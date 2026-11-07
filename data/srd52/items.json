@@ -8,16 +8,193 @@
   },
   "entries": [
     {
+      "id": "srd52:item/acid",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/alchemists-fire",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/alchemists-supplies",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/amulet",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/antitoxin",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/arrows",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "ammunition",
+          "bundleSize": 20
+        }
+      }
+    },
+    {
+      "id": "srd52:item/backpack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bagpipes",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ball-bearings",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/barrel",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 70,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/basket",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/battleaxe",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 4,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -43,16 +220,80 @@
       }
     },
     {
+      "id": "srd52:item/bedroll",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 25,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bell",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/blanket",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/block-and-tackle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/blowgun",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 1,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -76,16 +317,464 @@
       }
     },
     {
+      "id": "srd52:item/book",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bolts",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1.5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "ammunition",
+          "bundleSize": 20
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bottle-glass",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/breastplate",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 400,
+          "unit": "gp"
+        },
+        "weight": 20,
+        "category": "armor",
+        "armor": {
+          "category": "medium",
+          "base": 14,
+          "dexBonus": true,
+          "maxDexBonus": 2,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:medium-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/brewers-supplies",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 9,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bucket",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "cp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bullets-firearm",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 3,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "ammunition",
+          "bundleSize": 10
+        }
+      }
+    },
+    {
+      "id": "srd52:item/bullets-sling",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 4,
+          "unit": "cp"
+        },
+        "weight": 1.5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "ammunition",
+          "bundleSize": 20
+        }
+      }
+    },
+    {
+      "id": "srd52:item/burglars-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 16,
+          "unit": "gp"
+        },
+        "weight": 20,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "equipment-packs",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/ball-bearings",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/bell",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/candle",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/crowbar",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/lantern-hooded",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/flask",
+              "quantity": 7
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 7
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/rope",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/waterskin",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/calligraphers-supplies",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/caltrops",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/candle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "cp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/carpenters-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 8,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/cartographer-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/case-crossbow-bolt",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/case-map-or-scroll",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/chain",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/chain-mail",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 75,
+          "unit": "gp"
+        },
+        "weight": 55,
+        "category": "armor",
+        "armor": {
+          "category": "heavy",
+          "base": 16,
+          "dexBonus": false,
+          "maxDexBonus": 0,
+          "strengthMinimum": 13,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:heavy-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/chain-shirt",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 14,
+        "category": "armor",
+        "armor": {
+          "category": "medium",
+          "base": 13,
+          "dexBonus": true,
+          "maxDexBonus": 2,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:medium-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/chest",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 20,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/climbers-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/clothes-fine",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/clothes-travelers",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/club",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 1,
           "unit": "sp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -107,16 +796,112 @@
       }
     },
     {
-      "id": "srd52:item/dagger",
+      "id": "srd52:item/cobblers-tools",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/component-pouch",
+      "kind": "item",
+      "effects": [],
+      "data": {
         "cost": {
           "amount": 2,
           "unit": "gp"
         },
         "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/cooks-utensils",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/costume",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/crowbar",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/crystal",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dagger",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -148,12 +933,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 0.25,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "ranged",
@@ -181,16 +966,331 @@
       }
     },
     {
+      "id": "srd52:item/dice",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 0,
+        "category": "tools",
+        "tool": {
+          "category": "gaming-sets"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/diplomat-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 39,
+          "unit": "gp"
+        },
+        "weight": 20,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "equipment-packs",
+          "contents": [
+            {
+              "item": "srd52:item/chest",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/clothes-fine",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/ink",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/ink-pen",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/lamp",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/case-map-or-scroll",
+              "quantity": 2
+            },
+            {
+              "item": "srd52:item/flask",
+              "quantity": 4
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 4
+            },
+            {
+              "item": "srd52:item/paper",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/parchment",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/perfume",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/disguise-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dragonchess",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "tools",
+        "tool": {
+          "category": "gaming-sets"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/drum",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 6,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dulcimer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dungeoneer-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 12,
+          "unit": "gp"
+        },
+        "weight": 55,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "equipment-packs",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/caltrops",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/crowbar",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/flask",
+              "quantity": 2
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 2
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/rope",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/torch",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/waterskin",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/emblem",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/entertainers-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 40,
+          "unit": "gp"
+        },
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/bedroll",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/costume",
+              "quantity": 2
+            },
+            {
+              "item": "srd52:item/candle",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 5
+            },
+            {
+              "item": "srd52:item/waterskin",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/disguise-kit",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/explorers-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 55,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/bedroll",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 2
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/rope",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/torch",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/waterskin",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "srd52:item/flail",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -210,16 +1310,64 @@
       }
     },
     {
+      "id": "srd52:item/flask",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "cp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/flute",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/forgery-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
       "id": "srd52:item/glaive",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 20,
           "unit": "gp"
         },
         "weight": 6,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -243,16 +1391,48 @@
       }
     },
     {
+      "id": "srd52:item/glassblowers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/grappling-hook",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/greataxe",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 30,
           "unit": "gp"
         },
         "weight": 7,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -279,12 +1459,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 2,
           "unit": "sp"
         },
         "weight": 10,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -310,12 +1490,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 50,
           "unit": "gp"
         },
         "weight": 6,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -342,12 +1522,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 20,
           "unit": "gp"
         },
         "weight": 6,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -371,16 +1551,41 @@
       }
     },
     {
+      "id": "srd52:item/half-plate-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 750,
+          "unit": "gp"
+        },
+        "weight": 40,
+        "category": "armor",
+        "armor": {
+          "category": "medium",
+          "base": 15,
+          "dexBonus": true,
+          "maxDexBonus": 2,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:medium-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
       "id": "srd52:item/hand-crossbow",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 25,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -409,12 +1614,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -441,16 +1646,32 @@
       }
     },
     {
+      "id": "srd52:item/healers-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/heavy-crossbow",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 50,
           "unit": "gp"
         },
         "weight": 18,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -476,16 +1697,137 @@
       }
     },
     {
+      "id": "srd52:item/herbalism-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/hide-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 12,
+        "category": "armor",
+        "armor": {
+          "category": "light",
+          "base": 12,
+          "dexBonus": true,
+          "maxDexBonus": 2,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:light-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/holy-water",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/horn",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 3,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/hunting-trap",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 25,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ink",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ink-pen",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "cp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/javelin",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -511,16 +1853,80 @@
       }
     },
     {
+      "id": "srd52:item/jewelers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/jug",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "cp"
+        },
+        "weight": 4,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ladder",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 25,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/lamp",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/lance",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 6,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -544,16 +1950,88 @@
       }
     },
     {
+      "id": "srd52:item/lantern-bullseye",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/lantern-hooded",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/leather-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "category": "armor",
+        "armor": {
+          "category": "light",
+          "base": 11,
+          "dexBonus": true,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:light-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/leatherworkers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
       "id": "srd52:item/light-crossbow",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 25,
           "unit": "gp"
         },
         "weight": 5,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "ranged",
@@ -582,12 +2060,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 2,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -614,16 +2092,32 @@
       }
     },
     {
+      "id": "srd52:item/lock",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/longbow",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -652,12 +2146,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 15,
           "unit": "gp"
         },
         "weight": 3,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -683,16 +2177,48 @@
       }
     },
     {
+      "id": "srd52:item/lute",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 35,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/lyre",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
       "id": "srd52:item/mace",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -712,16 +2238,96 @@
       }
     },
     {
+      "id": "srd52:item/magnifying-glass",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 100,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/manacles",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/masons-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/map",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/mirror",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 0.5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/maul",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 10,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -748,12 +2354,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 15,
           "unit": "gp"
         },
         "weight": 4,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -762,6 +2368,9 @@
             "type": "piercing"
           },
           "properties": [],
+          "range": {
+            "normal": 5
+          },
           "mastery": "srd52:property/mastery-sap",
           "proficiency": [
             "weapon:martial-weapons"
@@ -774,12 +2383,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 500,
           "unit": "gp"
         },
         "weight": 10,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -804,16 +2413,201 @@
       }
     },
     {
+      "id": "srd52:item/navigators-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/needles",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "ammunition",
+          "bundleSize": 50
+        }
+      }
+    },
+    {
+      "id": "srd52:item/net",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/oil",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/orb",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/padded-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "armor",
+        "armor": {
+          "category": "light",
+          "base": 11,
+          "dexBonus": true,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:light-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/painters-supplies",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pan-flute",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 12,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/paper",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "sp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/parchment",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 3,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/perfume",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/pike",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 6,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -841,12 +2635,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 250,
           "unit": "gp"
         },
         "weight": 3,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "ranged",
@@ -870,16 +2664,215 @@
       }
     },
     {
+      "id": "srd52:item/poisoners-kit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/plate-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1500,
+          "unit": "gp"
+        },
+        "weight": 65,
+        "category": "armor",
+        "armor": {
+          "category": "heavy",
+          "base": 18,
+          "dexBonus": false,
+          "maxDexBonus": 0,
+          "strengthMinimum": 15,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:heavy-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/playing-cards",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        },
+        "weight": 0,
+        "category": "tools",
+        "tool": {
+          "category": "gaming-sets"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/poison-basic",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 100,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pole",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "cp"
+        },
+        "weight": 7,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pot-iron",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-healing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 0.5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/potters-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pouch",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/priests-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 33,
+          "unit": "gp"
+        },
+        "weight": 29,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "equipment-packs",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/blanket",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/holy-water",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/lamp",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 7
+            },
+            {
+              "item": "srd52:item/robe",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "srd52:item/quarterstaff",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 2,
           "unit": "sp"
         },
         "weight": 4,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -905,16 +2898,48 @@
       }
     },
     {
+      "id": "srd52:item/quiver",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ram-portable",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 4,
+          "unit": "gp"
+        },
+        "weight": 35,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/rapier",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 25,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -936,16 +2961,216 @@
       }
     },
     {
+      "id": "srd52:item/rations",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/reliquary",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/ring-mail",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 40,
+        "category": "armor",
+        "armor": {
+          "category": "heavy",
+          "base": 14,
+          "dexBonus": false,
+          "maxDexBonus": 0,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:heavy-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/robe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/rod",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/rope",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "cp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/scale-mail",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 45,
+        "category": "armor",
+        "armor": {
+          "category": "medium",
+          "base": 14,
+          "dexBonus": true,
+          "maxDexBonus": 2,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:medium-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/scholars-pack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 40,
+          "unit": "gp"
+        },
+        "weight": 22,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "equipment-packs",
+          "contents": [
+            {
+              "item": "srd52:item/backpack",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/blanket",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/book",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/ink",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/ink-pen",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/lamp",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/parchment",
+              "quantity": 10
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "srd52:item/scimitar",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 25,
           "unit": "gp"
         },
         "weight": 3,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -968,16 +3193,55 @@
       }
     },
     {
+      "id": "srd52:item/shawm",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/shield",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "category": "armor",
+        "armor": {
+          "category": "shield",
+          "base": 2,
+          "dexBonus": false,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:shields"
+          ]
+        }
+      }
+    },
+    {
       "id": "srd52:item/shortbow",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 25,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "ranged",
@@ -1005,12 +3269,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 10,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -1033,16 +3297,32 @@
       }
     },
     {
+      "id": "srd52:item/shovel",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/sickle",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 1,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -1064,16 +3344,32 @@
       }
     },
     {
+      "id": "srd52:item/signal-whistle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "cp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/sling",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 1,
           "unit": "sp"
         },
         "weight": 0,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "ranged",
@@ -1096,16 +3392,32 @@
       }
     },
     {
+      "id": "srd52:item/smiths-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 8,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
       "id": "srd52:item/spear",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "simple",
           "kind": "melee",
@@ -1136,16 +3448,289 @@
       }
     },
     {
-      "id": "srd52:item/trident",
+      "id": "srd52:item/spellbook",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spell-scroll-cantrip",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spell-scroll-level-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spikes-iron",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/splint-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 200,
+          "unit": "gp"
+        },
+        "weight": 60,
+        "category": "armor",
+        "armor": {
+          "category": "heavy",
+          "base": 17,
+          "dexBonus": false,
+          "maxDexBonus": 0,
+          "strengthMinimum": 15,
+          "stealthDisadvantage": true,
+          "proficiency": [
+            "armor:heavy-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sprig-of-mistletoe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spyglass",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1000,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/staff",
+      "kind": "item",
+      "effects": [],
+      "data": {
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 4,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/string",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/studded-leather-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 45,
+          "unit": "gp"
+        },
+        "weight": 13,
+        "category": "armor",
+        "armor": {
+          "category": "light",
+          "base": 12,
+          "dexBonus": true,
+          "strengthMinimum": 0,
+          "stealthDisadvantage": false,
+          "proficiency": [
+            "armor:light-armor",
+            "armor:all-armor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/tent",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 20,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/thieves-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "tools",
+        "tool": {
+          "category": "other-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/three-dragon-ante",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "tools",
+        "tool": {
+          "category": "gaming-sets"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/tinderbox",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/tinkers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/torch",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "cp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/trident",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -1176,16 +3761,64 @@
       }
     },
     {
+      "id": "srd52:item/vial",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 0,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/viol",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "category": "tools",
+        "tool": {
+          "category": "musical-instruments"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/wand",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
       "id": "srd52:item/warhammer",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 15,
           "unit": "gp"
         },
         "weight": 5,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -1215,12 +3848,12 @@
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 5,
           "unit": "gp"
         },
         "weight": 2,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -1246,16 +3879,48 @@
       }
     },
     {
+      "id": "srd52:item/waterskin",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 2,
+          "unit": "sp"
+        },
+        "weight": 5,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/weavers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
       "id": "srd52:item/whip",
       "kind": "item",
       "effects": [],
       "data": {
-        "category": "weapon",
         "cost": {
           "amount": 2,
           "unit": "gp"
         },
         "weight": 3,
+        "category": "weapon",
         "weapon": {
           "category": "martial",
           "kind": "melee",
@@ -1274,6 +3939,38 @@
           "proficiency": [
             "weapon:martial-weapons"
           ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/woodcarvers-tools",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "category": "tools",
+        "tool": {
+          "category": "artisans-tools"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/yew-wand",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "category": "adventuring-gear",
+        "gear": {
+          "category": "standard-gear"
         }
       }
     }

@@ -1,7 +1,10 @@
 import type { Entry } from "./schema";
 
 /** What an option hands out: a given item, or `count` items the person picks from a category. */
-export type StartingPart = { item: string; quantity: number } | { category: string; count: number };
+export type StartingPart =
+  | { item: string; quantity: number }
+  | { category: string; count: number }
+  | { gold: number };
 
 /** One option of a choice: its parts, and the proficiency (a key of the SRD) the rules ask for it. */
 export interface StartingOption {
@@ -30,6 +33,7 @@ export const STARTING_CATEGORIES = [
   "holy-symbols",
   "druidic-foci",
   "musical-instruments",
+  "gaming-sets",
 ] as const;
 export type StartingCategory = (typeof STARTING_CATEGORIES)[number];
 
@@ -39,7 +43,8 @@ const isPart = (p: unknown): p is StartingPart => {
     typeof o === "object" &&
     o !== null &&
     ((typeof o.item === "string" && typeof o.quantity === "number") ||
-      (typeof o.category === "string" && typeof o.count === "number"))
+      (typeof o.category === "string" && typeof o.count === "number") ||
+      typeof o.gold === "number")
   );
 };
 

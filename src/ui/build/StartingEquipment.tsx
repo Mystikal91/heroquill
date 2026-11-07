@@ -9,6 +9,7 @@ import {
   startingOf,
 } from "../../data/startingEquipment";
 import type { InventoryItem } from "../../engine/character";
+import { NO_COINS } from "../../engine/coins";
 import { addStartingItems, startingQuantity } from "../../engine/gear";
 import {
   type StartingPicks,
@@ -42,7 +43,9 @@ const itemText = (c: Content, item: string, quantity: number) => {
 const partText = (c: Content, part: StartingPart) =>
   "item" in part
     ? itemText(c, part.item, part.quantity)
-    : ui(`equipment.cat.${part.category}` as UiKey);
+    : "gold" in part
+      ? `${part.gold} gp`
+      : ui(`equipment.cat.${part.category}` as UiKey);
 
 /** What an option hands out, in words ("a light crossbow and 20 bolts"). */
 function optionText(c: Content, choice: StartingChoice, option: number): string {
@@ -104,7 +107,11 @@ function Questions({ c, entry, starting, picks, onChange }: SectionProps) {
                   }
                 >
                   <option value="">{ui("equipment.startingChoose")}</option>
-                  {categoryItems((part as { category: string }).category, c.index)
+                  {categoryItems(
+                    (part as { category: string }).category,
+                    c.index,
+                    character.value.ruleset,
+                  )
                     .map((id) => ({ id, name: c.name(id) }))
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map((item) => (
@@ -134,6 +141,8 @@ const fixedText = (c: Content, starting: Starting) =>
  */
 export function StartingEquipment() {
   const [all, setAll] = useState<Record<string, StartingPicks>>({});
+  // What was just added, so gold that no inventory line shows is not added twice.
+  const [justAdded, setJustAdded] = useState("");
   const c = content.value;
   const ch = character.value;
   if (!c) return null;
@@ -160,6 +169,8 @@ export function StartingEquipment() {
   );
   const given = sections.flatMap((s, i) => [...s.starting.fixed, ...(resolved[i]?.items ?? [])]);
   const complete = resolved.every((r) => r.complete);
+  const gold = resolved.reduce((sum, r) => sum + r.gold, 0);
+  const addKey = JSON.stringify([given, gold]);
   // Already added once: everything it would put in the inventory is there in full.
   const wanted: InventoryItem[] = [];
   addStartingItems(wanted, c.index, given);
@@ -205,13 +216,19 @@ export function StartingEquipment() {
           </section>
         );
       })}
-      {given.length > 0 && (
+      {(given.length > 0 || gold > 0) && (
         <>
           <button
             type="button"
             class="secondary"
-            disabled={added || !complete}
-            onClick={() => updateCharacter((d) => addStartingItems(d.inventory, c.index, given))}
+            disabled={added || justAdded === addKey || !complete}
+            onClick={() => {
+              updateCharacter((d) => {
+                addStartingItems(d.inventory, c.index, given);
+                if (gold > 0) d.coins = { ...NO_COINS, ...d.coins, gp: (d.coins?.gp ?? 0) + gold };
+              });
+              setJustAdded(addKey);
+            }}
           >
             {ui("equipment.startingAdd")}
           </button>

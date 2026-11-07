@@ -315,7 +315,81 @@
             }
           }
         ],
-        "startingChoices": []
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/chain-mail",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/greatsword",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/flail",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/javelin",
+                    "quantity": 8
+                  },
+                  {
+                    "item": "srd52:item/dungeoneer-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 4
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/studded-leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/scimitar",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shortsword",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/longbow",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/arrows",
+                    "quantity": 20
+                  },
+                  {
+                    "item": "srd52:item/quiver",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dungeoneer-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 11
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 155
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     }
   ]

@@ -328,7 +328,7 @@ function convertBackgrounds(
       data: {
         abilityScores: (b.ability_scores as Raw[]).map((a) => a.index),
         feat: id("feat", b.feat.index),
-        equipmentOptions: (b.equipment_options ?? []).map((o: Raw) => o.desc),
+        startingChoices: startingChoices(b.equipment_options),
       },
     });
     strings[`${b.index}.name`] = b.name;
@@ -417,7 +417,7 @@ function convertClasses(
           ),
         },
         levels,
-        startingChoices: [],
+        startingChoices: startingChoices(c.starting_equipment_options),
       },
     });
     classes.strings[`${c.index}.name`] = c.name;
@@ -484,39 +484,129 @@ function convertProperties(raw: RawSource): Converted {
   return { entries, strings };
 }
 
-/** The weapons of the equipment table (simple and martial, melee and ranged), with their mastery. */
-function convertWeapons(raw: RawSource): Converted {
+/**
+ * The pieces of a bundle: the 2024 table lists ammunition as one entry ("Arrows", 1 GP) that is a
+ * bundle of this many pieces, as the 2014 items ("Arrow (20)") already are.
+ */
+const BUNDLES: Record<string, number> = {
+  arrows: 20,
+  bolts: 20,
+  "bullets-sling": 20,
+  "bullets-firearm": 10,
+  needles: 50,
+};
+
+const categoriesOf = (e: Raw): string[] =>
+  ((e.equipment_categories ?? []) as Raw[]).map((c) => c.index);
+
+/** Every item of the equipment table: weapons, armor, tools, adventuring gear and ammunition. */
+function convertEquipment(raw: RawSource): Converted {
   const entries: Entry[] = [];
   const strings: Strings = {};
-  for (const w of raw.equipment) {
-    const categories: string[] = (w.equipment_categories ?? []).map((c: Raw) => c.index);
-    if (!categories.includes("weapons")) continue;
-    const category = categories.includes("simple-weapons") ? "simple" : "martial";
+  for (const e of raw.equipment) {
+    const categories = categoriesOf(e);
+    const data: Record<string, unknown> = {
+      cost: e.cost ? { amount: e.cost.quantity, unit: e.cost.unit } : { amount: 0, unit: "gp" },
+    };
+    if (e.weight !== undefined) data.weight = e.weight;
     const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
-    entries.push({
-      id: id("item", w.index),
-      kind: "item",
-      effects: [],
-      data: {
-        category: "weapon",
-        cost: { amount: w.cost.quantity, unit: w.cost.unit },
-        weight: w.weight,
-        weapon: {
-          category,
-          kind: categories.includes("melee-weapons") ? "melee" : "ranged",
-          ...(w.damage && { damage: damage(w.damage) }),
-          ...(w.two_handed_damage && { twoHandedDamage: damage(w.two_handed_damage) }),
-          properties: ((w.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
-          range: w.range,
-          ...(w.throw_range && { throwRange: w.throw_range }),
-          ...(w.mastery && { mastery: id("property", `mastery-${w.mastery.index}`) }),
-          proficiency: [`weapon:${category}-weapons`],
-        },
-      },
-    });
-    strings[`${w.index}.name`] = w.name;
+
+    if (categories.includes("weapons")) {
+      const category = categories.includes("simple-weapons") ? "simple" : "martial";
+      data.category = "weapon";
+      data.weapon = {
+        category,
+        kind: categories.includes("melee-weapons") ? "melee" : "ranged",
+        ...(e.damage && { damage: damage(e.damage) }),
+        ...(e.two_handed_damage && { twoHandedDamage: damage(e.two_handed_damage) }),
+        properties: ((e.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
+        // The Morningstar has no range in the source; a melee weapon reaches 5 feet.
+        range: e.range ?? { normal: 5 },
+        ...(e.throw_range && { throwRange: e.throw_range }),
+        ...(e.mastery && { mastery: id("property", `mastery-${e.mastery.index}`) }),
+        proficiency: [`weapon:${category}-weapons`],
+      };
+    } else if (categories.includes("armor")) {
+      const category = categories.includes("shields")
+        ? "shield"
+        : (["light", "medium", "heavy"].find((c) => categories.includes(`${c}-armor`)) ?? "light");
+      data.category = "armor";
+      data.armor = {
+        category,
+        base: e.armor_class.base,
+        dexBonus: e.armor_class.dex_bonus,
+        ...(e.armor_class.max_bonus !== undefined && { maxDexBonus: e.armor_class.max_bonus }),
+        strengthMinimum: e.str_minimum ?? 0,
+        stealthDisadvantage: e.stealth_disadvantage ?? false,
+        proficiency:
+          category === "shield"
+            ? ["armor:shields"]
+            : [`armor:${category}-armor`, "armor:all-armor"],
+      };
+    } else if (categories.some((c) => c === "tools" || /-tools$/.test(c))) {
+      // The Disguise Kit is listed as adventuring gear too; it is a tool.
+      data.category = "tools";
+      data.tool = {
+        category:
+          categories.find((c) => c !== "tools" && c !== "adventuring-gear") ?? "other-tools",
+      };
+    } else if (categories.includes("adventuring-gear") || categories.includes("ammunition")) {
+      data.category = "adventuring-gear";
+      const bundle = BUNDLES[e.index];
+      data.gear = {
+        category: categories.includes("equipment-packs")
+          ? "equipment-packs"
+          : categories.includes("ammunition")
+            ? "ammunition"
+            : "standard-gear",
+        ...(bundle && { bundleSize: bundle }),
+        ...(e.contents && {
+          contents: (e.contents as Raw[]).map((c) => ({
+            item: id("item", c.item.index),
+            quantity: c.quantity,
+          })),
+        }),
+      };
+    } else {
+      throw new Error(`Unknown equipment categories for ${e.index}: ${categories.join(", ")}`);
+    }
+
+    entries.push({ id: id("item", e.index), kind: "item", effects: [], data });
+    const bundle = BUNDLES[e.index];
+    strings[`${e.index}.name`] = bundle ? `${e.name} (${bundle})` : e.name;
+    if (e.description) strings[`${e.index}.desc`] = text(e.description);
   }
   return { entries, strings };
+}
+
+/**
+ * The choices of starting equipment of a class or a background, in the form the Equipment step reads:
+ * a part is a counted item, some gold, or a pick from a category ("a gaming set").
+ */
+function startingChoices(rawSets: Raw[] | undefined): Record<string, unknown>[] {
+  const parts = (o: Raw): Record<string, unknown>[] => {
+    switch (o.option_type) {
+      case "multiple":
+        return (o.items as Raw[]).flatMap(parts);
+      case "counted_reference":
+        return [{ item: id("item", o.of.index), quantity: o.count }];
+      case "money":
+        if (o.unit !== "gp") throw new Error(`Starting money in ${o.unit}`);
+        return [{ gold: o.count }];
+      case "choice":
+        return [
+          {
+            category: o.choice.from.equipment_category.index,
+            count: o.choice.choose,
+          },
+        ];
+      default:
+        throw new Error(`Unknown starting equipment option: ${o.option_type}`);
+    }
+  };
+  return (rawSets ?? []).map((set) => ({
+    options: (set.from.options as Raw[]).map((o) => ({ items: parts(o) })),
+  }));
 }
 
 const merge = (...parts: Converted[]): Converted => ({
@@ -530,9 +620,9 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const classPart = convertClasses(raw, table);
   const subclassPart = convertSubclasses(raw);
   const backgroundPart = convertBackgrounds(raw, table);
-  const items = convertWeapons(raw);
+  const items = convertEquipment(raw);
   // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
-  const weaponIds = items.entries.map((e) => e.id);
+  const weaponIds = items.entries.filter((e) => e.data.category === "weapon").map((e) => e.id);
   for (const feature of [...classPart.features.entries, ...subclassPart.features.entries]) {
     const pick = FEAT_PICKS[feature.id.split("/")[1] ?? ""];
     if (pick)

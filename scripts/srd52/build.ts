@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { type Pack, findBrokenReferences, parsePack } from "../../src/data/schema";
 import { type RawSource, convertAll } from "./convert";
 import { CACHE_DIR, fetchSource } from "./fetch";
+import { pairItems } from "./pairs";
 import source from "./source.json" with { type: "json" };
 
 const ATTRIBUTION =
@@ -85,3 +86,14 @@ if (broken.length) {
   );
   process.exitCode = 1;
 }
+
+// The items that are the same in the 2014 pack: what a conversion between editions starts from.
+const items51 = JSON.parse(await readFile(join("data", "srd51", "items.json"), "utf8")).entries.map(
+  (e: { id: string }) => e.id,
+);
+const pairs = pairItems(converted.item?.entries.map((e) => e.id) ?? [], items51);
+await write(join("src", "data", "srd52Pairs.json"), pairs);
+console.log(
+  `item pairs: ${Object.keys(pairs.items).length} paired, ${pairs.onlyIn2024.length} only in 2024`,
+);
+console.log(`  only in 2024: ${pairs.onlyIn2024.map((id) => id.split("/")[1]).join(", ")}`);

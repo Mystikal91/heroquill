@@ -55,8 +55,53 @@
           "con"
         ],
         "feat": "srd52:feat/savage-attacker",
-        "equipmentOptions": [
-          "Choose A or B: (A) Spear, Shortbow, 20 Arrows, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP"
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/spear",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shortbow",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/arrows",
+                    "quantity": 20
+                  },
+                  {
+                    "category": "gaming-sets",
+                    "count": 1
+                  },
+                  {
+                    "item": "srd52:item/healers-kit",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/quiver",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/clothes-travelers",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 14
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
         ]
       }
     }

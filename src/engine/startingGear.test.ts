@@ -18,7 +18,8 @@ const classes = [...srd51Index.values()].filter((e) => e.kind === "class");
 
 describe("the categories starting equipment picks from", () => {
   it("have items in the SRD", () => {
-    for (const category of STARTING_CATEGORIES)
+    // Gaming sets are a 2024 category: the 2014 SRD has no such list (the 2024 tests cover them).
+    for (const category of STARTING_CATEGORIES.filter((c) => c !== "gaming-sets"))
       expect(categoryItems(category, srd51Index).length, category).toBeGreaterThan(0);
   });
 
@@ -53,7 +54,8 @@ describe("the starting equipment of the classes of the SRD", () => {
           for (const part of option.items) {
             if ("item" in part)
               expect(srd51Index.has(part.item), `${cls.id} ${part.item}`).toBe(true);
-            else expect(categoryItems(part.category, srd51Index).length).toBeGreaterThan(0);
+            else if ("category" in part)
+              expect(categoryItems(part.category, srd51Index).length).toBeGreaterThan(0);
           }
     }
   });

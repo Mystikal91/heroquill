@@ -1,13 +1,12 @@
 import type { Entry } from "../data/schema";
 import type { StartingChoice, StartingPart } from "../data/startingEquipment";
 
-const PACK = "srd51";
-
 /** The items of the SRD that are not weapons and sit in a category the choices pick from. */
 const LISTED: Record<string, string[]> = {
   "arcane-foci": ["crystal", "orb", "rod", "staff", "wand"],
   "holy-symbols": ["amulet", "emblem", "reliquary"],
   "druidic-foci": ["sprig-of-mistletoe", "totem", "wooden-staff", "yew-wand"],
+  "gaming-sets": ["dice", "dragonchess", "playing-cards", "three-dragon-ante"],
   "musical-instruments": [
     "bagpipes",
     "drum",
@@ -31,14 +30,18 @@ const WEAPONS: Record<string, { category: string; melee: boolean }> = {
 };
 
 /** The ids of the items a starting equipment choice can pick from a category, in the order of the data. */
-export function categoryItems(category: string, index: ReadonlyMap<string, Entry>): string[] {
+export function categoryItems(
+  category: string,
+  index: ReadonlyMap<string, Entry>,
+  ruleset = "srd51",
+): string[] {
   const listed = LISTED[category];
-  if (listed) return listed.map((slug) => `${PACK}:item/${slug}`).filter((id) => index.has(id));
+  if (listed) return listed.map((slug) => `${ruleset}:item/${slug}`).filter((id) => index.has(id));
   const wanted = WEAPONS[category];
   if (!wanted) return [];
   const out: string[] = [];
   for (const [id, entry] of index) {
-    if (!id.startsWith(`${PACK}:item/`)) continue;
+    if (!id.startsWith(`${ruleset}:item/`)) continue;
     const weapon = (entry.data as { weapon?: { category?: string; kind?: string } }).weapon;
     if (weapon?.category !== wanted.category) continue;
     if (wanted.melee && weapon.kind !== "melee") continue;
@@ -75,8 +78,9 @@ export function slotKeys(n: number, part: number, p: StartingPart): string[] {
 export function resolveStarting(
   choices: StartingChoice[],
   picks: StartingPicks,
-): { items: { item: string; quantity: number }[]; complete: boolean } {
+): { items: { item: string; quantity: number }[]; gold: number; complete: boolean } {
   const items: { item: string; quantity: number }[] = [];
+  let gold = 0;
   let complete = true;
   choices.forEach((choice, n) => {
     const taken = takenOption(choice, picks, n);
@@ -86,6 +90,10 @@ export function resolveStarting(
       return;
     }
     option.items.forEach((part, p) => {
+      if ("gold" in part) {
+        gold += part.gold;
+        return;
+      }
       if ("item" in part) {
         items.push({ item: part.item, quantity: part.quantity });
         return;
@@ -97,5 +105,5 @@ export function resolveStarting(
       }
     });
   });
-  return { items, complete };
+  return { items, gold, complete };
 }
