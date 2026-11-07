@@ -27,8 +27,8 @@ import { transferDialog, transferInbox } from "./transferState";
 export type SaveStatus = "idle" | "saving" | "saved" | "failed";
 
 /** A blank character that starts with the standard array, the easiest way to assign scores. */
-function createNewCharacter(): Character {
-  const fresh = createCharacter("srd51");
+function createNewCharacter(ruleset: Character["ruleset"] = "srd51"): Character {
+  const fresh = createCharacter(ruleset);
   applyAbilityMethod(fresh, "standard");
   return fresh;
 }
@@ -204,7 +204,9 @@ export async function importFromLink(): Promise<void> {
   }
 }
 
-export const newCharacter = () => switchTo(createNewCharacter());
+/** The edition is fixed here, when the character is made: it picks the rules every later step uses. */
+export const newCharacter = (ruleset: Character["ruleset"] = "srd51") =>
+  switchTo(createNewCharacter(ruleset));
 
 /**
  * Opens Aria, the example character, in the sheet. If she is already among the characters (with
