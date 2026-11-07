@@ -1,0 +1,155 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:skill/acrobatics",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "dex"
+      }
+    },
+    {
+      "id": "srd52:skill/animal-handling",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "wis"
+      }
+    },
+    {
+      "id": "srd52:skill/arcana",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "int"
+      }
+    },
+    {
+      "id": "srd52:skill/athletics",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "str"
+      }
+    },
+    {
+      "id": "srd52:skill/deception",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "cha"
+      }
+    },
+    {
+      "id": "srd52:skill/history",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "int"
+      }
+    },
+    {
+      "id": "srd52:skill/insight",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "wis"
+      }
+    },
+    {
+      "id": "srd52:skill/intimidation",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "cha"
+      }
+    },
+    {
+      "id": "srd52:skill/investigation",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "int"
+      }
+    },
+    {
+      "id": "srd52:skill/medicine",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "wis"
+      }
+    },
+    {
+      "id": "srd52:skill/nature",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "int"
+      }
+    },
+    {
+      "id": "srd52:skill/perception",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "wis"
+      }
+    },
+    {
+      "id": "srd52:skill/performance",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "cha"
+      }
+    },
+    {
+      "id": "srd52:skill/persuasion",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "cha"
+      }
+    },
+    {
+      "id": "srd52:skill/religion",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "int"
+      }
+    },
+    {
+      "id": "srd52:skill/sleight-of-hand",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "dex"
+      }
+    },
+    {
+      "id": "srd52:skill/stealth",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "dex"
+      }
+    },
+    {
+      "id": "srd52:skill/survival",
+      "kind": "skill",
+      "effects": [],
+      "data": {
+        "ability": "wis"
+      }
+    }
+  ]
+}

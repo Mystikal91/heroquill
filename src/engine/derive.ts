@@ -247,7 +247,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     seen: heldIds,
   } = collectEffects(
     [...contributing, ...wornWithEffects, ...(starting?.entry ? [starting.entry] : []), ...reached],
-    { index, selections: character.selections, warnings, levelOf },
+    { index, selections: character.selections, warnings, levelOf, ruleset: character.ruleset },
     [
       ...character.classes.flatMap((cl) => [cl.classId, cl.subclassId ?? ""]),
       ...Object.values(character.choices),

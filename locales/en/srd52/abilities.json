@@ -1,0 +1,20 @@
+{
+  "str.name": "Strength",
+  "str.abbreviation": "STR",
+  "str.desc": "Physical might",
+  "dex.name": "Dexterity",
+  "dex.abbreviation": "DEX",
+  "dex.desc": "Agility, reflexes, and balance",
+  "con.name": "Constitution",
+  "con.abbreviation": "CON",
+  "con.desc": "Health and stamina",
+  "int.name": "Intelligence",
+  "int.abbreviation": "INT",
+  "int.desc": "Reasoning and memory",
+  "wis.name": "Wisdom",
+  "wis.abbreviation": "WIS",
+  "wis.desc": "Perceptiveness and mental fortitude",
+  "cha.name": "Charisma",
+  "cha.abbreviation": "CHA",
+  "cha.desc": "Confidence, poise, and charm"
+}

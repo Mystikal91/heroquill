@@ -1,0 +1,50 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:background/soldier",
+      "kind": "background",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "athletics"
+        },
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "intimidation"
+        },
+        {
+          "type": "choice",
+          "id": "soldier-proficiency-1",
+          "choose": 1,
+          "grants": "proficiency",
+          "from": [
+            "tool:tool-dice",
+            "tool:tool-dragonchess",
+            "tool:tool-playing-cards",
+            "tool:tool-three-dragon-ante"
+          ]
+        }
+      ],
+      "data": {
+        "abilityScores": [
+          "str",
+          "dex",
+          "con"
+        ],
+        "feat": "srd52:feat/savage-attacker",
+        "equipmentOptions": [
+          "Choose A or B: (A) Spear, Shortbow, 20 Arrows, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP"
+        ]
+      }
+    }
+  ]
+}

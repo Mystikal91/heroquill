@@ -1,0 +1,677 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:proficiency/light-armor",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "armor",
+        "target": "light-armor"
+      }
+    },
+    {
+      "id": "srd52:proficiency/medium-armor",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "armor",
+        "target": "medium-armor"
+      }
+    },
+    {
+      "id": "srd52:proficiency/heavy-armor",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "armor",
+        "target": "heavy-armor"
+      }
+    },
+    {
+      "id": "srd52:proficiency/all-armor",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "armor",
+        "target": "all-armor"
+      }
+    },
+    {
+      "id": "srd52:proficiency/shields",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "armor",
+        "target": "shields"
+      }
+    },
+    {
+      "id": "srd52:proficiency/simple-weapons",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "simple-weapons"
+      }
+    },
+    {
+      "id": "srd52:proficiency/martial-weapons",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "martial-weapons"
+      }
+    },
+    {
+      "id": "srd52:proficiency/longswords",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "longswords"
+      }
+    },
+    {
+      "id": "srd52:proficiency/rapiers",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "rapiers"
+      }
+    },
+    {
+      "id": "srd52:proficiency/scimitars",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "scimitars"
+      }
+    },
+    {
+      "id": "srd52:proficiency/shortswords",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "shortswords"
+      }
+    },
+    {
+      "id": "srd52:proficiency/whips",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "whips"
+      }
+    },
+    {
+      "id": "srd52:proficiency/hand-crossbows",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "target": "hand-crossbows"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-acrobatics",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "acrobatics"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-animal-handling",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "animal-handling"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-arcana",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "arcana"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-athletics",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "athletics"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-deception",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "deception"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-history",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "history"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-insight",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "insight"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-intimidation",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "intimidation"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-investigation",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "investigation"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-medicine",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "medicine"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-nature",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "nature"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-perception",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "perception"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-performance",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "performance"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-persuasion",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "persuasion"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-religion",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "religion"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-sleight-of-hand",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "sleight-of-hand"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-stealth",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "stealth"
+      }
+    },
+    {
+      "id": "srd52:proficiency/skill-survival",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "skill",
+        "target": "survival"
+      }
+    },
+    {
+      "id": "srd52:proficiency/alchemists-supplies",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "alchemists-supplies"
+      }
+    },
+    {
+      "id": "srd52:proficiency/brewers-supplies",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "brewers-supplies"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-calligraphers-supplies",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-calligraphers-supplies"
+      }
+    },
+    {
+      "id": "srd52:proficiency/carpenters-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "carpenters-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/cartographers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "cartographers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/cobblers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "cobblers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/cooks-utensils",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "cooks-utensils"
+      }
+    },
+    {
+      "id": "srd52:proficiency/glassblowers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "glassblowers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/jewelers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "jewelers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/leatherworkers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "leatherworkers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/masons-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "masons-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/painters-supplies",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "painters-supplies"
+      }
+    },
+    {
+      "id": "srd52:proficiency/potters-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "potters-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/smiths-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "smiths-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tinkers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tinkers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/weavers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "weavers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/woodcarvers-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "woodcarvers-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/disguise-kit",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "disguise-kit"
+      }
+    },
+    {
+      "id": "srd52:proficiency/forgery-kit",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "forgery-kit"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-dice",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-dice"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-dragonchess",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-dragonchess"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-playing-cards",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-playing-cards"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-navigators-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-navigators-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-poisoners-kit",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-poisoners-kit"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-thieves-tools",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-thieves-tools"
+      }
+    },
+    {
+      "id": "srd52:proficiency/tool-three-dragon-ante",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "tool-three-dragon-ante"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-str",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "str"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-dex",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "dex"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-con",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "con"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-int",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "int"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-wis",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "wis"
+      }
+    },
+    {
+      "id": "srd52:proficiency/saving-throw-cha",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "save",
+        "target": "cha"
+      }
+    },
+    {
+      "id": "srd52:proficiency/bagpipes",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "bagpipes"
+      }
+    },
+    {
+      "id": "srd52:proficiency/drum",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "drum"
+      }
+    },
+    {
+      "id": "srd52:proficiency/dulcimer",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "dulcimer"
+      }
+    },
+    {
+      "id": "srd52:proficiency/flute",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "flute"
+      }
+    },
+    {
+      "id": "srd52:proficiency/lute",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "lute"
+      }
+    },
+    {
+      "id": "srd52:proficiency/lyre",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "lyre"
+      }
+    },
+    {
+      "id": "srd52:proficiency/horn",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "horn"
+      }
+    },
+    {
+      "id": "srd52:proficiency/pan-flute",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "pan-flute"
+      }
+    },
+    {
+      "id": "srd52:proficiency/shawm",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "shawm"
+      }
+    },
+    {
+      "id": "srd52:proficiency/viol",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "viol"
+      }
+    },
+    {
+      "id": "srd52:proficiency/herbalism-kit",
+      "kind": "proficiency",
+      "effects": [],
+      "data": {
+        "category": "tool",
+        "target": "herbalism-kit"
+      }
+    }
+  ]
+}

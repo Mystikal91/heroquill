@@ -1,0 +1,243 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:feature/fighter-fighting-style",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-second-wind",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 2,
+          "recharge": "short",
+          "minLevel": 1
+        },
+        {
+          "type": "uses",
+          "term": 3,
+          "recharge": "short",
+          "minLevel": 4
+        },
+        {
+          "type": "uses",
+          "term": 4,
+          "recharge": "short",
+          "minLevel": 10
+        }
+      ],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 1,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-weapon-mastery",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-action-surge",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "short",
+          "minLevel": 2
+        },
+        {
+          "type": "uses",
+          "term": 2,
+          "recharge": "short",
+          "minLevel": 17
+        }
+      ],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-tactical-mind",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-extra-attack",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-tactical-shift",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-indomitable",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-tactical-master",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-two-extra-attacks",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-studied-attacks",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 13
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-epic-boon",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/fighter-three-extra-attacks",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/fighter",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/champion-improved-critical",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "critRange",
+          "min": 19
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/champion-remarkable-athlete",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/champion-additional-fighting-style",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/champion-heroic-warrior",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/champion-superior-critical",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "critRange",
+          "min": 18
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/champion-survivor",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/champion",
+        "level": 18
+      }
+    }
+  ]
+}

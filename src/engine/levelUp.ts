@@ -3,6 +3,7 @@ import type { Ability, Entry } from "../data/schema";
 import type { Character } from "./character";
 import { type DerivedSheet, type PackIndex, deriveSheet } from "./derive";
 import { unmetPrerequisites } from "./multiclass";
+import { inRuleset } from "./rulesets";
 
 export const MAX_LEVEL = 20;
 
@@ -27,8 +28,8 @@ export interface LevelUpOption {
 /** How the hit points of the new level are decided. */
 export type HpChoice = { type: "average" } | { type: "roll"; value: number };
 
-const classEntries = (index: PackIndex): Entry[] =>
-  [...index.values()].filter((e) => e.kind === "class");
+const classEntries = (index: PackIndex, ruleset: string): Entry[] =>
+  [...index.values()].filter((e) => e.kind === "class" && inRuleset(e.id, ruleset));
 
 /** The average of a hit die as the rules give it for levelling up: half the die, plus one. */
 export const averageHp = (hitDie: number) => Math.floor(hitDie / 2) + 1;
@@ -57,7 +58,7 @@ export function levelUpOptions(
     isNew: false,
     unmet: [],
   }));
-  for (const entry of classEntries(index)) {
+  for (const entry of classEntries(index, character.ruleset)) {
     if (character.classes.some((cl) => cl.classId === entry.id)) continue;
     const own = unmetPrerequisites(classData(entry), score).map((u) => ({
       classId: entry.id,

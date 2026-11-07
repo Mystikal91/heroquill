@@ -2,6 +2,7 @@ import type { Ability, Effect, Entry, ProficiencyCategory } from "../data/schema
 import type { PackIndex } from "./derive";
 import type { OptionNeed } from "./optionNeeds";
 import { evaluateRequirements } from "./requirements";
+import { inRuleset } from "./rulesets";
 import { type Warning, warn } from "./warnings";
 
 type ChoiceEffect = Extract<Effect, { type: "choice" }>;
@@ -49,6 +50,8 @@ interface Input {
   warnings: Warning[];
   /** The level that counts for what an entry gives; without it a trait that comes at a level is given at once. */
   levelOf?: (source: string) => number;
+  /** The character's edition: an open choice lists only the feats of that edition's SRD and of added packs. */
+  ruleset?: string;
 }
 
 /** The id without the number that makes it unique within its pack. */
@@ -71,10 +74,12 @@ function renumbered(picked: string, options: string[]): string | undefined {
  * spell of the level it names when a spell choice has a `spellLevel` and lists none (the cantrips
  * of the Pact of the Tome come from the list of any class).
  */
-function optionsOf(index: PackIndex, choice: ChoiceEffect): string[] {
+function optionsOf(index: PackIndex, choice: ChoiceEffect, ruleset?: string): string[] {
   if (choice.from.length > 0) return choice.from;
   if (choice.grants === "feat")
-    return [...index.values()].filter((e) => e.kind === "feat").map((e) => e.id);
+    return [...index.values()]
+      .filter((e) => e.kind === "feat" && (!ruleset || inRuleset(e.id, ruleset)))
+      .map((e) => e.id);
   if (
     choice.grants === "spell" &&
     (choice.spellLevel !== undefined || choice.spellUpTo !== undefined)
@@ -151,7 +156,7 @@ export function collectEffects(entries: Entry[], input: Input, alsoHeld: string[
 
 function walkEffects(
   entries: Entry[],
-  { index, selections, warnings, levelOf }: Input,
+  { index, selections, warnings, levelOf, ruleset }: Input,
   held: ReadonlySet<string>,
 ): Collected & { seen: Set<string>; gated: boolean } {
   const effects: Effect[] = [];
@@ -181,7 +186,7 @@ function walkEffects(
     const key = `${source}/${choice.id}`;
     const selected: string[] = [];
     const used = choice.grants === "abilityBonus" ? taken.get(source) : undefined;
-    const options = optionsOf(index, choice).filter((o) => !used?.has(o));
+    const options = optionsOf(index, choice, ruleset).filter((o) => !used?.has(o));
     for (const picked of selections[key] ?? []) {
       // An entry that was numbered differently when the pack was imported again (`charisma-2`
       // became `charisma-11`) is the one option of the choice with the same name.

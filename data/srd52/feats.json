@@ -1,0 +1,187 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:feat/alert",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "origin"
+      }
+    },
+    {
+      "id": "srd52:feat/magic-initiate",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "origin"
+      }
+    },
+    {
+      "id": "srd52:feat/savage-attacker",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "origin"
+      }
+    },
+    {
+      "id": "srd52:feat/skilled",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "origin"
+      }
+    },
+    {
+      "id": "srd52:feat/ability-score-improvement",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "general",
+        "prerequisites": {
+          "level": 4
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/grappler",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "general",
+        "prerequisites": {
+          "level": 4
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/archery",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "fighting-style",
+        "prerequisites": {
+          "featureNamed": "Fighting Style"
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/defense",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "fighting-style",
+        "prerequisites": {
+          "featureNamed": "Fighting Style"
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/great-weapon-fighting",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "fighting-style",
+        "prerequisites": {
+          "featureNamed": "Fighting Style"
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/two-weapon-fighting",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "fighting-style",
+        "prerequisites": {
+          "featureNamed": "Fighting Style"
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-combat-prowess",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-dimensional-travel",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-fate",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-irresistible-offense",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-spell-recall",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19,
+          "featureNamed": "Spellcasting"
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-the-night-spirit",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    },
+    {
+      "id": "srd52:feat/boon-of-truesight",
+      "kind": "feat",
+      "effects": [],
+      "data": {
+        "category": "epic-boon",
+        "prerequisites": {
+          "level": 19
+        }
+      }
+    }
+  ]
+}

@@ -1,8 +1,7 @@
-import { content } from "../../app/store";
+import { character, content } from "../../app/store";
 import { userPacks } from "../../app/userPacks";
+import { inRuleset } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
-
-const RULESET = "srd51";
 
 /** Entries of one kind from the active ruleset, sorted by their display name. */
 export function entriesOfKind(kind: string, parent?: string) {
@@ -11,7 +10,7 @@ export function entriesOfKind(kind: string, parent?: string) {
   return (
     [...c.index.values()]
       // The active ruleset's entries, plus packs the user added (any id that is not another SRD's).
-      .filter((e) => e.kind === kind && (e.id.startsWith(`${RULESET}:`) || !/^srd\d+:/.test(e.id)))
+      .filter((e) => e.kind === kind && inRuleset(e.id, character.value.ruleset))
       .filter((e) => parent === undefined || e.parent === parent)
       .map((e) => ({ id: e.id, label: c.name(e.id) }))
       .sort((a, b) => a.label.localeCompare(b.label))

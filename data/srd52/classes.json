@@ -1,0 +1,322 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:class/fighter",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "all-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "str"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "con"
+        },
+        {
+          "type": "choice",
+          "id": "fighter-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:animal-handling",
+            "skill:athletics",
+            "skill:history",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:perception",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 10,
+        "primaryAbility": [
+          "str",
+          "dex"
+        ],
+        "multiclassing": {
+          "prerequisites": [],
+          "prerequisiteOptions": {
+            "choose": 1,
+            "from": [
+              {
+                "ability": "str",
+                "minimum": 13
+              },
+              {
+                "ability": "dex",
+                "minimum": 13
+              }
+            ]
+          },
+          "proficiencies": [
+            "armor:light-armor",
+            "armor:medium-armor",
+            "armor:shields",
+            "weapon:martial-weapons"
+          ]
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/fighter-fighting-style",
+              "srd52:feature/fighter-second-wind",
+              "srd52:feature/fighter-weapon-mastery"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/fighter-action-surge",
+              "srd52:feature/fighter-tactical-mind"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/fighter-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/fighter-extra-attack",
+              "srd52:feature/fighter-tactical-shift"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/fighter-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/fighter-indomitable",
+              "srd52:feature/fighter-tactical-master"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/fighter-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/fighter-two-extra-attacks"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/fighter-indomitable",
+              "srd52:feature/fighter-studied-attacks"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/fighter-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 5
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/fighter-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 6
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/fighter-action-surge",
+              "srd52:feature/fighter-indomitable"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 6
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/fighter-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 6
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/fighter-epic-boon"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 6
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/fighter-three-extra-attacks"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "secondWindUses": 4,
+              "weaponMastery": 6
+            }
+          }
+        ],
+        "startingChoices": []
+      }
+    }
+  ]
+}
