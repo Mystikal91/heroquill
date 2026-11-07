@@ -1174,7 +1174,7 @@
   "edition.srd51.desc": "La quinta edición de 2014 (SRD 5.1). Todo el contenido de la aplicación, y lo que usan otras herramientas.",
   "edition.srd52.name": "Reglas de 2024",
   "edition.srd52.desc": "Las reglas revisadas de 2024 (SRD 5.2.1). En desarrollo: solo hay unas pocas clases, especies y armas listas.",
-  "edition.current": "Reglas: {name}",
+  "edition.current": "Edición: {name}",
   "bar.duplicate": "Duplicar",
   "bar.export": "Exportar",
   "share.intro": "Quien abra este enlace o escanee el código obtiene su propia copia. El personaje entero va dentro del enlace: no se sube nada a ningún servidor.",
