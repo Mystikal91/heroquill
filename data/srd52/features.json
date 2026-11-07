@@ -10,7 +10,20 @@
     {
       "id": "srd52:feature/fighter-fighting-style",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "fighting-style",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/archery",
+            "srd52:feat/defense",
+            "srd52:feat/great-weapon-fighting",
+            "srd52:feat/two-weapon-fighting"
+          ]
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
         "level": 1
@@ -172,7 +185,26 @@
     {
       "id": "srd52:feature/fighter-indomitable",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long",
+          "minLevel": 9
+        },
+        {
+          "type": "uses",
+          "term": 2,
+          "recharge": "long",
+          "minLevel": 13
+        },
+        {
+          "type": "uses",
+          "term": 3,
+          "recharge": "long",
+          "minLevel": 17
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
         "level": 9
@@ -208,7 +240,23 @@
     {
       "id": "srd52:feature/fighter-epic-boon",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
         "level": 19
@@ -249,7 +297,20 @@
     {
       "id": "srd52:feature/champion-additional-fighting-style",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "fighting-style",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/archery",
+            "srd52:feat/defense",
+            "srd52:feat/great-weapon-fighting",
+            "srd52:feat/two-weapon-fighting"
+          ]
+        }
+      ],
       "data": {
         "subclass": "srd52:subclass/champion",
         "level": 7

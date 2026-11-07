@@ -40,6 +40,13 @@ function MenuPicks({ choice }: { choice: PendingChoice }) {
   if (!c || !s) return null;
   const name = (id: string) => c.name(id);
   const sorted = [...choice.options].sort((a, b) => name(a).localeCompare(name(b)));
+  // What to explain under a pick: the entry itself, or for a weapon mastery the property of the weapon.
+  const about = (id: string | undefined) =>
+    id === undefined
+      ? undefined
+      : choice.grants === "mastery"
+        ? (c.index.get(id)?.data as { weapon?: { mastery?: string } }).weapon?.mastery
+        : id;
   const set = (slot: number, id: string) =>
     updateCharacter((d) => {
       const next = [...(d.selections[choice.key] ?? [])];
@@ -80,7 +87,13 @@ function MenuPicks({ choice }: { choice: PendingChoice }) {
                   );
                 })}
             </select>
-            {own && <RulesText id={own} name={name(own)} text={c.text(own, "desc")} />}
+            {about(own) && (
+              <RulesText
+                id={about(own) ?? ""}
+                name={name(about(own) ?? "")}
+                text={c.text(about(own) ?? "", "desc")}
+              />
+            )}
           </div>
         );
       })}
@@ -137,7 +150,9 @@ export function Choices() {
               : ""}{" "}
             · {ui("choice.hint", { n: choice.choose, left: choice.remaining })}
           </p>
-          {choice.grants === "feat" || (choice.grants === "spell" && choice.options.length > 40) ? (
+          {choice.grants === "feat" ||
+          choice.grants === "mastery" ||
+          (choice.grants === "spell" && choice.options.length > 40) ? (
             <MenuPicks choice={choice} />
           ) : (
             <ul class="options">

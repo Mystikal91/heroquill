@@ -10,7 +10,14 @@
     {
       "id": "srd52:feat/alert",
       "kind": "feat",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "initiative",
+          "value": 0,
+          "plus": "proficiency"
+        }
+      ],
       "data": {
         "category": "origin"
       }
@@ -34,7 +41,71 @@
     {
       "id": "srd52:feat/skilled",
       "kind": "feat",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "skilled",
+          "choose": 3,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:animal-handling",
+            "skill:arcana",
+            "skill:athletics",
+            "skill:deception",
+            "skill:history",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:investigation",
+            "skill:medicine",
+            "skill:nature",
+            "skill:perception",
+            "skill:performance",
+            "skill:persuasion",
+            "skill:religion",
+            "skill:sleight-of-hand",
+            "skill:stealth",
+            "skill:survival",
+            "tool:alchemists-supplies",
+            "tool:brewers-supplies",
+            "tool:tool-calligraphers-supplies",
+            "tool:carpenters-tools",
+            "tool:cartographers-tools",
+            "tool:cobblers-tools",
+            "tool:cooks-utensils",
+            "tool:glassblowers-tools",
+            "tool:jewelers-tools",
+            "tool:leatherworkers-tools",
+            "tool:masons-tools",
+            "tool:painters-supplies",
+            "tool:potters-tools",
+            "tool:smiths-tools",
+            "tool:tinkers-tools",
+            "tool:weavers-tools",
+            "tool:woodcarvers-tools",
+            "tool:disguise-kit",
+            "tool:forgery-kit",
+            "tool:tool-dice",
+            "tool:tool-dragonchess",
+            "tool:tool-playing-cards",
+            "tool:tool-navigators-tools",
+            "tool:tool-poisoners-kit",
+            "tool:tool-thieves-tools",
+            "tool:tool-three-dragon-ante",
+            "tool:bagpipes",
+            "tool:drum",
+            "tool:dulcimer",
+            "tool:flute",
+            "tool:lute",
+            "tool:lyre",
+            "tool:horn",
+            "tool:pan-flute",
+            "tool:shawm",
+            "tool:viol",
+            "tool:herbalism-kit"
+          ]
+        }
+      ],
       "data": {
         "category": "origin"
       }
@@ -45,9 +116,13 @@
       "effects": [],
       "data": {
         "category": "general",
-        "prerequisites": {
-          "level": 4
-        }
+        "builtIn": true,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 4
+          }
+        ]
       }
     },
     {
@@ -56,31 +131,44 @@
       "effects": [],
       "data": {
         "category": "general",
-        "prerequisites": {
-          "level": 4
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 4
+          }
+        ]
       }
     },
     {
       "id": "srd52:feat/archery",
       "kind": "feat",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "attack",
+          "value": 2,
+          "when": "ranged"
+        }
+      ],
       "data": {
         "category": "fighting-style",
-        "prerequisites": {
-          "featureNamed": "Fighting Style"
-        }
+        "featureNamed": "Fighting Style"
       }
     },
     {
       "id": "srd52:feat/defense",
       "kind": "feat",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "ac",
+          "value": 1,
+          "when": "wearingArmor"
+        }
+      ],
       "data": {
         "category": "fighting-style",
-        "prerequisites": {
-          "featureNamed": "Fighting Style"
-        }
+        "featureNamed": "Fighting Style"
       }
     },
     {
@@ -89,20 +177,21 @@
       "effects": [],
       "data": {
         "category": "fighting-style",
-        "prerequisites": {
-          "featureNamed": "Fighting Style"
-        }
+        "featureNamed": "Fighting Style"
       }
     },
     {
       "id": "srd52:feat/two-weapon-fighting",
       "kind": "feat",
-      "effects": [],
+      "effects": [
+        {
+          "type": "flag",
+          "id": "two-weapon-fighting"
+        }
+      ],
       "data": {
         "category": "fighting-style",
-        "prerequisites": {
-          "featureNamed": "Fighting Style"
-        }
+        "featureNamed": "Fighting Style"
       }
     },
     {
@@ -111,9 +200,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -122,9 +214,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -133,9 +228,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -144,9 +242,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -155,10 +256,13 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19,
-          "featureNamed": "Spellcasting"
-        }
+        "featureNamed": "Spellcasting",
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -167,9 +271,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     },
     {
@@ -178,9 +285,12 @@
       "effects": [],
       "data": {
         "category": "epic-boon",
-        "prerequisites": {
-          "level": 19
-        }
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 19
+          }
+        ]
       }
     }
   ]

@@ -7,7 +7,7 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
-import { ACTIVATION, FEATURE_EFFECTS } from "./effects";
+import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
 
 const PACK = "srd52";
 
@@ -162,18 +162,38 @@ function convertProficiencies(raw: RawSource, table: Map<string, string>): Conve
 }
 
 /** Feats keep their book category (origin, general, fighting-style, epic-boon) and what they ask for. */
-function convertFeats(raw: RawSource): Converted {
+function convertFeats(raw: RawSource, table: Map<string, string>): Converted {
   const entries: Entry[] = [];
   const strings: Strings = {};
+  // Skilled: three skills or tools, any combination.
+  const skillsAndTools = [...table.values()].filter(
+    (v) => v.startsWith("skill:") || v.startsWith("tool:"),
+  );
   for (const f of raw.feats) {
-    const asks: Record<string, unknown> = {};
-    if (f.prerequisites?.minimum_level) asks.level = f.prerequisites.minimum_level;
-    if (f.prerequisites?.feature_named) asks.featureNamed = f.prerequisites.feature_named;
+    // The way the engine reads what a feat asks for: a list (`level`), as for the 5.1 options.
+    const asks: Record<string, unknown>[] = [];
+    if (f.prerequisites?.minimum_level)
+      asks.push({ type: "level", level: f.prerequisites.minimum_level });
+    const effects: Effect[] = [...(FEAT_EFFECTS[f.index] ?? [])];
+    if (f.index === "skilled")
+      effects.push({
+        type: "choice",
+        id: "skilled",
+        choose: 3,
+        grants: "proficiency",
+        from: skillsAndTools,
+      });
     entries.push({
       id: id("feat", f.index),
       kind: "feat",
-      effects: [],
-      data: { category: f.type, ...(Object.keys(asks).length ? { prerequisites: asks } : {}) },
+      effects,
+      data: {
+        category: f.type,
+        // The feat that is the ability score increase of the level: the build screen has its own steps.
+        ...(f.index === "ability-score-improvement" && { builtIn: true }),
+        ...(f.prerequisites?.feature_named && { featureNamed: f.prerequisites.feature_named }),
+        ...(asks.length ? { prerequisites: asks } : {}),
+      },
     });
     strings[`${f.index}.name`] = f.name;
     strings[`${f.index}.desc`] = text(f.description);
@@ -513,7 +533,18 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const items = convertWeapons(raw);
   // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
   const weaponIds = items.entries.map((e) => e.id);
-  for (const feature of classPart.features.entries) {
+  for (const feature of [...classPart.features.entries, ...subclassPart.features.entries]) {
+    const pick = FEAT_PICKS[feature.id.split("/")[1] ?? ""];
+    if (pick)
+      feature.effects = [
+        {
+          type: "choice",
+          id: pick.id,
+          choose: 1,
+          grants: "feat",
+          from: featIdsOf(raw, pick.category),
+        },
+      ];
     if (feature.id === id("feature", "fighter-weapon-mastery"))
       feature.effects = [
         {
@@ -531,7 +562,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     skill: convertSkills(raw),
     language: convertLanguages(raw),
     proficiency: convertProficiencies(raw, table),
-    feat: convertFeats(raw),
+    feat: convertFeats(raw, table),
     background: backgroundPart.backgrounds,
     species,
     trait: merge(traits, backgroundPart.traits),

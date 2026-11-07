@@ -20,8 +20,38 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
     { type: "uses", term: 1, recharge: "short", minLevel: 2 },
     { type: "uses", term: 2, recharge: "short", minLevel: 17 },
   ],
+  // Three uses from level 17 is the table's; 1 at 9, 2 at 13, 3 at 17.
+  "fighter-indomitable": [
+    { type: "uses", term: 1, recharge: "long", minLevel: 9 },
+    { type: "uses", term: 2, recharge: "long", minLevel: 13 },
+    { type: "uses", term: 3, recharge: "long", minLevel: 17 },
+  ],
   "champion-improved-critical": [{ type: "critRange", min: 19 }],
   "champion-superior-critical": [{ type: "critRange", min: 18 }],
+};
+
+/**
+ * Effects of the 2024 feats, by feat slug. The Fighting Style feats are the 2014 styles, now feats
+ * a class feature lets the person pick. A feat that is not here is text only (Savage Attacker, the
+ * Epic Boons, Magic Initiate, which wait for the spells of the 2024 list).
+ */
+export const FEAT_EFFECTS: Record<string, Effect[]> = {
+  archery: [{ type: "modifier", target: "attack", value: 2, when: "ranged" }],
+  defense: [{ type: "modifier", target: "ac", value: 1, when: "wearingArmor" }],
+  // The off-hand weapon adds its ability modifier to damage (the engine reads this flag by name).
+  "two-weapon-fighting": [{ type: "flag", id: "two-weapon-fighting" }],
+  // Initiative Proficiency: the proficiency bonus on the roll.
+  alert: [{ type: "modifier", target: "initiative", value: 0, plus: "proficiency" }],
+};
+
+/**
+ * Class features that are a pick of feats of one category, by feature slug: the Fighting Style of
+ * the Fighter and the Champion's second one, and the Fighter's Epic Boon.
+ */
+export const FEAT_PICKS: Record<string, { category: string; id: string }> = {
+  "fighter-fighting-style": { category: "fighting-style", id: "fighting-style" },
+  "champion-additional-fighting-style": { category: "fighting-style", id: "fighting-style" },
+  "fighter-epic-boon": { category: "epic-boon", id: "epic-boon" },
 };
 
 /** How a feature is used: `bonus` for a Bonus Action, `action` for an action, `reaction`. */

@@ -165,6 +165,7 @@
   "choice.kind.abilityBonus": "Ability bonuses",
   "choice.kind.expertise": "Expertise",
   "choice.kind.feat": "Feats",
+  "choice.kind.mastery": "Weapon masteries",
   "choice.hint": "Choose {n} · {left} left",
   "choice.alreadyHave": "already have",
   "sheet.grantedSpells": "Granted spells",

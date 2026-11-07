@@ -189,8 +189,14 @@ function FeatPicker() {
   const scores = Object.fromEntries(Object.entries(s.abilities).map(([id, a]) => [id, a.score]));
   const state = { level: s.level, held: new Set(s.held), scores };
   // A feat that asks for something the character lacks stays in the list, greyed, with what it asks.
+  // The 2024 feats of other categories are given by a class or a background; the ability score
+  // increase is the build screen's own steps.
+  const pickable = (id: string) => {
+    const data = ct.index.get(id)?.data;
+    return data?.builtIn !== true && (data?.category === undefined || data.category === "general");
+  };
   const options = entriesOfKind("feat")
-    .filter((o) => !c.feats.includes(o.id))
+    .filter((o) => !c.feats.includes(o.id) && pickable(o.id))
     .map((o) => {
       const expression = needsOf(ct.index.get(o.id));
       const unmet = expression && !checkNeeds(expression, state, (w) => ct.index.has(w)).met;

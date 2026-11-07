@@ -165,6 +165,7 @@
   "choice.kind.abilityBonus": "Bonus de caractéristiques",
   "choice.kind.expertise": "Expertise",
   "choice.kind.feat": "Dons",
+  "choice.kind.mastery": "Maîtrises d'armes",
   "choice.hint": "Choisis-en {n} · {left} restants",
   "choice.alreadyHave": "déjà acquis",
   "sheet.grantedSpells": "Sorts accordés",
