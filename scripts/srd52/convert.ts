@@ -8,6 +8,7 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
+import { EQUIPMENT_FIXES } from "./equipmentFixes";
 
 const PACK = "srd52";
 
@@ -496,6 +497,9 @@ const BUNDLES: Record<string, number> = {
   needles: 50,
 };
 
+/** The fixes the source no longer needs (it now says what the book says), for the build to report. */
+export const staleFixes: string[] = [];
+
 const categoriesOf = (e: Raw): string[] =>
   ((e.equipment_categories ?? []) as Raw[]).map((c) => c.index);
 
@@ -505,10 +509,22 @@ function convertEquipment(raw: RawSource): Converted {
   const strings: Strings = {};
   for (const e of raw.equipment) {
     const categories = categoriesOf(e);
+    // Where the source disagrees with the book, the book wins (see `equipmentFixes.ts`).
+    const fix = EQUIPMENT_FIXES[e.index];
+    const sourceCost = e.cost ? { quantity: e.cost.quantity, unit: e.cost.unit } : undefined;
+    const cost = fix?.cost ?? sourceCost;
+    const weight = fix && "weight" in fix ? (fix.weight ?? undefined) : e.weight;
+    if (
+      fix &&
+      (fix.cost === undefined ||
+        (sourceCost?.quantity === fix.cost.quantity && sourceCost.unit === fix.cost.unit)) &&
+      (!("weight" in fix) || (fix.weight ?? undefined) === e.weight)
+    )
+      staleFixes.push(e.index);
     const data: Record<string, unknown> = {
-      cost: e.cost ? { amount: e.cost.quantity, unit: e.cost.unit } : { amount: 0, unit: "gp" },
+      cost: cost ? { amount: cost.quantity, unit: cost.unit } : { amount: 0, unit: "gp" },
     };
-    if (e.weight !== undefined) data.weight = e.weight;
+    if (weight !== undefined) data.weight = weight;
     const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
 
     if (categories.includes("weapons")) {

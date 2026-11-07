@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { EQUIPMENT_FIXES } from "../../scripts/srd52/equipmentFixes";
 import { itemData } from "../data/items";
 import pairs from "../data/srd52Pairs.json";
 import { startingOf } from "../data/startingEquipment";
@@ -87,6 +88,31 @@ describe("2024 equipment", () => {
     expect(categoryItems("gaming-sets", bothIndex, "srd51")).toEqual([]);
     const gold = resolveStarting(soldier().choices, { options: [1], items: {} });
     expect(gold).toMatchObject({ gold: 50, items: [], complete: true });
+  });
+});
+
+describe("prices and weights of the 2024 table", () => {
+  const price = (slug: string) => bothIndex.get(`srd52:item/${slug}`)?.data;
+
+  it("follow the SRD 5.2.1 where the database was wrong", () => {
+    expect(price("longbow")?.cost).toEqual({ amount: 50, unit: "gp" });
+    expect(price("spear")).toMatchObject({ cost: { amount: 1, unit: "gp" }, weight: 3 });
+    expect(price("javelin")?.cost).toEqual({ amount: 5, unit: "sp" });
+    expect(price("dart")).toMatchObject({ cost: { amount: 5, unit: "cp" }, weight: 0.25 });
+    expect(price("mace")?.weight).toBe(4);
+    expect(price("hand-crossbow")).toMatchObject({ cost: { amount: 75, unit: "gp" }, weight: 3 });
+    expect(price("poisoners-kit")?.cost).toEqual({ amount: 50, unit: "gp" });
+  });
+
+  it("leaves an item with no weight when the book shows a dash", () => {
+    expect(price("bell")).not.toHaveProperty("weight");
+    expect(price("antitoxin")).not.toHaveProperty("weight");
+  });
+
+  it("has a fix only for an item the pack has", () => {
+    for (const slug of Object.keys(EQUIPMENT_FIXES)) {
+      expect(bothIndex.has(`srd52:item/${slug}`), slug).toBe(true);
+    }
   });
 });
 

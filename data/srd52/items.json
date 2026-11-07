@@ -29,7 +29,7 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 25,
+          "amount": 50,
           "unit": "gp"
         },
         "weight": 1,
@@ -80,7 +80,6 @@
           "amount": 50,
           "unit": "gp"
         },
-        "weight": 1,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -174,8 +173,8 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 2,
-          "unit": "gp"
+          "amount": 4,
+          "unit": "sp"
         },
         "weight": 2,
         "category": "adventuring-gear",
@@ -225,10 +224,10 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 2,
+          "amount": 1,
           "unit": "gp"
         },
-        "weight": 25,
+        "weight": 7,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -244,7 +243,6 @@
           "amount": 1,
           "unit": "gp"
         },
-        "weight": 1,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -258,7 +256,7 @@
       "data": {
         "cost": {
           "amount": 5,
-          "unit": "gp"
+          "unit": "sp"
         },
         "weight": 3,
         "category": "adventuring-gear",
@@ -465,7 +463,7 @@
           "amount": 16,
           "unit": "gp"
         },
-        "weight": 20,
+        "weight": 42,
         "category": "adventuring-gear",
         "gear": {
           "category": "equipment-packs",
@@ -544,7 +542,7 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 2,
+          "amount": 1,
           "unit": "gp"
         },
         "weight": 2,
@@ -643,7 +641,7 @@
           "amount": 5,
           "unit": "gp"
         },
-        "weight": 6,
+        "weight": 10,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -684,7 +682,7 @@
           "amount": 50,
           "unit": "gp"
         },
-        "weight": 14,
+        "weight": 20,
         "category": "armor",
         "armor": {
           "category": "medium",
@@ -706,10 +704,10 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 50,
+          "amount": 5,
           "unit": "gp"
         },
-        "weight": 20,
+        "weight": 25,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -725,7 +723,7 @@
           "amount": 25,
           "unit": "gp"
         },
-        "weight": 8,
+        "weight": 12,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -741,7 +739,7 @@
           "amount": 15,
           "unit": "gp"
         },
-        "weight": 3,
+        "weight": 6,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -754,7 +752,7 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 5,
+          "amount": 2,
           "unit": "gp"
         },
         "weight": 4,
@@ -817,10 +815,10 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 2,
+          "amount": 25,
           "unit": "gp"
         },
-        "weight": 1,
+        "weight": 2,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -935,7 +933,7 @@
       "data": {
         "cost": {
           "amount": 5,
-          "unit": "gp"
+          "unit": "cp"
         },
         "weight": 0.25,
         "category": "weapon",
@@ -990,7 +988,7 @@
           "amount": 39,
           "unit": "gp"
         },
-        "weight": 20,
+        "weight": 39,
         "category": "adventuring-gear",
         "gear": {
           "category": "equipment-packs",
@@ -1581,10 +1579,10 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 25,
+          "amount": 75,
           "unit": "gp"
         },
-        "weight": 2,
+        "weight": 3,
         "category": "weapon",
         "weapon": {
           "category": "martial",
@@ -1824,7 +1822,7 @@
       "data": {
         "cost": {
           "amount": 5,
-          "unit": "gp"
+          "unit": "sp"
         },
         "weight": 2,
         "category": "weapon",
@@ -2113,7 +2111,7 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 5,
+          "amount": 50,
           "unit": "gp"
         },
         "weight": 2,
@@ -2217,7 +2215,7 @@
           "amount": 5,
           "unit": "gp"
         },
-        "weight": 2,
+        "weight": 4,
         "category": "weapon",
         "weapon": {
           "category": "simple",
@@ -2571,8 +2569,8 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 3,
-          "unit": "gp"
+          "amount": 1,
+          "unit": "sp"
         },
         "weight": 0,
         "category": "adventuring-gear",
@@ -2606,7 +2604,7 @@
           "amount": 5,
           "unit": "gp"
         },
-        "weight": 6,
+        "weight": 18,
         "category": "weapon",
         "weapon": {
           "category": "martial",
@@ -2669,7 +2667,7 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 5,
+          "amount": 50,
           "unit": "gp"
         },
         "weight": 2,
@@ -3026,7 +3024,7 @@
           "amount": 1,
           "unit": "gp"
         },
-        "weight": 1,
+        "weight": 4,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
@@ -3413,10 +3411,10 @@
       "effects": [],
       "data": {
         "cost": {
-          "amount": 5,
+          "amount": 1,
           "unit": "gp"
         },
-        "weight": 2,
+        "weight": 3,
         "category": "weapon",
         "weapon": {
           "category": "simple",
@@ -3504,7 +3502,7 @@
           "amount": 1,
           "unit": "gp"
         },
-        "weight": 2,
+        "weight": 5,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"
