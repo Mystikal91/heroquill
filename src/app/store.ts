@@ -20,6 +20,7 @@ import {
 } from "../storage/characters";
 import { decodeShare, isShareHash } from "../storage/share";
 import { parseBackup, parseImportFile } from "../storage/transfer";
+import { askEdition, editionsIn } from "./edition";
 import { EXAMPLE_ID, buildExample } from "./example";
 import { showView, view } from "./navigation";
 import { transferDialog, transferInbox } from "./transferState";
@@ -207,6 +208,21 @@ export async function importFromLink(): Promise<void> {
 /** The edition is fixed here, when the character is made: it picks the rules every later step uses. */
 export const newCharacter = (ruleset: Character["ruleset"] = "srd51") =>
   switchTo(createNewCharacter(ruleset));
+
+/** The editions whose rules are loaded. */
+export const editionsAvailable = computed(() =>
+  editionsIn((content.value?.packs ?? []).map((p) => p.manifest.ruleset)),
+);
+
+/**
+ * "New character": the edition comes first. With one edition loaded there is nothing to ask, so the
+ * character is made at once; closing the question makes none.
+ */
+export async function startNewCharacter(): Promise<void> {
+  if (editionsAvailable.value.length < 2) return newCharacter();
+  const ruleset = await askEdition();
+  if (ruleset) await newCharacter(ruleset);
+}
 
 /**
  * Opens Aria, the example character, in the sheet. If she is already among the characters (with

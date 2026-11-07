@@ -7,10 +7,10 @@ import {
   duplicateCharacter,
   importFailed,
   importNotice,
-  newCharacter,
   openCharacter,
   saveStatus,
   shareNotice,
+  startNewCharacter,
   undoDelete,
 } from "../app/store";
 import { transferDialog } from "../app/transferState";
@@ -61,7 +61,7 @@ export function CharacterBar() {
             </option>
           ))}
         </select>
-        <button type="button" class="bar-new" onClick={() => void newCharacter()}>
+        <button type="button" class="bar-new" onClick={() => void startNewCharacter()}>
           {ui("bar.new")}
         </button>
         <Popover label={<span aria-hidden="true">⋯</span>} title={ui("bar.more")}>

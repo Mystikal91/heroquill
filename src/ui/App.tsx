@@ -24,6 +24,7 @@ import { AppMenu } from "./AppMenu";
 import { AutoTranslatePage } from "./AutoTranslatePage";
 import { CustomSpellDialog } from "./CustomSpellDialog";
 import { CustomizeItemDialog } from "./CustomizeItemDialog";
+import { EditionDialog } from "./EditionDialog";
 import { ExplainDialog } from "./Explain";
 import { HomebrewPage } from "./HomebrewPage";
 import { InstallNotice } from "./InstallNotice";
@@ -172,6 +173,7 @@ export function App() {
       <RollToast />
       <UndoNotice />
       <ConfirmDialog />
+      <EditionDialog />
       <UpdateNotice />
       <InstallNotice />
       <SpellDialog />

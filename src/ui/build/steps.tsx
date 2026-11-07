@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { isHomebrewId } from "../../app/homebrew";
-import { character, content, sheet, updateCharacter } from "../../app/store";
+import { character, content, editionsAvailable, sheet, updateCharacter } from "../../app/store";
 import { itemData } from "../../data/items";
 import { proficiencyKeys } from "../../engine/equipment";
 import { addToInventory, itemKind, packContents } from "../../engine/gear";
@@ -33,6 +33,11 @@ export function OriginStep() {
           />
         </label>
 
+        {editionsAvailable.value.length > 1 && (
+          <p class="muted edition-current">
+            {ui("edition.current", { name: ui(`edition.${c.ruleset}.name`) })}
+          </p>
+        )}
         <Select
           label={ui("form.species")}
           value={c.choices.species}
