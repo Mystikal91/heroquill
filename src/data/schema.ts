@@ -137,6 +137,7 @@ const PlainEffectSchema = v.variant("type", [
       "abilityBonus",
       "expertise",
       "feat",
+      "mastery",
     ]),
     from: v.array(v.string()),
     /** Bonus applied per pick when `grants` is `abilityBonus`. */
@@ -308,6 +309,12 @@ const PlainEffectSchema = v.variant("type", [
    * `bonus` only the highest counts (an Extra Attack of 2 at the 5th level and 3 at the 11th is
    * 3, not 5). A text term (a damage type) is shown as it is.
    */
+  /**
+   * The character can use the mastery property of this kind of weapon (an item: a longsword, not
+   * one sword). The 2024 fighter, barbarian, paladin, ranger and rogue pick them; the weapon's
+   * `mastery` says which property it is.
+   */
+  v.object({ type: v.literal("weaponMastery"), item: EntryIdSchema }),
   v.object({
     type: v.literal("featureValue"),
     name: v.string(),

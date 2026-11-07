@@ -13,6 +13,8 @@ const WeaponSchema = v.object({
   properties: v.array(EntryIdSchema),
   range: RangeSchema,
   throwRange: v.optional(RangeSchema),
+  /** The 2024 mastery property (a `property` entry) of the weapon, used by whoever has mastered it. */
+  mastery: v.optional(EntryIdSchema),
   /** Any one of these `category:target` proficiencies makes the wielder proficient. */
   proficiency: v.array(v.string()),
 });

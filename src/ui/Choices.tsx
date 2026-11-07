@@ -23,6 +23,7 @@ function optionLabel(c: Content, ruleset: string, choice: PendingChoice, option:
     case "spell":
     case "trait":
     case "feat":
+    case "mastery":
       return c.name(option);
     case "expertise":
       return c.index.has(`${ruleset}:skill/${option}`)

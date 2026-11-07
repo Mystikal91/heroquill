@@ -33,6 +33,8 @@ export interface RawSource {
   features: Raw[];
   subclasses: Raw[];
   weaponMastery: Raw[];
+  equipment: Raw[];
+  weaponProperties: Raw[];
 }
 
 /** What the pilot converts for the kinds that are big; everything of the small kinds is converted. */
@@ -435,6 +437,68 @@ function convertSubclasses(raw: RawSource): { subclasses: Converted; features: C
   return { subclasses, features };
 }
 
+/**
+ * Weapon properties (Finesse, Light...) and the eight mastery properties (Cleave, Graze...), both as
+ * `property` entries: a mastery's id is `property/mastery-<name>`, so a weapon's `properties` and its
+ * `mastery` never share an id.
+ */
+function convertProperties(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const p of raw.weaponProperties) {
+    entries.push({ id: id("property", p.index), kind: "property", effects: [], data: {} });
+    strings[`${p.index}.name`] = p.name;
+    strings[`${p.index}.desc`] = text(p.description);
+  }
+  for (const m of raw.weaponMastery) {
+    const slug = `mastery-${m.index}`;
+    entries.push({
+      id: id("property", slug),
+      kind: "property",
+      effects: [],
+      data: { mastery: true },
+    });
+    strings[`${slug}.name`] = m.name;
+    strings[`${slug}.desc`] = text(m.description);
+  }
+  return { entries, strings };
+}
+
+/** The weapons of the equipment table (simple and martial, melee and ranged), with their mastery. */
+function convertWeapons(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const w of raw.equipment) {
+    const categories: string[] = (w.equipment_categories ?? []).map((c: Raw) => c.index);
+    if (!categories.includes("weapons")) continue;
+    const category = categories.includes("simple-weapons") ? "simple" : "martial";
+    const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
+    entries.push({
+      id: id("item", w.index),
+      kind: "item",
+      effects: [],
+      data: {
+        category: "weapon",
+        cost: { amount: w.cost.quantity, unit: w.cost.unit },
+        weight: w.weight,
+        weapon: {
+          category,
+          kind: categories.includes("melee-weapons") ? "melee" : "ranged",
+          ...(w.damage && { damage: damage(w.damage) }),
+          ...(w.two_handed_damage && { twoHandedDamage: damage(w.two_handed_damage) }),
+          properties: ((w.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
+          range: w.range,
+          ...(w.throw_range && { throwRange: w.throw_range }),
+          ...(w.mastery && { mastery: id("property", `mastery-${w.mastery.index}`) }),
+          proficiency: [`weapon:${category}-weapons`],
+        },
+      },
+    });
+    strings[`${w.index}.name`] = w.name;
+  }
+  return { entries, strings };
+}
+
 const merge = (...parts: Converted[]): Converted => ({
   entries: parts.flatMap((p) => p.entries),
   strings: Object.assign({}, ...parts.map((p) => p.strings)),
@@ -446,6 +510,22 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const classPart = convertClasses(raw, table);
   const subclassPart = convertSubclasses(raw);
   const backgroundPart = convertBackgrounds(raw, table);
+  const items = convertWeapons(raw);
+  // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
+  const weaponIds = items.entries.map((e) => e.id);
+  for (const feature of classPart.features.entries) {
+    if (feature.id === id("feature", "fighter-weapon-mastery"))
+      feature.effects = [
+        {
+          type: "choice",
+          id: "masteries",
+          choose: 3,
+          chooseBy: "weaponMastery",
+          grants: "mastery",
+          from: weaponIds,
+        },
+      ];
+  }
   return {
     ability: convertAbilities(raw),
     skill: convertSkills(raw),
@@ -458,5 +538,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     class: classPart.classes,
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),
+    item: items,
+    property: convertProperties(raw),
   };
 }

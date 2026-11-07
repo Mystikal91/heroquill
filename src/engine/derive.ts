@@ -126,6 +126,8 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   grantedSpells: string[];
   /** The granted spells that can be cast as often as wanted without a slot (an invocation): cantrips in all but their level. */
   atWillSpells: string[];
+  /** The weapons (items) whose mastery property the character can use. */
+  weaponMasteries: string[];
   /** Ids of what the character has (features, traits, spells, class, subclass, flags): what a requirement checks. */
   held: string[];
   /** What features add to the damage that spells roll (Agonizing Blast: the Charisma modifier), see `spellRolls`. */
@@ -741,6 +743,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       ),
     ],
     held: [...heldNow],
+    weaponMasteries: [
+      ...new Set(
+        sourced.flatMap(({ effect }) => (effect.type === "weaponMastery" ? [effect.item] : [])),
+      ),
+    ],
     atWillSpells: [
       ...new Set(
         sourced.flatMap(({ effect, source }) =>

@@ -114,6 +114,7 @@ function AttackCard({ a }: { a: AttackResult }) {
     ...(a.offHand ? [ui("play.weaponOffHand")] : []),
     ...(a.bonusAction ? [ui("play.unarmedBonus")] : []),
     ...a.properties.map((p) => c.name(p)),
+    ...(a.mastery ? [c.name(a.mastery)] : []),
     range,
   ].filter(Boolean);
 

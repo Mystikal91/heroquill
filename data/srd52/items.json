@@ -1,0 +1,1281 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api@f4eac5a (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:item/battleaxe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "slashing"
+          },
+          "twoHandedDamage": {
+            "dice": "1d10",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-topple",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/blowgun",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/loading"
+          ],
+          "range": {
+            "normal": 25,
+            "long": 100
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/club",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d4",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/light"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dagger",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d4",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/finesse",
+            "srd52:property/light",
+            "srd52:property/thrown"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-nick",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/dart",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 0.25,
+        "weapon": {
+          "category": "simple",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d4",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/finesse",
+            "srd52:property/thrown"
+          ],
+          "range": {
+            "normal": 20,
+            "long": 60
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/flail",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "bludgeoning"
+          },
+          "properties": [],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/glaive",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d10",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/reach",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-graze",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/greataxe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 7,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d12",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-cleave",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/greatclub",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 2,
+          "unit": "sp"
+        },
+        "weight": 10,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-push",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/greatsword",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "2d6",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-graze",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/halberd",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d10",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/reach",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-cleave",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/hand-crossbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/light",
+            "srd52:property/loading"
+          ],
+          "range": {
+            "normal": 30,
+            "long": 120
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/handaxe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/light",
+            "srd52:property/thrown"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/heavy-crossbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 18,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d10",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/heavy",
+            "srd52:property/loading",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 100,
+            "long": 400
+          },
+          "mastery": "srd52:property/mastery-push",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/javelin",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/thrown"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 30,
+            "long": 120
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/lance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d10",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/reach",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-topple",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/light-crossbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "weapon": {
+          "category": "simple",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/loading",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 80,
+            "long": 320
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/light-hammer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d4",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/light",
+            "srd52:property/thrown"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-nick",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/longbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/heavy",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 150,
+            "long": 600
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/longsword",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "slashing"
+          },
+          "twoHandedDamage": {
+            "dice": "1d10",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/mace",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "bludgeoning"
+          },
+          "properties": [],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/maul",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "2d6",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-topple",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/morningstar",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [],
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/musket",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 500,
+          "unit": "gp"
+        },
+        "weight": 10,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d12",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/loading",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 40,
+            "long": 120
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pike",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 6,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d10",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/heavy",
+            "srd52:property/reach",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-push",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pistol",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 250,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "weapon": {
+          "category": "martial",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d10",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/loading"
+          ],
+          "range": {
+            "normal": 30,
+            "long": 90
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/quarterstaff",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 2,
+          "unit": "sp"
+        },
+        "weight": 4,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "bludgeoning"
+          },
+          "twoHandedDamage": {
+            "dice": "1d8",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-topple",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/rapier",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/finesse"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/scimitar",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/finesse",
+            "srd52:property/light"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-nick",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/shortbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition",
+            "srd52:property/two-handed"
+          ],
+          "range": {
+            "normal": 80,
+            "long": 320
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/shortsword",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/finesse",
+            "srd52:property/light"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-vex",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sickle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d4",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/light"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-nick",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sling",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        },
+        "weight": 0,
+        "weapon": {
+          "category": "simple",
+          "kind": "ranged",
+          "damage": {
+            "dice": "1d4",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/ammunition"
+          ],
+          "range": {
+            "normal": 30,
+            "long": 120
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spear",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "simple",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "twoHandedDamage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/thrown",
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:simple-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/trident",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 4,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d6",
+            "type": "piercing"
+          },
+          "twoHandedDamage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/thrown",
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "throwRange": {
+            "normal": 20,
+            "long": 60
+          },
+          "mastery": "srd52:property/mastery-topple",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/warhammer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 5,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "bludgeoning"
+          },
+          "twoHandedDamage": {
+            "dice": "1d10",
+            "type": "bludgeoning"
+          },
+          "properties": [
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-push",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/war-pick",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        },
+        "weight": 2,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d8",
+            "type": "piercing"
+          },
+          "twoHandedDamage": {
+            "dice": "1d10",
+            "type": "piercing"
+          },
+          "properties": [
+            "srd52:property/versatile"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-sap",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    },
+    {
+      "id": "srd52:item/whip",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "weapon",
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 3,
+        "weapon": {
+          "category": "martial",
+          "kind": "melee",
+          "damage": {
+            "dice": "1d4",
+            "type": "slashing"
+          },
+          "properties": [
+            "srd52:property/finesse",
+            "srd52:property/reach"
+          ],
+          "range": {
+            "normal": 5
+          },
+          "mastery": "srd52:property/mastery-slow",
+          "proficiency": [
+            "weapon:martial-weapons"
+          ]
+        }
+      }
+    }
+  ]
+}

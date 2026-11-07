@@ -37,6 +37,8 @@ export interface AttackResult {
   magicWeapon?: number;
   /** The character has the spell Magic Weapon, so the weapon can take it. */
   canMagicWeapon?: boolean;
+  /** The weapon's mastery property (a `property` entry) once the character has mastered this kind of weapon. */
+  mastery?: string;
   /** The attack is made at range. */
   ranged: boolean;
   /** The weapon counts as magic. */
@@ -249,6 +251,10 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
   const { character, index, abilities, held, proficiencyBonus } = ctx;
   const attacks: AttackResult[] = [];
   const knowsMagicWeapon = knowsSpell(ctx, MAGIC_WEAPON_SPELL);
+  // The kinds of weapon (items) whose mastery property the character can use (2024).
+  const masteries = new Set(
+    ctx.sourced.flatMap(({ effect }) => (effect.type === "weaponMastery" ? [effect.item] : [])),
+  );
   // The paladin's Sacred Weapon: found by the slug of its feature, as the SRD and Aurora each have their own entry.
   const knowsSacredWeapon = ctx.sourced.some(({ source }) =>
     /\/channel-divinity-sacred-weapon$/.test(source),
@@ -335,6 +341,11 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
       }
     }
     const modifier = abilities[ability].modifier;
+    // A copy a person made of a weapon (Customize) keeps the mastery of the weapon it copies.
+    const copied = entry.data.copyOf;
+    const mastered =
+      masteries.has(item.itemId) || (typeof copied === "string" && masteries.has(copied));
+    const mastery = mastered ? weapon.mastery : undefined;
     const grip = (twoHanded: boolean) => ({
       armor,
       levelOf: ctx.levelOf,
@@ -366,6 +377,7 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
       ...(sacred && { sacredWeapon: sacredBonus }),
       ...(knowsSacredWeapon && { canSacredWeapon: true }),
       ranged: weapon.kind === "ranged",
+      ...(mastery && { mastery }),
       ...(offHand && { offHand }),
       magical,
       enhancement,

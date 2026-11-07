@@ -82,6 +82,51 @@ describe("the 2024 pilot pack", () => {
     expect(deriveSheet(c, bothIndex).abilities.str.score).toBe(17);
   });
 
+  describe("Weapon Mastery", () => {
+    const KEY = "srd52:feature/fighter-weapon-mastery/masteries";
+    const withSwords = (level: number, masteries: string[]) => {
+      const c = pilot(level);
+      c.inventory = [
+        { itemId: "srd52:item/longsword", quantity: 1, equipped: true },
+        { itemId: "srd52:item/dagger", quantity: 1, equipped: true },
+      ];
+      c.selections[KEY] = masteries;
+      return deriveSheet(c, bothIndex);
+    };
+
+    it("lets a Fighter master three kinds of weapon at level 1 and four at level 4", () => {
+      const pick = (level: number) =>
+        deriveSheet(pilot(level), bothIndex).choices.find((ch) => ch.key === KEY);
+      expect(pick(3)?.choose).toBe(3);
+      expect(pick(4)?.choose).toBe(4);
+      // Every simple and martial weapon, and only those of the 2024 SRD.
+      expect(pick(3)?.options.length).toBe(38);
+      expect(pick(3)?.options.every((o) => o.startsWith("srd52:item/"))).toBe(true);
+    });
+
+    it("shows the mastery property only on a weapon the character has mastered", () => {
+      const sheet = withSwords(3, ["srd52:item/longsword"]);
+      expect(sheet.weaponMasteries).toEqual(["srd52:item/longsword"]);
+      const sword = sheet.attacks.find((a) => a.itemId === "srd52:item/longsword");
+      const dagger = sheet.attacks.find((a) => a.itemId === "srd52:item/dagger");
+      expect(sword?.mastery).toBe("srd52:property/mastery-sap");
+      expect(dagger?.mastery).toBeUndefined();
+    });
+
+    it("reads each weapon's property from the book", () => {
+      expect(bothIndex.get("srd52:item/dagger")?.data.weapon).toMatchObject({
+        mastery: "srd52:property/mastery-nick",
+        properties: ["srd52:property/finesse", "srd52:property/light", "srd52:property/thrown"],
+      });
+      expect(bothIndex.get("srd52:property/mastery-sap")?.data.mastery).toBe(true);
+    });
+
+    it("gives a 2014 character no mastery", () => {
+      const c = createCharacter("srd51");
+      expect(deriveSheet(c, bothIndex).weaponMasteries).toEqual([]);
+    });
+  });
+
   it("does not offer 2024 feats to a 2014 character", () => {
     expect(inRuleset("srd52:feat/alert", "srd51")).toBe(false);
     expect(inRuleset("srd51:class/fighter", "srd52")).toBe(false);

@@ -125,6 +125,8 @@ function grantEffect(choice: ChoiceEffect, option: string): Effect {
       return { type: "trait", id: option };
     case "expertise":
       return { type: "expertise", skill: option };
+    case "mastery":
+      return { type: "weaponMastery", item: option };
   }
 }
 

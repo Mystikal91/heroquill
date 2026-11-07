@@ -17,6 +17,8 @@ export const SRD52_FILES = [
   "classes",
   "subclasses",
   "features",
+  "items",
+  "properties",
 ] as const;
 
 export const loadSrd52Pack = (file: string): Pack =>
