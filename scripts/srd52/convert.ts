@@ -228,13 +228,20 @@ function convertSpecies(raw: RawSource, table: Map<string, string>): [Converted,
 }
 
 /**
- * Backgrounds carry what the 2024 rules give them: three abilities to raise, an Origin feat and two
- * skill proficiencies (plus a tool). The ability increase and the feat are DATA for now: the engine
- * reads them in a later step (see the 2024 gap list, item B1).
+ * Backgrounds carry what the 2024 rules give them: two skill proficiencies (plus a tool), an Origin
+ * feat, and an increase of the three abilities they list: +2 to one and +1 to another, or +1 to all
+ * three. The feat is a `trait` effect that points at the feat (the engine holds it as given). The
+ * increase is a choice between two traits made for the background (`<slug>-ability-2-1` with two
+ * ability choices, which cannot take the same ability, and `<slug>-ability-1-1-1` with three fixed
+ * bonuses), so it reuses what the engine does for choices.
  */
-function convertBackgrounds(raw: RawSource, table: Map<string, string>): Converted {
+function convertBackgrounds(
+  raw: RawSource,
+  table: Map<string, string>,
+): { backgrounds: Converted; traits: Converted } {
   const entries: Entry[] = [];
   const strings: Strings = {};
+  const traits: Converted = { entries: [], strings: {} };
   for (const b of raw.backgrounds.filter((x: Raw) => PILOT.backgrounds.includes(x.index))) {
     const effects: Effect[] = (b.proficiencies as Raw[]).map((p) =>
       proficiencyEffect(table, p.index),
@@ -242,6 +249,56 @@ function convertBackgrounds(raw: RawSource, table: Map<string, string>): Convert
     (b.proficiency_choices ?? []).forEach((set: Raw, i: number) => {
       effects.push(proficiencyChoice(table, `${b.index}-proficiency-${i + 1}`, set));
     });
+    const abilities: string[] = (b.ability_scores as Raw[]).map((a) => a.index);
+    const split = `${b.index}-ability-2-1`;
+    const spread = `${b.index}-ability-1-1-1`;
+    traits.entries.push(
+      {
+        id: id("trait", split),
+        kind: "trait",
+        effects: [
+          {
+            type: "choice",
+            id: "plus-2",
+            choose: 1,
+            grants: "abilityBonus",
+            from: abilities,
+            value: 2,
+          },
+          {
+            type: "choice",
+            id: "plus-1",
+            choose: 1,
+            grants: "abilityBonus",
+            from: abilities,
+            value: 1,
+          },
+        ],
+        data: {},
+      },
+      {
+        id: id("trait", spread),
+        kind: "trait",
+        effects: abilities.map((ability) => ({
+          type: "abilityBonus" as const,
+          ability: ability as "str",
+          value: 1,
+        })),
+        data: {},
+      },
+    );
+    traits.strings[`${split}.name`] = "+2 to one ability, +1 to another";
+    traits.strings[`${spread}.name`] = "+1 to each of the three abilities";
+    effects.push(
+      { type: "trait", id: id("feat", b.feat.index) },
+      {
+        type: "choice",
+        id: "ability-increase",
+        choose: 1,
+        grants: "trait",
+        from: [id("trait", split), id("trait", spread)],
+      },
+    );
     entries.push({
       id: id("background", b.index),
       kind: "background",
@@ -254,7 +311,7 @@ function convertBackgrounds(raw: RawSource, table: Map<string, string>): Convert
     });
     strings[`${b.index}.name`] = b.name;
   }
-  return { entries, strings };
+  return { backgrounds: { entries, strings }, traits };
 }
 
 /** One feature entry; the effects and the activation are the hand-written ones, by feature slug. */
@@ -388,15 +445,16 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const [species, traits] = convertSpecies(raw, table);
   const classPart = convertClasses(raw, table);
   const subclassPart = convertSubclasses(raw);
+  const backgroundPart = convertBackgrounds(raw, table);
   return {
     ability: convertAbilities(raw),
     skill: convertSkills(raw),
     language: convertLanguages(raw),
     proficiency: convertProficiencies(raw, table),
     feat: convertFeats(raw),
-    background: convertBackgrounds(raw, table),
+    background: backgroundPart.backgrounds,
     species,
-    trait: traits,
+    trait: merge(traits, backgroundPart.traits),
     class: classPart.classes,
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),

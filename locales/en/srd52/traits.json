@@ -4,5 +4,7 @@
   "skillful.name": "Skillful",
   "skillful.desc": "You gain proficiency in one skill of your choice.",
   "versatile.name": "Versatile",
-  "versatile.desc": "You gain an Origin feat of your choice (see \"Feats\"). Skilled is recommended."
+  "versatile.desc": "You gain an Origin feat of your choice (see \"Feats\"). Skilled is recommended.",
+  "soldier-ability-2-1.name": "+2 to one ability, +1 to another",
+  "soldier-ability-1-1-1.name": "+1 to each of the three abilities"
 }

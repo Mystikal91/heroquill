@@ -47,6 +47,41 @@ describe("the 2024 pilot pack", () => {
     expect(feat?.options.length).toBe(4);
   });
 
+  it("gives the Soldier's Origin feat and +2/+1 among Strength, Dexterity and Constitution", () => {
+    const c = pilot();
+    c.selections["srd52:background/soldier/ability-increase"] = ["srd52:trait/soldier-ability-2-1"];
+    c.selections["srd52:trait/soldier-ability-2-1/plus-2"] = ["str"];
+    c.selections["srd52:trait/soldier-ability-2-1/plus-1"] = ["con"];
+    const sheet = deriveSheet(c, bothIndex);
+    expect(sheet.held).toContain("srd52:feat/savage-attacker");
+    expect(sheet.abilities.str.score).toBe(17);
+    expect(sheet.abilities.dex.score).toBe(14);
+    expect(sheet.abilities.con.score).toBe(14);
+    expect(sheet.abilities.int.score).toBe(12);
+  });
+
+  it("gives +1 to each of the three abilities for the other way", () => {
+    const c = pilot();
+    c.selections["srd52:background/soldier/ability-increase"] = [
+      "srd52:trait/soldier-ability-1-1-1",
+    ];
+    const sheet = deriveSheet(c, bothIndex);
+    expect([
+      sheet.abilities.str.score,
+      sheet.abilities.dex.score,
+      sheet.abilities.con.score,
+    ]).toEqual([16, 15, 14]);
+    expect(sheet.abilities.wis.score).toBe(10);
+  });
+
+  it("does not let the +2 and the +1 go to the same ability", () => {
+    const c = pilot();
+    c.selections["srd52:background/soldier/ability-increase"] = ["srd52:trait/soldier-ability-2-1"];
+    c.selections["srd52:trait/soldier-ability-2-1/plus-2"] = ["str"];
+    c.selections["srd52:trait/soldier-ability-2-1/plus-1"] = ["str"];
+    expect(deriveSheet(c, bothIndex).abilities.str.score).toBe(17);
+  });
+
   it("does not offer 2024 feats to a 2014 character", () => {
     expect(inRuleset("srd52:feat/alert", "srd51")).toBe(false);
     expect(inRuleset("srd51:class/fighter", "srd52")).toBe(false);

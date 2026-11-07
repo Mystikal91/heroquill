@@ -32,6 +32,20 @@
             "tool:tool-playing-cards",
             "tool:tool-three-dragon-ante"
           ]
+        },
+        {
+          "type": "trait",
+          "id": "srd52:feat/savage-attacker"
+        },
+        {
+          "type": "choice",
+          "id": "ability-increase",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/soldier-ability-2-1",
+            "srd52:trait/soldier-ability-1-1-1"
+          ]
         }
       ],
       "data": {

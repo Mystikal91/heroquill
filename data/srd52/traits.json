@@ -64,6 +64,59 @@
         }
       ],
       "data": {}
+    },
+    {
+      "id": "srd52:trait/soldier-ability-2-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "plus-2",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "str",
+            "dex",
+            "con"
+          ],
+          "value": 2
+        },
+        {
+          "type": "choice",
+          "id": "plus-1",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "str",
+            "dex",
+            "con"
+          ],
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/soldier-ability-1-1-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "str",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "dex",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "con",
+          "value": 1
+        }
+      ],
+      "data": {}
     }
   ]
 }
