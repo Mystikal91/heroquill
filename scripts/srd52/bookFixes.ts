@@ -49,6 +49,12 @@ export const ITEM_NAMES: Record<string, string> = {
   "spell-scroll-level-1": "Spell Scroll (Level 1)",
 };
 
+/** The text of an item the database gives none (the Entertainer's Pack has no description at all). */
+export const ITEM_DESCRIPTIONS: Record<string, string> = {
+  "entertainers-pack":
+    "An Entertainer’s Pack contains the following items: Backpack, Bedroll, Bell, Bullseye Lantern, 3 Costumes, Mirror, 8 flasks of Oil, 9 days of Rations, Tinderbox, and Waterskin.",
+};
+
 /** A sentence of an item's text that the database has wrong. */
 export const ITEM_TEXT: Record<string, { from: string; to: string }> = {
   "scholars-pack": { from: "Backpack, Blanket, Book,", to: "Backpack, Book," },

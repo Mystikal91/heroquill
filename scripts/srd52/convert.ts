@@ -11,6 +11,7 @@ import {
   CLASS_SKILLS,
   FEAT_NAMES,
   FEAT_TEXT,
+  ITEM_DESCRIPTIONS,
   ITEM_NAMES,
   ITEM_TEXT,
   PACK_CONTENTS,
@@ -618,11 +619,13 @@ function convertEquipment(raw: RawSource): Converted {
       data.category = "adventuring-gear";
       const bundle = BUNDLES[e.index];
       data.gear = {
-        category: categories.includes("equipment-packs")
-          ? "equipment-packs"
-          : categories.includes("ammunition")
-            ? "ammunition"
-            : "standard-gear",
+        // A pack is anything with contents (the database leaves the category off the Entertainer's Pack).
+        category:
+          categories.includes("equipment-packs") || e.contents
+            ? "equipment-packs"
+            : categories.includes("ammunition")
+              ? "ammunition"
+              : "standard-gear",
         ...(bundle && { bundleSize: bundle }),
         ...(e.contents && {
           contents: packContents(e),
@@ -637,12 +640,16 @@ function convertEquipment(raw: RawSource): Converted {
     const name = ITEM_NAMES[e.index] ?? e.name;
     if (ITEM_NAMES[e.index] === e.name) staleFixes.push(`${e.index} name`);
     strings[`${e.index}.name`] = bundle ? `${name} (${bundle})` : name;
-    if (e.description)
+    if (e.description) {
+      if (ITEM_DESCRIPTIONS[e.index]) staleFixes.push(`${e.index} description`);
       strings[`${e.index}.desc`] = fixedText(
         `${e.index} text`,
         text(e.description),
         ITEM_TEXT[e.index],
       );
+    } else if (ITEM_DESCRIPTIONS[e.index]) {
+      strings[`${e.index}.desc`] = ITEM_DESCRIPTIONS[e.index] as string;
+    }
   }
   return { entries, strings };
 }

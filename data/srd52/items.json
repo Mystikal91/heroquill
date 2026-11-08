@@ -1180,9 +1180,10 @@
           "amount": 40,
           "unit": "gp"
         },
+        "weight": 58.5,
         "category": "adventuring-gear",
         "gear": {
-          "category": "standard-gear",
+          "category": "equipment-packs",
           "contents": [
             {
               "item": "srd52:item/backpack",
@@ -1240,7 +1241,7 @@
         "weight": 55,
         "category": "adventuring-gear",
         "gear": {
-          "category": "standard-gear",
+          "category": "equipment-packs",
           "contents": [
             {
               "item": "srd52:item/backpack",
@@ -3072,7 +3073,7 @@
           "amount": 1,
           "unit": "cp"
         },
-        "weight": 1,
+        "weight": 0.5,
         "category": "adventuring-gear",
         "gear": {
           "category": "standard-gear"

@@ -112,6 +112,19 @@ describe("what the equipment packs hold, as the book lists it", () => {
     });
   });
 
+  it("gives the Entertainer's Pack the weight and the text the database lacks", () => {
+    const pack = bothIndex.get("srd52:item/entertainers-pack")?.data;
+    expect(pack?.weight).toBe(58.5);
+    expect((pack?.gear as { category: string }).category).toBe("equipment-packs");
+    expect(texts("items")["entertainers-pack.desc"]).toContain(
+      "3 Costumes, Mirror, 8 flasks of Oil",
+    );
+  });
+
+  it("weighs a sack half a pound", () => {
+    expect(bothIndex.get("srd52:item/sack")?.data.weight).toBe(0.5);
+  });
+
   it("has the 2024 contents in the Entertainer's Pack", () => {
     expect(holds("entertainers-pack")).toEqual({
       backpack: 1,

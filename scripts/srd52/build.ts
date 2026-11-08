@@ -9,6 +9,7 @@ import {
   CLASS_SKILLS,
   FEAT_NAMES,
   FEAT_TEXT,
+  ITEM_DESCRIPTIONS,
   ITEM_NAMES,
   ITEM_TEXT,
   PACK_CONTENTS,
@@ -113,6 +114,7 @@ const fixCount =
   Object.keys(FEAT_TEXT).length +
   Object.keys(ITEM_NAMES).length +
   Object.keys(ITEM_TEXT).length +
+  Object.keys(ITEM_DESCRIPTIONS).length +
   Object.keys(PACK_CONTENTS).length;
 console.log(`fixes from the book: ${fixCount - staleFixes.length} applied`);
 if (staleFixes.length)

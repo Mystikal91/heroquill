@@ -46,6 +46,9 @@ export const EQUIPMENT_FIXES: Record<string, EquipmentFix> = {
   "spikes-iron": { weight: 5 },
   // The Musical Instrument list of the book: "viol (30 GP, 1 lb.)".
   viol: { weight: 1 },
+  // Found with the weights written as fractions in the book: a sack weighs ½ lb, the pack 58½ lb.
+  sack: { weight: 0.5 },
+  "entertainers-pack": { weight: 58.5 },
   // The database has the sling as piercing (the book: bludgeoning) and the trident with its 2014 damage
   // (1d6, 1d8 in two hands); the 2024 trident is 1d8 and 1d10 ("Converting to SRD 5.2.1" says so too).
   sling: { damage: { dice: "1d4", type: "bludgeoning" } },
