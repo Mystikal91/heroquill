@@ -104,6 +104,13 @@ describe("prices and weights of the 2024 table", () => {
     expect(price("poisoners-kit")?.cost).toEqual({ amount: 50, unit: "gp" });
   });
 
+  it("follows the book on the damage of the sling and the trident", () => {
+    const weapon = (slug: string) => itemData(bothIndex.get(`srd52:item/${slug}`) as never).weapon;
+    expect(weapon("sling")?.damage).toEqual({ dice: "1d4", type: "bludgeoning" });
+    expect(weapon("trident")?.damage).toEqual({ dice: "1d8", type: "piercing" });
+    expect(weapon("trident")?.twoHandedDamage).toEqual({ dice: "1d10", type: "piercing" });
+  });
+
   it("leaves an item with no weight when the book shows a dash", () => {
     expect(price("bell")).not.toHaveProperty("weight");
     expect(price("antitoxin")).not.toHaveProperty("weight");

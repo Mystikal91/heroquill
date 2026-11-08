@@ -3373,7 +3373,7 @@
           "kind": "ranged",
           "damage": {
             "dice": "1d4",
-            "type": "piercing"
+            "type": "bludgeoning"
           },
           "properties": [
             "srd52:property/ammunition"
@@ -3733,11 +3733,11 @@
           "category": "martial",
           "kind": "melee",
           "damage": {
-            "dice": "1d6",
+            "dice": "1d8",
             "type": "piercing"
           },
           "twoHandedDamage": {
-            "dice": "1d8",
+            "dice": "1d10",
             "type": "piercing"
           },
           "properties": [

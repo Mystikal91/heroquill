@@ -514,18 +514,23 @@ function convertEquipment(raw: RawSource): Converted {
     const sourceCost = e.cost ? { quantity: e.cost.quantity, unit: e.cost.unit } : undefined;
     const cost = fix?.cost ?? sourceCost;
     const weight = fix && "weight" in fix ? (fix.weight ?? undefined) : e.weight;
+    const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
+    const sameDamage = (a: { dice: string; type: string } | undefined, d: Raw | undefined) =>
+      a === undefined ||
+      (d !== undefined && a.dice === damage(d).dice && a.type === damage(d).type);
     if (
       fix &&
       (fix.cost === undefined ||
         (sourceCost?.quantity === fix.cost.quantity && sourceCost.unit === fix.cost.unit)) &&
-      (!("weight" in fix) || (fix.weight ?? undefined) === e.weight)
+      (!("weight" in fix) || (fix.weight ?? undefined) === e.weight) &&
+      sameDamage(fix.damage, e.damage) &&
+      sameDamage(fix.twoHandedDamage, e.two_handed_damage)
     )
       staleFixes.push(e.index);
     const data: Record<string, unknown> = {
       cost: cost ? { amount: cost.quantity, unit: cost.unit } : { amount: 0, unit: "gp" },
     };
     if (weight !== undefined) data.weight = weight;
-    const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
 
     if (categories.includes("weapons")) {
       const category = categories.includes("simple-weapons") ? "simple" : "martial";
@@ -533,8 +538,10 @@ function convertEquipment(raw: RawSource): Converted {
       data.weapon = {
         category,
         kind: categories.includes("melee-weapons") ? "melee" : "ranged",
-        ...(e.damage && { damage: damage(e.damage) }),
-        ...(e.two_handed_damage && { twoHandedDamage: damage(e.two_handed_damage) }),
+        ...(e.damage && { damage: fix?.damage ?? damage(e.damage) }),
+        ...(e.two_handed_damage && {
+          twoHandedDamage: fix?.twoHandedDamage ?? damage(e.two_handed_damage),
+        }),
         properties: ((e.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
         // The Morningstar has no range in the source; a melee weapon reaches 5 feet.
         range: e.range ?? { normal: 5 },
