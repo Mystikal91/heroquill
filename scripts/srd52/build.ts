@@ -5,8 +5,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Pack, findBrokenReferences, parsePack } from "../../src/data/schema";
-import { type RawSource, convertAll, staleFixes } from "./convert";
-import { EQUIPMENT_FIXES } from "./equipmentFixes";
+import { type RawSource, convertAll } from "./convert";
 import { CACHE_DIR, fetchSource } from "./fetch";
 import { pairItems } from "./pairs";
 import source from "./source.json" with { type: "json" };
@@ -98,10 +97,3 @@ console.log(
   `item pairs: ${Object.keys(pairs.items).length} paired, ${pairs.onlyIn2024.length} only in 2024`,
 );
 console.log(`  only in 2024: ${pairs.onlyIn2024.map((id) => id.split("/")[1]).join(", ")}`);
-console.log(
-  `fixes from the book: ${Object.keys(EQUIPMENT_FIXES).length - staleFixes.length} applied`,
-);
-if (staleFixes.length)
-  console.warn(
-    `  no longer needed (the source now agrees with the book), remove from equipmentFixes.ts: ${staleFixes.join(", ")}`,
-  );

@@ -8,7 +8,6 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
-import { EQUIPMENT_FIXES } from "./equipmentFixes";
 
 const PACK = "srd52";
 
@@ -500,9 +499,6 @@ const BUNDLES: Record<string, number> = {
   needles: 50,
 };
 
-/** The fixes the source no longer needs (it now says what the book says), for the build to report. */
-export const staleFixes: string[] = [];
-
 const categoriesOf = (e: Raw): string[] =>
   ((e.equipment_categories ?? []) as Raw[]).map((c) => c.index);
 
@@ -512,28 +508,12 @@ function convertEquipment(raw: RawSource): Converted {
   const strings: Strings = {};
   for (const e of raw.equipment) {
     const categories = categoriesOf(e);
-    // Where the source disagrees with the book, the book wins (see `equipmentFixes.ts`).
-    const fix = EQUIPMENT_FIXES[e.index];
-    const sourceCost = e.cost ? { quantity: e.cost.quantity, unit: e.cost.unit } : undefined;
-    const cost = fix?.cost ?? sourceCost;
-    const weight = fix && "weight" in fix ? (fix.weight ?? undefined) : e.weight;
     const damage = (d: Raw) => ({ dice: d.damage_dice, type: d.damage_type.index });
-    const sameDamage = (a: { dice: string; type: string } | undefined, d: Raw | undefined) =>
-      a === undefined ||
-      (d !== undefined && a.dice === damage(d).dice && a.type === damage(d).type);
-    if (
-      fix &&
-      (fix.cost === undefined ||
-        (sourceCost?.quantity === fix.cost.quantity && sourceCost.unit === fix.cost.unit)) &&
-      (!("weight" in fix) || (fix.weight ?? undefined) === e.weight) &&
-      sameDamage(fix.damage, e.damage) &&
-      sameDamage(fix.twoHandedDamage, e.two_handed_damage)
-    )
-      staleFixes.push(e.index);
     const data: Record<string, unknown> = {
-      cost: cost ? { amount: cost.quantity, unit: cost.unit } : { amount: 0, unit: "gp" },
+      cost: e.cost ? { amount: e.cost.quantity, unit: e.cost.unit } : { amount: 0, unit: "gp" },
     };
-    if (weight !== undefined) data.weight = weight;
+    // The database writes 0 for an item that weighs nothing (a dash in the book).
+    if (e.weight !== undefined) data.weight = e.weight;
 
     if (categories.includes("weapons")) {
       const category = categories.includes("simple-weapons") ? "simple" : "martial";
@@ -541,10 +521,8 @@ function convertEquipment(raw: RawSource): Converted {
       data.weapon = {
         category,
         kind: categories.includes("melee-weapons") ? "melee" : "ranged",
-        ...(e.damage && { damage: fix?.damage ?? damage(e.damage) }),
-        ...(e.two_handed_damage && {
-          twoHandedDamage: fix?.twoHandedDamage ?? damage(e.two_handed_damage),
-        }),
+        ...(e.damage && { damage: damage(e.damage) }),
+        ...(e.two_handed_damage && { twoHandedDamage: damage(e.two_handed_damage) }),
         properties: ((e.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
         // The Morningstar has no range in the source; a melee weapon reaches 5 feet.
         range: e.range ?? { normal: 5 },

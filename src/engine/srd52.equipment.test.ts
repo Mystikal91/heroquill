@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { EQUIPMENT_FIXES } from "../../scripts/srd52/equipmentFixes";
 import { itemData } from "../data/items";
 import pairs from "../data/srd52Pairs.json";
 import { startingOf } from "../data/startingEquipment";
@@ -123,12 +122,6 @@ describe("prices and weights of the 2024 table", () => {
       cost: { amount: 2, unit: "gp" },
       weight: 4,
     });
-  });
-
-  it("has a fix only for an item the pack has", () => {
-    for (const slug of Object.keys(EQUIPMENT_FIXES)) {
-      expect(bothIndex.has(`srd52:item/${slug}`), slug).toBe(true);
-    }
   });
 });
 
