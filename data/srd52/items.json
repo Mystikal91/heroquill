@@ -493,10 +493,6 @@
               "quantity": 1
             },
             {
-              "item": "srd52:item/flask",
-              "quantity": 7
-            },
-            {
               "item": "srd52:item/oil",
               "quantity": 7
             },
@@ -1018,10 +1014,6 @@
               "quantity": 2
             },
             {
-              "item": "srd52:item/flask",
-              "quantity": 4
-            },
-            {
               "item": "srd52:item/oil",
               "quantity": 4
             },
@@ -1129,15 +1121,11 @@
             },
             {
               "item": "srd52:item/caltrops",
-              "quantity": 10
+              "quantity": 1
             },
             {
               "item": "srd52:item/crowbar",
               "quantity": 1
-            },
-            {
-              "item": "srd52:item/flask",
-              "quantity": 2
             },
             {
               "item": "srd52:item/oil",
@@ -1205,23 +1193,35 @@
               "quantity": 1
             },
             {
-              "item": "srd52:item/costume",
-              "quantity": 2
-            },
-            {
-              "item": "srd52:item/candle",
-              "quantity": 5
-            },
-            {
-              "item": "srd52:item/rations",
-              "quantity": 5
-            },
-            {
-              "item": "srd52:item/waterskin",
+              "item": "srd52:item/bell",
               "quantity": 1
             },
             {
-              "item": "srd52:item/disguise-kit",
+              "item": "srd52:item/lantern-bullseye",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/costume",
+              "quantity": 3
+            },
+            {
+              "item": "srd52:item/mirror",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/oil",
+              "quantity": 8
+            },
+            {
+              "item": "srd52:item/rations",
+              "quantity": 9
+            },
+            {
+              "item": "srd52:item/tinderbox",
+              "quantity": 1
+            },
+            {
+              "item": "srd52:item/waterskin",
               "quantity": 1
             }
           ]
@@ -3123,10 +3123,6 @@
               "quantity": 1
             },
             {
-              "item": "srd52:item/blanket",
-              "quantity": 1
-            },
-            {
               "item": "srd52:item/book",
               "quantity": 1
             },
@@ -3783,7 +3779,7 @@
           "amount": 30,
           "unit": "gp"
         },
-        "weight": 2,
+        "weight": 1,
         "category": "tools",
         "tool": {
           "category": "musical-instruments"

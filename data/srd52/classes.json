@@ -53,6 +53,7 @@
             "skill:history",
             "skill:insight",
             "skill:intimidation",
+            "skill:persuasion",
             "skill:perception",
             "skill:survival"
           ]
@@ -140,7 +141,7 @@
               "srd52:feature/fighter-extra-attack",
               "srd52:feature/fighter-tactical-shift"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 1,
             "classSpecific": {
               "secondWindUses": 3,
               "weaponMastery": 4
@@ -151,7 +152,7 @@
             "features": [
               "srd52:feature/fighter-ability-score-improvement"
             ],
-            "abilityScoreImprovements": 1,
+            "abilityScoreImprovements": 2,
             "classSpecific": {
               "secondWindUses": 3,
               "weaponMastery": 4
@@ -162,7 +163,7 @@
             "features": [
               "srd52:feature/fighter-subclass"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 2,
             "classSpecific": {
               "secondWindUses": 3,
               "weaponMastery": 4
@@ -173,7 +174,7 @@
             "features": [
               "srd52:feature/fighter-ability-score-improvement"
             ],
-            "abilityScoreImprovements": 1,
+            "abilityScoreImprovements": 3,
             "classSpecific": {
               "secondWindUses": 3,
               "weaponMastery": 4
@@ -185,7 +186,7 @@
               "srd52:feature/fighter-indomitable",
               "srd52:feature/fighter-tactical-master"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 3,
             "classSpecific": {
               "secondWindUses": 3,
               "weaponMastery": 4
@@ -196,7 +197,7 @@
             "features": [
               "srd52:feature/fighter-subclass"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 3,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -207,7 +208,7 @@
             "features": [
               "srd52:feature/fighter-two-extra-attacks"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 3,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -218,7 +219,7 @@
             "features": [
               "srd52:feature/fighter-ability-score-improvement"
             ],
-            "abilityScoreImprovements": 1,
+            "abilityScoreImprovements": 4,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -230,7 +231,7 @@
               "srd52:feature/fighter-indomitable",
               "srd52:feature/fighter-studied-attacks"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 4,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -241,7 +242,7 @@
             "features": [
               "srd52:feature/fighter-ability-score-improvement"
             ],
-            "abilityScoreImprovements": 1,
+            "abilityScoreImprovements": 5,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -252,7 +253,7 @@
             "features": [
               "srd52:feature/fighter-subclass"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 5,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 5
@@ -263,7 +264,7 @@
             "features": [
               "srd52:feature/fighter-ability-score-improvement"
             ],
-            "abilityScoreImprovements": 1,
+            "abilityScoreImprovements": 6,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 6
@@ -275,7 +276,7 @@
               "srd52:feature/fighter-action-surge",
               "srd52:feature/fighter-indomitable"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 6,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 6
@@ -286,7 +287,7 @@
             "features": [
               "srd52:feature/fighter-subclass"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 6,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 6
@@ -297,7 +298,7 @@
             "features": [
               "srd52:feature/fighter-epic-boon"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 6,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 6
@@ -308,7 +309,7 @@
             "features": [
               "srd52:feature/fighter-three-extra-attacks"
             ],
-            "abilityScoreImprovements": 0,
+            "abilityScoreImprovements": 6,
             "classSpecific": {
               "secondWindUses": 4,
               "weaponMastery": 6

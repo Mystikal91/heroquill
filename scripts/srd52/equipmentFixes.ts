@@ -44,6 +44,8 @@ export const EQUIPMENT_FIXES: Record<string, EquipmentFix> = {
   robe: { weight: 4 },
   spear: { cost: { quantity: 1, unit: "gp" }, weight: 3 },
   "spikes-iron": { weight: 5 },
+  // The Musical Instrument list of the book: "viol (30 GP, 1 lb.)".
+  viol: { weight: 1 },
   // The database has the sling as piercing (the book: bludgeoning) and the trident with its 2014 damage
   // (1d6, 1d8 in two hands); the 2024 trident is 1d8 and 1d10 ("Converting to SRD 5.2.1" says so too).
   sling: { damage: { dice: "1d4", type: "bludgeoning" } },

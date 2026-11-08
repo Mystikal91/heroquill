@@ -7,6 +7,14 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
+import {
+  CLASS_SKILLS,
+  FEAT_NAMES,
+  FEAT_TEXT,
+  ITEM_NAMES,
+  ITEM_TEXT,
+  PACK_CONTENTS,
+} from "./bookFixes";
 import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
 import { EQUIPMENT_FIXES } from "./equipmentFixes";
 
@@ -60,7 +68,23 @@ const text = (value: string | undefined | null): string =>
     .split("\n")
     .map((line) => line.trim())
     .join("\n")
-    .trim();
+    .trim()
+    // A hyphen left at the end of a line of the PDF ("15- foot radius").
+    .replace(/(\d)- (foot|feet)\b/g, "$1-$2");
+
+/** The text with a sentence of the database replaced by the book's; remembers a fix the source no longer needs. */
+function fixedText(
+  what: string,
+  value: string,
+  fix: { from: string; to: string } | undefined,
+): string {
+  if (!fix) return value;
+  if (!value.includes(fix.from)) {
+    staleFixes.push(what);
+    return value;
+  }
+  return value.replace(fix.from, fix.to);
+}
 
 const PROFICIENCY_TYPES: Record<string, ProficiencyCategory> = {
   Skills: "skill",
@@ -196,8 +220,13 @@ function convertFeats(raw: RawSource, table: Map<string, string>): Converted {
         ...(asks.length ? { prerequisites: asks } : {}),
       },
     });
-    strings[`${f.index}.name`] = f.name;
-    strings[`${f.index}.desc`] = text(f.description);
+    if (FEAT_NAMES[f.index] === f.name) staleFixes.push(`${f.index} name`);
+    strings[`${f.index}.name`] = FEAT_NAMES[f.index] ?? f.name;
+    strings[`${f.index}.desc`] = fixedText(
+      `${f.index} text`,
+      text(f.description),
+      FEAT_TEXT[f.index],
+    );
   }
   return { entries, strings };
 }
@@ -360,21 +389,33 @@ function convertClasses(
       proficiencyEffect(table, p.index),
     );
     (c.proficiency_choices ?? []).forEach((set: Raw, i: number) => {
-      effects.push(proficiencyChoice(table, `${c.index}-proficiency-${i + 1}`, set));
+      const effect = proficiencyChoice(table, `${c.index}-proficiency-${i + 1}`, set);
+      // The skills the book lists, where the database has fewer (the Fighter lacks Persuasion).
+      const skills = CLASS_SKILLS[c.index];
+      if (i === 0 && skills && effect.type === "choice") {
+        const book = skills.map((s) => `skill:${s}`);
+        if (book.length === effect.from.length && book.every((s) => effect.from.includes(s)))
+          staleFixes.push(`${c.index} skills`);
+        effect.from = book;
+      }
+      effects.push(effect);
     });
 
     const own = raw.levels.filter((l: Raw) => l.class.index === c.index && !l.subclass);
+    // The ability score increases available at a level are a running total, as in the 2014 data.
+    let increases = 0;
     const levels = own.map((l: Raw) => {
       const names = (l.features as Raw[]).map((f) => f.name);
       const specific: Record<string, number> = {};
       for (const [key, value] of Object.entries(l.class_specific ?? {})) {
         specific[key.replace(/_([a-z])/g, (_, ch: string) => ch.toUpperCase())] = value as number;
       }
+      // In 2024 the increase is the feat "Ability Score Improvement"; the build screen keeps its steps.
+      if (names.includes("Ability Score Improvement")) increases += 1;
       return {
         level: l.level,
         features: (l.features as Raw[]).map((f) => id("feature", f.index)),
-        // In 2024 the increase is the feat "Ability Score Improvement"; the build screen keeps its steps.
-        abilityScoreImprovements: names.includes("Ability Score Improvement") ? 1 : 0,
+        abilityScoreImprovements: increases,
         classSpecific: specific,
       };
     });
@@ -584,10 +625,7 @@ function convertEquipment(raw: RawSource): Converted {
             : "standard-gear",
         ...(bundle && { bundleSize: bundle }),
         ...(e.contents && {
-          contents: (e.contents as Raw[]).map((c) => ({
-            item: id("item", c.item.index),
-            quantity: c.quantity,
-          })),
+          contents: packContents(e),
         }),
       };
     } else {
@@ -596,10 +634,33 @@ function convertEquipment(raw: RawSource): Converted {
 
     entries.push({ id: id("item", e.index), kind: "item", effects: [], data });
     const bundle = BUNDLES[e.index];
-    strings[`${e.index}.name`] = bundle ? `${e.name} (${bundle})` : e.name;
-    if (e.description) strings[`${e.index}.desc`] = text(e.description);
+    const name = ITEM_NAMES[e.index] ?? e.name;
+    if (ITEM_NAMES[e.index] === e.name) staleFixes.push(`${e.index} name`);
+    strings[`${e.index}.name`] = bundle ? `${name} (${bundle})` : name;
+    if (e.description)
+      strings[`${e.index}.desc`] = fixedText(
+        `${e.index} text`,
+        text(e.description),
+        ITEM_TEXT[e.index],
+      );
   }
   return { entries, strings };
+}
+
+/** What a pack holds: the book's list where the database differs (see `bookFixes.ts`), else the database's. */
+function packContents(e: Raw): { item: string; quantity: number }[] {
+  const source = (e.contents as Raw[]).map((c) => ({
+    item: id("item", c.item.index),
+    quantity: c.quantity as number,
+  }));
+  const book = PACK_CONTENTS[e.index];
+  if (!book) return source;
+  const fixed = book.map((c) => ({ item: id("item", c.item), quantity: c.quantity }));
+  const same =
+    fixed.length === source.length &&
+    fixed.every((f) => source.some((s) => s.item === f.item && s.quantity === f.quantity));
+  if (same) staleFixes.push(`${e.index} contents`);
+  return fixed;
 }
 
 /**
