@@ -524,8 +524,7 @@ function convertEquipment(raw: RawSource): Converted {
         ...(e.damage && { damage: damage(e.damage) }),
         ...(e.two_handed_damage && { twoHandedDamage: damage(e.two_handed_damage) }),
         properties: ((e.properties ?? []) as Raw[]).map((p) => id("property", p.index ?? p)),
-        // The Morningstar has no range in the source; a melee weapon reaches 5 feet.
-        range: e.range ?? { normal: 5 },
+        range: e.range,
         ...(e.throw_range && { throwRange: e.throw_range }),
         ...(e.mastery && { mastery: id("property", `mastery-${e.mastery.index}`) }),
         proficiency: [`weapon:${category}-weapons`],
