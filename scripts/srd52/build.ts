@@ -5,15 +5,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Pack, findBrokenReferences, parsePack } from "../../src/data/schema";
-import {
-  CLASS_SKILLS,
-  FEAT_NAMES,
-  FEAT_TEXT,
-  ITEM_DESCRIPTIONS,
-  ITEM_NAMES,
-  ITEM_TEXT,
-  PACK_CONTENTS,
-} from "./bookFixes";
 import { type RawSource, convertAll, staleFixes } from "./convert";
 import { EQUIPMENT_FIXES } from "./equipmentFixes";
 import { CACHE_DIR, fetchSource } from "./fetch";
@@ -107,17 +98,10 @@ console.log(
   `item pairs: ${Object.keys(pairs.items).length} paired, ${pairs.onlyIn2024.length} only in 2024`,
 );
 console.log(`  only in 2024: ${pairs.onlyIn2024.map((id) => id.split("/")[1]).join(", ")}`);
-const fixCount =
-  Object.keys(EQUIPMENT_FIXES).length +
-  Object.keys(CLASS_SKILLS).length +
-  Object.keys(FEAT_NAMES).length +
-  Object.keys(FEAT_TEXT).length +
-  Object.keys(ITEM_NAMES).length +
-  Object.keys(ITEM_TEXT).length +
-  Object.keys(ITEM_DESCRIPTIONS).length +
-  Object.keys(PACK_CONTENTS).length;
-console.log(`fixes from the book: ${fixCount - staleFixes.length} applied`);
+console.log(
+  `fixes from the book: ${Object.keys(EQUIPMENT_FIXES).length - staleFixes.length} applied`,
+);
 if (staleFixes.length)
   console.warn(
-    `  no longer needed (the source now agrees with the book), remove from equipmentFixes.ts or bookFixes.ts: ${staleFixes.join(", ")}`,
+    `  no longer needed (the source now agrees with the book), remove from equipmentFixes.ts: ${staleFixes.join(", ")}`,
   );

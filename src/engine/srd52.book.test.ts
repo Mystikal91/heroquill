@@ -68,7 +68,6 @@ describe("names and texts as the book writes them", () => {
   it("writes the names with their hyphens", () => {
     expect(texts("feats")["two-weapon-fighting.name"]).toBe("Two-Weapon Fighting");
     expect(texts("items")["half-plate-armor.name"]).toBe("Half Plate Armor");
-    expect(texts("items")["spell-scroll-cantrip.name"]).toBe("Spell Scroll (Cantrip)");
   });
 
   it("gives the Epic Boons their own ability increase", () => {

@@ -7,15 +7,6 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
-import {
-  CLASS_SKILLS,
-  FEAT_NAMES,
-  FEAT_TEXT,
-  ITEM_DESCRIPTIONS,
-  ITEM_NAMES,
-  ITEM_TEXT,
-  PACK_CONTENTS,
-} from "./bookFixes";
 import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
 import { EQUIPMENT_FIXES } from "./equipmentFixes";
 
@@ -69,23 +60,7 @@ const text = (value: string | undefined | null): string =>
     .split("\n")
     .map((line) => line.trim())
     .join("\n")
-    .trim()
-    // A hyphen left at the end of a line of the PDF ("15- foot radius").
-    .replace(/(\d)- (foot|feet)\b/g, "$1-$2");
-
-/** The text with a sentence of the database replaced by the book's; remembers a fix the source no longer needs. */
-function fixedText(
-  what: string,
-  value: string,
-  fix: { from: string; to: string } | undefined,
-): string {
-  if (!fix) return value;
-  if (!value.includes(fix.from)) {
-    staleFixes.push(what);
-    return value;
-  }
-  return value.replace(fix.from, fix.to);
-}
+    .trim();
 
 const PROFICIENCY_TYPES: Record<string, ProficiencyCategory> = {
   Skills: "skill",
@@ -221,13 +196,8 @@ function convertFeats(raw: RawSource, table: Map<string, string>): Converted {
         ...(asks.length ? { prerequisites: asks } : {}),
       },
     });
-    if (FEAT_NAMES[f.index] === f.name) staleFixes.push(`${f.index} name`);
-    strings[`${f.index}.name`] = FEAT_NAMES[f.index] ?? f.name;
-    strings[`${f.index}.desc`] = fixedText(
-      `${f.index} text`,
-      text(f.description),
-      FEAT_TEXT[f.index],
-    );
+    strings[`${f.index}.name`] = f.name;
+    strings[`${f.index}.desc`] = text(f.description);
   }
   return { entries, strings };
 }
@@ -390,16 +360,7 @@ function convertClasses(
       proficiencyEffect(table, p.index),
     );
     (c.proficiency_choices ?? []).forEach((set: Raw, i: number) => {
-      const effect = proficiencyChoice(table, `${c.index}-proficiency-${i + 1}`, set);
-      // The skills the book lists, where the database has fewer (the Fighter lacks Persuasion).
-      const skills = CLASS_SKILLS[c.index];
-      if (i === 0 && skills && effect.type === "choice") {
-        const book = skills.map((s) => `skill:${s}`);
-        if (book.length === effect.from.length && book.every((s) => effect.from.includes(s)))
-          staleFixes.push(`${c.index} skills`);
-        effect.from = book;
-      }
-      effects.push(effect);
+      effects.push(proficiencyChoice(table, `${c.index}-proficiency-${i + 1}`, set));
     });
 
     const own = raw.levels.filter((l: Raw) => l.class.index === c.index && !l.subclass);
@@ -619,7 +580,7 @@ function convertEquipment(raw: RawSource): Converted {
       data.category = "adventuring-gear";
       const bundle = BUNDLES[e.index];
       data.gear = {
-        // A pack is anything with contents (the database leaves the category off the Entertainer's Pack).
+        // A pack is anything with contents (the Explorer's Pack lacks the category in the database).
         category:
           categories.includes("equipment-packs") || e.contents
             ? "equipment-packs"
@@ -628,7 +589,10 @@ function convertEquipment(raw: RawSource): Converted {
               : "standard-gear",
         ...(bundle && { bundleSize: bundle }),
         ...(e.contents && {
-          contents: packContents(e),
+          contents: (e.contents as Raw[]).map((c) => ({
+            item: id("item", c.item.index),
+            quantity: c.quantity,
+          })),
         }),
       };
     } else {
@@ -637,37 +601,10 @@ function convertEquipment(raw: RawSource): Converted {
 
     entries.push({ id: id("item", e.index), kind: "item", effects: [], data });
     const bundle = BUNDLES[e.index];
-    const name = ITEM_NAMES[e.index] ?? e.name;
-    if (ITEM_NAMES[e.index] === e.name) staleFixes.push(`${e.index} name`);
-    strings[`${e.index}.name`] = bundle ? `${name} (${bundle})` : name;
-    if (e.description) {
-      if (ITEM_DESCRIPTIONS[e.index]) staleFixes.push(`${e.index} description`);
-      strings[`${e.index}.desc`] = fixedText(
-        `${e.index} text`,
-        text(e.description),
-        ITEM_TEXT[e.index],
-      );
-    } else if (ITEM_DESCRIPTIONS[e.index]) {
-      strings[`${e.index}.desc`] = ITEM_DESCRIPTIONS[e.index] as string;
-    }
+    strings[`${e.index}.name`] = bundle ? `${e.name} (${bundle})` : e.name;
+    if (e.description) strings[`${e.index}.desc`] = text(e.description);
   }
   return { entries, strings };
-}
-
-/** What a pack holds: the book's list where the database differs (see `bookFixes.ts`), else the database's. */
-function packContents(e: Raw): { item: string; quantity: number }[] {
-  const source = (e.contents as Raw[]).map((c) => ({
-    item: id("item", c.item.index),
-    quantity: c.quantity as number,
-  }));
-  const book = PACK_CONTENTS[e.index];
-  if (!book) return source;
-  const fixed = book.map((c) => ({ item: id("item", c.item), quantity: c.quantity }));
-  const same =
-    fixed.length === source.length &&
-    fixed.every((f) => source.some((s) => s.item === f.item && s.quantity === f.quantity));
-  if (same) staleFixes.push(`${e.index} contents`);
-  return fixed;
 }
 
 /**

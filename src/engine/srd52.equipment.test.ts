@@ -111,9 +111,18 @@ describe("prices and weights of the 2024 table", () => {
     expect(weapon("trident")?.twoHandedDamage).toEqual({ dice: "1d10", type: "piercing" });
   });
 
-  it("leaves an item with no weight when the book shows a dash", () => {
-    expect(price("bell")).not.toHaveProperty("weight");
-    expect(price("antitoxin")).not.toHaveProperty("weight");
+  it("weighs nothing an item the book shows with a dash (the database writes 0)", () => {
+    expect(price("bell")?.weight ?? 0).toBe(0);
+    expect(price("antitoxin")?.weight ?? 0).toBe(0);
+  });
+
+  it("follows the book on the prices in silver that were written in gold", () => {
+    expect(price("basket")?.cost).toEqual({ amount: 4, unit: "sp" });
+    expect(price("blanket")?.cost).toEqual({ amount: 5, unit: "sp" });
+    expect(price("clothes-travelers")).toMatchObject({
+      cost: { amount: 2, unit: "gp" },
+      weight: 4,
+    });
   });
 
   it("has a fix only for an item the pack has", () => {
