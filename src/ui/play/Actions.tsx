@@ -1,10 +1,11 @@
-import { changePlay, rollDiceText } from "../../app/play";
+import { changePlay, healFromFeature, rollDiceText } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
 import {
   ACTIVATIONS,
   type Activation,
   breathWeaponOf,
   characterActions,
+  healExpression,
 } from "../../engine/actions";
 import { resourceLeft, setResourceUsed } from "../../engine/play";
 import { type ClassResource, resourcesByEntry } from "../../engine/resources";
@@ -51,6 +52,7 @@ function ActionCard({
   const single = counters.length === 1 ? counters[0] : undefined;
   const takesUse = !spend && single && !single.pool && !single.unlimited ? single : undefined;
   const breath = id === "srd51:trait/breath-weapon" ? breathWeaponOf(s, c.index) : undefined;
+  const heal = s.selfHeals[id];
 
   let usable = true;
   let left = 0;
@@ -101,7 +103,7 @@ function ActionCard({
         </button>
         <span class="card-meta">{breathInfo || preview(c.text(id, "desc"))}</span>
       </div>
-      {(spend || takesUse || breath || counters.length > 0) && (
+      {(spend || takesUse || breath || heal || counters.length > 0) && (
         <div class="card-actions action-actions">
           {(spend || takesUse) && (
             <button
@@ -121,6 +123,19 @@ function ActionCard({
                 </small>
               )}
               <b>{ui("play.slotLeft", { left, total })}</b>
+            </button>
+          )}
+          {heal && (
+            <button
+              type="button"
+              class="card-btn card-roll card-heal"
+              disabled={!usable}
+              onClick={() => {
+                use();
+                healFromFeature(name, heal);
+              }}
+            >
+              <b>{ui("play.actionHeal", { amount: healExpression(heal) })}</b>
             </button>
           )}
           {breath && (

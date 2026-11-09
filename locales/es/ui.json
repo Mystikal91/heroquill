@@ -1254,6 +1254,8 @@
   "sheet.noClass": "aún sin clase",
   "sheet.armorClass": "Clase de armadura",
   "sheet.stealthDisadvantage": "Desventaja en Sigilo",
+  "sheet.attacksPerAction": "Acción de Atacar: {n} ataques",
+  "play.actionHeal": "Curar {amount}",
   "sheet.initiative": "Iniciativa",
   "sheet.speed": "Velocidad",
   "sheet.move.climb": "Trepar",

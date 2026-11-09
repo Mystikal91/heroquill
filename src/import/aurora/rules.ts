@@ -890,6 +890,17 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
               bonus: rule.attrs.getAttribute("bonus") as string,
             }),
           });
+        // An Extra Attack is also a rule of the sheet: the Attack action makes that many attacks (the most counts).
+        if (
+          rule.name.toLowerCase() === "extra attack:count" &&
+          typeof term === "number" &&
+          term >= 2
+        )
+          mapped.effects.push({
+            type: "extraAttack",
+            attacks: term,
+            ...(rule.level !== undefined && { minLevel: rule.level }),
+          });
       } else {
         mapped.unsupported += 1;
       }

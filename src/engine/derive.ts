@@ -102,6 +102,10 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   conditionImmunities: string[];
   /** The lowest die that is a critical hit with weapon attacks (20, or less with Improved Critical). */
   critRange: number;
+  /** How many attacks the Attack action makes: 1, or the most an Extra Attack of the character gives (they do not add up). */
+  attacksPerAction: number;
+  /** What a feature heals the character for when used (Second Wind: 1d10 + fighter level), by entry; the bonus already counts the levels. */
+  selfHeals: Record<string, { dice?: string; bonus: number }>;
   /** A die lower than this counts as this on checks with a skill the character is proficient in (0: none). */
   proficientSkillFloor: number;
   /** The first spellcasting class: the one whose numbers the sheet headlines. */
@@ -702,6 +706,30 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       ),
     ],
     critRange: Math.min(20, ...effects.flatMap((e) => (e.type === "critRange" ? [e.min] : []))),
+    attacksPerAction: Math.max(
+      1,
+      ...sourced.flatMap(({ effect, source }) =>
+        effect.type === "extraAttack" &&
+        (effect.minLevel === undefined || levelOf(source) >= effect.minLevel)
+          ? [effect.attacks]
+          : [],
+      ),
+    ),
+    selfHeals: Object.fromEntries(
+      sourced.flatMap(({ effect, source }) =>
+        effect.type === "selfHeal"
+          ? [
+              [
+                source,
+                {
+                  ...(effect.dice && { dice: effect.dice }),
+                  bonus: (effect.perLevel ?? 0) * levelOf(source),
+                },
+              ],
+            ]
+          : [],
+      ),
+    ),
     proficientSkillFloor: Math.max(
       0,
       ...effects.flatMap((e) => (e.type === "d20Floor" ? [e.value] : [])),

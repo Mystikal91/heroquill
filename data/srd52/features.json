@@ -50,6 +50,11 @@
           "term": 4,
           "recharge": "short",
           "minLevel": 10
+        },
+        {
+          "type": "selfHeal",
+          "dice": "1d10",
+          "perLevel": 1
         }
       ],
       "data": {
@@ -167,7 +172,12 @@
     {
       "id": "srd52:feature/fighter-extra-attack",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 2
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
         "level": 5
@@ -222,10 +232,18 @@
     {
       "id": "srd52:feature/fighter-two-extra-attacks",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 3
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
-        "level": 11
+        "level": 11,
+        "replaces": [
+          "srd52:feature/fighter-extra-attack"
+        ]
       }
     },
     {
@@ -265,10 +283,18 @@
     {
       "id": "srd52:feature/fighter-three-extra-attacks",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 4
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
-        "level": 20
+        "level": 20,
+        "replaces": [
+          "srd52:feature/fighter-two-extra-attacks"
+        ]
       }
     },
     {

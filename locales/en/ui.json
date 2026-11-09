@@ -1254,6 +1254,8 @@
   "sheet.noClass": "no class yet",
   "sheet.armorClass": "Armor class",
   "sheet.stealthDisadvantage": "Disadvantage on Stealth",
+  "sheet.attacksPerAction": "Attack action: {n} attacks",
+  "play.actionHeal": "Heal {amount}",
   "sheet.initiative": "Initiative",
   "sheet.speed": "Speed",
   "sheet.move.climb": "Climb",

@@ -124,10 +124,20 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
   // like depend on the class table and are worked out in `engine/resources.ts`.
   "feature/divine-sense": uses("long", 1, { mod: "cha" }),
   "feature/cleansing-touch": [usesAtLeast(1, "long", { mod: "cha" })],
-  "feature/second-wind": uses("short", 1),
+  // Using it heals: 1d10 plus the fighter level (Play rolls it); Wholeness of Body gives three times the monk level.
+  "feature/second-wind": [...uses("short", 1), { type: "selfHeal", dice: "1d10", perLevel: 1 }],
   "feature/arcane-recovery": uses("long", 1),
   "feature/natural-recovery": uses("long", 1),
-  "feature/wholeness-of-body": uses("long", 1),
+  "feature/wholeness-of-body": [...uses("long", 1), { type: "selfHeal", perLevel: 3 }],
+  // The Attack action makes more attacks. The fighter has three steps that replace one another (2, 3, 4 attacks);
+  // the barbarian, monk, paladin and ranger have one (2). The sheet takes the most, as Extra Attacks do not add up.
+  "feature/extra-attack-1": [{ type: "extraAttack", attacks: 2 }],
+  "feature/extra-attack-2": [{ type: "extraAttack", attacks: 3 }],
+  "feature/extra-attack-3": [{ type: "extraAttack", attacks: 4 }],
+  "feature/barbarian-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "feature/monk-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "feature/paladin-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "feature/ranger-extra-attack": [{ type: "extraAttack", attacks: 2 }],
   "feature/stroke-of-luck": uses("short", 1),
   "feature/sorcerous-restoration": uses("long", 1),
   "feature/divine-intervention": uses("long", 1),

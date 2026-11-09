@@ -1254,6 +1254,8 @@
   "sheet.noClass": "ancora nessuna classe",
   "sheet.armorClass": "Classe Armatura",
   "sheet.stealthDisadvantage": "Svantaggio a Furtività",
+  "sheet.attacksPerAction": "Azione Attacco: {n} attacchi",
+  "play.actionHeal": "Cura {amount}",
   "sheet.initiative": "Iniziativa",
   "sheet.speed": "Velocità",
   "sheet.move.climb": "Scalata",

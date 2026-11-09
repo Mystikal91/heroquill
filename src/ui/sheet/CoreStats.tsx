@@ -150,6 +150,11 @@ export function Attacks() {
           ))}
         </>
       )}
+      {s.attacksPerAction > 1 && (
+        <p class="muted attacks-per-action">
+          {ui("sheet.attacksPerAction", { n: s.attacksPerAction })}
+        </p>
+      )}
       <ul class="attack-list">
         {[...s.attacks, ...(s.unarmed ? [s.unarmed] : [])].map((a) => (
           <li key={a.itemId}>

@@ -7,7 +7,7 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
-import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS } from "./effects";
+import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS, REPLACES } from "./effects";
 
 const PACK = "srd52";
 
@@ -639,7 +639,10 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
   const weaponIds = items.entries.filter((e) => e.data.category === "weapon").map((e) => e.id);
   for (const feature of [...classPart.features.entries, ...subclassPart.features.entries]) {
-    const pick = FEAT_PICKS[feature.id.split("/")[1] ?? ""];
+    const slug = feature.id.split("/")[1] ?? "";
+    const before = REPLACES[slug];
+    if (before) feature.data = { ...feature.data, replaces: [id("feature", before)] };
+    const pick = FEAT_PICKS[slug];
     if (pick)
       feature.effects = [
         {

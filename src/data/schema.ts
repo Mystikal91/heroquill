@@ -335,6 +335,26 @@ const PlainEffectSchema = v.variant("type", [
   }),
   /** The character cannot be affected by this condition (by its slug: `poisoned`, `frightened`). */
   v.object({ type: v.literal("conditionImmunity"), condition: v.string() }),
+  /**
+   * The Attack action makes this many attacks (an Extra Attack: 2, a fighter's second step 3, the third 4),
+   * from the class level `minLevel` if it says one. The Extra Attacks of a character do not add up: the most
+   * counts, and the sheet tells it (`attacksPerAction`).
+   */
+  v.object({
+    type: v.literal("extraAttack"),
+    attacks: v.pipe(v.number(), v.integer(), v.minValue(2), v.maxValue(8)),
+    minLevel: v.optional(v.number()),
+  }),
+  /**
+   * Using the feature heals the character: `dice` (Second Wind: 1d10) plus `perLevel` times the level of the class
+   * that gives it (1 for Second Wind, 3 for Wholeness of Body, which has no dice). Play rolls it and takes the hit
+   * points back; the uses of the feature are its `uses`.
+   */
+  v.object({
+    type: v.literal("selfHeal"),
+    dice: v.optional(v.string()),
+    perLevel: v.optional(v.number()),
+  }),
   /** The lowest die that is a critical hit with weapon attacks (Champion: 19, then 18). The lowest counts. */
   v.object({
     type: v.literal("critRange"),

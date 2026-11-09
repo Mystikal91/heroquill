@@ -1254,6 +1254,8 @@
   "sheet.noClass": "pas encore de classe",
   "sheet.armorClass": "Classe d'armure",
   "sheet.stealthDisadvantage": "Désavantage en Discrétion",
+  "sheet.attacksPerAction": "Action Attaquer : {n} attaques",
+  "play.actionHeal": "Soigner {amount}",
   "sheet.initiative": "Initiative",
   "sheet.speed": "Vitesse",
   "sheet.move.climb": "Escalade",

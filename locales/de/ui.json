@@ -1254,6 +1254,8 @@
   "sheet.noClass": "noch keine Klasse",
   "sheet.armorClass": "Rüstungsklasse",
   "sheet.stealthDisadvantage": "Nachteil auf Heimlichkeit",
+  "sheet.attacksPerAction": "Angriffsaktion: {n} Angriffe",
+  "play.actionHeal": "Heilen {amount}",
   "sheet.initiative": "Initiative",
   "sheet.speed": "Bewegungsrate",
   "sheet.move.climb": "Klettern",

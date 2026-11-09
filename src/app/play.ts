@@ -1,4 +1,5 @@
 import { signal } from "@preact/signals";
+import { healExpression } from "../engine/actions";
 import type { PlayState } from "../engine/character";
 import {
   type D20Mode,
@@ -202,6 +203,19 @@ export function useItem(itemId: string) {
     return;
   }
   addLog({ label: ui("play.used", { name }), detail: "" });
+}
+
+/**
+ * A feature that heals the character when used (Second Wind: 1d10 plus the fighter level, Wholeness of Body: three
+ * times the monk level): the dice are rolled and logged, and the hit points come back.
+ */
+export function healFromFeature(name: string, heal: { dice?: string; bonus: number }) {
+  const v = vitals();
+  if (!v) return;
+  const total = heal.dice ? rollDiceText(name, healExpression(heal))?.total : heal.bonus;
+  if (total === undefined) return;
+  if (!heal.dice) addLog({ label: name, detail: String(heal.bonus), total });
+  changePlay((p) => applyHealing(p, v.max, total));
 }
 
 /**

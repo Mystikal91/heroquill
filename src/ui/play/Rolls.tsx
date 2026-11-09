@@ -79,6 +79,11 @@ function RollsPanel({ part }: { part: "attacks" | "checks" }) {
   return (
     <Panel title={ui(part === "attacks" ? "play.attacks" : "play.rolls")}>
       <ModePicker />
+      {part === "attacks" && s.attacksPerAction > 1 && (
+        <p class="muted attacks-per-action">
+          {ui("sheet.attacksPerAction", { n: s.attacksPerAction })}
+        </p>
+      )}
       {part === "checks" && (
         <>
           <ul class="plain ability-legend" aria-label={ui("play.abilityLegend")}>

@@ -2191,3 +2191,28 @@ describe("a size that a trait gives (Tasha's Custom Lineage)", () => {
     expect(sheetWith("imp1:trait/medium").size).toBe("medium");
   });
 });
+
+describe("an Extra Attack of Aurora", () => {
+  const set = wrap(`
+    <element name="Test Warrior" type="Archetype" source="Test Book" id="ID_T_WARRIOR">
+      <supports>Martial Archetype</supports>
+      <description><p>A fighter who strikes more.</p></description>
+      <rules><grant type="Archetype Feature" id="ID_T_STRIKES" level="6" /></rules>
+    </element>
+    <element name="Test Strikes" type="Archetype Feature" source="Test Book" id="ID_T_STRIKES">
+      <supports>Fighter</supports>
+      <description><p>You attack more.</p></description>
+      <rules>
+        <stat name="extra attack:count" value="2" level="6" bonus="extra attack" />
+        <stat name="extra attack:count" value="3" level="11" bonus="extra attack" />
+      </rules>
+    </element>`);
+  const made = parseAurora([set], options);
+
+  it("becomes the attacks of the Attack action, step by step, besides the number it shows", () => {
+    const effects = byId(made, "imp1:feature/test-strikes").effects;
+    expect(effects).toContainEqual({ type: "extraAttack", attacks: 2, minLevel: 6 });
+    expect(effects).toContainEqual({ type: "extraAttack", attacks: 3, minLevel: 11 });
+    expect(effects.filter((e) => e.type === "featureValue")).toHaveLength(2);
+  });
+});
