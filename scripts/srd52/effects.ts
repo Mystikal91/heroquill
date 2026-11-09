@@ -17,6 +17,10 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
     { type: "uses", term: 4, recharge: "short", minLevel: 10 },
     { type: "selfHeal", dice: "1d10", perLevel: 1 },
   ],
+  // After a failed ability check: add 1d10 by using up one use of Second Wind (not spent if the check still fails).
+  "fighter-tactical-mind": [
+    { type: "checkBoost", dice: "1d10", spends: "srd52:feature/fighter-second-wind" },
+  ],
   // The Attack action makes two, three, then four attacks: three features, each replacing the one before.
   "fighter-extra-attack": [{ type: "extraAttack", attacks: 2 }],
   "fighter-two-extra-attacks": [{ type: "extraAttack", attacks: 3 }],

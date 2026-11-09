@@ -25,6 +25,7 @@ import {
   resourceLeft,
   setBardicDie,
   setInspiration,
+  setResourceUsed,
 } from "../engine/play";
 import { damageBeast } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
@@ -85,9 +86,11 @@ export interface LogEntry {
   total?: number;
   tone?: "critical" | "fumble";
   /** A d20 roll can be taken again or have a die added: what it takes to make it again. */
-  redo?: { label: string; bonus: number; options: D20Options | undefined };
+  redo?: { label: string; bonus: number; options: D20Options | undefined; check?: boolean };
   /** A die of Bardic Inspiration is already in the total. */
   bardic?: boolean;
+  /** A die of a feature (Tactical Mind) is already in the total, and this is the use it took: it can be given back. */
+  boosted?: { resource: string };
 }
 
 const MAX_LOG = 40;
@@ -122,7 +125,13 @@ export function clearLog() {
 const signedBonus = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
 
 /** Rolls a d20 with a bonus in the current mode and records it. */
-export function rollCheck(label: string, bonus: number, options?: D20Options): D20Roll {
+export function rollCheck(
+  label: string,
+  bonus: number,
+  options?: D20Options,
+  /** The roll is an ability check (a skill): a feature that helps with failed checks can add to it. */
+  check?: boolean,
+): D20Roll {
   const roll = rollD20(bonus, rollMode.value, undefined, options);
   const faces =
     roll.dice.length > 1
@@ -136,7 +145,7 @@ export function rollCheck(label: string, bonus: number, options?: D20Options): D
     total: roll.total,
     ...(roll.critical && { tone: "critical" as const }),
     ...(roll.fumble && { tone: "fumble" as const }),
-    redo: { label, bonus, options },
+    redo: { label, bonus, options, ...(check && { check }) },
   });
   return roll;
 }
@@ -145,8 +154,8 @@ export function rollCheck(label: string, bonus: number, options?: D20Options): D
 export function rerollWithInspiration(entry: LogEntry) {
   if (!entry.redo || !character.value.play.inspiration) return;
   changePlay((p) => setInspiration(p, false));
-  const { label, bonus, options } = entry.redo;
-  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options);
+  const { label, bonus, options, check } = entry.redo;
+  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check);
 }
 
 /** Spends the die of a Bardic Inspiration: it is rolled and added to the total of the d20 roll. */
@@ -162,7 +171,60 @@ export function addBardicDie(entry: LogEntry) {
     ...(entry.tone && { tone: entry.tone }),
     redo: entry.redo,
     bardic: true,
+    ...(entry.boosted && { boosted: entry.boosted }),
   });
+}
+
+/** What the character can add to this ability check by using a feature up: the boosts whose use is still there. */
+export function boostsFor(entry: LogEntry) {
+  const s = sheet.value;
+  if (!s || !entry.redo?.check || entry.boosted) return [];
+  const play = character.value.play;
+  return s.checkBoosts.flatMap((boost) => {
+    const counter = s.resources.find((r) => r.entry === boost.spends);
+    return counter && resourceLeft(play, counter.id, counter.max) > 0
+      ? [{ ...boost, counter }]
+      : [];
+  });
+}
+
+/**
+ * Tactical Mind and the like: a failed ability check gets the die of the feature, and one use of the feature it
+ * spends is taken. If the check fails anyway, `keepBoostedUse` gives the use back (the app does not know the DC).
+ */
+export function addCheckBoost(entry: LogEntry, feature: string) {
+  const boost = boostsFor(entry).find((b) => b.feature === feature);
+  const parsed = boost && parseDice(boost.dice);
+  if (!boost || !parsed || !entry.redo || entry.total === undefined) return;
+  const { counter } = boost;
+  changePlay((p) =>
+    setResourceUsed(p, counter.id, (p.resourcesUsed?.[counter.id] ?? 0) + 1, counter.max),
+  );
+  const rolled = rollExpression(parsed).total;
+  addLog({
+    label: `${entry.label} + ${content.value?.name(feature) ?? feature}`,
+    detail: `${entry.detail} + ${boost.dice} [${rolled}]`,
+    total: entry.total + rolled,
+    ...(entry.tone && { tone: entry.tone }),
+    redo: entry.redo,
+    boosted: { resource: counter.id },
+    ...(entry.bardic && { bardic: true }),
+  });
+}
+
+/** The check failed even with the die: the use of the feature that was taken is given back. */
+export function keepBoostedUse(entry: LogEntry) {
+  const used = entry.boosted;
+  const s = sheet.value;
+  const counter = used && s?.resources.find((r) => r.id === used.resource);
+  if (!used || !counter) return;
+  changePlay((p) =>
+    setResourceUsed(p, counter.id, (p.resourcesUsed?.[counter.id] ?? 0) - 1, counter.max),
+  );
+  const { boosted: _spent, ...rest } = entry;
+  rollLog.value = rollLog.value.map((e) =>
+    e.id === entry.id ? { ...rest, detail: `${entry.detail} (${ui("play.checkBoostKept")})` } : e,
+  );
 }
 
 /** Rolls dice like `2d6+3` and records it. Returns undefined when the text is not a dice expression. */

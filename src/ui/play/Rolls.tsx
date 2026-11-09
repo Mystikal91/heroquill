@@ -23,6 +23,7 @@ function RollButton({
   name = label,
   floor,
   ability,
+  check,
 }: {
   label: string;
   bonus: number;
@@ -31,13 +32,15 @@ function RollButton({
   ability?: Ability;
   /** A die lower than this counts as this (Reliable Talent). */
   floor?: number | undefined;
+  /** An ability check (a skill), which a feature can add to when it fails. */
+  check?: boolean;
 }) {
   return (
     <button
       type="button"
       class="roll-btn"
       data-ability={ability}
-      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined)}
+      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined, check)}
     >
       <span>{label}</span>
       <b>{signed(bonus)}</b>
@@ -117,6 +120,7 @@ function RollsPanel({ part }: { part: "attacks" | "checks" }) {
                 label={c.name(sk.id)}
                 bonus={sk.bonus}
                 ability={sk.ability}
+                check
                 floor={sk.proficient ? s.proficientSkillFloor : undefined}
               />
             ))}

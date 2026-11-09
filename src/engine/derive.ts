@@ -104,6 +104,8 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   critRange: number;
   /** How many attacks the Attack action makes: 1, or the most an Extra Attack of the character gives (they do not add up). */
   attacksPerAction: number;
+  /** The features that add a die to a failed ability check by using up a use of another: the feature, the dice and the entry whose use is spent. */
+  checkBoosts: { feature: string; dice: string; spends: string }[];
   /** What a feature heals the character for when used (Second Wind: 1d10 + fighter level), by entry; the bonus already counts the levels. */
   selfHeals: Record<string, { dice?: string; bonus: number }>;
   /** A die lower than this counts as this on checks with a skill the character is proficient in (0: none). */
@@ -714,6 +716,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
           ? [effect.attacks]
           : [],
       ),
+    ),
+    checkBoosts: sourced.flatMap(({ effect, source }) =>
+      effect.type === "checkBoost"
+        ? [{ feature: source, dice: effect.dice, spends: effect.spends }]
+        : [],
     ),
     selfHeals: Object.fromEntries(
       sourced.flatMap(({ effect, source }) =>

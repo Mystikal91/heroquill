@@ -355,6 +355,12 @@ const PlainEffectSchema = v.variant("type", [
     dice: v.optional(v.string()),
     perLevel: v.optional(v.number()),
   }),
+  /**
+   * After a failed ability check, the feature lets the character add `dice` to it by using up one use of the feature
+   * `spends` (Tactical Mind: 1d10, a use of Second Wind). If the check still fails the use is not spent: Play gives it
+   * back when the person says so, as it does not know the DC.
+   */
+  v.object({ type: v.literal("checkBoost"), dice: v.string(), spends: EntryIdSchema }),
   /** The lowest die that is a critical hit with weapon attacks (Champion: 19, then 18). The lowest counts. */
   v.object({
     type: v.literal("critRange"),

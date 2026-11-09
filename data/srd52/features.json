@@ -145,7 +145,13 @@
     {
       "id": "srd52:feature/fighter-tactical-mind",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "checkBoost",
+          "dice": "1d10",
+          "spends": "srd52:feature/fighter-second-wind"
+        }
+      ],
       "data": {
         "class": "srd52:class/fighter",
         "level": 2

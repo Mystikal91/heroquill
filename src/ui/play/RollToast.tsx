@@ -1,7 +1,14 @@
 import { useEffect, useState } from "preact/hooks";
 import { view } from "../../app/navigation";
-import { addBardicDie, rerollWithInspiration, rollLog } from "../../app/play";
-import { character } from "../../app/store";
+import {
+  addBardicDie,
+  addCheckBoost,
+  boostsFor,
+  keepBoostedUse,
+  rerollWithInspiration,
+  rollLog,
+} from "../../app/play";
+import { character, content } from "../../app/store";
 import { ui } from "../../i18n/ui";
 
 const ROLLING_MS = 560;
@@ -99,6 +106,10 @@ export function RollToast() {
   const canReroll = !rolling && fresh.redo !== undefined && play.inspiration;
   const canAddDie =
     !rolling && fresh.redo !== undefined && !fresh.bardic && play.bardicDie !== undefined;
+  // A check that landed can get the die of a feature that helps with failed checks (Tactical Mind), and a boosted
+  // one can say it failed anyway, which gives the use back.
+  const boosts = rolling ? [] : boostsFor(fresh);
+  const canKeep = !rolling && fresh.boosted !== undefined;
   return (
     <div
       class={`roll-toast no-print ${rolling ? "rolling" : "settled"} ${tone}`}
@@ -139,8 +150,28 @@ export function RollToast() {
           <small class="toast-hint">{ui("play.tapToClose")}</small>
         </span>
       </button>
-      {(canReroll || canAddDie) && (
+      {(canReroll || canAddDie || boosts.length > 0 || canKeep) && (
         <div class="toast-actions">
+          {boosts.map((b) => (
+            <button
+              key={b.feature}
+              type="button"
+              class="toast-act"
+              title={ui("play.checkBoostHint", {
+                feature: content.value?.name(b.spends) ?? b.spends,
+              })}
+              onClick={() => addCheckBoost(fresh, b.feature)}
+            >
+              <span aria-hidden="true">+</span>
+              {`${content.value?.name(b.feature) ?? b.feature} +${b.dice}`}
+            </button>
+          ))}
+          {canKeep && (
+            <button type="button" class="toast-act" onClick={() => keepBoostedUse(fresh)}>
+              <span aria-hidden="true">↺</span>
+              {ui("play.checkBoostFailed")}
+            </button>
+          )}
           {canAddDie && (
             <button type="button" class="toast-act" onClick={() => addBardicDie(fresh)}>
               <span aria-hidden="true">♪</span>
