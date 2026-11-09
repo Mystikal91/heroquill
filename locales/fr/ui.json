@@ -118,6 +118,7 @@
   "equipment.startingAdd": "Ajouter l’équipement de départ",
   "equipment.startingChoice": "Choix {n}",
   "equipment.startingChoose": "Choisis…",
+  "equipment.startingLinked": "{item} : le même dont vous maîtrisez l'usage",
   "equipment.startingNeeds": "exige la maîtrise",
   "equipment.startingIncomplete": "Fais tous les choix pour ajouter l’équipement.",
   "equipment.startingWealth": "Au lieu de tout cela, tu peux commencer avec {amount} po.",

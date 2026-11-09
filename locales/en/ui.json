@@ -118,6 +118,7 @@
   "equipment.startingAdd": "Add starting equipment",
   "equipment.startingChoice": "Choice {n}",
   "equipment.startingChoose": "Choose…",
+  "equipment.startingLinked": "{item}: the same one you are proficient with",
   "equipment.startingNeeds": "needs proficiency",
   "equipment.startingIncomplete": "Make every choice to add the equipment.",
   "equipment.startingWealth": "Instead of all this you can start with {amount} gp.",

@@ -118,6 +118,7 @@
   "equipment.startingAdd": "Añadir equipo inicial",
   "equipment.startingChoice": "Elección {n}",
   "equipment.startingChoose": "Elige…",
+  "equipment.startingLinked": "{item}: el mismo con el que tienes competencia",
   "equipment.startingNeeds": "requiere competencia",
   "equipment.startingIncomplete": "Haz todas las elecciones para añadir el equipo.",
   "equipment.startingWealth": "En lugar de todo esto puedes empezar con {amount} po.",

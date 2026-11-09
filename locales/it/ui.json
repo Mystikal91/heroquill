@@ -118,6 +118,7 @@
   "equipment.startingAdd": "Aggiungi equipaggiamento iniziale",
   "equipment.startingChoice": "Scelta {n}",
   "equipment.startingChoose": "Scegli…",
+  "equipment.startingLinked": "{item}: lo stesso con cui hai competenza",
   "equipment.startingNeeds": "richiede competenza",
   "equipment.startingIncomplete": "Fai tutte le scelte per aggiungere l’equipaggiamento.",
   "equipment.startingWealth": "In alternativa a tutto questo puoi partire con {amount} mo.",

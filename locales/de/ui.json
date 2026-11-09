@@ -118,6 +118,7 @@
   "equipment.startingAdd": "Startausrüstung hinzufügen",
   "equipment.startingChoice": "Wahl {n}",
   "equipment.startingChoose": "Wähle …",
+  "equipment.startingLinked": "{item}: dasselbe, mit dem Sie geübt sind",
   "equipment.startingNeeds": "erfordert Übung",
   "equipment.startingIncomplete": "Triff alle Entscheidungen, um die Ausrüstung hinzuzufügen.",
   "equipment.startingWealth": "Statt all dessen kannst du mit {amount} GM beginnen.",

@@ -50,6 +50,27 @@ export function categoryItems(
   return out;
 }
 
+/** The categories of tools whose pick can be "the same as the one you are proficient with". */
+const TOOL_CATEGORIES = new Set(["gaming-sets", "musical-instruments"]);
+
+/**
+ * The items of a tool category that the character is proficient with. The 2024 Soldier is proficient with one
+ * Gaming Set and starts with "a Gaming Set (the same as above)": the proficiency names the kind (`tool-dice`),
+ * the item is called by its slug (`dice`).
+ */
+export function proficientItems(
+  category: string,
+  index: ReadonlyMap<string, Entry>,
+  tools: readonly string[],
+  ruleset = "srd51",
+): string[] {
+  if (!TOOL_CATEGORIES.has(category)) return [];
+  return categoryItems(category, index, ruleset).filter((id) => {
+    const slug = id.split("/")[1] ?? "";
+    return tools.includes(slug) || tools.includes(`tool-${slug}`);
+  });
+}
+
 /** What a person has decided so far: the option taken for each choice, and the item picked for each category slot. */
 export interface StartingPicks {
   /** The option taken for each choice; a choice with one option needs no decision. */
@@ -72,6 +93,32 @@ export function takenOption(
 /** The slots a part of a category asks the person to fill, as the keys of `StartingPicks.items`. */
 export function slotKeys(n: number, part: number, p: StartingPart): string[] {
   return "category" in p ? Array.from({ length: p.count }, (_, i) => `${n}:${part}:${i}`) : [];
+}
+
+/**
+ * The picks with the ones the rules fix filled in: a single item of a tool category, when the character is
+ * proficient with exactly one kind of it, is that kind (the Soldier's gaming set is the one of its proficiency).
+ * Nothing is stored: when the proficiency changes, so does the item.
+ */
+export function withLinkedPicks(
+  choices: StartingChoice[],
+  picks: StartingPicks,
+  index: ReadonlyMap<string, Entry>,
+  tools: readonly string[],
+  ruleset = "srd51",
+): StartingPicks {
+  const items = { ...picks.items };
+  choices.forEach((choice, n) => {
+    const taken = takenOption(choice, picks, n);
+    const option = taken === undefined ? undefined : choice.options[taken];
+    option?.items.forEach((part, p) => {
+      if (!("category" in part) || part.count !== 1) return;
+      const only = proficientItems(part.category, index, tools, ruleset);
+      const key = slotKeys(n, p, part)[0];
+      if (only.length === 1 && only[0] && key) items[key] = only[0];
+    });
+  });
+  return { ...picks, items };
 }
 
 /** What the choices hand out with the decisions made so far, and whether every decision is made. */

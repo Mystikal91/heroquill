@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { character, content, updateCharacter } from "../../app/store";
+import { character, content, sheet, updateCharacter } from "../../app/store";
 import type { Content } from "../../content/browser";
 import type { Entry } from "../../data/schema";
 import {
@@ -15,9 +15,11 @@ import {
   type StartingPicks,
   categoryItems,
   noPicks,
+  proficientItems,
   resolveStarting,
   slotKeys,
   takenOption,
+  withLinkedPicks,
 } from "../../engine/startingGear";
 import { type UiKey, ui } from "../../i18n/ui";
 
@@ -59,12 +61,17 @@ interface SectionProps {
   c: Content;
   entry: Entry;
   starting: Starting;
+  /** What the person decided; the dialog changes this one. */
   picks: StartingPicks;
+  /** The same with the items the rules fix filled in (the gaming set of the proficiency). */
+  shown: StartingPicks;
+  /** The tool proficiencies the character holds. */
+  tools: readonly string[];
   onChange: (picks: StartingPicks) => void;
 }
 
 /** The questions of one class or background: which option to take, and which item of a category. */
-function Questions({ c, entry, starting, picks, onChange }: SectionProps) {
+function Questions({ c, entry, starting, picks, shown, tools, onChange }: SectionProps) {
   return (
     <>
       {starting.choices.map((choice, n) => {
@@ -95,33 +102,47 @@ function Questions({ c, entry, starting, picks, onChange }: SectionProps) {
                 ))}
               </>
             )}
-            {slots.map(({ key, part }) => (
-              <label key={key} class="start-slot">
-                <span>
-                  {ui(`equipment.cat.${(part as { category: string }).category}` as UiKey)}
-                </span>
-                <select
-                  value={picks.items[key] ?? ""}
-                  onChange={(e) =>
-                    onChange({ ...picks, items: { ...picks.items, [key]: e.currentTarget.value } })
-                  }
-                >
-                  <option value="">{ui("equipment.startingChoose")}</option>
-                  {categoryItems(
-                    (part as { category: string }).category,
-                    c.index,
-                    character.value.ruleset,
-                  )
-                    .map((id) => ({ id, name: c.name(id) }))
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </select>
-              </label>
-            ))}
+            {slots.map(({ key, part }) => {
+              const category = (part as { category: string }).category;
+              const only = proficientItems(category, c.index, tools, character.value.ruleset);
+              // One kind of tool is the character's: the book says "the same as above", so it is not asked again.
+              if (only.length === 1 && only[0])
+                return (
+                  <p key={key} class="start-slot muted">
+                    {ui("equipment.startingLinked", { item: c.name(only[0]) })}
+                  </p>
+                );
+              return (
+                <label key={key} class="start-slot">
+                  <span>
+                    {ui(`equipment.cat.${(part as { category: string }).category}` as UiKey)}
+                  </span>
+                  <select
+                    value={shown.items[key] ?? ""}
+                    onChange={(e) =>
+                      onChange({
+                        ...picks,
+                        items: { ...picks.items, [key]: e.currentTarget.value },
+                      })
+                    }
+                  >
+                    <option value="">{ui("equipment.startingChoose")}</option>
+                    {categoryItems(
+                      (part as { category: string }).category,
+                      c.index,
+                      character.value.ruleset,
+                    )
+                      .map((id) => ({ id, name: c.name(id) }))
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              );
+            })}
           </fieldset>
         );
       })}
@@ -164,9 +185,10 @@ export function StartingEquipment() {
     );
   if (sections.length === 0) return null;
 
-  const resolved = sections.map((s) =>
-    resolveStarting(s.starting.choices, all[s.entry.id] ?? noPicks()),
-  );
+  const tools = sheet.value?.proficiencies.tool ?? [];
+  const shownPicks = (s: (typeof sections)[number]) =>
+    withLinkedPicks(s.starting.choices, all[s.entry.id] ?? noPicks(), c.index, tools, ch.ruleset);
+  const resolved = sections.map((s) => resolveStarting(s.starting.choices, shownPicks(s)));
   const given = sections.flatMap((s, i) => [...s.starting.fixed, ...(resolved[i]?.items ?? [])]);
   const complete = resolved.every((r) => r.complete);
   const gold = resolved.reduce((sum, r) => sum + r.gold, 0);
@@ -203,6 +225,8 @@ export function StartingEquipment() {
               entry={s.entry}
               starting={s.starting}
               picks={all[s.entry.id] ?? noPicks()}
+              shown={shownPicks(s)}
+              tools={tools}
               onChange={(p) => setAll({ ...all, [s.entry.id]: p })}
             />
             {wealth && (

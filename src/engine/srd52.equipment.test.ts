@@ -4,7 +4,13 @@ import pairs from "../data/srd52Pairs.json";
 import { startingOf } from "../data/startingEquipment";
 import { bothIndex } from "../test/srd52";
 import { addStartingItems } from "./gear";
-import { categoryItems, noPicks, resolveStarting } from "./startingGear";
+import {
+  categoryItems,
+  noPicks,
+  proficientItems,
+  resolveStarting,
+  withLinkedPicks,
+} from "./startingGear";
 
 const fighter = () => startingOf(bothIndex.get("srd52:class/fighter"));
 const soldier = () => startingOf(bothIndex.get("srd52:background/soldier"));
@@ -145,5 +151,51 @@ describe("the 2014 and 2024 item pairs", () => {
   it("never pairs two 2024 items with the same 2014 one", () => {
     const targets = Object.values(pairs.items);
     expect(new Set(targets).size).toBe(targets.length);
+  });
+});
+
+describe("the Soldier's gaming set is the one of its tool proficiency", () => {
+  const choices = () => soldier().choices;
+  const taken = { options: [0], items: {} };
+  const itemsOf = (tools: string[], picks = taken) => {
+    const linked = withLinkedPicks(choices(), picks, bothIndex, tools, "srd52");
+    return resolveStarting(choices(), linked);
+  };
+  const has = (r: { items: { item: string }[] }, id: string) => r.items.some((i) => i.item === id);
+
+  it("finds the gaming sets a character is proficient with, and only those", () => {
+    expect(proficientItems("gaming-sets", bothIndex, ["tool-dice"], "srd52")).toEqual([
+      "srd52:item/dice",
+    ]);
+    expect(
+      proficientItems("gaming-sets", bothIndex, ["tool-dice", "tool-dragonchess"], "srd52"),
+    ).toEqual(["srd52:item/dice", "srd52:item/dragonchess"]);
+    expect(proficientItems("gaming-sets", bothIndex, [], "srd52")).toEqual([]);
+    // A category that is not a tool one, and a tool the category does not have.
+    expect(proficientItems("martial-weapons", bothIndex, ["tool-dice"], "srd52")).toEqual([]);
+    expect(proficientItems("gaming-sets", bothIndex, ["tool-thieves-tools"], "srd52")).toEqual([]);
+  });
+
+  it("is the item of the proficiency, with no question left", () => {
+    const r = itemsOf(["tool-dragonchess"]);
+    expect(r.complete).toBe(true);
+    expect(has(r, "srd52:item/dragonchess")).toBe(true);
+    expect(has(r, "srd52:item/dice")).toBe(false);
+  });
+
+  it("follows the proficiency when it changes, and overrides an earlier pick", () => {
+    const earlier = { options: [0], items: { "0:3:0": "srd52:item/dice" } };
+    expect(has(itemsOf(["tool-playing-cards"], earlier), "srd52:item/playing-cards")).toBe(true);
+    expect(has(itemsOf(["tool-playing-cards"], earlier), "srd52:item/dice")).toBe(false);
+  });
+
+  it("stays a question while the proficiency is not chosen yet, or when there are several", () => {
+    expect(itemsOf([]).complete).toBe(false);
+    expect(itemsOf(["tool-dice", "tool-dragonchess"]).complete).toBe(false);
+  });
+
+  it("leaves the other option (gold only) alone", () => {
+    const r = itemsOf(["tool-dice"], { options: [1], items: {} });
+    expect(r).toMatchObject({ gold: 50, items: [], complete: true });
   });
 });
