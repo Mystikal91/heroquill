@@ -2133,3 +2133,61 @@ describe("the natural weapons of the species of the books", () => {
     expect(sheet.unarmed?.damage).toMatchObject({ dice: "1d4", type: "slashing", bonus: 2 });
   });
 });
+
+describe("a size that a trait gives (Tasha's Custom Lineage)", () => {
+  const set = wrap(`
+    <element name="Free Folk" type="Race" source="Test Book" id="ID_T_FREEFOLK">
+      <description><p>Pick your size.</p></description>
+      <rules>
+        <select type="Racial Trait" name="Size" supports="Free Folk Size" />
+      </rules>
+    </element>
+    <element name="Small" type="Racial Trait" source="Test Book" id="ID_T_SIZE_SMALL">
+      <supports>Free Folk Size</supports>
+      <description><p>Your size is Small.</p></description>
+      <rules><grant type="Size" id="ID_SIZE_SMALL" /></rules>
+    </element>
+    <element name="Medium" type="Racial Trait" source="Test Book" id="ID_T_SIZE_MEDIUM">
+      <supports>Free Folk Size</supports>
+      <description><p>Your size is Medium.</p></description>
+      <rules><grant type="Size" id="ID_SIZE_MEDIUM" /></rules>
+    </element>`);
+  const made = parseAurora([set], options);
+
+  it("gives each size trait a size effect", () => {
+    expect(byId(made, "imp1:trait/small").effects).toEqual([{ type: "size", size: "small" }]);
+    expect(byId(made, "imp1:trait/medium").effects).toEqual([{ type: "size", size: "medium" }]);
+  });
+
+  it("offers the two as a choice of the race", () => {
+    const race = byId(made, "imp1:species/free-folk");
+    expect(race.effects.find((e) => e.type === "choice" && e.grants === "trait")).toMatchObject({
+      from: ["imp1:trait/small", "imp1:trait/medium"],
+    });
+  });
+
+  it("lets the sheet follow the size that was picked", () => {
+    const pack = parsePack({
+      manifest: {
+        id: "imp1",
+        ruleset: "custom",
+        version: "1",
+        license: "Personal",
+        attribution: "x",
+      },
+      entries: made.entries,
+    });
+    const index = indexPacks(...srd51Packs, pack);
+    const sheetWith = (pick?: string) => {
+      const c = createCharacter("srd51");
+      c.choices.species = "imp1:species/free-folk";
+      const first = deriveSheet(c, index).choices[0];
+      if (pick && first) c.selections[first.key] = [pick];
+      return deriveSheet(c, index);
+    };
+    // Nothing picked: the race's own size (a race that sets none is Medium).
+    expect(sheetWith().size).toBe("medium");
+    expect(sheetWith("imp1:trait/small").size).toBe("small");
+    expect(sheetWith("imp1:trait/medium").size).toBe("medium");
+  });
+});

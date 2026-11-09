@@ -1,4 +1,4 @@
-import type { Effect } from "../../data/schema";
+import { CREATURE_SIZES, type Effect } from "../../data/schema";
 import { emit } from "./emit";
 import { naturalWeaponEffects } from "./naturalWeapons";
 import { REPLACED_BY_FLAG } from "./optionalFeatures";
@@ -213,14 +213,18 @@ export function importOptionalFeature(ctx: Context, source: Source): void {
 
 /** A racial trait, a feat feature or any other named option that has effects of its own. */
 export function importTrait(ctx: Context, source: Source): void {
-  const { effects } = baseEffects(ctx, source, "trait");
+  const { mapped, effects } = baseEffects(ctx, source, "trait");
+  // A trait that gives a size (the Small and Medium that Tasha's Custom Lineage lets you pick) sets
+  // the creature's size, which a race that has no size of its own cannot do by itself.
+  const size = CREATURE_SIZES.find((s) => s === mapped.size);
+  const sizeEffects: Effect[] = size ? [{ type: "size", size }] : [];
   // The natural weapons of the species of the books are in a table: Aurora has only their words.
   emit(
     ctx,
     source,
     {},
     { desc: description(source.el) },
-    { effects: [...effects, ...naturalWeaponEffects(source.aid)] },
+    { effects: [...effects, ...sizeEffects, ...naturalWeaponEffects(source.aid)] },
   );
 }
 
