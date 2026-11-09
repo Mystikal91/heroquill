@@ -167,6 +167,7 @@
   "choice.kind.expertise": "Expertise",
   "choice.kind.feat": "Talente",
   "choice.kind.mastery": "Waffenmeisterschaften",
+  "choice.kind.size": "Größe",
   "choice.hint": "Wähle {n} · noch {left}",
   "choice.alreadyHave": "bereits vorhanden",
   "sheet.grantedSpells": "Gewährte Zauber",

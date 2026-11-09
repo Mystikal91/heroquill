@@ -76,6 +76,8 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   bonuses: AppliedModifier[];
   /** Walking speed in feet; undefined while no species is chosen. */
   speed?: number;
+  /** The creature size (`medium`, `small`): the one the person chose, else the species' own; undefined while there is none. */
+  size?: string;
   /** Climbing, swimming, flying and burrowing speeds; none while no species is chosen. */
   movement: Movement;
   /** Senses with their range in feet (darkvision, blindsight...). */
@@ -605,6 +607,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     if (numberOverride(character.overrides, OVERRIDE.spellSaveDc) === undefined)
       caster.saveDc += total(spellDcMods);
   }
+  // The size: the one picked where the species lets you pick, else the species' own.
+  const speciesSize = chosen.find((e) => e.kind === "species")?.data.size;
+  const size =
+    effects.flatMap((e) => (e.type === "size" ? [e.size] : []))[0] ??
+    (typeof speciesSize === "string" ? speciesSize : undefined);
   const speed =
     overrideNumber(character, "speed") ??
     (typeof baseSpeed === "number" ? baseSpeed + total(speedMods) : undefined);
@@ -670,6 +677,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       abilities.dex.modifier + halfBonus(halves, "dex", proficiencyBonus) + total(initiativeMods),
     bonuses,
     ...(speed !== undefined && { speed }),
+    ...(size !== undefined && { size }),
     movement,
     senses,
     level,

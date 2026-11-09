@@ -28,6 +28,10 @@ export const PROFICIENCY_CATEGORIES = [
 export const ProficiencyCategorySchema = v.picklist(PROFICIENCY_CATEGORIES);
 export type ProficiencyCategory = v.InferOutput<typeof ProficiencyCategorySchema>;
 
+/** The sizes of a creature, smallest first. */
+export const CREATURE_SIZES = ["tiny", "small", "medium", "large", "huge", "gargantuan"] as const;
+export type CreatureSize = (typeof CREATURE_SIZES)[number];
+
 /** What a `modifier` effect changes. */
 export const MODIFIER_TARGETS = [
   "ac",
@@ -138,6 +142,7 @@ const PlainEffectSchema = v.variant("type", [
       "expertise",
       "feat",
       "mastery",
+      "size",
     ]),
     from: v.array(v.string()),
     /** Bonus applied per pick when `grants` is `abilityBonus`. */
@@ -260,6 +265,12 @@ const PlainEffectSchema = v.variant("type", [
   v.object({ type: v.literal("attunementMax"), value: v.pipe(v.number(), v.integer(), v.minValue(3)) }),
   /** Double proficiency bonus on a skill the character is proficient in. */
   v.object({ type: v.literal("expertise"), skill: v.string() }),
+  /**
+   * The creature's size, for a species that lets the person pick one (the 2024 Human and Tiefling:
+   * Small or Medium) through a `choice` that grants `size`. A species with one size has it in
+   * `data.size` instead.
+   */
+  v.object({ type: v.literal("size"), size: v.picklist(CREATURE_SIZES) }),
   /** The ability score is at least this high (Gauntlets of Ogre Power): it never lowers it. */
   v.object({ type: v.literal("abilityFloor"), ability: AbilitySchema, value: v.number() }),
   /**

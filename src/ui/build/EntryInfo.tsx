@@ -1,5 +1,5 @@
 import { type ComponentChildren, Fragment } from "preact";
-import { character, content } from "../../app/store";
+import { character, content, sheet } from "../../app/store";
 import { classData, subclassData } from "../../data/progression";
 import type { Effect } from "../../data/schema";
 import { heldBy, plainEffects } from "../../engine/requirements";
@@ -43,6 +43,13 @@ function choiceLines(effects: Effect[]): string[] {
     .flatMap((e) => {
       if (e.grants === "language")
         return [ui("build.info.choose", { n: e.choose, list: ui("sheet.languages") })];
+      if (e.grants === "size")
+        return [
+          ui("build.info.choose", {
+            n: e.choose,
+            list: e.from.map((size) => ui(`hb.o.${size}` as UiKey)).join(", "),
+          }),
+        ];
       if (e.grants !== "proficiency") return [];
       const names = e.from.map((option) => {
         const [category = "", target = ""] = String(option).split(":");
@@ -135,7 +142,8 @@ export function SpeciesInfo() {
       (e) =>
         `${signed(e.value)} ${c.text(`${rs}:ability/${e.ability}`, "abbreviation") ?? e.ability}`,
     );
-  const size = species.data.size as string | undefined;
+  // The size the sheet works out (a species can let you pick it), else the one the species has.
+  const size = sheet.value?.size ?? (species.data.size as string | undefined);
   const speed = species.data.speed as number | undefined;
   const traits = effects.flatMap((e) => (e.type === "trait" ? [e.id] : []));
   const about = ["desc", "age", "alignment", "sizeDescription", "languageDescription"]

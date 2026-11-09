@@ -167,6 +167,7 @@
   "choice.kind.expertise": "Expertise",
   "choice.kind.feat": "Dons",
   "choice.kind.mastery": "Maîtrises d'armes",
+  "choice.kind.size": "Taille",
   "choice.hint": "Choisis-en {n} · {left} restants",
   "choice.alreadyHave": "déjà acquis",
   "sheet.grantedSpells": "Sorts accordés",

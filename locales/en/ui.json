@@ -167,6 +167,7 @@
   "choice.kind.expertise": "Expertise",
   "choice.kind.feat": "Feats",
   "choice.kind.mastery": "Weapon masteries",
+  "choice.kind.size": "Size",
   "choice.hint": "Choose {n} · {left} left",
   "choice.alreadyHave": "already have",
   "sheet.grantedSpells": "Granted spells",

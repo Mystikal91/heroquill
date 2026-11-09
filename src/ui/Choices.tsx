@@ -25,6 +25,10 @@ function optionLabel(c: Content, ruleset: string, choice: PendingChoice, option:
     case "feat":
     case "mastery":
       return c.name(option);
+    case "size":
+      return ["tiny", "small", "medium", "large"].includes(option)
+        ? ui(`hb.o.${option}` as UiKey)
+        : option;
     case "expertise":
       return c.index.has(`${ruleset}:skill/${option}`)
         ? c.name(`${ruleset}:skill/${option}`)

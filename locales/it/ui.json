@@ -167,6 +167,7 @@
   "choice.kind.expertise": "Maestria",
   "choice.kind.feat": "Talenti",
   "choice.kind.mastery": "Maestrie delle armi",
+  "choice.kind.size": "Taglia",
   "choice.hint": "Scegline {n} · {left} rimasti",
   "choice.alreadyHave": "già posseduto",
   "sheet.grantedSpells": "Incantesimi concessi",

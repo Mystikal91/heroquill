@@ -238,11 +238,21 @@ function convertSpecies(raw: RawSource, table: Map<string, string>): [Converted,
       traits.strings[`${trait.index}.name`] = trait.name;
       traits.strings[`${trait.index}.desc`] = text(trait.description);
     }
+    // A species has one size, or lets the person pick one (`size_options`: Small or Medium).
+    if (s.size_options) {
+      effects.push({
+        type: "choice",
+        id: "size",
+        choose: s.size_options.choose,
+        grants: "size",
+        from: (s.size_options.from.options as Raw[]).map((o) => String(o.size).toLowerCase()),
+      });
+    }
     species.entries.push({
       id: id("species", s.index),
       kind: "species",
       effects,
-      data: { speed: s.speed, size: String(s.size).toLowerCase() },
+      data: { speed: s.speed, ...(s.size && { size: String(s.size).toLowerCase() }) },
     });
     species.strings[`${s.index}.name`] = s.name;
   }

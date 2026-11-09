@@ -1,4 +1,4 @@
-import type { Ability, Effect, Entry, ProficiencyCategory } from "../data/schema";
+import type { Ability, CreatureSize, Effect, Entry, ProficiencyCategory } from "../data/schema";
 import type { PackIndex } from "./derive";
 import type { OptionNeed } from "./optionNeeds";
 import { evaluateRequirements } from "./requirements";
@@ -127,6 +127,8 @@ function grantEffect(choice: ChoiceEffect, option: string): Effect {
       return { type: "expertise", skill: option };
     case "mastery":
       return { type: "weaponMastery", item: option };
+    case "size":
+      return { type: "size", size: option as CreatureSize };
   }
 }
 

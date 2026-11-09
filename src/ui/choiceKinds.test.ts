@@ -12,6 +12,7 @@ const GRANTS: Record<ChoiceGrant, true> = {
   expertise: true,
   feat: true,
   mastery: true,
+  size: true,
 };
 
 describe("the headings of the choices", () => {

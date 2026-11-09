@@ -167,6 +167,7 @@
   "choice.kind.expertise": "Pericia",
   "choice.kind.feat": "Dotes",
   "choice.kind.mastery": "Maestrías con armas",
+  "choice.kind.size": "Tamaño",
   "choice.hint": "Elige {n} · faltan {left}",
   "choice.alreadyHave": "ya lo tienes",
   "sheet.grantedSpells": "Conjuros concedidos",
