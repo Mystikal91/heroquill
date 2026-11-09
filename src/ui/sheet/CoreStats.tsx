@@ -161,6 +161,7 @@ export function Attacks() {
             <ExplainButton class="attack-bonus" target={{ kind: "attack", itemId: a.itemId }}>
               <b>{signed(a.attackBonus)}</b>
             </ExplainButton>
+            {a.heavy && <p class="note attack-note">{ui(`weapon.heavy.${a.heavy}` as UiKey)}</p>}
             <div class="attack-damage">
               {a.damage && formatDamage(a.damage)}
               {a.twoHandedDamage && (

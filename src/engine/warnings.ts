@@ -18,6 +18,8 @@ export type WarningCode =
   | "attunementTooMany"
   | "strengthMinimum"
   | "notProficient"
+  | "heavySmall"
+  | "heavyScore"
   | "invalidChoice"
   | "tooManyChoices"
   | "asiInvalid"

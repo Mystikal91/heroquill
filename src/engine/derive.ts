@@ -481,10 +481,16 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   }
 
   const held = proficiencyKeys(proficiencies);
+  // The size: the one picked where the species lets you pick, else the species' own.
+  const speciesSize = chosen.find((e) => e.kind === "species")?.data.size;
+  const size =
+    effects.flatMap((e) => (e.type === "size" ? [e.size] : []))[0] ??
+    (typeof speciesSize === "string" ? speciesSize : undefined);
   const equipment = deriveEquipment({
     character,
     index,
     abilities,
+    size,
     held,
     seen: heldIds,
     proficiencyBonus,
@@ -607,11 +613,6 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     if (numberOverride(character.overrides, OVERRIDE.spellSaveDc) === undefined)
       caster.saveDc += total(spellDcMods);
   }
-  // The size: the one picked where the species lets you pick, else the species' own.
-  const speciesSize = chosen.find((e) => e.kind === "species")?.data.size;
-  const size =
-    effects.flatMap((e) => (e.type === "size" ? [e.size] : []))[0] ??
-    (typeof speciesSize === "string" ? speciesSize : undefined);
   const speed =
     overrideNumber(character, "speed") ??
     (typeof baseSpeed === "number" ? baseSpeed + total(speedMods) : undefined);

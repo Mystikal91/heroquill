@@ -754,6 +754,10 @@
   grid-column: 1 / -1;
 }
 
+.attack-note {
+  grid-column: 1 / -1;
+}
+
 /* Long labels (spell attack, saving throw DC) stay inside their box. */
 .stat-label {
   overflow-wrap: anywhere;

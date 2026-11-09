@@ -39,6 +39,12 @@ export interface AttackResult {
   canMagicWeapon?: boolean;
   /** The weapon's mastery property (a `property` entry) once the character has mastered this kind of weapon. */
   mastery?: string;
+  /**
+   * Why the attack rolls with this Heavy weapon have disadvantage for this character: a Small creature
+   * (the 2014 rule) or a Strength or Dexterity score under 13 (the 2024 rule, by the kind of weapon). Only a
+   * warning: nothing is rolled differently.
+   */
+  heavy?: "small" | "str" | "dex";
   /** The attack is made at range. */
   ranged: boolean;
   /** The weapon counts as magic. */
@@ -112,6 +118,8 @@ interface Context {
   martialArts?: string | undefined;
   /** The feats the character has, by id. */
   featIds: string[];
+  /** The creature size, for the rule of the 2014 Heavy property (Small creatures). */
+  size?: string | undefined;
 }
 
 const isProficient = (held: Set<string>, keys: string[]) => keys.some((k) => held.has(k));
@@ -247,6 +255,23 @@ function knowsSpell(ctx: Context, spell: string): boolean {
   );
 }
 
+/**
+ * Whether the Heavy property gives this character disadvantage on attack rolls with the weapon, and why. The
+ * 2014 rule is about size (Small creatures); the 2024 rule is about the score that fits the weapon: Strength
+ * for a Melee weapon, Dexterity for a Ranged one, at least 13.
+ */
+function heavyPenalty(
+  ctx: Context,
+  weapon: { kind: string; properties: string[] },
+): "small" | "str" | "dex" | undefined {
+  if (!weapon.properties.some((p) => p.endsWith("/heavy"))) return undefined;
+  if (ctx.character.ruleset === "srd52") {
+    const ability = weapon.kind === "ranged" ? "dex" : "str";
+    return ctx.abilities[ability].score < 13 ? ability : undefined;
+  }
+  return ctx.size === "small" || ctx.size === "tiny" ? "small" : undefined;
+}
+
 function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
   const { character, index, abilities, held, proficiencyBonus } = ctx;
   const attacks: AttackResult[] = [];
@@ -346,6 +371,12 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
     const mastered =
       masteries.has(item.itemId) || (typeof copied === "string" && masteries.has(copied));
     const mastery = mastered ? weapon.mastery : undefined;
+    const heavy = heavyPenalty(ctx, weapon);
+    if (heavy)
+      warn(ctx.warnings, heavy === "small" ? "heavySmall" : "heavyScore", {
+        item: item.itemId,
+        ...(heavy !== "small" && { ability: heavy }),
+      });
     const grip = (twoHanded: boolean) => ({
       armor,
       levelOf: ctx.levelOf,
@@ -378,6 +409,7 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
       ...(knowsSacredWeapon && { canSacredWeapon: true }),
       ranged: weapon.kind === "ranged",
       ...(mastery && { mastery }),
+      ...(heavy && { heavy }),
       ...(offHand && { offHand }),
       magical,
       enhancement,

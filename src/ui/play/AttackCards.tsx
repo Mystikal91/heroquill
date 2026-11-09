@@ -19,7 +19,7 @@ import {
   slotsLeft,
 } from "../../engine/play";
 import { canSpend, spendPool } from "../../engine/spends";
-import { signed, ui } from "../../i18n/ui";
+import { type UiKey, signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { attackName } from "../attackName";
 import { damageName } from "../damageName";
@@ -140,6 +140,7 @@ function AttackCard({ a }: { a: AttackResult }) {
           </button>
         )}
         <span class="card-meta">{meta.join(" · ")}</span>
+        {a.heavy && <span class="card-warn">{ui(`weapon.heavy.${a.heavy}` as UiKey)}</span>}
       </div>
       <div class="card-actions attack-actions">
         <div class="card-main">

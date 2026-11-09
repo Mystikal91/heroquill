@@ -83,6 +83,13 @@
   white-space: nowrap;
 }
 
+/* A rule that works against the character with this card (Heavy weapon, small or weak): a line, not a button. */
+.card-warn {
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
 .card-meta abbr,
 .card-tag {
   margin-inline-start: 0.4rem;
