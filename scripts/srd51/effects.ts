@@ -400,6 +400,20 @@ export const PRICES: Record<string, { amount: number; unit: "cp" | "sp" | "gp" }
 };
 
 /**
+ * The hit points a potion gives back when it is drunk (`data.use.heal`, which the Use button of the
+ * inventory rolls), by the database's index. From the "Potions of Healing" table of the SRD 5.1 (p. 234):
+ * healing (common) 2d4 + 2, greater (uncommon) 4d4 + 4, superior (rare) 8d4 + 8, supreme (very rare)
+ * 10d4 + 20. The database only has the numbers inside each potion's text; a test compares the two.
+ * Left out on purpose: the restorative ointment (2d8 + 2, but a jar has several doses).
+ */
+export const ITEM_HEALING: Record<string, string> = {
+  "potion-of-healing-common": "2d4+2",
+  "potion-of-healing-greater": "4d4+4",
+  "potion-of-healing-superior": "8d4+8",
+  "potion-of-healing-supreme": "10d4+20",
+};
+
+/**
  * What a feature or trait takes to use, written by hand from its text: an action, a bonus action
  * or a reaction (the same `data.activation` that Aurora's `<sheet action>` gives). A feature that
  * is used by another action (Action Surge, Extra Attack) or that is always on is not here.

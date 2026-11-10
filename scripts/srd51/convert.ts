@@ -7,6 +7,7 @@ import type { StartingChoice, StartingPart } from "../../src/data/startingEquipm
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
+  ITEM_HEALING,
   OPTION_FEATURES,
   PRICES,
   SUBCLASS_FIXES,
@@ -809,6 +810,7 @@ function convertItems(raw: RawSource): Converted {
         rarity: slugify(m.rarity.name),
         attunement: /requires attunement/i.test(description[0] ?? ""),
         ...(slot && { slot }),
+        ...(ITEM_HEALING[m.index] && { use: { heal: ITEM_HEALING[m.index] } }),
       },
     });
     strings[`${m.index}.name`] = m.name;

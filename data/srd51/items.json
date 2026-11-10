@@ -7876,7 +7876,10 @@
           "unit": "gp"
         },
         "rarity": "common",
-        "attunement": false
+        "attunement": false,
+        "use": {
+          "heal": "2d4+2"
+        }
       }
     },
     {
@@ -7890,7 +7893,10 @@
           "unit": "gp"
         },
         "rarity": "uncommon",
-        "attunement": false
+        "attunement": false,
+        "use": {
+          "heal": "4d4+4"
+        }
       }
     },
     {
@@ -7904,7 +7910,10 @@
           "unit": "gp"
         },
         "rarity": "rare",
-        "attunement": false
+        "attunement": false,
+        "use": {
+          "heal": "8d4+8"
+        }
       }
     },
     {
@@ -7918,7 +7927,10 @@
           "unit": "gp"
         },
         "rarity": "very-rare",
-        "attunement": false
+        "attunement": false,
+        "use": {
+          "heal": "10d4+20"
+        }
       }
     },
     {
