@@ -265,9 +265,7 @@ export function ItemPickerDialog() {
               <span>{ui("form.onlyProficient")}</span>
             </label>
           )}
-          <output class="picker-said muted">
-            {said || (typed.trim() ? "" : ui("picker.hint"))}
-          </output>
+          <output class="picker-said muted">{said}</output>
 
           {recent.length > 0 && (
             <section>

@@ -1493,7 +1493,6 @@
   "picker.done": "Fertig",
   "picker.placeholder": "Suchen oder „2 Tränke“ schreiben",
   "picker.filters": "Art des Gegenstands",
-  "picker.hint": "Mit + hinzufügen. Enter fügt den ersten hinzu. Erst eine Zahl schreiben, um mehrere hinzuzufügen.",
   "picker.recent": "Zuletzt hinzugefügt",
   "picker.all": "Alle Gegenstände",
   "picker.more": "{n} weitere zeigen",

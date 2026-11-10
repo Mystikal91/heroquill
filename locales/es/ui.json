@@ -1493,7 +1493,6 @@
   "picker.done": "Listo",
   "picker.placeholder": "Busca, o escribe «2 pociones»",
   "picker.filters": "Tipo de objeto",
-  "picker.hint": "Toca + para añadir. Intro añade el primero. Escribe antes un número para añadir varios.",
   "picker.recent": "Añadidos hace poco",
   "picker.all": "Todos los objetos",
   "picker.more": "Mostrar {n} más",

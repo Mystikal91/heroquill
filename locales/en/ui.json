@@ -1493,7 +1493,6 @@
   "picker.done": "Done",
   "picker.placeholder": "Search, or type “2 potions”",
   "picker.filters": "Sort of item",
-  "picker.hint": "Tap + to add. Enter adds the first one. Write a number first to add several.",
   "picker.recent": "Added lately",
   "picker.all": "All items",
   "picker.more": "Show {n} more",
