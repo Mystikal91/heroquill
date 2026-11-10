@@ -1293,16 +1293,6 @@ export const ROADMAP: RoadmapItem[] = [
     },
   },
   {
-    id: "money",
-    text: {
-      en: "Money that does something: the gold a class may start with instead of its equipment (the SRD does not print the amounts, so for now only the Artificer shows it).",
-      it: "Soldi che fanno qualcosa: l'oro con cui può partire una classe al posto dell'equipaggiamento (l'SRD non riporta le cifre, quindi per ora lo mostra solo l'Artefice).",
-      fr: "Un argent qui sert à quelque chose : l'or avec lequel une classe peut commencer à la place de son équipement (le SRD n'imprime pas les montants, donc pour l'instant seul l'Artificier l'affiche).",
-      de: "Geld, das etwas tut: das Gold, mit dem eine Klasse statt ihrer Ausrüstung beginnen kann (das SRD druckt die Beträge nicht, daher zeigt es vorerst nur der Artificer).",
-      es: "Dinero que hace algo: el oro con el que puede empezar una clase en lugar de su equipo (el SRD no imprime las cantidades, así que por ahora solo lo muestra el Artífice).",
-    },
-  },
-  {
     id: "quickEditMore",
     text: {
       en: "Quick edit everywhere (the lists of items and more), and Edit everything: replace the original entry, rules included (copying it as a new one in your homebrew already works).",
