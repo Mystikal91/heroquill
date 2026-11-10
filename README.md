@@ -64,6 +64,11 @@ and Aurora Legacy that you already own.
   window with all of them. Each one can be tapped to see how it adds up.
 - Class features that are played, not only read: Sacred Weapon, the Life domain's healing and
   Divine Strike, a sorcerer's Flexible Casting (slots from points and back).
+- Items and coins at the table: one *Add* window (in Create, on the Sheet and in Play) with search
+  as you type, chips by sort of item, the last items added, counts ("2 potions"), items of your
+  own, what a potion heals and the price when the book gives one, and a *Buy* button that pays
+  from the coins. *Spend* works out the coins to hand over and gives change in the biggest coins;
+  *Gain* adds some. The potions of healing heal when used.
 
 **Print and share**
 

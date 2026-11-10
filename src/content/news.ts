@@ -18,6 +18,40 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.29 beta",
+    date: "2026-11-10",
+    notes: [
+      {
+        en: "A new window to add items, in Create, on the Sheet and in Play (the Add button of the backpack): search as you type, a chip for each sort of item (potions, weapons, armor...), the last items you added on top, and a plus that keeps adding without closing. Write a number first (“2 potions”) to add several, and what the rules do not list can be added as your own item from the same field. Each row shows what a potion heals and its price when the book gives one, and its name (or the small i) opens the item’s details.",
+        it: "Una nuova finestra per aggiungere oggetti, in Crea, nella Scheda e in Gioca (il tasto Aggiungi dello zaino): ricerca mentre scrivi, una chip per ogni tipo di oggetto (pozioni, armi, armature...), gli ultimi oggetti aggiunti in cima e un + che continua ad aggiungere senza chiudersi. Scrivi prima un numero («2 pozioni») per aggiungerne più d’uno, e ciò che le regole non elencano si aggiunge come oggetto tuo dallo stesso campo. Ogni riga mostra quanto cura una pozione e il prezzo, quando il manuale lo dà, e il nome (o la piccola i) apre i dettagli dell’oggetto.",
+        fr: "Une nouvelle fenêtre pour ajouter des objets, dans Créer, sur la Fiche et dans Jouer (le bouton Ajouter du sac à dos) : recherche pendant la saisie, une pastille par sorte d’objet (potions, armes, armures...), les derniers objets ajoutés en haut et un + qui continue d’ajouter sans se fermer. Écris d’abord un nombre (« 2 potions ») pour en ajouter plusieurs, et ce que les règles ne listent pas s’ajoute comme objet personnel depuis le même champ. Chaque ligne montre ce que soigne une potion et son prix quand le livre en donne un, et le nom (ou le petit i) ouvre les détails de l’objet.",
+        de: "Ein neues Fenster zum Hinzufügen von Gegenständen, im Erstellen-Bildschirm, auf dem Bogen und beim Spielen (der Knopf Hinzufügen im Rucksack): Suche beim Tippen, ein Chip für jede Art von Gegenstand (Tränke, Waffen, Rüstungen ...), die zuletzt hinzugefügten oben und ein +, das weiter hinzufügt, ohne sich zu schließen. Schreib vorher eine Zahl („2 Tränke“), um mehrere hinzuzufügen; was die Regeln nicht aufführen, fügst du im selben Feld als eigenen Gegenstand hinzu. Jede Zeile zeigt, was ein Trank heilt, und den Preis, wenn das Buch einen nennt, und der Name (oder das kleine i) öffnet die Details.",
+        es: "Una ventana nueva para añadir objetos, en Crear, en la Hoja y en Jugar (el botón Añadir de la mochila): búsqueda mientras escribes, una etiqueta para cada tipo de objeto (pociones, armas, armaduras...), los últimos añadidos arriba y un + que sigue añadiendo sin cerrarse. Escribe antes un número («2 pociones») para añadir varios, y lo que las reglas no listan se añade como objeto propio desde el mismo campo. Cada fila muestra cuánto cura una poción y su precio cuando el libro lo da, y el nombre (o la pequeña i) abre los detalles del objeto.",
+      },
+      {
+        en: "Coins: a Spend button works out which coins to hand over and gives change in the biggest coins there are (15 gp with 2 platinum leaves 5 gp), and a Gain button adds coins; both can be undone. In the item window a Buy button pays the price from your coins, and is greyed out when you do not have enough.",
+        it: "Monete: un tasto Spendi calcola da solo quali monete consegnare e dà il resto con i tagli più grandi (15 mo con 2 monete di platino lasciano 5 mo), e un tasto Guadagna aggiunge monete; entrambi si possono annullare. Nella finestra degli oggetti un tasto Compra paga il prezzo con le tue monete, ed è disattivato se non ne hai abbastanza.",
+        fr: "Pièces : un bouton Dépenser calcule seul quelles pièces rendre et rend la monnaie avec les plus grosses pièces (15 po avec 2 pièces de platine laissent 5 po), et un bouton Gagner ajoute des pièces ; les deux s’annulent. Dans la fenêtre des objets, un bouton Acheter paie le prix avec tes pièces et reste grisé si tu n’en as pas assez.",
+        de: "Münzen: Ein Knopf Ausgeben rechnet selbst aus, welche Münzen du gibst, und gibt Wechselgeld in den größten Münzen (15 GM mit 2 Platinmünzen lassen 5 GM übrig); ein Knopf Erhalten fügt Münzen hinzu; beides lässt sich rückgängig machen. Im Gegenstandsfenster bezahlt ein Knopf Kaufen den Preis mit deinen Münzen und ist ausgegraut, wenn sie nicht reichen.",
+        es: "Monedas: un botón Gastar calcula solo qué monedas entregar y da el cambio con las monedas más grandes (15 mo con 2 de platino dejan 5 mo), y un botón Ganar añade monedas; ambos se pueden deshacer. En la ventana de objetos, un botón Comprar paga el precio con tus monedas y queda apagado si no te alcanzan.",
+      },
+      {
+        en: "The potions of healing of the SRD (2d4+2, 4d4+4, 8d4+8 and 10d4+20) now heal when you use them from the inventory, and the Potion of healing has its price of 50 gp. The caltrops cost 1 gp for the bag, as in the book, not 5 cp.",
+        it: "Le pozioni di guarigione dell’SRD (2d4+2, 4d4+4, 8d4+8 e 10d4+20) ora curano quando le usi dall’inventario, e la Pozione di guarigione ha il suo prezzo di 50 mo. I triboli costano 1 mo il sacchetto, come nel manuale, non 5 mr.",
+        fr: "Les potions de soin du SRD (2d4+2, 4d4+4, 8d4+8 et 10d4+20) soignent maintenant quand tu les utilises depuis l’inventaire, et la Potion de soin a son prix de 50 po. Les chausse-trappes coûtent 1 po le sac, comme dans le livre, et non 5 pc.",
+        de: "Die Heiltränke des SRD (2d4+2, 4d4+4, 8d4+8 und 10d4+20) heilen jetzt, wenn du sie im Inventar benutzt, und der Heiltrank hat seinen Preis von 50 GM. Die Krähenfüße kosten 1 GM für den Beutel, wie im Buch, nicht 5 KM.",
+        es: "Las pociones de curación del SRD (2d4+2, 4d4+4, 8d4+8 y 10d4+20) ahora curan cuando las usas desde el inventario, y la Poción de curación tiene su precio de 50 mo. Los abrojos cuestan 1 mo la bolsa, como en el libro, y no 5 mc.",
+      },
+      {
+        en: "The Monk weapon property now has its name and description in Italian, French, German and Spanish.",
+        it: "La proprietà delle armi da monaco ora ha nome e descrizione in italiano, francese, tedesco e spagnolo.",
+        fr: "La propriété d’arme Moine a maintenant son nom et sa description en italien, en français, en allemand et en espagnol.",
+        de: "Die Waffeneigenschaft Mönch hat jetzt Namen und Beschreibung auf Italienisch, Französisch, Deutsch und Spanisch.",
+        es: "La propiedad de arma Monje ahora tiene nombre y descripción en italiano, francés, alemán y español.",
+      },
+    ],
+  },
+  {
     version: "1.28 beta",
     date: "2026-11-07",
     notes: [
@@ -1261,11 +1295,11 @@ export const ROADMAP: RoadmapItem[] = [
   {
     id: "money",
     text: {
-      en: "Money that does something: buying items takes their cost from the coins, and the gold a class may start with instead of its equipment (the SRD does not print the amounts, so for now only the Artificer shows it).",
-      it: "Soldi che fanno qualcosa: comprare gli oggetti toglie il loro costo dalle monete, e l'oro con cui può partire una classe al posto dell'equipaggiamento (l'SRD non riporta le cifre, quindi per ora lo mostra solo l'Artefice).",
-      fr: "Un argent qui sert à quelque chose : acheter un objet retire son coût des pièces, et l'or avec lequel une classe peut commencer à la place de son équipement (le SRD n'imprime pas les montants, donc pour l'instant seul l'Artificier l'affiche).",
-      de: "Geld, das etwas tut: Der Kauf von Gegenständen zieht die Kosten von den Münzen ab, dazu das Gold, mit dem eine Klasse statt ihrer Ausrüstung beginnen kann (das SRD druckt die Beträge nicht, daher zeigt es vorerst nur der Artificer).",
-      es: "Dinero que hace algo: comprar objetos descuenta su coste de las monedas, y el oro con el que puede empezar una clase en lugar de su equipo (el SRD no imprime las cantidades, así que por ahora solo lo muestra el Artífice).",
+      en: "Money that does something: the gold a class may start with instead of its equipment (the SRD does not print the amounts, so for now only the Artificer shows it).",
+      it: "Soldi che fanno qualcosa: l'oro con cui può partire una classe al posto dell'equipaggiamento (l'SRD non riporta le cifre, quindi per ora lo mostra solo l'Artefice).",
+      fr: "Un argent qui sert à quelque chose : l'or avec lequel une classe peut commencer à la place de son équipement (le SRD n'imprime pas les montants, donc pour l'instant seul l'Artificier l'affiche).",
+      de: "Geld, das etwas tut: das Gold, mit dem eine Klasse statt ihrer Ausrüstung beginnen kann (das SRD druckt die Beträge nicht, daher zeigt es vorerst nur der Artificer).",
+      es: "Dinero que hace algo: el oro con el que puede empezar una clase en lugar de su equipo (el SRD no imprime las cantidades, así que por ahora solo lo muestra el Artífice).",
     },
   },
   {
@@ -1321,11 +1355,11 @@ export const ROADMAP: RoadmapItem[] = [
   {
     id: "items",
     text: {
-      en: "More of what items do on the sheet and in Play: using an item only counts it down for now, except the healing potions of Aurora, which heal; also weapon bonuses, charges, and the board of places in the Create step and on the printed sheet.",
-      it: "Altro di ciò che fanno gli oggetti sulla scheda e in Gioca: usare un oggetto per ora lo scala soltanto, tranne le pozioni di cura di Aurora, che curano; e poi bonus alle armi, cariche, e la bacheca dei posti nel passo Crea e sulla scheda stampata.",
-      fr: "Plus de ce que font les objets sur la fiche et dans Jouer : utiliser un objet ne fait que le décompter pour l’instant, sauf les potions de soin d’Aurora, qui soignent ; et aussi bonus d’armes, charges, et le tableau des emplacements à l’étape Créer et sur la fiche imprimée.",
-      de: "Mehr davon, was Gegenstände auf dem Bogen und im Spielmodus bewirken: Ein Gegenstand wird beim Benutzen vorerst nur abgezählt, außer den Heiltränken aus Aurora, die heilen; dazu Waffenboni, Ladungen und die Platztafel im Schritt Erstellen und auf dem gedruckten Bogen.",
-      es: "Más de lo que hacen los objetos en la hoja y en Jugar: usar un objeto por ahora solo lo descuenta, salvo las pociones de curación de Aurora, que curan; y también bonos de armas, cargas y el tablero de lugares en el paso Crear y en la hoja impresa.",
+      en: "More of what items do on the sheet and in Play: using an item only counts it down for now, except the healing potions, which heal; also weapon bonuses, charges, and the board of places in the Create step and on the printed sheet.",
+      it: "Altro di ciò che fanno gli oggetti sulla scheda e in Gioca: usare un oggetto per ora lo scala soltanto, tranne le pozioni di cura, che curano; e poi bonus alle armi, cariche, e la bacheca dei posti nel passo Crea e sulla scheda stampata.",
+      fr: "Plus de ce que font les objets sur la fiche et dans Jouer : utiliser un objet ne fait que le décompter pour l’instant, sauf les potions de soin, qui soignent ; et aussi bonus d’armes, charges, et le tableau des emplacements à l’étape Créer et sur la fiche imprimée.",
+      de: "Mehr davon, was Gegenstände auf dem Bogen und im Spielmodus bewirken: Ein Gegenstand wird beim Benutzen vorerst nur abgezählt, außer den Heiltränken, die heilen; dazu Waffenboni, Ladungen und die Platztafel im Schritt Erstellen und auf dem gedruckten Bogen.",
+      es: "Más de lo que hacen los objetos en la hoja y en Jugar: usar un objeto por ahora solo lo descuenta, salvo las pociones de curación, que curan; y también bonos de armas, cargas y el tablero de lugares en el paso Crear y en la hoja impresa.",
     },
   },
   {
