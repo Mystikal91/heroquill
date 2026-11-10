@@ -764,6 +764,7 @@
   "play.rage.unlimited": "Unbegrenzte Raserei.",
   "play.rage.noUses": "Keine Raserei mehr übrig.",
   "play.rage.rules": "Vorteil bei Stärkewürfen und Stärkerettungswürfen. Resistenz gegen Wucht-, Stich- und Hiebschaden. +{n} Schaden bei Nahkampfangriffen mit Stärke. Die Raserei endet, wenn du bewusstlos wirst oder ein ganzer Zug ohne Angriff und ohne Schaden vergeht.",
+  "play.rage.rules2024": "Vorteil bei Stärkeproben und Stärke-Rettungswürfen. Resistenz gegen Wucht-, Stich- und Hiebschaden. +{n} Schaden bei Angriffen mit Stärke. Du kannst weder Zauber wirken noch Konzentration aufrechterhalten. Die Raserei dauert bis zum Ende deines nächsten Zuges; du verlängerst sie durch einen Angriff, einen erzwungenen Rettungswurf oder eine Bonusaktion, höchstens 10 Minuten lang. Beende sie selbst mit der Schaltfläche.",
   "play.rage.note": "Im Wutrausch: Bei Wucht-, Stich- und Hiebschaden den Knopf „Resistent“ benutzen.",
   "monster.rollAll": "Angriffe würfeln",
   "play.wildShape.attacks": "In Tiergestalt greifst du mit den Aktionen des Wesens an: siehe seinen Werteblock.",

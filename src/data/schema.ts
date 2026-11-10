@@ -355,6 +355,12 @@ const PlainEffectSchema = v.variant("type", [
     type: v.literal("selfHeal"),
     dice: v.optional(v.string()),
     perLevel: v.optional(v.number()),
+    /** The dice are the die of Martial Arts at the monk's level (Wholeness of Body, 2024). */
+    martialArts: v.optional(v.boolean()),
+    /** The modifier of this ability is added. */
+    plus: v.optional(AbilitySchema),
+    /** The least that is healed (Wholeness of Body: 1 hit point). */
+    minimum: v.optional(v.number()),
   }),
   /**
    * After a failed ability check, the feature lets the character add `dice` to it by using up one use of the feature

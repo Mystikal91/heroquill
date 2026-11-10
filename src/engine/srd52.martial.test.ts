@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { bothIndex } from "../test/srd52";
 import { createCharacter } from "./character";
 import { deriveSheet } from "./derive";
+import { RAGE_ROUNDS, RAGE_ROUNDS_2024 } from "./durations";
+import { enterRage, resourceLeft, shortRest } from "./play";
 
 type Character = ReturnType<typeof createCharacter>;
 
@@ -225,5 +227,41 @@ describe("a 2024 Rogue", () => {
         (r) => r.entry === "srd52:feature/rogue-stroke-of-luck",
       )?.max,
     ).toBe(1);
+  });
+});
+
+describe("the 2024 Rage and Wholeness of Body", () => {
+  it("gives back one use of Rage on a short rest, and all of them on a long one", () => {
+    const c = make("barbarian", 5);
+    const rage = resource(c, "rage");
+    expect(rage?.shortRegain).toBe(1);
+    if (!rage) throw new Error("no rage");
+    let play = enterRage(c.play, rage);
+    play = enterRage({ ...play, raging: false }, rage);
+    expect(resourceLeft(play, rage.id, rage.max)).toBe(1);
+    const rested = shortRest(play, "none", [], [{ id: rage.id, count: rage.shortRegain ?? 0 }]);
+    expect(resourceLeft(rested, rage.id, rage.max)).toBe(2);
+    // The 2014 rage has no such rule.
+    const old = createCharacter("srd51");
+    old.classes = [{ classId: "srd51:class/barbarian", level: 5 }];
+    expect(
+      deriveSheet(old, bothIndex).resources.find((r) => r.kind === "rage")?.shortRegain,
+    ).toBeUndefined();
+  });
+
+  it("lasts a minute in 2014 and up to ten in 2024 (the person ends it)", () => {
+    const rage = { id: "rage:barbarian", max: 3 };
+    expect(enterRage(createCharacter("srd51").play, rage).rounds).toEqual({ rage: RAGE_ROUNDS });
+    expect(enterRage(createCharacter("srd52").play, rage, RAGE_ROUNDS_2024).rounds).toEqual({
+      rage: RAGE_ROUNDS_2024,
+    });
+    expect(RAGE_ROUNDS_2024).toBe(100);
+  });
+
+  it("heals the Martial Arts die plus the Wisdom modifier with Wholeness of Body, at least 1", () => {
+    const c = make("monk", 6, "warrior-of-the-open-hand");
+    c.abilityBase = { str: 10, dex: 16, con: 14, int: 10, wis: 14, cha: 8 };
+    const heal = sheetOf(c).selfHeals["srd52:feature/warrior-of-the-open-hand-wholeness-of-body"];
+    expect(heal).toEqual({ dice: "1d8", bonus: 2, minimum: 1 });
   });
 });

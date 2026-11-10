@@ -102,8 +102,10 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
     { type: "abilityBonus", ability: "wis", value: 4, max: 25 },
   ],
   // Wholeness of Body: Wisdom modifier uses (at least one), then a Long Rest.
+  // Heals the Martial Arts die plus the Wisdom modifier, at least 1 hit point.
   "warrior-of-the-open-hand-wholeness-of-body": [
     { type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 },
+    { type: "selfHeal", martialArts: true, plus: "wis", minimum: 1 },
   ],
 
   // ---- Rogue. Sneak Attack comes from the class table (`sneak_attack`); Weapon Mastery is a choice of two.

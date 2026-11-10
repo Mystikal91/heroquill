@@ -11,6 +11,7 @@ import {
   rollD20,
   rollExpression,
 } from "../engine/dice";
+import { RAGE_ROUNDS, RAGE_ROUNDS_2024 } from "../engine/durations";
 import { healingOf, useOne } from "../engine/gear";
 import {
   applyDamage,
@@ -271,11 +272,15 @@ export function useItem(itemId: string) {
  * A feature that heals the character when used (Second Wind: 1d10 plus the fighter level, Wholeness of Body: three
  * times the monk level): the dice are rolled and logged, and the hit points come back.
  */
-export function healFromFeature(name: string, heal: { dice?: string; bonus: number }) {
+export function healFromFeature(
+  name: string,
+  heal: { dice?: string; bonus: number; minimum?: number },
+) {
   const v = vitals();
   if (!v) return;
-  const total = heal.dice ? rollDiceText(name, healExpression(heal))?.total : heal.bonus;
-  if (total === undefined) return;
+  const rolled = heal.dice ? rollDiceText(name, healExpression(heal))?.total : heal.bonus;
+  if (rolled === undefined) return;
+  const total = Math.max(rolled, heal.minimum ?? 0);
   if (!heal.dice) addLog({ label: name, detail: String(heal.bonus), total });
   changePlay((p) => applyHealing(p, v.max, total));
 }
@@ -315,7 +320,16 @@ export function startRage() {
   const play = character.value.play;
   if (!resource || play.raging) return;
   if (!resource.unlimited && resourceLeft(play, resource.id, resource.max) === 0) return;
-  changePlay((p) => enterRage(p, resource.unlimited ? undefined : resource), { undo: false });
+  changePlay(
+    (p) =>
+      enterRage(
+        p,
+        resource.unlimited ? undefined : resource,
+        // 2024: the rage can be kept going for ten minutes; the person says when it ends.
+        character.value.ruleset === "srd52" ? RAGE_ROUNDS_2024 : RAGE_ROUNDS,
+      ),
+    { undo: false },
+  );
 }
 
 export function stopRage() {

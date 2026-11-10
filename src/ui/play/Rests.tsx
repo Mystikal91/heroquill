@@ -20,13 +20,14 @@ export function Rests() {
   const onlyWarlock = s.spellcasters.length === 1 && s.spellcasters[0]?.pact;
   const recovers = s.pactSlots ? "pact" : onlyWarlock ? "all" : "none";
   const shortUses = s.resources.filter((r) => r.recovery === "short");
+  const shortSome = s.resources.filter((r) => r.shortRegain !== undefined);
   const hasSlots = s.spellcasters.length > 0;
 
   const shortChips = [
     ...(recovers === "none"
       ? []
       : [ui(recovers === "pact" ? "play.restChipPact" : "play.restChipSlots")]),
-    ...(shortUses.length > 0 ? [ui("play.restChipUses")] : []),
+    ...(shortUses.length > 0 || shortSome.length > 0 ? [ui("play.restChipUses")] : []),
   ];
   const longChips = [
     ui("play.restChipHp"),
@@ -41,6 +42,7 @@ export function Rests() {
         p,
         recovers,
         shortUses.map((r) => r.id),
+        shortSome.map((r) => ({ id: r.id, count: r.shortRegain ?? 0 })),
       ),
     );
     addLog({ label: ui("play.shortRestLog"), detail: "" });

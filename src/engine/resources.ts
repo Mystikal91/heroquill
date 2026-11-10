@@ -16,6 +16,8 @@ export interface ClassResource {
   recovery: ResourceRecovery;
   /** Counted in points (ki, lay on hands) rather than a few uses to tick off. */
   pool?: boolean;
+  /** A short rest gives back only this many uses, not all of them (the 2024 Rage: one). */
+  shortRegain?: number;
   /** No limit at this level (a barbarian's rages at level 20). */
   unlimited?: boolean;
   /** A level of spell or similar number the label needs. */
@@ -61,6 +63,7 @@ interface Input {
   modifier: (ability: Ability) => number;
   /** For the saving throws of a class feature (the ki save DC). */
   proficiencyBonus?: number;
+  ruleset?: string;
 }
 
 const slug = (classId: string) => classId.split("/")[1] ?? classId;
@@ -94,9 +97,11 @@ export function classResources(input: Input): {
       const rages = num("rageCount");
       // The data writes "unlimited" as a huge number.
       // The 2024 feature is `barbarian-rage`.
+      // In 2024 a short rest gives back one expended use; all of them come back with a long rest.
       add("rage", Math.min(rages, 99), "long", {
         unlimited: rages >= 99,
         covers: "^(barbarian-)?rage$",
+        ...(input.ruleset === "srd52" && { shortRegain: 1 }),
       });
       if (num("rageDamageBonus") > 0) {
         facts.push({ kind: "rageDamage", params: { n: num("rageDamageBonus") } });

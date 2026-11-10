@@ -764,6 +764,7 @@
   "play.rage.unlimited": "Unlimited rages.",
   "play.rage.noUses": "No rages left.",
   "play.rage.rules": "Advantage on Strength checks and saving throws. Resistance to bludgeoning, piercing and slashing damage. +{n} damage on melee attacks with Strength. The rage ends if you fall unconscious, or if a whole turn goes by without you attacking or taking damage.",
+  "play.rage.rules2024": "Advantage on Strength checks and saving throws. Resistance to bludgeoning, piercing and slashing damage. +{n} damage on attacks made with Strength. You can't cast spells or keep Concentration. The rage lasts until the end of your next turn; keep it going by attacking, forcing a saving throw or using a Bonus Action, for up to 10 minutes. Finish it yourself with the button.",
   "play.rage.note": "Raging: for bludgeoning, piercing and slashing damage use the “Resistant” button.",
   "monster.rollAll": "Roll the attacks",
   "play.wildShape.attacks": "In beast form you attack with the actions of the creature: see its stat block.",

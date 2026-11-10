@@ -764,6 +764,7 @@
   "play.rage.unlimited": "Iras ilimitadas.",
   "play.rage.noUses": "No quedan iras.",
   "play.rage.rules": "Ventaja en pruebas y salvaciones de Fuerza. Resistencia al daño contundente, perforante y cortante. +{n} al daño de los ataques cuerpo a cuerpo con Fuerza. La ira termina si quedas inconsciente, o si pasa un turno entero sin que ataques ni recibas daño.",
+  "play.rage.rules2024": "Ventaja en las pruebas y tiradas de salvación de Fuerza. Resistencia al daño contundente, perforante y cortante. +{n} al daño de los ataques hechos con Fuerza. No puedes lanzar conjuros ni mantener la Concentración. La furia dura hasta el final de tu próximo turno; la prolongas atacando, obligando a una tirada de salvación o usando una Acción adicional, hasta 10 minutos. Termínala tú con el botón.",
   "play.rage.note": "En furia: para el daño contundente, perforante y cortante usa el botón «Resistente».",
   "monster.rollAll": "Tirar los ataques",
   "play.wildShape.attacks": "En forma de bestia atacas con las acciones de la criatura: mira su ficha.",

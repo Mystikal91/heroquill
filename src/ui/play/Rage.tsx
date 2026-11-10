@@ -32,7 +32,9 @@ export function Rage() {
       {play.raging ? (
         <>
           <p class="muted">
-            {ui("play.rage.rules", { n: bonus?.kind === "rage" ? bonus.bonus : 0 })}
+            {ui(character.value.ruleset === "srd52" ? "play.rage.rules2024" : "play.rage.rules", {
+              n: bonus?.kind === "rage" ? bonus.bonus : 0,
+            })}
           </p>
           <button type="button" class="secondary" onClick={stopRage}>
             {ui("play.rage.end")}

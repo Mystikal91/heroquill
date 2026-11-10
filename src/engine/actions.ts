@@ -41,7 +41,9 @@ export function characterActions(
 
 /** What a feature heals, as dice and a number: `1d10+5`, or `9` when it has no dice (Wholeness of Body). */
 export function healExpression(heal: { dice?: string; bonus: number }): string {
-  return heal.dice ? `${heal.dice}${heal.bonus > 0 ? `+${heal.bonus}` : ""}` : String(heal.bonus);
+  return heal.dice
+    ? `${heal.dice}${heal.bonus > 0 ? `+${heal.bonus}` : heal.bonus < 0 ? String(heal.bonus) : ""}`
+    : String(heal.bonus);
 }
 
 /** The breath weapon a dragonborn has from the ancestry chosen, worked out for the character. */

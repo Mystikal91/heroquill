@@ -764,6 +764,7 @@
   "play.rage.unlimited": "Rages illimitées.",
   "play.rage.noUses": "Plus de rage disponible.",
   "play.rage.rules": "Avantage aux tests et jets de sauvegarde de Force. Résistance aux dégâts contondants, perforants et tranchants. +{n} aux dégâts des attaques de mêlée avec la Force. La rage s’arrête si tu tombes inconscient, ou si un tour entier passe sans que tu attaques ni subisses de dégâts.",
+  "play.rage.rules2024": "Avantage aux tests et aux jets de sauvegarde de Force. Résistance aux dégâts contondants, perforants et tranchants. +{n} aux dégâts des attaques faites avec la Force. Vous ne pouvez ni lancer de sorts ni maintenir la Concentration. La rage dure jusqu'à la fin de votre prochain tour ; vous la prolongez en attaquant, en imposant un jet de sauvegarde ou en utilisant une Action Bonus, pendant 10 minutes au plus. Mettez-y fin avec le bouton.",
   "play.rage.note": "En rage : pour les dégâts contondants, perforants et tranchants, utilise le bouton « Résistant ».",
   "monster.rollAll": "Lancer les attaques",
   "play.wildShape.attacks": "Sous forme de bête, tu attaques avec les actions de la créature : vois son profil.",

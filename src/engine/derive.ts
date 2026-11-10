@@ -107,7 +107,7 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   /** The features that add a die to a failed ability check by using up a use of another: the feature, the dice and the entry whose use is spent. */
   checkBoosts: { feature: string; dice: string; spends: string }[];
   /** What a feature heals the character for when used (Second Wind: 1d10 + fighter level), by entry; the bonus already counts the levels. */
-  selfHeals: Record<string, { dice?: string; bonus: number }>;
+  selfHeals: Record<string, { dice?: string; bonus: number; minimum?: number }>;
   /** A die lower than this counts as this on checks with a skill the character is proficient in (0: none). */
   proficientSkillFloor: number;
   /** The first spellcasting class: the one whose numbers the sheet headlines. */
@@ -394,6 +394,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       data,
       modifier: (a) => abilities[a].modifier,
       proficiencyBonus,
+      ruleset: character.ruleset,
     });
     resources.push(...classBits.resources);
     facts.push(...classBits.facts);
@@ -729,8 +730,17 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
               [
                 source,
                 {
-                  ...(effect.dice && { dice: effect.dice }),
-                  bonus: (effect.perLevel ?? 0) * levelOf(source),
+                  ...((effect.martialArts
+                    ? extraDamage.find((e) => e.kind === "martialArts")?.dice
+                    : effect.dice) && {
+                    dice: effect.martialArts
+                      ? extraDamage.find((e) => e.kind === "martialArts")?.dice
+                      : effect.dice,
+                  }),
+                  bonus:
+                    (effect.perLevel ?? 0) * levelOf(source) +
+                    (effect.plus ? abilities[effect.plus].modifier : 0),
+                  ...(effect.minimum !== undefined && { minimum: effect.minimum }),
                 },
               ],
             ]

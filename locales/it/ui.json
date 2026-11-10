@@ -764,6 +764,7 @@
   "play.rage.unlimited": "Ire illimitate.",
   "play.rage.noUses": "Non ti restano ire.",
   "play.rage.rules": "Vantaggio alle prove e ai tiri salvezza di Forza. Resistenza ai danni contundenti, perforanti e taglienti. +{n} ai danni degli attacchi in mischia con la Forza. L’ira termina se cadi privo di sensi, o se per un intero turno non attacchi né subisci danni.",
+  "play.rage.rules2024": "Vantaggio alle prove e ai tiri salvezza di Forza. Resistenza ai danni contundenti, perforanti e taglienti. +{n} ai danni degli attacchi fatti con la Forza. Non puoi lanciare incantesimi né mantenere la Concentrazione. La furia dura fino alla fine del tuo prossimo turno; la prolunghi attaccando, imponendo un tiro salvezza o usando un'Azione Bonus, per un massimo di 10 minuti. La termini tu con il pulsante.",
   "play.rage.note": "In ira: per i danni contundenti, perforanti e taglienti usa il tasto “Resistente”.",
   "monster.rollAll": "Tira gli attacchi",
   "play.wildShape.attacks": "In forma di bestia attacchi con le azioni della creatura: vedi la sua scheda.",

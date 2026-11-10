@@ -231,14 +231,18 @@ export function shortRest(
   recovers: ShortRestRecovery,
   /** Ids of the class resources that come back on a short rest. */
   resources: string[] = [],
+  /** Resources that get only some uses back on a short rest (the 2024 Rage: one). */
+  partial: { id: string; count: number }[] = [],
 ): PlayState {
   // A rage and the cantrip Shillelagh last a minute: a short rest has ended them.
   let next = endMagicWeapon(endSacredWeapon(endShillelagh(endRage(play))));
   if (recovers === "all") next = { ...next, slotsUsed: next.slotsUsed.map(() => 0), pactUsed: 0 };
   else if (recovers === "pact") next = { ...next, pactUsed: 0 };
-  if (resources.length > 0 && next.resourcesUsed) {
+  if ((resources.length > 0 || partial.length > 0) && next.resourcesUsed) {
     const used = { ...next.resourcesUsed };
     for (const id of resources) delete used[id];
+    for (const { id, count } of partial)
+      if (used[id] !== undefined) used[id] = Math.max(0, used[id] - count);
     next = { ...next, resourcesUsed: used };
   }
   return next;
@@ -378,12 +382,16 @@ export function advanceRound(play: PlayState): { play: PlayState; ended: string[
 }
 
 /** Enters a rage, spending one of its uses (unless they are unlimited, `max` of 0). */
-export function enterRage(play: PlayState, resource?: { id: string; max: number }): PlayState {
+export function enterRage(
+  play: PlayState,
+  resource?: { id: string; max: number },
+  rounds: number = RAGE_ROUNDS,
+): PlayState {
   const spent = resource
     ? setResourceUsed(play, resource.id, (play.resourcesUsed?.[resource.id] ?? 0) + 1, resource.max)
     : play;
-  // A rage lasts a minute: ten rounds.
-  return setRounds({ ...spent, raging: true }, "rage", RAGE_ROUNDS);
+  // A rage lasts a minute: ten rounds (in 2024 up to ten minutes).
+  return setRounds({ ...spent, raging: true }, "rage", rounds);
 }
 
 export function endRage(play: PlayState): PlayState {

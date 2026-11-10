@@ -1,5 +1,7 @@
 /** A rage lasts a minute, which is ten rounds. */
 export const RAGE_ROUNDS = 10;
+/** In 2024 a rage can be extended up to ten minutes, a hundred rounds; how it is kept going is up to the person. */
+export const RAGE_ROUNDS_2024 = 100;
 /** The cantrip Shillelagh lasts a minute too. */
 export const SHILLELAGH_ROUNDS = 10;
 /** The Channel Divinity: Sacred Weapon of a paladin lasts a minute too. */

@@ -1353,6 +1353,12 @@
           },
           "recharge": "long",
           "min": 1
+        },
+        {
+          "type": "selfHeal",
+          "martialArts": true,
+          "plus": "wis",
+          "minimum": 1
         }
       ],
       "data": {
