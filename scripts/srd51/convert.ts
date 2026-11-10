@@ -8,6 +8,7 @@ import {
   ACTIVATION,
   FEATURE_EFFECTS,
   OPTION_FEATURES,
+  PRICES,
   SUBCLASS_FIXES,
   magicItemSlot,
 } from "./effects";
@@ -726,7 +727,7 @@ function convertItems(raw: RawSource): Converted {
   for (const e of raw.equipment) {
     const data: Record<string, unknown> = {
       category: e.equipment_category.index,
-      cost: { amount: e.cost.quantity, unit: e.cost.unit },
+      cost: PRICES[e.index] ?? { amount: e.cost.quantity, unit: e.cost.unit },
     };
     if (e.weight !== undefined) data.weight = e.weight;
 
@@ -803,7 +804,8 @@ function convertItems(raw: RawSource): Converted {
       effects: [],
       data: {
         category: "magic-items",
-        cost: { amount: 0, unit: "gp" },
+        // The SRD gives magic items no price, except the potion of healing in its gear table.
+        cost: PRICES[m.index] ?? { amount: 0, unit: "gp" },
         rarity: slugify(m.rarity.name),
         attunement: /requires attunement/i.test(description[0] ?? ""),
         ...(slot && { slot }),

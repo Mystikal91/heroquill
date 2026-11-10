@@ -2037,8 +2037,8 @@
       "data": {
         "category": "adventuring-gear",
         "cost": {
-          "amount": 5,
-          "unit": "cp"
+          "amount": 1,
+          "unit": "gp"
         },
         "weight": 2,
         "gear": {
@@ -7872,7 +7872,7 @@
       "data": {
         "category": "magic-items",
         "cost": {
-          "amount": 0,
+          "amount": 50,
           "unit": "gp"
         },
         "rarity": "common",

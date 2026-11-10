@@ -387,6 +387,19 @@ for (const [key, spend] of Object.entries(SPENDS))
   ];
 
 /**
+ * Prices that the SRD 5.1 prints and the database lacks or has wrong, by the database's index.
+ * Checked against the English PDF (SRD_CC_v5.1.pdf, "Adventuring Gear", page 69) with every priced
+ * row of pages 62 to 74 (191 prices agree; these two do not):
+ * - the Potion of healing is 50 gp in the book's table; the database has it only as the magic item
+ *   (the common one) and gives magic items no price. The other potions of healing have no price in the SRD.
+ * - Caltrops are 1 gp for the bag of 20; the database has 5 cp, the price of one piece.
+ */
+export const PRICES: Record<string, { amount: number; unit: "cp" | "sp" | "gp" }> = {
+  "potion-of-healing-common": { amount: 50, unit: "gp" },
+  caltrops: { amount: 1, unit: "gp" },
+};
+
+/**
  * What a feature or trait takes to use, written by hand from its text: an action, a bonus action
  * or a reaction (the same `data.activation` that Aurora's `<sheet action>` gives). A feature that
  * is used by another action (Action Surge, Extra Attack) or that is always on is not here.

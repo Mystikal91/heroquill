@@ -102,14 +102,21 @@ describe("the window to add items", () => {
     done();
   });
 
-  it("has no price and no Buy for what the data does not price", async () => {
+  it("has no price and no Buy for what the book does not price", async () => {
     content.value = await loadContent(["en"]);
     character.value = complete(build(CLASSES[0] ?? "fighter", 3, "human"));
     const { host, done } = await opened();
     await type(host, "potion of healing");
-    expect(host.querySelector("button.picker-add")).not.toBeNull();
-    expect(host.querySelector("button.picker-buy")).toBeNull();
-    expect(host.querySelector(".picker-price")).toBeNull();
+    const rows = [...host.querySelectorAll<HTMLElement>(".picker-row")];
+    const row = (name: string) => rows.find((r) => r.querySelector("b")?.textContent === name);
+    // The SRD prices the potion of healing (50 gp, page 69) and no other magic item.
+    expect(row("Potion of Healing")?.querySelector(".picker-price")?.textContent).toContain("50");
+    expect(row("Potion of Healing")?.querySelector("button.picker-buy")).not.toBeNull();
+    const greater = row("Potion of Greater Healing");
+    expect(greater).toBeDefined();
+    expect(greater?.querySelector("button.picker-add")).not.toBeNull();
+    expect(greater?.querySelector("button.picker-buy")).toBeNull();
+    expect(greater?.querySelector(".picker-price")).toBeNull();
     done();
   });
 
