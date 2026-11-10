@@ -31,8 +31,19 @@ export const ClassDataSchema = v.object({
       pact: v.optional(v.boolean()),
       preparation: v.variant("type", [
         v.object({ type: v.literal("known") }),
-        v.object({ type: v.literal("prepared"), levelDivisor: v.number() }),
-        v.object({ type: v.literal("spellbook"), initial: v.number(), perLevel: v.number() }),
+        v.object({
+          type: v.literal("prepared"),
+          levelDivisor: v.number(),
+          /** The number of prepared spells is the class table's (`spellsKnown` of the level row), as in 2024. */
+          fromTable: v.optional(v.boolean()),
+        }),
+        v.object({
+          type: v.literal("spellbook"),
+          initial: v.number(),
+          perLevel: v.number(),
+          /** The number of prepared spells is the class table's, as in 2024. */
+          fromTable: v.optional(v.boolean()),
+        }),
       ]),
     }),
   ),

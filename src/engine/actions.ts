@@ -16,7 +16,8 @@ export function activationOf(entry: Entry | undefined): Activation | undefined {
  * Features that have a panel of their own in Play, which turns them on: a button for them here
  * would spend a use without doing it.
  */
-const OWN_PANEL = /^((barbarian-)?rage|wild-shape|channel-divinity-sacred-weapon)/;
+const OWN_PANEL =
+  /^((barbarian-)?rage|wild-shape|channel-divinity-sacred-weapon|oath-of-devotion-sacred-weapon)/;
 
 /**
  * The features, traits and feats of the character that take an action, a bonus action or a

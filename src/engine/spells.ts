@@ -151,13 +151,17 @@ export function deriveSpellLists(input: Input): SpellLists {
         : undefined,
     );
   } else if (preparation.type === "prepared") {
-    const count = Math.max(1, abilityModifier + Math.floor(level / preparation.levelDivisor));
+    const count = preparation.fromTable
+      ? (row?.spellsKnown ?? 0)
+      : Math.max(1, abilityModifier + Math.floor(level / preparation.levelDivisor));
     const pool = leveled.filter((s) => !alwaysPrepared.includes(s));
     lists.prepared = resolvePick(picks?.prepared ?? [], count, pool, classId, warnings);
   } else {
     const bookSize = preparation.initial + preparation.perLevel * (level - 1);
     lists.known = resolvePick(picks?.known ?? [], bookSize, leveled, classId, warnings);
-    const count = Math.max(1, abilityModifier + level);
+    const count = preparation.fromTable
+      ? (row?.spellsKnown ?? 0)
+      : Math.max(1, abilityModifier + level);
     lists.prepared = resolvePick(
       picks?.prepared ?? [],
       count,

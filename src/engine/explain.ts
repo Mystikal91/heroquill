@@ -2,6 +2,7 @@ import { itemData } from "../data/items";
 import type { Ability, Sense } from "../data/schema";
 import type { Character } from "./character";
 import type { DerivedSheet, PackIndex } from "./derive";
+import { SACRED_WEAPON } from "./equipment";
 import type { Movement } from "./movement";
 import { OVERRIDE } from "./overrides";
 
@@ -204,7 +205,7 @@ export function explain(
                 part: "feature" as const,
                 value: attack.sacredWeapon,
                 ref:
-                  sheet.features.find((f) => f.endsWith("/channel-divinity-sacred-weapon")) ??
+                  sheet.features.find((f) => SACRED_WEAPON.test(f)) ??
                   "channel-divinity-sacred-weapon",
               },
             ]

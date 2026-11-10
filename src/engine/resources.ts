@@ -156,11 +156,20 @@ export function classResources(input: Input): {
         });
       break;
     }
-    case "paladin":
-      add("layOnHands", 5 * level, "long", { pool: true, covers: "^lay-on-hands$" });
-      if (level >= 2) extras.push({ kind: "divineSmite" });
-      if (level >= 3) add("channelDivinity", 1, "short", { covers: "^channel-divinity" });
+    case "paladin": {
+      const edition2024 = input.ruleset === "srd52";
+      add("layOnHands", 5 * level, "long", { pool: true, covers: "^(paladin-)?lay-on-hands$" });
+      // In 2024 Divine Smite is a spell (Paladin's Smite always has it prepared), so there is no smite button.
+      if (level >= 2 && !edition2024) extras.push({ kind: "divineSmite" });
+      if (edition2024)
+        // Two uses, three from level 11; one comes back on a short rest, all on a long one.
+        add("channelDivinity", num("channelDivinityCharges"), "long", {
+          covers: "(^|-)channel-divinity$",
+          shortRegain: 1,
+        });
+      else if (level >= 3) add("channelDivinity", 1, "short", { covers: "^channel-divinity" });
       break;
+    }
     case "rogue": {
       const sneak = row.sneakAttack as { diceCount?: number; diceValue?: number } | undefined;
       if (sneak?.diceCount) {

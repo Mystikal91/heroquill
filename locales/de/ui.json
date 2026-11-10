@@ -220,6 +220,7 @@
   "spells.area.cone": "Kegel",
   "spells.area.cube": "Würfel",
   "spells.area.cylinder": "Zylinder",
+  "spells.area.emanation": "Emanation",
   "spells.area.line": "Linie",
   "spells.area.sphere": "Kugel",
   "feature.activation.action": "Aktion",

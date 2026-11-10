@@ -220,6 +220,7 @@
   "spells.area.cone": "Cône",
   "spells.area.cube": "Cube",
   "spells.area.cylinder": "Cylindre",
+  "spells.area.emanation": "Émanation",
   "spells.area.line": "Ligne",
   "spells.area.sphere": "Sphère",
   "feature.activation.action": "Action",

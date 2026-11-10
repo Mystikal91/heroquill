@@ -7,6 +7,7 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
+import { cleanData } from "../srd51/convert";
 import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS, REPLACES } from "./effects";
 
 const PACK = "srd52";
@@ -35,12 +36,22 @@ export interface RawSource {
   weaponMastery: Raw[];
   equipment: Raw[];
   weaponProperties: Raw[];
+  spells: Raw[];
+  magicSchools: Raw[];
+  conditions: Raw[];
 }
 
 /** What the pilot converts for the kinds that are big; everything of the small kinds is converted. */
 export const PILOT = {
-  classes: ["fighter", "barbarian", "monk", "rogue"],
-  subclasses: ["champion", "path-of-the-berserker", "warrior-of-the-open-hand", "thief"],
+  classes: ["fighter", "barbarian", "monk", "rogue", "paladin", "ranger"],
+  subclasses: [
+    "champion",
+    "path-of-the-berserker",
+    "warrior-of-the-open-hand",
+    "thief",
+    "oath-of-devotion",
+    "hunter",
+  ],
   backgrounds: ["soldier"],
   species: ["human"],
 };
@@ -67,6 +78,18 @@ const MASTERY_PICKS: Record<
     choose: 2,
     byClassTable: true,
     from: (e) => weaponOf(e).kind === "melee",
+  },
+  "paladin-weapon-mastery": {
+    choose: 2,
+    byClassTable: false,
+    from: (e, classProficiencies) =>
+      weaponOf(e).proficiency.some((key) => classProficiencies.has(key.replace(/^weapon:/, ""))),
+  },
+  "ranger-weapon-mastery": {
+    choose: 2,
+    byClassTable: false,
+    from: (e, classProficiencies) =>
+      weaponOf(e).proficiency.some((key) => classProficiencies.has(key.replace(/^weapon:/, ""))),
   },
   "rogue-weapon-mastery": {
     choose: 2,
@@ -414,6 +437,18 @@ function camelKeys(value: unknown): unknown {
   return value;
 }
 
+/** How each caster of the SRD 5.2.1 prepares spells: the number is the class table's (the wizard keeps a spellbook). */
+const PREPARATION: Record<string, Record<string, unknown>> = Object.fromEntries([
+  ...["bard", "cleric", "druid", "paladin", "ranger", "sorcerer"].map((c) => [
+    c,
+    { type: "prepared", levelDivisor: 1, fromTable: true },
+  ]),
+  ["wizard", { type: "spellbook", initial: 6, perLevel: 2, fromTable: true }],
+]);
+const failPreparation = (index: string): never => {
+  throw new Error(`No spell preparation rule for class ${index}`);
+};
+
 function convertClasses(
   raw: RawSource,
   table: Map<string, string>,
@@ -436,10 +471,17 @@ function convertClasses(
       const specific = camelKeys(l.class_specific ?? {}) as Record<string, unknown>;
       // In 2024 the increase is the feat "Ability Score Improvement"; the build screen keeps its steps.
       if (names.includes("Ability Score Improvement")) increases += 1;
+      const sc = l.spellcasting;
       return {
         level: l.level,
         features: (l.features as Raw[]).map((f) => id("feature", f.index)),
         abilityScoreImprovements: increases,
+        ...(sc?.cantrips_known > 0 && { cantripsKnown: sc.cantrips_known }),
+        // The 2024 classes prepare as many spells as the Prepared Spells column of the class table.
+        ...(sc && { spellsKnown: sc.prepared_spells }),
+        ...(sc && {
+          spellSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => sc[`spell_slots_level_${n}`] ?? 0),
+        }),
         classSpecific: specific,
       };
     });
@@ -468,7 +510,10 @@ function convertClasses(
           (c.primary_ability?.ability_score_options?.from?.options ?? []) as Raw[]
         ).map((o) => o.item.index),
         multiclassing: {
-          prerequisites: [],
+          prerequisites: ((c.multi_classing.prerequisites ?? []) as Raw[]).map((p) => ({
+            ability: p.ability_score.index,
+            minimum: p.minimum_score,
+          })),
           prerequisiteOptions: prereq
             ? {
                 choose: prereq.choose,
@@ -482,13 +527,49 @@ function convertClasses(
             (p) => table.get(p.index) ?? p.index,
           ),
         },
+        ...(c.spellcasting && {
+          spellcasting: {
+            ability: c.spellcasting.spellcasting_ability.index,
+            startsAtLevel: c.spellcasting.level,
+            preparation: PREPARATION[c.index] ?? failPreparation(c.index),
+          },
+        }),
         levels,
         startingChoices: startingChoices(c.starting_equipment_options),
       },
     });
     classes.strings[`${c.index}.name`] = c.name;
+    (c.spellcasting?.info as Raw[] | undefined)?.forEach((info, i) => {
+      classes.strings[`${c.index}.spellcasting.${i + 1}.name`] = info.name;
+      classes.strings[`${c.index}.spellcasting.${i + 1}.desc`] = text(info.desc.join("\n"));
+    });
   }
   return { classes, features };
+}
+
+/**
+ * The spells a subclass always has prepared, from the table in the text of its "... Spells" feature
+ * (`Paladin Level / Spells`, then `3 / Protection from Evil and Good, Shield of Faith`). A name that is not a
+ * spell of the list stops the build: the table is read as it is, never corrected here.
+ */
+function subclassSpells(raw: RawSource, subclass: string): { spell: string; classLevel: number }[] {
+  const feature = (raw.features as Raw[]).find(
+    (f) => f.subclass?.index === subclass && /Spells$/.test(f.name),
+  );
+  if (!feature) return [];
+  const byName = new Map((raw.spells as Raw[]).map((s) => [slugify(s.name), s.index as string]));
+  const found: { spell: string; classLevel: number }[] = [];
+  for (const line of String(feature.description).split("\n")) {
+    const row = /^(\d+) \/ (.+)$/.exec(line.trim());
+    if (!row) continue;
+    for (const name of (row[2] ?? "").split(/,\s*/)) {
+      const index = byName.get(slugify(name));
+      if (!index)
+        throw new Error(`${subclass}: the spell "${name}" of the table is not in the spell list`);
+      found.push({ spell: id("spell", index), classLevel: Number(row[1]) });
+    }
+  }
+  return found;
 }
 
 function convertSubclasses(raw: RawSource): { subclasses: Converted; features: Converted } {
@@ -514,13 +595,73 @@ function convertSubclasses(raw: RawSource): { subclasses: Converted; features: C
       effects: [],
       data: {
         levels: [...byLevel.entries()].map(([level, list]) => ({ level, features: list })),
-        spells: [],
+        spells: subclassSpells(raw, s.index),
         expanded: [],
       },
     });
     subclasses.strings[`${s.index}.name`] = s.name;
   }
   return { subclasses, features };
+}
+
+/**
+ * Every spell of the list. The classes a spell belongs to are those the pack has (the others come back by
+ * themselves when `PILOT.classes` grows). The data has an attack type and damage by slot level, nothing else the
+ * 5.1 data carries (no save DC, area or healing), so Play rolls the damage only.
+ */
+function convertSpells(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const s of raw.spells) {
+    const data: Record<string, unknown> = {
+      level: s.level,
+      school: s.school.index,
+      components: s.components,
+      ritual: s.ritual,
+      concentration: s.concentration,
+      classes: (s.classes as Raw[])
+        .map((c) => c.index as string)
+        .filter((c) => PILOT.classes.includes(c))
+        .map((c) => id("class", c)),
+    };
+    for (const key of ["attack_type", "dc", "heal_at_slot_level", "area_of_effect"]) {
+      if (s[key] !== undefined)
+        data[key.replace(/_([a-z])/g, (_, ch: string) => ch.toUpperCase())] = cleanData(s[key]);
+    }
+    // The 2024 file gives one damage object; the data model (as the 5.1 file's) holds a list of them.
+    if (s.damage !== undefined) data.damage = [cleanData(s.damage)];
+    entries.push({ id: id("spell", s.index), kind: "spell", effects: [], data });
+    strings[`${s.index}.name`] = s.name;
+    strings[`${s.index}.desc`] = text(s.description);
+    if (s.higher_level) strings[`${s.index}.higherLevel`] = text(s.higher_level);
+    if (s.material) strings[`${s.index}.material`] = s.material;
+    strings[`${s.index}.castingTime`] = s.casting_time;
+    strings[`${s.index}.range`] = s.range;
+    strings[`${s.index}.duration`] = s.duration;
+  }
+  return { entries, strings };
+}
+
+function convertConditions(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const c of raw.conditions) {
+    entries.push({ id: id("condition", c.index), kind: "condition", effects: [], data: {} });
+    strings[`${c.index}.name`] = c.name;
+    strings[`${c.index}.desc`] = text(c.description);
+  }
+  return { entries, strings };
+}
+
+function convertSchools(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const m of raw.magicSchools) {
+    entries.push({ id: id("school", m.index), kind: "school", effects: [], data: {} });
+    strings[`${m.index}.name`] = m.name;
+    strings[`${m.index}.desc`] = text(m.description);
+  }
+  return { entries, strings };
 }
 
 /**
@@ -748,5 +889,8 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     feature: merge(classPart.features, subclassPart.features),
     item: items,
     property: convertProperties(raw),
+    spell: convertSpells(raw),
+    school: convertSchools(raw),
+    condition: convertConditions(raw),
   };
 }

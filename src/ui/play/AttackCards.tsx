@@ -10,7 +10,8 @@ import {
 } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
 import { doubleDice } from "../../engine/dice";
-import type { AttackResult } from "../../engine/equipment";
+import { SACRED_WEAPON_ROUNDS_2024 } from "../../engine/durations";
+import { type AttackResult, SACRED_WEAPON } from "../../engine/equipment";
 import {
   castSpell,
   setMagicWeapon,
@@ -67,9 +68,7 @@ function AttackCard({ a }: { a: AttackResult }) {
   };
   // A paladin's Channel Divinity: Sacred Weapon, turned on from the weapon: it takes the use it costs
   // (unless it is only moved from another weapon) and ends with a rest or when the rounds run out.
-  const sacredSpend = Object.entries(s.spends).find(([id]) =>
-    id.endsWith("/channel-divinity-sacred-weapon"),
-  )?.[1];
+  const sacredSpend = Object.entries(s.spends).find(([id]) => SACRED_WEAPON.test(id))?.[1];
   const sacredElsewhere = character.value.play.sacredWeapon !== undefined;
   const sacredOn = a.sacredWeapon !== undefined;
   const sacredCannot =
@@ -219,6 +218,7 @@ function AttackCard({ a }: { a: AttackResult }) {
                         ? spendPool(p, sacredSpend, s.resources)
                         : p,
                       a.itemId,
+                      character.value.ruleset === "srd52" ? SACRED_WEAPON_ROUNDS_2024 : undefined,
                     ),
               )
             }

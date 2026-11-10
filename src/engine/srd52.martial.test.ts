@@ -4,6 +4,7 @@ import { createCharacter } from "./character";
 import { deriveSheet } from "./derive";
 import { RAGE_ROUNDS, RAGE_ROUNDS_2024 } from "./durations";
 import { enterRage, resourceLeft, shortRest } from "./play";
+import { type SpellRollData, spellRolls } from "./spellRolls";
 
 type Character = ReturnType<typeof createCharacter>;
 
@@ -279,5 +280,177 @@ describe("the 2024 Rage and Wholeness of Body", () => {
     c.abilityBase = { str: 10, dex: 16, con: 14, int: 10, wis: 14, cha: 8 };
     const heal = sheetOf(c).selfHeals["srd52:feature/warrior-of-the-open-hand-wholeness-of-body"];
     expect(heal).toEqual({ dice: "1d8", bonus: 2, minimum: 1 });
+  });
+});
+
+describe("a 2024 Paladin", () => {
+  it("has spell slots, prepared spells and the Oath spells from the tables", () => {
+    const c = make("paladin", 5, "oath-of-devotion");
+    const sheet = sheetOf(c);
+    expect(sheet.spellSlots.slice(0, 3)).toEqual([4, 2, 0]);
+    const caster = sheet.spellcasters[0];
+    expect(caster?.ability).toBe("cha");
+    // The table says six prepared spells at level 5; the Oath spells do not count against them.
+    expect(caster?.lists.prepared?.allowed).toBe(6);
+    expect(caster?.lists.maxSpellLevel).toBe(2);
+    expect(caster?.lists.alwaysPrepared).toEqual(
+      expect.arrayContaining([
+        "srd52:spell/protection-from-evil-and-good",
+        "srd52:spell/shield-of-faith",
+        "srd52:spell/aid",
+        "srd52:spell/zone-of-truth",
+      ]),
+    );
+    expect(caster?.lists.alwaysPrepared).not.toContain("srd52:spell/beacon-of-hope");
+    const pool = caster?.lists.prepared?.pool ?? [];
+    expect(pool).toContain("srd52:spell/cure-wounds");
+    expect(pool).not.toContain("srd52:spell/fireball");
+    expect(pool.every((id) => Number(bothIndex.get(id)?.data.level) <= 2)).toBe(true);
+  });
+
+  it("always has Divine Smite, and Find Steed from level 5, as spells", () => {
+    expect(sheetOf(make("paladin", 1)).grantedSpells).not.toContain("srd52:spell/divine-smite");
+    expect(sheetOf(make("paladin", 2)).grantedSpells).toContain("srd52:spell/divine-smite");
+    expect(sheetOf(make("paladin", 4)).grantedSpells).not.toContain("srd52:spell/find-steed");
+    expect(sheetOf(make("paladin", 5)).grantedSpells).toContain("srd52:spell/find-steed");
+    // No separate smite button: the spell is the smite.
+    expect(sheetOf(make("paladin", 5)).extraDamage.some((e) => e.kind === "divineSmite")).toBe(
+      false,
+    );
+  });
+
+  it("counts Lay On Hands and Channel Divinity, which gives one use back on a short rest", () => {
+    expect(resource(make("paladin", 7), "layOnHands")?.max).toBe(35);
+    expect(resource(make("paladin", 2), "channelDivinity")).toBeUndefined();
+    const two = resource(make("paladin", 3), "channelDivinity");
+    expect(two?.max).toBe(2);
+    expect(two?.shortRegain).toBe(1);
+    expect(resource(make("paladin", 11), "channelDivinity")?.max).toBe(3);
+  });
+
+  it("adds the Charisma modifier to saving throws, is immune to fear and strikes for 1d8 radiant", () => {
+    const c = make("paladin", 11, "oath-of-devotion");
+    c.abilityBase = { str: 15, dex: 10, con: 13, int: 8, wis: 10, cha: 16 };
+    const sheet = sheetOf(c);
+    expect(sheet.conditionImmunities).toEqual(
+      expect.arrayContaining(["srd52:condition/frightened", "srd52:condition/charmed"]),
+    );
+    expect(bothIndex.has("srd52:condition/frightened")).toBe(true);
+    expect(sheet.bonuses.some((b) => b.target === "save")).toBe(true);
+    expect(
+      sheet.extraDamage.find((e) => e.kind === "feature" && e.damageType === "radiant"),
+    ).toMatchObject({ dice: "1d8" });
+    expect(
+      sheetOf(make("paladin", 10)).extraDamage.some(
+        (e) => e.kind === "feature" && e.damageType === "radiant",
+      ),
+    ).toBe(false);
+  });
+
+  it("asks for Strength and Charisma 13 to multiclass into", () => {
+    const multi = (bothIndex.get("srd52:class/paladin")?.data.multiclassing ?? {}) as {
+      prerequisites?: { ability: string; minimum: number }[];
+    };
+    expect(multi.prerequisites).toEqual([
+      { ability: "str", minimum: 13 },
+      { ability: "cha", minimum: 13 },
+    ]);
+  });
+});
+
+describe("a 2024 Ranger", () => {
+  it("prepares spells by the table and always has Hunter's Mark, cast free more often as it grows", () => {
+    const one = sheetOf(make("ranger", 1));
+    expect(one.spellcasters[0]?.lists.prepared?.allowed).toBe(2);
+    expect(one.spellSlots[0]).toBe(2);
+    expect(one.grantedSpells).toContain("srd52:spell/hunters-mark");
+    const uses = (level: number) =>
+      sheetOf(make("ranger", level)).resources.find(
+        (r) => r.entry === "srd52:feature/ranger-favored-enemy",
+      )?.max;
+    expect(uses(1)).toBe(2);
+    expect(uses(5)).toBe(3);
+    expect(uses(17)).toBe(6);
+  });
+
+  it("moves 10 feet faster, climbs and swims at its Speed from level 6", () => {
+    const five = sheetOf(make("ranger", 5));
+    const six = sheetOf(make("ranger", 6));
+    expect((six.speed ?? 0) - (five.speed ?? 0)).toBe(10);
+    expect(six.movement.climb).toEqual({ feet: six.speed });
+    expect(six.movement.swim).toEqual({ feet: six.speed });
+  });
+
+  it("gets Expertise at levels 2 and 9 and Blindsight at level 18", () => {
+    expect(choice(make("ranger", 1), "ranger-deft-explorer", "expertise")).toBeUndefined();
+    expect(choice(make("ranger", 2), "ranger-deft-explorer", "expertise")?.choose).toBe(1);
+    expect(choice(make("ranger", 9), "ranger-expertise", "expertise")?.choose).toBe(2);
+    expect(sheetOf(make("ranger", 17)).senses.blindsight).toBeUndefined();
+    expect(sheetOf(make("ranger", 18)).senses.blindsight).toBe(30);
+  });
+
+  it("makes two attacks from level 5 and masters weapons it is proficient with", () => {
+    expect(sheetOf(make("ranger", 5)).attacksPerAction).toBe(2);
+    const pick = choice(make("ranger", 1), "ranger-weapon-mastery", "masteries");
+    expect(pick?.choose).toBe(2);
+    expect(pick?.options).toContain("srd52:item/longbow");
+  });
+});
+
+describe("the 2024 spells", () => {
+  const spells = [...bothIndex.values()].filter((e) => e.id.startsWith("srd52:spell/"));
+
+  it("are all of the list, with the school, level and damage the data gives", () => {
+    expect(spells).toHaveLength(339);
+    const bolt = bothIndex.get("srd52:spell/fire-bolt");
+    expect(bolt?.data.level).toBe(0);
+    expect(bolt?.data.school).toBe("evocation");
+    expect(bolt?.data.damage).toEqual([
+      {
+        damageType: { index: "fire" },
+        damageAtCharacterLevel: { "1": "1d10", "5": "2d10", "11": "3d10", "17": "4d10" },
+      },
+    ]);
+    expect(bothIndex.get("srd52:school/evocation")?.kind).toBe("school");
+  });
+
+  it("roll like the 5.1 ones: the damage of the base level, with the attack or not", () => {
+    const roll = (id: string) =>
+      spellRolls(bothIndex.get(id)?.data as unknown as SpellRollData, {
+        slotLevel: id.endsWith("fire-bolt") ? 0 : 3,
+        characterLevel: 5,
+        modifier: 3,
+      });
+    // A cantrip grows with the character level, a spell with the slot, and the save and the healing are there.
+    expect(roll("srd52:spell/fire-bolt")).toMatchObject({
+      attack: true,
+      damage: [{ type: "fire", dice: "2d10" }],
+    });
+    expect(roll("srd52:spell/fireball")).toMatchObject({
+      damage: [{ type: "fire", dice: "8d6" }],
+      save: "dex",
+      scalesBySlot: true,
+    });
+    const fireball = bothIndex.get("srd52:spell/fireball")?.data as unknown as SpellRollData;
+    expect(spellRolls(fireball, { slotLevel: 5, characterLevel: 9, modifier: 3 }).damage).toEqual([
+      { type: "fire", dice: "10d6" },
+    ]);
+    const cure = bothIndex.get("srd52:spell/cure-wounds")?.data as unknown as SpellRollData;
+    expect(spellRolls(cure, { slotLevel: 2, characterLevel: 5, modifier: 3 }).heal).toBe("4d8+3");
+    // Every spell that has damage in the data can be rolled (none breaks the roller).
+    for (const spell of spells.filter((s) => s.data.damage !== undefined))
+      expect(() =>
+        spellRolls(spell.data as unknown as SpellRollData, {
+          slotLevel: Number(spell.data.level),
+          characterLevel: 5,
+          modifier: 3,
+        }),
+      ).not.toThrow();
+  });
+
+  it("belong to the classes the pack has", () => {
+    const cure = bothIndex.get("srd52:spell/cure-wounds")?.data.classes as string[];
+    expect(cure).toEqual(expect.arrayContaining(["srd52:class/paladin", "srd52:class/ranger"]));
+    expect(cure.every((id) => bothIndex.has(id))).toBe(true);
   });
 });

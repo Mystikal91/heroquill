@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { isHomebrewId } from "../../app/homebrew";
 import { rulesFocus, rulesKind, rulesQuery, showRulesKind } from "../../app/rulesView";
 import { type SearchHit, browse, kindsOf, search } from "../../app/search";
-import { content } from "../../app/store";
+import { character, content } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { EntryDetail } from "./EntryDetail";
 
@@ -13,8 +13,10 @@ function listed(query: string): { hits: SearchHit[]; searching: boolean } {
   const c = content.value;
   const kind = rulesKind.value;
   if (!c) return { hits: [], searching: false };
-  if (query.trim().length >= 2) return { hits: search(c, query, kind, 300), searching: true };
-  return { hits: kind ? browse(c, kind) : [], searching: false };
+  const ruleset = character.value.ruleset;
+  if (query.trim().length >= 2)
+    return { hits: search(c, query, kind, 300, ruleset), searching: true };
+  return { hits: kind ? browse(c, kind, ruleset) : [], searching: false };
 }
 
 /** The rules, to look up by a word or to read through by kind: spells, items, feats, conditions... */
@@ -31,7 +33,7 @@ export function RulesPage() {
   }, [focus]);
 
   if (!c) return null;
-  const present = kindsOf(c);
+  const present = kindsOf(c, character.value.ruleset);
   // The monsters are a large pack: their button is there before they are loaded, and loads them.
   const kinds = present.includes("monster") ? present : [...present, "monster" as const];
   const loading = rulesKind.value === "monster" && !c.monsters;

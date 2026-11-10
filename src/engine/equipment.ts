@@ -281,9 +281,7 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
     ctx.sourced.flatMap(({ effect }) => (effect.type === "weaponMastery" ? [effect.item] : [])),
   );
   // The paladin's Sacred Weapon: found by the slug of its feature, as the SRD and Aurora each have their own entry.
-  const knowsSacredWeapon = ctx.sourced.some(({ source }) =>
-    /\/channel-divinity-sacred-weapon$/.test(source),
-  );
+  const knowsSacredWeapon = ctx.sourced.some(({ source }) => SACRED_WEAPON.test(source));
   // A weapon in the off hand: it does not add the ability modifier to damage, unless the style
   // Two-Weapon Fighting is known; a negative modifier is still taken off.
   const offHandId = placeEquipment(character.inventory, index).slots.offHand?.itemId;
@@ -467,6 +465,8 @@ type DamageResultLike = { dice: string; type: string };
 
 /** The feat Tavern Brawler, by the name of its id (it is not in the SRD: an imported or homebrew pack has it). */
 const TAVERN_BRAWLER = /\/tavern-brawler(-\d+)?$/;
+/** The feature that is Sacred Weapon: the 2014 Channel Divinity option or the 2024 Oath of Devotion feature. */
+export const SACRED_WEAPON = /\/(channel-divinity|oath-of-devotion)-sacred-weapon$/;
 /** The monk feature that makes unarmed strikes count as magic. */
 const KI_EMPOWERED = /\/ki-empowered-strikes$/;
 

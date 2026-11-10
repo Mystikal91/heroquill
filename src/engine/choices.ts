@@ -86,7 +86,7 @@ function optionsOf(index: PackIndex, choice: ChoiceEffect, ruleset?: string): st
   )
     return [...index.values()]
       .filter((e) => {
-        if (e.kind !== "spell") return false;
+        if (e.kind !== "spell" || (ruleset && !inRuleset(e.id, ruleset))) return false;
         const level = typeof e.data.level === "number" ? e.data.level : 0;
         if (choice.spellLevel !== undefined && level !== choice.spellLevel) return false;
         if (choice.spellUpTo !== undefined && level > choice.spellUpTo) return false;

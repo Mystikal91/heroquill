@@ -127,6 +127,60 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
   "rogue-stroke-of-luck": [{ type: "uses", term: 1, recharge: "short" }],
   "thief-second-story-work": [{ type: "movement", mode: "climb", feet: "walk" }],
   "thief-use-magic-device": [{ type: "attunementMax", value: 4 }],
+
+  // ---- Paladin. Lay On Hands and Channel Divinity come from the class table; the spell slots and the number
+  // of prepared spells too. A feature that gives a spell always prepared and one free cast a day is the spell
+  // (`grantSpell`) and a counter of one use.
+  "paladin-paladins-smite": [
+    { type: "grantSpell", spell: "srd52:spell/divine-smite" },
+    { type: "uses", term: 1, recharge: "long" },
+  ],
+  "paladin-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "paladin-faithful-steed": [
+    { type: "grantSpell", spell: "srd52:spell/find-steed" },
+    { type: "uses", term: 1, recharge: "long" },
+  ],
+  "paladin-aura-of-protection": [
+    { type: "modifier", target: "save", value: 0, plus: "cha", min: 1 },
+  ],
+  "paladin-abjure-foes": [{ type: "spends", pool: "channelDivinity" }],
+  "paladin-aura-of-courage": [{ type: "conditionImmunity", condition: "frightened" }],
+  "paladin-radiant-strikes": [
+    {
+      type: "extraDamage",
+      damageType: "radiant",
+      steps: [{ minLevel: 11, dice: "1d8" }],
+      note: "oncePerTurn",
+    },
+  ],
+  "oath-of-devotion-sacred-weapon": [{ type: "spends", pool: "channelDivinity" }],
+  "oath-of-devotion-aura-of-devotion": [{ type: "conditionImmunity", condition: "charmed" }],
+  "oath-of-devotion-holy-nimbus": [{ type: "uses", term: 1, recharge: "long" }],
+
+  // ---- Ranger. Favored Enemy: Hunter's Mark always prepared, cast free twice, up to six times.
+  "ranger-favored-enemy": [
+    { type: "grantSpell", spell: "srd52:spell/hunters-mark" },
+    { type: "uses", term: 2, recharge: "long", minLevel: 1 },
+    { type: "uses", term: 3, recharge: "long", minLevel: 5 },
+    { type: "uses", term: 4, recharge: "long", minLevel: 9 },
+    { type: "uses", term: 5, recharge: "long", minLevel: 13 },
+    { type: "uses", term: 6, recharge: "long", minLevel: 17 },
+  ],
+  "ranger-deft-explorer": [
+    { type: "choice", id: "expertise", choose: 1, grants: "expertise", from: SKILLS },
+  ],
+  "ranger-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "ranger-roving": [
+    { type: "modifier", target: "speed", value: 10, when: "noHeavyArmor" },
+    { type: "movement", mode: "climb", feet: "walk" },
+    { type: "movement", mode: "swim", feet: "walk" },
+  ],
+  "ranger-expertise": [
+    { type: "choice", id: "expertise", choose: 2, grants: "expertise", from: SKILLS },
+  ],
+  "ranger-tireless": [{ type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 }],
+  "ranger-natures-veil": [{ type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 }],
+  "ranger-feral-senses": [{ type: "sense", sense: "blindsight", range: 30 }],
 };
 
 /**
@@ -152,6 +206,10 @@ export const FEAT_PICKS: Record<string, { category: string; id: string }> = {
   "champion-additional-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "fighter-epic-boon": { category: "epic-boon", id: "epic-boon" },
   "barbarian-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "paladin-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "ranger-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "paladin-fighting-style": { category: "fighting-style", id: "fighting-style" },
+  "ranger-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "monk-epic-boon": { category: "epic-boon", id: "epic-boon" },
   "rogue-epic-boon": { category: "epic-boon", id: "epic-boon" },
 };
@@ -178,4 +236,10 @@ export const ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
   "rogue-steady-aim": "bonus",
   "rogue-uncanny-dodge": "reaction",
   "thief-fast-hands": "bonus",
+  "paladin-lay-on-hands": "bonus",
+  "paladin-paladins-smite": "bonus",
+  "paladin-abjure-foes": "action",
+  "oath-of-devotion-holy-nimbus": "bonus",
+  "ranger-tireless": "action",
+  "ranger-natures-veil": "bonus",
 };

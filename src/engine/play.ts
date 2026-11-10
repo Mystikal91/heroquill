@@ -415,10 +415,14 @@ export function endShillelagh(play: PlayState): PlayState {
 }
 
 /** Puts the Channel Divinity: Sacred Weapon on a weapon, or takes it off (`undefined`). */
-export function setSacredWeapon(play: PlayState, itemId: string | undefined): PlayState {
+export function setSacredWeapon(
+  play: PlayState,
+  itemId: string | undefined,
+  rounds: number = SACRED_WEAPON_ROUNDS,
+): PlayState {
   if (itemId === undefined) return endSacredWeapon(play);
-  // It lasts a minute: ten rounds.
-  return setRounds({ ...play, sacredWeapon: itemId }, "sacredWeapon", SACRED_WEAPON_ROUNDS);
+  // It lasts a minute: ten rounds (in 2024, ten minutes).
+  return setRounds({ ...play, sacredWeapon: itemId }, "sacredWeapon", rounds);
 }
 
 /** Sacred Weapon lasts a minute: it ends at any rest, and when it is taken off. */

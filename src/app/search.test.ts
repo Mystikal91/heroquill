@@ -51,3 +51,34 @@ describe("searching the rules", () => {
     expect(search(content, "f")).toEqual([]);
   });
 });
+
+describe("searching the rules of one edition", () => {
+  const two: Searchable = {
+    index: new Map(
+      [
+        ["srd51:spell/fireball", "spell"],
+        ["srd52:spell/fireball", "spell"],
+        ["imp1:spell/fireball-of-mine", "spell"],
+        ["srd52:condition/blinded", "condition"],
+      ].map(([id, kind]) => [id, { id, kind, effects: [], data: {} }] as const),
+    ) as Searchable["index"],
+    name: (id) => id.split("/")[1] ?? id,
+    text: () => undefined,
+  };
+
+  it("keeps its own SRD and the packs the person added, never the other SRD", () => {
+    expect(browse(two, "spell", "srd51").map((h) => h.id)).toEqual([
+      "srd51:spell/fireball",
+      "imp1:spell/fireball-of-mine",
+    ]);
+    expect(browse(two, "spell", "srd52").map((h) => h.id)).toEqual([
+      "srd52:spell/fireball",
+      "imp1:spell/fireball-of-mine",
+    ]);
+    expect(search(two, "fireball", undefined, 10, "srd52")).toHaveLength(2);
+    expect(kindsOf(two, "srd51")).toEqual(["spell"]);
+    expect(kindsOf(two, "srd52")).toEqual(["spell", "condition"]);
+    // With no edition named everything is there.
+    expect(browse(two, "spell")).toHaveLength(3);
+  });
+});

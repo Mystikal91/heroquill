@@ -12,6 +12,7 @@ import {
   setRounds,
   toggleCondition,
 } from "../../engine/play";
+import { inRuleset } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
 import { Panel, Paragraphs } from "../sheet/parts";
 import { useHoldRepeat } from "../useHoldRepeat";
@@ -68,7 +69,7 @@ export function Conditions() {
   const play = character.value.play;
   if (!c) return null;
   const conditions = [...c.index.values()]
-    .filter((e) => e.kind === "condition")
+    .filter((e) => e.kind === "condition" && inRuleset(e.id, character.value.ruleset))
     .sort((a, b) => c.name(a.id).localeCompare(c.name(b.id)));
   const active = conditions.filter((e) => play.conditions.includes(e.id));
   const others = conditions.filter((e) => !play.conditions.includes(e.id));

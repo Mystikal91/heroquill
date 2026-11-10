@@ -24,6 +24,9 @@ const FILE_NAMES: Record<string, string> = {
   trait: "traits",
   class: "classes",
   subclass: "subclasses",
+  spell: "spells",
+  school: "schools",
+  condition: "conditions",
   feature: "features",
   item: "items",
   property: "properties",
@@ -52,6 +55,9 @@ const raw: RawSource = {
   weaponMastery: await readJson("5e-SRD-Weapon-Mastery-Properties"),
   equipment: await readJson("5e-SRD-Equipment"),
   weaponProperties: await readJson("5e-SRD-Weapon-Properties"),
+  spells: await readJson("5e-SRD-Spells"),
+  magicSchools: await readJson("5e-SRD-Magic-Schools"),
+  conditions: await readJson("5e-SRD-Conditions"),
 };
 
 const converted = convertAll(raw);
