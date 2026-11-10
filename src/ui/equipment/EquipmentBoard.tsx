@@ -18,6 +18,7 @@ import {
 import { type UiKey, ui } from "../../i18n/ui";
 import { weight } from "../../i18n/units";
 import { CustomizeButton } from "../ItemCustomize";
+import { AddItemButton } from "../ItemPicker";
 import { itemFacts, itemTag } from "../ItemTag";
 import { ruleDetail } from "../rules/EntryDetail";
 import { useHoldRepeat } from "../useHoldRepeat";
@@ -371,7 +372,10 @@ export function EquipmentBoard({ mode }: { mode: Mode }) {
       )}
 
       <section class="equip-extra">
-        <h5>{ui("equip.backpack")}</h5>
+        <div class="equip-backpack-head">
+          <h5>{ui("equip.backpack")}</h5>
+          <AddItemButton primary />
+        </div>
         {pack.length === 0 ? (
           <p class="muted">{ui("equip.empty")}</p>
         ) : (

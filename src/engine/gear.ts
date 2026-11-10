@@ -82,6 +82,11 @@ export function useOne(inventory: InventoryItem[], itemId: string): boolean {
   return true;
 }
 
+/** An id for an item the person wrote themselves; it never repeats on one device. */
+export function newCustomItemId(): string {
+  return `custom:item/${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
 /** Puts `quantity` of an item in the inventory, adding to what is already there. */
 export function addToInventory(inventory: InventoryItem[], itemId: string, quantity = 1): void {
   const existing = inventory.find((i) => i.itemId === itemId);

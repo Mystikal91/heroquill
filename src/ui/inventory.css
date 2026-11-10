@@ -327,3 +327,162 @@ button.inv-card-name:hover {
   min-height: 2.5rem;
   padding: 0 1rem;
 }
+
+/* ---- The window to add items: search, chips, rows with a plus ---- */
+
+.picker-dialog {
+  width: min(40rem, calc(100vw - 1rem));
+  max-height: calc(100dvh - 1rem);
+}
+
+.picker-top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: -1rem -1.25rem 0.5rem;
+  padding: 0.75rem 1.25rem 0.5rem;
+  background: var(--surface);
+}
+
+.picker-top h3 {
+  margin: 0;
+}
+
+.picker-search {
+  width: 100%;
+  min-height: 2.75rem;
+  font-size: 1rem;
+}
+
+.picker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.picker .picker-chip:not(.pip-btn):not(.info-btn):not(.link) {
+  min-height: 2.25rem;
+  padding: 0.2rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.picker .picker-chip[aria-pressed="true"]:not(.pip-btn):not(.info-btn):not(.link) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-fg, #fff);
+  font-weight: 700;
+}
+
+.picker-said {
+  display: block;
+  min-height: 1.4rem;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.picker-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+}
+
+.picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.picker-row[data-added] {
+  border-color: var(--accent);
+}
+
+.picker-name {
+  display: grid;
+  min-width: 0;
+}
+
+.picker-meta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.picker-buttons {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.picker .picker-add:not(.pip-btn):not(.info-btn):not(.link),
+.picker .picker-step:not(.pip-btn):not(.info-btn):not(.link) {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.picker-count {
+  min-width: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.picker .picker-free {
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.equip-backpack-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.equip-backpack-head h5 {
+  margin: 0;
+}
+
+.step-add-item {
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 42rem) {
+  /* One row to swipe, so the results keep the room. */
+  .picker-chips {
+    flex-wrap: nowrap;
+    margin-inline: -1.25rem;
+    padding: 0 1.25rem 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .picker .picker-chip:not(.pip-btn):not(.info-btn):not(.link) {
+    flex: none;
+  }
+
+  .picker-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-width: 0;
+  }
+}
