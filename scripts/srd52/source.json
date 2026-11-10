@@ -1,7 +1,7 @@
 {
   "repo": "Mystikal91/5e-srd-api",
-  "commit": "e780513079fdf710affe0e5893614cec9eae1712",
-  "databaseVersion": "5e-srd-api fork integration @e780513 (2024)",
+  "commit": "0948ca0330b5888b76ffe3339a2cc93117ffe2e9",
+  "databaseVersion": "5e-srd-api fork integration @0948ca0 (2024)",
   "path": "packages/5e-database/src/2024/en",
   "files": [
     "5e-SRD-Ability-Scores",
