@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @0948ca0 (2024)",
+    "version": "5e-srd-api fork integration @e6744d8 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -115,6 +115,121 @@
             "level": 17,
             "features": [
               "srd52:feature/warrior-of-the-open-hand-quivering-palm"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/oath-of-devotion",
+      "kind": "subclass",
+      "parent": "srd52:class/paladin",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/oath-of-devotion-oath-of-devotion-spells",
+              "srd52:feature/oath-of-devotion-sacred-weapon"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/oath-of-devotion-aura-of-devotion"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/oath-of-devotion-smite-of-protection"
+            ]
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/oath-of-devotion-holy-nimbus"
+            ]
+          }
+        ],
+        "spells": [
+          {
+            "spell": "srd52:spell/protection-from-evil-and-good",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/shield-of-faith",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/aid",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/zone-of-truth",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/beacon-of-hope",
+            "classLevel": 9
+          },
+          {
+            "spell": "srd52:spell/dispel-magic",
+            "classLevel": 9
+          },
+          {
+            "spell": "srd52:spell/freedom-of-movement",
+            "classLevel": 13
+          },
+          {
+            "spell": "srd52:spell/guardian-of-faith",
+            "classLevel": 13
+          },
+          {
+            "spell": "srd52:spell/commune",
+            "classLevel": 17
+          },
+          {
+            "spell": "srd52:spell/flame-strike",
+            "classLevel": 17
+          }
+        ],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/hunter",
+      "kind": "subclass",
+      "parent": "srd52:class/ranger",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/hunter-hunters-lore",
+              "srd52:feature/hunter-hunters-prey"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/hunter-defensive-tactics"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/hunter-superior-hunters-prey"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/hunter-superior-hunters-defense"
             ]
           }
         ],

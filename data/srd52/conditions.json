@@ -1,0 +1,101 @@
+{
+  "manifest": {
+    "id": "srd52",
+    "ruleset": "srd52",
+    "version": "5e-srd-api fork integration @e6744d8 (2024)",
+    "license": "CC-BY-4.0",
+    "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
+  },
+  "entries": [
+    {
+      "id": "srd52:condition/blinded",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/charmed",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/deafened",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/exhaustion",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/frightened",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/grappled",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/incapacitated",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/invisible",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/paralyzed",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/petrified",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/poisoned",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/prone",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/restrained",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/stunned",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:condition/unconscious",
+      "kind": "condition",
+      "effects": [],
+      "data": {}
+    }
+  ]
+}

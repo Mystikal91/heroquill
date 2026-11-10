@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @0948ca0 (2024)",
+    "version": "5e-srd-api fork integration @e6744d8 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -65,7 +65,12 @@
         "hitDie": 12,
         "primaryAbility": [],
         "multiclassing": {
-          "prerequisites": [],
+          "prerequisites": [
+            {
+              "ability": "str",
+              "minimum": 13
+            }
+          ],
           "proficiencies": [
             "armor:shields",
             "weapon:martial-weapons"
@@ -829,7 +834,16 @@
         "hitDie": 8,
         "primaryAbility": [],
         "multiclassing": {
-          "prerequisites": [],
+          "prerequisites": [
+            {
+              "ability": "dex",
+              "minimum": 13
+            },
+            {
+              "ability": "wis",
+              "minimum": 13
+            }
+          ],
           "proficiencies": []
         },
         "levels": [
@@ -1121,6 +1135,1159 @@
       }
     },
     {
+      "id": "srd52:class/paladin",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "all-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "choice",
+          "id": "paladin-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:athletics",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:medicine",
+            "skill:persuasion",
+            "skill:religion"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 10,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "str",
+              "minimum": 13
+            },
+            {
+              "ability": "cha",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor",
+            "armor:medium-armor",
+            "armor:shields",
+            "weapon:martial-weapons"
+          ]
+        },
+        "spellcasting": {
+          "ability": "cha",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/paladin-lay-on-hands",
+              "srd52:feature/paladin-spellcasting",
+              "srd52:feature/paladin-weapon-mastery"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 2,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 0
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/paladin-fighting-style",
+              "srd52:feature/paladin-paladins-smite"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 3,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 0
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/paladin-channel-divinity",
+              "srd52:feature/paladin-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 4,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/paladin-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/paladin-extra-attack",
+              "srd52:feature/paladin-faithful-steed"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/paladin-aura-of-protection"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/paladin-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/paladin-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/paladin-abjure-foes"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/paladin-aura-of-courage"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/paladin-radiant-strikes"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/paladin-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/paladin-restoring-touch"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/paladin-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/paladin-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 17,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/paladin-aura-expansion"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/paladin-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/paladin-subclass"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/chain-mail",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shield",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/longsword",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/javelin",
+                    "quantity": 6
+                  },
+                  {
+                    "item": "srd52:item/holy-symbols",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/priests-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 9
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 150
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/ranger",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "medium-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "dex"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "str"
+        },
+        {
+          "type": "choice",
+          "id": "ranger-proficiency-1",
+          "choose": 3,
+          "grants": "proficiency",
+          "from": [
+            "skill:animal-handling",
+            "skill:athletics",
+            "skill:insight",
+            "skill:investigation",
+            "skill:nature",
+            "skill:perception",
+            "skill:stealth",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 10,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "dex",
+              "minimum": 13
+            },
+            {
+              "ability": "wis",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor",
+            "armor:medium-armor",
+            "armor:shields",
+            "weapon:martial-weapons"
+          ]
+        },
+        "spellcasting": {
+          "ability": "wis",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/ranger-favored-enemy",
+              "srd52:feature/ranger-spellcasting",
+              "srd52:feature/ranger-weapon-mastery"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 2,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 2
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/ranger-deft-explorer",
+              "srd52:feature/ranger-fighting-style"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 3,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 2
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/ranger-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "spellsKnown": 4,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 2
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/ranger-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 2
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/ranger-extra-attack"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 3
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/ranger-roving"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 3
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/ranger-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 3
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/ranger-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 3
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/ranger-expertise"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 4
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/ranger-tireless"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 4
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/ranger-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 4
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/ranger-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 4
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/ranger-relentless-hunter"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 5
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/ranger-natures-veil"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 5
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/ranger-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 5
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/ranger-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 5
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/ranger-precise-hunter"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 6
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/ranger-feral-senses"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 6
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/ranger-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 6
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/ranger-foe-slayer"
+            ],
+            "abilityScoreImprovements": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "favoredEnemies": 6
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/studded-leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/scimitar",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shortsword",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/longbow",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/arrows",
+                    "quantity": 20
+                  },
+                  {
+                    "item": "srd52:item/quiver",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/sprig-of-mistletoe",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/explorers-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 7
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 150
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "id": "srd52:class/rogue",
       "kind": "class",
       "effects": [
@@ -1197,7 +2364,12 @@
         "hitDie": 8,
         "primaryAbility": [],
         "multiclassing": {
-          "prerequisites": [],
+          "prerequisites": [
+            {
+              "ability": "dex",
+              "minimum": 13
+            }
+          ],
           "proficiencies": [
             "armor:light-armor",
             "tool:tool-thieves-tools"

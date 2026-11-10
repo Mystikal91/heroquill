@@ -1,7 +1,7 @@
 {
   "repo": "Mystikal91/5e-srd-api",
-  "commit": "0948ca0330b5888b76ffe3339a2cc93117ffe2e9",
-  "databaseVersion": "5e-srd-api fork integration @0948ca0 (2024)",
+  "commit": "e6744d8019b7f49be9da467d174b28a93e38e620",
+  "databaseVersion": "5e-srd-api fork integration @e6744d8 (2024)",
   "path": "packages/5e-database/src/2024/en",
   "files": [
     "5e-SRD-Ability-Scores",
@@ -18,6 +18,9 @@
     "5e-SRD-Subclasses",
     "5e-SRD-Weapon-Mastery-Properties",
     "5e-SRD-Equipment",
-    "5e-SRD-Weapon-Properties"
+    "5e-SRD-Weapon-Properties",
+    "5e-SRD-Spells",
+    "5e-SRD-Magic-Schools",
+    "5e-SRD-Conditions"
   ]
 }

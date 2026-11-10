@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @0948ca0 (2024)",
+    "version": "5e-srd-api fork integration @e6744d8 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -921,6 +921,659 @@
       }
     },
     {
+      "id": "srd52:feature/paladin-lay-on-hands",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 1,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-weapon-mastery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "masteries",
+          "choose": 2,
+          "grants": "mastery",
+          "from": [
+            "srd52:item/battleaxe",
+            "srd52:item/blowgun",
+            "srd52:item/club",
+            "srd52:item/dagger",
+            "srd52:item/dart",
+            "srd52:item/flail",
+            "srd52:item/glaive",
+            "srd52:item/greataxe",
+            "srd52:item/greatclub",
+            "srd52:item/greatsword",
+            "srd52:item/halberd",
+            "srd52:item/hand-crossbow",
+            "srd52:item/handaxe",
+            "srd52:item/heavy-crossbow",
+            "srd52:item/javelin",
+            "srd52:item/lance",
+            "srd52:item/light-crossbow",
+            "srd52:item/light-hammer",
+            "srd52:item/longbow",
+            "srd52:item/longsword",
+            "srd52:item/mace",
+            "srd52:item/maul",
+            "srd52:item/morningstar",
+            "srd52:item/musket",
+            "srd52:item/pike",
+            "srd52:item/pistol",
+            "srd52:item/quarterstaff",
+            "srd52:item/rapier",
+            "srd52:item/scimitar",
+            "srd52:item/shortbow",
+            "srd52:item/shortsword",
+            "srd52:item/sickle",
+            "srd52:item/sling",
+            "srd52:item/spear",
+            "srd52:item/trident",
+            "srd52:item/warhammer",
+            "srd52:item/war-pick",
+            "srd52:item/whip"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-fighting-style",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "fighting-style",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/archery",
+            "srd52:feat/defense",
+            "srd52:feat/great-weapon-fighting",
+            "srd52:feat/two-weapon-fighting"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-paladins-smite",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/divine-smite"
+        },
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 2,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-channel-divinity",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-extra-attack",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 2
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-faithful-steed",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/find-steed"
+        },
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-aura-of-protection",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "save",
+          "value": 0,
+          "plus": "cha",
+          "min": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-abjure-foes",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "channelDivinity"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 9,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-aura-of-courage",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "conditionImmunity",
+          "condition": "frightened"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-radiant-strikes",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "extraDamage",
+          "damageType": "radiant",
+          "steps": [
+            {
+              "minLevel": 11,
+              "dice": "1d8"
+            }
+          ],
+          "note": "oncePerTurn"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-restoring-touch",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-aura-expansion",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/paladin-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/paladin",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-favored-enemy",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/hunters-mark"
+        },
+        {
+          "type": "uses",
+          "term": 2,
+          "recharge": "long",
+          "minLevel": 1
+        },
+        {
+          "type": "uses",
+          "term": 3,
+          "recharge": "long",
+          "minLevel": 5
+        },
+        {
+          "type": "uses",
+          "term": 4,
+          "recharge": "long",
+          "minLevel": 9
+        },
+        {
+          "type": "uses",
+          "term": 5,
+          "recharge": "long",
+          "minLevel": 13
+        },
+        {
+          "type": "uses",
+          "term": 6,
+          "recharge": "long",
+          "minLevel": 17
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-weapon-mastery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "masteries",
+          "choose": 2,
+          "grants": "mastery",
+          "from": [
+            "srd52:item/battleaxe",
+            "srd52:item/blowgun",
+            "srd52:item/club",
+            "srd52:item/dagger",
+            "srd52:item/dart",
+            "srd52:item/flail",
+            "srd52:item/glaive",
+            "srd52:item/greataxe",
+            "srd52:item/greatclub",
+            "srd52:item/greatsword",
+            "srd52:item/halberd",
+            "srd52:item/hand-crossbow",
+            "srd52:item/handaxe",
+            "srd52:item/heavy-crossbow",
+            "srd52:item/javelin",
+            "srd52:item/lance",
+            "srd52:item/light-crossbow",
+            "srd52:item/light-hammer",
+            "srd52:item/longbow",
+            "srd52:item/longsword",
+            "srd52:item/mace",
+            "srd52:item/maul",
+            "srd52:item/morningstar",
+            "srd52:item/musket",
+            "srd52:item/pike",
+            "srd52:item/pistol",
+            "srd52:item/quarterstaff",
+            "srd52:item/rapier",
+            "srd52:item/scimitar",
+            "srd52:item/shortbow",
+            "srd52:item/shortsword",
+            "srd52:item/sickle",
+            "srd52:item/sling",
+            "srd52:item/spear",
+            "srd52:item/trident",
+            "srd52:item/warhammer",
+            "srd52:item/war-pick",
+            "srd52:item/whip"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-deft-explorer",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "expertise",
+          "choose": 1,
+          "grants": "expertise",
+          "from": [
+            "acrobatics",
+            "animal-handling",
+            "arcana",
+            "athletics",
+            "deception",
+            "history",
+            "insight",
+            "intimidation",
+            "investigation",
+            "medicine",
+            "nature",
+            "perception",
+            "performance",
+            "persuasion",
+            "religion",
+            "sleight-of-hand",
+            "stealth",
+            "survival"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-fighting-style",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "fighting-style",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/archery",
+            "srd52:feat/defense",
+            "srd52:feat/great-weapon-fighting",
+            "srd52:feat/two-weapon-fighting"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-extra-attack",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 2
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-roving",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 10,
+          "when": "noHeavyArmor"
+        },
+        {
+          "type": "movement",
+          "mode": "climb",
+          "feet": "walk"
+        },
+        {
+          "type": "movement",
+          "mode": "swim",
+          "feet": "walk"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-expertise",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "expertise",
+          "choose": 2,
+          "grants": "expertise",
+          "from": [
+            "acrobatics",
+            "animal-handling",
+            "arcana",
+            "athletics",
+            "deception",
+            "history",
+            "insight",
+            "intimidation",
+            "investigation",
+            "medicine",
+            "nature",
+            "perception",
+            "performance",
+            "persuasion",
+            "religion",
+            "sleight-of-hand",
+            "stealth",
+            "survival"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-tireless",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "mod": "wis"
+          },
+          "recharge": "long",
+          "min": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 10,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-relentless-hunter",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 13
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-natures-veil",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "mod": "wis"
+          },
+          "recharge": "long",
+          "min": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 14,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-precise-hunter",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-feral-senses",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "sense",
+          "sense": "blindsight",
+          "range": 30
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/ranger-foe-slayer",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/ranger",
+        "level": 20
+      }
+    },
+    {
       "id": "srd52:feature/rogue-expertise",
       "kind": "feature",
       "effects": [
@@ -1382,6 +2035,113 @@
       "data": {
         "subclass": "srd52:subclass/warrior-of-the-open-hand",
         "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/oath-of-devotion-oath-of-devotion-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/oath-of-devotion",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/oath-of-devotion-sacred-weapon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "channelDivinity"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/oath-of-devotion",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/oath-of-devotion-aura-of-devotion",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "conditionImmunity",
+          "condition": "charmed"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/oath-of-devotion",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/oath-of-devotion-smite-of-protection",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/oath-of-devotion",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/oath-of-devotion-holy-nimbus",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/oath-of-devotion",
+        "level": 20,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/hunter-hunters-lore",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/hunter",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/hunter-hunters-prey",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/hunter",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/hunter-defensive-tactics",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/hunter",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/hunter-superior-hunters-prey",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/hunter",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/hunter-superior-hunters-defense",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/hunter",
+        "level": 15
       }
     },
     {
