@@ -569,3 +569,15 @@ button.inv-card-name:hover {
 .picker-dialog {
   overflow-x: hidden;
 }
+
+/* The chips are grabbed with the mouse like a finger: no text selected on the way, a hand to show it. */
+@media (max-width: 42rem) {
+  .picker-chips {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .picker-chips[data-dragging] {
+    cursor: grabbing;
+  }
+}

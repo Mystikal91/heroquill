@@ -9,6 +9,8 @@
   "light.desc": "Un'arma leggera è piccola e facile da maneggiare, cosa che la rende ideale per combattere con due armi.",
   "loading.name": "Ricarica",
   "loading.desc": "Dato che ricaricare quest'arma richiede del tempo, un personaggio può scagliare una sola munizione con essa quando usa un'azione, un'azione bonus o una reazione per fare fuoco, a prescindere dal numero di attacchi che può effettuare normalmente.",
+  "monk.name": "Monaco",
+  "monk.desc": "I monaci ottengono diversi benefici quando sono disarmati o impugnano solo armi da monaco, purché non indossino armatura né impugnino scudi.",
   "reach.name": "Portata",
   "reach.desc": "Quest'arma aggiunge 1,5 metri alla portata del personaggio che la usa per attaccare o per determinare la portata dei suoi attacchi di opportunità.",
   "special.name": "Speciale",

@@ -9,6 +9,8 @@
   "light.desc": "Leichte Waffen sind klein und einfach zu handhaben, wodurch sie ideal für den Kampf mit zwei Waffen geeignet sind.",
   "loading.name": "Laden",
   "loading.desc": "Da das Laden einer solchen Waffe lange dauert, kannst du mit einer Aktion, Bonusaktion oder Reaktion immer nur ein Geschoss abfeuern, unabhängig davon, wie viele Angriffe dir zur Verfügung stehen.",
+  "monk.name": "Mönch",
+  "monk.desc": "Mönche erhalten mehrere Vorteile, wenn sie unbewaffnet sind oder nur Mönchswaffen führen, solange sie weder Rüstung tragen noch Schilde führen.",
   "reach.name": "Weitreichend",
   "reach.desc": "Mit dieser Waffe steigt die normale Angriffsreichweite um zusätzliche 1,5 Meter. Dies gilt auch für Gelegenheitsangriffe.",
   "special.name": "Besonders",

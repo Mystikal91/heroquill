@@ -19,6 +19,7 @@ import {
 import { type UiKey, ui } from "../i18n/ui";
 import { itemFacts, itemTag } from "./ItemTag";
 import { coinsText, copperText } from "./coinText";
+import { useDragScroll } from "./useDragScroll";
 
 /** Whether the window to add things is open. */
 export const itemPickerOpen = signal(false);
@@ -81,7 +82,20 @@ function Row({
           </span>
         )}
       </div>
+      {/* Buy first, then the count, and the plus last: the pluses line up down the list. */}
       <span class="picker-buttons">
+        {price !== undefined && (
+          <button
+            type="button"
+            class="card-btn picker-buy"
+            disabled={!affordable}
+            title={affordable ? undefined : ui("picker.noMoney")}
+            aria-label={ui("picker.buyFor", { name: option.name, price: copperText(total) })}
+            onClick={() => onBuy(option.id, amount)}
+          >
+            {ui("picker.buy")}
+          </button>
+        )}
         {!isPack && added > 0 && (
           <>
             <button
@@ -105,20 +119,29 @@ function Row({
         >
           {amount > 1 ? `+${amount}` : "+"}
         </button>
-        {price !== undefined && (
-          <button
-            type="button"
-            class="card-btn picker-buy"
-            disabled={!affordable}
-            title={affordable ? undefined : ui("picker.noMoney")}
-            aria-label={ui("picker.buyFor", { name: option.name, price: copperText(total) })}
-            onClick={() => onBuy(option.id, amount)}
-          >
-            {ui("picker.buy")}
-          </button>
-        )}
       </span>
     </li>
+  );
+}
+
+/** The chips for the sorts of item: a row to scroll on a narrow screen, with the mouse too. */
+function Chips({ filter, onPick }: { filter: ItemFilter; onPick: (f: ItemFilter) => void }) {
+  const row = useRef<HTMLFieldSetElement>(null);
+  useDragScroll(row);
+  return (
+    <fieldset ref={row} class="picker-chips" aria-label={ui("picker.filters")}>
+      {ITEM_FILTERS.map((f) => (
+        <button
+          key={f}
+          type="button"
+          class="picker-chip"
+          aria-pressed={filter === f}
+          onClick={() => onPick(f)}
+        >
+          {ui(`picker.filter.${f}` as UiKey)}
+        </button>
+      ))}
+    </fieldset>
   );
 }
 
@@ -295,22 +318,13 @@ export function ItemPickerDialog() {
               } else addFree();
             }}
           />
-          <fieldset class="picker-chips" aria-label={ui("picker.filters")}>
-            {ITEM_FILTERS.map((f) => (
-              <button
-                key={f}
-                type="button"
-                class="picker-chip"
-                aria-pressed={filter === f}
-                onClick={() => {
-                  setFilter(f);
-                  setLimit(PAGE);
-                }}
-              >
-                {ui(`picker.filter.${f}` as UiKey)}
-              </button>
-            ))}
-          </fieldset>
+          <Chips
+            filter={filter}
+            onPick={(f) => {
+              setFilter(f);
+              setLimit(PAGE);
+            }}
+          />
           {(filter === "all" || filter === "weapon" || filter === "armor") && (
             <label class="check picker-proficient">
               <input
