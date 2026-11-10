@@ -46,10 +46,8 @@ export const PILOT = {
 };
 
 type WeaponEntry = { id: string; data: Record<string, unknown> };
-const weaponOf = (e: WeaponEntry) => e.data.weapon as { category: string; kind: string };
-const slugOfId = (value: string) => value.split("/")[1] ?? "";
-/** The martial weapons a Rogue is proficient with besides the Simple ones (the class's proficiency list). */
-const ROGUE_MARTIAL = ["longsword", "rapier", "scimitar", "shortsword", "whip", "hand-crossbow"];
+const weaponOf = (e: WeaponEntry) =>
+  e.data.weapon as { category: string; kind: string; proficiency: string[] };
 
 /**
  * The Weapon Mastery features: how many weapons, whether the class table grows the number (`weapon_mastery`),
@@ -57,7 +55,12 @@ const ROGUE_MARTIAL = ["longsword", "rapier", "scimitar", "shortsword", "whip", 
  */
 const MASTERY_PICKS: Record<
   string,
-  { choose: number; byClassTable: boolean; from: (e: WeaponEntry) => boolean }
+  {
+    choose: number;
+    byClassTable: boolean;
+    /** The weapons it offers; `classProficiencies` are the indexes the class lists (`simple-weapons`, `rapiers`). */
+    from: (e: WeaponEntry, classProficiencies: Set<string>) => boolean;
+  }
 > = {
   "fighter-weapon-mastery": { choose: 3, byClassTable: true, from: () => true },
   "barbarian-weapon-mastery": {
@@ -68,9 +71,18 @@ const MASTERY_PICKS: Record<
   "rogue-weapon-mastery": {
     choose: 2,
     byClassTable: false,
-    from: (e) => weaponOf(e).category === "simple" || ROGUE_MARTIAL.includes(slugOfId(e.id)),
+    from: (e, classProficiencies) =>
+      weaponOf(e).proficiency.some((key) => classProficiencies.has(key.replace(/^weapon:/, ""))),
   },
 };
+
+/** The proficiency indexes a class lists, for the class a feature slug starts with (`rogue-weapon-mastery`). */
+const classProficiencies = (raw: RawSource, featureSlug: string): Set<string> =>
+  new Set(
+    (raw.classes.find((c) => featureSlug.startsWith(`${c.index}-`))?.proficiencies ?? []).map(
+      (p: Raw) => p.index as string,
+    ),
+  );
 
 const id = (kind: string, slug: string) => `${PACK}:${kind}/${slug}`;
 const slugify = (value: string) =>
@@ -555,6 +567,7 @@ const categoriesOf = (e: Raw): string[] =>
 
 /** Every item of the equipment table: weapons, armor, tools, adventuring gear and ammunition. */
 function convertEquipment(raw: RawSource): Converted {
+  const namedKinds = new Set(raw.proficiencies.map((p: Raw) => p.index as string));
   const entries: Entry[] = [];
   const strings: Strings = {};
   for (const e of raw.equipment) {
@@ -578,7 +591,11 @@ function convertEquipment(raw: RawSource): Converted {
         range: e.range,
         ...(e.throw_range && { throwRange: e.throw_range }),
         ...(e.mastery && { mastery: id("property", `mastery-${e.mastery.index}`) }),
-        proficiency: [`weapon:${category}-weapons`],
+        // A kind of weapon some classes are proficient with by name (rapiers, scimitars): its own key first.
+        proficiency: [
+          ...(namedKinds.has(`${e.index}s`) ? [`weapon:${e.index}s`] : []),
+          `weapon:${category}-weapons`,
+        ],
       };
     } else if (categories.includes("armor")) {
       const category = categories.includes("shields")
@@ -705,7 +722,9 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
           choose: mastery.choose,
           ...(mastery.byClassTable && { chooseBy: "weaponMastery" }),
           grants: "mastery",
-          from: weapons.filter(mastery.from).map((e) => e.id),
+          from: weapons
+            .filter((e) => mastery.from(e, classProficiencies(raw, slug)))
+            .map((e) => e.id),
         },
       ];
     // Primal Knowledge: one more skill from the list the Barbarian chose from at level 1.

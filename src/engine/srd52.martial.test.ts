@@ -230,6 +230,22 @@ describe("a 2024 Rogue", () => {
   });
 });
 
+describe("proficiency with named weapons", () => {
+  it("makes a Monk proficient with a Scimitar and a Rogue with a Rapier, and not the other way round", () => {
+    const monk = make("monk", 1);
+    monk.inventory = [{ itemId: "srd52:item/scimitar", quantity: 1, equipped: true }];
+    expect(sheetOf(monk).attacks[0]?.proficient).toBe(true);
+    const rogue = make("rogue", 1);
+    rogue.inventory = [{ itemId: "srd52:item/rapier", quantity: 1, equipped: true }];
+    expect(sheetOf(rogue).attacks[0]?.proficient).toBe(true);
+    // A Monk has no proficiency with a Rapier (a Finesse weapon without Light), nor a Rogue with a Greatsword.
+    monk.inventory = [{ itemId: "srd52:item/rapier", quantity: 1, equipped: true }];
+    expect(sheetOf(monk).attacks[0]?.proficient).toBe(false);
+    rogue.inventory = [{ itemId: "srd52:item/greatsword", quantity: 1, equipped: true }];
+    expect(sheetOf(rogue).attacks[0]?.proficient).toBe(false);
+  });
+});
+
 describe("the 2024 Rage and Wholeness of Body", () => {
   it("gives back one use of Rage on a short rest, and all of them on a long one", () => {
     const c = make("barbarian", 5);

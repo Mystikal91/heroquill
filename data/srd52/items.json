@@ -1605,6 +1605,7 @@
           },
           "mastery": "srd52:property/mastery-vex",
           "proficiency": [
+            "weapon:hand-crossbows",
             "weapon:martial-weapons"
           ]
         }
@@ -2172,6 +2173,7 @@
           },
           "mastery": "srd52:property/mastery-sap",
           "proficiency": [
+            "weapon:longswords",
             "weapon:martial-weapons"
           ]
         }
@@ -2956,6 +2958,7 @@
           },
           "mastery": "srd52:property/mastery-vex",
           "proficiency": [
+            "weapon:rapiers",
             "weapon:martial-weapons"
           ]
         }
@@ -3184,6 +3187,7 @@
           },
           "mastery": "srd52:property/mastery-nick",
           "proficiency": [
+            "weapon:scimitars",
             "weapon:martial-weapons"
           ]
         }
@@ -3288,6 +3292,7 @@
           },
           "mastery": "srd52:property/mastery-vex",
           "proficiency": [
+            "weapon:shortswords",
             "weapon:martial-weapons"
           ]
         }
@@ -3934,6 +3939,7 @@
           },
           "mastery": "srd52:property/mastery-slow",
           "proficiency": [
+            "weapon:whips",
             "weapon:martial-weapons"
           ]
         }
