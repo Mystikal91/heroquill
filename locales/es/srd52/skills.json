@@ -1,0 +1,20 @@
+{
+  "acrobatics.name": "Acrobacias",
+  "animal-handling.name": "Trato con Animales",
+  "arcana.name": "Conocimiento Arcano",
+  "athletics.name": "Atletismo",
+  "deception.name": "Engaño",
+  "history.name": "Historia",
+  "insight.name": "Perspicacia",
+  "intimidation.name": "Intimidación",
+  "investigation.name": "Investigación",
+  "medicine.name": "Medicina",
+  "nature.name": "Naturaleza",
+  "perception.name": "Percepción",
+  "performance.name": "Interpretación",
+  "persuasion.name": "Persuasión",
+  "religion.name": "Religión",
+  "sleight-of-hand.name": "Juego de Manos",
+  "stealth.name": "Sigilo",
+  "survival.name": "Supervivencia"
+}

@@ -1,0 +1,14 @@
+{
+  "str.name": "Stärke",
+  "str.abbreviation": "STR",
+  "dex.name": "Geschicklichkeit",
+  "dex.abbreviation": "GES",
+  "con.name": "Konstitution",
+  "con.abbreviation": "KON",
+  "int.name": "Intelligenz",
+  "int.abbreviation": "INT",
+  "wis.name": "Weisheit",
+  "wis.abbreviation": "WEI",
+  "cha.name": "Charisma",
+  "cha.abbreviation": "CHA"
+}

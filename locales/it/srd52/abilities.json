@@ -1,0 +1,14 @@
+{
+  "str.name": "Forza",
+  "str.abbreviation": "FOR",
+  "dex.name": "Destrezza",
+  "dex.abbreviation": "DES",
+  "con.name": "Costituzione",
+  "con.abbreviation": "COS",
+  "int.name": "Intelligenza",
+  "int.abbreviation": "INT",
+  "wis.name": "Saggezza",
+  "wis.abbreviation": "SAG",
+  "cha.name": "Carisma",
+  "cha.abbreviation": "CAR"
+}

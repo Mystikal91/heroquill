@@ -1,0 +1,20 @@
+{
+  "acrobatics.name": "Akrobatik",
+  "animal-handling.name": "Mit Tieren umgehen",
+  "arcana.name": "Arkane Kunde",
+  "athletics.name": "Athletik",
+  "deception.name": "Täuschen",
+  "history.name": "Geschichte",
+  "insight.name": "Motiv erkennen",
+  "intimidation.name": "Einschüchtern",
+  "investigation.name": "Nachforschungen",
+  "medicine.name": "Heilkunde",
+  "nature.name": "Naturkunde",
+  "perception.name": "Wahrnehmung",
+  "performance.name": "Auftreten",
+  "persuasion.name": "Überzeugen",
+  "religion.name": "Religion",
+  "sleight-of-hand.name": "Fingerfertigkeit",
+  "stealth.name": "Heimlichkeit",
+  "survival.name": "Überlebenskunst"
+}
