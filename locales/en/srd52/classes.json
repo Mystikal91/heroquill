@@ -1,3 +1,6 @@
 {
-  "fighter.name": "Fighter"
+  "barbarian.name": "Barbarian",
+  "fighter.name": "Fighter",
+  "monk.name": "Monk",
+  "rogue.name": "Rogue"
 }

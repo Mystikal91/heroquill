@@ -78,15 +78,20 @@ function AttackCard({ a }: { a: AttackResult }) {
     sacredSpend !== undefined &&
     !canSpend(character.value.play, sacredSpend, s.resources);
   // A monk can spend a ki point for two unarmed strikes as a bonus action: Flurry of Blows.
-  const flurryId = "srd51:feature/flurry-of-blows";
+  // The 2024 monk has it inside Monk's Focus, and three strikes with Heightened Focus.
+  const flurryId = s.spends["srd52:feature/monk-monks-focus"]
+    ? "srd52:feature/monk-monks-focus"
+    : "srd51:feature/flurry-of-blows";
   const flurry = a.unarmed ? s.spends[flurryId] : undefined;
+  const flurryName = flurryId.startsWith("srd52:") ? ui("play.flurryOfBlows") : c.name(flurryId);
+  const flurryStrikes = s.held.includes("srd52:feature/monk-heightened-focus") ? 3 : 2;
   const flurryNow = () => {
     if (!flurry) return;
     changePlay((p) => spendPool(p, flurry, s.resources));
     let landed = false;
     let fumbled = true;
-    for (const n of [1, 2]) {
-      const roll = rollCheck(`${name} - ${c.name(flurryId)} ${n}`, a.attackBonus, {
+    for (const n of Array.from({ length: flurryStrikes }, (_, i) => i + 1)) {
+      const roll = rollCheck(`${name} - ${flurryName} ${n}`, a.attackBonus, {
         critMin: s.critRange,
       });
       landed = landed || roll.critical;
@@ -171,7 +176,7 @@ function AttackCard({ a }: { a: AttackResult }) {
             disabled={!canSpend(character.value.play, flurry, s.resources)}
             onClick={flurryNow}
           >
-            {`${c.name(flurryId)} · ${flurry.cost} ki`}
+            {`${flurryName} · ${flurry.cost} ${ui(flurry.pool === "focus" ? "play.pointFocus" : "play.pointKi")}`}
           </button>
         )}
         {(a.canMagicWeapon || a.magicWeapon) && (

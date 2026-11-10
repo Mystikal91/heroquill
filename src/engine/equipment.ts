@@ -310,7 +310,10 @@ function deriveAttacks(ctx: Context, armor: ArmorState): AttackResult[] {
     const monkWeapon =
       ctx.martialArts !== undefined &&
       weapon.kind === "melee" &&
-      weapon.properties.some((p) => p.endsWith("/monk"));
+      (weapon.properties.some((p) => p.endsWith("/monk")) ||
+        // 2024: Simple melee weapons and the Martial melee weapons that have the Light property.
+        (character.ruleset === "srd52" &&
+          (weapon.category === "simple" || weapon.properties.some((p) => p.endsWith("/light")))));
     if (monkWeapon && abilities.dex.modifier > abilities[ability].modifier) ability = "dex";
     const baseDamage =
       weapon.damage && monkWeapon && ctx.martialArts

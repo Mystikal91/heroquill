@@ -98,7 +98,11 @@ export function Conditions() {
     id === "concentration"
       ? ui("play.concentrating", { spell: c.name(play.concentration ?? "") })
       : id === "rage"
-        ? c.name(`${character.value.ruleset}:feature/rage`)
+        ? c.name(
+            character.value.ruleset === "srd52"
+              ? "srd52:feature/barbarian-rage"
+              : "srd51:feature/rage",
+          )
         : id === "shillelagh"
           ? ui("play.shillelagh")
           : id === "sacredWeapon"

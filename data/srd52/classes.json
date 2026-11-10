@@ -8,6 +8,352 @@
   },
   "entries": [
     {
+      "id": "srd52:class/barbarian",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "medium-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "str"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "con"
+        },
+        {
+          "type": "choice",
+          "id": "barbarian-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:animal-handling",
+            "skill:athletics",
+            "skill:intimidation",
+            "skill:nature",
+            "skill:perception",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 12,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [],
+          "proficiencies": [
+            "armor:shields",
+            "weapon:martial-weapons"
+          ]
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/barbarian-rage",
+              "srd52:feature/barbarian-unarmored-defense",
+              "srd52:feature/barbarian-weapon-mastery"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "rageCount": 2,
+              "rageDamageBonus": 2,
+              "weaponMastery": 2
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/barbarian-danger-sense",
+              "srd52:feature/barbarian-reckless-attack"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "rageCount": 2,
+              "rageDamageBonus": 2,
+              "weaponMastery": 2
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/barbarian-subclass",
+              "srd52:feature/barbarian-primal-knowledge"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "rageCount": 3,
+              "rageDamageBonus": 2,
+              "weaponMastery": 2
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/barbarian-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "rageCount": 3,
+              "rageDamageBonus": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/barbarian-extra-attack",
+              "srd52:feature/barbarian-fast-movement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "rageCount": 3,
+              "rageDamageBonus": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/barbarian-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/barbarian-feral-instinct",
+              "srd52:feature/barbarian-instinctive-pounce"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/barbarian-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 2,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/barbarian-brutal-strike"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 3,
+              "weaponMastery": 3
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/barbarian-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/barbarian-relentless-rage"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "rageCount": 4,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/barbarian-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "rageCount": 5,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/barbarian-improved-brutal-strike-1"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "rageCount": 5,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/barbarian-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "rageCount": 5,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/barbarian-persistent-rage"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "rageCount": 5,
+              "rageDamageBonus": 3,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/barbarian-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "rageCount": 5,
+              "rageDamageBonus": 4,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/barbarian-improved-brutal-strike-2"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "rageCount": 6,
+              "rageDamageBonus": 4,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/barbarian-indomitable-might"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "rageCount": 6,
+              "rageDamageBonus": 4,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/barbarian-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "rageCount": 6,
+              "rageDamageBonus": 4,
+              "weaponMastery": 4
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/barbarian-primal-champion"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "rageCount": 6,
+              "rageDamageBonus": 4,
+              "weaponMastery": 4
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/greataxe",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/handaxe",
+                    "quantity": 4
+                  },
+                  {
+                    "item": "srd52:item/explorers-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 15
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 75
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "id": "srd52:class/fighter",
       "kind": "class",
       "effects": [
@@ -385,6 +731,798 @@
                 "items": [
                   {
                     "gold": 155
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/monk",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "scimitars"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "shortswords"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "hand-crossbows"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "dex"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "str"
+        },
+        {
+          "type": "choice",
+          "id": "monk-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:athletics",
+            "skill:history",
+            "skill:insight",
+            "skill:religion",
+            "skill:stealth"
+          ]
+        },
+        {
+          "type": "choice",
+          "id": "monk-proficiency-2",
+          "choose": 1,
+          "grants": "proficiency",
+          "from": [
+            "tool:alchemists-supplies",
+            "tool:brewers-supplies",
+            "tool:tool-calligraphers-supplies",
+            "tool:carpenters-tools",
+            "tool:cartographers-tools",
+            "tool:cobblers-tools",
+            "tool:cooks-utensils",
+            "tool:glassblowers-tools",
+            "tool:jewelers-tools",
+            "tool:leatherworkers-tools",
+            "tool:masons-tools",
+            "tool:painters-supplies",
+            "tool:potters-tools",
+            "tool:smiths-tools",
+            "tool:tinkers-tools",
+            "tool:weavers-tools",
+            "tool:woodcarvers-tools",
+            "tool:disguise-kit",
+            "tool:forgery-kit",
+            "tool:bagpipes",
+            "tool:drum",
+            "tool:dulcimer",
+            "tool:flute",
+            "tool:lute",
+            "tool:lyre",
+            "tool:horn",
+            "tool:pan-flute",
+            "tool:shawm",
+            "tool:viol"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [],
+          "proficiencies": []
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/monk-martial-arts",
+              "srd52:feature/monk-unarmored-defense"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "martialArtsDie": 6,
+              "focusPoints": 0,
+              "unarmoredMovementBonus": 0
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/monk-monks-focus",
+              "srd52:feature/monk-unarmored-movement",
+              "srd52:feature/monk-uncanny-metabolism"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "martialArtsDie": 6,
+              "focusPoints": 2,
+              "unarmoredMovementBonus": 10
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/monk-subclass",
+              "srd52:feature/monk-deflect-attacks"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "martialArtsDie": 6,
+              "focusPoints": 3,
+              "unarmoredMovementBonus": 10
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/monk-ability-score-improvement",
+              "srd52:feature/monk-slow-fall"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "martialArtsDie": 6,
+              "focusPoints": 4,
+              "unarmoredMovementBonus": 10
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/monk-extra-attack",
+              "srd52:feature/monk-stunning-strike"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 5,
+              "unarmoredMovementBonus": 10
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/monk-subclass",
+              "srd52:feature/monk-empowered-strikes"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 6,
+              "unarmoredMovementBonus": 15
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/monk-evasion"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 7,
+              "unarmoredMovementBonus": 15
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/monk-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 8,
+              "unarmoredMovementBonus": 15
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/monk-acrobatic-movement"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 9,
+              "unarmoredMovementBonus": 15
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/monk-heightened-focus",
+              "srd52:feature/monk-self-restoration"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "martialArtsDie": 8,
+              "focusPoints": 10,
+              "unarmoredMovementBonus": 20
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/monk-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 11,
+              "unarmoredMovementBonus": 20
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/monk-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 12,
+              "unarmoredMovementBonus": 20
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/monk-deflect-energy"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 13,
+              "unarmoredMovementBonus": 20
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/monk-disciplined-survivor"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 14,
+              "unarmoredMovementBonus": 25
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/monk-perfect-focus"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 15,
+              "unarmoredMovementBonus": 25
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/monk-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "martialArtsDie": 10,
+              "focusPoints": 16,
+              "unarmoredMovementBonus": 25
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/monk-subclass"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "martialArtsDie": 12,
+              "focusPoints": 17,
+              "unarmoredMovementBonus": 25
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/monk-superior-defense"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "martialArtsDie": 12,
+              "focusPoints": 18,
+              "unarmoredMovementBonus": 30
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/monk-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "martialArtsDie": 12,
+              "focusPoints": 19,
+              "unarmoredMovementBonus": 30
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/monk-body-and-mind"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "martialArtsDie": 12,
+              "focusPoints": 20,
+              "unarmoredMovementBonus": 30
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/spear",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 5
+                  },
+                  {
+                    "category": "artisans-tools+musical-instruments",
+                    "count": 1
+                  },
+                  {
+                    "item": "srd52:item/explorers-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 11
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/rogue",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "longswords"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "rapiers"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "scimitars"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "shortswords"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "whips"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "hand-crossbows"
+        },
+        {
+          "type": "proficiency",
+          "category": "tool",
+          "target": "tool-thieves-tools"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "dex"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "int"
+        },
+        {
+          "type": "choice",
+          "id": "rogue-proficiency-1",
+          "choose": 4,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:athletics",
+            "skill:deception",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:investigation",
+            "skill:perception",
+            "skill:performance",
+            "skill:persuasion",
+            "skill:sleight-of-hand",
+            "skill:stealth"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [],
+          "proficiencies": [
+            "armor:light-armor",
+            "tool:tool-thieves-tools"
+          ]
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/rogue-expertise",
+              "srd52:feature/rogue-sneak-attack",
+              "srd52:feature/rogue-thieves-cant",
+              "srd52:feature/rogue-weapon-mastery"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 1,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/rogue-cunning-action"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 1,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/rogue-subclass",
+              "srd52:feature/rogue-steady-aim"
+            ],
+            "abilityScoreImprovements": 0,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 2,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/rogue-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 2,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/rogue-cunning-strike",
+              "srd52:feature/rogue-uncanny-dodge"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 3,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/rogue-expertise"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 3,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/rogue-evasion",
+              "srd52:feature/rogue-reliable-talent"
+            ],
+            "abilityScoreImprovements": 1,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 4,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/rogue-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 4,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/rogue-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 5,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/rogue-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 5,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/rogue-improved-cunning-strike"
+            ],
+            "abilityScoreImprovements": 3,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 6,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/rogue-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 6,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/rogue-subclass"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 7,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/rogue-devious-strikes"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 7,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/rogue-slippery-mind"
+            ],
+            "abilityScoreImprovements": 4,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 8,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/rogue-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 5,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 8,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/rogue-subclass"
+            ],
+            "abilityScoreImprovements": 5,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 9,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/rogue-elusive"
+            ],
+            "abilityScoreImprovements": 5,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 9,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/rogue-epic-boon"
+            ],
+            "abilityScoreImprovements": 5,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 10,
+                "diceValue": 6
+              }
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/rogue-stroke-of-luck"
+            ],
+            "abilityScoreImprovements": 5,
+            "classSpecific": {
+              "sneakAttack": {
+                "diceCount": 10,
+                "diceValue": 6
+              }
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/shortsword",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shortbow",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/arrows",
+                    "quantity": 20
+                  },
+                  {
+                    "item": "srd52:item/quiver",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/thieves-tools",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/burglars-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 8
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 100
                   }
                 ]
               }

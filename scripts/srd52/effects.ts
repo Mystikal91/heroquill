@@ -8,6 +8,28 @@
  */
 import type { Effect } from "../../src/data/schema";
 
+/** The skills of the 2024 book, for the choices that name any of them (Expertise). */
+const SKILLS = [
+  "acrobatics",
+  "animal-handling",
+  "arcana",
+  "athletics",
+  "deception",
+  "history",
+  "insight",
+  "intimidation",
+  "investigation",
+  "medicine",
+  "nature",
+  "perception",
+  "performance",
+  "persuasion",
+  "religion",
+  "sleight-of-hand",
+  "stealth",
+  "survival",
+];
+
 export const FEATURE_EFFECTS: Record<string, Effect[]> = {
   // Two uses at level 1, three at 4, four at 10 (the Fighter Features table).
   // Using it heals 1d10 plus the Fighter level.
@@ -38,6 +60,71 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
   ],
   "champion-improved-critical": [{ type: "critRange", min: 19 }],
   "champion-superior-critical": [{ type: "critRange", min: 18 }],
+
+  // ---- Barbarian. Rage and Weapon Mastery count from the class table (`rage_count`, `weapon_mastery`);
+  // Danger Sense, Reckless Attack, Feral Instinct and the Brutal Strikes are text (they are about advantage).
+  "barbarian-unarmored-defense": [
+    { type: "unarmoredDefense", base: 10, add: ["con"], shield: true },
+  ],
+  "barbarian-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "barbarian-fast-movement": [
+    { type: "modifier", target: "speed", value: 10, when: "noHeavyArmor" },
+  ],
+  "barbarian-primal-champion": [
+    { type: "abilityBonus", ability: "str", value: 4, max: 25 },
+    { type: "abilityBonus", ability: "con", value: 4, max: 25 },
+  ],
+  // Intimidating Presence: once per Long Rest (or by spending a use of Rage, which is for the person to do).
+  "path-of-the-berserker-intimidating-presence": [{ type: "uses", term: 1, recharge: "long" }],
+
+  // ---- Monk. The Martial Arts die and the Focus Points come from the class table.
+  "monk-unarmored-defense": [{ type: "unarmoredDefense", base: 10, add: ["wis"], shield: false }],
+  // Flurry of Blows, Patient Defense and Step of the Wind take 1 point each: the unarmed strike card has the button.
+  "monk-monks-focus": [{ type: "spends", pool: "focus", cost: 1 }],
+  "monk-unarmored-movement": [
+    { type: "modifier", target: "speed", value: 10, when: "unarmoredNoShield", minLevel: 2 },
+    { type: "modifier", target: "speed", value: 5, when: "unarmoredNoShield", minLevel: 6 },
+    { type: "modifier", target: "speed", value: 5, when: "unarmoredNoShield", minLevel: 10 },
+    { type: "modifier", target: "speed", value: 5, when: "unarmoredNoShield", minLevel: 14 },
+    { type: "modifier", target: "speed", value: 5, when: "unarmoredNoShield", minLevel: 18 },
+  ],
+  "monk-uncanny-metabolism": [{ type: "uses", term: 1, recharge: "long" }],
+  "monk-extra-attack": [{ type: "extraAttack", attacks: 2 }],
+  "monk-disciplined-survivor": [
+    ...(["str", "dex", "con", "int", "wis", "cha"] as const).map(
+      (target): Effect => ({ type: "proficiency", category: "save", target }),
+    ),
+    { type: "spends", pool: "focus", cost: 1 },
+  ],
+  "monk-superior-defense": [{ type: "spends", pool: "focus", cost: 3 }],
+  "monk-body-and-mind": [
+    { type: "abilityBonus", ability: "dex", value: 4, max: 25 },
+    { type: "abilityBonus", ability: "wis", value: 4, max: 25 },
+  ],
+  // Wholeness of Body: Wisdom modifier uses (at least one), then a Long Rest.
+  "warrior-of-the-open-hand-wholeness-of-body": [
+    { type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 },
+  ],
+
+  // ---- Rogue. Sneak Attack comes from the class table (`sneak_attack`); Weapon Mastery is a choice of two.
+  "rogue-expertise": [
+    { type: "choice", id: "expertise", choose: 2, grants: "expertise", from: SKILLS },
+    {
+      type: "when",
+      requires: "[level:rogue:6]",
+      effects: [
+        { type: "choice", id: "expertise-2", choose: 2, grants: "expertise", from: SKILLS },
+      ],
+    },
+  ],
+  "rogue-reliable-talent": [{ type: "d20Floor", value: 10, on: "proficientSkills" }],
+  "rogue-slippery-mind": [
+    { type: "proficiency", category: "save", target: "wis" },
+    { type: "proficiency", category: "save", target: "cha" },
+  ],
+  "rogue-stroke-of-luck": [{ type: "uses", term: 1, recharge: "short" }],
+  "thief-second-story-work": [{ type: "movement", mode: "climb", feet: "walk" }],
+  "thief-use-magic-device": [{ type: "attunementMax", value: 4 }],
 };
 
 /**
@@ -62,6 +149,9 @@ export const FEAT_PICKS: Record<string, { category: string; id: string }> = {
   "fighter-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "champion-additional-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "fighter-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "barbarian-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "monk-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "rogue-epic-boon": { category: "epic-boon", id: "epic-boon" },
 };
 
 /**
@@ -76,4 +166,14 @@ export const REPLACES: Record<string, string> = {
 /** How a feature is used: `bonus` for a Bonus Action, `action` for an action, `reaction`. */
 export const ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
   "fighter-second-wind": "bonus",
+  "barbarian-rage": "bonus",
+  "path-of-the-berserker-retaliation": "reaction",
+  "path-of-the-berserker-intimidating-presence": "bonus",
+  "monk-deflect-attacks": "reaction",
+  "monk-slow-fall": "reaction",
+  "warrior-of-the-open-hand-wholeness-of-body": "bonus",
+  "rogue-cunning-action": "bonus",
+  "rogue-steady-aim": "bonus",
+  "rogue-uncanny-dodge": "reaction",
+  "thief-fast-hands": "bonus",
 };

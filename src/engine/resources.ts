@@ -93,7 +93,11 @@ export function classResources(input: Input): {
     case "barbarian": {
       const rages = num("rageCount");
       // The data writes "unlimited" as a huge number.
-      add("rage", Math.min(rages, 99), "long", { unlimited: rages >= 99, covers: "^rage$" });
+      // The 2024 feature is `barbarian-rage`.
+      add("rage", Math.min(rages, 99), "long", {
+        unlimited: rages >= 99,
+        covers: "^(barbarian-)?rage$",
+      });
       if (num("rageDamageBonus") > 0) {
         facts.push({ kind: "rageDamage", params: { n: num("rageDamageBonus") } });
         extras.push({ kind: "rage", bonus: num("rageDamageBonus") });
@@ -130,16 +134,19 @@ export function classResources(input: Input): {
       break;
     case "monk": {
       add("ki", num("kiPoints"), "short", { pool: true, covers: "^ki$" });
+      // The 2024 monk has Focus Points (the feature Monk's Focus) and a martial arts die written as a number.
+      add("focus", num("focusPoints"), "short", { pool: true, covers: "^monk-monks-focus$" });
       const art = row.martialArts as { diceCount?: number; diceValue?: number } | undefined;
-      if (art?.diceValue) {
-        const dice = `${art.diceCount ?? 1}d${art.diceValue}`;
+      const die = art?.diceValue ?? (num("martialArtsDie") || undefined);
+      if (die) {
+        const dice = `${art?.diceCount ?? 1}d${die}`;
         facts.push({ kind: "martialArts", params: { dice } });
         extras.push({ kind: "martialArts", dice });
       }
-      // Stunning Strike and the other ki features that make a creature save: 8 + proficiency + Wisdom.
-      if (num("kiPoints") > 0 && input.proficiencyBonus !== undefined)
+      // Stunning Strike and the other features that make a creature save: 8 + proficiency + Wisdom.
+      if (input.proficiencyBonus !== undefined && (num("kiPoints") > 0 || num("focusPoints") > 0))
         facts.push({
-          kind: "kiSaveDc",
+          kind: num("focusPoints") > 0 ? "focusSaveDc" : "kiSaveDc",
           params: { dc: 8 + input.proficiencyBonus + input.modifier("wis") },
         });
       break;

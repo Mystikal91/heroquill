@@ -8,6 +8,42 @@
   },
   "entries": [
     {
+      "id": "srd52:subclass/path-of-the-berserker",
+      "kind": "subclass",
+      "parent": "srd52:class/barbarian",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/path-of-the-berserker-frenzy"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/path-of-the-berserker-mindless-rage"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/path-of-the-berserker-retaliation"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/path-of-the-berserker-intimidating-presence"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
       "id": "srd52:subclass/champion",
       "kind": "subclass",
       "parent": "srd52:class/fighter",
@@ -43,6 +79,79 @@
             "level": 18,
             "features": [
               "srd52:feature/champion-survivor"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/warrior-of-the-open-hand",
+      "kind": "subclass",
+      "parent": "srd52:class/monk",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/warrior-of-the-open-hand-open-hand-technique"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/warrior-of-the-open-hand-wholeness-of-body"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/warrior-of-the-open-hand-fleet-step"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/warrior-of-the-open-hand-quivering-palm"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/thief",
+      "kind": "subclass",
+      "parent": "srd52:class/rogue",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/thief-fast-hands",
+              "srd52:feature/thief-second-story-work"
+            ]
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/thief-supreme-sneak"
+            ]
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/thief-use-magic-device"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/thief-thiefs-reflexes"
             ]
           }
         ],

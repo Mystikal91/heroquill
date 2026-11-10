@@ -34,6 +34,9 @@ export const STARTING_CATEGORIES = [
   "druidic-foci",
   "musical-instruments",
   "gaming-sets",
+  "artisans-tools",
+  // Several categories at once, joined by "+": the Monk starts with an artisan's tool or an instrument.
+  "artisans-tools+musical-instruments",
 ] as const;
 export type StartingCategory = (typeof STARTING_CATEGORIES)[number];
 

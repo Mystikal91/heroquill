@@ -39,10 +39,37 @@ export interface RawSource {
 
 /** What the pilot converts for the kinds that are big; everything of the small kinds is converted. */
 export const PILOT = {
-  classes: ["fighter"],
-  subclasses: ["champion"],
+  classes: ["fighter", "barbarian", "monk", "rogue"],
+  subclasses: ["champion", "path-of-the-berserker", "warrior-of-the-open-hand", "thief"],
   backgrounds: ["soldier"],
   species: ["human"],
+};
+
+type WeaponEntry = { id: string; data: Record<string, unknown> };
+const weaponOf = (e: WeaponEntry) => e.data.weapon as { category: string; kind: string };
+const slugOfId = (value: string) => value.split("/")[1] ?? "";
+/** The martial weapons a Rogue is proficient with besides the Simple ones (the class's proficiency list). */
+const ROGUE_MARTIAL = ["longsword", "rapier", "scimitar", "shortsword", "whip", "hand-crossbow"];
+
+/**
+ * The Weapon Mastery features: how many weapons, whether the class table grows the number (`weapon_mastery`),
+ * and which weapons the class offers (the Barbarian only Melee ones, the Rogue those it is proficient with).
+ */
+const MASTERY_PICKS: Record<
+  string,
+  { choose: number; byClassTable: boolean; from: (e: WeaponEntry) => boolean }
+> = {
+  "fighter-weapon-mastery": { choose: 3, byClassTable: true, from: () => true },
+  "barbarian-weapon-mastery": {
+    choose: 2,
+    byClassTable: true,
+    from: (e) => weaponOf(e).kind === "melee",
+  },
+  "rogue-weapon-mastery": {
+    choose: 2,
+    byClassTable: false,
+    from: (e) => weaponOf(e).category === "simple" || ROGUE_MARTIAL.includes(slugOfId(e.id)),
+  },
 };
 
 const id = (kind: string, slug: string) => `${PACK}:${kind}/${slug}`;
@@ -93,7 +120,11 @@ function proficiencyEffect(table: Map<string, string>, index: string): Effect {
 
 /** A 5e-database choice of proficiencies as a `choice` effect (options are `category:target`). */
 function proficiencyChoice(table: Map<string, string>, choiceId: string, set: Raw): Effect {
-  const from = (set.from.options as Raw[]).map((o) => {
+  // An option can itself be a pick from a list (the Monk: one artisan's tool or one musical instrument,
+  // each a list); those lists are flattened into the one choice.
+  const flat = (options: Raw[]): Raw[] =>
+    options.flatMap((o) => (o.option_type === "choice" ? flat(o.choice.from.options) : [o]));
+  const from = flat(set.from.options as Raw[]).map((o) => {
     const index: string = o.item.index;
     // Skill options of a trait are the skill index itself ("acrobatics"), the others are proficiencies.
     return table.get(index) ?? table.get(`skill-${index}`) ?? `skill:${index}`;
@@ -358,6 +389,19 @@ function featureEntry(slug: string, owner: Raw, level: number): Entry {
   };
 }
 
+/** The keys of a class table row in camel case, also inside a value (`sneak_attack.dice_count`), as the 2014 data has them. */
+function camelKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(camelKeys);
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([key, v]) => [
+        key.replace(/_([a-z])/g, (_, ch: string) => ch.toUpperCase()),
+        camelKeys(v),
+      ]),
+    );
+  return value;
+}
+
 function convertClasses(
   raw: RawSource,
   table: Map<string, string>,
@@ -377,10 +421,7 @@ function convertClasses(
     let increases = 0;
     const levels = own.map((l: Raw) => {
       const names = (l.features as Raw[]).map((f) => f.name);
-      const specific: Record<string, number> = {};
-      for (const [key, value] of Object.entries(l.class_specific ?? {})) {
-        specific[key.replace(/_([a-z])/g, (_, ch: string) => ch.toUpperCase())] = value as number;
-      }
+      const specific = camelKeys(l.class_specific ?? {}) as Record<string, unknown>;
       // In 2024 the increase is the feat "Ability Score Improvement"; the build screen keeps its steps.
       if (names.includes("Ability Score Improvement")) increases += 1;
       return {
@@ -608,13 +649,15 @@ function startingChoices(rawSets: Raw[] | undefined): Record<string, unknown>[] 
       case "money":
         if (o.unit !== "gp") throw new Error(`Starting money in ${o.unit}`);
         return [{ gold: o.count }];
-      case "choice":
-        return [
-          {
-            category: o.choice.from.equipment_category.index,
-            count: o.choice.choose,
-          },
-        ];
+      case "choice": {
+        // A pick from one category, or from several joined by "+" (the Monk: an artisan's tool or an instrument).
+        const from = o.choice.from;
+        const category: string =
+          from.option_set_type === "options_array"
+            ? (from.options as Raw[]).map((n) => n.choice.from.equipment_category.index).join("+")
+            : from.equipment_category.index;
+        return [{ category, count: o.choice.choose }];
+      }
       default:
         throw new Error(`Unknown starting equipment option: ${o.option_type}`);
     }
@@ -637,7 +680,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const backgroundPart = convertBackgrounds(raw, table);
   const items = convertEquipment(raw);
   // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
-  const weaponIds = items.entries.filter((e) => e.data.category === "weapon").map((e) => e.id);
+  const weapons = items.entries.filter((e) => e.data.category === "weapon");
   for (const feature of [...classPart.features.entries, ...subclassPart.features.entries]) {
     const slug = feature.id.split("/")[1] ?? "";
     const before = REPLACES[slug];
@@ -653,17 +696,24 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
           from: featIdsOf(raw, pick.category),
         },
       ];
-    if (feature.id === id("feature", "fighter-weapon-mastery"))
+    const mastery = MASTERY_PICKS[slug];
+    if (mastery)
       feature.effects = [
         {
           type: "choice",
           id: "masteries",
-          choose: 3,
-          chooseBy: "weaponMastery",
+          choose: mastery.choose,
+          ...(mastery.byClassTable && { chooseBy: "weaponMastery" }),
           grants: "mastery",
-          from: weaponIds,
+          from: weapons.filter(mastery.from).map((e) => e.id),
         },
       ];
+    // Primal Knowledge: one more skill from the list the Barbarian chose from at level 1.
+    if (slug === "barbarian-primal-knowledge") {
+      const skills = raw.classes.find((c) => c.index === "barbarian")?.proficiency_choices?.[0];
+      if (skills)
+        feature.effects = [proficiencyChoice(table, "primal-knowledge", { ...skills, choose: 1 })];
+    }
   }
   return {
     ability: convertAbilities(raw),

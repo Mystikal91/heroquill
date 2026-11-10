@@ -7,6 +7,25 @@ const LISTED: Record<string, string[]> = {
   "holy-symbols": ["amulet", "emblem", "reliquary"],
   "druidic-foci": ["sprig-of-mistletoe", "totem", "wooden-staff", "yew-wand"],
   "gaming-sets": ["dice", "dragonchess", "playing-cards", "three-dragon-ante"],
+  "artisans-tools": [
+    "alchemists-supplies",
+    "brewers-supplies",
+    "calligraphers-supplies",
+    "carpenters-tools",
+    "cartographer-tools",
+    "cobblers-tools",
+    "cooks-utensils",
+    "glassblowers-tools",
+    "jewelers-tools",
+    "leatherworkers-tools",
+    "masons-tools",
+    "painters-supplies",
+    "potters-tools",
+    "smiths-tools",
+    "tinkers-tools",
+    "weavers-tools",
+    "woodcarvers-tools",
+  ],
   "musical-instruments": [
     "bagpipes",
     "drum",
@@ -35,6 +54,9 @@ export function categoryItems(
   index: ReadonlyMap<string, Entry>,
   ruleset = "srd51",
 ): string[] {
+  // Several categories joined by "+" are all of them together.
+  if (category.includes("+"))
+    return category.split("+").flatMap((one) => categoryItems(one, index, ruleset));
   const listed = LISTED[category];
   if (listed) return listed.map((slug) => `${ruleset}:item/${slug}`).filter((id) => index.has(id));
   const wanted = WEAPONS[category];
@@ -51,7 +73,7 @@ export function categoryItems(
 }
 
 /** The categories of tools whose pick can be "the same as the one you are proficient with". */
-const TOOL_CATEGORIES = new Set(["gaming-sets", "musical-instruments"]);
+const TOOL_CATEGORIES = new Set(["gaming-sets", "musical-instruments", "artisans-tools"]);
 
 /**
  * The items of a tool category that the character is proficient with. The 2024 Soldier is proficient with one
@@ -64,7 +86,7 @@ export function proficientItems(
   tools: readonly string[],
   ruleset = "srd51",
 ): string[] {
-  if (!TOOL_CATEGORIES.has(category)) return [];
+  if (!category.split("+").every((one) => TOOL_CATEGORIES.has(one))) return [];
   return categoryItems(category, index, ruleset).filter((id) => {
     const slug = id.split("/")[1] ?? "";
     return tools.includes(slug) || tools.includes(`tool-${slug}`);

@@ -95,6 +95,7 @@ export type FeatureTerm = v.InferOutput<typeof FeatureTermSchema>;
 /** The kinds of resource that a feature can take points from (see the `spends` effect). */
 export const SPEND_POOLS = [
   "ki",
+  "focus",
   "channelDivinity",
   "bardicInspiration",
   "sorceryPoints",

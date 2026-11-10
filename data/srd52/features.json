@@ -8,6 +8,290 @@
   },
   "entries": [
     {
+      "id": "srd52:feature/barbarian-rage",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 1,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-unarmored-defense",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "unarmoredDefense",
+          "base": 10,
+          "add": [
+            "con"
+          ],
+          "shield": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-weapon-mastery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "masteries",
+          "choose": 2,
+          "grants": "mastery",
+          "from": [
+            "srd52:item/battleaxe",
+            "srd52:item/club",
+            "srd52:item/dagger",
+            "srd52:item/flail",
+            "srd52:item/glaive",
+            "srd52:item/greataxe",
+            "srd52:item/greatclub",
+            "srd52:item/greatsword",
+            "srd52:item/halberd",
+            "srd52:item/handaxe",
+            "srd52:item/javelin",
+            "srd52:item/lance",
+            "srd52:item/light-hammer",
+            "srd52:item/longsword",
+            "srd52:item/mace",
+            "srd52:item/maul",
+            "srd52:item/morningstar",
+            "srd52:item/pike",
+            "srd52:item/quarterstaff",
+            "srd52:item/rapier",
+            "srd52:item/scimitar",
+            "srd52:item/shortsword",
+            "srd52:item/sickle",
+            "srd52:item/spear",
+            "srd52:item/trident",
+            "srd52:item/warhammer",
+            "srd52:item/war-pick",
+            "srd52:item/whip"
+          ],
+          "chooseBy": "weaponMastery"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-danger-sense",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-reckless-attack",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-primal-knowledge",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "primal-knowledge",
+          "choose": 1,
+          "grants": "proficiency",
+          "from": [
+            "skill:animal-handling",
+            "skill:athletics",
+            "skill:intimidation",
+            "skill:nature",
+            "skill:perception",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-extra-attack",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 2
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-fast-movement",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 10,
+          "when": "noHeavyArmor"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-feral-instinct",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-instinctive-pounce",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-brutal-strike",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-relentless-rage",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-improved-brutal-strike-1",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 13
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-persistent-rage",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-improved-brutal-strike-2",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-indomitable-might",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/barbarian-primal-champion",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "str",
+          "value": 4,
+          "max": 25
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "con",
+          "value": 4,
+          "max": 25
+        }
+      ],
+      "data": {
+        "class": "srd52:class/barbarian",
+        "level": 20
+      }
+    },
+    {
       "id": "srd52:feature/fighter-fighting-style",
       "kind": "feature",
       "effects": [
@@ -304,6 +588,675 @@
       }
     },
     {
+      "id": "srd52:feature/monk-martial-arts",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/monk-unarmored-defense",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "unarmoredDefense",
+          "base": 10,
+          "add": [
+            "wis"
+          ],
+          "shield": false
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/monk-monks-focus",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "focus",
+          "cost": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/monk-unarmored-movement",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 10,
+          "when": "unarmoredNoShield",
+          "minLevel": 2
+        },
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 5,
+          "when": "unarmoredNoShield",
+          "minLevel": 6
+        },
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 5,
+          "when": "unarmoredNoShield",
+          "minLevel": 10
+        },
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 5,
+          "when": "unarmoredNoShield",
+          "minLevel": 14
+        },
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 5,
+          "when": "unarmoredNoShield",
+          "minLevel": 18
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/monk-uncanny-metabolism",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/monk-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/monk-deflect-attacks",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 3,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/monk-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/monk-slow-fall",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 4,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/monk-extra-attack",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "extraAttack",
+          "attacks": 2
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/monk-stunning-strike",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/monk-empowered-strikes",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/monk-evasion",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/monk-acrobatic-movement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/monk-heightened-focus",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/monk-self-restoration",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/monk-deflect-energy",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 13
+      }
+    },
+    {
+      "id": "srd52:feature/monk-disciplined-survivor",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "str"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "dex"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "con"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "int"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "spends",
+          "pool": "focus",
+          "cost": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/monk-perfect-focus",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/monk-superior-defense",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "focus",
+          "cost": 3
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/monk-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/monk-body-and-mind",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "dex",
+          "value": 4,
+          "max": 25
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "wis",
+          "value": 4,
+          "max": 25
+        }
+      ],
+      "data": {
+        "class": "srd52:class/monk",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-expertise",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "expertise",
+          "choose": 2,
+          "grants": "expertise",
+          "from": [
+            "acrobatics",
+            "animal-handling",
+            "arcana",
+            "athletics",
+            "deception",
+            "history",
+            "insight",
+            "intimidation",
+            "investigation",
+            "medicine",
+            "nature",
+            "perception",
+            "performance",
+            "persuasion",
+            "religion",
+            "sleight-of-hand",
+            "stealth",
+            "survival"
+          ]
+        },
+        {
+          "type": "when",
+          "requires": "[level:rogue:6]",
+          "effects": [
+            {
+              "type": "choice",
+              "id": "expertise-2",
+              "choose": 2,
+              "grants": "expertise",
+              "from": [
+                "acrobatics",
+                "animal-handling",
+                "arcana",
+                "athletics",
+                "deception",
+                "history",
+                "insight",
+                "intimidation",
+                "investigation",
+                "medicine",
+                "nature",
+                "perception",
+                "performance",
+                "persuasion",
+                "religion",
+                "sleight-of-hand",
+                "stealth",
+                "survival"
+              ]
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-sneak-attack",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-thieves-cant",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-weapon-mastery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "masteries",
+          "choose": 2,
+          "grants": "mastery",
+          "from": [
+            "srd52:item/club",
+            "srd52:item/dagger",
+            "srd52:item/dart",
+            "srd52:item/greatclub",
+            "srd52:item/hand-crossbow",
+            "srd52:item/handaxe",
+            "srd52:item/javelin",
+            "srd52:item/light-crossbow",
+            "srd52:item/light-hammer",
+            "srd52:item/longsword",
+            "srd52:item/mace",
+            "srd52:item/quarterstaff",
+            "srd52:item/rapier",
+            "srd52:item/scimitar",
+            "srd52:item/shortbow",
+            "srd52:item/shortsword",
+            "srd52:item/sickle",
+            "srd52:item/sling",
+            "srd52:item/spear",
+            "srd52:item/whip"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-cunning-action",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 2,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-steady-aim",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 3,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-cunning-strike",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-uncanny-dodge",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 5,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-evasion",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-reliable-talent",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "d20Floor",
+          "value": 10,
+          "on": "proficientSkills"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-improved-cunning-strike",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-devious-strikes",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-slippery-mind",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-elusive",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/rogue-stroke-of-luck",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "short"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/rogue",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/path-of-the-berserker-frenzy",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/path-of-the-berserker",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/path-of-the-berserker-mindless-rage",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/path-of-the-berserker",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/path-of-the-berserker-retaliation",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/path-of-the-berserker",
+        "level": 10,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/path-of-the-berserker-intimidating-presence",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/path-of-the-berserker",
+        "level": 14,
+        "activation": "bonus"
+      }
+    },
+    {
       "id": "srd52:feature/champion-improved-critical",
       "kind": "feature",
       "effects": [
@@ -378,6 +1331,109 @@
       "data": {
         "subclass": "srd52:subclass/champion",
         "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/warrior-of-the-open-hand-open-hand-technique",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/warrior-of-the-open-hand",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/warrior-of-the-open-hand-wholeness-of-body",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "mod": "wis"
+          },
+          "recharge": "long",
+          "min": 1
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/warrior-of-the-open-hand",
+        "level": 6,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/warrior-of-the-open-hand-fleet-step",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/warrior-of-the-open-hand",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/warrior-of-the-open-hand-quivering-palm",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/warrior-of-the-open-hand",
+        "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/thief-fast-hands",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/thief",
+        "level": 3,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/thief-second-story-work",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "movement",
+          "mode": "climb",
+          "feet": "walk"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/thief",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/thief-supreme-sneak",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/thief",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/thief-use-magic-device",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "attunementMax",
+          "value": 4
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/thief",
+        "level": 13
+      }
+    },
+    {
+      "id": "srd52:feature/thief-thiefs-reflexes",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/thief",
+        "level": 17
       }
     }
   ]
