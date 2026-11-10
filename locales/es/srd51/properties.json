@@ -9,6 +9,8 @@
   "light.desc": "Un arma ligera es pequeña y fácil de manejar, así que resulta ideal para luchar con dos armas.",
   "loading.name": "Recarga",
   "loading.desc": "Debido al tiempo que requiere recargar un arma con esta propiedad, cuando utilices una acción, acción adicional o reacción para atacar con ella, solo podrás disparar una unidad de munición, incluso aunque normalmente pudieras hacer más de un ataque.",
+  "monk.name": "Monje",
+  "monk.desc": "Los monjes obtienen varios beneficios mientras están desarmados o empuñan solo armas de monje, siempre que no lleven armadura ni empuñen escudos.",
   "reach.name": "Gran alcance",
   "reach.desc": "Cuando empleas un arma de este tipo, tu alcance aumenta en 1,5 m, tanto al atacar como a efectos de ataques de oportunidad.",
   "special.name": "Especial",

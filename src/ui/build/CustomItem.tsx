@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { updateCharacter } from "../../app/store";
+import { newCustomItemId } from "../../engine/gear";
 import { ui } from "../../i18n/ui";
 import { metricUnits, toPounds } from "../../i18n/units";
 
@@ -15,7 +16,7 @@ export function CustomItem() {
     const parsed = Number(heavy.replace(",", "."));
     const pounds =
       heavy.trim() && Number.isFinite(parsed) && parsed >= 0 ? toPounds(parsed) : undefined;
-    const id = `custom:item/${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    const id = newCustomItemId();
     updateCharacter((d) => {
       d.inventory.push({
         itemId: id,
