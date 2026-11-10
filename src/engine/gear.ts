@@ -1,5 +1,6 @@
 import type { Entry } from "../data/schema";
 import type { InventoryItem } from "./character";
+import { toCopper } from "./coins";
 
 /** What an equipment pack (a burglar's pack, an explorer's pack...) holds. Empty for any other item. */
 export function packContents(entry: Entry): { item: string; quantity: number }[] {
@@ -80,6 +81,19 @@ export function useOne(inventory: InventoryItem[], itemId: string): boolean {
   if (item.quantity > 1) item.quantity -= 1;
   else inventory.splice(index, 1);
   return true;
+}
+
+/**
+ * What an item costs, in copper pieces, when the data knows. A price of zero is not a price: the
+ * SRD gives none for its magic items and Aurora has none for what it leaves empty, so both are
+ * written as 0 gp and are read here as "not known".
+ */
+export function priceOf(entry: Entry | undefined): number | undefined {
+  const cost = (entry?.data as { cost?: { amount?: unknown; unit?: unknown } } | undefined)?.cost;
+  if (typeof cost?.amount !== "number" || cost.amount <= 0) return undefined;
+  if (cost.unit !== "cp" && cost.unit !== "sp" && cost.unit !== "gp") return undefined;
+  const copper = toCopper(cost.amount, cost.unit);
+  return copper > 0 ? copper : undefined;
 }
 
 /** An id for an item the person wrote themselves; it never repeats on one device. */

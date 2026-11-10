@@ -1,12 +1,13 @@
 import { signal } from "@preact/signals";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { addFreeItem, addItem, removeSome } from "../app/addItems";
+import { addFreeItem, addItem, buyItem, removeSome } from "../app/addItems";
 import { isHomebrewId } from "../app/homebrew";
 import { recentItems } from "../app/recentItems";
 import { character, content, sheet } from "../app/store";
 import { itemData } from "../data/items";
+import { type Coins, canPay } from "../engine/coins";
 import { proficiencyKeys } from "../engine/equipment";
-import { itemKind, packContents } from "../engine/gear";
+import { itemKind, packContents, priceOf } from "../engine/gear";
 import {
   ITEM_FILTERS,
   type ItemFilter,
@@ -17,6 +18,7 @@ import {
 } from "../engine/itemSearch";
 import { type UiKey, ui } from "../i18n/ui";
 import { itemFacts, itemTag } from "./ItemTag";
+import { coinsText, copperText } from "./coinText";
 
 /** Whether the window to add things is open. */
 export const itemPickerOpen = signal(false);
@@ -34,16 +36,26 @@ function Row({
   have,
   base,
   amount,
+  coins,
   onAdd,
+  onBuy,
+  onRemove,
 }: {
   option: ItemOption;
   have: number;
   base: number;
   amount: number;
+  coins: Coins | undefined;
   onAdd: (id: string, amount: number) => void;
+  onBuy: (id: string, amount: number) => void;
+  onRemove: (id: string) => void;
 }) {
   const c = content.value;
   const entry = c?.index.get(option.id);
+  // The price is shown, and the item can be bought, only when the data really has one.
+  const price = priceOf(entry);
+  const total = price === undefined ? 0 : price * amount;
+  const affordable = price !== undefined && canPay(coins, total);
   const tag = itemTag(option.id);
   const facts = itemFacts(option.id);
   let rarity: string | undefined;
@@ -62,6 +74,12 @@ function Row({
         <b>{option.name}</b>
         {meta && <span class="picker-meta">{meta}</span>}
         {isPack && <span class="picker-meta">{ui("picker.pack")}</span>}
+        {price !== undefined && (
+          <span class="picker-price" data-short={affordable ? undefined : ""}>
+            {copperText(price)}
+            {amount > 1 && ` · ${ui("picker.priceTotal", { total: copperText(total) })}`}
+          </span>
+        )}
       </div>
       <span class="picker-buttons">
         {!isPack && added > 0 && (
@@ -70,7 +88,7 @@ function Row({
               type="button"
               class="card-btn picker-step"
               aria-label={ui("picker.fewer", { name: option.name })}
-              onClick={() => removeSome(option.id, 1)}
+              onClick={() => onRemove(option.id)}
             >
               −
             </button>
@@ -87,6 +105,18 @@ function Row({
         >
           {amount > 1 ? `+${amount}` : "+"}
         </button>
+        {price !== undefined && (
+          <button
+            type="button"
+            class="card-btn picker-buy"
+            disabled={!affordable}
+            title={affordable ? undefined : ui("picker.noMoney")}
+            aria-label={ui("picker.buyFor", { name: option.name, price: copperText(total) })}
+            onClick={() => onBuy(option.id, amount)}
+          >
+            {ui("picker.buy")}
+          </button>
+        )}
       </span>
     </li>
   );
@@ -107,6 +137,8 @@ export function ItemPickerDialog() {
   const [onlyProficient, setOnlyProficient] = useState(false);
   const [limit, setLimit] = useState(PAGE);
   const [said, setSaid] = useState("");
+  /** Takes back the last purchase; gone with the next thing added. */
+  const [undo, setUndo] = useState<(() => void) | undefined>(undefined);
   /** What the character carried when the window opened: the minus button only takes back what was added since. */
   const base = useRef(new Map<string, number>());
   const c = content.value;
@@ -175,11 +207,29 @@ export function ItemPickerDialog() {
   const add = (id: string, amount: number) => {
     addItem(id, amount);
     const name = c?.name(id) ?? id;
+    setUndo(undefined);
     setSaid(ui("picker.added", { name, count: amount }));
+  };
+  const buy = (id: string, amount: number) => {
+    const done = buyItem(id, amount);
+    if (!done) return;
+    const name = c?.name(id) ?? id;
+    setUndo(() => done.undo);
+    setSaid(
+      coinsText(done.change)
+        ? ui("picker.bought.change", {
+            name,
+            count: amount,
+            price: copperText(done.price),
+            change: coinsText(done.change),
+          })
+        : ui("picker.bought", { name, count: amount, price: copperText(done.price) }),
+    );
   };
   const addFree = () => {
     if (!freeName) return;
     addFreeItem(freeName, quantity);
+    setUndo(undefined);
     setSaid(ui("picker.added", { name: freeName, count: quantity }));
     setTyped("");
     field.current?.focus();
@@ -193,7 +243,13 @@ export function ItemPickerDialog() {
         have={have(o.id)}
         base={base.current.get(o.id) ?? 0}
         amount={quantity}
+        coins={character.value.coins}
         onAdd={add}
+        onBuy={buy}
+        onRemove={(id) => {
+          removeSome(id, 1);
+          setUndo(undefined);
+        }}
       />
     ));
 
@@ -265,7 +321,22 @@ export function ItemPickerDialog() {
               <span>{ui("form.onlyProficient")}</span>
             </label>
           )}
-          <output class="picker-said muted">{said}</output>
+          <output class="picker-said muted">
+            {said}
+            {undo && said && (
+              <button
+                type="button"
+                class="link"
+                onClick={() => {
+                  undo();
+                  setUndo(undefined);
+                  setSaid("");
+                }}
+              >
+                {ui("bar.undo")}
+              </button>
+            )}
+          </output>
 
           {recent.length > 0 && (
             <section>

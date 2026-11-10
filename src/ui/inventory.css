@@ -486,3 +486,86 @@ button.inv-card-name:hover {
     border-width: 0;
   }
 }
+
+/* The price under the name, and the Buy button next to the plus. */
+.picker-price {
+  color: var(--fg);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.picker-price[data-short] {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.picker .picker-buy:not(.pip-btn):not(.info-btn):not(.link) {
+  min-height: 2.75rem;
+  padding: 0 0.7rem;
+}
+
+.picker-said .link {
+  margin-left: 0.5rem;
+}
+
+/* Spend and gain coins: an amount, the kind of coin and two buttons. */
+.coin-spend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.coin-spend-amount {
+  flex: 1 1 6rem;
+  min-width: 5rem;
+  max-width: 10rem;
+  min-height: 2.75rem;
+}
+
+.coin-spend .coin-spend-unit {
+  flex: none;
+  width: auto;
+  min-width: 5rem;
+  min-height: 2.75rem;
+}
+
+.coin-spend .card-btn {
+  min-height: 2.75rem;
+}
+
+.coin-spend-said {
+  display: block;
+  flex-basis: 100%;
+  min-height: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.picker .picker-buy:disabled:not(.pip-btn):not(.info-btn):not(.link) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* The buttons go under the name when there is no room beside it. */
+.picker-row {
+  flex-wrap: wrap;
+}
+
+.picker-name {
+  flex: 1 1 11rem;
+}
+
+.picker-buttons {
+  margin-left: auto;
+}
+
+/* A fieldset never shrinks under its content unless told to: without this the chips widened the whole window. */
+.picker-chips {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.picker-dialog {
+  overflow-x: hidden;
+}

@@ -75,6 +75,44 @@ describe("the window to add items", () => {
     done();
   });
 
+  it("shows the price and buys only with enough coins, giving change", async () => {
+    content.value = await loadContent(["en"]);
+    const base = complete(build(CLASSES[0] ?? "fighter", 3, "human"));
+    character.value = { ...base, coins: { cp: 0, sp: 0, ep: 0, gp: 10, pp: 0 } };
+    const { host, done } = await opened();
+    await type(host, "longsword");
+    const buy = host.querySelector<HTMLButtonElement>("button.picker-buy");
+    expect(buy).not.toBeNull();
+    expect(host.querySelector(".picker-price")?.textContent).toContain("15");
+    // Ten gold do not pay 15.
+    expect(buy?.disabled).toBe(true);
+    character.value = { ...base, coins: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 2 } };
+    await tick();
+    const ready = host.querySelector<HTMLButtonElement>("button.picker-buy");
+    expect(ready?.disabled).toBe(false);
+    ready?.click();
+    await tick();
+    expect(character.value.coins).toEqual({ cp: 0, sp: 0, ep: 0, gp: 5, pp: 0 });
+    expect(character.value.inventory.some((i) => i.itemId.endsWith("/longsword"))).toBe(true);
+    // The undo of the window gives the coins and the item back.
+    host.querySelector<HTMLButtonElement>(".picker-said button.link")?.click();
+    await tick();
+    expect(character.value.coins?.pp).toBe(2);
+    expect(character.value.inventory.length).toBe(base.inventory.length);
+    done();
+  });
+
+  it("has no price and no Buy for what the data does not price", async () => {
+    content.value = await loadContent(["en"]);
+    character.value = complete(build(CLASSES[0] ?? "fighter", 3, "human"));
+    const { host, done } = await opened();
+    await type(host, "potion of healing");
+    expect(host.querySelector("button.picker-add")).not.toBeNull();
+    expect(host.querySelector("button.picker-buy")).toBeNull();
+    expect(host.querySelector(".picker-price")).toBeNull();
+    done();
+  });
+
   it("offers what the rules do not list as an item of your own", async () => {
     content.value = await loadContent(["en"]);
     character.value = complete(build(CLASSES[0] ?? "fighter", 3, "human"));
