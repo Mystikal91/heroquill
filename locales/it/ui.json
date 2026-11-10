@@ -1527,5 +1527,6 @@
   "coin.spent": "Spesi {cost}: pagato con {paid}, resto {change}.",
   "coin.spent.exact": "Spesi {cost}: pagato con {paid}.",
   "coin.gained": "Guadagnati {gain}.",
-  "coin.gain.whole": "Per guadagnare serve un numero intero di monete."
+  "coin.gain.whole": "Per guadagnare serve un numero intero di monete.",
+  "picker.heals": "Cura {dice}"
 }

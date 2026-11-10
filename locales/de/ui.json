@@ -1527,5 +1527,6 @@
   "coin.spent": "{cost} ausgegeben: bezahlt mit {paid}, Wechselgeld {change}.",
   "coin.spent.exact": "{cost} ausgegeben: bezahlt mit {paid}.",
   "coin.gained": "{gain} erhalten.",
-  "coin.gain.whole": "Zum Erhalten ist eine ganze Zahl von Münzen nötig."
+  "coin.gain.whole": "Zum Erhalten ist eine ganze Zahl von Münzen nötig.",
+  "picker.heals": "Heilt {dice}"
 }

@@ -7,7 +7,7 @@ import { character, content, sheet } from "../app/store";
 import { itemData } from "../data/items";
 import { type Coins, canPay } from "../engine/coins";
 import { proficiencyKeys } from "../engine/equipment";
-import { itemKind, packContents, priceOf } from "../engine/gear";
+import { healingOf, itemKind, packContents, priceOf } from "../engine/gear";
 import {
   ITEM_FILTERS,
   type ItemFilter,
@@ -19,6 +19,7 @@ import {
 import { type UiKey, ui } from "../i18n/ui";
 import { itemFacts, itemTag } from "./ItemTag";
 import { coinsText, copperText } from "./coinText";
+import { RuleInfoButton, ruleDetail } from "./rules/EntryDetail";
 import { useDragScroll } from "./useDragScroll";
 
 /** Whether the window to add things is open. */
@@ -68,12 +69,27 @@ function Row({
   }
   const isPack = entry ? packContents(entry).length > 0 : false;
   const meta = [tag, facts, rarity].filter(Boolean).join(" · ");
+  // What a potion gives back when drunk, as the book writes it: "2d4 + 2".
+  const heal = healingOf(entry)?.replace(/([+-])/, " $1 ");
   const added = have - base;
   return (
     <li class="picker-row" data-added={added > 0 ? "" : undefined}>
       <div class="picker-name">
-        <b>{option.name}</b>
+        <span class="picker-title">
+          <button
+            type="button"
+            class="link picker-link"
+            aria-label={`${ui("inv.info")}: ${option.name}`}
+            onClick={() => {
+              ruleDetail.value = option.id;
+            }}
+          >
+            {option.name}
+          </button>
+          <RuleInfoButton id={option.id} />
+        </span>
         {meta && <span class="picker-meta">{meta}</span>}
+        {heal && <span class="picker-heal">{ui("picker.heals", { dice: heal })}</span>}
         {isPack && <span class="picker-meta">{ui("picker.pack")}</span>}
         {price !== undefined && (
           <span class="picker-price" data-short={affordable ? undefined : ""}>

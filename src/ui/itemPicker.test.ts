@@ -5,6 +5,7 @@ import { character, content } from "../app/store";
 import { loadContent } from "../content/browser";
 import { CLASSES, build, complete } from "../test/characters";
 import { ItemPickerDialog, itemPickerOpen } from "./ItemPicker";
+import { ruleDetail } from "./rules/EntryDetail";
 
 const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -108,7 +109,8 @@ describe("the window to add items", () => {
     const { host, done } = await opened();
     await type(host, "potion of healing");
     const rows = [...host.querySelectorAll<HTMLElement>(".picker-row")];
-    const row = (name: string) => rows.find((r) => r.querySelector("b")?.textContent === name);
+    const row = (name: string) =>
+      rows.find((r) => r.querySelector(".picker-link")?.textContent === name);
     // The SRD prices the potion of healing (50 gp, page 69) and no other magic item.
     expect(row("Potion of Healing")?.querySelector(".picker-price")?.textContent).toContain("50");
     expect(row("Potion of Healing")?.querySelector("button.picker-buy")).not.toBeNull();
@@ -117,6 +119,29 @@ describe("the window to add items", () => {
     expect(greater?.querySelector("button.picker-add")).not.toBeNull();
     expect(greater?.querySelector("button.picker-buy")).toBeNull();
     expect(greater?.querySelector(".picker-price")).toBeNull();
+    done();
+  });
+
+  it("says what a potion heals, and the name and the i open the details", async () => {
+    content.value = await loadContent(["en"]);
+    character.value = complete(build(CLASSES[0] ?? "fighter", 3, "human"));
+    const { host, done } = await opened();
+    await type(host, "potion of superior healing");
+    const row = host.querySelector<HTMLElement>(".picker-row");
+    expect(row?.querySelector(".picker-heal")?.textContent).toBe("Heals 8d4 + 8");
+    // The name opens the rules of the item...
+    row?.querySelector<HTMLButtonElement>("button.picker-link")?.click();
+    expect(ruleDetail.value).toBe("srd51:item/potion-of-healing-superior");
+    ruleDetail.value = undefined;
+    // ...and so does the small i, without adding anything.
+    const before = character.value.inventory.length;
+    row?.querySelector<HTMLButtonElement>("button.info-btn")?.click();
+    expect(ruleDetail.value).toBe("srd51:item/potion-of-healing-superior");
+    expect(character.value.inventory.length).toBe(before);
+    ruleDetail.value = undefined;
+    // A thing that does not heal says nothing about it.
+    await type(host, "torch");
+    expect(host.querySelector(".picker-heal")).toBeNull();
     done();
   });
 

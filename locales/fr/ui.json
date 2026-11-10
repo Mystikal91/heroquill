@@ -1527,5 +1527,6 @@
   "coin.spent": "Dépensé {cost} : payé avec {paid}, monnaie rendue {change}.",
   "coin.spent.exact": "Dépensé {cost} : payé avec {paid}.",
   "coin.gained": "Gagné {gain}.",
-  "coin.gain.whole": "Pour gagner, il faut un nombre entier de pièces."
+  "coin.gain.whole": "Pour gagner, il faut un nombre entier de pièces.",
+  "picker.heals": "Soigne {dice}"
 }

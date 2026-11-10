@@ -1527,5 +1527,6 @@
   "coin.spent": "Spent {cost}: paid {paid}, change {change}.",
   "coin.spent.exact": "Spent {cost}: paid {paid}.",
   "coin.gained": "Gained {gain}.",
-  "coin.gain.whole": "Gaining needs a whole number of coins."
+  "coin.gain.whole": "Gaining needs a whole number of coins.",
+  "picker.heals": "Heals {dice}"
 }
