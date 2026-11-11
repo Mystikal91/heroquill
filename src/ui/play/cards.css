@@ -252,3 +252,8 @@
   margin: 0;
   padding: 0;
 }
+
+/* A spell that cannot be cast (armor worn without training): its buttons are put away. */
+.card-actions[inert] {
+  opacity: 0.45;
+}

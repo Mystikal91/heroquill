@@ -1286,6 +1286,7 @@
   "sheet.noClass": "aún sin clase",
   "sheet.armorClass": "Clase de armadura",
   "sheet.stealthDisadvantage": "Desventaja en Sigilo",
+  "armor.untrained": "Llevas una armadura en la que no tienes competencia: desventaja en las tiradas de ataque, pruebas y salvaciones de Fuerza o Destreza, y no puedes lanzar conjuros.",
   "sheet.attacksPerAction": "Acción de Atacar: {n} ataques",
   "play.actionHeal": "Curar {amount}",
   "play.checkBoostHint": "Gasta un uso de {feature}. Si la prueba falla igualmente, devuélvelo.",

@@ -105,6 +105,7 @@ export function CoreStats() {
         </Stat>
       </div>
       {s.armorClass.stealthDisadvantage && <p class="note">{ui("sheet.stealthDisadvantage")}</p>}
+      {s.armorClass.untrained && <p class="note">{ui("armor.untrained")}</p>}
       <Bonuses />
       <div class="stat-row stat-row-2">
         <Stat label={ui("sheet.hitPoints")} forced={isForced(OVERRIDE.hitPoints)}>

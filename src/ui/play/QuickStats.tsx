@@ -94,7 +94,7 @@ export function QuickStats() {
           full={ui("sheet.initiative")}
           value={signed(s.initiative)}
           onRoll={() =>
-            rollCheck(ui("play.initiative"), s.initiative, undefined, undefined, "check")
+            rollCheck(ui("play.initiative"), s.initiative, undefined, undefined, "check", "dex")
           }
         />
         <Stat

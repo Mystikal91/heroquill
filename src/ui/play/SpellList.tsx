@@ -208,7 +208,13 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
       )}
 
       {hasActions && (
-        <div class="card-actions">
+        // Armor worn without training: the character cannot cast, so none of the buttons of the spell works.
+        <div
+          class="card-actions"
+          ref={(el) => {
+            if (el) el.inert = s.armorClass.untrained;
+          }}
+        >
           {level > 0 && (
             <button type="button" class="card-btn card-primary" onClick={cast}>
               {ui("play.cast")}
@@ -379,6 +385,7 @@ export function PlaySpells() {
 
   return (
     <Panel title={ui("play.spells")} className="spells-panel">
+      {s.armorClass.untrained && <p class="note">{ui("armor.untrained")}</p>}
       {concentrating && <ConcentrationBanner spell={concentrating} />}
       <SpellToolbar levels={levels} />
       {levels.map((level) => (

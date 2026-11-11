@@ -68,6 +68,20 @@ export function exhaustedHitPoints(ruleset: string, level: number, max: number):
 export type ExhaustionRoll = "check" | "attack" | "save";
 
 /**
+ * How a d20 roll is made in armor the character is not trained with: disadvantage on the D20 Tests (ability checks,
+ * attack rolls, saving throws) that use Strength or Dexterity; it cancels an advantage.
+ */
+export function armorMode(
+  untrained: boolean,
+  kind: ExhaustionRoll | undefined,
+  ability: string | undefined,
+  mode: D20Mode,
+): D20Mode {
+  if (!untrained || kind === undefined || (ability !== "str" && ability !== "dex")) return mode;
+  return mode === "advantage" ? "normal" : "disadvantage";
+}
+
+/**
  * How a d20 roll is made with the 2014 exhaustion: disadvantage on ability checks from the 1st level, on attack rolls
  * and saving throws from the 3rd. It cancels an advantage, as any disadvantage does.
  */

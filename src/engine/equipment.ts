@@ -69,6 +69,8 @@ export interface ArmorClassResult {
   value: number;
   overridden: boolean;
   stealthDisadvantage: boolean;
+  /** Armor or a shield is worn without proficiency (2024: training): disadvantage on Strength and Dexterity rolls, no spells. */
+  untrained: boolean;
   /** What the value is made of, for display. Sources are keys, not text. */
   parts: {
     source: "base" | "armor" | "dex" | "shield" | "feature";
@@ -221,6 +223,7 @@ function deriveArmorClass(ctx: Context, state: ArmorState): ArmorClassResult {
     value: overridden ? override : computed,
     overridden,
     stealthDisadvantage: armors.some((a) => a.armor.stealthDisadvantage),
+    untrained: armors.some((a) => !isProficient(held, a.armor.proficiency)),
     parts,
   };
 }

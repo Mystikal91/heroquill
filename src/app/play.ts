@@ -13,7 +13,12 @@ import {
   rollExpression,
 } from "../engine/dice";
 import { RAGE_ROUNDS, RAGE_ROUNDS_2024 } from "../engine/durations";
-import { type ExhaustionRoll, exhaustionLevel, exhaustionMode } from "../engine/exhaustion";
+import {
+  type ExhaustionRoll,
+  armorMode,
+  exhaustionLevel,
+  exhaustionMode,
+} from "../engine/exhaustion";
 import { healingOf, useOne } from "../engine/gear";
 import {
   applyDamage,
@@ -94,8 +99,10 @@ export interface LogEntry {
     bonus: number;
     options: D20Options | undefined;
     check?: boolean;
-    /** What kind of roll it is: the 2014 exhaustion gives disadvantage on some. */
+    /** What kind of roll it is: exhaustion (2014) and armor worn without training give disadvantage on some. */
     kind?: ExhaustionRoll;
+    /** The ability the roll uses, for the armor worn without training (Strength and Dexterity). */
+    ability?: string;
   };
   /** The dice of a roll of dice (damage, healing): with the 2024 Heroic Inspiration one of them can be rolled again. */
   dice?: DiceRoll;
@@ -145,12 +152,20 @@ export function rollCheck(
   check?: boolean,
   /** An ability check, an attack roll or a saving throw: the 2014 exhaustion gives disadvantage on them. */
   kind?: ExhaustionRoll,
+  /** The ability the roll uses: armor worn without training gives disadvantage on Strength and Dexterity. */
+  ability?: string,
 ): D20Roll {
-  const mode = exhaustionMode(
-    character.value.ruleset,
-    exhaustionLevel(character.value.play),
-    kind ?? (check ? "check" : undefined),
-    rollMode.value,
+  const type = kind ?? (check ? "check" : undefined);
+  const mode = armorMode(
+    sheet.value?.armorClass.untrained ?? false,
+    type,
+    ability,
+    exhaustionMode(
+      character.value.ruleset,
+      exhaustionLevel(character.value.play),
+      type,
+      rollMode.value,
+    ),
   );
   const roll = rollD20(bonus, mode, undefined, options);
   const faces =
@@ -165,7 +180,14 @@ export function rollCheck(
     total: roll.total,
     ...(roll.critical && { tone: "critical" as const }),
     ...(roll.fumble && { tone: "fumble" as const }),
-    redo: { label, bonus, options, ...(check && { check }), ...(kind && { kind }) },
+    redo: {
+      label,
+      bonus,
+      options,
+      ...(check && { check }),
+      ...(kind && { kind }),
+      ...(ability && { ability }),
+    },
   });
   return roll;
 }
@@ -174,8 +196,8 @@ export function rollCheck(
 export function rerollWithInspiration(entry: LogEntry) {
   if (!entry.redo || !character.value.play.inspiration) return;
   changePlay((p) => setInspiration(p, false));
-  const { label, bonus, options, check, kind } = entry.redo;
-  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check, kind);
+  const { label, bonus, options, check, kind, ability } = entry.redo;
+  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check, kind, ability);
 }
 
 /** Spends the die of a Bardic Inspiration: it is rolled and added to the total of the d20 roll. */

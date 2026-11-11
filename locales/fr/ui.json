@@ -1286,6 +1286,7 @@
   "sheet.noClass": "pas encore de classe",
   "sheet.armorClass": "Classe d'armure",
   "sheet.stealthDisadvantage": "Désavantage en Discrétion",
+  "armor.untrained": "Vous portez une armure que vous ne maîtrisez pas : désavantage aux jets d’attaque, aux tests et aux jets de sauvegarde de Force ou de Dextérité, et vous ne pouvez pas lancer de sorts.",
   "sheet.attacksPerAction": "Action Attaquer : {n} attaques",
   "play.actionHeal": "Soigner {amount}",
   "play.checkBoostHint": "Utilise une charge de {feature}. Si le test échoue quand même, rendez-la.",

@@ -62,6 +62,7 @@ function AttackCard({ a }: { a: AttackResult }) {
       { critMin: s.critRange },
       undefined,
       "attack",
+      a.ability,
     );
     criticalExtra.value = roll.critical;
     // A natural 20 arms the critical damage; any other attack clears it.
@@ -100,6 +101,7 @@ function AttackCard({ a }: { a: AttackResult }) {
         { critMin: s.critRange },
         undefined,
         "attack",
+        a.ability,
       );
       landed = landed || roll.critical;
       fumbled = fumbled && roll.fumble;

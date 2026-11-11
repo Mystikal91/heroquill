@@ -44,7 +44,7 @@ function RollButton({
       type="button"
       class="roll-btn"
       data-ability={ability}
-      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined, check, kind)}
+      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined, check, kind, ability)}
     >
       <span>{label}</span>
       <b>{signed(bonus)}</b>
@@ -139,6 +139,9 @@ function RollsPanel({ part }: { part: "attacks" | "checks" }) {
       )}
       {part === "attacks" && character.value.play.wildShape && (
         <p class="muted">{ui("play.wildShape.attacks")}</p>
+      )}
+      {part === "attacks" && sheet.value?.armorClass.untrained && (
+        <p class="note">{ui("armor.untrained")}</p>
       )}
       {part === "attacks" && <AttackCards />}
       {part === "attacks" && <ExtraCards />}

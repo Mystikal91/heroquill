@@ -1286,6 +1286,7 @@
   "sheet.noClass": "ancora nessuna classe",
   "sheet.armorClass": "Classe Armatura",
   "sheet.stealthDisadvantage": "Svantaggio a Furtività",
+  "armor.untrained": "Indossi un'armatura per cui non hai competenza: svantaggio ai tiri per colpire, alle prove e ai tiri salvezza di Forza o Destrezza, e non puoi lanciare incantesimi.",
   "sheet.attacksPerAction": "Azione Attacco: {n} attacchi",
   "play.actionHeal": "Cura {amount}",
   "play.checkBoostHint": "Consuma un uso di {feature}. Se la prova fallisce comunque, restituiscilo.",

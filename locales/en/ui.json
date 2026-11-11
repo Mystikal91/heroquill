@@ -1286,6 +1286,7 @@
   "sheet.noClass": "no class yet",
   "sheet.armorClass": "Armor class",
   "sheet.stealthDisadvantage": "Disadvantage on Stealth",
+  "armor.untrained": "You wear armor you are not trained with: disadvantage on attack rolls, checks and saving throws that use Strength or Dexterity, and you cannot cast spells.",
   "sheet.attacksPerAction": "Attack action: {n} attacks",
   "play.actionHeal": "Heal {amount}",
   "play.checkBoostHint": "Uses up one use of {feature}. If the check still fails, press Refund to get it back.",

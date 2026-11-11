@@ -1286,6 +1286,7 @@
   "sheet.noClass": "noch keine Klasse",
   "sheet.armorClass": "Rüstungsklasse",
   "sheet.stealthDisadvantage": "Nachteil auf Heimlichkeit",
+  "armor.untrained": "Du trägst eine Rüstung, in der du nicht geübt bist: Nachteil bei Angriffswürfen, Attributswürfen und Rettungswürfen mit Stärke oder Geschicklichkeit, und du kannst keine Zauber wirken.",
   "sheet.attacksPerAction": "Angriffsaktion: {n} Angriffe",
   "play.actionHeal": "Heilen {amount}",
   "play.checkBoostHint": "Verbraucht eine Anwendung von {feature}. Misslingt die Probe trotzdem, gib sie zurück.",
