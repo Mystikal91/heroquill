@@ -493,7 +493,18 @@
     {
       "id": "srd52:feature/cleric-divine-order",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "order",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/divine-order-protector",
+            "srd52:trait/divine-order-thaumaturge"
+          ]
+        }
+      ],
       "data": {
         "class": "srd52:class/cleric",
         "level": 1
@@ -629,7 +640,18 @@
     {
       "id": "srd52:feature/druid-primal-order",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "order",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/primal-order-warden",
+            "srd52:trait/primal-order-magician"
+          ]
+        }
+      ],
       "data": {
         "class": "srd52:class/druid",
         "level": 1

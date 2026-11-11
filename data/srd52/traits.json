@@ -1575,6 +1575,112 @@
       "data": {
         "class": "srd52:class/sorcerer"
       }
+    },
+    {
+      "id": "srd52:trait/divine-order-protector",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "heavy-armor"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/cleric"
+      }
+    },
+    {
+      "id": "srd52:trait/divine-order-thaumaturge",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "cantrip",
+          "choose": 1,
+          "grants": "spell",
+          "from": [],
+          "spellLevel": 0,
+          "spellClass": "srd52:class/cleric"
+        },
+        {
+          "type": "modifier",
+          "target": "skill",
+          "value": 0,
+          "plus": "wis",
+          "skill": "arcana",
+          "min": 1
+        },
+        {
+          "type": "modifier",
+          "target": "skill",
+          "value": 0,
+          "plus": "wis",
+          "skill": "religion",
+          "min": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/cleric"
+      }
+    },
+    {
+      "id": "srd52:trait/primal-order-warden",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "martial-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "medium-armor"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
+    },
+    {
+      "id": "srd52:trait/primal-order-magician",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "cantrip",
+          "choose": 1,
+          "grants": "spell",
+          "from": [],
+          "spellLevel": 0,
+          "spellClass": "srd52:class/druid"
+        },
+        {
+          "type": "modifier",
+          "target": "skill",
+          "value": 0,
+          "plus": "wis",
+          "skill": "arcana",
+          "min": 1
+        },
+        {
+          "type": "modifier",
+          "target": "skill",
+          "value": 0,
+          "plus": "wis",
+          "skill": "nature",
+          "min": 1
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
     }
   ]
 }

@@ -117,5 +117,13 @@
   "elemental-affinity-cold.name": "Cold",
   "elemental-affinity-fire.name": "Fire",
   "elemental-affinity-lightning.name": "Lightning",
-  "elemental-affinity-poison.name": "Poison"
+  "elemental-affinity-poison.name": "Poison",
+  "divine-order-protector.name": "Protector",
+  "divine-order-protector.desc": "Trained for battle, you gain proficiency with Martial weapons and training with Heavy armor.",
+  "divine-order-thaumaturge.name": "Thaumaturge",
+  "divine-order-thaumaturge.desc": "You know one extra cantrip from the Cleric spell list. In addition, your mystical connection to the divine gives you a bonus to your Intelligence (Arcana or Religion) checks. The bonus equals your Wisdom modifier (minimum of +1).",
+  "primal-order-warden.name": "Warden",
+  "primal-order-warden.desc": "Trained for battle, you gain proficiency with Martial weapons and training with Medium armor.",
+  "primal-order-magician.name": "Magician",
+  "primal-order-magician.desc": "You know one extra cantrip from the Druid spell list. In addition, your mystical connection to nature gives you a bonus to your Intelligence (Arcana or Nature) checks. The bonus equals your Wisdom modifier (minimum bonus of +1)."
 }
