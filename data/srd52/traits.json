@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @e6744d8 (2024)",
+    "version": "5e-srd-api fork integration @c49411f (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -117,6 +117,306 @@
         }
       ],
       "data": {}
+    },
+    {
+      "id": "srd52:trait/land-arid",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/blur",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/burning-hands",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/fire-bolt",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/fireball",
+          "minLevel": 5
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/blight",
+          "minLevel": 7
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/wall-of-stone",
+          "minLevel": 9
+        },
+        {
+          "type": "when",
+          "requires": "[level:druid:10]",
+          "effects": [
+            {
+              "type": "defense",
+              "kind": "resistance",
+              "damage": "fire"
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
+    },
+    {
+      "id": "srd52:trait/land-polar",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/fog-cloud",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/hold-person",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/ray-of-frost",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/sleet-storm",
+          "minLevel": 5
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/ice-storm",
+          "minLevel": 7
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/cone-of-cold",
+          "minLevel": 9
+        },
+        {
+          "type": "when",
+          "requires": "[level:druid:10]",
+          "effects": [
+            {
+              "type": "defense",
+              "kind": "resistance",
+              "damage": "cold"
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
+    },
+    {
+      "id": "srd52:trait/land-temperate",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/misty-step",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/shocking-grasp",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/sleep",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/lightning-bolt",
+          "minLevel": 5
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/tree-stride",
+          "minLevel": 9
+        },
+        {
+          "type": "when",
+          "requires": "[level:druid:10]",
+          "effects": [
+            {
+              "type": "defense",
+              "kind": "resistance",
+              "damage": "lightning"
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
+    },
+    {
+      "id": "srd52:trait/land-tropical",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/acid-splash",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/ray-of-sickness",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/web",
+          "minLevel": 3
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/stinking-cloud",
+          "minLevel": 5
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/polymorph",
+          "minLevel": 7
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/insect-plague",
+          "minLevel": 9
+        },
+        {
+          "type": "when",
+          "requires": "[level:druid:10]",
+          "effects": [
+            {
+              "type": "defense",
+              "kind": "resistance",
+              "damage": "poison"
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid"
+      }
+    },
+    {
+      "id": "srd52:trait/elemental-affinity-acid",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        },
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "damageType": "acid",
+          "once": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer"
+      }
+    },
+    {
+      "id": "srd52:trait/elemental-affinity-cold",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        },
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "damageType": "cold",
+          "once": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer"
+      }
+    },
+    {
+      "id": "srd52:trait/elemental-affinity-fire",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        },
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "damageType": "fire",
+          "once": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer"
+      }
+    },
+    {
+      "id": "srd52:trait/elemental-affinity-lightning",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        },
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "damageType": "lightning",
+          "once": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer"
+      }
+    },
+    {
+      "id": "srd52:trait/elemental-affinity-poison",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        },
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "damageType": "poison",
+          "once": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer"
+      }
     }
   ]
 }

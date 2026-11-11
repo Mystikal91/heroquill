@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @e6744d8 (2024)",
+    "version": "5e-srd-api fork integration @c49411f (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -350,6 +350,1772 @@
                 "items": [
                   {
                     "gold": 75
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/bard",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "dex"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "choice",
+          "id": "bard-proficiency-1",
+          "choose": 3,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:animal-handling",
+            "skill:arcana",
+            "skill:athletics",
+            "skill:deception",
+            "skill:history",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:investigation",
+            "skill:medicine",
+            "skill:nature",
+            "skill:perception",
+            "skill:performance",
+            "skill:persuasion",
+            "skill:religion",
+            "skill:sleight-of-hand",
+            "skill:stealth",
+            "skill:survival"
+          ]
+        },
+        {
+          "type": "choice",
+          "id": "bard-proficiency-2",
+          "choose": 3,
+          "grants": "proficiency",
+          "from": [
+            "tool:bagpipes",
+            "tool:drum",
+            "tool:dulcimer",
+            "tool:flute",
+            "tool:lute",
+            "tool:lyre",
+            "tool:horn",
+            "tool:pan-flute",
+            "tool:shawm",
+            "tool:viol"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "cha",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor"
+          ]
+        },
+        "spellcasting": {
+          "ability": "cha",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/bard-bardic-inspiration",
+              "srd52:feature/bard-spellcasting"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 4,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 6
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/bard-expertise",
+              "srd52:feature/bard-jack-of-all-trades"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 6
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/bard-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 6
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/bard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 6
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/bard-font-of-inspiration"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 8
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/bard-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 8
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/bard-countercharm"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 8
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/bard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 8
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/bard-expertise"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 8
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/bard-magical-secrets"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 10
+            }
+          },
+          {
+            "level": 11,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 10
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/bard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 10
+            }
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 10
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/bard-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 10
+            }
+          },
+          {
+            "level": 15,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/bard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          },
+          {
+            "level": 17,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 19,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/bard-superior-inspiration"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 20,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/bard-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 21,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/bard-words-of-creation"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 22,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              2,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "bardicInspirationDie": 12
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/entertainers-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 19
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 90
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/cleric",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "medium-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "choice",
+          "id": "cleric-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:history",
+            "skill:insight",
+            "skill:medicine",
+            "skill:persuasion",
+            "skill:religion"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "wis",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor",
+            "armor:medium-armor",
+            "armor:shields"
+          ]
+        },
+        "spellcasting": {
+          "ability": "wis",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/cleric-divine-order",
+              "srd52:feature/cleric-spellcasting"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 4,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 0
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/cleric-channel-divinity"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/cleric-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/cleric-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/cleric-sear-undead"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 2
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/cleric-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/cleric-blessed-strikes"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/cleric-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 9,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/cleric-divine-intervention"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 11,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/cleric-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/cleric-improved-blessed-strikes"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 15,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/cleric-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/cleric-subclass"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 19,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 3
+            }
+          },
+          {
+            "level": 18,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 20,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 4
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/cleric-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 21,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 4
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/cleric-greater-divine-intervention"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 22,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              2,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "channelDivinityCharges": 4
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/chain-shirt",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shield",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/mace",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/holy-symbols",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/priests-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 7
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 110
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/druid",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "shields"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "tool",
+          "target": "herbalism-kit"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "int"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "choice",
+          "id": "druid-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:arcana",
+            "skill:animal-handling",
+            "skill:insight",
+            "skill:medicine",
+            "skill:nature",
+            "skill:perception",
+            "skill:religion",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "wis",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor",
+            "armor:shields"
+          ]
+        },
+        "spellcasting": {
+          "ability": "wis",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/druid-druidic",
+              "srd52:feature/druid-primal-order",
+              "srd52:feature/druid-spellcasting"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 4,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 0
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/druid-wild-shape",
+              "srd52:feature/druid-wild-companion"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 2,
+              "wildShapeMaxCr": 0.25,
+              "wildShapeKnownForms": 4
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/druid-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 2,
+              "wildShapeMaxCr": 0.25,
+              "wildShapeKnownForms": 4
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/druid-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 2,
+              "wildShapeMaxCr": 0.5,
+              "wildShapeKnownForms": 6
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/druid-wild-resurgence"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 2,
+              "wildShapeMaxCr": 0.5,
+              "wildShapeKnownForms": 6
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/druid-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 0.5,
+              "wildShapeKnownForms": 6
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/druid-elemental-fury"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 0.5,
+              "wildShapeKnownForms": 6
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/druid-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 9,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/druid-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 11,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/druid-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/druid-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/druid-improved-elemental-fury"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/druid-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "wildShapeUses": 3,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 17,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 19,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "wildShapeUses": 4,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/druid-beast-spells"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 20,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "wildShapeUses": 4,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/druid-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 21,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "wildShapeUses": 4,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/druid-archdruid"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 22,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              2,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "wildShapeUses": 4,
+              "wildShapeMaxCr": 1,
+              "wildShapeKnownForms": 8
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/shield",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/sickle",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/quarterstaff",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/explorers-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/herbalism-kit",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 9
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
                   }
                 ]
               }
@@ -2689,6 +4455,1632 @@
                 "items": [
                   {
                     "gold": 100
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/sorcerer",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "con"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "choice",
+          "id": "sorcerer-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:arcana",
+            "skill:deception",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:persuasion",
+            "skill:religion"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 6,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "cha",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": []
+        },
+        "spellcasting": {
+          "ability": "cha",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/sorcerer-innate-sorcery",
+              "srd52:feature/sorcerer-spellcasting"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 4,
+            "spellsKnown": 2,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 0
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/sorcerer-font-of-magic",
+              "srd52:feature/sorcerer-metamagic"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 4,
+            "spellsKnown": 4,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 2
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/sorcerer-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 4,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 3
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/sorcerer-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 5,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 4
+            }
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/sorcerer-sorcerous-restoration"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 5,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 5
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/sorcerer-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 5,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 6
+            }
+          },
+          {
+            "level": 7,
+            "features": [
+              "srd52:feature/sorcerer-sorcery-incarnate"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 5,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 7
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/sorcerer-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 8
+            }
+          },
+          {
+            "level": 9,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 9
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/sorcerer-metamagic"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 6,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 10
+            }
+          },
+          {
+            "level": 11,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 6,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 11
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/sorcerer-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 6,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 12
+            }
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 6,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 13
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/sorcerer-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 6,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 14
+            }
+          },
+          {
+            "level": 15,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 6,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 15
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/sorcerer-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 6,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {
+              "sorceryPoints": 16
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/sorcerer-metamagic"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 6,
+            "spellsKnown": 19,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "sorceryPoints": 17
+            }
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/sorcerer-subclass"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 6,
+            "spellsKnown": 20,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "sorceryPoints": 18
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/sorcerer-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 6,
+            "spellsKnown": 21,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "sorceryPoints": 19
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/sorcerer-arcane-apotheosis"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 6,
+            "spellsKnown": 22,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              2,
+              1,
+              1
+            ],
+            "classSpecific": {
+              "sorceryPoints": 20
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/spear",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/crystal",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dungeoneer-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 28
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/warlock",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "armor",
+          "target": "light-armor"
+        },
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "cha"
+        },
+        {
+          "type": "choice",
+          "id": "warlock-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:arcana",
+            "skill:deception",
+            "skill:history",
+            "skill:intimidation",
+            "skill:investigation",
+            "skill:nature",
+            "skill:religion"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 8,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "cha",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": [
+            "armor:light-armor"
+          ]
+        },
+        "spellcasting": {
+          "ability": "cha",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "prepared",
+            "levelDivisor": 1,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/warlock-eldritch-invocations",
+              "srd52:feature/warlock-pact-magic"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 2,
+            "spellSlots": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 1
+            }
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/warlock-magical-cunning"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 3,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 3
+            }
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/warlock-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 2,
+            "spellsKnown": 4,
+            "spellSlots": [
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 3
+            }
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/warlock-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 5,
+            "spellSlots": [
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 3
+            }
+          },
+          {
+            "level": 5,
+            "features": [],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 6,
+            "spellSlots": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 5
+            }
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/warlock-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 7,
+            "spellSlots": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 5
+            }
+          },
+          {
+            "level": 7,
+            "features": [],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 3,
+            "spellsKnown": 8,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 6
+            }
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/warlock-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 9,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 6
+            }
+          },
+          {
+            "level": 9,
+            "features": [
+              "srd52:feature/warlock-contact-patron"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 3,
+            "spellsKnown": 10,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 7
+            }
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/warlock-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 10,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 7
+            }
+          },
+          {
+            "level": 11,
+            "features": [
+              "srd52:feature/warlock-mystic-arcanum"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 11,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 7
+            }
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/warlock-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 11,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 8
+            }
+          },
+          {
+            "level": 13,
+            "features": [
+              "srd52:feature/warlock-mystic-arcanum"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 8
+            }
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/warlock-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 8
+            }
+          },
+          {
+            "level": 15,
+            "features": [
+              "srd52:feature/warlock-mystic-arcanum"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 4,
+            "spellsKnown": 13,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 9
+            }
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/warlock-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 13,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 9
+            }
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/warlock-mystic-arcanum"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 9
+            }
+          },
+          {
+            "level": 18,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 10
+            }
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/warlock-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 10
+            }
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/warlock-eldritch-master"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 4,
+            "spellsKnown": 15,
+            "spellSlots": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {
+              "eldritchInvocations": 10
+            }
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/leather-armor",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/sickle",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/orb",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/book",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/scholars-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 15
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 100
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:class/wizard",
+      "kind": "class",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "weapon",
+          "target": "simple-weapons"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "int"
+        },
+        {
+          "type": "proficiency",
+          "category": "save",
+          "target": "wis"
+        },
+        {
+          "type": "choice",
+          "id": "wizard-proficiency-1",
+          "choose": 2,
+          "grants": "proficiency",
+          "from": [
+            "skill:arcana",
+            "skill:history",
+            "skill:insight",
+            "skill:investigation",
+            "skill:medicine",
+            "skill:nature",
+            "skill:religion"
+          ]
+        }
+      ],
+      "data": {
+        "hitDie": 6,
+        "primaryAbility": [],
+        "multiclassing": {
+          "prerequisites": [
+            {
+              "ability": "int",
+              "minimum": 13
+            }
+          ],
+          "proficiencies": []
+        },
+        "spellcasting": {
+          "ability": "int",
+          "startsAtLevel": 1,
+          "preparation": {
+            "type": "spellbook",
+            "initial": 6,
+            "perLevel": 2,
+            "fromTable": true
+          }
+        },
+        "levels": [
+          {
+            "level": 1,
+            "features": [
+              "srd52:feature/wizard-arcane-recovery",
+              "srd52:feature/wizard-ritual-adept",
+              "srd52:feature/wizard-spellcasting"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 4,
+            "spellSlots": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 2,
+            "features": [
+              "srd52:feature/wizard-scholar"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 5,
+            "spellSlots": [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/wizard-subclass"
+            ],
+            "abilityScoreImprovements": 0,
+            "cantripsKnown": 3,
+            "spellsKnown": 6,
+            "spellSlots": [
+              4,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 4,
+            "features": [
+              "srd52:feature/wizard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 7,
+            "spellSlots": [
+              4,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 5,
+            "features": [
+              "srd52:feature/wizard-memorize-spell"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 9,
+            "spellSlots": [
+              4,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/wizard-subclass"
+            ],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 10,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 7,
+            "features": [],
+            "abilityScoreImprovements": 1,
+            "cantripsKnown": 4,
+            "spellsKnown": 11,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 8,
+            "features": [
+              "srd52:feature/wizard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 12,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 9,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 4,
+            "spellsKnown": 14,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/wizard-subclass"
+            ],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 15,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 11,
+            "features": [],
+            "abilityScoreImprovements": 2,
+            "cantripsKnown": 5,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 12,
+            "features": [
+              "srd52:feature/wizard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 16,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 13,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 17,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/wizard-subclass"
+            ],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 18,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              0,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 15,
+            "features": [],
+            "abilityScoreImprovements": 3,
+            "cantripsKnown": 5,
+            "spellsKnown": 19,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 16,
+            "features": [
+              "srd52:feature/wizard-ability-score-improvement"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 21,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              0
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 17,
+            "features": [],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 22,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/wizard-spell-mastery"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 23,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 19,
+            "features": [
+              "srd52:feature/wizard-epic-boon"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 24,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              1,
+              1,
+              1
+            ],
+            "classSpecific": {}
+          },
+          {
+            "level": 20,
+            "features": [
+              "srd52:feature/wizard-signature-spells"
+            ],
+            "abilityScoreImprovements": 4,
+            "cantripsKnown": 5,
+            "spellsKnown": 25,
+            "spellSlots": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              2,
+              2,
+              1,
+              1
+            ],
+            "classSpecific": {}
+          }
+        ],
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/quarterstaff",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/robe",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/spellbook",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/scholars-pack",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 5
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 55
                   }
                 ]
               }

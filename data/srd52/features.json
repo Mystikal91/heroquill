@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @e6744d8 (2024)",
+    "version": "5e-srd-api fork integration @c49411f (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -288,6 +288,467 @@
       ],
       "data": {
         "class": "srd52:class/barbarian",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/bard-bardic-inspiration",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 1,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/bard-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/bard-expertise",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "expertise",
+          "choose": 2,
+          "grants": "expertise",
+          "from": [
+            "acrobatics",
+            "animal-handling",
+            "arcana",
+            "athletics",
+            "deception",
+            "history",
+            "insight",
+            "intimidation",
+            "investigation",
+            "medicine",
+            "nature",
+            "perception",
+            "performance",
+            "persuasion",
+            "religion",
+            "sleight-of-hand",
+            "stealth",
+            "survival"
+          ]
+        },
+        {
+          "type": "when",
+          "requires": "[level:bard:9]",
+          "effects": [
+            {
+              "type": "choice",
+              "id": "expertise-2",
+              "choose": 2,
+              "grants": "expertise",
+              "from": [
+                "acrobatics",
+                "animal-handling",
+                "arcana",
+                "athletics",
+                "deception",
+                "history",
+                "insight",
+                "intimidation",
+                "investigation",
+                "medicine",
+                "nature",
+                "perception",
+                "performance",
+                "persuasion",
+                "religion",
+                "sleight-of-hand",
+                "stealth",
+                "survival"
+              ]
+            }
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/bard-jack-of-all-trades",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "halfProficiency",
+          "round": "down"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/bard-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/bard-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/bard-font-of-inspiration",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/bard-countercharm",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 7,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/bard-magical-secrets",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/bard-superior-inspiration",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/bard-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/bard-words-of-creation",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/power-word-heal"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/power-word-kill"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/bard",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-divine-order",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-channel-divinity",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-sear-undead",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-blessed-strikes",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-divine-intervention",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 10,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-improved-blessed-strikes",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/cleric-greater-divine-intervention",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/cleric",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/druid-druidic",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/speak-with-animals"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/druid-primal-order",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/druid-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/druid-wild-shape",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 2,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/druid-wild-companion",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 2,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/druid-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/druid-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/druid-wild-resurgence",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/druid-elemental-fury",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/druid-improved-elemental-fury",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 15
+      }
+    },
+    {
+      "id": "srd52:feature/druid-beast-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/druid-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/druid",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/druid-archdruid",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/druid",
         "level": 20
       }
     },
@@ -1865,6 +2326,365 @@
       }
     },
     {
+      "id": "srd52:feature/sorcerer-innate-sorcery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 2,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 1,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-font-of-magic",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-metamagic",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-sorcerous-restoration",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-sorcery-incarnate",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 7
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/sorcerer-arcane-apotheosis",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-eldritch-invocations",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-pact-magic",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-magical-cunning",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-contact-patron",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/contact-other-plane"
+        },
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 9
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-mystic-arcanum",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 11
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/warlock-eldritch-master",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-arcane-recovery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-ritual-adept",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-spellcasting",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-scholar",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "expertise",
+          "choose": 1,
+          "grants": "expertise",
+          "from": [
+            "arcana",
+            "history",
+            "investigation",
+            "medicine",
+            "nature",
+            "religion"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-subclass",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-ability-score-improvement",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 4
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-memorize-spell",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 5
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-spell-mastery",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-epic-boon",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "epic-boon",
+          "choose": 1,
+          "grants": "feat",
+          "from": [
+            "srd52:feat/boon-of-combat-prowess",
+            "srd52:feat/boon-of-dimensional-travel",
+            "srd52:feat/boon-of-fate",
+            "srd52:feat/boon-of-irresistible-offense",
+            "srd52:feat/boon-of-spell-recall",
+            "srd52:feat/boon-of-the-night-spirit",
+            "srd52:feat/boon-of-truesight"
+          ]
+        }
+      ],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 19
+      }
+    },
+    {
+      "id": "srd52:feature/wizard-signature-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/wizard",
+        "level": 20
+      }
+    },
+    {
       "id": "srd52:feature/path-of-the-berserker-frenzy",
       "kind": "feature",
       "effects": [],
@@ -1906,6 +2726,227 @@
         "subclass": "srd52:subclass/path-of-the-berserker",
         "level": 14,
         "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/college-of-lore-bonus-proficiencies",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "skills",
+          "choose": 3,
+          "grants": "proficiency",
+          "from": [
+            "skill:acrobatics",
+            "skill:animal-handling",
+            "skill:arcana",
+            "skill:athletics",
+            "skill:deception",
+            "skill:history",
+            "skill:insight",
+            "skill:intimidation",
+            "skill:investigation",
+            "skill:medicine",
+            "skill:nature",
+            "skill:perception",
+            "skill:performance",
+            "skill:persuasion",
+            "skill:religion",
+            "skill:sleight-of-hand",
+            "skill:stealth",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/college-of-lore",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/college-of-lore-cutting-words",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "bardicInspiration"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/college-of-lore",
+        "level": 3,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/college-of-lore-magical-discoveries",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/college-of-lore",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/college-of-lore-peerless-skill",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "bardicInspiration"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/college-of-lore",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/life-domain-disciple-of-life",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spellHealing",
+          "plusSlotLevel": 2
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/life-domain",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/life-domain-life-domain-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/life-domain",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/life-domain-preserve-life",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "channelDivinity"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/life-domain",
+        "level": 3,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/life-domain-blessed-healer",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spellHealing",
+          "selfPlusSlotLevel": 2
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/life-domain",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/life-domain-supreme-healing",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spellHealing",
+          "maxDice": true
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/life-domain",
+        "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/circle-of-the-land-circle-of-the-land-spells",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "land",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/land-arid",
+            "srd52:trait/land-polar",
+            "srd52:trait/land-temperate",
+            "srd52:trait/land-tropical"
+          ]
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/circle-of-the-land",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/circle-of-the-land-lands-aid",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "wildShape"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/circle-of-the-land",
+        "level": 3,
+        "activation": "action"
+      }
+    },
+    {
+      "id": "srd52:feature/circle-of-the-land-natural-recovery",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/circle-of-the-land",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/circle-of-the-land-natures-ward",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "conditionImmunity",
+          "condition": "poisoned"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/circle-of-the-land",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/circle-of-the-land-natures-sanctuary",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spends",
+          "pool": "wildShape"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/circle-of-the-land",
+        "level": 14,
+        "activation": "action"
       }
     },
     {
@@ -2199,6 +3240,209 @@
       "data": {
         "subclass": "srd52:subclass/thief",
         "level": 17
+      }
+    },
+    {
+      "id": "srd52:feature/draconic-sorcery-draconic-resilience",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "unarmoredDefense",
+          "base": 10,
+          "add": [
+            "cha"
+          ],
+          "shield": false
+        },
+        {
+          "type": "modifier",
+          "target": "hpPerLevel",
+          "value": 1
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/draconic-sorcery",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/draconic-sorcery-draconic-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/draconic-sorcery",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/draconic-sorcery-elemental-affinity",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "damage-type",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/elemental-affinity-acid",
+            "srd52:trait/elemental-affinity-cold",
+            "srd52:trait/elemental-affinity-fire",
+            "srd52:trait/elemental-affinity-lightning",
+            "srd52:trait/elemental-affinity-poison"
+          ]
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/draconic-sorcery",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/draconic-sorcery-dragon-wings",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/draconic-sorcery",
+        "level": 14,
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:feature/draconic-sorcery-dragon-companion",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/summon-dragon"
+        },
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/draconic-sorcery",
+        "level": 18
+      }
+    },
+    {
+      "id": "srd52:feature/fiend-patron-dark-ones-blessing",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/fiend-patron",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/fiend-patron-fiend-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/fiend-patron",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/fiend-patron-dark-ones-own-luck",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "mod": "cha"
+          },
+          "recharge": "long",
+          "min": 1
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/fiend-patron",
+        "level": 6,
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:feature/fiend-patron-fiendish-resilience",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/fiend-patron",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/fiend-patron-hurl-through-hell",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/fiend-patron",
+        "level": 14
+      }
+    },
+    {
+      "id": "srd52:feature/evoker-evocation-savant",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/evoker",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/evoker-potent-cantrip",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/evoker",
+        "level": 3
+      }
+    },
+    {
+      "id": "srd52:feature/evoker-sculpt-spells",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/evoker",
+        "level": 6
+      }
+    },
+    {
+      "id": "srd52:feature/evoker-empowered-evocation",
+      "kind": "feature",
+      "effects": [
+        {
+          "type": "spellDamage",
+          "plus": "int",
+          "school": "evocation",
+          "once": true
+        }
+      ],
+      "data": {
+        "subclass": "srd52:subclass/evoker",
+        "level": 10
+      }
+    },
+    {
+      "id": "srd52:feature/evoker-overchannel",
+      "kind": "feature",
+      "effects": [],
+      "data": {
+        "subclass": "srd52:subclass/evoker",
+        "level": 14
       }
     }
   ]

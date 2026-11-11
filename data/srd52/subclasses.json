@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @e6744d8 (2024)",
+    "version": "5e-srd-api fork integration @c49411f (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -36,6 +36,147 @@
             "level": 14,
             "features": [
               "srd52:feature/path-of-the-berserker-intimidating-presence"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/college-of-lore",
+      "kind": "subclass",
+      "parent": "srd52:class/bard",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/college-of-lore-bonus-proficiencies",
+              "srd52:feature/college-of-lore-cutting-words"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/college-of-lore-magical-discoveries"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/college-of-lore-peerless-skill"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/life-domain",
+      "kind": "subclass",
+      "parent": "srd52:class/cleric",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/life-domain-disciple-of-life",
+              "srd52:feature/life-domain-life-domain-spells",
+              "srd52:feature/life-domain-preserve-life"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/life-domain-blessed-healer"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "srd52:feature/life-domain-supreme-healing"
+            ]
+          }
+        ],
+        "spells": [
+          {
+            "spell": "srd52:spell/aid",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/bless",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/cure-wounds",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/lesser-restoration",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/mass-healing-word",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/revivify",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/aura-of-life",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/death-ward",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/greater-restoration",
+            "classLevel": 9
+          },
+          {
+            "spell": "srd52:spell/mass-cure-wounds",
+            "classLevel": 9
+          }
+        ],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/circle-of-the-land",
+      "kind": "subclass",
+      "parent": "srd52:class/druid",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/circle-of-the-land-circle-of-the-land-spells",
+              "srd52:feature/circle-of-the-land-lands-aid"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/circle-of-the-land-natural-recovery"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/circle-of-the-land-natures-ward"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/circle-of-the-land-natures-sanctuary"
             ]
           }
         ],
@@ -267,6 +408,199 @@
             "level": 17,
             "features": [
               "srd52:feature/thief-thiefs-reflexes"
+            ]
+          }
+        ],
+        "spells": [],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/draconic-sorcery",
+      "kind": "subclass",
+      "parent": "srd52:class/sorcerer",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/draconic-sorcery-draconic-resilience",
+              "srd52:feature/draconic-sorcery-draconic-spells"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/draconic-sorcery-elemental-affinity"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/draconic-sorcery-dragon-wings"
+            ]
+          },
+          {
+            "level": 18,
+            "features": [
+              "srd52:feature/draconic-sorcery-dragon-companion"
+            ]
+          }
+        ],
+        "spells": [
+          {
+            "spell": "srd52:spell/alter-self",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/chromatic-orb",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/command",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/dragons-breath",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/fear",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/fly",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/arcane-eye",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/charm-monster",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/legend-lore",
+            "classLevel": 9
+          },
+          {
+            "spell": "srd52:spell/summon-dragon",
+            "classLevel": 9
+          }
+        ],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/fiend-patron",
+      "kind": "subclass",
+      "parent": "srd52:class/warlock",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/fiend-patron-dark-ones-blessing",
+              "srd52:feature/fiend-patron-fiend-spells"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/fiend-patron-dark-ones-own-luck"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/fiend-patron-fiendish-resilience"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/fiend-patron-hurl-through-hell"
+            ]
+          }
+        ],
+        "spells": [
+          {
+            "spell": "srd52:spell/burning-hands",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/command",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/scorching-ray",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/suggestion",
+            "classLevel": 3
+          },
+          {
+            "spell": "srd52:spell/fireball",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/stinking-cloud",
+            "classLevel": 5
+          },
+          {
+            "spell": "srd52:spell/fire-shield",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/wall-of-fire",
+            "classLevel": 7
+          },
+          {
+            "spell": "srd52:spell/geas",
+            "classLevel": 9
+          },
+          {
+            "spell": "srd52:spell/insect-plague",
+            "classLevel": 9
+          }
+        ],
+        "expanded": []
+      }
+    },
+    {
+      "id": "srd52:subclass/evoker",
+      "kind": "subclass",
+      "parent": "srd52:class/wizard",
+      "effects": [],
+      "data": {
+        "levels": [
+          {
+            "level": 3,
+            "features": [
+              "srd52:feature/evoker-evocation-savant",
+              "srd52:feature/evoker-potent-cantrip"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "srd52:feature/evoker-sculpt-spells"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "srd52:feature/evoker-empowered-evocation"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "srd52:feature/evoker-overchannel"
             ]
           }
         ],
