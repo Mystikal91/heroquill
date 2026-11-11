@@ -16,6 +16,7 @@ Usage: python book52.py it .cache/srd52/pdf/IT_SRD_CC_v5.2.1.pdf   (writes the .
 from __future__ import annotations
 
 import collections
+import functools
 import re
 import sys
 from pathlib import Path
@@ -184,6 +185,7 @@ def text_of(lines: list[dict], bold: bool = True) -> str:
     return out.strip()
 
 
+@functools.lru_cache(maxsize=None)
 def _plain(text: str) -> str:
     import unicodedata
 
@@ -227,6 +229,7 @@ def term_misses(english: str, translated: str, lang: str) -> int:
     return sum(1 for a, b in terms(lang) if a in e and b not in t)
 
 
+@functools.lru_cache(maxsize=None)
 def numbers(text: str, english: bool = False):
     """The numbers of a text as a Counter, so English and translated texts compare.
 
