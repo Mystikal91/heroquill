@@ -8,6 +8,207 @@
   },
   "entries": [
     {
+      "id": "srd52:species/dragonborn",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-60"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/draconic-flight"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/draconic-ancestry"
+        },
+        {
+          "type": "choice",
+          "id": "draconic-ancestry",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/draconic-ancestor-black",
+            "srd52:trait/draconic-ancestor-blue",
+            "srd52:trait/draconic-ancestor-brass",
+            "srd52:trait/draconic-ancestor-bronze",
+            "srd52:trait/draconic-ancestor-copper",
+            "srd52:trait/draconic-ancestor-gold",
+            "srd52:trait/draconic-ancestor-green",
+            "srd52:trait/draconic-ancestor-red",
+            "srd52:trait/draconic-ancestor-silver",
+            "srd52:trait/draconic-ancestor-white"
+          ]
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "medium"
+      }
+    },
+    {
+      "id": "srd52:species/dwarf",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-120"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/dwarven-resilience"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/dwarven-toughness"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/stonecunning"
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "medium"
+      }
+    },
+    {
+      "id": "srd52:species/elf",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-60"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/elven-lineage"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/fey-ancestry"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/keen-senses"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/trance"
+        },
+        {
+          "type": "choice",
+          "id": "elven-lineage",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/elven-lineage-drow",
+            "srd52:trait/elven-lineage-high-elf",
+            "srd52:trait/elven-lineage-wood-elf"
+          ]
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "medium"
+      }
+    },
+    {
+      "id": "srd52:species/gnome",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-60"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/gnomish-cunning"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/gnomish-lineage"
+        },
+        {
+          "type": "choice",
+          "id": "gnomish-lineage",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/gnomish-lineage-forest-gnome",
+            "srd52:trait/gnomish-lineage-rock-gnome"
+          ]
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "small"
+      }
+    },
+    {
+      "id": "srd52:species/goliath",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/giant-ancestry"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/large-form"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/powerful-build"
+        },
+        {
+          "type": "choice",
+          "id": "giant-ancestry",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/giant-ancestry-clouds-jaunt",
+            "srd52:trait/giant-ancestry-fires-burn",
+            "srd52:trait/giant-ancestry-frosts-chill",
+            "srd52:trait/giant-ancestry-hills-tumble",
+            "srd52:trait/giant-ancestry-stones-endurance",
+            "srd52:trait/giant-ancestry-storms-thunder"
+          ]
+        }
+      ],
+      "data": {
+        "speed": 35,
+        "size": "medium"
+      }
+    },
+    {
+      "id": "srd52:species/halfling",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/brave"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/halfling-nimbleness"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/luck"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/naturally-stealthy"
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "small"
+      }
+    },
+    {
       "id": "srd52:species/human",
       "kind": "species",
       "effects": [
@@ -22,6 +223,70 @@
         {
           "type": "trait",
           "id": "srd52:trait/versatile"
+        },
+        {
+          "type": "choice",
+          "id": "size",
+          "choose": 1,
+          "grants": "size",
+          "from": [
+            "small",
+            "medium"
+          ]
+        }
+      ],
+      "data": {
+        "speed": 30
+      }
+    },
+    {
+      "id": "srd52:species/orc",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/adrenaline-rush"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-120"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/relentless-endurance"
+        }
+      ],
+      "data": {
+        "speed": 30,
+        "size": "medium"
+      }
+    },
+    {
+      "id": "srd52:species/tiefling",
+      "kind": "species",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:trait/darkvision-60"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/fiendish-legacy"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:trait/otherworldly-presence"
+        },
+        {
+          "type": "choice",
+          "id": "fiendish-legacy",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/fiendish-legacy-abyssal",
+            "srd52:trait/fiendish-legacy-chthonic",
+            "srd52:trait/fiendish-legacy-infernal"
+          ]
         },
         {
           "type": "choice",

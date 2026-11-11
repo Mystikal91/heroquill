@@ -8,6 +8,876 @@
   },
   "entries": [
     {
+      "id": "srd52:trait/darkvision-60",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "sense",
+          "sense": "darkvision",
+          "range": 60
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/draconic-flight",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long",
+          "minLevel": 5
+        }
+      ],
+      "data": {
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestry",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-black",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "acid"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-blue",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "lightning"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-brass",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "fire"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-bronze",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "lightning"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-copper",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "acid"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-gold",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "fire"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-green",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "poison"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-red",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "fire"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-silver",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "cold"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/draconic-ancestor-white",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "action",
+        "traitSpecific": {
+          "breathWeapon": {
+            "areaOfEffect": {
+              "type": "cone",
+              "size": 15
+            },
+            "dc": {
+              "dcType": {
+                "index": "dex"
+              },
+              "successType": "half"
+            },
+            "damage": [
+              {
+                "damageType": {
+                  "index": "cold"
+                },
+                "damageAtCharacterLevel": {
+                  "1": "1d10",
+                  "5": "2d10",
+                  "11": "3d10",
+                  "17": "4d10"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "srd52:trait/darkvision-120",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "sense",
+          "sense": "darkvision",
+          "range": 120
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/dwarven-resilience",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/dwarven-toughness",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "hpPerLevel",
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/stonecunning",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:trait/elven-lineage",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/fey-ancestry",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/keen-senses",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "keen-senses-skill",
+          "choose": 1,
+          "grants": "proficiency",
+          "from": [
+            "skill:insight",
+            "skill:perception",
+            "skill:survival"
+          ]
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/trance",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/elven-lineage-drow",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "sense",
+          "sense": "darkvision",
+          "range": 120
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/dancing-lights"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/faerie-fire",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/darkness",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/elven-lineage-high-elf",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/prestidigitation"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/detect-magic",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/misty-step",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/elven-lineage-wood-elf",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 5
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/druidcraft"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/longstrider",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/pass-without-trace",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/gnomish-cunning",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/gnomish-lineage",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/gnomish-lineage-forest-gnome",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/minor-illusion"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/speak-with-animals"
+        },
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/gnomish-lineage-rock-gnome",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/mending"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/prestidigitation"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/giant-ancestry",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/large-form",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long",
+          "minLevel": 5
+        }
+      ],
+      "data": {
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:trait/powerful-build",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-clouds-jaunt",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-fires-burn",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-frosts-chill",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-hills-tumble",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-stones-endurance",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:trait/giant-ancestry-storms-thunder",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "long"
+        }
+      ],
+      "data": {
+        "activation": "reaction"
+      }
+    },
+    {
+      "id": "srd52:trait/brave",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/halfling-nimbleness",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/luck",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/naturally-stealthy",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
       "id": "srd52:trait/resourceful",
       "kind": "trait",
       "effects": [],
@@ -61,6 +931,241 @@
             "srd52:feat/savage-attacker",
             "srd52:feat/skilled"
           ]
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/adrenaline-rush",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": {
+            "of": "proficiency"
+          },
+          "recharge": "short"
+        }
+      ],
+      "data": {
+        "activation": "bonus"
+      }
+    },
+    {
+      "id": "srd52:trait/relentless-endurance",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "uses",
+          "term": 1,
+          "recharge": "long"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/fiendish-legacy",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/otherworldly-presence",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/thaumaturgy"
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/fiendish-legacy-abyssal",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/poison-spray"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/ray-of-sickness",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/hold-person",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/fiendish-legacy-chthonic",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "necrotic"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/chill-touch"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/false-life",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/ray-of-enfeeblement",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/fiendish-legacy-infernal",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/fire-bolt"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/hellish-rebuke",
+          "minLevel": 3,
+          "free": true
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/darkness",
+          "minLevel": 5,
+          "free": true
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/acolyte-ability-2-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "plus-2",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "int",
+            "wis",
+            "cha"
+          ],
+          "value": 2
+        },
+        {
+          "type": "choice",
+          "id": "plus-1",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "int",
+            "wis",
+            "cha"
+          ],
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/acolyte-ability-1-1-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "int",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "wis",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "cha",
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/criminal-ability-2-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "plus-2",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "dex",
+            "con",
+            "int"
+          ],
+          "value": 2
+        },
+        {
+          "type": "choice",
+          "id": "plus-1",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "dex",
+            "con",
+            "int"
+          ],
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/criminal-ability-1-1-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "dex",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "con",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "int",
+          "value": 1
         }
       ],
       "data": {}

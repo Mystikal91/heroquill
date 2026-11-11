@@ -8,6 +8,172 @@
   },
   "entries": [
     {
+      "id": "srd52:background/acolyte",
+      "kind": "background",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "insight"
+        },
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "religion"
+        },
+        {
+          "type": "proficiency",
+          "category": "tool",
+          "target": "tool-calligraphers-supplies"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:feat/magic-initiate"
+        },
+        {
+          "type": "choice",
+          "id": "ability-increase",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/acolyte-ability-2-1",
+            "srd52:trait/acolyte-ability-1-1-1"
+          ]
+        }
+      ],
+      "data": {
+        "abilityScores": [
+          "int",
+          "wis",
+          "cha"
+        ],
+        "feat": "srd52:feat/magic-initiate",
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/calligraphers-supplies",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/book",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/holy-symbols",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/parchment",
+                    "quantity": 10
+                  },
+                  {
+                    "item": "srd52:item/robe",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 8
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:background/criminal",
+      "kind": "background",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "sleight-of-hand"
+        },
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "stealth"
+        },
+        {
+          "type": "proficiency",
+          "category": "tool",
+          "target": "tool-thieves-tools"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:feat/alert"
+        },
+        {
+          "type": "choice",
+          "id": "ability-increase",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/criminal-ability-2-1",
+            "srd52:trait/criminal-ability-1-1-1"
+          ]
+        }
+      ],
+      "data": {
+        "abilityScores": [
+          "dex",
+          "con",
+          "int"
+        ],
+        "feat": "srd52:feat/alert",
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/dagger",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/thieves-tools",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/crowbar",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/pouch",
+                    "quantity": 2
+                  },
+                  {
+                    "item": "srd52:item/clothes-travelers",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 16
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "id": "srd52:background/soldier",
       "kind": "background",
       "effects": [

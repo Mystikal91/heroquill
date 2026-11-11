@@ -1,3 +1,11 @@
 {
-  "human.name": "Human"
+  "dragonborn.name": "Dragonborn",
+  "dwarf.name": "Dwarf",
+  "elf.name": "Elf",
+  "gnome.name": "Gnome",
+  "goliath.name": "Goliath",
+  "halfling.name": "Halfling",
+  "human.name": "Human",
+  "orc.name": "Orc",
+  "tiefling.name": "Tiefling"
 }
