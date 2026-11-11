@@ -1682,3 +1682,13 @@ fieldset.segmented {
     animation: none !important;
   }
 }
+
+/* The forms a 2024 druid knows for Wild Shape. */
+.play .wild-forms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}

@@ -1,7 +1,7 @@
 import type { ClassData } from "../data/progression";
 import type { Entry } from "../data/schema";
 import type { PlayState } from "./character";
-import { setSlotsUsed } from "./play";
+import { currentHp, setSlotsUsed } from "./play";
 
 /** What a druid can turn into at a level. */
 export interface WildShapeLimits {
@@ -13,6 +13,12 @@ export interface WildShapeLimits {
   fly: boolean;
   /** How many hours the shape lasts. */
   hours: number;
+  /**
+   * The 2024 rules: how many forms the druid knows. Only a known form can be assumed, the druid keeps
+   * their own hit points and gains temporary hit points as many as their level. Absent in the 2014 rules,
+   * where any beast within the limits will do and the beast has hit points of its own.
+   */
+  knownForms?: number;
 }
 
 /**
@@ -33,8 +39,42 @@ export function wildShapeLimits(
     swim: row.wildShapeSwim === true,
     fly: row.wildShapeFly === true,
     hours: Math.floor(level / 2),
+    ...(typeof row.wildShapeKnownForms === "number" && { knownForms: row.wildShapeKnownForms }),
   };
 }
+
+/** The hit points of the beast of a 2014 Wild Shape (a 2024 shape has none: the druid keeps their own). */
+export function beastPool(
+  play: Pick<PlayState, "wildShape">,
+): { hp: number; max: number } | undefined {
+  const shape = play.wildShape;
+  return shape && !shape.own ? { hp: shape.hp, max: shape.max } : undefined;
+}
+
+/**
+ * The 2024 Wild Shape: the druid keeps their own hit points and gains temporary hit points as many as their
+ * level (they do not add up with those they have: the higher number stays).
+ */
+export function assumeBeastKeepingHitPoints(
+  play: PlayState,
+  monster: string,
+  level: number,
+): PlayState {
+  return {
+    ...play,
+    tempHp: Math.max(play.tempHp, level),
+    wildShape: { monster, hp: 0, max: 0, own: true },
+  };
+}
+
+/** A 2024 shape ends when the druid falls to 0 hit points (they are Incapacitated); a 2014 one ends with the beast's. */
+export function endShapeIfDown(play: PlayState, max: number): PlayState {
+  return play.wildShape?.own && currentHp(play, max) === 0 ? leaveBeast(play) : play;
+}
+
+/** The known forms still allowed at this level: a list longer than the table allows loses its last ones. */
+export const trimForms = (forms: readonly string[] | undefined, allowed: number): string[] =>
+  (forms ?? []).slice(0, Math.max(0, allowed));
 
 /** A beast the druid can become: a real animal (not a swarm) that the limits allow. */
 export function canAssume(entry: Entry, limits: WildShapeLimits): boolean {
@@ -70,7 +110,7 @@ export function damageBeast(
 ): { play: PlayState; overflow: number } {
   const shape = play.wildShape;
   const damage = Math.max(0, Math.floor(amount));
-  if (!shape || damage === 0) return { play, overflow: damage };
+  if (!shape || shape.own || damage === 0) return { play, overflow: damage };
   if (damage < shape.hp)
     return { play: { ...play, wildShape: { ...shape, hp: shape.hp - damage } }, overflow: 0 };
   return { play: leaveBeast(play), overflow: damage - shape.hp };
@@ -80,7 +120,7 @@ export function damageBeast(
 export function healBeast(play: PlayState, amount: number): PlayState {
   const shape = play.wildShape;
   const heal = Math.max(0, Math.floor(amount));
-  if (!shape || heal === 0) return play;
+  if (!shape || shape.own || heal === 0) return play;
   return { ...play, wildShape: { ...shape, hp: Math.min(shape.max, shape.hp + heal) } };
 }
 

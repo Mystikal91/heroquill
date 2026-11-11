@@ -3,7 +3,7 @@ import { changePlay, hpUndo, undoHp } from "../../app/play";
 import { PLAY_GROUPS, type PlayGroup, playGroup, showPlayGroup } from "../../app/playView";
 import { character, content, sheet } from "../../app/store";
 import { applyHealing, currentHp } from "../../engine/play";
-import { healBeast } from "../../engine/wildShape";
+import { beastPool, healBeast } from "../../engine/wildShape";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 import { ExplainButton } from "../Explain";
 import { useHoldRepeat } from "../useHoldRepeat";
@@ -30,7 +30,8 @@ export function StatusBar() {
   const c = content.value;
   if (!s || !v || !c) return null;
   // In the shape of a beast the bar shows the beast: its hit points and its armor class.
-  const shape = play.wildShape;
+  // A 2014 beast has hit points of its own; a 2024 shape has none (the druid's own show, with the temporary ones).
+  const shape = beastPool(play);
   const beastAc = beastArmorClass(c, play);
   const max = shape ? shape.max : v.max;
   const hp = shape ? shape.hp : currentHp(play, v.max);

@@ -536,16 +536,21 @@ function featureEntry(slug: string, owner: Raw, level: number): Entry {
 /**
  * The Beast Shapes table in the text of Wild Shape (`Druid Level / Known Forms / Max CR / Fly Speed`, then `2 / 4 / 1/4 / No`)
  * gives the highest Challenge Rating of a form by Druid level: it goes into each level of the class table as
- * `wildShapeMaxCr` and `wildShapeKnownForms`, as the 5.1 data has the Challenge Rating.
+ * `wildShapeMaxCr` and `wildShapeKnownForms`, as the 5.1 data has the Challenge Rating, and whether a form may fly.
  */
 function addWildShapeLimits(raw: RawSource, levels: { level: number; classSpecific: unknown }[]) {
   const feature = (raw.features as Raw[]).find((f) => f.index === "druid-wild-shape");
-  const steps: { level: number; forms: number; cr: number }[] = [];
+  const steps: { level: number; forms: number; cr: number; fly: boolean }[] = [];
   for (const line of String(feature?.description ?? "").split("\n")) {
-    const row = /^(\d+) \/ (\d+) \/ (\d+(?:\/\d+)?) \/ (?:Yes|No)$/.exec(line.trim());
+    const row = /^(\d+) \/ (\d+) \/ (\d+(?:\/\d+)?) \/ (Yes|No)$/.exec(line.trim());
     if (!row) continue;
     const [num, den] = String(row[3]).split("/").map(Number);
-    steps.push({ level: Number(row[1]), forms: Number(row[2]), cr: (num as number) / (den ?? 1) });
+    steps.push({
+      level: Number(row[1]),
+      forms: Number(row[2]),
+      cr: (num as number) / (den ?? 1),
+      fly: row[4] === "Yes",
+    });
   }
   if (steps.length === 0) throw new Error("The Beast Shapes table of Wild Shape was not found");
   for (const l of levels) {
@@ -555,6 +560,9 @@ function addWildShapeLimits(raw: RawSource, levels: { level: number; classSpecif
         ...(l.classSpecific as object),
         wildShapeMaxCr: step.cr,
         wildShapeKnownForms: step.forms,
+        // The table has a Fly Speed column and no limit on swimming (the 2014 table limits both).
+        wildShapeFly: step.fly,
+        wildShapeSwim: true,
       };
   }
 }

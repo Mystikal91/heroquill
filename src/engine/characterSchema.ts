@@ -68,6 +68,8 @@ const CharacterSchema = v.object({
       }),
     ),
   ),
+  /** The Beast forms a 2024 druid knows for Wild Shape (monster ids). */
+  wildShapeForms: v.optional(v.array(v.string())),
   /** The optional rules switched on for this character (ids of `option` entries). */
   options: v.optional(v.array(v.string())),
   /** Features the person wrote for this character. */
@@ -146,7 +148,9 @@ const CharacterSchema = v.object({
       v.object({
         monster: v.string(),
         hp: v.pipe(v.number(), v.integer(), v.minValue(0)),
-        max: v.pipe(v.number(), v.integer(), v.minValue(1)),
+        max: v.pipe(v.number(), v.integer(), v.minValue(0)),
+        // The 2024 rules: the druid keeps their own hit points, so the shape has none (hp and max are 0).
+        own: v.optional(v.boolean()),
       }),
     ),
     pactUsed: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),

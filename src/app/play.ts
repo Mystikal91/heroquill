@@ -28,7 +28,7 @@ import {
   setInspiration,
   setResourceUsed,
 } from "../engine/play";
-import { damageBeast } from "../engine/wildShape";
+import { beastPool, damageBeast, endShapeIfDown } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
 import { character, content, sheet, updateCharacter } from "./store";
 
@@ -295,7 +295,7 @@ export function damageCharacter(amount: number) {
   const play = character.value.play;
   // In the shape of a beast the beast takes the damage first; what is left over, once the shape
   // is gone, falls on the druid's own hit points.
-  if (play.wildShape) {
+  if (beastPool(play)) {
     const { overflow } = damageBeast(play, amount);
     changePlay((p) => damageBeast(p, amount).play, { undo: false });
     if (play.concentration) concentrationAlert.value = concentrationDc(amount);
@@ -305,7 +305,8 @@ export function damageCharacter(amount: number) {
   const concentrating = Boolean(play.concentration);
   const after = applyDamage(play, v.max, amount);
   // A rage ends when the barbarian falls unconscious.
-  const hit = (p: PlayState) => endRageIfDown(applyDamage(p, v.max, amount), v.max);
+  const hit = (p: PlayState) =>
+    endShapeIfDown(endRageIfDown(applyDamage(p, v.max, amount), v.max), v.max);
   if (concentrating && deathStatus(after, v.max) !== "alive") {
     changePlay((p) => endConcentration(hit(p)));
   } else {

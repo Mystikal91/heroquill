@@ -97,7 +97,7 @@ export interface PlayState {
   /** The barbarian is raging: resistance to physical damage, and the rage bonus to melee damage. */
   raging?: boolean;
   /** The beast the druid has turned into (Wild Shape), with the hit points of that shape. */
-  wildShape?: { monster: string; hp: number; max: number };
+  wildShape?: { monster: string; hp: number; max: number; own?: boolean };
   /** Pact Magic slots spent, when they are kept apart from the shared slots (multiclass warlock). */
   pactUsed?: number;
   deathSaves: { successes: number; failures: number };
@@ -195,6 +195,8 @@ export interface Character {
   coins?: Coins;
   /** Creatures the character has: a familiar, a beast, a defender. Absent when there are none. */
   companions?: Companion[];
+  /** The Beast forms a 2024 druid knows for Wild Shape (monster ids), as many as the class table allows. */
+  wildShapeForms?: string[];
   /**
    * The optional rules switched on for this character (ids of `option` entries, such as
    * Tasha's customised origin). Other rules ask for them by id, and their own effects apply.

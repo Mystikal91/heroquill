@@ -42,7 +42,11 @@ export function HitPoints() {
         <span>{ui("play.of", { max: v.max })}</span>
         {play.tempHp > 0 && <em>{ui("play.temp", { n: play.tempHp })}</em>}
       </output>
-      {play.wildShape && <p class="muted">{ui("play.wildShape.note")}</p>}
+      {play.wildShape && (
+        <p class="muted">
+          {ui(play.wildShape.own ? "play.wildShape.noteOwn" : "play.wildShape.note")}
+        </p>
+      )}
       {play.raging && <p class="muted">{ui("play.rage.note")}</p>}
       <div
         class="hp-bar"
