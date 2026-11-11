@@ -51,7 +51,10 @@ function ActionCard({
   const pool = spend && s.resources.find((r) => r.id === spend.resource);
   const single = counters.length === 1 ? counters[0] : undefined;
   const takesUse = !spend && single && !single.pool && !single.unlimited ? single : undefined;
-  const breath = id === "srd51:trait/breath-weapon" ? breathWeaponOf(s, c.index) : undefined;
+  const holdsBreath = (c.index.get(id)?.data as { traitSpecific?: { breathWeapon?: unknown } })
+    ?.traitSpecific?.breathWeapon;
+  const breath =
+    id === "srd51:trait/breath-weapon" || holdsBreath ? breathWeaponOf(s, c.index) : undefined;
   const heal = s.selfHeals[id];
 
   let usable = true;

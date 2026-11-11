@@ -345,3 +345,127 @@ export const ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
   "draconic-sorcery-dragon-wings": "bonus",
   "fiend-patron-dark-ones-own-luck": "reaction",
 };
+
+// ---- Species. The database has the text of the traits, not what they do; these are written from the book.
+const PB_LONG: Effect = { type: "uses", term: { of: "proficiency" }, recharge: "long" };
+const spellOf = (slug: string, minLevel?: number): Effect => ({
+  type: "grantSpell",
+  spell: `srd52:spell/${slug}`,
+  ...(minLevel !== undefined && { minLevel, free: true }),
+});
+const resists = (damage: string): Effect => ({ type: "defense", kind: "resistance", damage });
+const darkvision = (range: number): Effect => ({ type: "sense", sense: "darkvision", range });
+
+/** Effects of the traits of a species, by trait index. Advantage on saves and the like stay text. */
+export const TRAIT_EFFECTS: Record<string, Effect[]> = {
+  "darkvision-60": [darkvision(60)],
+  "darkvision-120": [darkvision(120)],
+  "draconic-flight": [{ type: "uses", term: 1, recharge: "long", minLevel: 5 }],
+  "dwarven-resilience": [resists("poison")],
+  // +1 hit point, and +1 more at every level.
+  "dwarven-toughness": [{ type: "modifier", target: "hpPerLevel", value: 1 }],
+  stonecunning: [PB_LONG],
+  "adrenaline-rush": [{ type: "uses", term: { of: "proficiency" }, recharge: "short" }],
+  "relentless-endurance": [{ type: "uses", term: 1, recharge: "long" }],
+  "large-form": [{ type: "uses", term: 1, recharge: "long", minLevel: 5 }],
+  "otherworldly-presence": [spellOf("thaumaturgy")],
+};
+
+/** How a trait of a species is used. */
+export const TRAIT_ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
+  "draconic-flight": "bonus",
+  stonecunning: "bonus",
+  "adrenaline-rush": "bonus",
+  "large-form": "bonus",
+};
+
+const DRAGONS: Record<string, string> = {
+  black: "acid",
+  blue: "lightning",
+  brass: "fire",
+  bronze: "lightning",
+  copper: "acid",
+  gold: "fire",
+  green: "poison",
+  red: "fire",
+  silver: "cold",
+  white: "cold",
+};
+
+/**
+ * The options a species picks from (a dragon ancestor, an elven lineage, a giant ancestry, a fiendish
+ * legacy), by subspecies index. A spell that comes at the 3rd or the 5th level of the character is cast once
+ * between long rests without a slot (`free`).
+ */
+export const SUBSPECIES_EFFECTS: Record<string, Effect[]> = {
+  ...Object.fromEntries(
+    Object.entries(DRAGONS).map(([dragon, damage]) => [
+      `draconic-ancestor-${dragon}`,
+      [resists(damage), PB_LONG],
+    ]),
+  ),
+  "elven-lineage-drow": [
+    darkvision(120),
+    spellOf("dancing-lights"),
+    spellOf("faerie-fire", 3),
+    spellOf("darkness", 5),
+  ],
+  "elven-lineage-high-elf": [
+    spellOf("prestidigitation"),
+    spellOf("detect-magic", 3),
+    spellOf("misty-step", 5),
+  ],
+  "elven-lineage-wood-elf": [
+    { type: "modifier", target: "speed", value: 5 },
+    spellOf("druidcraft"),
+    spellOf("longstrider", 3),
+    spellOf("pass-without-trace", 5),
+  ],
+  // Speak with Animals: a number of times equal to the proficiency bonus, between long rests.
+  "gnomish-lineage-forest-gnome": [
+    spellOf("minor-illusion"),
+    spellOf("speak-with-animals"),
+    PB_LONG,
+  ],
+  "gnomish-lineage-rock-gnome": [spellOf("mending"), spellOf("prestidigitation")],
+  "giant-ancestry-clouds-jaunt": [PB_LONG],
+  "giant-ancestry-fires-burn": [PB_LONG],
+  "giant-ancestry-frosts-chill": [PB_LONG],
+  "giant-ancestry-hills-tumble": [PB_LONG],
+  "giant-ancestry-stones-endurance": [PB_LONG],
+  "giant-ancestry-storms-thunder": [PB_LONG],
+  "fiendish-legacy-abyssal": [
+    resists("poison"),
+    spellOf("poison-spray"),
+    spellOf("ray-of-sickness", 3),
+    spellOf("hold-person", 5),
+  ],
+  "fiendish-legacy-chthonic": [
+    resists("necrotic"),
+    spellOf("chill-touch"),
+    spellOf("false-life", 3),
+    spellOf("ray-of-enfeeblement", 5),
+  ],
+  "fiendish-legacy-infernal": [
+    resists("fire"),
+    spellOf("fire-bolt"),
+    spellOf("hellish-rebuke", 3),
+    spellOf("darkness", 5),
+  ],
+};
+
+export const SUBSPECIES_ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
+  ...Object.fromEntries(Object.keys(DRAGONS).map((d) => [`draconic-ancestor-${d}`, "action"])),
+  "giant-ancestry-clouds-jaunt": "bonus",
+  "giant-ancestry-stones-endurance": "reaction",
+  "giant-ancestry-storms-thunder": "reaction",
+};
+
+/** The trait of each species that holds its choice of subspecies (the Dragonborn's is missing from the source list). */
+export const SUBSPECIES_TRAIT: Record<string, string> = {
+  dragonborn: "draconic-ancestry",
+  elf: "elven-lineage",
+  gnome: "gnomish-lineage",
+  goliath: "giant-ancestry",
+  tiefling: "fiendish-legacy",
+};

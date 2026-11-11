@@ -47,6 +47,7 @@ const raw: RawSource = {
   feats: await readJson("5e-SRD-Feats"),
   backgrounds: await readJson("5e-SRD-Backgrounds"),
   species: await readJson("5e-SRD-Species"),
+  subspecies: await readJson("5e-SRD-Subspecies"),
   traits: await readJson("5e-SRD-Traits"),
   classes: await readJson("5e-SRD-Classes"),
   levels: await readJson("5e-SRD-Levels"),

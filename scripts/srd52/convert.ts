@@ -8,7 +8,18 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { cleanData } from "../srd51/convert";
-import { ACTIVATION, FEATURE_EFFECTS, FEAT_EFFECTS, FEAT_PICKS, REPLACES } from "./effects";
+import {
+  ACTIVATION,
+  FEATURE_EFFECTS,
+  FEAT_EFFECTS,
+  FEAT_PICKS,
+  REPLACES,
+  SUBSPECIES_ACTIVATION,
+  SUBSPECIES_EFFECTS,
+  SUBSPECIES_TRAIT,
+  TRAIT_ACTIVATION,
+  TRAIT_EFFECTS,
+} from "./effects";
 
 const PACK = "srd52";
 
@@ -28,6 +39,7 @@ export interface RawSource {
   feats: Raw[];
   backgrounds: Raw[];
   species: Raw[];
+  subspecies: Raw[];
   traits: Raw[];
   classes: Raw[];
   levels: Raw[];
@@ -71,8 +83,19 @@ export const PILOT = {
     "fiend-patron",
     "evoker",
   ],
-  backgrounds: ["soldier"],
-  species: ["human"],
+  // Sage waits for the source: its Magic Initiate has no list (the book: Wizard).
+  backgrounds: ["soldier", "acolyte", "criminal"],
+  species: [
+    "human",
+    "dragonborn",
+    "dwarf",
+    "elf",
+    "gnome",
+    "goliath",
+    "halfling",
+    "orc",
+    "tiefling",
+  ],
 };
 
 type WeaponEntry = { id: string; data: Record<string, unknown> };
@@ -289,17 +312,47 @@ function convertFeats(raw: RawSource, table: Map<string, string>): Converted {
 const featIdsOf = (raw: RawSource, category: string) =>
   raw.feats.filter((f: Raw) => f.type === category).map((f: Raw) => id("feat", f.index));
 
-/** Species (Human only for now): traits as entries, size and speed as data. No ability scores, no languages. */
+/**
+ * The breath weapon of a dragon ancestor, read from the text of its trait: the cone (or the 30-foot line, the
+ * person picks each time), a Dexterity save for half, the damage by character level.
+ */
+function breathWeaponOf(sub: Raw, traits: Raw[]) {
+  const trait = traits.find((t) => String(t.index).startsWith("draconic-breath-weapon-"));
+  if (!trait) return undefined;
+  const d = String(trait.description);
+  const first = /takes (\d+d\d+) \w+ damage/.exec(d)?.[1];
+  const more = /levels 5 \((\d+d\d+)\), 11 \((\d+d\d+)\), and 17 \((\d+d\d+)\)/.exec(d);
+  const cone = /(\d+)-foot Cone/.exec(d)?.[1];
+  if (!first || !more || !cone || !sub.damage_type) {
+    throw new Error(`The breath weapon of ${sub.index} could not be read`);
+  }
+  return {
+    areaOfEffect: { type: "cone", size: Number(cone) },
+    dc: { dcType: { index: "dex" }, successType: "half" },
+    damage: [
+      {
+        damageType: { index: sub.damage_type.index },
+        damageAtCharacterLevel: { "1": first, "5": more[1], "11": more[2], "17": more[3] },
+      },
+    ],
+  };
+}
+
+/** Species: traits as entries, size and speed as data, a choice of lineage where the species has one. No ability scores, no languages. */
 function convertSpecies(raw: RawSource, table: Map<string, string>): [Converted, Converted] {
   const species: Converted = { entries: [], strings: {} };
   const traits: Converted = { entries: [], strings: {} };
   for (const s of raw.species.filter((x: Raw) => PILOT.species.includes(x.index))) {
     const effects: Effect[] = [];
-    for (const ref of s.traits as Raw[]) {
+    const refs = [...(s.traits as Raw[])];
+    // The trait that holds the choice of subspecies must be there (the source lacks the Dragonborn's).
+    const parent = SUBSPECIES_TRAIT[s.index];
+    if (parent && !refs.some((r) => r.index === parent)) refs.push({ index: parent });
+    for (const ref of refs) {
       const trait = raw.traits.find((t: Raw) => t.index === ref.index);
       if (!trait) throw new Error(`Missing trait: ${ref.index}`);
       effects.push({ type: "trait", id: id("trait", trait.index) });
-      const traitEffects: Effect[] = [];
+      const traitEffects: Effect[] = [...(TRAIT_EFFECTS[trait.index] ?? [])];
       if (trait.proficiency_choices) {
         traitEffects.push(
           proficiencyChoice(table, `${trait.index}-skill`, trait.proficiency_choices),
@@ -314,14 +367,52 @@ function convertSpecies(raw: RawSource, table: Map<string, string>): [Converted,
           from: featIdsOf(raw, "origin"),
         });
       }
+      const how = TRAIT_ACTIVATION[trait.index];
+      // A trait shared by several species (Darkvision) is one entry.
+      if (traits.entries.some((e) => e.id === id("trait", trait.index))) continue;
       traits.entries.push({
         id: id("trait", trait.index),
         kind: "trait",
         effects: traitEffects,
-        data: {},
+        data: how ? { activation: how } : {},
       });
       traits.strings[`${trait.index}.name`] = trait.name;
       traits.strings[`${trait.index}.desc`] = text(trait.description);
+    }
+    // A lineage, an ancestor or a legacy: one option each, a trait made of the traits the source lists for it.
+    const subs = (raw.subspecies as Raw[]).filter((x) => x.species.index === s.index);
+    if (subs.length > 0 && parent) {
+      for (const sub of subs) {
+        const named = (sub.traits as Raw[]).map((r) => {
+          const t = raw.traits.find((x: Raw) => x.index === r.index);
+          if (!t) throw new Error(`Missing trait: ${r.index}`);
+          return t;
+        });
+        const effects2 = SUBSPECIES_EFFECTS[sub.index];
+        if (!effects2) throw new Error(`No effects written for the option ${sub.index}`);
+        const how = SUBSPECIES_ACTIVATION[sub.index];
+        const breath = breathWeaponOf(sub, named);
+        traits.entries.push({
+          id: id("trait", sub.index),
+          kind: "trait",
+          effects: effects2,
+          data: {
+            ...(how && { activation: how }),
+            ...(breath && { traitSpecific: { breathWeapon: breath } }),
+          },
+        });
+        traits.strings[`${sub.index}.name`] = sub.name;
+        traits.strings[`${sub.index}.desc`] = named
+          .map((t) => `${t.name}\n${text(t.description)}`)
+          .join("\n");
+      }
+      effects.push({
+        type: "choice",
+        id: parent,
+        choose: 1,
+        grants: "trait",
+        from: subs.map((x) => id("trait", x.index)),
+      });
     }
     // A species has one size, or lets the person pick one (`size_options`: Small or Medium).
     if (s.size_options) {
