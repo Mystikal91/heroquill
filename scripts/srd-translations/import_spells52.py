@@ -79,7 +79,7 @@ LANGUAGES = {
     },
 }
 NOISE = re.compile(
-    r"^(\d{1,3}|System Reference Document|Syst.me de r.f.rence|Document de R.f.rence|Systemreferenzdokument"
+    r"^(\d{1,3}$|System Reference Document|Syst.me de r.f.rence|Document de R.f.rence|Systemreferenzdokument"
     r"|Documento de referencia del sistema)"
 )
 
