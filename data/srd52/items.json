@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @6744006 (2024)",
+    "version": "5e-srd-api fork integration @b3f40d9 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -3975,6 +3975,3963 @@
         "gear": {
           "category": "standard-gear"
         }
+      }
+    },
+    {
+      "id": "srd52:item/adamantine-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/ammunition-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/ammunition-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/ammunition-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/ammunition-of-slaying",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/amulet-of-health",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/amulet-of-proof-against-detection-and-location",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/amulet-of-the-planes",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/animated-shield",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/apparatus-of-the-crab",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/armor-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/armor-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/armor-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/armor-of-invulnerability",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/armor-of-resistance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/armor-of-vulnerability",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/arrow-catching-shield",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/bag-of-beans",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bag-of-devouring",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bag-of-holding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bag-of-tricks",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bead-of-force",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bead-of-nourishment",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "common",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/belt-of-dwarvenkind",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "waist"
+      }
+    },
+    {
+      "id": "srd52:item/belt-of-giant-strength",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": true,
+        "slot": "waist"
+      }
+    },
+    {
+      "id": "srd52:item/berserker-axe",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/boots-of-elvenkind",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/boots-of-levitation",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/boots-of-speed",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/boots-of-striding-and-springing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/boots-of-the-winterlands",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/bowl-of-commanding-water-elementals",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/bracers-of-archery",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "arms"
+      }
+    },
+    {
+      "id": "srd52:item/bracers-of-defense",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "arms"
+      }
+    },
+    {
+      "id": "srd52:item/brazier-of-commanding-fire-elementals",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/brooch-of-shielding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/broom-of-flying",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/candle-of-invocation",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/cape-of-the-mountebank",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/carpet-of-flying",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/censer-of-controlling-air-elementals",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/chime-of-opening",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/circlet-of-blasting",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-arachnida",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-displacement",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-elvenkind",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-invisibility",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-protection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-the-bat",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/cloak-of-the-manta-ray",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/crystal-ball",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/crystal-ball-of-mind-reading",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/crystal-ball-of-telepathy",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/crystal-ball-of-true-seeing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/cube-of-force",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/cubic-gate",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/dagger-of-venom",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/dancing-sword",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/decanter-of-endless-water",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/deck-of-illusions",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/defender",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/demon-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/dimensional-shackles",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/dragon-orb",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "artifact",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/dragon-scale-mail",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/dragon-slayer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/dust-of-disappearance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/dust-of-dryness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/dust-of-sneezing-and-choking",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/dwarven-plate",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/dwarven-thrower",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/efficient-quiver",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/efreeti-bottle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/elemental-gem",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/elixir-of-health",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/elven-chain",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/energy-bow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/eversmoking-bottle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/eyes-of-charming",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/eyes-of-minute-seeing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/eyes-of-the-eagle",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/feather-token",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/figurine-of-wondrous-power",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/flame-tongue",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/folding-boat",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/frost-brand",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/gauntlets-of-ogre-power",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "hands"
+      }
+    },
+    {
+      "id": "srd52:item/gem-of-brightness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/gem-of-seeing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/giant-slayer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/glamoured-studded-leather",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/gloves-of-missile-snaring",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "hands"
+      }
+    },
+    {
+      "id": "srd52:item/gloves-of-swimming-and-climbing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "hands"
+      }
+    },
+    {
+      "id": "srd52:item/gloves-of-thievery",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/goggles-of-night",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/hammer-of-thunderbolts",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "twoHands"
+      }
+    },
+    {
+      "id": "srd52:item/handy-haversack",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/hat-of-disguise",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/hat-of-many-spells",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/headband-of-intellect",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/helm-of-brilliance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/helm-of-comprehending-languages",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/helm-of-telepathy",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/helm-of-teleportation",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "head"
+      }
+    },
+    {
+      "id": "srd52:item/holy-avenger",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/horn-of-blasting",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horn-of-valhalla-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horn-of-valhalla-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horn-of-valhalla-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horn-of-valhalla-4",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horseshoes-of-a-zephyr",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/horseshoes-of-speed",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/immovable-rod",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/instant-fortress",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/ioun-stone",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/iron-bands",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/iron-flask",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/javelin-of-lightning",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/lantern-of-revealing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/luck-blade",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/mace-of-disruption",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/mace-of-smiting",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/mace-of-terror",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/mantle-of-spell-resistance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/manual-of-bodily-health",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/manual-of-gainful-exercise",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/manual-of-golems",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/manual-of-quickness-of-action",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/marvelous-pigments",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/medallion-of-thoughts",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/mirror-of-life-trapping",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/mithral-armor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/mysterious-deck",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/necklace-of-adaptation",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/necklace-of-fireballs",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/necklace-of-prayer-beads",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/nine-lives-stealer",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/oathbow",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "twoHands"
+      }
+    },
+    {
+      "id": "srd52:item/oil-of-etherealness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/oil-of-sharpness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/oil-of-slipperiness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/pearl-of-power",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/periapt-of-health",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/periapt-of-proof-against-poison",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/periapt-of-wound-closure",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/philter-of-love",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/pipes-of-haunting",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/pipes-of-the-sewers",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/plate-armor-of-etherealness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/portable-hole",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-animal-friendship",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-clairvoyance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-climbing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "common",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-diminution",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-flying",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-growth",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potions-of-healing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-gaseous-form",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-heroism",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-giant-strength",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-invisibility",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-invulnerability",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-longevity",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-mind-reading",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-poison",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-resistance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-speed",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-vitality",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/potion-of-water-breathing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/quarterstaff-of-the-acrobat",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-animal-influence",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-djinni-summoning",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-elemental-command",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-evasion",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-feather-falling",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-free-action",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-invisibility",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-jumping",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-mind-shielding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-protection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-regeneration",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-resistance",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-shooting-stars",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-spell-storing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-spell-turning",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-swimming",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-telekinesis",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-the-ram",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-three-wishes",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-warmth",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-water-walking",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/ring-of-x-ray-vision",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "ring"
+      }
+    },
+    {
+      "id": "srd52:item/robe-of-eyes",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/robe-of-scintillating-colors",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/robe-of-stars",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/robe-of-the-archmagi",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/robe-of-useful-items",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "body"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-absorption",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-alertness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-lordly-might",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-resurrection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-rulership",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rod-of-security",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/rope-of-climbing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/rope-of-entanglement",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/scarab-of-protection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/scimitar-of-speed",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/shield-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/shield-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/shield-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/sending-stones",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/sentinel-shield",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/shield-of-missile-attraction",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/shield-of-the-cavalier",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/slippers-of-spider-climbing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/sovereign-glue",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/spellguard-shield",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "shield"
+      }
+    },
+    {
+      "id": "srd52:item/spell-scroll",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/sphere-of-annihilation",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-charming",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-fire",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-frost",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-healing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-power",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-striking",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-swarming-insects",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-the-magi",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-the-python",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-the-woodlands",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-thunder-and-lightning",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/staff-of-withering",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/stone-of-controlling-earth-elementals",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/stone-of-good-luck-luckstone",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true
+      }
+    },
+    {
+      "id": "srd52:item/sun-blade",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/sword-of-life-stealing",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/sword-of-sharpness",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/sword-of-wounding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/talisman-of-pure-good",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/talisman-of-the-sphere",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/talisman-of-ultimate-evil",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "neck"
+      }
+    },
+    {
+      "id": "srd52:item/thunderous-greatclub",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/tome-of-clear-thought",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/tome-of-leadership-and-influence",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/tome-of-understanding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/trident-of-fish-command",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/universal-solvent",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/vicious-weapon",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/vorpal-sword",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-binding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-enemy-detection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-fear",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-fireballs",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-lightning-bolts",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-magic-detection",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-magic-missiles",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-paralysis",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-polymorph",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-secrets",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-the-war-mage-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-the-war-mage-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-the-war-mage-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-web",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/wand-of-wonder",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/weapon-1",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/weapon-2",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/weapon-3",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "very-rare",
+        "attunement": false,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/weapon-of-warning",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "oneHand"
+      }
+    },
+    {
+      "id": "srd52:item/well-of-many-worlds",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "legendary",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/wind-fan",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": false
+      }
+    },
+    {
+      "id": "srd52:item/winged-boots",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": true,
+        "slot": "feet"
+      }
+    },
+    {
+      "id": "srd52:item/wings-of-flying",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "magic-items",
+        "cost": {
+          "amount": 0,
+          "unit": "gp"
+        },
+        "rarity": "rare",
+        "attunement": true,
+        "slot": "shoulders"
       }
     }
   ]
