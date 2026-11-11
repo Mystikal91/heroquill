@@ -298,7 +298,12 @@ export function setBardicDie(play: PlayState, die: number | undefined): PlayStat
  * A long rest: full hit points, no temporary hit points, all slots back, no death saves, and
  * half of the hit dice (at least one) regained, largest dice first.
  */
-export function longRest(play: PlayState, hitDice: Record<string, number>): PlayState {
+export function longRest(
+  play: PlayState,
+  hitDice: Record<string, number>,
+  /** A trait gives Heroic Inspiration at the end of a long rest (the 2024 Human's Resourceful). */
+  { grantsInspiration = false }: { grantsInspiration?: boolean } = {},
+): PlayState {
   const totalDice = Object.values(hitDice).reduce((sum, n) => sum + n, 0);
   let regain = Math.max(1, Math.floor(totalDice / 2));
 
@@ -312,7 +317,7 @@ export function longRest(play: PlayState, hitDice: Record<string, number>): Play
 
   return {
     ...createPlayState(),
-    inspiration: play.inspiration,
+    inspiration: play.inspiration || grantsInspiration,
     conditions: play.conditions,
     // The rounds of the conditions stay with them; a rest ended the rest (a concentration, a rage).
     ...keptRounds(play),

@@ -86,6 +86,27 @@ export function rollExpression(
   return { expression: formatDice(expression), rolls, modifier: expression.modifier, total };
 }
 
+/**
+ * One die of a roll rolled again, the new face taking the place of the old one (the 2024 Heroic Inspiration: "reroll
+ * any die immediately after rolling it, and you must use the new roll"). `term` is the group of dice (`2d6` is
+ * one) and `index` the die in it; a roll that has no such die is given back as it was.
+ */
+export function rerollDie(
+  roll: DiceRoll,
+  term: number,
+  index: number,
+  random: RandomInt = cryptoRandomInt,
+): DiceRoll {
+  const sides = parseDice(roll.expression)?.terms[term]?.sides;
+  const group = roll.rolls[term];
+  if (sides === undefined || group === undefined || group[index] === undefined) return roll;
+  const rolls = roll.rolls.map((g, t) =>
+    t === term ? g.map((face, i) => (i === index ? 1 + random(sides) : face)) : g,
+  );
+  const total = rolls.flat().reduce((sum, face) => sum + face, 0) + roll.modifier;
+  return { ...roll, rolls, total };
+}
+
 export type D20Mode = "normal" | "advantage" | "disadvantage";
 
 export interface D20Roll {

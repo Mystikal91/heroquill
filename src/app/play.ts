@@ -8,6 +8,7 @@ import {
   type DiceRoll,
   cryptoRandomInt,
   parseDice,
+  rerollDie,
   rollD20,
   rollExpression,
 } from "../engine/dice";
@@ -88,6 +89,8 @@ export interface LogEntry {
   tone?: "critical" | "fumble";
   /** A d20 roll can be taken again or have a die added: what it takes to make it again. */
   redo?: { label: string; bonus: number; options: D20Options | undefined; check?: boolean };
+  /** The dice of a roll of dice (damage, healing): with the 2024 Heroic Inspiration one of them can be rolled again. */
+  dice?: DiceRoll;
   /** A die of Bardic Inspiration is already in the total. */
   bardic?: boolean;
   /** A die of a feature (Tactical Mind) is already in the total, and this is the use it took: it can be given back. */
@@ -233,9 +236,27 @@ export function rollDiceText(label: string, text: string): DiceRoll | undefined 
   const parsed = parseDice(text);
   if (!parsed) return undefined;
   const roll = rollExpression(parsed);
-  const faces = roll.rolls.map((group) => `[${group.join(", ")}]`).join(" + ");
-  addLog({ label, detail: `${faces}${signedBonus(roll.modifier)}`, total: roll.total });
+  addLog({ label, detail: diceDetail(roll), total: roll.total, dice: roll });
   return roll;
+}
+
+const diceDetail = (roll: DiceRoll) =>
+  `${roll.rolls.map((group) => `[${group.join(", ")}]`).join(" + ")}${signedBonus(roll.modifier)}`;
+
+/**
+ * Spends Heroic Inspiration (2024) to roll one die of a roll again: the new face counts and the total changes. Not
+ * for the d20 of a check, which has its own button (`rerollWithInspiration`).
+ */
+export function rerollOneDie(entry: LogEntry, term: number, index: number) {
+  if (!entry.dice || !character.value.play.inspiration) return;
+  changePlay((p) => setInspiration(p, false));
+  const roll = rerollDie(entry.dice, term, index);
+  addLog({
+    label: `${entry.label} (${ui("play.rerolled")})`,
+    detail: diceDetail(roll),
+    total: roll.total,
+    dice: roll,
+  });
 }
 
 /** Hit points and the numbers the play screen needs, or undefined before the sheet exists. */

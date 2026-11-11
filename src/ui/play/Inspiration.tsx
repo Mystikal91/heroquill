@@ -41,9 +41,14 @@ export function BardNotes() {
 export function Inspiration() {
   const play = character.value.play;
   const bardic = play.bardicDie;
+  // The 2024 rules call it Heroic Inspiration, and it rolls any die again, not only the d20.
+  const heroic = character.value.ruleset === "srd52";
 
   return (
-    <Panel title={ui("play.inspirationTitle")} className="inspiration-panel">
+    <Panel
+      title={ui(heroic ? "play.heroic" : "play.inspirationTitle")}
+      className="inspiration-panel"
+    >
       <ul class="plain card-list">
         <li
           class="play-card insp-card"
@@ -54,8 +59,10 @@ export function Inspiration() {
             <StarIcon />
           </span>
           <div class="card-head">
-            <b class="feat-name">{ui("play.inspiration")}</b>
-            <span class="card-meta insp-meta">{ui("play.inspirationHint")}</span>
+            <b class="feat-name">{ui(heroic ? "play.heroic" : "play.inspiration")}</b>
+            <span class="card-meta insp-meta">
+              {ui(heroic ? "play.heroicHint" : "play.inspirationHint")}
+            </span>
           </div>
           <div class="card-actions">
             <button
@@ -64,7 +71,15 @@ export function Inspiration() {
               aria-pressed={play.inspiration}
               onClick={() => changePlay((p) => setInspiration(p, !p.inspiration))}
             >
-              {ui(play.inspiration ? "play.inspirationHave" : "play.inspirationNone")}
+              {ui(
+                heroic
+                  ? play.inspiration
+                    ? "play.heroicHave"
+                    : "play.heroicNone"
+                  : play.inspiration
+                    ? "play.inspirationHave"
+                    : "play.inspirationNone",
+              )}
             </button>
           </div>
         </li>

@@ -110,6 +110,8 @@ function LongRestDialog() {
   const asked = longRestAsked.value;
   const v = vitals();
   const prepares = preparingCasters(sheet.value).length > 0;
+  // The 2024 Human's Resourceful: Heroic Inspiration whenever a long rest ends.
+  const resourceful = Boolean(sheet.value?.traits.includes("srd52:trait/resourceful"));
 
   useEffect(() => {
     const el = dialog.current;
@@ -129,6 +131,7 @@ function LongRestDialog() {
     ui("play.longRestDeath"),
     ui("play.longRestEnds"),
     ...(prepares ? [ui("play.longRestPrepare")] : []),
+    ...(resourceful ? [ui("play.longRestHeroic")] : []),
   ];
 
   return (
@@ -163,7 +166,8 @@ function LongRestDialog() {
               type="button"
               class="card-btn card-primary"
               onClick={() => {
-                if (v) changePlay((p) => longRest(p, v.hitDice));
+                if (v)
+                  changePlay((p) => longRest(p, v.hitDice, { grantsInspiration: resourceful }));
                 addLog({ label: ui("play.longRestLog"), detail: "" });
                 close();
                 // The step after the rest: a reminder to change the spells that are prepared.

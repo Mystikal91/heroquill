@@ -5,6 +5,7 @@ import {
   addCheckBoost,
   boostsFor,
   keepBoostedUse,
+  rerollOneDie,
   rerollWithInspiration,
   rollLog,
 } from "../../app/play";
@@ -59,6 +60,8 @@ export function RollToast() {
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState(0);
   const [hidden, setHidden] = useState(true);
+  // The roll whose dice are being offered for a reroll (Heroic Inspiration).
+  const [choosingFor, setChoosingFor] = useState<number>();
 
   // The history that was there when the screen opened is not a roll to show.
   const [first] = useState(latest?.id);
@@ -112,6 +115,10 @@ export function RollToast() {
   // one can say it failed anyway, which gives the use back.
   const boosts = rolling ? [] : boostsFor(fresh);
   const canKeep = !rolling && fresh.boosted !== undefined;
+  // The 2024 Heroic Inspiration rerolls any die, not only the d20: a roll of dice offers each of its dice.
+  const canRerollDie =
+    !rolling && fresh.dice !== undefined && play.inspiration && character.value.ruleset === "srd52";
+  const choosing = canRerollDie && choosingFor === fresh.id;
   return (
     <div
       class={`roll-toast no-print ${rolling ? "rolling" : "settled"} ${tone}`}
@@ -152,8 +159,33 @@ export function RollToast() {
           <small class="toast-hint">{ui("play.tapToClose")}</small>
         </span>
       </button>
-      {(canReroll || canAddDie || boosts.length > 0 || canKeep) && (
+      {(canReroll || canAddDie || boosts.length > 0 || canKeep || canRerollDie) && (
         <div class="toast-actions">
+          {canRerollDie && !choosing && (
+            <button type="button" class="toast-act" onClick={() => setChoosingFor(fresh.id)}>
+              <span aria-hidden="true">✦</span>
+              {ui("play.rerollDie")}
+            </button>
+          )}
+          {choosing &&
+            fresh.dice?.rolls.flatMap((group, term) =>
+              group.map((face, index) => (
+                <button
+                  // biome-ignore lint/suspicious/noArrayIndexKey: the dice of a roll have no id, their place is their identity
+                  key={`${term}-${index}`}
+                  type="button"
+                  class="toast-act"
+                  aria-label={`${ui("play.rerollDieWhich")} ${face}`}
+                  onClick={() => {
+                    setChoosingFor(undefined);
+                    rerollOneDie(fresh, term, index);
+                  }}
+                >
+                  <span aria-hidden="true">✦</span>
+                  {face}
+                </button>
+              )),
+            )}
           {boosts.map((b) => (
             <button
               key={b.feature}
