@@ -86,13 +86,15 @@ export function RollToast() {
     };
   }, [freshId, freshTotal]);
 
-  // Leaving the play screen puts the roll away.
-  const onPlay = view.value === "play";
+  // Changing screen puts the old roll away; a roll made on any screen (the rules, with a monster
+  // open, as well as Play) shows where it was made.
+  const screen = view.value;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the screen is the trigger
   useEffect(() => {
-    if (!onPlay) setHidden(true);
-  }, [onPlay]);
+    setHidden(true);
+  }, [screen]);
 
-  if (!fresh || hidden || !onPlay) return null;
+  if (!fresh || hidden) return null;
   const tone = rolling ? "" : (fresh.tone ?? "");
   // A d20 roll that has landed can be taken again with the inspiration, or get the Bardic die.
   const play = character.value.play;
