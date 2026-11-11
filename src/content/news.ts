@@ -18,6 +18,19 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.29.1 beta",
+    date: "2026-11-11",
+    notes: [
+      {
+        en: "The big die with the result now shows for the rolls you make from the rules too (the attack and damage buttons of a monster, for example), not only on the Play screen.",
+        it: "Il dado grande con il risultato ora compare anche per i tiri fatti dalle regole (per esempio i tasti di colpo e danno di un mostro), non solo nella schermata Gioca.",
+        fr: "Le grand dé avec le résultat s’affiche maintenant aussi pour les jets faits depuis les règles (par exemple les boutons d’attaque et de dégâts d’un monstre), et pas seulement sur l’écran Jouer.",
+        de: "Der große Würfel mit dem Ergebnis erscheint jetzt auch bei Würfen aus den Regeln (zum Beispiel die Angriffs- und Schadensknöpfe eines Monsters), nicht nur auf dem Spielbildschirm.",
+        es: "El dado grande con el resultado ahora también aparece en las tiradas hechas desde las reglas (por ejemplo los botones de ataque y daño de un monstruo), no solo en la pantalla Jugar.",
+      },
+    ],
+  },
+  {
     version: "1.29 beta",
     date: "2026-11-10",
     notes: [
