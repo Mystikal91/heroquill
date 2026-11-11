@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @b3f40d9 (2024)",
+    "version": "5e-srd-api fork integration @f79c200 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -2384,7 +2384,74 @@
     {
       "id": "srd52:feature/sorcerer-metamagic",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "option",
+          "choose": 2,
+          "grants": "trait",
+          "from": [
+            "srd52:feature/metamagic-careful-spell",
+            "srd52:feature/metamagic-distant-spell",
+            "srd52:feature/metamagic-empowered-spell",
+            "srd52:feature/metamagic-extended-spell",
+            "srd52:feature/metamagic-heightened-spell",
+            "srd52:feature/metamagic-quickened-spell",
+            "srd52:feature/metamagic-seeking-spell",
+            "srd52:feature/metamagic-subtle-spell",
+            "srd52:feature/metamagic-transmuted-spell",
+            "srd52:feature/metamagic-twinned-spell"
+          ]
+        },
+        {
+          "type": "when",
+          "requires": "[level:sorcerer:10]",
+          "effects": [
+            {
+              "type": "choice",
+              "id": "option-10",
+              "choose": 2,
+              "grants": "trait",
+              "from": [
+                "srd52:feature/metamagic-careful-spell",
+                "srd52:feature/metamagic-distant-spell",
+                "srd52:feature/metamagic-empowered-spell",
+                "srd52:feature/metamagic-extended-spell",
+                "srd52:feature/metamagic-heightened-spell",
+                "srd52:feature/metamagic-quickened-spell",
+                "srd52:feature/metamagic-seeking-spell",
+                "srd52:feature/metamagic-subtle-spell",
+                "srd52:feature/metamagic-transmuted-spell",
+                "srd52:feature/metamagic-twinned-spell"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "when",
+          "requires": "[level:sorcerer:17]",
+          "effects": [
+            {
+              "type": "choice",
+              "id": "option-17",
+              "choose": 2,
+              "grants": "trait",
+              "from": [
+                "srd52:feature/metamagic-careful-spell",
+                "srd52:feature/metamagic-distant-spell",
+                "srd52:feature/metamagic-empowered-spell",
+                "srd52:feature/metamagic-extended-spell",
+                "srd52:feature/metamagic-heightened-spell",
+                "srd52:feature/metamagic-quickened-spell",
+                "srd52:feature/metamagic-seeking-spell",
+                "srd52:feature/metamagic-subtle-spell",
+                "srd52:feature/metamagic-transmuted-spell",
+                "srd52:feature/metamagic-twinned-spell"
+              ]
+            }
+          ]
+        }
+      ],
       "data": {
         "class": "srd52:class/sorcerer",
         "level": 2
@@ -2467,9 +2534,155 @@
       }
     },
     {
+      "id": "srd52:feature/metamagic-careful-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-distant-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-empowered-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-extended-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-heightened-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-quickened-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-seeking-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-subtle-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-transmuted-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
+      "id": "srd52:feature/metamagic-twinned-spell",
+      "kind": "feature",
+      "parent": "srd52:feature/sorcerer-metamagic",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/sorcerer",
+        "level": 2
+      }
+    },
+    {
       "id": "srd52:feature/warlock-eldritch-invocations",
       "kind": "feature",
-      "effects": [],
+      "effects": [
+        {
+          "type": "choice",
+          "id": "option",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:feature/invocation-agonizing-blast-chill-touch",
+            "srd52:feature/invocation-agonizing-blast-eldritch-blast",
+            "srd52:feature/invocation-agonizing-blast-poison-spray",
+            "srd52:feature/invocation-armor-of-shadows",
+            "srd52:feature/invocation-ascendant-step",
+            "srd52:feature/invocation-devils-sight",
+            "srd52:feature/invocation-devouring-blade",
+            "srd52:feature/invocation-eldritch-mind",
+            "srd52:feature/invocation-eldritch-smite",
+            "srd52:feature/invocation-eldritch-spear-eldritch-blast",
+            "srd52:feature/invocation-eldritch-spear-poison-spray",
+            "srd52:feature/invocation-fiendish-vigor",
+            "srd52:feature/invocation-gaze-of-two-minds",
+            "srd52:feature/invocation-gift-of-the-depths",
+            "srd52:feature/invocation-gift-of-the-protectors",
+            "srd52:feature/invocation-investment-of-the-chain-master",
+            "srd52:feature/invocation-lessons-of-the-first-ones-alert",
+            "srd52:feature/invocation-lessons-of-the-first-ones-magic-initiate",
+            "srd52:feature/invocation-lessons-of-the-first-ones-savage-attacker",
+            "srd52:feature/invocation-lessons-of-the-first-ones-skilled",
+            "srd52:feature/invocation-lifedrinker",
+            "srd52:feature/invocation-mask-of-many-faces",
+            "srd52:feature/invocation-master-of-myriad-forms",
+            "srd52:feature/invocation-misty-visions",
+            "srd52:feature/invocation-one-with-shadows",
+            "srd52:feature/invocation-otherworldly-leap",
+            "srd52:feature/invocation-pact-of-the-blade",
+            "srd52:feature/invocation-pact-of-the-chain",
+            "srd52:feature/invocation-pact-of-the-tome",
+            "srd52:feature/invocation-repelling-blast-chill-touch",
+            "srd52:feature/invocation-repelling-blast-eldritch-blast",
+            "srd52:feature/invocation-repelling-blast-poison-spray",
+            "srd52:feature/invocation-thirsting-blade",
+            "srd52:feature/invocation-visions-of-distant-realms",
+            "srd52:feature/invocation-whispers-of-the-grave",
+            "srd52:feature/invocation-witch-sight"
+          ],
+          "chooseBy": "eldritchInvocations"
+        }
+      ],
       "data": {
         "class": "srd52:class/warlock",
         "level": 1
@@ -2577,6 +2790,747 @@
       "data": {
         "class": "srd52:class/warlock",
         "level": 20
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-agonizing-blast-chill-touch",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "spell": "srd52:spell/chill-touch"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/chill-touch"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-agonizing-blast-eldritch-blast",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "spell": "srd52:spell/eldritch-blast"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/eldritch-blast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-agonizing-blast-poison-spray",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "spellDamage",
+          "plus": "cha",
+          "spell": "srd52:spell/poison-spray"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/poison-spray"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-armor-of-shadows",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/mage-armor",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-ascendant-step",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/levitate",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-devils-sight",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-devouring-blade",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 12
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-thirsting-blade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-eldritch-mind",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-eldritch-smite",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-pact-of-the-blade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-eldritch-spear-eldritch-blast",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/eldritch-blast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-eldritch-spear-poison-spray",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/poison-spray"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-fiendish-vigor",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/false-life",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-gaze-of-two-minds",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-gift-of-the-depths",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "movement",
+          "mode": "swim",
+          "feet": "walk"
+        },
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/water-breathing",
+          "free": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-gift-of-the-protectors",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 9
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-pact-of-the-tome"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-investment-of-the-chain-master",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-pact-of-the-chain"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-lessons-of-the-first-ones-alert",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:feat/alert"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-lessons-of-the-first-ones-magic-initiate",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:feat/magic-initiate"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-lessons-of-the-first-ones-savage-attacker",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:feat/savage-attacker"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-lessons-of-the-first-ones-skilled",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "trait",
+          "id": "srd52:feat/skilled"
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-lifedrinker",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 9
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-pact-of-the-blade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-mask-of-many-faces",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/disguise-self",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-master-of-myriad-forms",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/alter-self",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-misty-visions",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/silent-image",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-one-with-shadows",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/invisibility",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-otherworldly-leap",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/jump",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-pact-of-the-blade",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-pact-of-the-chain",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/find-familiar",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-pact-of-the-tome",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "cantrips",
+          "choose": 3,
+          "grants": "spell",
+          "from": [],
+          "spellLevel": 0
+        },
+        {
+          "type": "choice",
+          "id": "rituals",
+          "choose": 2,
+          "grants": "spell",
+          "from": [],
+          "spellLevel": 1,
+          "ritual": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-repelling-blast-chill-touch",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/chill-touch"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-repelling-blast-eldritch-blast",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/eldritch-blast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-repelling-blast-poison-spray",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 2
+          },
+          {
+            "type": "spell",
+            "spell": "srd52:spell/poison-spray"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-thirsting-blade",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 5
+          },
+          {
+            "type": "feature",
+            "feature": "srd52:feature/invocation-pact-of-the-blade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-visions-of-distant-realms",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/arcane-eye",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 9
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-whispers-of-the-grave",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "grantSpell",
+          "spell": "srd52:spell/speak-with-dead",
+          "atWill": true
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:feature/invocation-witch-sight",
+      "kind": "feature",
+      "parent": "srd52:feature/warlock-eldritch-invocations",
+      "effects": [
+        {
+          "type": "sense",
+          "sense": "truesight",
+          "range": 30
+        }
+      ],
+      "data": {
+        "class": "srd52:class/warlock",
+        "level": 1,
+        "prerequisites": [
+          {
+            "type": "level",
+            "level": 15
+          }
+        ]
       }
     },
     {
