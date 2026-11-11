@@ -68,7 +68,8 @@ function RoundsField({ id, name }: { id: string; name: string }) {
 
 /**
  * Exhaustion is not a switch like the other conditions: it has levels (1 to 6), each with its effects, that a long rest
- * takes off one at a time. The card is always there, with a level to change and what the level does.
+ * takes off one at a time. Its button in the list gives the first level and shows this card, with the level to change
+ * and what the level does; taking off the first level (or a long rest) removes the card.
  */
 function Exhaustion() {
   const play = character.value.play;
@@ -118,16 +119,12 @@ function Exhaustion() {
             +
           </button>
         </div>
-        {level === 0 ? (
-          <p class="muted">{ui("play.exhaustionNone")}</p>
-        ) : (
-          <ul class="plain exhaustion-effects">
-            {lines.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-            {level >= MAX_EXHAUSTION && <li>{ui("play.exhaustionDead")}</li>}
-          </ul>
-        )}
+        <ul class="plain exhaustion-effects">
+          {lines.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+          {level >= MAX_EXHAUSTION && <li>{ui("play.exhaustionDead")}</li>}
+        </ul>
         <p class="muted">{ui("play.exhaustionRest")}</p>
       </li>
     </ul>
@@ -143,16 +140,18 @@ export function Conditions() {
   const play = character.value.play;
   if (!c) return null;
   const conditions = [...c.index.values()]
-    .filter(
-      (e) =>
-        e.kind === "condition" &&
-        inRuleset(e.id, character.value.ruleset) &&
-        !isExhaustionCondition(e.id),
-    )
+    .filter((e) => e.kind === "condition" && inRuleset(e.id, character.value.ruleset))
     .sort((a, b) => c.name(a.id).localeCompare(c.name(b.id)));
-  const active = conditions.filter((e) => play.conditions.includes(e.id));
-  const others = conditions.filter((e) => !play.conditions.includes(e.id));
-  const toggle = (id: string) => changePlay((p) => toggleCondition(p, id));
+  // Exhaustion has its own card, which is there from the first level on; the button of the list gives that level.
+  const tired = exhaustionLevel(play) > 0;
+  const active = conditions.filter(
+    (e) => play.conditions.includes(e.id) && !isExhaustionCondition(e.id),
+  );
+  const others = conditions.filter(
+    (e) => !active.includes(e) && !(isExhaustionCondition(e.id) && tired),
+  );
+  const toggle = (id: string) =>
+    changePlay((p) => (isExhaustionCondition(id) ? setExhaustion(p, 1) : toggleCondition(p, id)));
   const immune = sheet.value?.conditionImmunities ?? [];
   // What else runs by rounds: the concentration, the rage and the cantrip Shillelagh.
   const running = (["concentration", "rage", "shillelagh", "sacredWeapon"] as const).filter(
@@ -240,7 +239,7 @@ export function Conditions() {
           })}
         </ul>
       )}
-      <Exhaustion />
+      {tired && <Exhaustion />}
       {active.length > 0 && (
         <ul class="plain card-list">
           {active.map((e) => (

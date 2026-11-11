@@ -1030,7 +1030,6 @@
   "play.exhaustionLevel": "Stufe {n} von {max}",
   "play.exhaustionFewer": "Eine Stufe Erschöpfung entfernen",
   "play.exhaustionMore": "Eine Stufe Erschöpfung hinzufügen",
-  "play.exhaustionNone": "Keine Stufen Erschöpfung.",
   "play.exhaustionDead": "Tod.",
   "play.exhaustionRest": "Eine lange Rast entfernt eine Stufe.",
   "play.exhaustion24": "W20-Tests sind um {d20} gesenkt (Proben, Angriffe, Rettungswürfe, Initiative), ebenso der Zauber-SG; deine Bewegungsrate ist um {feet} Fuß gesenkt.",

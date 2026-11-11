@@ -1030,7 +1030,6 @@
   "play.exhaustionLevel": "Livello {n} di {max}",
   "play.exhaustionFewer": "Togli un livello di esaurimento",
   "play.exhaustionMore": "Aggiungi un livello di esaurimento",
-  "play.exhaustionNone": "Nessun livello di esaurimento.",
   "play.exhaustionDead": "Morte.",
   "play.exhaustionRest": "Un riposo lungo toglie un livello.",
   "play.exhaustion24": "I Test di d20 sono ridotti di {d20} (prove, attacchi, tiri salvezza, iniziativa) e così la CD degli incantesimi; la velocità è ridotta di {feet} piedi.",

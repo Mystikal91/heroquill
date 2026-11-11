@@ -1030,7 +1030,6 @@
   "play.exhaustionLevel": "Nivel {n} de {max}",
   "play.exhaustionFewer": "Quitar un nivel de agotamiento",
   "play.exhaustionMore": "Añadir un nivel de agotamiento",
-  "play.exhaustionNone": "Ningún nivel de agotamiento.",
   "play.exhaustionDead": "Muerte.",
   "play.exhaustionRest": "Un descanso largo quita un nivel.",
   "play.exhaustion24": "Las tiradas de d20 se reducen en {d20} (pruebas, ataques, salvaciones, iniciativa) y también la CD de tus conjuros; tu velocidad se reduce en {feet} pies.",

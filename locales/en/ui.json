@@ -1030,7 +1030,6 @@
   "play.exhaustionLevel": "Level {n} of {max}",
   "play.exhaustionFewer": "Take off a level of exhaustion",
   "play.exhaustionMore": "Add a level of exhaustion",
-  "play.exhaustionNone": "No levels of exhaustion.",
   "play.exhaustionDead": "Death.",
   "play.exhaustionRest": "A long rest takes off one level.",
   "play.exhaustion24": "D20 Tests are lowered by {d20} (checks, attacks, saves, initiative) and so is your spell save DC; your Speed is lowered by {feet} feet.",

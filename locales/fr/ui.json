@@ -1030,7 +1030,6 @@
   "play.exhaustionLevel": "Niveau {n} sur {max}",
   "play.exhaustionFewer": "Retirer un niveau d’épuisement",
   "play.exhaustionMore": "Ajouter un niveau d’épuisement",
-  "play.exhaustionNone": "Aucun niveau d’épuisement.",
   "play.exhaustionDead": "Mort.",
   "play.exhaustionRest": "Un repos long retire un niveau.",
   "play.exhaustion24": "Les jets de d20 sont réduits de {d20} (tests, attaques, sauvegardes, initiative), tout comme le DD de vos sorts ; votre vitesse est réduite de {feet} pieds.",
