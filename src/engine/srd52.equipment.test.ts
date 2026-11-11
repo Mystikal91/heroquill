@@ -22,7 +22,7 @@ describe("2024 equipment", () => {
     expect(by("weapon")).toBe(38);
     expect(by("armor")).toBe(13);
     expect(by("tools")).toBe(37);
-    expect(items.length).toBe(182);
+    expect(items.filter((e) => e.data.category !== "magic-items").length).toBe(182);
   });
 
   it("gives every weapon and armor a shape the engine reads", () => {
@@ -145,7 +145,8 @@ describe("the 2014 and 2024 item pairs", () => {
     expect(pairs.items["srd52:item/dungeoneer-pack"]).toBe("srd51:item/dungeoneers-pack");
     expect(pairs.items["srd52:item/arrows"]).toBe("srd51:item/arrow");
     expect(pairs.onlyIn2024).toContain("srd52:item/musket");
-    expect(Object.keys(pairs.items).length + pairs.onlyIn2024.length).toBe(182);
+    // every 2024 item: the 182 of the equipment table and the 271 magic items
+    expect(Object.keys(pairs.items).length + pairs.onlyIn2024.length).toBe(182 + 271);
   });
 
   it("never pairs two 2024 items with the same 2014 one", () => {

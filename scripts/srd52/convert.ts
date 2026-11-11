@@ -8,6 +8,7 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { cleanData } from "../srd51/convert";
+import { magicItemSlot } from "../srd51/effects";
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
@@ -40,6 +41,7 @@ export interface RawSource {
   backgrounds: Raw[];
   species: Raw[];
   subspecies: Raw[];
+  magicItems: Raw[];
   traits: Raw[];
   classes: Raw[];
   levels: Raw[];
@@ -1091,6 +1093,63 @@ function startingChoices(rawSets: Raw[] | undefined): Record<string, unknown>[] 
   }));
 }
 
+/**
+ * The magic items of the SRD: plain items (`category "magic-items"`, rarity, attunement, where they are worn), the text
+ * says what they do, as in the 5.1 build. The entries that only point to their variants ("Armor, +1, +2, or +3": the
+ * variants carry that entry's picture) are left out, the variants are listed. A rarity that varies has none.
+ */
+function convertMagicItems(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  const parents = new Set(
+    (raw.magicItems as Raw[])
+      .filter((m) => m.variant)
+      .map((m) => /\/([^/]+)\.png$/.exec(String(m.image))?.[1])
+      .filter((p) => p && !(raw.magicItems as Raw[]).some((m) => m.variant && m.index === p)),
+  );
+  const category: Record<string, string> = {
+    armor: "armor",
+    weapons: "weapon",
+    rings: "ring",
+    staffs: "staff",
+    wands: "wand",
+    potions: "potion",
+    "wondrous-items": "wondrous-items",
+  };
+  for (const m of raw.magicItems as Raw[]) {
+    if (!m.variant && parents.has(m.index)) continue;
+    const kind = String(m.desc[0] ?? "");
+    // The book says what kind of armor it is ("Armor (Shield)"); the table of the 5.1 build knows the shields by name.
+    const slot = /\(Shield\)/i.test(kind)
+      ? "shield"
+      : magicItemSlot(
+          m.index,
+          kind === "Rod"
+            ? "rod"
+            : (category[m.equipment_category.index] ?? m.equipment_category.index),
+        );
+    const rarity = String(m.rarity.name)
+      .replace(/\s*\(.*$/, "")
+      .toLowerCase()
+      .replace(/ /g, "-");
+    entries.push({
+      id: id("item", m.index),
+      kind: "item",
+      effects: [],
+      data: {
+        category: "magic-items",
+        cost: { amount: 0, unit: "gp" },
+        ...(rarity !== "rarity-varies" && { rarity }),
+        attunement: Boolean(m.attunement),
+        ...(slot && { slot }),
+      },
+    });
+    strings[`${m.index}.name`] = m.name;
+    strings[`${m.index}.desc`] = text((m.desc as string[]).join("\n")) ?? "";
+  }
+  return { entries, strings };
+}
+
 const merge = (...parts: Converted[]): Converted => ({
   entries: parts.flatMap((p) => p.entries),
   strings: Object.assign({}, ...parts.map((p) => p.strings)),
@@ -1156,7 +1215,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     class: classPart.classes,
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),
-    item: items,
+    item: merge(items, convertMagicItems(raw)),
     property: convertProperties(raw),
     spell: convertSpells(raw),
     school: convertSchools(raw),

@@ -1,7 +1,7 @@
 {
   "repo": "Mystikal91/5e-srd-api",
-  "commit": "67440065ae2325551ab491af268ebbbf14cd0487",
-  "databaseVersion": "5e-srd-api fork integration @6744006 (2024)",
+  "commit": "b3f40d923b369ec40cdd66ffe061f2f24251d933",
+  "databaseVersion": "5e-srd-api fork integration @b3f40d9 (2024)",
   "path": "packages/5e-database/src/2024/en",
   "files": [
     "5e-SRD-Ability-Scores",
@@ -12,6 +12,7 @@
     "5e-SRD-Backgrounds",
     "5e-SRD-Species",
     "5e-SRD-Subspecies",
+    "5e-SRD-Magic-Items",
     "5e-SRD-Traits",
     "5e-SRD-Classes",
     "5e-SRD-Levels",
