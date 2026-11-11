@@ -322,3 +322,25 @@ output.death-status {
   font-size: 0.9rem;
   white-space: nowrap;
 }
+
+/* The exhaustion card: a level to change and what the level does, across the whole card. */
+.exhaustion-card > p,
+.exhaustion-card > .exhaustion-effects {
+  grid-column: 1 / -1;
+  margin: 0.5rem 0 0;
+}
+
+.exhaustion-card .exhaustion-effects {
+  padding: 0;
+}
+
+.exhaustion-card .exhaustion-effects li + li {
+  margin-top: 0.25rem;
+}
+
+.exhaustion-card .cond-rounds output {
+  min-width: 2.25rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
