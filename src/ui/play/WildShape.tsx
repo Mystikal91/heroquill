@@ -169,7 +169,7 @@ export function WildShape() {
     );
   }
 
-  const beasts = monstersOf(c.index)
+  const beasts = monstersOf(c.index, character.value.ruleset)
     .filter((e) => canAssume(e, limits))
     .map((e) => ({ id: e.id, name: c.name(e.id), cr: challengeText(Number(e.data.challenge)) }))
     .sort((a, b) => a.name.localeCompare(b.name));

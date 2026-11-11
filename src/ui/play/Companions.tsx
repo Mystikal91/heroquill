@@ -116,7 +116,7 @@ export function Companions() {
   }, [list.length, adding]);
   if (!c) return null;
 
-  const monsters = monstersOf(c.index)
+  const monsters = monstersOf(c.index, character.value.ruleset)
     .map((e) => ({ id: e.id, name: c.name(e.id), familiar: isFamiliar(e) }))
     .sort((a, b) => a.name.localeCompare(b.name));
   const familiars = monsters.filter((m) => m.familiar);

@@ -933,7 +933,13 @@ const feetOf = (value: string) => Number.parseInt(value, 10);
  * Alternatives that the source spells out as option sets (breath weapons, rolled-up attacks) are
  * left to the text; `names` turns the actions a multiattack names into positions in the list.
  */
-function monsterAction(strings: Strings, prefix: string, a: Raw, names: Map<string, number>): Raw {
+function monsterAction(
+  strings: Strings,
+  prefix: string,
+  a: Raw,
+  names: Map<string, number>,
+  pack: string,
+): Raw {
   const { name, desc, ...rest } = a;
   strings[`${prefix}.name`] = name;
   strings[`${prefix}.desc`] = desc ?? "";
@@ -960,7 +966,7 @@ function monsterAction(strings: Strings, prefix: string, a: Raw, names: Map<stri
       ...cleanData(rest.spellcasting),
       ability: rest.spellcasting.ability?.index,
       spells: (rest.spellcasting.spells as Raw[]).map((sp) => ({
-        spell: id("spell", lastSegment(sp.url)),
+        spell: `${pack}:spell/${lastSegment(sp.url)}`,
         level: sp.level,
         ...(sp.usage && { usage: cleanData(sp.usage) }),
       })),
@@ -968,9 +974,11 @@ function monsterAction(strings: Strings, prefix: string, a: Raw, names: Map<stri
   return Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
 }
 
-function convertMonsters(raw: RawSource): Converted {
+/** The monsters of a rules pack (`srd51`, or `srd52` for the 2024 book): the data has the same shape. */
+export function convertMonsters(raw: { monsters: Raw[] }, pack: string = PACK): Converted {
   const entries: Entry[] = [];
   const strings: Strings = {};
+  const idOf = (kind: string, slug: string) => `${pack}:${kind}/${slug}`;
   for (const m of raw.monsters) {
     const swarm = /^swarm of (\w+) (\w+?)s?$/i.exec(m.type);
     const type = swarm ? (swarm[2] as string).toLowerCase() : m.type;
@@ -1013,8 +1021,8 @@ function convertMonsters(raw: RawSource): Converted {
       armorClass: (m.armor_class as Raw[]).map((a) => ({
         type: a.type,
         value: a.value,
-        ...(a.armor && { armor: (a.armor as Raw[]).map((i) => id("item", i.index)) }),
-        ...(a.spell && { spell: id("spell", a.spell.index) }),
+        ...(a.armor && { armor: (a.armor as Raw[]).map((i) => idOf("item", i.index)) }),
+        ...(a.spell && { spell: idOf("spell", a.spell.index) }),
         ...(a.condition && { condition: a.condition.index }),
       })),
       hitPoints: m.hit_points,
@@ -1031,7 +1039,7 @@ function convertMonsters(raw: RawSource): Converted {
       challenge: m.challenge_rating,
       xp: m.xp,
       proficiencyBonus: m.proficiency_bonus,
-      ...(m.forms && { forms: (m.forms as Raw[]).map((f) => id("monster", f.index)) }),
+      ...(m.forms && { forms: (m.forms as Raw[]).map((f) => idOf("monster", f.index)) }),
     };
     const actionNames = new Map<string, number>(
       (lists.actions ?? []).map((a, i) => [a.name as string, i + 1]),
@@ -1039,9 +1047,9 @@ function convertMonsters(raw: RawSource): Converted {
     for (const [key, list] of Object.entries(lists))
       if (list.length)
         data[key] = list.map((a, i) =>
-          monsterAction(strings, `${m.index}.${key}.${i + 1}`, a, actionNames),
+          monsterAction(strings, `${m.index}.${key}.${i + 1}`, a, actionNames, pack),
         );
-    entries.push({ id: id("monster", m.index), kind: "monster", effects: [], data });
+    entries.push({ id: idOf("monster", m.index), kind: "monster", effects: [], data });
     strings[`${m.index}.name`] = m.name;
     if (m.desc) strings[`${m.index}.desc`] = m.desc;
     strings[`${m.index}.alignment`] = m.alignment;

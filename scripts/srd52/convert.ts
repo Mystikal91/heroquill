@@ -7,7 +7,7 @@
  * `effects.ts`, as for the 5.1 build; a feature with no effect there is text only.
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
-import { cleanData } from "../srd51/convert";
+import { cleanData, convertMonsters } from "../srd51/convert";
 import { magicItemSlot } from "../srd51/effects";
 import {
   ACTIVATION,
@@ -42,6 +42,7 @@ export interface RawSource {
   species: Raw[];
   subspecies: Raw[];
   magicItems: Raw[];
+  monsters: Raw[];
   traits: Raw[];
   classes: Raw[];
   levels: Raw[];
@@ -1216,6 +1217,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),
     item: merge(items, convertMagicItems(raw)),
+    monster: convertMonsters(raw, PACK),
     property: convertProperties(raw),
     spell: convertSpells(raw),
     school: convertSchools(raw),

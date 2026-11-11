@@ -1,5 +1,6 @@
 import type { Entry } from "../data/schema";
 import type { Companion } from "./character";
+import { inRuleset } from "./rulesets";
 import { type Owner, scaledHitPoints } from "./scaling";
 
 /** The forms the spell Find Familiar offers in the SRD, by the slug of the monster. */
@@ -21,9 +22,9 @@ export const SRD_FAMILIARS = [
   "weasel",
 ];
 
-/** The monsters among the entries, in no particular order. */
-export const monstersOf = (index: ReadonlyMap<string, Entry>): Entry[] =>
-  [...index.values()].filter((e) => e.kind === "monster");
+/** The monsters among the entries (those of the character's edition, and of the packs added), in no particular order. */
+export const monstersOf = (index: ReadonlyMap<string, Entry>, ruleset?: string): Entry[] =>
+  [...index.values()].filter((e) => e.kind === "monster" && (!ruleset || inRuleset(e.id, ruleset)));
 
 /** A monster a familiar can be: a form of Find Familiar, or one a book lists as a familiar. */
 export function isFamiliar(entry: Entry): boolean {
