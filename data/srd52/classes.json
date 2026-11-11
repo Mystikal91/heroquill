@@ -1632,7 +1632,9 @@
             "classSpecific": {
               "wildShapeUses": 2,
               "wildShapeMaxCr": 0.25,
-              "wildShapeKnownForms": 4
+              "wildShapeKnownForms": 4,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1657,7 +1659,9 @@
             "classSpecific": {
               "wildShapeUses": 2,
               "wildShapeMaxCr": 0.25,
-              "wildShapeKnownForms": 4
+              "wildShapeKnownForms": 4,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1682,7 +1686,9 @@
             "classSpecific": {
               "wildShapeUses": 2,
               "wildShapeMaxCr": 0.5,
-              "wildShapeKnownForms": 6
+              "wildShapeKnownForms": 6,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1707,7 +1713,9 @@
             "classSpecific": {
               "wildShapeUses": 2,
               "wildShapeMaxCr": 0.5,
-              "wildShapeKnownForms": 6
+              "wildShapeKnownForms": 6,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1732,7 +1740,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 0.5,
-              "wildShapeKnownForms": 6
+              "wildShapeKnownForms": 6,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1757,7 +1767,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 0.5,
-              "wildShapeKnownForms": 6
+              "wildShapeKnownForms": 6,
+              "wildShapeFly": false,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1782,7 +1794,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1805,7 +1819,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1830,7 +1846,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1853,7 +1871,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1878,7 +1898,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1901,7 +1923,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1926,7 +1950,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1951,7 +1977,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1976,7 +2004,9 @@
             "classSpecific": {
               "wildShapeUses": 3,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -1999,7 +2029,9 @@
             "classSpecific": {
               "wildShapeUses": 4,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -2024,7 +2056,9 @@
             "classSpecific": {
               "wildShapeUses": 4,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -2049,7 +2083,9 @@
             "classSpecific": {
               "wildShapeUses": 4,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           },
           {
@@ -2074,7 +2110,9 @@
             "classSpecific": {
               "wildShapeUses": 4,
               "wildShapeMaxCr": 1,
-              "wildShapeKnownForms": 8
+              "wildShapeKnownForms": 8,
+              "wildShapeFly": true,
+              "wildShapeSwim": true
             }
           }
         ],
