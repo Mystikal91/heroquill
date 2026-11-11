@@ -20,6 +20,7 @@ import {
 } from "../../engine/play";
 import { inRuleset } from "../../engine/rulesets";
 import { type UiKey, ui } from "../../i18n/ui";
+import { distance } from "../../i18n/units";
 import { Panel, Paragraphs } from "../sheet/parts";
 import { useHoldRepeat } from "../useHoldRepeat";
 import { ConditionIcon } from "./icons";
@@ -79,7 +80,7 @@ function Exhaustion() {
   const lines =
     ruleset === "srd52"
       ? level > 0
-        ? [ui("play.exhaustion24", { d20: 2 * level, feet: 5 * level })]
+        ? [ui("play.exhaustion24", { d20: 2 * level, distance: distance(5 * level) })]
         : []
       : Array.from({ length: level }, (_, i) => ui(`play.exhaustion14.${i + 1}` as UiKey));
   return (

@@ -1032,7 +1032,7 @@
   "play.exhaustionMore": "Eine Stufe Erschöpfung hinzufügen",
   "play.exhaustionDead": "Tod.",
   "play.exhaustionRest": "Eine lange Rast entfernt eine Stufe.",
-  "play.exhaustion24": "W20-Tests sind um {d20} gesenkt (Proben, Angriffe, Rettungswürfe, Initiative), ebenso der Zauber-SG; deine Bewegungsrate ist um {feet} Fuß gesenkt.",
+  "play.exhaustion24": "W20-Tests sind um {d20} gesenkt (Proben, Angriffe, Rettungswürfe, Initiative), ebenso der Zauber-SG; deine Bewegungsrate ist um {distance} gesenkt.",
   "play.exhaustion14.1": "Nachteil bei Attributswürfen.",
   "play.exhaustion14.2": "Bewegungsrate halbiert.",
   "play.exhaustion14.3": "Nachteil bei Angriffswürfen und Rettungswürfen.",

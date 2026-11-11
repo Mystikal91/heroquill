@@ -1032,7 +1032,7 @@
   "play.exhaustionMore": "Add a level of exhaustion",
   "play.exhaustionDead": "Death.",
   "play.exhaustionRest": "A long rest takes off one level.",
-  "play.exhaustion24": "D20 Tests are lowered by {d20} (checks, attacks, saves, initiative) and so is your spell save DC; your Speed is lowered by {feet} feet.",
+  "play.exhaustion24": "D20 Tests are lowered by {d20} (checks, attacks, saves, initiative) and so is your spell save DC; your Speed is lowered by {distance}.",
   "play.exhaustion14.1": "Disadvantage on ability checks.",
   "play.exhaustion14.2": "Speed halved.",
   "play.exhaustion14.3": "Disadvantage on attack rolls and saving throws.",
