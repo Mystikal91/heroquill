@@ -113,19 +113,32 @@ export function classResources(input: Input): {
     }
     case "bard":
       add("bardicInspiration", Math.max(1, modifier("cha")), level >= 5 ? "short" : "long", {
-        covers: "^(bardic-inspiration|font-of-inspiration)",
+        covers: "^(bard-)?(bardic-inspiration|font-of-inspiration)",
       });
       if (num("bardicInspirationDie") > 0)
         facts.push({ kind: "bardicDie", params: { die: num("bardicInspirationDie") } });
       break;
     case "cleric":
-      add("channelDivinity", num("channelDivinityCharges"), "short", {
-        covers: "^channel-divinity",
-      });
+      if (input.ruleset === "srd52")
+        // Two uses, more by level; one comes back on a short rest, all of them on a long one.
+        add("channelDivinity", num("channelDivinityCharges"), "long", {
+          covers: "^cleric-channel-divinity$",
+          shortRegain: 1,
+        });
+      else
+        add("channelDivinity", num("channelDivinityCharges"), "short", {
+          covers: "^channel-divinity",
+        });
       break;
     case "druid":
+      if (input.ruleset === "srd52")
+        // The uses are the table's; one comes back on a short rest, all of them on a long one.
+        add("wildShape", num("wildShapeUses"), "long", {
+          covers: "^druid-wild-shape$",
+          shortRegain: 1,
+        });
       // The Archdruid, at the 20th level, can Wild Shape as often as wanted.
-      if (level >= 2)
+      else if (level >= 2)
         add("wildShape", level >= 20 ? 99 : 2, "short", {
           covers: "^wild-shape",
           ...(level >= 20 && { unlimited: true }),
@@ -180,9 +193,32 @@ export function classResources(input: Input): {
       break;
     }
     case "sorcerer":
-      add("sorceryPoints", num("sorceryPoints"), "long", { pool: true, covers: "^font-of-magic$" });
+      add("sorceryPoints", num("sorceryPoints"), "long", {
+        pool: true,
+        covers: "^(sorcerer-)?font-of-magic$",
+      });
       break;
-    case "warlock":
+    case "warlock": {
+      // In 2024 the one feature Mystic Arcanum comes at levels 11, 13, 15 and 17, a spell of level 6, 7, 8 and 9 each time.
+      const arcana =
+        input.ruleset === "srd52"
+          ? data.levels
+              .filter((l) => l.level <= level)
+              .reduce(
+                (n, l) => n + l.features.filter((f) => f.endsWith("-mystic-arcanum")).length,
+                0,
+              )
+          : 0;
+      for (let k = 1; k <= arcana; k++)
+        resources.push({
+          id: `mysticArcanum${5 + k}:${slug(classId)}`,
+          kind: "mysticArcanum",
+          classId,
+          max: 1,
+          recovery: "long",
+          level: 5 + k,
+          covers: "^warlock-mystic-arcanum$",
+        });
       for (const spellLevel of [6, 7, 8, 9]) {
         if (num(`mysticArcanumLevel_${spellLevel}`) > 0) {
           resources.push({
@@ -197,8 +233,12 @@ export function classResources(input: Input): {
         }
       }
       break;
+    }
     case "wizard":
-      if (num("arcaneRecoveryLevels") > 0)
+      // In 2024 Arcane Recovery gives back slots of a combined level up to half the Wizard level, rounded up.
+      if (input.ruleset === "srd52")
+        facts.push({ kind: "arcaneRecovery", params: { levels: Math.ceil(level / 2) } });
+      else if (num("arcaneRecoveryLevels") > 0)
         facts.push({ kind: "arcaneRecovery", params: { levels: num("arcaneRecoveryLevels") } });
       break;
   }

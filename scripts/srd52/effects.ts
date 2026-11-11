@@ -181,6 +181,90 @@ export const FEATURE_EFFECTS: Record<string, Effect[]> = {
   "ranger-tireless": [{ type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 }],
   "ranger-natures-veil": [{ type: "uses", term: { mod: "wis" }, recharge: "long", min: 1 }],
   "ranger-feral-senses": [{ type: "sense", sense: "blindsight", range: 30 }],
+
+  // ---- Bard. The uses and the die of Bardic Inspiration come from the class table (`bardic_inspiration_die`).
+  "bard-expertise": [
+    { type: "choice", id: "expertise", choose: 2, grants: "expertise", from: SKILLS },
+    {
+      type: "when",
+      requires: "[level:bard:9]",
+      effects: [
+        { type: "choice", id: "expertise-2", choose: 2, grants: "expertise", from: SKILLS },
+      ],
+    },
+  ],
+  "bard-jack-of-all-trades": [{ type: "halfProficiency", round: "down" }],
+  // Always prepared, and the two words of life and death.
+  "bard-words-of-creation": [
+    { type: "grantSpell", spell: "srd52:spell/power-word-heal" },
+    { type: "grantSpell", spell: "srd52:spell/power-word-kill" },
+  ],
+  "college-of-lore-bonus-proficiencies": [
+    {
+      type: "choice",
+      id: "skills",
+      choose: 3,
+      grants: "proficiency",
+      from: SKILLS.map((skill) => `skill:${skill}`),
+    },
+  ],
+  "college-of-lore-cutting-words": [{ type: "spends", pool: "bardicInspiration" }],
+  "college-of-lore-peerless-skill": [{ type: "spends", pool: "bardicInspiration" }],
+
+  // ---- Cleric. Channel Divinity comes from the class table (`channel_divinity_charges`).
+  "cleric-divine-intervention": [{ type: "uses", term: 1, recharge: "long" }],
+  "life-domain-disciple-of-life": [{ type: "spellHealing", plusSlotLevel: 2 }],
+  "life-domain-preserve-life": [{ type: "spends", pool: "channelDivinity" }],
+  "life-domain-blessed-healer": [{ type: "spellHealing", selfPlusSlotLevel: 2 }],
+  "life-domain-supreme-healing": [{ type: "spellHealing", maxDice: true }],
+
+  // ---- Druid. Wild Shape comes from the class table (`wild_shape_uses`, and the Challenge Rating from its Beast Shapes table).
+  "druid-druidic": [{ type: "grantSpell", spell: "srd52:spell/speak-with-animals" }],
+  // Immunity to Poisoned; the Resistance of the land is in the trait of the land picked with Circle Spells.
+  "circle-of-the-land-natures-ward": [{ type: "conditionImmunity", condition: "poisoned" }],
+  "circle-of-the-land-lands-aid": [{ type: "spends", pool: "wildShape" }],
+  "circle-of-the-land-natural-recovery": [{ type: "uses", term: 1, recharge: "long" }],
+  "circle-of-the-land-natures-sanctuary": [{ type: "spends", pool: "wildShape" }],
+
+  // ---- Sorcerer. Sorcery Points come from the class table (`sorcery_points`).
+  "sorcerer-innate-sorcery": [{ type: "uses", term: 2, recharge: "long" }],
+  "sorcerer-sorcerous-restoration": [{ type: "uses", term: 1, recharge: "long" }],
+  // 3 more Hit Points at level 3 and 1 for each level: 1 for each Sorcerer level; Armor Class 10 + Dexterity + Charisma without armor.
+  "draconic-sorcery-draconic-resilience": [
+    { type: "unarmoredDefense", base: 10, add: ["cha"], shield: false },
+    { type: "modifier", target: "hpPerLevel", value: 1 },
+  ],
+  "draconic-sorcery-dragon-wings": [{ type: "uses", term: 1, recharge: "long" }],
+  "draconic-sorcery-dragon-companion": [
+    { type: "grantSpell", spell: "srd52:spell/summon-dragon" },
+    { type: "uses", term: 1, recharge: "long" },
+  ],
+
+  // ---- Warlock. The Pact Magic slots and the invocations come from the class table.
+  "warlock-magical-cunning": [{ type: "uses", term: 1, recharge: "long" }],
+  "warlock-contact-patron": [
+    { type: "grantSpell", spell: "srd52:spell/contact-other-plane" },
+    { type: "uses", term: 1, recharge: "long" },
+  ],
+  "fiend-patron-dark-ones-own-luck": [
+    { type: "uses", term: { mod: "cha" }, recharge: "long", min: 1 },
+  ],
+  "fiend-patron-hurl-through-hell": [{ type: "uses", term: 1, recharge: "long" }],
+
+  // ---- Wizard. Arcane Recovery is a fact of the class (half the level, rounded up).
+  "wizard-arcane-recovery": [{ type: "uses", term: 1, recharge: "long" }],
+  "wizard-scholar": [
+    {
+      type: "choice",
+      id: "expertise",
+      choose: 1,
+      grants: "expertise",
+      from: ["arcana", "history", "investigation", "medicine", "nature", "religion"],
+    },
+  ],
+  "evoker-empowered-evocation": [
+    { type: "spellDamage", plus: "int", school: "evocation", once: true },
+  ],
 };
 
 /**
@@ -208,6 +292,12 @@ export const FEAT_PICKS: Record<string, { category: string; id: string }> = {
   "barbarian-epic-boon": { category: "epic-boon", id: "epic-boon" },
   "paladin-epic-boon": { category: "epic-boon", id: "epic-boon" },
   "ranger-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "bard-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "cleric-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "druid-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "sorcerer-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "warlock-epic-boon": { category: "epic-boon", id: "epic-boon" },
+  "wizard-epic-boon": { category: "epic-boon", id: "epic-boon" },
   "paladin-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "ranger-fighting-style": { category: "fighting-style", id: "fighting-style" },
   "monk-epic-boon": { category: "epic-boon", id: "epic-boon" },
@@ -242,4 +332,16 @@ export const ACTIVATION: Record<string, "action" | "bonus" | "reaction"> = {
   "oath-of-devotion-holy-nimbus": "bonus",
   "ranger-tireless": "action",
   "ranger-natures-veil": "bonus",
+  "bard-bardic-inspiration": "bonus",
+  "bard-countercharm": "reaction",
+  "college-of-lore-cutting-words": "reaction",
+  "cleric-divine-intervention": "action",
+  "life-domain-preserve-life": "action",
+  "druid-wild-shape": "bonus",
+  "druid-wild-companion": "action",
+  "circle-of-the-land-lands-aid": "action",
+  "circle-of-the-land-natures-sanctuary": "action",
+  "sorcerer-innate-sorcery": "bonus",
+  "draconic-sorcery-dragon-wings": "bonus",
+  "fiend-patron-dark-ones-own-luck": "reaction",
 };

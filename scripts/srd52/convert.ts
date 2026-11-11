@@ -43,7 +43,20 @@ export interface RawSource {
 
 /** What the pilot converts for the kinds that are big; everything of the small kinds is converted. */
 export const PILOT = {
-  classes: ["fighter", "barbarian", "monk", "rogue", "paladin", "ranger"],
+  classes: [
+    "fighter",
+    "barbarian",
+    "monk",
+    "rogue",
+    "paladin",
+    "ranger",
+    "bard",
+    "cleric",
+    "druid",
+    "sorcerer",
+    "warlock",
+    "wizard",
+  ],
   subclasses: [
     "champion",
     "path-of-the-berserker",
@@ -51,6 +64,12 @@ export const PILOT = {
     "thief",
     "oath-of-devotion",
     "hunter",
+    "college-of-lore",
+    "life-domain",
+    "circle-of-the-land",
+    "draconic-sorcery",
+    "fiend-patron",
+    "evoker",
   ],
   backgrounds: ["soldier"],
   species: ["human"],
@@ -424,6 +443,32 @@ function featureEntry(slug: string, owner: Raw, level: number): Entry {
   };
 }
 
+/**
+ * The Beast Shapes table in the text of Wild Shape (`Druid Level / Known Forms / Max CR / Fly Speed`, then `2 / 4 / 1/4 / No`)
+ * gives the highest Challenge Rating of a form by Druid level: it goes into each level of the class table as
+ * `wildShapeMaxCr` and `wildShapeKnownForms`, as the 5.1 data has the Challenge Rating.
+ */
+function addWildShapeLimits(raw: RawSource, levels: { level: number; classSpecific: unknown }[]) {
+  const feature = (raw.features as Raw[]).find((f) => f.index === "druid-wild-shape");
+  const steps: { level: number; forms: number; cr: number }[] = [];
+  for (const line of String(feature?.description ?? "").split("\n")) {
+    const row = /^(\d+) \/ (\d+) \/ (\d+(?:\/\d+)?) \/ (?:Yes|No)$/.exec(line.trim());
+    if (!row) continue;
+    const [num, den] = String(row[3]).split("/").map(Number);
+    steps.push({ level: Number(row[1]), forms: Number(row[2]), cr: (num as number) / (den ?? 1) });
+  }
+  if (steps.length === 0) throw new Error("The Beast Shapes table of Wild Shape was not found");
+  for (const l of levels) {
+    const step = [...steps].reverse().find((x) => x.level <= l.level);
+    if (step)
+      l.classSpecific = {
+        ...(l.classSpecific as object),
+        wildShapeMaxCr: step.cr,
+        wildShapeKnownForms: step.forms,
+      };
+  }
+}
+
 /** The keys of a class table row in camel case, also inside a value (`sneak_attack.dice_count`), as the 2014 data has them. */
 function camelKeys(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(camelKeys);
@@ -445,6 +490,8 @@ const PREPARATION: Record<string, Record<string, unknown>> = Object.fromEntries(
   ]),
   ["wizard", { type: "spellbook", initial: 6, perLevel: 2, fromTable: true }],
 ]);
+// Pact Magic: the prepared spells are the table's too, of a level up to the slot level (the slots are all of one level).
+PREPARATION.warlock = { type: "prepared", levelDivisor: 1, fromTable: true };
 const failPreparation = (index: string): never => {
   throw new Error(`No spell preparation rule for class ${index}`);
 };
@@ -498,6 +545,8 @@ function convertClasses(
         features.strings[`${f.index}.desc`] = text(feature.description);
       }
     }
+
+    if (c.index === "druid") addWildShapeLimits(raw, levels);
 
     const prereq = c.multi_classing.prerequisite_options;
     classes.entries.push({
@@ -553,6 +602,8 @@ function convertClasses(
  * spell of the list stops the build: the table is read as it is, never corrected here.
  */
 function subclassSpells(raw: RawSource, subclass: string): { spell: string; classLevel: number }[] {
+  // The Circle of the Land has four tables, one for each kind of land: they are traits (`landTraits`).
+  if (subclass === "circle-of-the-land") return [];
   const feature = (raw.features as Raw[]).find(
     (f) => f.subclass?.index === subclass && /Spells$/.test(f.name),
   );
@@ -560,7 +611,7 @@ function subclassSpells(raw: RawSource, subclass: string): { spell: string; clas
   const byName = new Map((raw.spells as Raw[]).map((s) => [slugify(s.name), s.index as string]));
   const found: { spell: string; classLevel: number }[] = [];
   for (const line of String(feature.description).split("\n")) {
-    const row = /^(\d+) \/ (.+)$/.exec(line.trim());
+    const row = /^(\d+)\s*[|/]?\s*(.+)$/.exec(line.trim());
     if (!row) continue;
     for (const name of (row[2] ?? "").split(/,\s*/)) {
       const index = byName.get(slugify(name));
@@ -570,6 +621,134 @@ function subclassSpells(raw: RawSource, subclass: string): { spell: string; clas
     }
   }
   return found;
+}
+
+/** Rows `3 / Blur, Burning Hands` of a table, by the heading above them (`Arid Land`). */
+function landTables(text: string): Map<string, { level: number; names: string[] }[]> {
+  const tables = new Map<string, { level: number; names: string[] }[]>();
+  let current: { level: number; names: string[] }[] | undefined;
+  for (const line of text.split("\n").map((l) => l.trim())) {
+    const heading = /^(Arid|Polar|Temperate|Tropical) Land$/.exec(line);
+    if (heading) {
+      current = [];
+      tables.set(heading[1] as string, current);
+      continue;
+    }
+    const row = /^(\d+)\s*[|/]?\s*(.+)$/.exec(line);
+    if (row && current)
+      current.push({ level: Number(row[1]), names: (row[2] ?? "").split(/,\s*/) });
+  }
+  return tables;
+}
+
+/**
+ * The traits a feature lets the person pick from, made from the tables and lists in its text, with the effects each
+ * one has: the Circle of the Land's four kinds of land (the spells of the table, and the Resistance of Nature's Ward
+ * from the Druid level 10) and the Draconic Sorcerer's Elemental Affinity (one of five damage types: its Resistance
+ * and the Charisma modifier on the damage of its spells). Each trait is owned by the class, so its levels are those of
+ * the class. A list that cannot be read stops the build.
+ */
+function convertChoiceTraits(raw: RawSource): {
+  traits: Converted;
+  choices: Record<string, Effect>;
+} {
+  const traits: Converted = { entries: [], strings: {} };
+  const choices: Record<string, Effect> = {};
+  const byName = new Map((raw.spells as Raw[]).map((s) => [slugify(s.name), s.index as string]));
+  const feature = (index: string, name: string) =>
+    (raw.features as Raw[]).find((f) => f.subclass?.index === index && f.name === name);
+
+  // The Circle of the Land
+  const circle = feature("circle-of-the-land", "Circle of the Land Spells");
+  const ward = feature("circle-of-the-land", "Nature's Ward");
+  const own = (raw.subclasses as Raw[])
+    .find((x) => x.index === "circle-of-the-land")
+    ?.features.find((f: Raw) => String(f.name).startsWith("Circle of the Land Spells"));
+  if (circle && ward) {
+    const tables = landTables(String(circle.description));
+    // The same tables are in the subclass's own text: they must say the same.
+    if (own) {
+      const other = landTables(String(own.description));
+      for (const [land, rows] of tables) {
+        const mine = JSON.stringify(rows);
+        const theirs = JSON.stringify(other.get(land));
+        if (mine !== theirs)
+          throw new Error(
+            `Circle of the Land, ${land}: the table of the feature and the one of the subclass differ (${mine} / ${theirs})`,
+          );
+      }
+    }
+    const resistance = new Map<string, string>();
+    for (const line of String(ward.description).split("\n")) {
+      const row = /^(Arid|Polar|Temperate|Tropical)\s*[|/]\s*(\w+)$/.exec(line.trim());
+      if (row) resistance.set(row[1] as string, (row[2] as string).toLowerCase());
+    }
+    const from: string[] = [];
+    for (const [land, rows] of tables) {
+      const slug = `land-${land.toLowerCase()}`;
+      const effects: Effect[] = rows.flatMap((r) =>
+        r.names.map((name) => {
+          const index = byName.get(slugify(name));
+          if (!index)
+            throw new Error(`Circle of the Land, ${land}: "${name}" is not a spell of the list`);
+          return { type: "grantSpell", spell: id("spell", index), minLevel: r.level } as Effect;
+        }),
+      );
+      const damage = resistance.get(land);
+      if (!damage) throw new Error(`Nature's Ward has no Resistance for the ${land} land`);
+      effects.push({
+        type: "when",
+        requires: "[level:druid:10]",
+        effects: [{ type: "defense", kind: "resistance", damage }],
+      });
+      traits.entries.push({
+        id: id("trait", slug),
+        kind: "trait",
+        effects,
+        data: { class: id("class", "druid") },
+      });
+      traits.strings[`${slug}.name`] = `${land} Land`;
+      from.push(id("trait", slug));
+    }
+    choices["circle-of-the-land-circle-of-the-land-spells"] = {
+      type: "choice",
+      id: "land",
+      choose: 1,
+      grants: "trait",
+      from,
+    };
+  }
+
+  // Elemental Affinity
+  const affinity = feature("draconic-sorcery", "Elemental Affinity");
+  if (affinity) {
+    const list = /Choose one of those types: ([^.]+)\./.exec(String(affinity.description))?.[1];
+    if (!list) throw new Error("Elemental Affinity: the list of damage types was not found");
+    const from: string[] = [];
+    for (const name of list.split(/,\s*(?:or\s+)?|\s+or\s+/).filter(Boolean)) {
+      const type = name.trim().toLowerCase();
+      const slug = `elemental-affinity-${type}`;
+      traits.entries.push({
+        id: id("trait", slug),
+        kind: "trait",
+        effects: [
+          { type: "defense", kind: "resistance", damage: type },
+          { type: "spellDamage", plus: "cha", damageType: type, once: true },
+        ],
+        data: { class: id("class", "sorcerer") },
+      });
+      traits.strings[`${slug}.name`] = `${name.trim()}`;
+      from.push(id("trait", slug));
+    }
+    choices["draconic-sorcery-elemental-affinity"] = {
+      type: "choice",
+      id: "damage-type",
+      choose: 1,
+      grants: "trait",
+      from,
+    };
+  }
+  return { traits, choices };
 }
 
 function convertSubclasses(raw: RawSource): { subclasses: Converted; features: Converted } {
@@ -837,12 +1016,15 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
   const subclassPart = convertSubclasses(raw);
   const backgroundPart = convertBackgrounds(raw, table);
   const items = convertEquipment(raw);
+  const choiceTraits = convertChoiceTraits(raw);
   // The Fighter's Weapon Mastery: as many kinds of weapon as the class table says (`weaponMastery`).
   const weapons = items.entries.filter((e) => e.data.category === "weapon");
   for (const feature of [...classPart.features.entries, ...subclassPart.features.entries]) {
     const slug = feature.id.split("/")[1] ?? "";
     const before = REPLACES[slug];
     if (before) feature.data = { ...feature.data, replaces: [id("feature", before)] };
+    const traitChoice = choiceTraits.choices[slug];
+    if (traitChoice) feature.effects = [...feature.effects, traitChoice];
     const pick = FEAT_PICKS[slug];
     if (pick)
       feature.effects = [
@@ -883,7 +1065,7 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     feat: convertFeats(raw, table),
     background: backgroundPart.backgrounds,
     species,
-    trait: merge(traits, backgroundPart.traits),
+    trait: merge(traits, backgroundPart.traits, choiceTraits.traits),
     class: classPart.classes,
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),
