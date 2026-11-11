@@ -2,11 +2,17 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @c49411f (2024)",
+    "version": "5e-srd-api fork integration @6744006 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
   "entries": [
+    {
+      "id": "srd52:trait/draconic-ancestry",
+      "kind": "trait",
+      "effects": [],
+      "data": {}
+    },
     {
       "id": "srd52:trait/darkvision-60",
       "kind": "trait",
@@ -33,12 +39,6 @@
       "data": {
         "activation": "bonus"
       }
-    },
-    {
-      "id": "srd52:trait/draconic-ancestry",
-      "kind": "trait",
-      "effects": [],
-      "data": {}
     },
     {
       "id": "srd52:trait/draconic-ancestor-black",
@@ -1165,6 +1165,59 @@
         {
           "type": "abilityBonus",
           "ability": "int",
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/sage-ability-2-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "choice",
+          "id": "plus-2",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "con",
+            "int",
+            "wis"
+          ],
+          "value": 2
+        },
+        {
+          "type": "choice",
+          "id": "plus-1",
+          "choose": 1,
+          "grants": "abilityBonus",
+          "from": [
+            "con",
+            "int",
+            "wis"
+          ],
+          "value": 1
+        }
+      ],
+      "data": {}
+    },
+    {
+      "id": "srd52:trait/sage-ability-1-1-1",
+      "kind": "trait",
+      "effects": [
+        {
+          "type": "abilityBonus",
+          "ability": "con",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "int",
+          "value": 1
+        },
+        {
+          "type": "abilityBonus",
+          "ability": "wis",
           "value": 1
         }
       ],

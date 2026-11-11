@@ -2,7 +2,7 @@
   "manifest": {
     "id": "srd52",
     "ruleset": "srd52",
-    "version": "5e-srd-api fork integration @c49411f (2024)",
+    "version": "5e-srd-api fork integration @6744006 (2024)",
     "license": "CC-BY-4.0",
     "attribution": "This work includes material taken from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC and available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode."
   },
@@ -158,6 +158,89 @@
                   },
                   {
                     "gold": 16
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "gold": 50
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "srd52:background/sage",
+      "kind": "background",
+      "effects": [
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "arcana"
+        },
+        {
+          "type": "proficiency",
+          "category": "skill",
+          "target": "history"
+        },
+        {
+          "type": "proficiency",
+          "category": "tool",
+          "target": "tool-calligraphers-supplies"
+        },
+        {
+          "type": "trait",
+          "id": "srd52:feat/magic-initiate"
+        },
+        {
+          "type": "choice",
+          "id": "ability-increase",
+          "choose": 1,
+          "grants": "trait",
+          "from": [
+            "srd52:trait/sage-ability-2-1",
+            "srd52:trait/sage-ability-1-1-1"
+          ]
+        }
+      ],
+      "data": {
+        "abilityScores": [
+          "con",
+          "int",
+          "wis"
+        ],
+        "feat": "srd52:feat/magic-initiate",
+        "startingChoices": [
+          {
+            "options": [
+              {
+                "items": [
+                  {
+                    "item": "srd52:item/quarterstaff",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/calligraphers-supplies",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/book",
+                    "quantity": 1
+                  },
+                  {
+                    "item": "srd52:item/parchment",
+                    "quantity": 8
+                  },
+                  {
+                    "item": "srd52:item/robe",
+                    "quantity": 1
+                  },
+                  {
+                    "gold": 8
                   }
                 ]
               },
