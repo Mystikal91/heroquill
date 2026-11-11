@@ -1,5 +1,6 @@
 import { type PlayState, createPlayState } from "./character";
 import { RAGE_ROUNDS, SACRED_WEAPON_ROUNDS, SHILLELAGH_ROUNDS } from "./durations";
+import { exhaustionLevel, setExhaustion } from "./exhaustion";
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
@@ -315,7 +316,7 @@ export function longRest(
     regain -= back;
   }
 
-  return {
+  const rested: PlayState = {
     ...createPlayState(),
     inspiration: play.inspiration || grantsInspiration,
     conditions: play.conditions,
@@ -323,6 +324,8 @@ export function longRest(
     ...keptRounds(play),
     hitDiceUsed: Object.fromEntries(Object.entries(hitDiceUsed).filter(([, n]) => n > 0)),
   };
+  // A long rest removes one level of exhaustion (the 2014 rules ask for food and drink too: the person says).
+  return setExhaustion(rested, exhaustionLevel(play) - 1);
 }
 
 /** The most rounds a condition can be given. */

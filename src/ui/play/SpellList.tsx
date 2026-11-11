@@ -70,7 +70,15 @@ function ConcentrationBanner({ spell }: { spell: string }) {
         <button
           type="button"
           class="card-btn"
-          onClick={() => rollCheck(`${c.name(spell)} - ${ui("play.concentrationSave")}`, conSave)}
+          onClick={() =>
+            rollCheck(
+              `${c.name(spell)} - ${ui("play.concentrationSave")}`,
+              conSave,
+              undefined,
+              undefined,
+              "save",
+            )
+          }
         >
           {ui("play.concentrationRoll")} {signed(conSave)}
         </button>
@@ -211,7 +219,13 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
               type="button"
               class="card-btn card-roll card-attack"
               onClick={() => {
-                const roll = rollCheck(`${name} - ${ui("play.spellAttack")}`, caster.attackBonus);
+                const roll = rollCheck(
+                  `${name} - ${ui("play.spellAttack")}`,
+                  caster.attackBonus,
+                  undefined,
+                  undefined,
+                  "attack",
+                );
                 criticalSpell.value = roll.critical ? id : undefined;
               }}
             >

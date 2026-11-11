@@ -1,7 +1,8 @@
 import { signal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import { addLog, changePlay, vitals } from "../../app/play";
-import { sheet } from "../../app/store";
+import { character, sheet } from "../../app/store";
+import { exhaustionLevel } from "../../engine/exhaustion";
 import { longRest, shortRest } from "../../engine/play";
 import { ui } from "../../i18n/ui";
 import { Panel } from "../sheet/parts";
@@ -132,6 +133,7 @@ function LongRestDialog() {
     ui("play.longRestEnds"),
     ...(prepares ? [ui("play.longRestPrepare")] : []),
     ...(resourceful ? [ui("play.longRestHeroic")] : []),
+    ...(exhaustionLevel(character.value.play) > 0 ? [ui("play.longRestExhaustion")] : []),
   ];
 
   return (

@@ -144,6 +144,7 @@ const CharacterSchema = v.object({
     resourcesUsed: v.optional(v.record(v.string(), v.pipe(v.number(), v.integer(), v.minValue(0)))),
     concentration: v.optional(v.string()),
     raging: v.optional(v.boolean()),
+    exhaustion: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(6))),
     wildShape: v.optional(
       v.object({
         monster: v.string(),

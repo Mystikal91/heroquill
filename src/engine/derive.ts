@@ -16,6 +16,13 @@ import { type ChecksResult, deriveChecks, halfBonus } from "./checks";
 import { type PendingChoice, collectEffects } from "./choices";
 import { customResources } from "./custom";
 import { type EquipmentResult, deriveEquipment, proficiencyKeys } from "./equipment";
+import {
+  exhaustedHitPoints,
+  exhaustedSpeed,
+  exhaustionId,
+  exhaustionLevel,
+  exhaustionModifiers,
+} from "./exhaustion";
 import { type FeatureValue, deriveFeatureValues } from "./featureValues";
 import { type AppliedModifier, appliedModifiers, total } from "./modifiers";
 import { type Movement, deriveMovement, deriveSenses } from "./movement";
@@ -252,7 +259,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   const contributing = standsIn ? chosen.filter((e) => e.kind !== "species") : chosen;
   const {
     effects,
-    sourced,
+    sourced: collected,
     choices,
     seen: heldIds,
   } = collectEffects(
@@ -270,6 +277,15 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       ),
     ].filter((id): id is string => Boolean(id)),
   );
+  // The levels of exhaustion lower the numbers like any modifier, from the condition (so the sheet says where they come from).
+  const exhaustion = exhaustionLevel(character.play);
+  const sourced = [
+    ...collected,
+    ...exhaustionModifiers(character.ruleset, exhaustion).map((effect) => ({
+      effect,
+      source: exhaustionId(character.ruleset),
+    })),
+  ];
   for (const { entry } of others) {
     if (!entry) continue;
     for (const key of classData(entry).multiclassing.proficiencies) {
@@ -619,9 +635,14 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     if (numberOverride(character.overrides, OVERRIDE.spellSaveDc) === undefined)
       caster.saveDc += total(spellDcMods);
   }
-  const speed =
+  const plainSpeed =
     overrideNumber(character, "speed") ??
     (typeof baseSpeed === "number" ? baseSpeed + total(speedMods) : undefined);
+  // The 2014 exhaustion halves the speed and then takes it away; the 2024 one is a modifier that cannot go under 0.
+  const speed =
+    plainSpeed === undefined
+      ? undefined
+      : exhaustedSpeed(character.ruleset, exhaustion, plainSpeed);
   const movement =
     speed === undefined ? {} : deriveMovement(sourced, state, speed, total(speedMods));
   const senses = deriveSenses(sourced, state);
@@ -691,7 +712,9 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     proficiencyBonus,
     abilities,
     hitPoints: {
-      max: hpOverride ?? hp + hpBonus + total(hpFlat),
+      max:
+        hpOverride ??
+        exhaustedHitPoints(character.ruleset, exhaustion, hp + hpBonus + total(hpFlat)),
       overridden: hpOverride !== undefined,
       hitDice,
     },

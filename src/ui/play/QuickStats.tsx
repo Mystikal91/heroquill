@@ -93,7 +93,9 @@ export function QuickStats() {
           short={ui("quick.initiative")}
           full={ui("sheet.initiative")}
           value={signed(s.initiative)}
-          onRoll={() => rollCheck(ui("play.initiative"), s.initiative)}
+          onRoll={() =>
+            rollCheck(ui("play.initiative"), s.initiative, undefined, undefined, "check")
+          }
         />
         <Stat
           icon={<BootIcon />}

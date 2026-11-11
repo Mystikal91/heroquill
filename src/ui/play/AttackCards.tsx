@@ -56,9 +56,13 @@ function AttackCard({ a }: { a: AttackResult }) {
   const due = damageDue.value === a.itemId;
 
   const attack = () => {
-    const roll = rollCheck(`${name} - ${ui("play.attackRoll")}`, a.attackBonus, {
-      critMin: s.critRange,
-    });
+    const roll = rollCheck(
+      `${name} - ${ui("play.attackRoll")}`,
+      a.attackBonus,
+      { critMin: s.critRange },
+      undefined,
+      "attack",
+    );
     criticalExtra.value = roll.critical;
     // A natural 20 arms the critical damage; any other attack clears it.
     if (roll.critical) criticalWeapon.value = a.itemId;
@@ -90,9 +94,13 @@ function AttackCard({ a }: { a: AttackResult }) {
     let landed = false;
     let fumbled = true;
     for (const n of Array.from({ length: flurryStrikes }, (_, i) => i + 1)) {
-      const roll = rollCheck(`${name} - ${flurryName} ${n}`, a.attackBonus, {
-        critMin: s.critRange,
-      });
+      const roll = rollCheck(
+        `${name} - ${flurryName} ${n}`,
+        a.attackBonus,
+        { critMin: s.critRange },
+        undefined,
+        "attack",
+      );
       landed = landed || roll.critical;
       fumbled = fumbled && roll.fumble;
     }

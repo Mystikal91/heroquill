@@ -1,4 +1,5 @@
 import type { PlayState } from "../engine/character";
+import { exhaustionLevel } from "../engine/exhaustion";
 import { deathStatus } from "../engine/play";
 
 /**
@@ -24,9 +25,12 @@ export interface PlayStates {
 export function playStates(play: PlayState, max: number): PlayStates {
   // A character with no class has no hit points yet: nothing to be dying of.
   const status = max > 0 ? deathStatus(play, max) : "alive";
-  const conditions = play.conditions
-    .map((id) => id.split("/")[1])
-    .filter(Boolean)
+  // The levels of exhaustion colour the screen as the condition did.
+  const conditions = [
+    ...play.conditions.map((id) => id.split("/")[1]),
+    ...(exhaustionLevel(play) > 0 ? ["exhaustion"] : []),
+  ]
+    .filter((slug, i, all): slug is string => Boolean(slug) && all.indexOf(slug) === i)
     .join(" ");
   return {
     ...(status !== "alive" && { dying: status }),

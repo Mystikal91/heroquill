@@ -10,6 +10,7 @@ import {
 import { character, content, sheet } from "../../app/store";
 import { ABILITIES, type Ability } from "../../data/schema";
 import type { D20Mode } from "../../engine/dice";
+import type { ExhaustionRoll } from "../../engine/exhaustion";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 import { Panel } from "../sheet/parts";
 import { AttackCards, ExtraCards } from "./AttackCards";
@@ -24,6 +25,7 @@ function RollButton({
   floor,
   ability,
   check,
+  kind,
 }: {
   label: string;
   bonus: number;
@@ -34,13 +36,15 @@ function RollButton({
   floor?: number | undefined;
   /** An ability check (a skill), which a feature can add to when it fails. */
   check?: boolean;
+  /** An ability check, an attack roll or a saving throw (the 2014 exhaustion gives disadvantage on them). */
+  kind?: ExhaustionRoll;
 }) {
   return (
     <button
       type="button"
       class="roll-btn"
       data-ability={ability}
-      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined, check)}
+      onClick={() => rollCheck(name, bonus, floor ? { floor } : undefined, check, kind)}
     >
       <span>{label}</span>
       <b>{signed(bonus)}</b>
@@ -98,7 +102,12 @@ function RollsPanel({ part }: { part: "attacks" | "checks" }) {
           </ul>
           <h4>{ui("play.initiative")}</h4>
           <div class="roll-grid">
-            <RollButton label={ui("play.initiative")} bonus={s.initiative} ability="dex" />
+            <RollButton
+              label={ui("play.initiative")}
+              bonus={s.initiative}
+              ability="dex"
+              kind="check"
+            />
           </div>
           <h4>{ui("play.saves")}</h4>
           <div class="roll-grid">
@@ -109,6 +118,7 @@ function RollsPanel({ part }: { part: "attacks" | "checks" }) {
                 name={`${c.name(`${ruleset}:ability/${a}`)} - ${ui("sheet.savingThrow")}`}
                 bonus={s.saves[a].bonus}
                 ability={a}
+                kind="save"
               />
             ))}
           </div>

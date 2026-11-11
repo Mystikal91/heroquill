@@ -2,6 +2,12 @@ import { addLog, changePlay } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
 import { offerUndo } from "../../app/undo";
 import {
+  MAX_EXHAUSTION,
+  exhaustionLevel,
+  isExhaustionCondition,
+  setExhaustion,
+} from "../../engine/exhaustion";
+import {
   MAX_ROUNDS,
   advanceRound,
   endConcentration,
@@ -13,7 +19,7 @@ import {
   toggleCondition,
 } from "../../engine/play";
 import { inRuleset } from "../../engine/rulesets";
-import { ui } from "../../i18n/ui";
+import { type UiKey, ui } from "../../i18n/ui";
 import { Panel, Paragraphs } from "../sheet/parts";
 import { useHoldRepeat } from "../useHoldRepeat";
 import { ConditionIcon } from "./icons";
@@ -61,6 +67,74 @@ function RoundsField({ id, name }: { id: string; name: string }) {
 }
 
 /**
+ * Exhaustion is not a switch like the other conditions: it has levels (1 to 6), each with its effects, that a long rest
+ * takes off one at a time. The card is always there, with a level to change and what the level does.
+ */
+function Exhaustion() {
+  const play = character.value.play;
+  const ruleset = character.value.ruleset;
+  const level = exhaustionLevel(play);
+  const set = (n: number) => changePlay((p) => setExhaustion(p, n), { undo: false });
+  const lines =
+    ruleset === "srd52"
+      ? level > 0
+        ? [ui("play.exhaustion24", { d20: 2 * level, feet: 5 * level })]
+        : []
+      : Array.from({ length: level }, (_, i) => ui(`play.exhaustion14.${i + 1}` as UiKey));
+  return (
+    <ul class="plain card-list">
+      <li
+        class="play-card cond-card exhaustion-card"
+        data-condition="exhaustion"
+        data-level={level}
+      >
+        <span class="card-badge" aria-hidden="true">
+          <ConditionIcon />
+        </span>
+        <div class="card-head">
+          <b class="feat-name">{ui("play.exhaustion")}</b>
+          <span class="card-meta">
+            {ui("play.exhaustionLevel", { n: level, max: MAX_EXHAUSTION })}
+          </span>
+        </div>
+        <div class="cond-rounds">
+          <button
+            type="button"
+            class="card-btn"
+            aria-label={ui("play.exhaustionFewer")}
+            disabled={level === 0}
+            onClick={() => set(level - 1)}
+          >
+            −
+          </button>
+          <output>{level}</output>
+          <button
+            type="button"
+            class="card-btn"
+            aria-label={ui("play.exhaustionMore")}
+            disabled={level >= MAX_EXHAUSTION}
+            onClick={() => set(level + 1)}
+          >
+            +
+          </button>
+        </div>
+        {level === 0 ? (
+          <p class="muted">{ui("play.exhaustionNone")}</p>
+        ) : (
+          <ul class="plain exhaustion-effects">
+            {lines.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+            {level >= MAX_EXHAUSTION && <li>{ui("play.exhaustionDead")}</li>}
+          </ul>
+        )}
+        <p class="muted">{ui("play.exhaustionRest")}</p>
+      </li>
+    </ul>
+  );
+}
+
+/**
  * The conditions of the rules: the ones in force first, as cards with their rules and a button that
  * removes them; the list of all of them stays folded until a new one is wanted.
  */
@@ -69,7 +143,12 @@ export function Conditions() {
   const play = character.value.play;
   if (!c) return null;
   const conditions = [...c.index.values()]
-    .filter((e) => e.kind === "condition" && inRuleset(e.id, character.value.ruleset))
+    .filter(
+      (e) =>
+        e.kind === "condition" &&
+        inRuleset(e.id, character.value.ruleset) &&
+        !isExhaustionCondition(e.id),
+    )
     .sort((a, b) => c.name(a.id).localeCompare(c.name(b.id)));
   const active = conditions.filter((e) => play.conditions.includes(e.id));
   const others = conditions.filter((e) => !play.conditions.includes(e.id));
@@ -161,6 +240,7 @@ export function Conditions() {
           })}
         </ul>
       )}
+      <Exhaustion />
       {active.length > 0 && (
         <ul class="plain card-list">
           {active.map((e) => (

@@ -96,6 +96,8 @@ export interface PlayState {
   concentration?: string;
   /** The barbarian is raging: resistance to physical damage, and the rage bonus to melee damage. */
   raging?: boolean;
+  /** The levels of exhaustion (1 to 6); absent when there are none. See `engine/exhaustion.ts`. */
+  exhaustion?: number;
   /** The beast the druid has turned into (Wild Shape), with the hit points of that shape. */
   wildShape?: { monster: string; hp: number; max: number; own?: boolean };
   /** Pact Magic slots spent, when they are kept apart from the shared slots (multiclass warlock). */

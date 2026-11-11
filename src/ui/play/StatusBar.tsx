@@ -83,7 +83,9 @@ export function StatusBar() {
         <button
           type="button"
           class="ps-stat ps-roll"
-          onClick={() => rollCheck(ui("play.initiative"), s.initiative)}
+          onClick={() =>
+            rollCheck(ui("play.initiative"), s.initiative, undefined, undefined, "check")
+          }
         >
           <small>{ui("play.init")}</small>
           <b>{signed(s.initiative)}</b>

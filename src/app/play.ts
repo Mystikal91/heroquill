@@ -13,6 +13,7 @@ import {
   rollExpression,
 } from "../engine/dice";
 import { RAGE_ROUNDS, RAGE_ROUNDS_2024 } from "../engine/durations";
+import { type ExhaustionRoll, exhaustionLevel, exhaustionMode } from "../engine/exhaustion";
 import { healingOf, useOne } from "../engine/gear";
 import {
   applyDamage,
@@ -88,7 +89,14 @@ export interface LogEntry {
   total?: number;
   tone?: "critical" | "fumble";
   /** A d20 roll can be taken again or have a die added: what it takes to make it again. */
-  redo?: { label: string; bonus: number; options: D20Options | undefined; check?: boolean };
+  redo?: {
+    label: string;
+    bonus: number;
+    options: D20Options | undefined;
+    check?: boolean;
+    /** What kind of roll it is: the 2014 exhaustion gives disadvantage on some. */
+    kind?: ExhaustionRoll;
+  };
   /** The dice of a roll of dice (damage, healing): with the 2024 Heroic Inspiration one of them can be rolled again. */
   dice?: DiceRoll;
   /** A die of Bardic Inspiration is already in the total. */
@@ -135,8 +143,16 @@ export function rollCheck(
   options?: D20Options,
   /** The roll is an ability check (a skill): a feature that helps with failed checks can add to it. */
   check?: boolean,
+  /** An ability check, an attack roll or a saving throw: the 2014 exhaustion gives disadvantage on them. */
+  kind?: ExhaustionRoll,
 ): D20Roll {
-  const roll = rollD20(bonus, rollMode.value, undefined, options);
+  const mode = exhaustionMode(
+    character.value.ruleset,
+    exhaustionLevel(character.value.play),
+    kind ?? (check ? "check" : undefined),
+    rollMode.value,
+  );
+  const roll = rollD20(bonus, mode, undefined, options);
   const faces =
     roll.dice.length > 1
       ? `[${roll.dice.join(", ")}] → ${roll.used}`
@@ -149,7 +165,7 @@ export function rollCheck(
     total: roll.total,
     ...(roll.critical && { tone: "critical" as const }),
     ...(roll.fumble && { tone: "fumble" as const }),
-    redo: { label, bonus, options, ...(check && { check }) },
+    redo: { label, bonus, options, ...(check && { check }), ...(kind && { kind }) },
   });
   return roll;
 }
@@ -158,8 +174,8 @@ export function rollCheck(
 export function rerollWithInspiration(entry: LogEntry) {
   if (!entry.redo || !character.value.play.inspiration) return;
   changePlay((p) => setInspiration(p, false));
-  const { label, bonus, options, check } = entry.redo;
-  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check);
+  const { label, bonus, options, check, kind } = entry.redo;
+  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check, kind);
 }
 
 /** Spends the die of a Bardic Inspiration: it is rolled and added to the total of the d20 roll. */
