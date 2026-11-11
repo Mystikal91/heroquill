@@ -14,6 +14,7 @@ import {
   FEATURE_EFFECTS,
   FEAT_EFFECTS,
   FEAT_PICKS,
+  INVOCATION_EFFECTS,
   REPLACES,
   SUBSPECIES_ACTIVATION,
   SUBSPECIES_EFFECTS,
@@ -533,6 +534,128 @@ function featureEntry(slug: string, owner: Raw, level: number): Entry {
   };
 }
 
+/** A prerequisite of an option as the engine reads it (`level`, `feature`, `spell`). */
+const normalizePrerequisite = (p: Raw): Raw => {
+  const last = (url: string) => url.split("/").pop() ?? url;
+  if (p.type === "level") return { type: "level", level: p.level };
+  if (p.type === "feature") return { type: "feature", feature: id("feature", last(p.feature)) };
+  if (p.type === "spell") return { type: "spell", spell: id("spell", last(p.spell)) };
+  throw new Error(`Unknown prerequisite: ${p.type}`);
+};
+
+/**
+ * The invocations the book lets a Warlock take more than once, each time with something else: a different eligible
+ * cantrip, or a different Origin feat. Each choice is an option of its own (`Agonizing Blast (Eldritch Blast)`), so
+ * taking one twice with another cantrip is two different picks. What makes a cantrip eligible is read from the text
+ * of the invocation and the data of the spell: its damage, its range, an attack roll.
+ */
+const REPEATABLE: Record<string, (spell: Raw) => boolean> = {
+  "invocation-agonizing-blast": (s) => Boolean(s.damage),
+  "invocation-eldritch-spear": (s) =>
+    Boolean(s.damage) && Number.parseInt(String(s.range), 10) >= 10,
+  "invocation-repelling-blast": (s) => Boolean(s.damage) && Boolean(s.attack_type),
+};
+
+/**
+ * The options a feature of a class offers (the Metamagic options of the Sorcerer, the Eldritch Invocations of the
+ * Warlock): the features that name it as their `parent`. They are entries of their own with the prerequisites the
+ * source gives; the parent gets a choice among them. The Metamagic options are two at the 2nd level and two more at
+ * the 10th and the 17th (the text says so, the class table has no column); the invocations come from the table.
+ */
+function addOptionFeatures(raw: RawSource, classIndex: string, features: Converted) {
+  const spells = raw.spells as Raw[];
+  for (const parentIndex of new Set(
+    (raw.features as Raw[])
+      .filter((f) => f.parent && f.class?.index === classIndex && !f.subclass)
+      .map((f) => f.parent.index as string),
+  )) {
+    const options: string[] = [];
+    const parentId = id("feature", parentIndex);
+    const add = (
+      slug: string,
+      source: Raw,
+      name: string,
+      prerequisites: Raw[],
+      effects: Effect[],
+    ) => {
+      const entry = featureEntry(
+        slug,
+        { class: id("class", classIndex) },
+        source.level.index ? Number(String(source.level.index).split("-").pop()) : 1,
+      );
+      entry.effects = effects;
+      entry.parent = parentId;
+      if (prerequisites.length) entry.data.prerequisites = prerequisites;
+      features.entries.push(entry);
+      features.strings[`${slug}.name`] = name;
+      features.strings[`${slug}.desc`] = text(source.description);
+      options.push(entry.id);
+    };
+    for (const f of (raw.features as Raw[]).filter((x) => x.parent?.index === parentIndex)) {
+      const name = String(f.name).replace(/^(Metamagic|Eldritch Invocation): /, "");
+      const prerequisites = ((f.prerequisites ?? []) as Raw[]).map(normalizePrerequisite);
+      const eligible = REPEATABLE[f.index];
+      if (eligible) {
+        // A different cantrip each time: one option for each cantrip of the class list that qualifies.
+        for (const s of spells.filter(
+          (x) =>
+            x.level === 0 &&
+            (x.classes as Raw[]).some((c) => c.index === classIndex) &&
+            eligible(x),
+        )) {
+          const effects: Effect[] =
+            f.index === "invocation-agonizing-blast"
+              ? [{ type: "spellDamage", plus: "cha", spell: id("spell", s.index) }]
+              : [];
+          add(
+            `${f.index}-${s.index}`,
+            f,
+            `${name} (${s.name})`,
+            [...prerequisites, { type: "spell", spell: id("spell", s.index) }],
+            effects,
+          );
+        }
+      } else if (f.index === "invocation-lessons-of-the-first-ones") {
+        // A different Origin feat each time.
+        for (const feat of (raw.feats as Raw[]).filter((x) => x.type === "origin")) {
+          add(`${f.index}-${feat.index}`, f, `${name} (${feat.name})`, prerequisites, [
+            { type: "trait", id: id("feat", feat.index) },
+          ]);
+        }
+      } else {
+        add(f.index, f, name, prerequisites, INVOCATION_EFFECTS[f.index] ?? []);
+      }
+    }
+    const parent = features.entries.find((e) => e.id === parentId);
+    if (!parent) throw new Error(`The feature ${parentIndex} is not in the class`);
+    const pick = (stepId: string, count: number, chooseBy?: string): Effect => ({
+      type: "choice",
+      id: stepId,
+      choose: count,
+      grants: "trait",
+      from: [...options].sort(),
+      ...(chooseBy && { chooseBy }),
+    });
+    if (parentIndex === "sorcerer-metamagic") {
+      parent.effects.push(
+        pick("option", 2),
+        {
+          type: "when",
+          requires: "[level:sorcerer:10]",
+          effects: [pick("option-10", 2)],
+        },
+        {
+          type: "when",
+          requires: "[level:sorcerer:17]",
+          effects: [pick("option-17", 2)],
+        },
+      );
+    } else {
+      parent.effects.push(pick("option", 1, "eldritchInvocations"));
+    }
+  }
+}
+
 /**
  * The Beast Shapes table in the text of Wild Shape (`Druid Level / Known Forms / Max CR / Fly Speed`, then `2 / 4 / 1/4 / No`)
  * gives the highest Challenge Rating of a form by Druid level: it goes into each level of the class table as
@@ -645,6 +768,7 @@ function convertClasses(
     }
 
     if (c.index === "druid") addWildShapeLimits(raw, levels);
+    addOptionFeatures(raw, c.index, features);
 
     const prereq = c.multi_classing.prerequisite_options;
     classes.entries.push({

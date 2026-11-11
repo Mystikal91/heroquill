@@ -469,3 +469,45 @@ export const SUBSPECIES_TRAIT: Record<string, string> = {
   goliath: "giant-ancestry",
   tiefling: "fiendish-legacy",
 };
+
+// ---- Eldritch Invocations. A spell that an invocation lets the Warlock cast "without expending a spell slot" is cast at
+// will (listed as a cantrip, no slot); the rest of them (the pact weapon, advantage, the extra attacks) stays text.
+const atWillSpell = (slug: string): Effect => ({
+  type: "grantSpell",
+  spell: `srd52:spell/${slug}`,
+  atWill: true,
+});
+
+/** Effects of the Eldritch Invocations, by feature slug (the repeatable ones are made by the converter). */
+export const INVOCATION_EFFECTS: Record<string, Effect[]> = {
+  "invocation-armor-of-shadows": [atWillSpell("mage-armor")],
+  "invocation-ascendant-step": [atWillSpell("levitate")],
+  "invocation-fiendish-vigor": [atWillSpell("false-life")],
+  "invocation-mask-of-many-faces": [atWillSpell("disguise-self")],
+  "invocation-master-of-myriad-forms": [atWillSpell("alter-self")],
+  "invocation-misty-visions": [atWillSpell("silent-image")],
+  "invocation-one-with-shadows": [atWillSpell("invisibility")],
+  "invocation-otherworldly-leap": [atWillSpell("jump")],
+  "invocation-visions-of-distant-realms": [atWillSpell("arcane-eye")],
+  "invocation-whispers-of-the-grave": [atWillSpell("speak-with-dead")],
+  // Breathing underwater and a Swim Speed equal to the Speed; Water Breathing once between long rests.
+  "invocation-gift-of-the-depths": [
+    { type: "movement", mode: "swim", feet: "walk" },
+    { type: "grantSpell", spell: "srd52:spell/water-breathing", free: true },
+  ],
+  "invocation-witch-sight": [{ type: "sense", sense: "truesight", range: 30 }],
+  "invocation-pact-of-the-chain": [atWillSpell("find-familiar")],
+  // Three cantrips and two level 1 rituals, from any class's list.
+  "invocation-pact-of-the-tome": [
+    { type: "choice", id: "cantrips", choose: 3, grants: "spell", from: [], spellLevel: 0 },
+    {
+      type: "choice",
+      id: "rituals",
+      choose: 2,
+      grants: "spell",
+      from: [],
+      spellLevel: 1,
+      ritual: true,
+    },
+  ],
+};
