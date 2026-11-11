@@ -461,7 +461,7 @@ export const SUBSPECIES_ACTIVATION: Record<string, "action" | "bonus" | "reactio
   "giant-ancestry-storms-thunder": "reaction",
 };
 
-/** The trait of each species that holds its choice of subspecies (the Dragonborn's is missing from the source list). */
+/** The trait of each species that holds its choice of subspecies. */
 export const SUBSPECIES_TRAIT: Record<string, string> = {
   dragonborn: "draconic-ancestry",
   elf: "elven-lineage",

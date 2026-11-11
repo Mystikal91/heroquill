@@ -144,8 +144,16 @@ describe("what the traits do", () => {
 });
 
 describe("the 2024 backgrounds", () => {
-  it("Acolyte, Criminal and Soldier are there, each with its Origin feat", () => {
+  it("a Wood Elf knows Druidcraft", () => {
+    const sheet = sheetOf(
+      make("elf", 1, { choice: "elven-lineage", option: "elven-lineage-wood-elf" }),
+    );
+    expect(sheet.grantedSpells).toContain("srd52:spell/druidcraft");
+  });
+
+  it("Acolyte, Criminal, Sage and Soldier are there, each with its Origin feat", () => {
     const feat: Record<string, string> = {
+      sage: "magic-initiate",
       acolyte: "magic-initiate",
       criminal: "alert",
       soldier: "savage-attacker",

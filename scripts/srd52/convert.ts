@@ -83,8 +83,7 @@ export const PILOT = {
     "fiend-patron",
     "evoker",
   ],
-  // Sage waits for the source: its Magic Initiate has no list (the book: Wizard).
-  backgrounds: ["soldier", "acolyte", "criminal"],
+  backgrounds: ["soldier", "acolyte", "criminal", "sage"],
   species: [
     "human",
     "dragonborn",
@@ -344,11 +343,8 @@ function convertSpecies(raw: RawSource, table: Map<string, string>): [Converted,
   const traits: Converted = { entries: [], strings: {} };
   for (const s of raw.species.filter((x: Raw) => PILOT.species.includes(x.index))) {
     const effects: Effect[] = [];
-    const refs = [...(s.traits as Raw[])];
-    // The trait that holds the choice of subspecies must be there (the source lacks the Dragonborn's).
     const parent = SUBSPECIES_TRAIT[s.index];
-    if (parent && !refs.some((r) => r.index === parent)) refs.push({ index: parent });
-    for (const ref of refs) {
+    for (const ref of s.traits as Raw[]) {
       const trait = raw.traits.find((t: Raw) => t.index === ref.index);
       if (!trait) throw new Error(`Missing trait: ${ref.index}`);
       effects.push({ type: "trait", id: id("trait", trait.index) });
