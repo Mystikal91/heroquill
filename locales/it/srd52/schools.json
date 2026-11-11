@@ -1,0 +1,10 @@
+{
+  "abjuration.name": "Abiurazione",
+  "conjuration.name": "Evocazione",
+  "divination.name": "Divinazione",
+  "enchantment.name": "Ammaliamento",
+  "evocation.name": "Invocazione",
+  "illusion.name": "Illusione",
+  "necromancy.name": "Necromanzia",
+  "transmutation.name": "Trasmutazione"
+}
