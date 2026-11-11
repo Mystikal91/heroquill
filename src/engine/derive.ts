@@ -592,9 +592,8 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     saveBonus: total(appliedModifiers(sourced, "save", saveState)),
     skillBonus: (slug) =>
       total(
-        appliedModifiers(sourced, "skill", { armor: equipment.armor, levelOf }).filter(
-          (m) => !m.skill || m.skill === slug,
-        ),
+        // A bonus to a skill can read an ability modifier (the Thaumaturge and the Magician: Wisdom, at least +1).
+        appliedModifiers(sourced, "skill", saveState).filter((m) => !m.skill || m.skill === slug),
       ),
   });
   const baseSpeed = chosen.find((e) => e.kind === "species")?.data.speed;

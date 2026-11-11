@@ -846,6 +846,90 @@ function convertChoiceTraits(raw: RawSource): {
       from,
     };
   }
+
+  // The Divine Order of the Cleric and the Primal Order of the Druid: two sacred roles each. One trains for battle
+  // (Martial weapons and the armor the text names), the other knows one more cantrip of the class and adds the
+  // Wisdom modifier (at least +1) to two Intelligence skills. The effects are written from the text, which names
+  // the proficiencies and the skills; a role the text does not have stops the build.
+  const proficiencies = proficiencyTable(raw);
+  const bonus = (skill: string): Effect => ({
+    type: "modifier",
+    target: "skill",
+    value: 0,
+    plus: "wis",
+    min: 1,
+    skill,
+  });
+  const ORDERS: Record<string, { cls: string; roles: Record<string, (cls: string) => Effect[]> }> =
+    {
+      "cleric-divine-order": {
+        cls: "cleric",
+        roles: {
+          Protector: () => [
+            proficiencyEffect(proficiencies, "martial-weapons"),
+            proficiencyEffect(proficiencies, "heavy-armor"),
+          ],
+          Thaumaturge: (cls) => [
+            {
+              type: "choice",
+              id: "cantrip",
+              choose: 1,
+              grants: "spell",
+              from: [],
+              spellLevel: 0,
+              spellClass: id("class", cls),
+            },
+            bonus("arcana"),
+            bonus("religion"),
+          ],
+        },
+      },
+      "druid-primal-order": {
+        cls: "druid",
+        roles: {
+          Warden: () => [
+            proficiencyEffect(proficiencies, "martial-weapons"),
+            proficiencyEffect(proficiencies, "medium-armor"),
+          ],
+          Magician: (cls) => [
+            {
+              type: "choice",
+              id: "cantrip",
+              choose: 1,
+              grants: "spell",
+              from: [],
+              spellLevel: 0,
+              spellClass: id("class", cls),
+            },
+            bonus("arcana"),
+            bonus("nature"),
+          ],
+        },
+      },
+    };
+  for (const [slug, order] of Object.entries(ORDERS)) {
+    const source = (raw.features as Raw[]).find((f) => f.index === slug);
+    if (!source) throw new Error(`The feature ${slug} was not found`);
+    const from: string[] = [];
+    for (const [role, effects] of Object.entries(order.roles)) {
+      const line = String(source.description)
+        .split("\n")
+        .map((l) => l.trim())
+        .find((l) => l.startsWith(`${role}. `));
+      if (!line) throw new Error(`${slug}: the role ${role} is not in the text`);
+      const trait = `${slug.replace(/^\w+-/, "")}-${slugify(role)}`;
+      traits.entries.push({
+        id: id("trait", trait),
+        kind: "trait",
+        effects: effects(order.cls),
+        data: { class: id("class", order.cls) },
+      });
+      traits.strings[`${trait}.name`] = role;
+      traits.strings[`${trait}.desc`] = text(line.slice(role.length + 2));
+      from.push(id("trait", trait));
+    }
+    choices[slug] = { type: "choice", id: "order", choose: 1, grants: "trait", from };
+  }
   return { traits, choices };
 }
 
