@@ -178,6 +178,50 @@ restrained and stunned (only their names are added, by hand, in `import_misc.py`
 not part of the running text. Item descriptions, proficiencies and the remaining gear are not
 imported yet.
 
+## The SRD 5.2.1 (2024 rules)
+
+The SRD 5.2.1 is published by Wizards in the same four languages (same download page, files
+`<IT|FR|DE|SP>_SRD_CC_v5.2.1.pdf`; they go in `.cache/srd52/pdf/`, which is not in the repository).
+Its layout is not that of the 5.1, so `scripts/srd-translations/book52.py` reads it by its typography:
+the sans headings with their sizes, the bold run-in names, italics (a prerequisite, a cost, the kind of a
+poison), bullets and the indent that opens a paragraph, and the two columns. From it come the sections,
+a text in the form the app writes (`text_of`), a bag of numbers in which feet become metres
+(`number_gap`) and the named terms of a language (spells, conditions, skills: `term_hits`).
+
+The importers reuse what the 5.1 ones have (the global best pairing of `import_spells.hungarian`, the
+glossaries of `import_reference`, `import_species`, `import_classes`, `import_properties`, the rarity and
+kind words of `import_magic_items`, the stat-block signature of `import_monsters`). Run them from the
+repository folder, in this order (the later ones read the names the earlier ones wrote):
+
+```bash
+python scripts/srd-translations/import_spells52.py it .cache/srd52/pdf/IT_SRD_CC_v5.2.1.pdf   # SP for Spanish
+python scripts/srd-translations/import_conditions52.py          # all four languages without an argument
+python scripts/srd-translations/import_feats52.py
+python scripts/srd-translations/import_species52.py             # species, traits, backgrounds
+python scripts/srd-translations/import_classes52.py             # classes, subclasses, features, options
+python scripts/srd-translations/fill_traits52.py                # Divine and Primal Order, Giant Ancestry
+python scripts/srd-translations/import_magic_items52.py
+python scripts/srd-translations/import_equipment52.py           # names, descriptions, poisons
+python scripts/srd-translations/import_mounts52.py              # from the tables, by price and capacity
+python scripts/srd-translations/import_properties52.py          # properties and weapon mastery
+python scripts/srd-translations/import_monsters52.py
+python scripts/srd-translations/fill_monsters52.py              # entries identical to a translated one
+python scripts/srd-translations/import_reuse52.py               # languages, proficiencies, alignments
+```
+
+How each is paired: spells, feats, conditions and magic items by the shape of the text (level, school,
+components, numbers, rarity, attunement), species by the 5.1 glossary and the shape of their traits,
+features by class (or subclass) and level (the English data knows a feature by those), properties and
+mastery by the rows of the weapons table, monsters by the signature of the stat block (armor class,
+hit points, experience, the six scores) and then entry by entry with a second pass for what the first
+left out. The scripts say what they could not pair; the book's own words are never replaced by a guess.
+What is left English stays English on purpose and goes to Weblate: names of items the book does not
+name in a way that can be paired (a dozen), the traits the data composes from a table (Draconic
+Ancestor, Elemental Affinity, the lineages), the texts of the tables themselves (Wild Shape, Circle of
+the Land; the tables of spells of the four other subclasses are rebuilt from the English rows with the
+book's spell names and headings), the short glosses of the data (abilities, skills, schools) and the
+monster entries that share one block of the book (vampires, were-creatures).
+
 ## Automatic translation of what is missing
 
 Texts that have no translation yet (about 13% of the rules texts, and everything imported from

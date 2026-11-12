@@ -1,6 +1,7 @@
 # Content packs
 
-The app ships with the SRD 5.1 only. People can add their own content as **packs**, which live
+The app ships with the SRD 5.1 (the 2014 rules) and the SRD 5.2.1 (the 2024 rules). People can add
+their own content as **packs**, which live
 in the browser (IndexedDB) of the device that added them. Open them from the footer link
 *Content packs*.
 
@@ -201,6 +202,49 @@ you have the right to use.
 A homebrew pack file is JSON with `format: "dnd-character-maker-pack"`, an `id`, a `name`, the
 `lang` of its texts, a `pack` (manifest and entries, as in `src/data/schema.ts`) and `strings`
 keyed by `<entry id>.<field>` (`name`, `desc`, ...). Pack ids may not be `srd51` or `srd52`.
+
+## The two editions and the packs
+
+Every character follows one edition, chosen when it is made (`Character.ruleset`: `srd51` or
+`srd52`). The ids of the SRD packs carry it (`srd51:spell/fireball`, `srd52:spell/fireball`), and a
+character sees its own SRD only. A pack of a person (homebrew, Aurora) has another prefix and
+belongs to **every edition**. What this means for the content of Aurora, whose books are 2014 rules:
+
+- **The import sees the 2014 SRD only.** An element named like an entry of the SRD is recognised as
+  that entry only among the 2014 ones, and the choices of spells and feats it makes list only
+  those. A book's Goliath stays a species of the pack; it is not taken for the 2024 one. A test
+  (`corpus.editions.test.ts`, with `AURORA_CORPUS`) reads the whole of Aurora with both SRDs loaded
+  and checks that no entry points to the 2024 SRD.
+- **A subclass of a book can be played on the 2024 class of the same name** (the 134 written for the
+  twelve SRD classes). The list shows it with "(2014)" after the name, `subclassOf` in
+  `engine/rulesets.ts` says which belong to a class, and the corpus test derives each of them on the
+  2024 class at levels 3, 5, 11 and 20 (no sheet fails, every feature is given). What the subclass
+  does is the 2014 text: a feature that uses a resource the 2024 class changed (Channel Divinity,
+  Wild Shape) works as the pack wrote it.
+- **The spells of the 2014 SRD named by a book become the 2024 spell of the same name** for a 2024
+  character: a granted spell, a list of spells to pick from, the spells a subclass always has
+  prepared (`localizeSpells`, `spellFor2024`). Branding Smite and Feeblemind have no 2024 twin and
+  stay as they are.
+- **Not carried over:** the 50 sub-species of a 2014 species (the 2024 species have lineages and
+  the ability increases come from the background, so a sub-species would count them twice), and what
+  refers to a species or trait of the 2014 SRD (101 references).
+
+## Data of the 2024 pack
+
+`data/srd52/` is built by `npm run data:srd52` from the pinned source (`scripts/srd52/source.json`) and
+from `scripts/srd52/supplement/`, a hand file for what the source lacks (mounts, vehicles, saddles
+and feed: see `data/srd52/NOTICE.md`). It has the kinds of the 2014 pack plus feats. New in the entry
+data:
+
+- **monster**: `bonusActions` next to `actions`, `reactions` and `legendary` (the texts are
+  `<slug>.bonusActions.N.name|desc`); the stat block shows them under "Bonus Actions".
+- **item**, category `mounts-and-vehicles`: `data.vehicle` {`category` (`mounts-and-other-animals`,
+  `tack-harness-and-drawn-vehicles`, `waterborne-vehicles`), `speed`, and for ships `crew`,
+  `passengers`, `cargo`, `armorClass`, `hitPoints`, `damageThreshold`}; the carrying capacity of an
+  animal is the text `<slug>.capacity`.
+- **item**, poisons: `data.poison.delivery` (`ingested`, `inhaled`, `contact` or `injury`), a price per
+  dose, the category `adventuring-gear` with `gear.category` `poisons`.
+- **alignment**: the ten of the book (name, abbreviation, text), the kind the 2014 pack has.
 
 ## Which pack wins
 

@@ -5,7 +5,8 @@
 **[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/)
 
 Heroquill is a free, offline-first web app to **build, level up, play and print Dungeons & Dragons
-5th edition characters** with the SRD 5.1 rules. No server, no account, no tracking: your characters
+5th edition characters** with the SRD 5.1 rules (2014) or the SRD 5.2.1 rules (2024), chosen for each
+character. No server, no account, no tracking: your characters
 stay on your device, and the app works without a connection once it has been opened. It speaks
 English, Italian, French, German and Spanish, and it reads the content files made for Aurora Builder
 and Aurora Legacy that you already own.
@@ -79,6 +80,11 @@ and Aurora Legacy that you already own.
 **Content**
 
 - The whole SRD 5.1: classes, subclasses, species, backgrounds, spells, equipment and features.
+- The SRD 5.2.1 (the 2024 rules), next to it: classes and subclasses, species, backgrounds, feats, spells,
+  equipment (with mounts, vehicles and poisons), magic items, monsters, alignments and the new rules
+  (weapon mastery, Divine and Primal Order, Heroic Inspiration, Exhaustion). A character follows the
+  edition chosen when it was made; content from Aurora is 2014 rules and works with both (see
+  [docs/CONTENT_PACKS.md](docs/CONTENT_PACKS.md)).
 - **Content packs** (footer, *Content packs*):
   - a **homebrew editor** for spells, weapons, armor, gear, properties, languages, feats, species,
     backgrounds, classes and subclasses, with export and import of your packs; weapons and armor
@@ -90,7 +96,7 @@ and Aurora Legacy that you already own.
 **Languages and look**
 
 - English, Italian, French, German and Spanish, with the **official SRD translations** (about 94%
-  of the rules texts). Missing texts show in English; translations are managed with Weblate (see
+  of the 5.1 rules texts; the 5.2.1 ones are imported the same way). Missing texts show in English; translations are managed with Weblate (see
   [docs/TRANSLATING.md](docs/TRANSLATING.md)).
 - **Automatic translation** (footer): with your own DeepL key, texts that have no translation yet
   (and the English content you imported) are translated as you read them (the casting time and the
@@ -123,6 +129,7 @@ app reads to tell what an update brings.
 | Command | What it does |
 |---------|--------------|
 | `npm run data:srd51` | Rebuilds `data/srd51/` and `locales/en/srd51/` from the pinned 5e-database source |
+| `npm run data:srd52` | Rebuilds `data/srd52/` and `locales/en/srd52/` from the pinned source of the 2024 rules and `scripts/srd52/supplement/` |
 
 The scripts in `scripts/srd-translations/` (Python, PyMuPDF) import the official SRD
 translations from their PDFs into `locales/`; see [docs/TRANSLATING.md](docs/TRANSLATING.md).
@@ -140,7 +147,7 @@ translations from their PDFs into `locales/`; see [docs/TRANSLATING.md](docs/TRA
 | `src/storage/` | IndexedDB: characters, packs, saved translations; sharing links |
 | `src/app/` | App state (signals): character, navigation, language, theme, units |
 | `src/ui/` | Preact components and styles |
-| `data/srd51/`, `locales/` | The SRD 5.1 content and its texts, by language |
+| `data/srd51/`, `data/srd52/`, `locales/` | The SRD 5.1 and 5.2.1 content and its texts, by language |
 | `workers/translate-proxy/` | The Cloudflare Worker that relays DeepL requests |
 | `docs/` | Guides: translating, content packs, the translation relay |
 
@@ -164,9 +171,9 @@ the app, under the title.
 
 - Code: [MIT](LICENSE).
 - Game data and translations: [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/), derived
-  from the System Reference Document 5.1 by Wizards of the Coast LLC, including its official
-  Italian, French, German and Spanish translations. The full attribution is in the app (footer,
-  *Credits and licenses*) and in `data/srd51/NOTICE.md`.
+  from the System Reference Document 5.1 and the System Reference Document 5.2.1 by Wizards of the
+  Coast LLC, including their official Italian, French, German and Spanish translations. The full attribution is in the app (footer,
+  *Credits and licenses*) and in `data/srd51/NOTICE.md` and `data/srd52/NOTICE.md`.
 - The sheet layout is inspired by the character sheets of Emmet Byrne; no artwork or text of
   his is used.
 
