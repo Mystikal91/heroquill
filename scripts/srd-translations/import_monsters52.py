@@ -215,7 +215,26 @@ def fill(slug: str, block: Block, english: dict, out: dict, glossary: dict, shar
     first = "actions" in data and data["actions"] and "multiattack" in data["actions"][0]
     if len(entries) != len(wanted_keys):
         problems.append(f"{slug}: {len(entries)} in the book, {len(wanted_keys)} in the data")
-    for r, c in pair_entries(wanted, found, en_len, sizes, bool(first), bonus):
+    pairs = list(pair_entries(wanted, found, en_len, sizes, bool(first), bonus))
+    # Second pass: what the margin left out is paired among what is left, when each is the other's best choice
+    # and the likeness is good (the same numbers, a text of about the same length).
+    left_r = [r for r in range(len(wanted_keys)) if r not in {p[0] for p in pairs}]
+    left_c = [c for c in range(len(entries)) if c not in {p[1] for p in pairs}]
+    if left_r and left_c:
+        import math
+
+        from import_monsters import hungarian, similarity
+
+        def cost(r: int, c: int) -> float:
+            return (1.0 - similarity(wanted[r], found[c])) + 0.25 * min(abs(math.log(max(sizes[c], 1) / max(en_len[r] * 1.15, 1))), 2.0) + bonus[r][c]
+
+        size = max(len(left_r), len(left_c))
+        matrix = [[cost(left_r[i], left_c[j]) if i < len(left_r) and j < len(left_c) else 1.0 for j in range(size)] for i in range(size)]
+        for i, j in enumerate(hungarian(matrix)):
+            if i < len(left_r) and j < len(left_c) and matrix[i][j] <= 0.7:
+                pairs.append((left_r[i], left_c[j]))
+                report["second pass"] += 1
+    for r, c in pairs:
         k, n = wanted_keys[r]
         prefix = f"{slug}.{k}.{n + 1}"
         english_name = strings.get(f"{prefix}.name", "")
