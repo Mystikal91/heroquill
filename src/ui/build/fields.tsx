@@ -1,6 +1,6 @@
 import { character, content } from "../../app/store";
 import { userPacks } from "../../app/userPacks";
-import { inRuleset } from "../../engine/rulesets";
+import { inRuleset, subclassOf } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
 
 /** Entries of one kind from the active ruleset, sorted by their display name. */
@@ -11,7 +11,12 @@ export function entriesOfKind(kind: string, parent?: string) {
     [...c.index.values()]
       // The active ruleset's entries, plus packs the user added (any id that is not another SRD's).
       .filter((e) => e.kind === kind && inRuleset(e.id, character.value.ruleset))
-      .filter((e) => parent === undefined || e.parent === parent)
+      .filter(
+        (e) =>
+          parent === undefined ||
+          e.parent === parent ||
+          (kind === "subclass" && subclassOf(e, parent)),
+      )
       .map((e) => ({ id: e.id, label: c.name(e.id) }))
       .sort((a, b) => a.label.localeCompare(b.label))
       .map((option, _, all) =>

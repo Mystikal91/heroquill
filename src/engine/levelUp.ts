@@ -3,7 +3,7 @@ import type { Ability, Entry } from "../data/schema";
 import type { Character } from "./character";
 import { type DerivedSheet, type PackIndex, deriveSheet } from "./derive";
 import { unmetPrerequisites } from "./multiclass";
-import { inRuleset } from "./rulesets";
+import { inRuleset, subclassOf } from "./rulesets";
 
 export const MAX_LEVEL = 20;
 
@@ -107,7 +107,7 @@ export function applyLevelUp(
 /** The first class level at which a class's subclass starts to matter, from its subclasses' features. */
 export function subclassLevel(index: PackIndex, classId: string): number | undefined {
   const levels = [...index.values()]
-    .filter((e) => e.kind === "subclass" && e.parent === classId)
+    .filter((e) => e.kind === "subclass" && subclassOf(e, classId))
     .flatMap((e) => subclassData(e).levels.map((l) => l.level));
   return levels.length > 0 ? Math.min(...levels) : undefined;
 }

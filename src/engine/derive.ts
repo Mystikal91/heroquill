@@ -30,6 +30,7 @@ import { type CasterInput, casterKind, slotPools, unmetPrerequisites } from "./m
 import { type OptionNeed, checkNeeds, needsOf } from "./optionNeeds";
 import { OVERRIDE, numberOverride } from "./overrides";
 import { type ClassFact, type ClassResource, type ExtraDamage, classResources } from "./resources";
+import { subclassOf } from "./rulesets";
 import { type FeatureSource, featureSources } from "./sources";
 import type { SpellBonus, SpellHealing } from "./spellRolls";
 import { type SpellLists, deriveSpellLists } from "./spells";
@@ -421,7 +422,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       const sub = lookup(index, cl.subclassId, warnings);
       subEntry = sub;
       if (sub) {
-        if (sub.parent !== cl.classId)
+        if (!subclassOf(sub, cl.classId))
           warn(warnings, "subclassMismatch", { subclass: cl.subclassId, class: cl.classId });
         for (const l of subclassData(sub).levels)
           if (l.level <= cl.level) features.push(...l.features);
