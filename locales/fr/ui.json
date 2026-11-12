@@ -1140,6 +1140,7 @@
   "monster.xp": "{n} PX",
   "monster.proficiencyBonus": "Bonus de maîtrise",
   "monster.actions": "Actions",
+  "monster.bonusActions": "Actions bonus",
   "monster.reactions": "Réactions",
   "monster.legendary": "Actions légendaires",
   "monster.usage.perDay": "{n}/jour",

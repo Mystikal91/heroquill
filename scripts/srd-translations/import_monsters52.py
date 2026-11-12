@@ -25,7 +25,7 @@ import import_monsters as old
 from import_monsters import Block, Entry, clean_name, pair_blocks, pair_entries, profile, USAGE_NAME
 
 ROOT = book52.ROOT
-SECTIONS = ["special", "actions", "reactions", "legendary"]
+SECTIONS = ["special", "actions", "bonusActions", "reactions", "legendary"]
 FACT = re.compile(r"^\*\*(.+?)\*\*\s*(.*)$", re.S)
 SCORE_ROW = re.compile(r"^\s*([^\W\d_]{2,5})\.?\s+(\d{1,2})(?:\s|$)")
 
@@ -162,7 +162,7 @@ def run(lang: str) -> None:
             fill(slug, block, english, out, glossary, shared, report, problems)
         seen: dict[str, Counter] = {}
         for k, v in out.items():
-            if re.search(r"\.(special|actions|reactions|legendary)\.\d+\.name$", k):
+            if re.search(r"\.(special|actions|bonusActions|reactions|legendary)\.\d+\.name$", k):
                 en_name = english[k.split(".")[0]]["strings"].get(k, "")
                 seen.setdefault(clean_name(en_name), Counter())[clean_name(v)] += 1
         glossary = {en: c.most_common(1)[0][0] for en, c in seen.items() if c.most_common(1)[0][1] >= 2 or len(c) == 1}
@@ -185,7 +185,7 @@ def fill(slug: str, block: Block, english: dict, out: dict, glossary: dict, shar
     if f"{slug}.alignment" in strings and al:
         out[f"{slug}.alignment"] = al
     facts = block.facts
-    if len(facts) >= 8:
+    if len(facts) >= 7:  # AC, Initiative, HP, Speed, then optional facts, then Senses, Languages and CR
         languages = facts[-2]
         if languages and languages not in ("—", "-", "–") and strings.get(f"{slug}.languages"):
             out[f"{slug}.languages"] = languages

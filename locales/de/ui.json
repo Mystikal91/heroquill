@@ -1140,6 +1140,7 @@
   "monster.xp": "{n} EP",
   "monster.proficiencyBonus": "Übungsbonus",
   "monster.actions": "Aktionen",
+  "monster.bonusActions": "Bonusaktionen",
   "monster.reactions": "Reaktionen",
   "monster.legendary": "Legendäre Aktionen",
   "monster.usage.perDay": "{n}/Tag",

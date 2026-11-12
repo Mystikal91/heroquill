@@ -167,7 +167,11 @@ def text_of(lines: list[dict], bold: bool = True) -> str:
             after_italic = False
             continue
         after_italic = bool(line.get("italic"))
-        if text.startswith("•"):
+        if text.startswith("**") and paras and re.search(r"\*\*[^*]*[^.:\s*]\*\*$", paras[-1]):
+            # a bold name that wraps: this line has the end of the name, it does not open a new run-in
+            paras[-1] += " " + text
+            in_list = False
+        elif text.startswith("•"):
             paras.append("• " + text[1:].strip())
             in_list = True
         elif in_list and line["tab"] and not text.startswith("**"):

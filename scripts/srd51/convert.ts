@@ -985,6 +985,8 @@ export function convertMonsters(raw: { monsters: Raw[] }, pack: string = PACK): 
     const lists: Record<string, Raw[]> = {
       special: m.special_abilities ?? [],
       actions: m.actions ?? [],
+      // 2024 only: the bonus actions of the book (the 5.1 source has none)
+      bonusActions: m.bonus_actions ?? [],
       reactions: m.reactions ?? [],
       legendary: m.legendary_actions ?? [],
     };

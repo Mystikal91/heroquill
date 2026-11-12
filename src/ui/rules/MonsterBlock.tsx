@@ -61,6 +61,7 @@ interface MonsterData {
   proficiencyBonus?: number;
   special?: Action[];
   actions?: Action[];
+  bonusActions?: Action[];
   reactions?: Action[];
   legendary?: Action[];
 }
@@ -68,6 +69,7 @@ interface MonsterData {
 const SECTIONS = [
   ["special", undefined],
   ["actions", "monster.actions"],
+  ["bonusActions", "monster.bonusActions"],
   ["reactions", "monster.reactions"],
   ["legendary", "monster.legendary"],
 ] as const;

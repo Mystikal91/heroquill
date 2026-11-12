@@ -32,6 +32,18 @@ describe("the 2024 monsters", () => {
     expect(get("octopus")?.data).toMatchObject({ size: "small", challenge: 0, hitPoints: 3 });
   });
 
+  it("keep the bonus actions (the Basilisk's Petrifying Gaze is one)", () => {
+    const withBonus = monsters.entries.filter(
+      (e) => ((e.data as { bonusActions?: unknown[] }).bonusActions?.length ?? 0) > 0,
+    );
+    expect(withBonus.length).toBeGreaterThan(70);
+    const basilisk = get("basilisk")?.data as {
+      bonusActions?: { dc?: { ability: string; value: number } }[];
+    };
+    expect(basilisk.bonusActions).toHaveLength(1);
+    expect(basilisk.bonusActions?.[0]?.dc).toMatchObject({ ability: "con", value: 12 });
+  });
+
   it("point to the 2024 spells and forms, never to the 2014 ones", () => {
     const text = JSON.stringify(monsters.entries);
     expect(text).not.toContain("srd51:");
