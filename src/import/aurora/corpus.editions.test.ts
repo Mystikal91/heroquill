@@ -151,6 +151,24 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
         }
       }
     }
+    // The spells such a subclass always has prepared are the 2024 ones (all but two have a twin).
+    const stayed2014: string[] = [];
+    const withSpells = subs.filter((s) => subclassData(s).spells.length > 0);
+    const both52 = new Map([...bothIndex, ...idx]);
+    for (const sub of withSpells) {
+      const cls = `srd52:class/${sub.parent?.split("/")[1]}`;
+      const c = createCharacter("srd52");
+      c.choices.species = "srd52:species/human";
+      c.abilityBase = { str: 14, dex: 14, con: 14, int: 14, wis: 14, cha: 14 };
+      c.classes = [{ classId: cls, level: 20, subclassId: sub.id }];
+      const sheet = deriveSheet(c, both52);
+      for (const caster of sheet.spellcasters)
+        for (const id of caster.lists.alwaysPrepared)
+          if (id.startsWith("srd51:") && !/feeblemind|branding-smite/.test(id))
+            stayed2014.push(`${sub.id}: ${id}`);
+    }
+    expect(withSpells.length).toBeGreaterThan(5);
+    expect(stayed2014.slice(0, 5)).toEqual([]);
     // Every subclass of a book has a 2024 class of the same name, derives on it, gives its features and warns of nothing.
     expect(out.noClass).toBe(0);
     expect(out.tested).toBeGreaterThan(100);

@@ -17,7 +17,14 @@ export function entriesOfKind(kind: string, parent?: string) {
           e.parent === parent ||
           (kind === "subclass" && subclassOf(e, parent)),
       )
-      .map((e) => ({ id: e.id, label: c.name(e.id) }))
+      // A subclass written for the 2014 class and offered on the 2024 one says so.
+      .map((e) => ({
+        id: e.id,
+        label:
+          kind === "subclass" && parent !== undefined && e.parent !== parent
+            ? `${c.name(e.id)} (2014)`
+            : c.name(e.id),
+      }))
       .sort((a, b) => a.label.localeCompare(b.label))
       .map((option, _, all) =>
         // The same name twice (a subspecies of two books, imported apart) says where each is from.

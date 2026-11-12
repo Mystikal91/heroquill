@@ -7,6 +7,28 @@ export const inRuleset = (entryId: string, ruleset: string): boolean =>
   entryId.startsWith(`${ruleset}:`) || !/^srd\d+:/.test(entryId);
 
 /**
+ * The spell a 2024 character gets where a book wrote a 2014 one: `srd51:spell/fireball` becomes
+ * `srd52:spell/fireball` when the 2024 SRD has a spell with that name (all but Branding Smite and Feeblemind do).
+ * Anything else is left as it is.
+ */
+export function spellFor2024(id: string, index: { has(id: string): boolean }): string {
+  const match = /^srd51:spell\/(.+)$/.exec(id);
+  const twin = match ? `srd52:spell/${match[1]}` : undefined;
+  return twin && index.has(twin) ? twin : id;
+}
+
+/** `value` with every 2014 spell id inside it (an effect, a list of ids) turned into the 2024 spell. */
+export function localizeSpells<T>(value: T, index: { has(id: string): boolean }): T {
+  if (typeof value === "string") return spellFor2024(value, index) as T;
+  if (Array.isArray(value)) return value.map((v) => localizeSpells(v, index)) as T;
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, localizeSpells(v, index)]),
+    ) as T;
+  return value;
+}
+
+/**
  * Whether a subclass belongs to a class. The parent of a subclass from a book (Aurora) is the 2014 SRD class it
  * was written for (`srd51:class/fighter`): the 2024 class of the same name takes it too, as a table plays a 2014
  * subclass on the new class. The subclasses of the SRD itself stay with their own edition's class.

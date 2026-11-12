@@ -2,6 +2,7 @@ import { type ClassData, subclassData } from "../data/progression";
 import type { Entry } from "../data/schema";
 import type { ClassSpells } from "./character";
 import type { PackIndex } from "./derive";
+import { spellFor2024 } from "./rulesets";
 import { type Warning, warn } from "./warnings";
 
 /** One list of spells a class picks: how many it may hold, the picks, and what it may pick from. */
@@ -63,8 +64,16 @@ function classSpellPool(index: PackIndex, classId: string, min: number, max: num
 }
 
 /** The spells a patron adds to the list, within the levels the class can cast. */
-function expandedPool(index: PackIndex, subclass: Entry | undefined, min: number, max: number) {
-  const ids = subclass ? subclassData(subclass).expanded : [];
+function expandedPool(
+  index: PackIndex,
+  subclass: Entry | undefined,
+  min: number,
+  max: number,
+  twin = false,
+) {
+  const ids = (subclass ? subclassData(subclass).expanded : []).map((id) =>
+    twin ? spellFor2024(id, index) : id,
+  );
   return ids.filter((id) => {
     const level = index.get(id)?.data.level;
     return typeof level === "number" && level >= min && level <= max;
@@ -103,13 +112,15 @@ export function deriveSpellLists(input: Input): SpellLists {
   const { classId, data, level, abilityModifier, picks, index, subclass, warnings } = input;
   const casting = data.spellcasting;
   if (!casting) throw new Error(`${classId} is not a spellcasting class`);
+  // The spells the subclass of a book names are those of the 2014 SRD: a 2024 class takes the 2024 spells.
+  const twin = classId.startsWith("srd52:");
   const row = data.levels.find((l) => l.level === level);
   const maxSpellLevel = (row?.spellSlots ?? []).reduce((max, n, i) => (n > 0 ? i + 1 : max), 0);
 
   const alwaysPrepared = subclass
     ? subclassData(subclass)
         .spells.filter((s) => s.classLevel <= level)
-        .map((s) => s.spell)
+        .map((s) => (twin ? spellFor2024(s.spell, index) : s.spell))
     : [];
 
   const lists: SpellLists = {
@@ -122,7 +133,7 @@ export function deriveSpellLists(input: Input): SpellLists {
     lists.cantrips = resolvePick(
       picks?.cantrips ?? [],
       row.cantripsKnown,
-      [...classSpellPool(index, classId, 0, 0), ...expandedPool(index, subclass, 0, 0)],
+      [...classSpellPool(index, classId, 0, 0), ...expandedPool(index, subclass, 0, 0, twin)],
       classId,
       warnings,
     );
@@ -131,7 +142,7 @@ export function deriveSpellLists(input: Input): SpellLists {
   const leveled = [
     ...new Set([
       ...classSpellPool(index, classId, 1, maxSpellLevel),
-      ...expandedPool(index, subclass, 1, maxSpellLevel),
+      ...expandedPool(index, subclass, 1, maxSpellLevel, twin),
     ]),
   ];
   const preparation = casting.preparation;

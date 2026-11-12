@@ -2,7 +2,7 @@ import type { Ability, CreatureSize, Effect, Entry, ProficiencyCategory } from "
 import type { PackIndex } from "./derive";
 import type { OptionNeed } from "./optionNeeds";
 import { evaluateRequirements } from "./requirements";
-import { inRuleset } from "./rulesets";
+import { inRuleset, localizeSpells } from "./rulesets";
 import { type Warning, warn } from "./warnings";
 
 type ChoiceEffect = Extract<Effect, { type: "choice" }>;
@@ -219,7 +219,9 @@ function walkEffects(
     for (const option of selected) apply(grantEffect(choice, option), source);
   };
 
-  const apply = (effect: Effect, source: string) => {
+  const apply = (written: Effect, source: string) => {
+    // A book wrote the spells of the 2014 SRD: a 2024 character takes the 2024 spell of the same name.
+    const effect = ruleset === "srd52" ? localizeSpells(written, index) : written;
     if (effect.type === "choice") return resolve(effect, source);
     if (effect.type === "flag") {
       seen.add(effect.id);
