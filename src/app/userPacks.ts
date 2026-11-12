@@ -252,9 +252,13 @@ async function importAuroraSources(
       userPacks.value.filter((p) => p.id !== id && !absorbed.some((a) => a.id === p.id)),
       { monsters: true },
     );
+    // Aurora's books are 2014 rules: the importer sees the 2014 SRD and the person's other packs, never the 2024 SRD.
+    // Its choices list the spells and feats they can pick from the index, and a 2014 character must not be offered
+    // (or tied to) an entry of the other edition.
+    const index = new Map([...english.index].filter(([entryId]) => !entryId.startsWith("srd52:")));
     const result = parseAurora(gathered.texts, {
       packId: id,
-      index: english.index,
+      index,
       nameOf: (entryId) => english.name(entryId),
       keepEditions: keep,
     });

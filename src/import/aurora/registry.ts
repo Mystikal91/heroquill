@@ -246,7 +246,9 @@ export function pairedEntry(options: AuroraOptions, kind: string, aid: string): 
 export function indexExisting(options: AuroraOptions): Map<string, string> {
   const found = new Map<string, string>();
   for (const entry of options.index.values()) {
-    if (!/^srd\d+:/.test(entry.id)) continue; // only content that ships with the app
+    // Only the 2014 SRD: Aurora's books are 2014 rules, and a 2014 character cannot see the entries of the 2024 SRD,
+    // so an element that is named like one of them (Goliath, a spell) must stay a pack entry of its own.
+    if (!entry.id.startsWith("srd51:")) continue;
     // A magic item of the app has only its text; the one of Aurora also gives what it does.
     if (entry.kind === "item" && entry.data.rarity) continue;
     found.set(nameKey(entry.kind, options.nameOf(entry.id)), entry.id);
