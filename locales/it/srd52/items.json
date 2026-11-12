@@ -747,5 +747,10 @@
   "winged-boots.name": "Stivali alati",
   "winged-boots.desc": "Oggetto meraviglioso\nQuesti stivali hanno 4 cariche e recuperano 1d4 cariche consumate all'alba di ogni giorno. Mentre indossa gli stivali, il personaggio può effettuare un'azione di Magia per consumare 1 carica, ottenendo una velocità di volo di 9 metri per 1 ora. Se il personaggio è in volo quando la durata si esaurisce, scende a una velocità di 9 metri per round finché non atterra.",
   "wings-of-flying.name": "Ali del volo",
-  "wings-of-flying.desc": "Oggetto meraviglioso\nMentre indossa questo mantello, il personaggio può effettuare un'azione di Magia per trasformarlo in un paio di ali sulla propria schiena. Le ali permangono per 1 ora o finché il personaggio non pone fine all'effetto con un'azione di Magia. Le ali forniscono una velocità di volo di 18 metri. Se il personaggio è in aria quando le ali spariscono, cade a terra. Dopo che le ali scompaiono, non è possibile utilizzarle di nuovo per 1d12 ore."
+  "wings-of-flying.desc": "Oggetto meraviglioso\nMentre indossa questo mantello, il personaggio può effettuare un'azione di Magia per trasformarlo in un paio di ali sulla propria schiena. Le ali permangono per 1 ora o finché il personaggio non pone fine all'effetto con un'azione di Magia. Le ali forniscono una velocità di volo di 18 metri. Se il personaggio è in aria quando le ali spariscono, cade a terra. Dopo che le ali scompaiono, non è possibile utilizzarle di nuovo per 1d12 ore.",
+  "musket.name": "Moschetto",
+  "hand-crossbow.name": "Balestra a mano",
+  "heavy-crossbow.name": "Balestra pesante",
+  "light-crossbow.name": "Balestra leggera",
+  "pistol.name": "Pistola"
 }

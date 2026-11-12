@@ -748,5 +748,10 @@
   "winged-boots.name": "Bottes ailées",
   "winged-boots.desc": "Objet merveilleux\nCes bottes disposent de 4 charges et récupèrent quotidiennement 1d4 charges dépensées, à l’aube. Tant qu’elles vous chaussent, vous pouvez entreprendre l’action Magie pour dépenser 1 charge et recevoir une Vitesse de vol de 9 m pendant 1 heure. Si vous volez au moment où la durée expire, vous descendez à une vitesse de 9 m par round jusqu’à ce que vous touchiez terre.",
   "wings-of-flying.name": "Cape de vol",
-  "wings-of-flying.desc": "Objet merveilleux\nTant que vous portez cette cape, vous pouvez entreprendre l’action Magie pour la transformer en paire d’ailes dans votre dos. Elles persistent pendant 1 heure, sauf si vous y mettez fin prématurément au prix de l’action Magie. Ces ailes vous octroient une Vitesse de vol de 18 m. Si vous êtes en l’air lorsqu’elles disparaissent, vous tombez. Après leur disparition, vous ne pouvez plus les déployer pendant 1d12 heures."
+  "wings-of-flying.desc": "Objet merveilleux\nTant que vous portez cette cape, vous pouvez entreprendre l’action Magie pour la transformer en paire d’ailes dans votre dos. Elles persistent pendant 1 heure, sauf si vous y mettez fin prématurément au prix de l’action Magie. Ces ailes vous octroient une Vitesse de vol de 18 m. Si vous êtes en l’air lorsqu’elles disparaissent, vous tombez. Après leur disparition, vous ne pouvez plus les déployer pendant 1d12 heures.",
+  "musket.name": "Mousquet",
+  "hand-crossbow.name": "Arbalète de poing",
+  "heavy-crossbow.name": "Arbalète lourde",
+  "light-crossbow.name": "Arbalète légère",
+  "pistol.name": "Pistolet"
 }

@@ -748,5 +748,10 @@
   "winged-boots.name": "Botas aladas",
   "winged-boots.desc": "Objeto maravilloso\nEstas botas tienen 4 cargas y recuperan 1d4 cargas empleadas cada día, al amanecer. Mientras las lleves puestas, puedes emplear una acción de magia para gastar 1 carga, lo que te proporciona una velocidad volando de 9 m durante 1 hora. Si estás volando cuando concluya la duración, descenderás a una velocidad de 9 m por asalto hasta que aterrices.",
   "wings-of-flying.name": "Alas de vuelo",
-  "wings-of-flying.desc": "Objeto maravilloso\nMientras lleves puesta esta capa, puedes emplear una acción de magia para convertirla en un par de alas que se colocan en tu espalda. Las alas durarán 1 hora o hasta que pongas fin al efecto antes de tiempo como acción de magia. Las alas te otorgan una velocidad volando de 18 m. Si estás en el aire cuando desaparezcan las alas, caerás. Cuando desaparezcan, no podrás usarlas de nuevo durante 1d12 horas."
+  "wings-of-flying.desc": "Objeto maravilloso\nMientras lleves puesta esta capa, puedes emplear una acción de magia para convertirla en un par de alas que se colocan en tu espalda. Las alas durarán 1 hora o hasta que pongas fin al efecto antes de tiempo como acción de magia. Las alas te otorgan una velocidad volando de 18 m. Si estás en el aire cuando desaparezcan las alas, caerás. Cuando desaparezcan, no podrás usarlas de nuevo durante 1d12 horas.",
+  "musket.name": "Mosquete",
+  "hand-crossbow.name": "Ballesta de mano",
+  "heavy-crossbow.name": "Ballesta pesada",
+  "light-crossbow.name": "Ballesta ligera",
+  "pistol.name": "Pistola"
 }

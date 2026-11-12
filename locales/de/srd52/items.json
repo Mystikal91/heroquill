@@ -733,5 +733,9 @@
   "winged-boots.name": "Geflügelte Stiefel",
   "winged-boots.desc": "Wundersamer Gegenstand\nDiese Stiefel haben vier Ladungen und erhalten täglich im Morgengrauen 1W4 verbrauchte Ladungen zurück. Wenn du die Stiefel trägst, kannst du eine magische Aktion ausführen und eine Ladung verbrauchen, um eine Stunde lang über eine Flugbewegungsrate von neun Metern zu verfügen. Fliegst du, wenn die Wirkungsdauer abläuft, so sinkst du um neun Meter pro Runde, bis du landest.",
   "wings-of-flying.name": "Zauberflügel",
-  "wings-of-flying.desc": "Wundersamer Gegenstand\nWenn du diesen Mantel trägst, kannst du eine magische Aktion ausführen, um den Mantel in ein Flügelpaar auf deinem Rücken zu verwandeln. Diese Flügel bleiben erhalten, bis eine Stunde ver- gangen ist oder du den Effekt als magische Aktion vorzeitig beendest. Die Flügel verleihen dir eine Flugbewegungsrate von 18 Metern. Befindest du dich in der Luft, wenn die Flügel verschwinden, so stürzt du ab. Wenn die Flügel verschwunden sind, kannst du sie erst nach 1W12 Stunden erneut verwenden."
+  "wings-of-flying.desc": "Wundersamer Gegenstand\nWenn du diesen Mantel trägst, kannst du eine magische Aktion ausführen, um den Mantel in ein Flügelpaar auf deinem Rücken zu verwandeln. Diese Flügel bleiben erhalten, bis eine Stunde ver- gangen ist oder du den Effekt als magische Aktion vorzeitig beendest. Die Flügel verleihen dir eine Flugbewegungsrate von 18 Metern. Befindest du dich in der Luft, wenn die Flügel verschwinden, so stürzt du ab. Wenn die Flügel verschwunden sind, kannst du sie erst nach 1W12 Stunden erneut verwenden.",
+  "musket.name": "Muskete",
+  "hand-crossbow.name": "Handarmbrust",
+  "light-crossbow.name": "Leichte Armbrust",
+  "pistol.name": "Pistole"
 }
