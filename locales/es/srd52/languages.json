@@ -1,0 +1,18 @@
+{
+  "common.name": "Común",
+  "draconic.name": "Dracónico",
+  "dwarvish.name": "Enano",
+  "elvish.name": "Elfo",
+  "giant.name": "Gigante",
+  "gnomish.name": "Gnomo",
+  "goblin.name": "Goblin",
+  "halfling.name": "Mediano",
+  "orc.name": "Orco",
+  "abyssal.name": "Abisal",
+  "celestial.name": "Celestial",
+  "deep-speech.name": "Habla de las profundidades",
+  "infernal.name": "Infernal",
+  "primordial.name": "Primordial",
+  "sylvan.name": "Silvano",
+  "undercommon.name": "Infracomún"
+}

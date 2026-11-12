@@ -1,0 +1,18 @@
+{
+  "common.name": "Commun",
+  "draconic.name": "Draconique",
+  "dwarvish.name": "Nain",
+  "elvish.name": "Elfique",
+  "giant.name": "Gigant",
+  "gnomish.name": "Gnome",
+  "goblin.name": "Gobelin",
+  "halfling.name": "Halfelin",
+  "orc.name": "Orc",
+  "abyssal.name": "Abyssal",
+  "celestial.name": "Céleste",
+  "deep-speech.name": "Profond",
+  "infernal.name": "Infernal",
+  "primordial.name": "Primordial",
+  "sylvan.name": "Sylvestre",
+  "undercommon.name": "Commun des profondeurs"
+}

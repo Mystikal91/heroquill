@@ -559,6 +559,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -875,6 +878,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -1150,6 +1156,20 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "dc": {
+              "ability": "con",
+              "value": 12,
+              "onSave": "none"
+            },
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 4
+            }
+          }
         ]
       }
     },
@@ -1331,6 +1351,21 @@
               "type": "recharge on roll",
               "dice": "1d6",
               "minValue": 5
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "acid",
+                "dice": "6d6"
+              }
+            ],
+            "dc": {
+              "ability": "dex",
+              "value": 18,
+              "onSave": "none"
             }
           }
         ]
@@ -2025,6 +2060,15 @@
                 "dice": "1d4+3"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 4
+            }
           }
         ]
       }
@@ -3804,6 +3848,15 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "dc": {
+              "ability": "dex",
+              "value": 13,
+              "onSave": "none"
+            }
+          }
         ]
       }
     },
@@ -3948,6 +4001,9 @@
               "onSave": "half"
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -4009,6 +4065,26 @@
                 "dice": "1d8+2"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "bludgeoning",
+                "dice": "1d6+4"
+              }
+            ],
+            "dc": {
+              "ability": "str",
+              "value": 14,
+              "onSave": "none"
+            },
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
           }
         ]
       }
@@ -4355,6 +4431,15 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
+          }
         ]
       }
     },
@@ -4436,6 +4521,34 @@
                 "dice": "1d10+3"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "dc": {
+              "ability": "wis",
+              "value": 13,
+              "onSave": "none"
+            }
+          },
+          {
+            "usage": {
+              "type": "recharge after rest",
+              "restTypes": [
+                "short",
+                "long"
+              ]
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/mirror-image",
+                  "level": 2
+                }
+              ]
+            }
           }
         ]
       }
@@ -4559,6 +4672,25 @@
                     "type": "per day",
                     "times": 1
                   }
+                }
+              ]
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 15,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/misty-step",
+                  "level": 2
                 }
               ]
             }
@@ -5351,6 +5483,33 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 2
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "dc": 15,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/bless",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/lesser-restoration",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/sanctuary",
+                  "level": 1
+                }
+              ]
+            }
+          }
         ]
       }
     },
@@ -5574,6 +5733,30 @@
                     "type": "per day",
                     "times": 1
                   }
+                }
+              ]
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 2
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "dc": 12,
+              "modifier": 4,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/spiritual-weapon",
+                  "level": 2
                 }
               ]
             }
@@ -5826,6 +6009,37 @@
                     "type": "per day",
                     "times": 1
                   }
+                }
+              ]
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 2
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 17,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/cure-wounds",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/lesser-restoration",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/remove-curse",
+                  "level": 3
                 }
               ]
             }
@@ -6095,6 +6309,9 @@
               "minValue": 6
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -6315,6 +6532,37 @@
                 "dice": "3d6+3"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "dc": 14,
+              "componentsRequired": [
+                "V",
+                "S"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/darkness",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/faerie-fire",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/web",
+                  "level": 2
+                }
+              ]
+            }
           }
         ]
       }
@@ -6564,6 +6812,9 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -6969,6 +7220,9 @@
               "minValue": 5
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -7360,6 +7614,15 @@
                 "dice": "2d6"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
           }
         ]
       }
@@ -8260,6 +8523,14 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 1
+            }
+          }
         ]
       }
     },
@@ -8310,6 +8581,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -8381,6 +8655,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -8453,6 +8730,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ],
         "reactions": [
           {}
@@ -9065,6 +9345,21 @@
               "type": "recharge on roll",
               "dice": "1d6",
               "minValue": 5
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "bludgeoning",
+                "dice": "2d10+5"
+              }
+            ],
+            "dc": {
+              "ability": "dex",
+              "value": 16,
+              "onSave": "half"
             }
           }
         ]
@@ -10330,6 +10625,9 @@
               "minValue": 5
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -10543,6 +10841,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -11304,6 +11605,26 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "psychic",
+                "dice": "4d8"
+              }
+            ],
+            "dc": {
+              "ability": "wis",
+              "value": 15,
+              "onSave": "none"
+            },
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 6
+            }
+          }
         ]
       }
     },
@@ -11879,6 +12200,9 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -12349,6 +12673,29 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 3
+            },
+            "spellcasting": {
+              "ability": "int",
+              "dc": 14,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/misty-step",
+                  "level": 2
+                }
+              ]
+            }
+          }
+        ],
         "reactions": [
           {
             "usage": {
@@ -12560,6 +12907,29 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 3
+            },
+            "spellcasting": {
+              "ability": "int",
+              "dc": 17,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/misty-step",
+                  "level": 2
+                }
+              ]
+            }
+          }
+        ],
         "reactions": [
           {
             "usage": {
@@ -12648,6 +13018,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -12800,6 +13173,15 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
+          }
+        ],
         "reactions": [
           {}
         ]
@@ -12879,6 +13261,20 @@
                 "dice": "2d8+2"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "dc": {
+              "ability": "con",
+              "value": 13,
+              "onSave": "none"
+            },
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
           }
         ]
       }
@@ -13480,6 +13876,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -13890,6 +14289,26 @@
           },
           {}
         ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "psychic",
+                "dice": "8d6"
+              }
+            ],
+            "dc": {
+              "ability": "wis",
+              "value": 15,
+              "onSave": "none"
+            },
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            }
+          }
+        ],
         "reactions": [
           {}
         ]
@@ -14065,6 +14484,9 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -14418,6 +14840,21 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 13,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/invisibility",
+                  "level": 2
+                }
+              ]
+            }
+          }
         ]
       }
     },
@@ -14698,6 +15135,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -15120,6 +15560,41 @@
               ]
             }
           }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 2
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 20,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/cure-wounds",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/invisibility",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/lesser-restoration",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/remove-curse",
+                  "level": 3
+                }
+              ]
+            }
+          }
         ]
       }
     },
@@ -15207,6 +15682,36 @@
                   "usage": {
                     "type": "at will"
                   }
+                }
+              ]
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 1
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/bless",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/healing-word",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/sanctuary",
+                  "level": 1
                 }
               ]
             }
@@ -15309,6 +15814,41 @@
                     "type": "per day",
                     "times": 1
                   }
+                }
+              ]
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 3
+            },
+            "spellcasting": {
+              "ability": "wis",
+              "dc": 13,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/bless",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/dispel-magic",
+                  "level": 3
+                },
+                {
+                  "spell": "srd52:spell/healing-word",
+                  "level": 1
+                },
+                {
+                  "spell": "srd52:spell/lesser-restoration",
+                  "level": 2
                 }
               ]
             }
@@ -15475,6 +16015,21 @@
                 "dice": "10d6"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "acid",
+                "dice": "5d6"
+              }
+            ],
+            "dc": {
+              "ability": "str",
+              "value": 19,
+              "onSave": "none"
+            }
           }
         ]
       }
@@ -16263,6 +16818,25 @@
               "onSave": "none"
             }
           }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "acid",
+                "dice": "3d6"
+              },
+              {
+                "type": "fire",
+                "dice": "3d6"
+              }
+            ],
+            "dc": {
+              "ability": "str",
+              "value": 19,
+              "onSave": "none"
+            }
+          }
         ]
       }
     },
@@ -16336,6 +16910,15 @@
               "ability": "str",
               "value": 19,
               "onSave": "none"
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
             }
           }
         ]
@@ -16555,6 +17138,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -16965,6 +17551,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -17996,6 +18585,37 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 3
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 25,
+              "componentsRequired": [
+                "V",
+                "S",
+                "M"
+              ],
+              "spells": [
+                {
+                  "spell": "srd52:spell/cure-wounds",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/lesser-restoration",
+                  "level": 2
+                },
+                {
+                  "spell": "srd52:spell/remove-curse",
+                  "level": 3
+                }
+              ]
+            }
+          }
+        ],
         "legendary": [
           {
             "dc": {
@@ -18833,6 +19453,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -19043,6 +19666,26 @@
                 "dice": "4d10"
               }
             ]
+          }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            },
+            "spellcasting": {
+              "ability": "con",
+              "dc": 17,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/slow",
+                  "level": 3
+                }
+              ]
+            }
           }
         ]
       }
@@ -19268,6 +19911,9 @@
               "onSave": "half"
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -19390,6 +20036,21 @@
               "type": "recharge on roll",
               "dice": "1d6",
               "minValue": 5
+            }
+          }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "acid",
+                "dice": "16d6"
+              }
+            ],
+            "dc": {
+              "ability": "str",
+              "value": 27,
+              "onSave": "none"
             }
           }
         ],
@@ -19660,6 +20321,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -19933,6 +20597,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20030,6 +20697,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20147,6 +20817,27 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 17,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/charm-person",
+                  "level": 1
+                }
+              ]
+            }
+          },
+          {}
+        ],
         "legendary": [
           {
             "spellcasting": {
@@ -20249,6 +20940,27 @@
             }
           }
         ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 17,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/charm-person",
+                  "level": 1
+                }
+              ]
+            }
+          },
+          {}
+        ],
         "legendary": [
           {
             "spellcasting": {
@@ -20331,6 +21043,27 @@
           {},
           {},
           {},
+          {}
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "recharge on roll",
+              "dice": "1d6",
+              "minValue": 5
+            },
+            "spellcasting": {
+              "ability": "cha",
+              "dc": 17,
+              "componentsRequired": [],
+              "spells": [
+                {
+                  "spell": "srd52:spell/charm-person",
+                  "level": 1
+                }
+              ]
+            }
+          },
           {}
         ],
         "legendary": [
@@ -20716,6 +21449,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20794,6 +21530,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20864,6 +21603,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20917,6 +21659,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -20997,6 +21742,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21068,6 +21816,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21134,6 +21885,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21214,6 +21968,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21285,6 +22042,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21350,6 +22110,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21429,6 +22192,10 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {},
+          {}
         ]
       }
     },
@@ -21499,6 +22266,10 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {},
+          {}
         ]
       }
     },
@@ -21567,6 +22338,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21649,6 +22423,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -21722,6 +22499,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -22330,6 +23110,16 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "dc": {
+              "ability": "con",
+              "value": 10,
+              "onSave": "none"
+            }
+          },
+          {}
         ]
       }
     },
@@ -22679,6 +23469,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -23951,6 +24744,21 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "bludgeoning",
+                "dice": "2d10+6"
+              }
+            ],
+            "dc": {
+              "ability": "dex",
+              "value": 16,
+              "onSave": "half"
+            }
+          }
         ]
       }
     },
@@ -24184,6 +24992,9 @@
               "minValue": 6
             }
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -24944,6 +25755,14 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "usage": {
+              "type": "per day",
+              "times": 1
+            }
+          }
         ]
       }
     },
@@ -25341,6 +26160,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -26364,6 +27186,21 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {
+            "damage": [
+              {
+                "type": "bludgeoning",
+                "dice": "4d10+7"
+              }
+            ],
+            "dc": {
+              "ability": "dex",
+              "value": 18,
+              "onSave": "half"
+            }
+          }
         ]
       }
     },
@@ -26633,6 +27470,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -27206,6 +28046,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },
@@ -27815,6 +28658,9 @@
               }
             ]
           }
+        ],
+        "bonusActions": [
+          {}
         ]
       }
     },

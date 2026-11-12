@@ -1,0 +1,18 @@
+{
+  "common.name": "Comune",
+  "draconic.name": "Draconico",
+  "dwarvish.name": "Nanico",
+  "elvish.name": "Elfico",
+  "giant.name": "Gigante",
+  "gnomish.name": "Gnomesco",
+  "goblin.name": "Goblin",
+  "halfling.name": "Halfling",
+  "orc.name": "Orchesco",
+  "abyssal.name": "Abissale",
+  "celestial.name": "Celestiale",
+  "deep-speech.name": "Gergo delle profondità",
+  "infernal.name": "Infernale",
+  "primordial.name": "Primordiale",
+  "sylvan.name": "Silvano",
+  "undercommon.name": "Sottocomune"
+}

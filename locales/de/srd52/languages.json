@@ -1,0 +1,18 @@
+{
+  "common.name": "Gemeinsprache",
+  "draconic.name": "Drakonisch",
+  "dwarvish.name": "Zwergisch",
+  "elvish.name": "Elfisch",
+  "giant.name": "Riesisch",
+  "gnomish.name": "Gnomisch",
+  "goblin.name": "Goblinisch",
+  "halfling.name": "Halblingisch",
+  "orc.name": "Orkisch",
+  "abyssal.name": "Abyssisch",
+  "celestial.name": "Celestisch",
+  "deep-speech.name": "Tiefensprache",
+  "infernal.name": "Infernalisch",
+  "primordial.name": "Urtümlich",
+  "sylvan.name": "Sylvanisch",
+  "undercommon.name": "Gemeinsprache der Unterreiche"
+}
