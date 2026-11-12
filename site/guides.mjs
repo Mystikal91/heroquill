@@ -24,7 +24,7 @@ export const GUIDES = {
         [
           "What this does, and what it does not",
           [
-            "Heroquill comes with the free rules of the SRD 5.1. Everything else you add yourself, from files you already have. Nothing from Aurora or from any publisher is bundled in the app, and the app never downloads content on its own: it fetches only from an address you type, or one listed in an index file you chose.",
+            "Heroquill comes with the free rules of the SRD 5.1 and the SRD 5.2.1. Everything else you add yourself, from files you already have. Nothing from Aurora or from any publisher is bundled in the app, and the app never downloads content on its own: it fetches only from an address you type, or one listed in an index file you chose.",
             "What you add stays on your device, in your browser. A pack made from your own files can be removed at any time but never exported or shared: only add content you have the right to use.",
           ],
         ],
@@ -103,7 +103,7 @@ export const GUIDES = {
         [
           "Cosa fa, e cosa non fa",
           [
-            "Heroquill include le regole libere dell’SRD 5.1. Tutto il resto lo aggiungi tu, da file che hai già. Nell’app non c’è nulla di Aurora né di alcun editore, e l’app non scarica mai contenuti da sola: li prende solo da un indirizzo che scrivi tu, o elencato in un file indice che hai scelto.",
+            "Heroquill include le regole libere dell’SRD 5.1 e dell’SRD 5.2.1. Tutto il resto lo aggiungi tu, da file che hai già. Nell’app non c’è nulla di Aurora né di alcun editore, e l’app non scarica mai contenuti da sola: li prende solo da un indirizzo che scrivi tu, o elencato in un file indice che hai scelto.",
             "Ciò che aggiungi resta sul tuo dispositivo, nel browser. Un pacchetto fatto da file tuoi si può rimuovere in ogni momento ma non esportare né condividere: aggiungi solo contenuti che hai il diritto di usare.",
           ],
         ],
@@ -182,7 +182,7 @@ export const GUIDES = {
         [
           "Ce que ça fait, et ce que ça ne fait pas",
           [
-            "Heroquill est livré avec les règles libres du SRD 5.1. Tout le reste, tu l’ajoutes toi-même, à partir de fichiers que tu as déjà. Rien d’Aurora ni d’aucun éditeur n’est inclus dans l’app, et l’app ne télécharge jamais de contenu toute seule : elle ne va chercher qu’à une adresse que tu écris, ou listée dans un fichier d’index que tu as choisi.",
+            "Heroquill est livré avec les règles libres du SRD 5.1 et du SRD 5.2.1. Tout le reste, tu l’ajoutes toi-même, à partir de fichiers que tu as déjà. Rien d’Aurora ni d’aucun éditeur n’est inclus dans l’app, et l’app ne télécharge jamais de contenu toute seule : elle ne va chercher qu’à une adresse que tu écris, ou listée dans un fichier d’index que tu as choisi.",
             "Ce que tu ajoutes reste sur ton appareil, dans ton navigateur. Un paquet fait de tes propres fichiers peut être retiré à tout moment, mais jamais exporté ni partagé : n’ajoute que du contenu que tu as le droit d’utiliser.",
           ],
         ],
@@ -261,7 +261,7 @@ export const GUIDES = {
         [
           "Was das tut und was nicht",
           [
-            "Heroquill bringt die freien Regeln des SRD 5.1 mit. Alles andere fügst du selbst hinzu, aus Dateien, die du schon hast. In der App steckt nichts von Aurora oder einem Verlag, und die App lädt nie von selbst Inhalte herunter: sie holt nur von einer Adresse, die du eingibst, oder die in einer von dir gewählten Indexdatei steht.",
+            "Heroquill bringt die freien Regeln des SRD 5.1 und des SRD 5.2.1 mit. Alles andere fügst du selbst hinzu, aus Dateien, die du schon hast. In der App steckt nichts von Aurora oder einem Verlag, und die App lädt nie von selbst Inhalte herunter: sie holt nur von einer Adresse, die du eingibst, oder die in einer von dir gewählten Indexdatei steht.",
             "Was du hinzufügst, bleibt auf deinem Gerät, in deinem Browser. Ein Paket aus eigenen Dateien lässt sich jederzeit entfernen, aber nie exportieren oder teilen: füge nur Inhalte hinzu, die du verwenden darfst.",
           ],
         ],
@@ -340,7 +340,7 @@ export const GUIDES = {
         [
           "Qué hace y qué no hace",
           [
-            "Heroquill incluye las reglas libres del SRD 5.1. Todo lo demás lo añades tú, desde archivos que ya tienes. En la app no hay nada de Aurora ni de ninguna editorial, y la app nunca descarga contenido por su cuenta: solo lo busca en una dirección que escribes tú, o listada en un archivo de índice que elegiste.",
+            "Heroquill incluye las reglas libres del SRD 5.1 y del SRD 5.2.1. Todo lo demás lo añades tú, desde archivos que ya tienes. En la app no hay nada de Aurora ni de ninguna editorial, y la app nunca descarga contenido por su cuenta: solo lo busca en una dirección que escribes tú, o listada en un archivo de índice que elegiste.",
             "Lo que añades se queda en tu dispositivo, en el navegador. Un paquete hecho con tus propios archivos se puede quitar en cualquier momento, pero nunca exportar ni compartir: añade solo contenido que tengas derecho a usar.",
           ],
         ],
@@ -813,7 +813,7 @@ export const GUIDES = {
             "Two kinds of texts, kept apart so you can pick what you like:",
             [
               "the app: buttons, menus, messages and help (a few thousand short texts);",
-              "the rules: names and descriptions of species, classes, spells, items and the rest of the SRD 5.1. For Italian, French, German and Spanish the official translations of the SRD are already in; what is missing is welcome, and so is any correction.",
+              "the rules: names and descriptions of species, classes, spells, items and the rest of the SRD 5.1 and 5.2.1. For Italian, French, German and Spanish the official translations of the SRD are already in; what is missing is welcome, and so is any correction.",
             ],
             "A text with no translation in your language shows in English, so a language can grow little by little. Nothing has to be finished at once.",
           ],
@@ -856,7 +856,7 @@ export const GUIDES = {
         [
           "Licence",
           [
-            "Your translations are released under the same licence as the texts they translate: the interface texts under the MIT licence of the project, the rules under CC-BY-4.0, the licence of the SRD 5.1. By translating you agree to that.",
+            "Your translations are released under the same licence as the texts they translate: the interface texts under the MIT licence of the project, the rules under CC-BY-4.0, the licence of the SRD 5.1 and 5.2.1. By translating you agree to that.",
           ],
         ],
       ],
@@ -876,7 +876,7 @@ export const GUIDES = {
             "Due tipi di testi, separati così puoi scegliere quelli che preferisci:",
             [
               "l’app: pulsanti, menu, messaggi e aiuti (qualche migliaio di testi brevi);",
-              "le regole: nomi e descrizioni di specie, classi, incantesimi, oggetti e il resto dell’SRD 5.1. Per italiano, francese, tedesco e spagnolo ci sono già le traduzioni ufficiali dell’SRD; ciò che manca è benvenuto, e lo sono anche le correzioni.",
+              "le regole: nomi e descrizioni di specie, classi, incantesimi, oggetti e il resto dell’SRD 5.1 e 5.2.1. Per italiano, francese, tedesco e spagnolo ci sono già le traduzioni ufficiali dell’SRD; ciò che manca è benvenuto, e lo sono anche le correzioni.",
             ],
             "Un testo senza traduzione nella tua lingua appare in inglese, quindi una lingua può crescere un po’ alla volta. Non serve finire tutto subito.",
           ],
@@ -919,7 +919,7 @@ export const GUIDES = {
         [
           "Licenza",
           [
-            "Le tue traduzioni escono con la stessa licenza dei testi che traducono: i testi dell’interfaccia con la licenza MIT del progetto, le regole con la CC-BY-4.0, la licenza dell’SRD 5.1. Traducendo accetti questo.",
+            "Le tue traduzioni escono con la stessa licenza dei testi che traducono: i testi dell’interfaccia con la licenza MIT del progetto, le regole con la CC-BY-4.0, la licenza degli SRD 5.1 e 5.2.1. Traducendo accetti questo.",
           ],
         ],
       ],
@@ -939,7 +939,7 @@ export const GUIDES = {
             "Deux sortes de textes, séparés pour que tu choisisses ceux que tu préfères :",
             [
               "l’app : boutons, menus, messages et aides (quelques milliers de textes courts) ;",
-              "les règles : noms et descriptions des espèces, classes, sorts, objets et le reste du SRD 5.1. Pour l’italien, le français, l’allemand et l’espagnol, les traductions officielles du SRD sont déjà là ; ce qui manque est bienvenu, tout comme les corrections.",
+              "les règles : noms et descriptions des espèces, classes, sorts, objets et le reste des SRD 5.1 et 5.2.1. Pour l’italien, le français, l’allemand et l’espagnol, les traductions officielles du SRD sont déjà là ; ce qui manque est bienvenu, tout comme les corrections.",
             ],
             "Un texte sans traduction dans ta langue s’affiche en anglais : une langue peut donc grandir petit à petit. Rien n’a besoin d’être fini d’un coup.",
           ],
@@ -982,7 +982,7 @@ export const GUIDES = {
         [
           "Licence",
           [
-            "Tes traductions sont publiées sous la même licence que les textes qu’elles traduisent : les textes de l’interface sous la licence MIT du projet, les règles sous CC-BY-4.0, la licence du SRD 5.1. En traduisant, tu l’acceptes.",
+            "Tes traductions sont publiées sous la même licence que les textes qu’elles traduisent : les textes de l’interface sous la licence MIT du projet, les règles sous CC-BY-4.0, la licence des SRD 5.1 et 5.2.1. En traduisant, tu l’acceptes.",
           ],
         ],
       ],
@@ -1002,7 +1002,7 @@ export const GUIDES = {
             "Zwei Arten von Texten, getrennt, damit du wählen kannst, was dir liegt:",
             [
               "die App: Schaltflächen, Menüs, Meldungen und Hilfen (einige tausend kurze Texte);",
-              "die Regeln: Namen und Beschreibungen von Völkern, Klassen, Zaubern, Gegenständen und dem Rest des SRD 5.1. Für Italienisch, Französisch, Deutsch und Spanisch sind die offiziellen Übersetzungen des SRD schon drin; was fehlt, ist willkommen, ebenso Korrekturen.",
+              "die Regeln: Namen und Beschreibungen von Völkern, Klassen, Zaubern, Gegenständen und dem Rest der SRD 5.1 und 5.2.1. Für Italienisch, Französisch, Deutsch und Spanisch sind die offiziellen Übersetzungen des SRD schon drin; was fehlt, ist willkommen, ebenso Korrekturen.",
             ],
             "Ein Text ohne Übersetzung in deiner Sprache erscheint auf Englisch, eine Sprache kann also nach und nach wachsen. Nichts muss auf einmal fertig sein.",
           ],
@@ -1045,7 +1045,7 @@ export const GUIDES = {
         [
           "Lizenz",
           [
-            "Deine Übersetzungen erscheinen unter derselben Lizenz wie die Texte, die sie übersetzen: die Oberflächentexte unter der MIT-Lizenz des Projekts, die Regeln unter CC-BY-4.0, der Lizenz des SRD 5.1. Mit dem Übersetzen stimmst du dem zu.",
+            "Deine Übersetzungen erscheinen unter derselben Lizenz wie die Texte, die sie übersetzen: die Oberflächentexte unter der MIT-Lizenz des Projekts, die Regeln unter CC-BY-4.0, der Lizenz der SRD 5.1 und 5.2.1. Mit dem Übersetzen stimmst du dem zu.",
           ],
         ],
       ],
@@ -1065,7 +1065,7 @@ export const GUIDES = {
             "Dos tipos de textos, separados para que elijas lo que prefieras:",
             [
               "la app: botones, menús, mensajes y ayudas (unos miles de textos cortos);",
-              "las reglas: nombres y descripciones de especies, clases, conjuros, objetos y el resto del SRD 5.1. Para italiano, francés, alemán y español ya están las traducciones oficiales del SRD; lo que falta es bienvenido, y las correcciones también.",
+              "las reglas: nombres y descripciones de especies, clases, conjuros, objetos y el resto de los SRD 5.1 y 5.2.1. Para italiano, francés, alemán y español ya están las traducciones oficiales del SRD; lo que falta es bienvenido, y las correcciones también.",
             ],
             "Un texto sin traducción en tu idioma se muestra en inglés, así que un idioma puede crecer poco a poco. No hace falta terminarlo todo de golpe.",
           ],
@@ -1108,7 +1108,7 @@ export const GUIDES = {
         [
           "Licencia",
           [
-            "Tus traducciones se publican con la misma licencia que los textos que traducen: los textos de la interfaz con la licencia MIT del proyecto, las reglas con CC-BY-4.0, la licencia del SRD 5.1. Al traducir aceptas eso.",
+            "Tus traducciones se publican con la misma licencia que los textos que traducen: los textos de la interfaz con la licencia MIT del proyecto, las reglas con CC-BY-4.0, la licencia de los SRD 5.1 y 5.2.1. Al traducir aceptas eso.",
           ],
         ],
       ],

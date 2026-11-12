@@ -18,7 +18,7 @@ export const GUIDE = {
       [
         "Choose a species",
         [
-          "Your species (called race in older books) gives your character a size, a speed, languages and a few traits, and in the SRD 5.1 it also adds to some ability scores. The SRD includes the dwarf, elf, halfling, human, dragonborn, gnome, half-elf, half-orc and tiefling, some with a subrace such as the high elf or the hill dwarf.",
+          "Your species (called race in older books) gives your character a size, a speed, languages and a few traits, and in the 2014 rules (SRD 5.1) it also adds to some ability scores, while in the 2024 rules (SRD 5.2.1) the increase comes from the background. The 2014 SRD includes the dwarf, elf, halfling, human, dragonborn, gnome, half-elf, half-orc and tiefling, some with a subrace such as the high elf or the hill dwarf; the 2024 SRD has the dragonborn, dwarf, elf, gnome, goliath, halfling, human, orc and tiefling, with lineages instead of subraces.",
         ],
       ],
       [
@@ -95,7 +95,7 @@ export const GUIDE = {
       [
         "Scegli una specie",
         [
-          "La specie (nei libri più vecchi si chiamava razza) dà al personaggio taglia, velocità, linguaggi e qualche tratto, e nell’SRD 5.1 aumenta anche alcuni punteggi di caratteristica. L’SRD comprende nano, elfo, halfling, umano, dragonide, gnomo, mezzelfo, mezzorco e tiefling, alcuni con una sottorazza come l’elfo alto o il nano delle colline.",
+          "La specie (nei libri più vecchi si chiamava razza) dà al personaggio taglia, velocità, linguaggi e qualche tratto, e nelle regole 2014 (SRD 5.1) aumenta anche alcuni punteggi di caratteristica, mentre nelle regole 2024 (SRD 5.2.1) l’aumento viene dal background. L’SRD 2014 comprende nano, elfo, halfling, umano, dragonide, gnomo, mezzelfo, mezzorco e tiefling, alcuni con una sottorazza come l’elfo alto o il nano delle colline; l’SRD 2024 ha dragonide, nano, elfo, gnomo, goliath, halfling, umano, orco e tiefling, con lignaggi al posto delle sottorazze.",
         ],
       ],
       [
@@ -172,7 +172,7 @@ export const GUIDE = {
       [
         "Choisis une espèce",
         [
-          "Ton espèce (appelée race dans les anciens livres) donne à ton personnage une taille, une vitesse, des langues et quelques traits, et dans le SRD 5.1 elle augmente aussi certaines caractéristiques. Le SRD comprend le nain, l’elfe, le halfelin, l’humain, le drakéide, le gnome, le demi-elfe, le demi-orque et le tieffelin, certains avec une sous-race comme le haut-elfe ou le nain des collines.",
+          "Ton espèce (appelée race dans les anciens livres) donne à ton personnage une taille, une vitesse, des langues et quelques traits, et dans les règles de 2014 (SRD 5.1) elle augmente aussi certaines caractéristiques, alors que dans celles de 2024 (SRD 5.2.1) l’augmentation vient de l’historique. Le SRD 2014 comprend le nain, l’elfe, le halfelin, l’humain, le drakéide, le gnome, le demi-elfe, le demi-orque et le tieffelin, certains avec une sous-race comme le haut-elfe ou le nain des collines ; le SRD 2024 a le drakéide, le nain, l’elfe, le gnome, le goliath, le halfelin, l’humain, l’orc et le tieffelin, avec des lignages à la place des sous-races.",
         ],
       ],
       [
@@ -249,7 +249,7 @@ export const GUIDE = {
       [
         "Wähle ein Volk",
         [
-          "Dein Volk (in älteren Büchern Rasse genannt) gibt deinem Charakter Größe, Geschwindigkeit, Sprachen und ein paar Merkmale, und im SRD 5.1 erhöht es auch einige Attributswerte. Das SRD enthält Zwerg, Elf, Halbling, Mensch, Drachenblütiger, Gnom, Halbelf, Halbork und Tiefling, einige mit einem Untervolk wie dem Hochelfen oder dem Hügelzwerg.",
+          "Dein Volk (in älteren Büchern Rasse genannt) gibt deinem Charakter Größe, Geschwindigkeit, Sprachen und ein paar Merkmale, und in den Regeln von 2014 (SRD 5.1) erhöht es auch einige Attributswerte, während in den Regeln von 2024 (SRD 5.2.1) die Erhöhung aus dem Hintergrund kommt. Das SRD 2014 enthält Zwerg, Elf, Halbling, Mensch, Drachenblütiger, Gnom, Halbelf, Halbork und Tiefling, einige mit einem Untervolk wie dem Hochelfen oder dem Hügelzwerg; das SRD 2024 hat Drachenblütiger, Zwerg, Elf, Gnom, Goliath, Halbling, Mensch, Ork und Tiefling, mit Abstammungen statt Untervölkern.",
         ],
       ],
       [
@@ -326,7 +326,7 @@ export const GUIDE = {
       [
         "Elige una especie",
         [
-          "Tu especie (en los libros antiguos, raza) da a tu personaje un tamaño, una velocidad, idiomas y algunos rasgos, y en el SRD 5.1 también aumenta algunas puntuaciones de característica. El SRD incluye el enano, el elfo, el mediano, el humano, el dracónido, el gnomo, el semielfo, el semiorco y el tiefling, algunos con una subraza como el alto elfo o el enano de las colinas.",
+          "Tu especie (en los libros antiguos, raza) da a tu personaje un tamaño, una velocidad, idiomas y algunos rasgos, y en las reglas de 2014 (SRD 5.1) también aumenta algunas puntuaciones de característica, mientras que en las de 2024 (SRD 5.2.1) el aumento viene del trasfondo. El SRD 2014 incluye el enano, el elfo, el mediano, el humano, el dracónido, el gnomo, el semielfo, el semiorco y el tiefling, algunos con una subraza como el alto elfo o el enano de las colinas; el SRD 2024 tiene el dracónido, el enano, el elfo, el gnomo, el goliat, el mediano, el humano, el orco y el tiefling, con linajes en lugar de subrazas.",
         ],
       ],
       [

@@ -18,6 +18,33 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.30 beta",
+    date: "2026-11-12",
+    notes: [
+      {
+        en: "The 2024 rules (SRD 5.2.1) are here, next to the 2014 ones: when you make a character the app asks which rules it follows. All the classes and subclasses, species, backgrounds with their origin feat, feats, spells, equipment (with mounts, vehicles and poisons), magic items, monsters and alignments of the SRD, with the official translations in the five languages. Wild Shape works as the 2024 book says, and Weapon Mastery, Divine and Primal Order, Metamagic, Eldritch Invocations (the repeatable ones can be taken again) and Heroic Inspiration are in Play.",
+        it: "Ci sono le regole 2024 (SRD 5.2.1), accanto a quelle del 2014: quando crei un personaggio l'app chiede quali regole segue. Tutte le classi e sottoclassi, specie, background con il loro talento di origine, talenti, incantesimi, equipaggiamento (con cavalcature, veicoli e veleni), oggetti magici, mostri e allineamenti dell'SRD, con le traduzioni ufficiali nelle cinque lingue. La Forma selvatica funziona come dice il manuale 2024, e in Gioca ci sono la Maestria nelle armi, l'Ordine divino e primordiale, la Metamagia, le Suppliche occulte (quelle ripetibili si possono riprendere) e l'Ispirazione eroica.",
+        fr: "Les règles 2024 (SRD 5.2.1) sont là, à côté de celles de 2014 : quand tu crées un personnage, l'application demande quelles règles il suit. Toutes les classes et sous-classes, espèces, historiques avec leur don d'origine, dons, sorts, équipements (avec montures, véhicules et poisons), objets magiques, monstres et alignements du SRD, avec les traductions officielles dans les cinq langues. La Forme sauvage fonctionne comme le dit le livre 2024, et Jouer propose la Maîtrise des armes, l'Ordre divin et primordial, la Métamagie, les Invocations occultes (les répétables peuvent être reprises) et l'Inspiration héroïque.",
+        de: "Die Regeln von 2024 (SRD 5.2.1) sind da, neben denen von 2014: Beim Erstellen eines Charakters fragt die App, welchen Regeln er folgt. Alle Klassen und Unterklassen, Völker, Hintergründe mit ihrem Herkunftstalent, Talente, Zauber, Ausrüstung (mit Reittieren, Fahrzeugen und Giften), magische Gegenstände, Monster und Gesinnungen des SRD, mit den offiziellen Übersetzungen in den fünf Sprachen. Die Tiergestalt funktioniert, wie das Buch von 2024 es sagt, und im Spielmodus gibt es Waffenmeisterschaft, Göttliche und Urzeitliche Ordnung, Metamagie, Schauerliche Anrufungen (wiederholbare lassen sich erneut nehmen) und Heldenhafte Inspiration.",
+        es: "Las reglas de 2024 (SRD 5.2.1) ya están, junto a las de 2014: al crear un personaje la app pregunta qué reglas sigue. Todas las clases y subclases, especies, trasfondos con su dote de origen, dotes, conjuros, equipo (con monturas, vehículos y venenos), objetos mágicos, monstruos y alineamientos del SRD, con las traducciones oficiales en los cinco idiomas. La Forma salvaje funciona como dice el libro de 2024, y en Jugar hay Maestría con armas, Orden divino y primigenio, Metamagia, Invocaciones sobrenaturales (las repetibles se pueden volver a tomar) e Inspiración heroica.",
+      },
+      {
+        en: "Exhaustion now has its levels, for both editions: a button among the conditions adds a level, Rest removes one and the effects (a penalty to the d20 rolls and to the speed in 2024) show with it. Armor training counts too: wearing armor you are not trained in is flagged on the sheet and puts the penalties on the rolls made with the buttons.",
+        it: "L'Indebolimento ora ha i suoi livelli, per entrambe le edizioni: un pulsante tra le condizioni aggiunge un livello, il Riposo lo toglie e gli effetti (nel 2024 una penalità ai tiri di d20 e alla velocità) si vedono con esso. Conta anche l'addestramento con le armature: indossare un'armatura in cui non sei addestrato viene segnalato sulla scheda e mette le penalità ai tiri fatti con i pulsanti.",
+        fr: "L'Épuisement a maintenant ses niveaux, pour les deux éditions : un bouton parmi les conditions ajoute un niveau, le Repos en retire un et les effets (en 2024 une pénalité aux jets de d20 et à la vitesse) s'affichent avec lui. La formation aux armures compte aussi : porter une armure sans en avoir la formation est signalé sur la fiche et applique les pénalités aux jets faits avec les boutons.",
+        de: "Erschöpfung hat jetzt ihre Stufen, für beide Editionen: Ein Knopf unter den Zuständen fügt eine Stufe hinzu, Rast nimmt eine weg, und die Wirkungen (2024 ein Abzug auf W20-Würfe und Bewegungsrate) werden mit angezeigt. Auch die Rüstungsausbildung zählt: Eine Rüstung ohne Ausbildung wird auf dem Bogen gekennzeichnet und gibt den Würfen über die Knöpfe die Abzüge.",
+        es: "El Cansancio ahora tiene sus niveles, para las dos ediciones: un botón entre las condiciones añade un nivel, el Descanso quita uno y los efectos (en 2024 una penalización a las tiradas de d20 y a la velocidad) se muestran con él. El entrenamiento con armaduras también cuenta: llevar una armadura sin entrenamiento se marca en la hoja y pone las penalizaciones a las tiradas hechas con los botones.",
+      },
+      {
+        en: 'Aurora\'s content with the 2024 rules: a subclass from a book can be taken on the 2024 class of the same name (the list marks it "2014"), and the spells of the 2014 SRD that a book names become the 2024 spell with the same name. The importer now sees the 2014 SRD only, which fixes duplicates being taken for 2024 entries. The monsters of the rules show their bonus actions.',
+        it: "I contenuti di Aurora con le regole 2024: una sottoclasse di un libro si può scegliere sulla classe 2024 con lo stesso nome (nell'elenco è segnata \"2014\"), e gli incantesimi dell'SRD 2014 nominati da un libro diventano l'incantesimo 2024 con lo stesso nome. L'importazione ora vede solo l'SRD 2014, e questo evita che dei doppioni vengano scambiati per voci 2024. I mostri delle regole mostrano le loro azioni bonus.",
+        fr: "Le contenu d'Aurora avec les règles 2024 : une sous-classe d'un livre peut être prise sur la classe 2024 du même nom (la liste la marque « 2014 »), et les sorts du SRD 2014 cités par un livre deviennent le sort 2024 du même nom. L'import ne voit plus que le SRD 2014, ce qui évite que des doublons soient pris pour des entrées 2024. Les monstres des règles montrent leurs actions bonus.",
+        de: "Inhalte aus Aurora mit den Regeln von 2024: Eine Unterklasse aus einem Buch lässt sich auf der Klasse von 2024 mit demselben Namen wählen (die Liste kennzeichnet sie mit „2014“), und die Zauber des SRD 2014, die ein Buch nennt, werden zum Zauber von 2024 mit demselben Namen. Der Import sieht jetzt nur noch das SRD 2014, wodurch Dubletten nicht mehr für Einträge von 2024 gehalten werden. Die Monster der Regeln zeigen ihre Bonusaktionen.",
+        es: "El contenido de Aurora con las reglas de 2024: una subclase de un libro se puede elegir en la clase de 2024 del mismo nombre (la lista la marca «2014»), y los conjuros del SRD 2014 que nombra un libro pasan a ser el conjuro de 2024 con el mismo nombre. La importación ahora ve solo el SRD 2014, lo que evita que duplicados se tomen por entradas de 2024. Los monstruos de las reglas muestran sus acciones adicionales.",
+      },
+    ],
+  },
+  {
     version: "1.29.1 beta",
     date: "2026-11-11",
     notes: [
@@ -1298,11 +1325,11 @@ export const ROADMAP: RoadmapItem[] = [
   {
     id: "translations",
     text: {
-      en: "The remaining translations: a few class options. Automatic translation fills them meanwhile.",
-      it: "Le traduzioni che mancano: alcune opzioni di classe. Nel frattempo la traduzione automatica le riempie.",
-      fr: "Les traductions manquantes : quelques options de classe. La traduction automatique les comble en attendant.",
-      de: "Die fehlenden Übersetzungen: einige Klassenoptionen. Die automatische Übersetzung füllt sie in der Zwischenzeit.",
-      es: "Las traducciones que faltan: algunas opciones de clase. La traducción automática las cubre mientras tanto.",
+      en: "The remaining translations: the options of some 2024 traits (draconic ancestors, lineages), a few tables and item names. Automatic translation fills them meanwhile.",
+      it: "Le traduzioni che mancano: le opzioni di alcuni tratti 2024 (antenati draconici, lignaggi), qualche tabella e nome di oggetto. Nel frattempo la traduzione automatica le riempie.",
+      fr: "Les traductions manquantes : les options de certains traits 2024 (ancêtres draconiques, lignages), quelques tables et noms d'objets. La traduction automatique les comble en attendant.",
+      de: "Die fehlenden Übersetzungen: die Optionen einiger Merkmale von 2024 (Drachenahnen, Abstammungen), ein paar Tabellen und Gegenstandsnamen. Die automatische Übersetzung füllt sie in der Zwischenzeit.",
+      es: "Las traducciones que faltan: las opciones de algunos rasgos de 2024 (ancestros dracónicos, linajes), algunas tablas y nombres de objetos. La traducción automática las cubre mientras tanto.",
     },
   },
   {
@@ -1318,11 +1345,11 @@ export const ROADMAP: RoadmapItem[] = [
   {
     id: "rules2024",
     text: {
-      en: "The 2024 rules (SRD 5.2.1), next to the 2014 ones.",
-      it: "Le regole 2024 (SRD 5.2.1), accanto a quelle del 2014.",
-      fr: "Les règles 2024 (SRD 5.2.1), à côté de celles de 2014.",
-      de: "Die Regeln von 2024 (SRD 5.2.1), neben denen von 2014.",
-      es: "Las reglas de 2024 (SRD 5.2.1), junto a las de 2014.",
+      en: "More of the 2024 rules: moving a 2014 character to the new edition, and Aurora's sub-species on the 2024 species.",
+      it: "Altro sulle regole 2024: spostare un personaggio 2014 alla nuova edizione, e le sottospecie di Aurora sulle specie 2024.",
+      fr: "Plus sur les règles 2024 : faire passer un personnage 2014 à la nouvelle édition, et les sous-espèces d'Aurora sur les espèces 2024.",
+      de: "Mehr zu den Regeln von 2024: einen Charakter von 2014 in die neue Edition überführen und die Unterarten aus Aurora auf den Völkern von 2024.",
+      es: "Más sobre las reglas de 2024: pasar un personaje de 2014 a la nueva edición, y las subespecies de Aurora en las especies de 2024.",
     },
   },
   {

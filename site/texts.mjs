@@ -4,7 +4,7 @@ export const TEXTS = {
   en: {
     "meta.title": "Heroquill – Free D&D 5e Character Creator",
     "meta.desc":
-      "Free D&D 5e character creator: build, level up, play and print characters with the SRD 5.1 rules. No account, works offline, imports Aurora files.",
+      "Free D&D 5e character creator: build, level up, play and print characters with the 2014 (SRD 5.1) or 2024 (SRD 5.2.1) rules. No account, works offline, imports Aurora files.",
     "nav.openShort": "Open",
     "nav.features": "Features",
     "nav.colors": "Colours",
@@ -19,7 +19,7 @@ export const TEXTS = {
     "feat.sub": "From the first step to the printed page, in one place.",
     "feat.create.t": "Create",
     "feat.create.d":
-      "Species, class, background, ability scores, spells: one step at a time, with every number worked out from the rules.",
+      "Species, class, background, ability scores, spells: one step at a time, with every number worked out from the rules: the 2014 ones or the 2024 ones, as you choose for each character.",
     "feat.play.t": "Play",
     "feat.play.d":
       "Hit points, spell slots, resources, rests and rolls at a tap. Every roll shows big, with the die spinning.",
@@ -57,7 +57,7 @@ export const TEXTS = {
       "Yes, once it has been opened. You can also install it on your phone or computer like an app: Heroquill offers it after a few seconds (or choose “Install the app” in the ☰ menu), and on an iPhone or iPad use Share, then “Add to Home Screen”.",
     "faq.q4": "Is it an official D&D product?",
     "faq.a4":
-      "No. It uses the SRD 5.1, under a free licence, and is not affiliated with Wizards of the Coast.",
+      "No. It uses the SRD 5.1 and the SRD 5.2.1, under a free licence, and is not affiliated with Wizards of the Coast.",
     "faq.q5": "Does it work with Aurora content?",
     "faq.a5":
       "Yes. You can import the content files (XML) made for Aurora Builder and Aurora Legacy, from a file, an index file or an address. Nothing from Aurora or from any publisher is included: you bring what you already own.",
@@ -67,10 +67,10 @@ export const TEXTS = {
     "cta.title": "Ready to write your story?",
     "cta.open": "Open Heroquill",
     "foot.unofficial":
-      "Heroquill is an unofficial fan project, not affiliated with or endorsed by Wizards of the Coast. It uses the System Reference Document 5.1 under the CC-BY-4.0 licence.",
+      "Heroquill is an unofficial fan project, not affiliated with or endorsed by Wizards of the Coast. It uses the System Reference Documents 5.1 and 5.2.1 under the CC-BY-4.0 licence.",
     "foot.privacy": "Privacy",
     "foot.terms": "Terms",
-    "val.srd": "SRD 5.1 rules",
+    "val.srd": "SRD 5.1 and 5.2.1 rules (2014 and 2024)",
     "val.multi": "Multiclassing and level up",
     "val.homebrew": "Homebrew editor",
     "val.aurora": "Aurora and Aurora Legacy import",
@@ -92,7 +92,7 @@ export const TEXTS = {
   it: {
     "meta.title": "Heroquill – Creatore di personaggi D&D 5e gratis",
     "meta.desc":
-      "Creatore gratuito di personaggi D&D 5e: crea, sali di livello, gioca e stampa con le regole SRD 5.1. Senza account, offline, importa da Aurora.",
+      "Creatore gratuito di personaggi D&D 5e: crea, sali di livello, gioca e stampa con le regole SRD 5.1 (2014) o 5.2.1 (2024). Senza account, offline, importa da Aurora.",
     "nav.openShort": "Apri",
     "nav.features": "Funzioni",
     "nav.colors": "Colori",
@@ -107,7 +107,7 @@ export const TEXTS = {
     "feat.sub": "Dal primo passo alla pagina stampata, in un posto solo.",
     "feat.create.t": "Crea",
     "feat.create.d":
-      "Specie, classe, background, punteggi, incantesimi: un passo alla volta, con ogni numero calcolato dalle regole.",
+      "Specie, classe, background, punteggi, incantesimi: un passo alla volta, con ogni numero calcolato dalle regole: quelle del 2014 o del 2024, come scegli per ogni personaggio.",
     "feat.play.t": "Gioca",
     "feat.play.d":
       "Punti ferita, slot, risorse, riposi e tiri con un tocco. Ogni tiro compare grande, con il dado che gira.",
@@ -147,7 +147,8 @@ export const TEXTS = {
     "faq.a3":
       "Sì, dopo il primo accesso. Si può anche installare su telefono o computer come un’app: Heroquill lo propone dopo qualche secondo (o scegli “Installa l’app” nel menu ☰), e su iPhone e iPad usa Condividi, poi “Aggiungi alla schermata Home”.",
     "faq.q4": "È un prodotto ufficiale di D&D?",
-    "faq.a4": "No. Usa l’SRD 5.1, con licenza libera, e non è affiliato a Wizards of the Coast.",
+    "faq.a4":
+      "No. Usa l’SRD 5.1 e l’SRD 5.2.1, con licenza libera, e non è affiliato a Wizards of the Coast.",
     "faq.q5": "Funziona con i contenuti di Aurora?",
     "faq.a5":
       "Sì. Puoi importare i file di contenuto (XML) fatti per Aurora Builder e Aurora Legacy, da file, da un file indice o da un indirizzo. Non include nulla di Aurora né di alcun editore: porti quello che già possiedi.",
@@ -157,10 +158,10 @@ export const TEXTS = {
     "cta.title": "Pronto a scrivere la tua storia?",
     "cta.open": "Apri Heroquill",
     "foot.unofficial":
-      "Heroquill è un progetto di fan non ufficiale, non affiliato né approvato da Wizards of the Coast. Usa il System Reference Document 5.1 con licenza CC-BY-4.0.",
+      "Heroquill è un progetto di fan non ufficiale, non affiliato né approvato da Wizards of the Coast. Usa il System Reference Document 5.1 e 5.2.1 con licenza CC-BY-4.0.",
     "foot.privacy": "Privacy",
     "foot.terms": "Termini",
-    "val.srd": "Regole SRD 5.1",
+    "val.srd": "Regole SRD 5.1 e 5.2.1 (2014 e 2024)",
     "val.multi": "Multiclasse e avanzamento di livello",
     "val.homebrew": "Editor homebrew",
     "val.aurora": "Importazione da Aurora e Aurora Legacy",
@@ -182,7 +183,7 @@ export const TEXTS = {
   fr: {
     "meta.title": "Heroquill – Créateur de personnages D&D 5e gratuit",
     "meta.desc":
-      "Créateur gratuit de personnages D&D 5e : crée, monte de niveau, joue et imprime avec le SRD 5.1. Sans compte, hors ligne, import Aurora.",
+      "Créateur gratuit de personnages D&D 5e : crée, monte de niveau, joue et imprime avec le SRD 5.1 (2014) ou 5.2.1 (2024). Sans compte, hors ligne, import Aurora.",
     "nav.openShort": "Ouvrir",
     "nav.features": "Fonctions",
     "nav.colors": "Couleurs",
@@ -197,7 +198,7 @@ export const TEXTS = {
     "feat.sub": "Du premier pas à la page imprimée, au même endroit.",
     "feat.create.t": "Créer",
     "feat.create.d":
-      "Espèce, classe, historique, caractéristiques, sorts : une étape à la fois, avec chaque nombre calculé d’après les règles.",
+      "Espèce, classe, historique, caractéristiques, sorts : une étape à la fois, avec chaque nombre calculé d’après les règles : celles de 2014 ou de 2024, au choix pour chaque personnage.",
     "feat.play.t": "Jouer",
     "feat.play.d":
       "Points de vie, emplacements, ressources, repos et jets d’un geste. Chaque jet s’affiche en grand, avec le dé qui tourne.",
@@ -238,7 +239,7 @@ export const TEXTS = {
       "Oui, une fois ouvert. On peut aussi l’installer sur le téléphone ou l’ordinateur comme une app : Heroquill le propose après quelques secondes (ou choisis « Installer l’appli » dans le menu ☰), et sur iPhone et iPad utilise Partager, puis « Sur l’écran d’accueil ».",
     "faq.q4": "C’est un produit officiel de D&D ?",
     "faq.a4":
-      "Non. Il utilise le SRD 5.1, sous licence libre, et n’est pas affilié à Wizards of the Coast.",
+      "Non. Il utilise les SRD 5.1 et 5.2.1, sous licence libre, et n’est pas affilié à Wizards of the Coast.",
     "faq.q5": "Ça marche avec le contenu d’Aurora ?",
     "faq.a5":
       "Oui. Tu peux importer les fichiers de contenu (XML) faits pour Aurora Builder et Aurora Legacy, par fichier, par fichier d’index ou par adresse. Rien d’Aurora ni d’aucun éditeur n’est inclus : tu apportes ce que tu possèdes déjà.",
@@ -248,10 +249,10 @@ export const TEXTS = {
     "cta.title": "Prêt à écrire ton histoire ?",
     "cta.open": "Ouvrir Heroquill",
     "foot.unofficial":
-      "Heroquill est un projet de fan non officiel, non affilié à Wizards of the Coast ni approuvé par elle. Il utilise le System Reference Document 5.1 sous licence CC-BY-4.0.",
+      "Heroquill est un projet de fan non officiel, non affilié à Wizards of the Coast ni approuvé par elle. Il utilise le System Reference Documents 5.1 et 5.2.1 sous licence CC-BY-4.0.",
     "foot.privacy": "Confidentialité",
     "foot.terms": "Conditions",
-    "val.srd": "Règles SRD 5.1",
+    "val.srd": "Règles SRD 5.1 et 5.2.1 (2014 et 2024)",
     "val.multi": "Multiclassage et montée de niveau",
     "val.homebrew": "Éditeur homebrew",
     "val.aurora": "Import depuis Aurora et Aurora Legacy",
@@ -273,7 +274,7 @@ export const TEXTS = {
   de: {
     "meta.title": "Heroquill – Kostenloser D&D-5e-Charaktergenerator",
     "meta.desc":
-      "Kostenloser D&D-5e-Charaktergenerator: erstellen, aufsteigen, spielen und drucken mit den SRD-5.1-Regeln. Ohne Konto, offline, Aurora-Import.",
+      "Kostenloser D&D-5e-Charaktergenerator: erstellen, aufsteigen, spielen und drucken mit den SRD-Regeln 5.1 (2014) oder 5.2.1 (2024). Ohne Konto, offline, Aurora-Import.",
     "nav.openShort": "Öffnen",
     "nav.features": "Funktionen",
     "nav.colors": "Farben",
@@ -288,7 +289,7 @@ export const TEXTS = {
     "feat.sub": "Vom ersten Schritt bis zur gedruckten Seite, an einem Ort.",
     "feat.create.t": "Erstellen",
     "feat.create.d":
-      "Volk, Klasse, Hintergrund, Attributswerte, Zauber: ein Schritt nach dem anderen, jede Zahl nach den Regeln berechnet.",
+      "Volk, Klasse, Hintergrund, Attributswerte, Zauber: ein Schritt nach dem anderen, jede Zahl nach den Regeln berechnet: denen von 2014 oder von 2024, für jeden Charakter wählbar.",
     "feat.play.t": "Spielen",
     "feat.play.d":
       "Trefferpunkte, Zauberplätze, Ressourcen, Rasten und Würfe mit einem Tipp. Jeder Wurf erscheint groß, der Würfel dreht sich.",
@@ -328,7 +329,7 @@ export const TEXTS = {
       "Ja, sobald es einmal geöffnet wurde. Du kannst es auch wie eine App auf Handy oder Computer installieren: Heroquill bietet es nach ein paar Sekunden an (oder wähle „App installieren“ im ☰-Menü), und auf iPhone und iPad tippst du auf Teilen und dann auf „Zum Home-Bildschirm“.",
     "faq.q4": "Ist es ein offizielles D&D-Produkt?",
     "faq.a4":
-      "Nein. Es nutzt das SRD 5.1 unter freier Lizenz und ist nicht mit Wizards of the Coast verbunden.",
+      "Nein. Es nutzt das SRD 5.1 und das SRD 5.2.1 unter freier Lizenz und ist nicht mit Wizards of the Coast verbunden.",
     "faq.q5": "Funktioniert es mit Aurora-Inhalten?",
     "faq.a5":
       "Ja. Du kannst die Inhaltsdateien (XML) importieren, die für Aurora Builder und Aurora Legacy gemacht sind, per Datei, Indexdatei oder Adresse. Von Aurora oder einem Verlag ist nichts enthalten: Du bringst mit, was du schon besitzt.",
@@ -338,10 +339,10 @@ export const TEXTS = {
     "cta.title": "Bereit, deine Geschichte zu schreiben?",
     "cta.open": "Heroquill öffnen",
     "foot.unofficial":
-      "Heroquill ist ein inoffizielles Fanprojekt, nicht mit Wizards of the Coast verbunden und nicht von ihr gebilligt. Es nutzt das System Reference Document 5.1 unter der Lizenz CC-BY-4.0.",
+      "Heroquill ist ein inoffizielles Fanprojekt, nicht mit Wizards of the Coast verbunden und nicht von ihr gebilligt. Es nutzt das System Reference Documents 5.1 und 5.2.1 unter der Lizenz CC-BY-4.0.",
     "foot.privacy": "Datenschutz",
     "foot.terms": "Bedingungen",
-    "val.srd": "SRD-5.1-Regeln",
+    "val.srd": "SRD-Regeln 5.1 und 5.2.1 (2014 und 2024)",
     "val.multi": "Multiclassing und Stufenaufstieg",
     "val.homebrew": "Homebrew-Editor",
     "val.aurora": "Import aus Aurora und Aurora Legacy",
@@ -363,7 +364,7 @@ export const TEXTS = {
   es: {
     "meta.title": "Heroquill – Creador de personajes D&D 5e gratis",
     "meta.desc":
-      "Creador gratuito de personajes de D&D 5e: crea, sube de nivel, juega e imprime con el SRD 5.1. Sin cuenta, sin conexión, importa de Aurora.",
+      "Creador gratuito de personajes de D&D 5e: crea, sube de nivel, juega e imprime con el SRD 5.1 (2014) o 5.2.1 (2024). Sin cuenta, sin conexión, importa de Aurora.",
     "nav.openShort": "Abrir",
     "nav.features": "Funciones",
     "nav.colors": "Colores",
@@ -378,7 +379,7 @@ export const TEXTS = {
     "feat.sub": "Del primer paso a la página impresa, en un solo lugar.",
     "feat.create.t": "Crear",
     "feat.create.d":
-      "Especie, clase, trasfondo, puntuaciones, conjuros: un paso a la vez, con cada número calculado según las reglas.",
+      "Especie, clase, trasfondo, puntuaciones, conjuros: un paso a la vez, con cada número calculado según las reglas: las de 2014 o las de 2024, a tu elección para cada personaje.",
     "feat.play.t": "Jugar",
     "feat.play.d":
       "Puntos de golpe, espacios, recursos, descansos y tiradas con un toque. Cada tirada se ve grande, con el dado girando.",
@@ -417,7 +418,8 @@ export const TEXTS = {
     "faq.a3":
       "Sí, una vez abierta. También puedes instalarla en el teléfono o el ordenador como una app: Heroquill la propone tras unos segundos (o elige «Instalar la app» en el menú ☰), y en iPhone e iPad usa Compartir y luego «Añadir a pantalla de inicio».",
     "faq.q4": "¿Es un producto oficial de D&D?",
-    "faq.a4": "No. Usa el SRD 5.1, con licencia libre, y no está afiliado a Wizards of the Coast.",
+    "faq.a4":
+      "No. Usa el SRD 5.1 y el SRD 5.2.1, con licencia libre, y no está afiliado a Wizards of the Coast.",
     "faq.q5": "¿Funciona con el contenido de Aurora?",
     "faq.a5":
       "Sí. Puedes importar los archivos de contenido (XML) hechos para Aurora Builder y Aurora Legacy, por archivo, por archivo de índice o por dirección. No incluye nada de Aurora ni de ninguna editorial: traes lo que ya tienes.",
@@ -427,10 +429,10 @@ export const TEXTS = {
     "cta.title": "¿Listo para escribir tu historia?",
     "cta.open": "Abrir Heroquill",
     "foot.unofficial":
-      "Heroquill es un proyecto de fans no oficial, no afiliado ni respaldado por Wizards of the Coast. Usa el System Reference Document 5.1 con licencia CC-BY-4.0.",
+      "Heroquill es un proyecto de fans no oficial, no afiliado ni respaldado por Wizards of the Coast. Usa el System Reference Documents 5.1 y 5.2.1 con licencia CC-BY-4.0.",
     "foot.privacy": "Privacidad",
     "foot.terms": "Condiciones",
-    "val.srd": "Reglas del SRD 5.1",
+    "val.srd": "Reglas del SRD 5.1 y 5.2.1 (2014 y 2024)",
     "val.multi": "Multiclase y subida de nivel",
     "val.homebrew": "Editor homebrew",
     "val.aurora": "Importación de Aurora y Aurora Legacy",

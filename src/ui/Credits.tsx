@@ -48,6 +48,12 @@ export function Credits() {
           {" — Wizards of the Coast"}
         </li>
         <li>
+          <ExternalLink href="https://www.dndbeyond.com/srd">
+            System Reference Document 5.2.1
+          </ExternalLink>
+          {" — Wizards of the Coast"}
+        </li>
+        <li>
           <ExternalLink href="https://creativecommons.org/licenses/by/4.0/legalcode">
             Creative Commons Attribution 4.0 International
           </ExternalLink>
@@ -75,6 +81,8 @@ export function Credits() {
         <ExternalLink href="https://github.com/5e-bits/5e-database">
           5e-bits/5e-database
         </ExternalLink>
+        {" · "}
+        <ExternalLink href="https://github.com/open5e/open5e-api">open5e/open5e-api</ExternalLink>
       </p>
 
       <h3>{ui("credits.translations")}</h3>
@@ -89,6 +97,11 @@ export function Credits() {
             </ExternalLink>
           </li>
         ))}
+        <li>
+          <ExternalLink href="https://www.dndbeyond.com/srd">
+            {"SRD 5.2.1 — Italiano, Français, Deutsch, Español"}
+          </ExternalLink>
+        </li>
       </ul>
 
       <h3>{ui("credits.design")}</h3>

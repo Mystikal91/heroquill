@@ -26,6 +26,12 @@ import { brokenReferences } from "../data/schema";
 import { type UiKey, ui } from "../i18n/ui";
 import { type UserPackRecord, addressesOf, shortAddress } from "../storage/packs";
 
+/** The names the packs that come with the app are shown with. */
+const BUILT_IN_NAMES: Record<string, string> = {
+  srd51: "SRD 5.1 (2014)",
+  srd52: "SRD 5.2.1 (2024)",
+};
+
 /** How many entries of each kind a pack has, e.g. `3 spell, 2 item`. */
 function summary(record: UserPackRecord): string {
   if (record.origin === "edits")
@@ -101,7 +107,7 @@ export function PacksPage() {
       <ul class="plain">
         {builtIn.map(([id, count]) => (
           <li key={id}>
-            <b>{id.toUpperCase()}</b> · {count} {ui("packs.entries")}
+            <b>{BUILT_IN_NAMES[id] ?? id.toUpperCase()}</b> · {count} {ui("packs.entries")}
           </li>
         ))}
       </ul>
