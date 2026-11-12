@@ -55,6 +55,8 @@ export interface RawSource {
   spells: Raw[];
   magicSchools: Raw[];
   conditions: Raw[];
+  alignments: Raw[];
+  poisons: Raw[];
 }
 
 /** What the pilot converts for the kinds that are big; everything of the small kinds is converted. */
@@ -1247,6 +1249,22 @@ function convertEquipment(raw: RawSource): Converted {
         category:
           categories.find((c) => c !== "tools" && c !== "adventuring-gear") ?? "other-tools",
       };
+    } else if (categories.includes("mounts-and-vehicles")) {
+      // The source of the fork lists none yet (the book has them: Mounts and Other Animals, Tack, Harness and Drawn
+      // Vehicles, Waterborne vehicles); the entries are written in the form the 2014 database has, plus the columns
+      // of the book's table for ships.
+      data.category = "mounts-and-vehicles";
+      data.vehicle = {
+        category: categories.find((c) => c !== "mounts-and-vehicles") ?? "mounts-and-vehicles",
+        ...(e.speed && { speed: { amount: e.speed.quantity, unit: e.speed.unit } }),
+        ...(e.crew !== undefined && { crew: e.crew }),
+        ...(e.passengers !== undefined && { passengers: e.passengers }),
+        ...(e.cargo_capacity !== undefined && { cargo: e.cargo_capacity }),
+        ...(e.armor_class !== undefined && { armorClass: e.armor_class }),
+        ...(e.hit_points !== undefined && { hitPoints: e.hit_points }),
+        ...(e.damage_threshold !== undefined && { damageThreshold: e.damage_threshold }),
+      };
+      if (e.capacity) strings[`${e.index}.capacity`] = e.capacity;
     } else if (categories.includes("adventuring-gear") || categories.includes("ammunition")) {
       data.category = "adventuring-gear";
       const bundle = BUNDLES[e.index];
@@ -1367,6 +1385,41 @@ function convertMagicItems(raw: RawSource): Converted {
   return { entries, strings };
 }
 
+/** The nine alignments and "unaligned" of the book: a name, an abbreviation and what the book says of it. */
+function convertAlignments(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const a of raw.alignments) {
+    entries.push({ id: id("alignment", a.index), kind: "alignment", effects: [], data: {} });
+    strings[`${a.index}.name`] = a.name;
+    strings[`${a.index}.abbreviation`] = a.abbreviation;
+    strings[`${a.index}.desc`] = text(a.description) ?? "";
+  }
+  return { entries, strings };
+}
+
+/** The poisons of the Gameplay Toolbox: items with a price per dose and the way they are delivered. */
+function convertPoisons(raw: RawSource): Converted {
+  const entries: Entry[] = [];
+  const strings: Strings = {};
+  for (const p of raw.poisons) {
+    entries.push({
+      id: id("item", p.index),
+      kind: "item",
+      effects: [],
+      data: {
+        category: "adventuring-gear",
+        cost: { amount: p.cost, unit: "gp" },
+        gear: { category: "poisons" },
+        poison: { delivery: p.type },
+      },
+    });
+    strings[`${p.index}.name`] = p.name;
+    strings[`${p.index}.desc`] = text(p.description) ?? "";
+  }
+  return { entries, strings };
+}
+
 const merge = (...parts: Converted[]): Converted => ({
   entries: parts.flatMap((p) => p.entries),
   strings: Object.assign({}, ...parts.map((p) => p.strings)),
@@ -1432,7 +1485,8 @@ export function convertAll(raw: RawSource): Record<string, Converted> {
     class: classPart.classes,
     subclass: subclassPart.subclasses,
     feature: merge(classPart.features, subclassPart.features),
-    item: merge(items, convertMagicItems(raw)),
+    alignment: convertAlignments(raw),
+    item: merge(items, convertMagicItems(raw), convertPoisons(raw)),
     monster: convertMonsters(raw, PACK),
     property: convertProperties(raw),
     spell: convertSpells(raw),

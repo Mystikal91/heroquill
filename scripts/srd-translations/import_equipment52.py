@@ -38,7 +38,8 @@ def sections(lang: str) -> list[dict]:
             out.append(
                 {
                     "name": m.group(1).strip(),
-                    "price": m.group(2).replace(",", ".").rstrip("."),
+                    # "2.000" is two thousand in these books; "1,5" and "0.5" are fractions
+                    "price": re.sub(r"[.,  ](?=\d{3})", "", m.group(2)).replace(",", ".").rstrip("."),
                     "desc": book52.text_of(s["lines"], bold=False),
                 }
             )
@@ -71,6 +72,7 @@ def run(lang: str) -> None:
     secs = sections(lang)
     text = book_text(lang)
     out: dict[str, str] = {}
+    poisons = {e["id"].split("/")[1] for e in items if "poison" in e["data"]}
 
     # 1. descriptions: the sections with a price against the English items that have a description
     with_desc = [e["id"].split("/")[1] for e in items if f"{e['id'].split('/')[1]}.desc" in en]
@@ -99,7 +101,11 @@ def run(lang: str) -> None:
             doubtful.append((slug, secs[j]["name"], round(value, 1)))
             continue
         out[f"{slug}.name"] = secs[j]["name"]
-        out[f"{slug}.desc"] = secs[j]["desc"]
+        desc = secs[j]["desc"]
+        if slug in poisons:
+            # the line under the name of a poison is its kind ("ingested"), which the data keeps apart
+            desc = "\n".join(desc.split("\n")[1:])
+        out[f"{slug}.desc"] = desc
         written_names.add(slug)
 
     # 2. names of the rest: the 5.1 name, when the 5.2.1 book still writes it

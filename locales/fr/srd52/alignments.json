@@ -1,0 +1,21 @@
+{
+  "lawful-good.name": "Loyal Bon",
+  "lawful-good.abbreviation": "LB",
+  "neutral-good.name": "Neutre Bon",
+  "neutral-good.abbreviation": "NB",
+  "chaotic-good.name": "Chaotique Bon",
+  "chaotic-good.abbreviation": "CB",
+  "lawful-neutral.name": "Loyal Neutre",
+  "lawful-neutral.abbreviation": "LN",
+  "neutral.name": "Neutre",
+  "neutral.abbreviation": "N",
+  "chaotic-neutral.name": "Chaotique Neutre",
+  "chaotic-neutral.abbreviation": "CN",
+  "lawful-evil.name": "Loyal Mauvais",
+  "lawful-evil.abbreviation": "LM",
+  "neutral-evil.name": "Neutre Mauvais",
+  "neutral-evil.abbreviation": "NM",
+  "chaotic-evil.name": "Chaotique Mauvais",
+  "chaotic-evil.abbreviation": "CM",
+  "unaligned.name": "Non alignée"
+}

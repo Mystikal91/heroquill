@@ -3978,6 +3978,442 @@
       }
     },
     {
+      "id": "srd52:item/camel",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/draft-horse",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/elephant",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 200,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/mastiff",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/mule",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 8,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pony",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/riding-horse",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 75,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/warhorse",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 400,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "mounts-and-other-animals"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/chariot",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 250,
+          "unit": "gp"
+        },
+        "weight": 100,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/cart",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 15,
+          "unit": "gp"
+        },
+        "weight": 200,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/carriage",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 100,
+          "unit": "gp"
+        },
+        "weight": 600,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/wagon",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 35,
+          "unit": "gp"
+        },
+        "weight": 400,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sled",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 300,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/feed-per-day",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 5,
+          "unit": "cp"
+        },
+        "weight": 10,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/saddle-exotic",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 60,
+          "unit": "gp"
+        },
+        "weight": 40,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/saddle-military",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        },
+        "weight": 30,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/saddle-riding",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        },
+        "weight": 25,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "tack-harness-and-drawn-vehicles"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/airship",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 40000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 8,
+            "unit": "mph"
+          },
+          "crew": 10,
+          "passengers": 20,
+          "cargo": "1 ton",
+          "armorClass": 13,
+          "hitPoints": 300
+        }
+      }
+    },
+    {
+      "id": "srd52:item/galley",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 30000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 4,
+            "unit": "mph"
+          },
+          "crew": 80,
+          "cargo": "150 tons",
+          "armorClass": 15,
+          "hitPoints": 500,
+          "damageThreshold": 20
+        }
+      }
+    },
+    {
+      "id": "srd52:item/keelboat",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 3000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 1,
+            "unit": "mph"
+          },
+          "crew": 1,
+          "passengers": 6,
+          "cargo": "1/2 ton",
+          "armorClass": 15,
+          "hitPoints": 100,
+          "damageThreshold": 10
+        }
+      }
+    },
+    {
+      "id": "srd52:item/longship",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 3,
+            "unit": "mph"
+          },
+          "crew": 40,
+          "passengers": 150,
+          "cargo": "10 tons",
+          "armorClass": 15,
+          "hitPoints": 300,
+          "damageThreshold": 15
+        }
+      }
+    },
+    {
+      "id": "srd52:item/rowboat",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 50,
+          "unit": "gp"
+        },
+        "weight": 100,
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 1.5,
+            "unit": "mph"
+          },
+          "crew": 1,
+          "passengers": 3,
+          "armorClass": 11,
+          "hitPoints": 50
+        }
+      }
+    },
+    {
+      "id": "srd52:item/sailing-ship",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 10000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 2,
+            "unit": "mph"
+          },
+          "crew": 20,
+          "passengers": 20,
+          "cargo": "100 tons",
+          "armorClass": 15,
+          "hitPoints": 300,
+          "damageThreshold": 15
+        }
+      }
+    },
+    {
+      "id": "srd52:item/warship",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "cost": {
+          "amount": 25000,
+          "unit": "gp"
+        },
+        "category": "mounts-and-vehicles",
+        "vehicle": {
+          "category": "waterborne-vehicles",
+          "speed": {
+            "amount": 2.5,
+            "unit": "mph"
+          },
+          "crew": 60,
+          "passengers": 60,
+          "cargo": "200 tons",
+          "armorClass": 15,
+          "hitPoints": 500,
+          "damageThreshold": 20
+        }
+      }
+    },
+    {
       "id": "srd52:item/adamantine-armor",
       "kind": "item",
       "effects": [],
@@ -7932,6 +8368,258 @@
         "rarity": "rare",
         "attunement": true,
         "slot": "shoulders"
+      }
+    },
+    {
+      "id": "srd52:item/assassins-blood",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 150,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "ingested"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/burnt-othur-fumes",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 500,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "inhaled"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/crawler-mucus",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 200,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "contact"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/essence-of-ether",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 300,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "inhaled"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/malice",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 250,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "inhaled"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/midnight-tears",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 1500,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "ingested"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/oil-of-taggit",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 400,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "contact"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/pale-tincture",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 250,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "ingested"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/purple-worm-poison",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 2000,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "injury"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/serpent-venom",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 200,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "injury"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/spiders-sting",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 200,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "injury"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/torpor",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 600,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "ingested"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/truth-serum",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 150,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "ingested"
+        }
+      }
+    },
+    {
+      "id": "srd52:item/wyvern-poison",
+      "kind": "item",
+      "effects": [],
+      "data": {
+        "category": "adventuring-gear",
+        "cost": {
+          "amount": 1200,
+          "unit": "gp"
+        },
+        "gear": {
+          "category": "poisons"
+        },
+        "poison": {
+          "delivery": "injury"
+        }
       }
     }
   ]

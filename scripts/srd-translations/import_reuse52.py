@@ -16,7 +16,7 @@ import book52
 from import_reference import plain
 
 ROOT = book52.ROOT
-KINDS = ("languages", "proficiencies")
+KINDS = ("languages", "proficiencies", "alignments")
 
 
 def run(lang: str) -> None:
@@ -29,6 +29,7 @@ def run(lang: str) -> None:
         for k in en:
             if not k.endswith(".name"):
                 continue
+            abbreviation = k[: -len(".name")] + ".abbreviation"
             name = old.get(k)
             if not name:
                 missing.append(k[:-5])
@@ -39,8 +40,19 @@ def run(lang: str) -> None:
                 if len(w) >= 4
             ):
                 out[k] = name
+                if old.get(abbreviation) and abbreviation in en:
+                    out[abbreviation] = old[abbreviation]  # the abbreviation of an alignment (LG...)
             else:
                 absent.append((k[:-5], name))
+        if kind == "alignments" and "unaligned" in missing:
+            # "Unaligned" has no 5.1 name: the books write it in the alignment of the monsters that have none.
+            mo_en = json.loads((ROOT / "locales/en/srd52/monsters.json").read_text(encoding="utf-8"))
+            mo_tr = json.loads((ROOT / f"locales/{lang}/srd52/monsters.json").read_text(encoding="utf-8"))
+            words = [mo_tr[k] for k, v in mo_en.items() if k.endswith(".alignment") and v == "unaligned" and k in mo_tr]
+            if words:
+                best = max(set(words), key=words.count)
+                out["unaligned.name"] = best[0].upper() + best[1:]
+                missing.remove("unaligned")
         (ROOT / f"locales/{lang}/srd52/{kind}.json").write_text(
             json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )

@@ -1,0 +1,590 @@
+[
+  {
+    "index": "camel",
+    "name": "Camel",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 50,
+      "unit": "gp"
+    },
+    "capacity": "450 lb.",
+    "url": "/api/2024/equipment/camel"
+  },
+  {
+    "index": "draft-horse",
+    "name": "Draft Horse",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 50,
+      "unit": "gp"
+    },
+    "capacity": "540 lb.",
+    "url": "/api/2024/equipment/draft-horse"
+  },
+  {
+    "index": "elephant",
+    "name": "Elephant",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 200,
+      "unit": "gp"
+    },
+    "capacity": "1,320 lb.",
+    "url": "/api/2024/equipment/elephant"
+  },
+  {
+    "index": "mastiff",
+    "name": "Mastiff",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 25,
+      "unit": "gp"
+    },
+    "capacity": "195 lb.",
+    "url": "/api/2024/equipment/mastiff"
+  },
+  {
+    "index": "mule",
+    "name": "Mule",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 8,
+      "unit": "gp"
+    },
+    "capacity": "420 lb.",
+    "url": "/api/2024/equipment/mule"
+  },
+  {
+    "index": "pony",
+    "name": "Pony",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 30,
+      "unit": "gp"
+    },
+    "capacity": "225 lb.",
+    "url": "/api/2024/equipment/pony"
+  },
+  {
+    "index": "riding-horse",
+    "name": "Riding Horse",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 75,
+      "unit": "gp"
+    },
+    "capacity": "480 lb.",
+    "url": "/api/2024/equipment/riding-horse"
+  },
+  {
+    "index": "warhorse",
+    "name": "Warhorse",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "mounts-and-other-animals",
+        "name": "Mounts and Other Animals",
+        "url": "/api/2024/equipment-categories/mounts-and-other-animals"
+      }
+    ],
+    "cost": {
+      "quantity": 400,
+      "unit": "gp"
+    },
+    "capacity": "540 lb.",
+    "url": "/api/2024/equipment/warhorse"
+  },
+  {
+    "index": "chariot",
+    "name": "Chariot",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 250,
+      "unit": "gp"
+    },
+    "weight": 100,
+    "url": "/api/2024/equipment/chariot"
+  },
+  {
+    "index": "cart",
+    "name": "Cart",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 15,
+      "unit": "gp"
+    },
+    "weight": 200,
+    "url": "/api/2024/equipment/cart"
+  },
+  {
+    "index": "carriage",
+    "name": "Carriage",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 100,
+      "unit": "gp"
+    },
+    "weight": 600,
+    "url": "/api/2024/equipment/carriage"
+  },
+  {
+    "index": "wagon",
+    "name": "Wagon",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 35,
+      "unit": "gp"
+    },
+    "weight": 400,
+    "url": "/api/2024/equipment/wagon"
+  },
+  {
+    "index": "sled",
+    "name": "Sled",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 20,
+      "unit": "gp"
+    },
+    "weight": 300,
+    "url": "/api/2024/equipment/sled"
+  },
+  {
+    "index": "feed-per-day",
+    "name": "Feed (per day)",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 5,
+      "unit": "cp"
+    },
+    "weight": 10,
+    "url": "/api/2024/equipment/feed-per-day"
+  },
+  {
+    "index": "saddle-exotic",
+    "name": "Saddle (Exotic)",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 60,
+      "unit": "gp"
+    },
+    "weight": 40,
+    "url": "/api/2024/equipment/saddle-exotic"
+  },
+  {
+    "index": "saddle-military",
+    "name": "Saddle (Military)",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 20,
+      "unit": "gp"
+    },
+    "weight": 30,
+    "url": "/api/2024/equipment/saddle-military"
+  },
+  {
+    "index": "saddle-riding",
+    "name": "Saddle (Riding)",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "tack-harness-and-drawn-vehicles",
+        "name": "Tack, Harness, and Drawn Vehicles",
+        "url": "/api/2024/equipment-categories/tack-harness-and-drawn-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 10,
+      "unit": "gp"
+    },
+    "weight": 25,
+    "url": "/api/2024/equipment/saddle-riding"
+  },
+  {
+    "index": "airship",
+    "name": "Airship",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 40000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 8,
+      "unit": "mph"
+    },
+    "crew": 10,
+    "passengers": 20,
+    "cargo_capacity": "1 ton",
+    "armor_class": 13,
+    "hit_points": 300,
+    "url": "/api/2024/equipment/airship"
+  },
+  {
+    "index": "galley",
+    "name": "Galley",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 30000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 4,
+      "unit": "mph"
+    },
+    "crew": 80,
+    "cargo_capacity": "150 tons",
+    "armor_class": 15,
+    "hit_points": 500,
+    "damage_threshold": 20,
+    "url": "/api/2024/equipment/galley"
+  },
+  {
+    "index": "keelboat",
+    "name": "Keelboat",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 3000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 1,
+      "unit": "mph"
+    },
+    "crew": 1,
+    "passengers": 6,
+    "cargo_capacity": "1/2 ton",
+    "armor_class": 15,
+    "hit_points": 100,
+    "damage_threshold": 10,
+    "url": "/api/2024/equipment/keelboat"
+  },
+  {
+    "index": "longship",
+    "name": "Longship",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 10000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 3,
+      "unit": "mph"
+    },
+    "crew": 40,
+    "passengers": 150,
+    "cargo_capacity": "10 tons",
+    "armor_class": 15,
+    "hit_points": 300,
+    "damage_threshold": 15,
+    "url": "/api/2024/equipment/longship"
+  },
+  {
+    "index": "rowboat",
+    "name": "Rowboat",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 50,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 1.5,
+      "unit": "mph"
+    },
+    "crew": 1,
+    "passengers": 3,
+    "armor_class": 11,
+    "hit_points": 50,
+    "weight": 100,
+    "url": "/api/2024/equipment/rowboat"
+  },
+  {
+    "index": "sailing-ship",
+    "name": "Sailing Ship",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 10000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 2,
+      "unit": "mph"
+    },
+    "crew": 20,
+    "passengers": 20,
+    "cargo_capacity": "100 tons",
+    "armor_class": 15,
+    "hit_points": 300,
+    "damage_threshold": 15,
+    "url": "/api/2024/equipment/sailing-ship"
+  },
+  {
+    "index": "warship",
+    "name": "Warship",
+    "equipment_categories": [
+      {
+        "index": "mounts-and-vehicles",
+        "name": "Mounts and Vehicles",
+        "url": "/api/2024/equipment-categories/mounts-and-vehicles"
+      },
+      {
+        "index": "waterborne-vehicles",
+        "name": "Waterborne Vehicles",
+        "url": "/api/2024/equipment-categories/waterborne-vehicles"
+      }
+    ],
+    "cost": {
+      "quantity": 25000,
+      "unit": "gp"
+    },
+    "speed": {
+      "quantity": 2.5,
+      "unit": "mph"
+    },
+    "crew": 60,
+    "passengers": 60,
+    "cargo_capacity": "200 tons",
+    "armor_class": 15,
+    "hit_points": 500,
+    "damage_threshold": 20,
+    "url": "/api/2024/equipment/warship"
+  }
+]

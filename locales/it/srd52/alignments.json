@@ -1,0 +1,21 @@
+{
+  "lawful-good.name": "Legale Buono",
+  "lawful-good.abbreviation": "LB",
+  "neutral-good.name": "Neutrale Buono",
+  "neutral-good.abbreviation": "NB",
+  "chaotic-good.name": "Caotico Buono",
+  "chaotic-good.abbreviation": "CB",
+  "lawful-neutral.name": "Legale Neutrale",
+  "lawful-neutral.abbreviation": "LN",
+  "neutral.name": "Neutrale",
+  "neutral.abbreviation": "N",
+  "chaotic-neutral.name": "Caotico Neutrale",
+  "chaotic-neutral.abbreviation": "CN",
+  "lawful-evil.name": "Legale Malvagio",
+  "lawful-evil.abbreviation": "LM",
+  "neutral-evil.name": "Neutrale Malvagio",
+  "neutral-evil.abbreviation": "NM",
+  "chaotic-evil.name": "Caotico Malvagio",
+  "chaotic-evil.abbreviation": "CM",
+  "unaligned.name": "Senza allineamento"
+}

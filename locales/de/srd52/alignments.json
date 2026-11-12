@@ -1,0 +1,21 @@
+{
+  "lawful-good.name": "Rechtschaffen Gut",
+  "lawful-good.abbreviation": "RG",
+  "neutral-good.name": "Neutral Gut",
+  "neutral-good.abbreviation": "NG",
+  "chaotic-good.name": "Chaotisch Gut",
+  "chaotic-good.abbreviation": "CG",
+  "lawful-neutral.name": "Rechtschaffen Neutral",
+  "lawful-neutral.abbreviation": "RN",
+  "neutral.name": "Neutral",
+  "neutral.abbreviation": "N",
+  "chaotic-neutral.name": "Chaotisch Neutral",
+  "chaotic-neutral.abbreviation": "CN",
+  "lawful-evil.name": "Rechtschaffen Böse",
+  "lawful-evil.abbreviation": "RB",
+  "neutral-evil.name": "Neutral Böse",
+  "neutral-evil.abbreviation": "NB",
+  "chaotic-evil.name": "Chaotisch Böse",
+  "chaotic-evil.abbreviation": "CB",
+  "unaligned.name": "Gesinnungslos"
+}

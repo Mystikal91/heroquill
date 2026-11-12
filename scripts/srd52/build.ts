@@ -31,6 +31,7 @@ const FILE_NAMES: Record<string, string> = {
   item: "items",
   property: "properties",
   monster: "monsters",
+  alignment: "alignments",
 };
 
 const readJson = async (name: string) =>
@@ -57,11 +58,22 @@ const raw: RawSource = {
   features: await readJson("5e-SRD-Features"),
   subclasses: await readJson("5e-SRD-Subclasses"),
   weaponMastery: await readJson("5e-SRD-Weapon-Mastery-Properties"),
-  equipment: await readJson("5e-SRD-Equipment"),
+  // The fork's equipment has no mounts, vehicles, saddles or feed, which the book has. They are written in
+  // `supplement/mounts-and-vehicles.json`: the names, prices and weights come from open5e's SRD 5.2 data, each one
+  // checked against the book (kilograms to pounds), and the carrying capacities and the ships' columns from the
+  // book's tables. They carry no description: the book has none for them.
+  equipment: [
+    ...(await readJson("5e-SRD-Equipment")),
+    ...JSON.parse(
+      await readFile(join("scripts", "srd52", "supplement", "mounts-and-vehicles.json"), "utf8"),
+    ),
+  ],
   weaponProperties: await readJson("5e-SRD-Weapon-Properties"),
   spells: await readJson("5e-SRD-Spells"),
   magicSchools: await readJson("5e-SRD-Magic-Schools"),
   conditions: await readJson("5e-SRD-Conditions"),
+  alignments: await readJson("5e-SRD-Alignments"),
+  poisons: await readJson("5e-SRD-Poisons"),
 };
 
 const converted = convertAll(raw);
