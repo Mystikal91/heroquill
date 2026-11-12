@@ -45,6 +45,24 @@ def sections(lang: str) -> list[dict]:
     return out
 
 
+def weapon_rows(lang: str) -> list[tuple[str, str, float, bool]]:
+    """(name, damage dice, price) of the rows of the weapons table: a name, then a line that opens with dice."""
+    lines = book52.book_lines(book52.pdf_path(lang))
+    rows = []
+    for i, l in enumerate(lines[:-1]):
+        nxt = lines[i + 1]["text"].strip()
+        m = re.match(r"^(\d+)\s?[dDwW]\s?(\d+)", nxt)
+        if l["head"] in (9, 10) and m:
+            price = next(
+                (re.match(r"^(\d[\d.,]*)\s*[^\d\s]+$", x["text"].strip()) for x in lines[i + 1 : i + 9] if re.match(r"^(\d[\d.,]*)\s*(?!kg|lb|Pfd|libras)[^\d\s]{1,3}$", x["text"].strip())),
+                None,
+            )
+            if price:
+                ranged = any(re.search(r"\d+/\d+", x["text"]) for x in lines[i + 1 : i + 6])
+                rows.append((l["text"].strip(), f"{m.group(1)}d{m.group(2)}", float(price.group(1).replace(".", "").replace(",", ".")), ranged))
+    return rows
+
+
 def run(lang: str) -> None:
     data = json.loads((ROOT / "data/srd52/items.json").read_text(encoding="utf-8"))["entries"]
     en = json.loads((ROOT / "locales/en/srd52/items.json").read_text(encoding="utf-8"))
@@ -85,7 +103,7 @@ def run(lang: str) -> None:
         written_names.add(slug)
 
     # 2. names of the rest: the 5.1 name, when the 5.2.1 book still writes it
-    kept, dropped = 0, []
+    kept, dropped, by_table = 0, [], []
     for e in items:
         slug = e["id"].split("/")[1]
         if slug in written_names:
@@ -97,11 +115,26 @@ def run(lang: str) -> None:
         else:
             dropped.append(slug)
 
+    # 3. what is left: the weapons by their row of the table (damage and price), then the things whose
+    # section has a price that no other item without a name shares.
+    rows = weapon_rows(lang)
+    by_slug = {e["id"].split("/")[1]: e for e in items}
+    for slug in list(dropped):
+        w = by_slug[slug]["data"].get("weapon")
+        if not w:
+            continue
+        key = (w["damage"]["dice"], by_slug[slug]["data"]["cost"]["amount"], w["kind"] == "ranged")
+        found = sorted({name for name, dmg, price, ranged in rows if (dmg, price, ranged) == key})
+        if len(found) == 1:
+            out[f"{slug}.name"] = found[0]
+            dropped.remove(slug)
+            by_table.append(slug)
     target = ROOT / f"locales/{lang}/srd52/items.json"
     existing = json.loads(target.read_text(encoding="utf-8")) if target.exists() else {}
     existing.update(out)
     target.write_text(json.dumps(existing, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{lang}: {len(secs)} sections, {len(written_names)} with a description, {kept} names from 5.1, {len(dropped)} left English")
+    print("  names from the weapons table or a section with the same price:", by_table)
     print("  left English:", dropped)
     print("  doubtful (left English):", doubtful)
 

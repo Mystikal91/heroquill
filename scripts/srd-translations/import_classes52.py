@@ -87,6 +87,45 @@ def is_table(english_text: str) -> bool:
     return sum(1 for l in lines if " / " in l) >= 2 or sum(1 for l in lines if re.match(r"^\d+ [A-Z]", l)) >= 2
 
 
+_SPELLS: dict[str, dict[str, str]] = {}
+
+
+def spell_names(lang: str) -> dict[str, str]:
+    if lang not in _SPELLS:
+        en = json.loads((ROOT / "locales/en/srd52/spells.json").read_text(encoding="utf-8"))
+        tr = json.loads((ROOT / f"locales/{lang}/srd52/spells.json").read_text(encoding="utf-8"))
+        _SPELLS[lang] = {en[k].replace("’", "'"): tr[k] for k in en if k.endswith(".name") and tr.get(k)}
+    return _SPELLS[lang]
+
+
+def spell_table(lang: str, english_text: str, parsed: dict) -> str | None:
+    """A table "level / spells" of a subclass: the English rows with the spells in the book's names.
+
+    The intro is the book's own text; the title and the heading of the columns are the book's sans lines. Only
+    tables of one block (a title and a single row of headings, as the Life Domain's) are done: the circle spells of
+    the Circle of the Land have four tables and stay English."""
+    lines = english_text.split("\n")
+    rows_at = [i for i, l in enumerate(lines) if re.match(r"^\d+( /)? ", l)]
+    if not rows_at or sum(1 for l in lines if l.strip() and not re.match(r"^\d+( /)? ", l) and len(l) < 40) > 6:
+        return None
+    sans = [l for l in parsed["lines"] if l["head"]]
+    title = next((l["text"].strip() for l in sans if l["head"] == 10), None)
+    heads = [l["text"].strip() for l in sans if l["head"] == 9]
+    if not title or not heads:
+        return None
+    names = spell_names(lang)
+    pattern = re.compile("|".join(re.escape(n) for n in sorted(names, key=len, reverse=True)))
+    rows: list[str] = []
+    for l in lines[rows_at[0] :]:
+        if re.match(r"^\d+( /)? ", l):
+            rows.append(l)
+        elif rows:
+            rows[-1] += " " + l.strip()
+    rows = [pattern.sub(lambda m: names[m.group(0)], r.replace("’", "'")) for r in rows]
+    intro = book52.text_of(parsed["lines"], bold=False)
+    return "\n".join([intro, title, " ".join(heads), *rows])
+
+
 OPTION_PARENTS = {"sorcerer": "sorcerer-metamagic", "warlock": "warlock-eldritch-invocations"}
 
 
@@ -165,6 +204,7 @@ def run(lang: str) -> None:
     unpaired: list = []
     reordered: list = []
     tables: list = []
+    rebuilt_tables: list = []
 
     def score(text: str, english_text: str) -> float:
         return (
@@ -212,9 +252,15 @@ def run(lang: str) -> None:
                     out_feat[f"{w}.name"] = f["name"]
                     matched[w] = f
                     if is_table(en_feat[f"{w}.desc"]):
-                        # The English text carries a table (rows written "a / b"): the book's table is not read yet,
-                        # so the translated text would lack it. Name only; the text stays English.
-                        tables.append(w)
+                        # The English text carries a table. The tables of spells (a level and its spells) are
+                        # rebuilt from the English rows with the translated spell names and the book's headings;
+                        # the others are not read yet, so only the name is written and the text stays English.
+                        rebuilt = spell_table(lang, en_feat[f"{w}.desc"], f) if w.endswith("-spells") else None
+                        if rebuilt:
+                            out_feat[f"{w}.desc"] = rebuilt
+                            rebuilt_tables.append(w)
+                        else:
+                            tables.append(w)
                         continue
                     out_feat[f"{w}.desc"] = f["desc"]
                 unpaired += [(w, None) for w in wanted if f"{w}.name" not in out_feat and w not in [u[0] for u in unpaired]]
@@ -226,6 +272,7 @@ def run(lang: str) -> None:
         target = ROOT / f"locales/{lang}/srd52/{name}.json"
         target.write_text(json.dumps(values, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(lang, len(classes), "classes,", len(out_sub), "subclasses,", len(out_feat) // 2, "features; unpaired:", len(unpaired), unpaired[:30])
+    print("  tables of spells rebuilt:", rebuilt_tables)
     print("  name only (the text has a table):", tables)
 
 
