@@ -5,18 +5,23 @@ type Dir = "up" | "down" | "left" | "right";
 
 const name = (panel: string) => ui(`play.panel.${panel}` as UiKey);
 
-/** The button that opens the arranging of the panels, at the top of the screen. */
+/**
+ * The button that opens the arranging of the panels: at the end of the strip of quick numbers on
+ * a wide screen, under the last panel on a phone, where it takes no room from the play.
+ */
 export function CustomizeButton() {
   return (
     <button
       type="button"
       class="customize-open"
+      title={ui("play.customize")}
       onClick={() => {
         customizing.value = true;
+        window.scrollTo({ top: 0 });
       }}
     >
-      <span aria-hidden="true">{"⇄ "}</span>
-      {ui("play.customize")}
+      <span aria-hidden="true">{"⇄"}</span>
+      <span class="customize-word">{ui("play.customize")}</span>
     </button>
   );
 }

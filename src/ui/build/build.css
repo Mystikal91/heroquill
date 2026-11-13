@@ -442,8 +442,8 @@
   margin-top: 0;
 }
 
-.play button.play-levelup.level-up-button:not(.info-btn):not(.link) {
-  margin-bottom: 0.75rem;
+/* The level-up button lives in Create only (the summary and its strip), and stands out there. */
+:root[data-style] button.level-up-button {
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #f3c653));
   color: var(--bg);
   font-weight: 700;

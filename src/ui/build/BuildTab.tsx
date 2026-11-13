@@ -175,6 +175,7 @@ function Summary() {
             levelUpPhase.value = "choose";
           }}
         >
+          <span aria-hidden="true">{"✦ "}</span>
           {ui("levelUp.button")}
         </button>
       )}
@@ -224,6 +225,7 @@ function SummaryStrip() {
             levelUpPhase.value = "choose";
           }}
         >
+          <span aria-hidden="true">{"✦ "}</span>
           {ui("levelUp.button")}
         </button>
       )}

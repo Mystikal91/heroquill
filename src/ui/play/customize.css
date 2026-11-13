@@ -1,29 +1,45 @@
 /* ---- Arranging the panels of Play: a bar for each panel instead of its content ---- */
 
-/* The level-up button and "Customize" share a row: the first takes what the second leaves. */
-.play-topbar {
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.play .play-topbar button.play-levelup.level-up-button:not(.info-btn):not(.link) {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin-bottom: 0;
-}
-
+/* "Customize" takes no row of its own: on a wide screen it ends the strip of quick numbers, on a
+   phone it is under the last panel. */
 .play .customize-open:not(.pip-btn):not(.info-btn):not(.link) {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0 0.8rem;
   font-size: 0.85rem;
   white-space: nowrap;
 }
 
-.play-topbar:empty {
+.qs-tools {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.qs-tools:empty {
   display: none;
+}
+
+.play-foot {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* The strip is there: the button under the panels is not needed. */
+@container play (min-width: 42rem) {
+  .play-foot {
+    display: none;
+  }
+}
+
+/* A strip with little room keeps the picture and drops the word (the title still says it). */
+@container play (max-width: 56rem) {
+  .qs-tools .customize-word {
+    display: none;
+  }
 }
 
 .customize-bar,

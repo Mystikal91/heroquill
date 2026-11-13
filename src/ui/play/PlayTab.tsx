@@ -1,6 +1,5 @@
 import type { ComponentChildren } from "preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
-import { levelUpPhase } from "../../app/buildState";
 import {
   type Columns,
   canHide,
@@ -16,7 +15,6 @@ import { playStates, stateAttributes } from "../../app/playStates";
 import { type PlayGroup, playGroup, showPlayGroup } from "../../app/playView";
 import { character, content, sheet } from "../../app/store";
 import { ACTIVATIONS, characterActions } from "../../engine/actions";
-import { MAX_LEVEL } from "../../engine/levelUp";
 import { visibleSlots } from "../../engine/slots";
 import { type UiKey, ui } from "../../i18n/ui";
 import { CoinsPanel } from "../Coins";
@@ -202,7 +200,6 @@ export function PlayTab() {
   );
   const room = useColumns(root, Boolean(c && s));
   if (!c || !s) return null;
-  const canLevelUp = character.value.classes.length > 0 && s.level < MAX_LEVEL;
   const hasMagic = s.spellcasters.length > 0 || collectSpellRows(c, s).length > 0;
   const groups: PlayGroup[] = hasMagic
     ? ["combat", "checks", "magic", "resources"]
@@ -273,23 +270,8 @@ export function PlayTab() {
             </div>
           )}
         </div>
-        <QuickStats />
+        <QuickStats>{!arranging && <CustomizeButton />}</QuickStats>
         <MoreStatsDialog />
-        <div class="play-topbar">
-          {canLevelUp && (
-            <button
-              type="button"
-              class="level-up-button play-levelup"
-              onClick={() => {
-                levelUpPhase.value = "choose";
-              }}
-            >
-              <span aria-hidden="true">{"✦ "}</span>
-              {ui("levelUp.button")}
-            </button>
-          )}
-          {!arranging && <CustomizeButton />}
-        </div>
         <RageStrip wide />
         <BeastStrip wide />
         {arranging && (
@@ -360,6 +342,11 @@ export function PlayTab() {
             }
             onShowAll={() => setPlayLayout({ ...layout, hidden: [] })}
           />
+        )}
+        {!arranging && (
+          <div class="play-foot">
+            <CustomizeButton />
+          </div>
         )}
         <DiceButton />
         <DiceDrawer />

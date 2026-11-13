@@ -57,11 +57,12 @@ function Stat({
  * screen. Armor class is the crest; the rest are in groups by meaning, with a thin line between:
  * moving (initiative, speed), noticing and training (passive Perception, proficiency bonus) and
  * the numbers others roll against or that the character rolls (the martial save DC and, for a
- * caster, the spell save DC and attack bonus). Every number but the proficiency bonus and the
+ * caster, the spell save DC and attack bonus), and at the far end what the caller puts there
+ * (the button that arranges the panels). Every number but the proficiency bonus and the
  * initiative opens how it adds up; the initiative rolls when tapped. On a phone the bar of the
  * play head has the armor class and the initiative, and this strip is not shown.
  */
-export function QuickStats() {
+export function QuickStats({ children }: { children?: ComponentChildren }) {
   const s = sheet.value;
   const c = content.value;
   const play = character.value.play;
@@ -147,6 +148,8 @@ export function QuickStats() {
           </>
         )}
       </div>
+      {/* What is not a number (the button that arranges the panels) sits at the far end. */}
+      <div class="qs-tools">{children}</div>
     </div>
   );
 }

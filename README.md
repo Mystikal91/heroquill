@@ -30,7 +30,7 @@ and Aurora Legacy that you already own.
   score prerequisites; **feats** in place of ability score improvements. Options that ask for
   something (an invocation's level, pact or cantrip; a feat's scores) say so and stay locked until
   the character has it.
-- **Level up**, from the Create or Play tabs: choose the class and the hit points, see exactly what
+- **Level up**, from the Create tab: choose the class and the hit points, see exactly what
   changes, then jump to whatever is left to decide (subclass, ability scores, spells, choices).
   With a small celebration. The classes you do not have yet wait behind an *Add a new class* button,
   and only the ones whose minimum scores you meet are offered.
