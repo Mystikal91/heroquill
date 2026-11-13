@@ -3,6 +3,7 @@ import { MAX_LEVEL } from "../../engine/levelUp";
 import { subclassLevel } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
 import { Choices } from "../Choices";
+import { CardSelect, classFact } from "./CardSelect";
 import { ClassInfo } from "./EntryInfo";
 import { Select, entriesOfKind, parseWhole } from "./fields";
 
@@ -21,8 +22,9 @@ export function ClassStep() {
       {classes.length === 0 && (
         <div class="step-split">
           <div class="step-fields">
-            <Select
+            <CardSelect
               label={ui("form.class")}
+              fact={classFact}
               value={undefined}
               options={entriesOfKind("class")}
               onChange={(id) =>

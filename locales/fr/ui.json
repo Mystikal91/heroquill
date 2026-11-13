@@ -958,6 +958,8 @@
   "build.equipment": "Équipement",
   "build.left": "{n} restants",
   "build.continue": "Continuer",
+  "pick.change": "Changer",
+  "pick.close": "Fermer la liste",
   "build.optional": "facultatif",
   "build.viewSheet": "Voir la feuille",
   "build.options.title": "Règles optionnelles",

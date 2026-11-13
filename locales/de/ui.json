@@ -958,6 +958,8 @@
   "build.equipment": "Ausrüstung",
   "build.left": "Noch {n}",
   "build.continue": "Weiter",
+  "pick.change": "Ändern",
+  "pick.close": "Liste schließen",
   "build.optional": "optional",
   "build.viewSheet": "Bogen ansehen",
   "build.options.title": "Optionale Regeln",

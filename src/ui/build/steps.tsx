@@ -4,6 +4,7 @@ import { Choices } from "../Choices";
 import { Coins } from "../Coins";
 import { InventoryList, LoadLine } from "../InventoryList";
 import { AddItemButton } from "../ItemPicker";
+import { CardSelect, backgroundFact, speciesFact } from "./CardSelect";
 import { CustomItem } from "./CustomItem";
 import { BackgroundInfo, SpeciesInfo } from "./EntryInfo";
 import { OptionalRules } from "./OptionalRules";
@@ -34,8 +35,9 @@ export function OriginStep() {
             <span class="edition-tag">{ui(`edition.${c.ruleset}.name`)}</span>
           </p>
         )}
-        <Select
+        <CardSelect
           label={ui("form.species")}
+          fact={speciesFact}
           value={c.choices.species}
           options={entriesOfKind("species")}
           onChange={(id) =>
@@ -60,8 +62,9 @@ export function OriginStep() {
         {/* What the species asks to choose (a lineage, a skill), asked here and not three steps on. */}
         <Choices only="species" />
 
-        <Select
+        <CardSelect
           label={ui("form.background")}
+          fact={backgroundFact}
           value={c.choices.background}
           options={entriesOfKind("background")}
           onChange={(id) =>
