@@ -1,19 +1,24 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { isHomebrewId } from "../../app/homebrew";
-import { rulesFocus, rulesKind, rulesQuery, showRulesKind } from "../../app/rulesView";
+import {
+  rulesEdition,
+  rulesFocus,
+  rulesKind,
+  rulesQuery,
+  showRulesKind,
+} from "../../app/rulesView";
 import { type SearchHit, browse, kindsOf, search } from "../../app/search";
-import { character, content } from "../../app/store";
+import { character, content, editionsAvailable } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { EntryDetail } from "./EntryDetail";
 
 const STEP = 150;
 
 /** What is shown: the matches of what is typed, or the whole kind to read through. */
-function listed(query: string): { hits: SearchHit[]; searching: boolean } {
+function listed(query: string, ruleset: string): { hits: SearchHit[]; searching: boolean } {
   const c = content.value;
   const kind = rulesKind.value;
   if (!c) return { hits: [], searching: false };
-  const ruleset = character.value.ruleset;
   if (query.trim().length >= 2)
     return { hits: search(c, query, kind, 300, ruleset), searching: true };
   return { hits: kind ? browse(c, kind, ruleset) : [], searching: false };
@@ -33,11 +38,13 @@ export function RulesPage() {
   }, [focus]);
 
   if (!c) return null;
-  const present = kindsOf(c, character.value.ruleset);
+  const ruleset = rulesEdition.value ?? character.value.ruleset;
+  const both = editionsAvailable.value.length > 1;
+  const present = kindsOf(c, ruleset);
   // The monsters are a large pack: their button is there before they are loaded, and loads them.
   const kinds = present.includes("monster") ? present : [...present, "monster" as const];
   const loading = rulesKind.value === "monster" && !c.monsters;
-  const { hits, searching } = listed(query);
+  const { hits, searching } = listed(query, ruleset);
   const visible = hits.slice(0, shown);
 
   return (
@@ -56,6 +63,26 @@ export function RulesPage() {
             setShown(STEP);
           }}
         />
+        {both && (
+          <fieldset class="segmented rules-edition">
+            <legend class="sr-only">{ui("edition.label")}</legend>
+            {(["srd51", "srd52"] as const).map((e) => (
+              <button
+                type="button"
+                key={e}
+                class={ruleset === e ? "on" : ""}
+                aria-pressed={ruleset === e}
+                onClick={() => {
+                  rulesEdition.value = e;
+                  setPicked(undefined);
+                  setShown(STEP);
+                }}
+              >
+                {ui(`edition.${e}.name`)}
+              </button>
+            ))}
+          </fieldset>
+        )}
         <fieldset class="rules-kinds">
           <legend class="sr-only">{ui("rules.kinds")}</legend>
           <button
@@ -91,7 +118,26 @@ export function RulesPage() {
           {loading ? (
             <p class="muted">{ui("rules.loading")}</p>
           ) : !searching && !rulesKind.value ? (
-            <p class="muted">{ui("rules.hint")}</p>
+            <>
+              <p class="muted">{ui("rules.hint")}</p>
+              {/* The way in: each kind with how many entries it has. */}
+              <ul class="rules-start">
+                {present.map((k) => (
+                  <li key={k}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        showRulesKind(k);
+                        setShown(STEP);
+                      }}
+                    >
+                      <b>{ui(`search.kind.${k}` as UiKey)}</b>
+                      <small>{browse(c, k, ruleset).length}</small>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : hits.length === 0 ? (
             <p class="muted">{ui("search.none")}</p>
           ) : (

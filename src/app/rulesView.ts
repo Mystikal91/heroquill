@@ -20,6 +20,8 @@ export const monstersWanted = signal(false);
 export const rulesQuery = signal("");
 /** The kind the page is limited to; the last one is remembered. */
 export const rulesKind = signal<SearchKind | undefined>(remembered());
+/** The edition whose rules the page shows; without a choice, the open character's. */
+export const rulesEdition = signal<"srd51" | "srd52" | undefined>(undefined);
 /** Raised to put the cursor in the search field (the button in the header, the slash key). */
 export const rulesFocus = signal(0);
 
