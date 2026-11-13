@@ -2,6 +2,7 @@ import { character, content, sheet, updateCharacter } from "../app/store";
 import type { Content } from "../content/browser";
 import type { PendingChoice } from "../engine/choices";
 import { type UiKey, signed, ui } from "../i18n/ui";
+import { type ChoiceOrigin, choiceOrigin } from "./choiceOrigin";
 import { needLabel } from "./needLabel";
 import { RuleInfoButton } from "./rules/EntryDetail";
 import { RulesText } from "./sheet/parts";
@@ -84,9 +85,12 @@ function MenuPicks({ choice }: { choice: PendingChoice }) {
                   const need = choice.needs?.[id];
                   const blocked = need !== undefined && !need.met && id !== own;
                   const asks = blocked ? needLabel(c, ruleset, id, need.expression) : "";
+                  // A weapon says which mastery it gives: that is what the pick is about.
+                  const gives = choice.grants === "mastery" ? about(id) : undefined;
+                  const label = gives ? `${name(id)} · ${name(gives)}` : name(id);
                   return (
                     <option key={id} value={id} disabled={blocked}>
-                      {asks ? `${name(id)} (${asks})` : name(id)}
+                      {asks ? `${label} (${asks})` : label}
                     </option>
                   );
                 })}
@@ -105,13 +109,22 @@ function MenuPicks({ choice }: { choice: PendingChoice }) {
   );
 }
 
-export function Choices() {
+/**
+ * The choices of the character. With `only`, the ones that come from one origin (the species,
+ * the background, the classes), with no frame around them: the step that gave them asks them
+ * on the spot. The Choices step shows them all, so nothing is missed.
+ */
+export function Choices({ only }: { only?: ChoiceOrigin }) {
   const c = content.value;
   const s = sheet.value;
   const ch = character.value;
   if (!c || !s) return null;
 
-  const pending = s.choices.reduce((sum, choice) => sum + choice.remaining, 0);
+  const shown = only
+    ? s.choices.filter((choice) => choiceOrigin(c.index, choice.source) === only)
+    : s.choices;
+  if (only && shown.length === 0) return null;
+  const pending = shown.reduce((sum, choice) => sum + choice.remaining, 0);
 
   const toggle = (choice: PendingChoice, option: string, on: boolean) => {
     updateCharacter((d) => {
@@ -135,16 +148,16 @@ export function Choices() {
   };
 
   return (
-    <fieldset class="choices">
-      <legend>{ui("choices.title")}</legend>
-      {s.choices.length === 0 ? (
+    <fieldset class={only ? "choices choices-inline" : "choices"}>
+      {!only && <legend>{ui("choices.title")}</legend>}
+      {only ? null : s.choices.length === 0 ? (
         <p class="muted">{ui("choices.none")}</p>
       ) : (
         <p class={pending > 0 ? "note" : "muted"}>
           {pending > 0 ? ui("choices.pending", { count: pending }) : ui("choices.done")}
         </p>
       )}
-      {s.choices.map((choice) => (
+      {shown.map((choice) => (
         <fieldset class="choice" key={choice.key}>
           <legend>{c.name(choice.source)}</legend>
           <p class="muted">

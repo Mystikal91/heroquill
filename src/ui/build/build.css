@@ -133,6 +133,23 @@
   color: var(--muted);
 }
 
+/* The choices a step asks on the spot: no frame of their own, each one a box under its field. */
+fieldset.choices-inline {
+  min-width: 0;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: 0;
+}
+
+.choices-inline .choice {
+  min-width: 0;
+  margin: 0 0 0.6rem;
+}
+
+.choices-inline .choice:first-child {
+  margin-top: 0;
+}
+
 .subclass-later {
   margin: 0 0 0.75rem;
 }

@@ -1,5 +1,6 @@
 import { character, editionsAvailable, updateCharacter } from "../../app/store";
 import { ui } from "../../i18n/ui";
+import { Choices } from "../Choices";
 import { Coins } from "../Coins";
 import { InventoryList, LoadLine } from "../InventoryList";
 import { AddItemButton } from "../ItemPicker";
@@ -56,6 +57,8 @@ export function OriginStep() {
             }
           />
         )}
+        {/* What the species asks to choose (a lineage, a skill), asked here and not three steps on. */}
+        <Choices only="species" />
 
         <Select
           label={ui("form.background")}
@@ -67,6 +70,7 @@ export function OriginStep() {
             })
           }
         />
+        <Choices only="background" />
         <OptionalRules />
       </div>
       <div class="step-info">

@@ -9,6 +9,7 @@ import { AbilityScores } from "../AbilityScores";
 import { Choices } from "../Choices";
 import { SpellPicker } from "../SpellPicker";
 import { Welcome } from "../Welcome";
+import { type ChoiceOrigin, choiceOrigin } from "../choiceOrigin";
 import { ClassStep } from "./ClassStep";
 import { FeaturesStep } from "./FeaturesStep";
 import { FreeEditStep } from "./FreeEditStep";
@@ -36,6 +37,15 @@ function buildSteps(): StepInfo[] {
   const first = ch.classes[0];
   const needsSubclass = c ? classesNeedingSubclass(ch, c.index).length > 0 : false;
   const pendingChoices = s?.choices.reduce((sum, choice) => sum + choice.remaining, 0) ?? 0;
+  // The choices a step asks on the spot count for that step too.
+  const pendingOf = (origins: ChoiceOrigin[]) =>
+    s && c
+      ? s.choices
+          .filter((choice) => origins.includes(choiceOrigin(c.index, choice.source)))
+          .reduce((sum, choice) => sum + choice.remaining, 0)
+      : 0;
+  const originLeft = pendingOf(["species", "background"]);
+  const classLeft = pendingOf(["class"]);
   const asiLeft = s ? s.asi.available - s.asi.used : 0;
   const spellsLeft = (s?.spellcasters ?? []).reduce(
     (total, caster) =>
@@ -51,8 +61,14 @@ function buildSteps(): StepInfo[] {
     {
       id: "origin",
       title: "build.origin",
-      status: [name(ch.choices.species), name(ch.choices.background)].filter(Boolean).join(" · "),
-      done: Boolean(ch.choices.species && ch.choices.background),
+      status: [
+        name(ch.choices.species),
+        name(ch.choices.background),
+        originLeft > 0 ? ui("build.left", { n: originLeft }) : "",
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      done: Boolean(ch.choices.species && ch.choices.background) && originLeft === 0,
       body: <OriginStep />,
     },
     {
@@ -61,10 +77,11 @@ function buildSteps(): StepInfo[] {
       status: [
         ch.classes.map((cl) => `${name(cl.classId)} ${cl.level}`).join(" / "),
         needsSubclass ? ui("build.needsSubclass") : "",
+        classLeft > 0 ? ui("build.left", { n: classLeft }) : "",
       ]
         .filter(Boolean)
         .join(" · "),
-      done: Boolean(first) && !needsSubclass,
+      done: Boolean(first) && !needsSubclass && classLeft === 0,
       body: <ClassStep />,
     },
     {

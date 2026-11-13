@@ -2,6 +2,7 @@ import { character, content, sheet, updateCharacter } from "../../app/store";
 import { MAX_LEVEL } from "../../engine/levelUp";
 import { subclassLevel } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
+import { Choices } from "../Choices";
 import { ClassInfo } from "./EntryInfo";
 import { Select, entriesOfKind, parseWhole } from "./fields";
 
@@ -127,6 +128,8 @@ export function ClassStep() {
 
       {classes.length > 0 && (
         <>
+          {/* What the classes ask to choose (skills, a fighting style, weapon masteries). */}
+          <Choices only="class" />
           <p class="muted">{ui("class.total", { level: total })}</p>
           {available.length > 0 && total < MAX_LEVEL && (
             <label class="field">
