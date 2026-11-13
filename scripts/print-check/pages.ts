@@ -197,7 +197,7 @@ const COLLECT = `(async () => {
   }
   // The fixed pages (the front, the story) are one page each: every line of them has to be on one page.
   const whole = [...paper.querySelectorAll(".p-front, .p-story")].map((el) => ({
-    label: el.className + " (density " + (el.dataset.density ?? "-") + ")",
+    label: el.className + " (density " + (el.dataset.density ?? "-") + ", spill " + (el.dataset.spill ?? "-") + ", " + Math.round(el.getBoundingClientRect().height / (96 / 25.4)) + " mm tall" + (el.matches(".p-front") ? ", columns over by " + [...el.querySelectorAll(".p-col")].map((c) => Math.round(((c.scrollHeight - c.clientHeight) / (96 / 25.4)) * 10) / 10).join("/") + " mm" : "") + ")",
     lines: [...new Set((el.innerText || "").split("\\n").map(norm).filter((l) => l.length >= 5))],
   }));
   return { sections: paper.querySelectorAll(".p-page").length, blocks, whole };
@@ -343,6 +343,7 @@ async function main() {
       );
 
     for (const w of found.whole) {
+      if (process.env.VERBOSE) console.log(`  ${w.label}`);
       // The page that has most of its lines is where it was meant to be: the others are the spill.
       const have = pages.map((p) => w.lines.filter((l) => p.includes(l)).length);
       const best = have.indexOf(Math.max(...have));

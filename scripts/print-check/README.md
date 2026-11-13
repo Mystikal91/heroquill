@@ -36,6 +36,12 @@ KEEP=out npm run test:print         # also keep each PDF in out/ to look at it
 ACCEPT=1 npm run test:print         # write the baseline (after looking at the PDFs)
 ```
 
+**When the front page is too full** even at its densest, panels of its right column leave for a page of their own,
+"Sheet, continued" (`FrontMore`): first the limited uses, then the species traits and feats, then the class
+features (`fitFront`, `frontSpill`). The fitting leaves 9 mm to spare, because the printed page comes out taller than
+the screen shows it: a front that fits on screen by a few millimetres lost its last block to a second page in the
+PDF (this test found it in a level 20 Paladin).
+
 A page count that changes is a decision: look at the PDFs (`KEEP`), then `ACCEPT=1`. `known` in the baseline lists
 what is wrong today and is not fixed yet (a front page that does not fit): it is shown, it does not fail, and
 when one is fixed the check fails until its line is removed (`ACCEPT=1`). A page that does not load is tried three

@@ -11,6 +11,7 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { Cards } from "./CardsGroup";
 import { FeatureText } from "./FeatureText";
+import { FrontMore } from "./FrontMore";
 import { FrontPage } from "./FrontPage";
 import { SpellPages } from "./SpellPages";
 import { StoryPage } from "./StoryPage";
@@ -133,6 +134,7 @@ export function PrintView() {
         <div class="paper">
           {nothing && <p class="no-print">{ui("print.nothing")}</p>}
           {settings.includeSheet && <FrontPage />}
+          {settings.includeSheet && <FrontMore />}
           {settings.includeStory && <StoryPage />}
           {settings.includeFeatureText && <FeatureText />}
           <SpellPages />

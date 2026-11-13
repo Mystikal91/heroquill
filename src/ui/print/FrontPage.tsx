@@ -1,25 +1,21 @@
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { character, content, printSheet } from "../../app/store";
-import type { Content } from "../../content/browser";
-import { classData, subclassData } from "../../data/progression";
 import { ABILITIES } from "../../data/schema";
-import type { ClassLevel } from "../../engine/character";
 import type { DamageResult } from "../../engine/equipment";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { damageName } from "../damageName";
 import { movementLines } from "../movementLines";
-import { recoveryLabel, resourceLabel } from "../play/ResourceControl";
 import { extraAmount, extraName } from "../sheet/ExtraDamage";
 import { collectSpellRows } from "../spellRows";
+import { ClassFeaturesPanels, TraitsPanels, UsesPanel } from "./FrontPanels";
 import { RuledArea } from "./RuledArea";
 import { fitFront } from "./fitFront";
+import { frontSpill } from "./frontSpill";
 
 const BLANK_ATTACK_ROWS = 4;
 /** Facts that the attacks panel already says as damage (sneak attack, rage, martial arts). */
 const FACTS_AS_DAMAGE = new Set(["rageDamage", "sneakAttack", "martialArts"]);
-/** Up to this many uses are boxes to tick; more (ki points, hit points to heal) is a number to write. */
-const MAX_BOXES = 8;
 const PROFICIENCY_CATEGORIES = ["armor", "weapon", "tool", "language"] as const;
 const PROFICIENCY_LABELS = {
   armor: "sheet.armor",
@@ -31,20 +27,6 @@ const PROFICIENCY_LABELS = {
 const formatDamage = (d: DamageResult) =>
   `${d.dice}${d.bonus === 0 ? "" : signed(d.bonus)} ${damageName(d.type)}`;
 
-/** Names of the features gained at each level reached, from the class and its subclass. */
-function featureRows(c: Content, cl: ClassLevel): [number, string[]][] {
-  const byLevel = new Map<number, string[]>();
-  const add = (level: number, ids: string[]) => {
-    if (level <= cl.level && ids.length > 0)
-      byLevel.set(level, [...(byLevel.get(level) ?? []), ...ids]);
-  };
-  const entry = c.index.get(cl.classId);
-  if (entry) for (const row of classData(entry).levels) add(row.level, row.features);
-  const sub = cl.subclassId ? c.index.get(cl.subclassId) : undefined;
-  if (sub) for (const row of subclassData(sub).levels) add(row.level, row.features);
-  return [...byLevel.entries()].sort(([a], [b]) => a - b);
-}
-
 /** The main sheet: everything needed at the table, laid out like the on-screen sheet. */
 export function FrontPage() {
   const page = useRef<HTMLElement>(null);
@@ -52,7 +34,11 @@ export function FrontPage() {
   useLayoutEffect(() => {
     const el = page.current;
     if (!el) return;
-    const fit = () => fitFront(el);
+    // The page gets denser until it fits; at the densest, a panel goes to the next page, one at a time.
+    const fit = () => {
+      const { spill } = fitFront(el);
+      if (frontSpill.value !== spill) frontSpill.value = spill;
+    };
     fit();
     void document.fonts?.ready.then(fit);
     window.addEventListener("beforeprint", fit);
@@ -86,9 +72,7 @@ export function FrontPage() {
   // Climbing and swimming at half speed are not written on the sheet; what is given is.
   const otherSpeeds = movementLines(s.movement, s.senses, true);
   const facts = s.facts.filter((f) => !FACTS_AS_DAMAGE.has(f.kind));
-  const feats = s.feats.filter((id) => !s.hiddenFeatures.includes(id));
   const bardic = s.facts.find((f) => f.kind === "bardicDie");
-  const uses = s.resources.filter((r) => !r.unlimited);
   const list = (category: (typeof PROFICIENCY_CATEGORIES)[number]) =>
     s.proficiencies[category]
       .map((t) =>
@@ -360,67 +344,11 @@ export function FrontPage() {
             </dl>
           </section>
 
-          {s.traits.length > 0 && (
-            <section class="p-frame p-panel">
-              <h3 class="p-h">{ui("sheet.speciesTraits")}</h3>
-              <ul class="p-names">
-                {s.traits.map((id) => (
-                  <li key={id}>{name(id)}</li>
-                ))}
-              </ul>
-            </section>
-          )}
+          <TraitsPanels />
 
-          {feats.length > 0 && (
-            <section class="p-frame p-panel">
-              <h3 class="p-h">{ui("sheet.feats")}</h3>
-              <ul class="p-names">
-                {feats.map((id) => (
-                  <li key={id}>{name(id)}</li>
-                ))}
-              </ul>
-            </section>
-          )}
+          <ClassFeaturesPanels />
 
-          {ch.classes.map((cl) => (
-            <section class="p-frame p-panel" key={cl.classId}>
-              <h3 class="p-h">{ui("sheet.classFeatures")}</h3>
-              {featureRows(c, cl).map(([level, ids]) => (
-                <div class="p-level-row" key={level}>
-                  <span class="p-level">{level}</span>
-                  <span class="names">{ids.map((id) => name(id)).join(", ")}</span>
-                </div>
-              ))}
-            </section>
-          ))}
-
-          {uses.length > 0 && (
-            <section class="p-frame p-panel">
-              <h3 class="p-h">{ui("print.resources")}</h3>
-              <ul class="p-uses">
-                {uses.map((r) => (
-                  <li key={r.id}>
-                    <span class="p-use-name">
-                      {resourceLabel(r)}
-                      <small>{recoveryLabel(r)}</small>
-                    </span>
-                    {r.pool || r.max > MAX_BOXES ? (
-                      <span class="p-use-count">
-                        {r.max}
-                        <span class="p-write small" />
-                      </span>
-                    ) : (
-                      <span class="p-use-boxes">
-                        {Array.from({ length: r.max }, (_, i) => (
-                          <span class="p-pip" key={`${r.id}-${i + 1}`} />
-                        ))}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+          <UsesPanel />
 
           {(ch.custom ?? []).some((f) => f.name.trim() !== "") && (
             <section class="p-frame p-panel">

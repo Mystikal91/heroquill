@@ -1375,3 +1375,26 @@
   text-transform: uppercase;
   vertical-align: middle;
 }
+
+/* ---- What did not fit on the front page, on a page of its own ---- */
+
+.p-more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3mm;
+  align-items: start;
+}
+
+.p-more .p-panel {
+  break-inside: avoid;
+}
+
+/* The panels that left the front for the page that follows (see fitFront). */
+.p-front[data-spill="1"] [data-panel="uses"],
+.p-front[data-spill="2"] [data-panel="uses"],
+.p-front[data-spill="3"] [data-panel="uses"],
+.p-front[data-spill="2"] [data-panel="traits"],
+.p-front[data-spill="3"] [data-panel="traits"],
+.p-front[data-spill="3"] [data-panel="features"] {
+  display: none;
+}
