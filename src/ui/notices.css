@@ -80,10 +80,21 @@
   text-align: left;
 }
 
-.edition-option span {
-  font-size: 0.9rem;
+/* The description is a sentence to read: the plain letters, not the capitals of a button. */
+.edition-option span,
+:root[data-style] .edition-option span {
+  font-family: var(--font-body);
+  font-size: 1rem;
   font-weight: 400;
-  opacity: 0.85;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: none;
+  opacity: 0.9;
+}
+
+.edition-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
 }
 
 .confirm-actions {

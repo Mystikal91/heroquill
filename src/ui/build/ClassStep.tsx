@@ -1,5 +1,6 @@
 import { character, content, sheet, updateCharacter } from "../../app/store";
 import { MAX_LEVEL } from "../../engine/levelUp";
+import { subclassLevel } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
 import { ClassInfo } from "./EntryInfo";
 import { Select, entriesOfKind, parseWhole } from "./fields";
@@ -11,6 +12,8 @@ export function ClassStep() {
   const taken = new Set(classes.map((cl) => cl.classId));
   const available = entriesOfKind("class").filter((o) => !taken.has(o.id));
   const warnings = (sheet.value?.warnings ?? []).filter((w) => w.code === "multiclassPrerequisite");
+  const index = content.value?.index;
+  const subclassAt = (classId: string) => (index ? subclassLevel(classId, index) : undefined);
 
   return (
     <>
@@ -81,19 +84,26 @@ export function ClassStep() {
                   }}
                 />
               </label>
-              {entriesOfKind("subclass", cl.classId).length > 0 && (
-                <Select
-                  label={ui("form.subclass")}
-                  value={cl.subclassId}
-                  options={entriesOfKind("subclass", cl.classId)}
-                  onChange={(id) =>
-                    updateCharacter((d) => {
-                      const row = d.classes[i];
-                      if (row) row.subclassId = id;
-                    })
-                  }
-                />
+              {/* Before the level of the choice there is nothing to choose: say when it comes. */}
+              {!cl.subclassId && cl.level < (subclassAt(cl.classId) ?? 0) && (
+                <p class="muted subclass-later">
+                  {ui("class.subclassAt", { level: subclassAt(cl.classId) ?? 0 })}
+                </p>
               )}
+              {entriesOfKind("subclass", cl.classId).length > 0 &&
+                (cl.subclassId || cl.level >= (subclassAt(cl.classId) ?? 0)) && (
+                  <Select
+                    label={ui("form.subclass")}
+                    value={cl.subclassId}
+                    options={entriesOfKind("subclass", cl.classId)}
+                    onChange={(id) =>
+                      updateCharacter((d) => {
+                        const row = d.classes[i];
+                        if (row) row.subclassId = id;
+                      })
+                    }
+                  />
+                )}
               {i > 0 && (
                 <button
                   type="button"

@@ -80,26 +80,39 @@ export function HitPoints() {
           </button>
         ))}
       </div>
+      {/* The number with what is done most beside it (damage, healing); under them, smaller,
+          what is done now and then (half, double, temporary hit points). */}
       <div class="hp-controls">
-        <label class="field">
-          <span>{ui("play.amount")}</span>
+        <div class="hp-apply">
           <input
             type="number"
             min={0}
             inputMode="numeric"
+            aria-label={ui("play.amount")}
+            placeholder={ui("play.amount")}
             value={amount}
             onInput={(e) => setAmount(e.currentTarget.value)}
           />
-        </label>
-        <div class="btn-row">
-          <DamageButtons amount={n} apply={(dealt) => apply(() => damageCharacter(dealt))} />
+          <DamageButtons
+            amount={n}
+            kinds={["normal"]}
+            apply={(dealt) => apply(() => damageCharacter(dealt))}
+          />
           <button
             type="button"
+            class="hp-heal"
             disabled={n === 0}
             onClick={() => apply((a) => changePlay((p) => applyHealing(p, v.max, a)))}
           >
             {ui("play.heal")}
           </button>
+        </div>
+        <div class="btn-row hp-more">
+          <DamageButtons
+            amount={n}
+            kinds={["resistant", "vulnerable"]}
+            apply={(dealt) => apply(() => damageCharacter(dealt))}
+          />
           <button
             type="button"
             disabled={n === 0}

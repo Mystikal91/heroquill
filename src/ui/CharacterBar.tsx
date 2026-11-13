@@ -5,6 +5,7 @@ import {
   deleteCurrentCharacter,
   deletedCharacter,
   duplicateCharacter,
+  editionsAvailable,
   importFailed,
   importNotice,
   openCharacter,
@@ -24,15 +25,26 @@ const STATUS_KEYS = {
   failed: "bar.notSaved",
 } as const;
 
+/** The year an edition is known by. */
+const YEARS: Record<string, string> = { srd51: "2014", srd52: "2024" };
+
 export function CharacterBar() {
   const current = character.value;
   const c = content.value;
   const unnamed = ui("sheet.unnamed");
 
   /** "Elowen · Wizard 3": the name and what the character is, so unnamed ones can be told apart. */
-  const label = (name: string, classes: { classId: string; level: number }[]) => {
+  // With both editions in the app, the year tells two characters of the same name apart. The
+  // list knows the edition only from the id of a class of the SRD; a class of a book says nothing.
+  const both = editionsAvailable.value.length > 1;
+  const yearOf = (classes: { classId: string }[], ruleset?: string) => {
+    const from =
+      ruleset ?? classes.map((cl) => cl.classId.split(":")[0] ?? "").find((p) => p in YEARS);
+    return both && from ? YEARS[from] : undefined;
+  };
+  const label = (name: string, classes: { classId: string; level: number }[], ruleset?: string) => {
     const what = classes.map((cl) => `${c?.name(cl.classId) ?? ""} ${cl.level}`.trim()).join(" / ");
-    return [name || unnamed, what].filter(Boolean).join(" · ");
+    return [name || unnamed, what, yearOf(classes, ruleset)].filter(Boolean).join(" · ");
   };
 
   // The list is saved data; the open character may be newer, so show its live name and classes.
@@ -57,7 +69,7 @@ export function CharacterBar() {
         >
           {options.map((s) => (
             <option key={s.id} value={s.id}>
-              {label(s.name, s.classes)}
+              {label(s.name, s.classes, s.id === current.id ? current.ruleset : undefined)}
             </option>
           ))}
         </select>

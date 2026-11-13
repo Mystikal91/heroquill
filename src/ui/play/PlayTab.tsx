@@ -265,6 +265,7 @@ export function PlayTab() {
           <StatusBar />
           <div class="play-groups-row">
             <GroupTabs groups={groups} />
+            <DiceButton inHead />
             {!arranging && <CustomizeButton />}
           </div>
           {(open === "combat" || open === "checks") && (

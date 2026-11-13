@@ -29,6 +29,7 @@ export function EditionDialog() {
         <div class="spell-dialog-body">
           <h3 id="edition-title">{ui("edition.title")}</h3>
           <p class="muted">{ui("edition.fixed")}</p>
+          <p class="edition-hint">{ui("edition.hint")}</p>
           <div class="edition-options">
             <button type="button" class="edition-option" onClick={() => request.answer("srd51")}>
               <b>{ui("edition.srd51.name")}</b>

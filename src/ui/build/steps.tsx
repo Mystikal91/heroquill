@@ -29,8 +29,8 @@ export function OriginStep() {
         </label>
 
         {editionsAvailable.value.length > 1 && (
-          <p class="muted edition-current">
-            {ui("edition.current", { name: ui(`edition.${c.ruleset}.name`) })}
+          <p class="edition-current">
+            <span class="edition-tag">{ui(`edition.${c.ruleset}.name`)}</span>
           </p>
         )}
         <Select

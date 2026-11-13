@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { type StepId, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
-import { character, content, updateCharacter } from "../../app/store";
+import { character, content, editionsAvailable, updateCharacter } from "../../app/store";
 import { ui } from "../../i18n/ui";
 import { Portrait } from "./Portrait";
 
@@ -136,7 +136,16 @@ export function SheetHeader() {
             {classTitle}
           </Change>
         </h2>
-        <span class="banner-label">{classLabel}</span>
+        <span class="banner-label">
+          {classLabel}
+          {/* Which rules the character follows, when the app has both editions. */}
+          {editionsAvailable.value.length > 1 && (
+            <>
+              {" · "}
+              <span title={ui("edition.label")}>{ui(`edition.${ch.ruleset}.name`)}</span>
+            </>
+          )}
+        </span>
       </div>
     </header>
   );

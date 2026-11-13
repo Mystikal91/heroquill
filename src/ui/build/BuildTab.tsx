@@ -22,6 +22,8 @@ interface StepInfo {
   status: string;
   /** True when there is nothing left to do in this step. */
   done: boolean;
+  /** A step nobody has to do: it has no check mark, and says so until something is in it. */
+  optional?: boolean;
   body: ComponentChildren;
 }
 
@@ -96,7 +98,8 @@ function buildSteps(): StepInfo[] {
     id: "equipment",
     title: "build.equipment",
     status: ch.inventory.length > 0 ? String(ch.inventory.length) : "",
-    done: true,
+    // Done once the character carries something: an empty pack is still a step to take.
+    done: ch.inventory.length > 0,
     body: <EquipmentStep />,
   });
   const story = ch.story;
@@ -114,16 +117,18 @@ function buildSteps(): StepInfo[] {
   steps.push({
     id: "features",
     title: "build.features",
-    status: customCount > 0 ? String(customCount) : "",
-    done: true,
+    status: customCount > 0 ? String(customCount) : ui("build.optional"),
+    done: false,
+    optional: true,
     body: <FeaturesStep />,
   });
   const forcedCount = countOverrides(ch.overrides);
   steps.push({
     id: "freeEdit",
     title: "build.freeEdit",
-    status: forcedCount > 0 ? ui("freeEdit.count", { n: forcedCount }) : "",
-    done: true,
+    status: forcedCount > 0 ? ui("freeEdit.count", { n: forcedCount }) : ui("build.optional"),
+    done: false,
+    optional: true,
     body: <FreeEditStep />,
   });
   return steps;
@@ -282,8 +287,11 @@ export function BuildTab() {
                     aria-controls={`step-${step.id}`}
                     onClick={() => choose(isOpen ? undefined : step.id)}
                   >
-                    <span class={`step-mark${step.done ? " done" : ""}`} aria-hidden="true">
-                      {step.done ? "✓" : i + 1}
+                    <span
+                      class={`step-mark${step.done ? " done" : ""}${step.optional ? " optional" : ""}`}
+                      aria-hidden="true"
+                    >
+                      {step.done ? "✓" : step.optional ? "+" : i + 1}
                     </span>
                     <span class="step-name">{ui(step.title)}</span>
                     {step.status && <span class="step-status">{step.status}</span>}

@@ -8,11 +8,12 @@ const close = () => {
 };
 
 /** A round button that opens the dice and the roll history; shown on a phone only. */
-export function DiceButton() {
+export function DiceButton({ inHead }: { inHead?: boolean }) {
   return (
     <button
       type="button"
-      class="dice-fab"
+      class={inHead ? "dice-head" : "dice-fab"}
+      title={ui("play.dice")}
       aria-label={ui("play.dice")}
       onClick={() => {
         diceOpen.value = true;

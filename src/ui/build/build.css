@@ -126,6 +126,36 @@
   color: var(--accent-contrast);
 }
 
+/* A step nobody has to do: a quiet mark, neither a number to get through nor a check. */
+.step-mark.optional {
+  border-style: dashed;
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.subclass-later {
+  margin: 0 0 0.75rem;
+}
+
+/* Which rules the character follows: a small label, the same wherever it is shown. */
+.edition-tag {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+p.edition-current {
+  margin: 0 0 0.75rem;
+}
+
 .step-name {
   flex: 1 1 auto;
   min-width: 0;

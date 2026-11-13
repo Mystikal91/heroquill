@@ -252,6 +252,32 @@ output.death-status {
   grid-column: span 6;
 }
 
+/* The character's own panel: the number, Damage and Heal in one row; the rest smaller under it. */
+.hp-apply {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hp-apply input {
+  min-width: 0;
+  height: 100%;
+  text-align: center;
+}
+
+.play .hp-apply button:not(.pip-btn):not(.info-btn):not(.link) {
+  min-width: 0;
+  padding-inline: 0.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.play .hp-more > button:not(.pip-btn):not(.info-btn):not(.link) {
+  min-height: 2.5rem;
+  font-size: 0.78rem;
+}
+
 /* The name of the button on one line and the factor with the result under it, on one line too. */
 .damage-kind small {
   display: block;
