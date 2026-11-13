@@ -1,5 +1,34 @@
 import { describe, expect, it } from "vitest";
-import { choiceOrigin } from "./choiceOrigin";
+import { choiceOrigin, originsOf } from "./choiceOrigin";
+
+describe("originsOf", () => {
+  const owned = new Map<string, { kind: string; effects?: unknown[]; data?: { class?: string } }>([
+    ["p:species/elf", { kind: "species", effects: [{ type: "trait", id: "p:trait/keen" }] }],
+    ["p:trait/keen", { kind: "trait" }],
+    ["p:class/fighter", { kind: "class", effects: [{ type: "trait", id: "p:feature/style" }] }],
+    [
+      "p:feature/style",
+      {
+        kind: "feature",
+        effects: [{ type: "choice", grants: "trait", from: ["p:feature/dueling"] }],
+      },
+    ],
+    ["p:feature/dueling", { kind: "feature" }],
+    ["p:feature/mastery", { kind: "feature", data: { class: "p:class/fighter" } }],
+  ]);
+  const origins = originsOf(owned, {
+    species: ["p:species/elf"],
+    background: [],
+    class: ["p:class/fighter"],
+  });
+
+  it("follows what a species or a class grants", () => {
+    expect(choiceOrigin(owned, "p:trait/keen", origins)).toBe("species");
+    expect(choiceOrigin(owned, "p:feature/style", origins)).toBe("class");
+    expect(choiceOrigin(owned, "p:feature/dueling", origins)).toBe("class");
+    expect(choiceOrigin(owned, "p:feature/mastery", origins)).toBe("class");
+  });
+});
 
 const index = new Map<string, { kind: string; parent?: string }>([
   ["p:species/elf", { kind: "species" }],

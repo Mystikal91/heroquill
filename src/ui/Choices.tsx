@@ -2,7 +2,7 @@ import { character, content, sheet, updateCharacter } from "../app/store";
 import type { Content } from "../content/browser";
 import type { PendingChoice } from "../engine/choices";
 import { type UiKey, signed, ui } from "../i18n/ui";
-import { type ChoiceOrigin, choiceOrigin } from "./choiceOrigin";
+import { type ChoiceOrigin, characterOrigins, choiceOrigin } from "./choiceOrigin";
 import { needLabel } from "./needLabel";
 import { RuleInfoButton } from "./rules/EntryDetail";
 import { RulesText } from "./sheet/parts";
@@ -120,8 +120,9 @@ export function Choices({ only }: { only?: ChoiceOrigin }) {
   const ch = character.value;
   if (!c || !s) return null;
 
+  const origins = characterOrigins(c.index, ch);
   const shown = only
-    ? s.choices.filter((choice) => choiceOrigin(c.index, choice.source) === only)
+    ? s.choices.filter((choice) => choiceOrigin(c.index, choice.source, origins) === only)
     : s.choices;
   if (only && shown.length === 0) return null;
   const pending = shown.reduce((sum, choice) => sum + choice.remaining, 0);

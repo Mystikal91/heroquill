@@ -9,7 +9,7 @@ import { AbilityScores } from "../AbilityScores";
 import { Choices } from "../Choices";
 import { SpellPicker } from "../SpellPicker";
 import { Welcome } from "../Welcome";
-import { type ChoiceOrigin, choiceOrigin } from "../choiceOrigin";
+import { type ChoiceOrigin, characterOrigins, choiceOrigin } from "../choiceOrigin";
 import { ClassStep } from "./ClassStep";
 import { FeaturesStep } from "./FeaturesStep";
 import { FreeEditStep } from "./FreeEditStep";
@@ -38,10 +38,11 @@ function buildSteps(): StepInfo[] {
   const needsSubclass = c ? classesNeedingSubclass(ch, c.index).length > 0 : false;
   const pendingChoices = s?.choices.reduce((sum, choice) => sum + choice.remaining, 0) ?? 0;
   // The choices a step asks on the spot count for that step too.
+  const owners = c ? characterOrigins(c.index, ch) : undefined;
   const pendingOf = (origins: ChoiceOrigin[]) =>
     s && c
       ? s.choices
-          .filter((choice) => origins.includes(choiceOrigin(c.index, choice.source)))
+          .filter((choice) => origins.includes(choiceOrigin(c.index, choice.source, owners)))
           .reduce((sum, choice) => sum + choice.remaining, 0)
       : 0;
   const originLeft = pendingOf(["species", "background"]);
