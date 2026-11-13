@@ -27,7 +27,6 @@ export const TOUR_STEPS: readonly TourStep[] = [
   { id: "play", view: "play", target: ".play-head, .hp-readout" },
   { id: "rules", view: "rules", target: ".rules-top" },
   { id: "print", view: "print", target: ".print-toolbar" },
-  { id: "search", target: ".search-button" },
   { id: "menu", target: ".app-menu .popover-button" },
   { id: "packs", view: "packs", target: '[data-tour="aurora"]' },
   {

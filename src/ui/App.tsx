@@ -33,7 +33,6 @@ import { ConfirmDialog, UndoNotice } from "./Notices";
 import { PacksNotice } from "./PacksNotice";
 import { PacksPage } from "./PacksPage";
 import { QuickEditDialog } from "./QuickEdit";
-import { SearchButton } from "./SearchButton";
 import { Sheet } from "./Sheet";
 import { Tabs } from "./Tabs";
 import { Tour } from "./Tour";
@@ -48,6 +47,7 @@ import { PrintView } from "./print/PrintView";
 import { RuleDialog } from "./rules/EntryDetail";
 import { RulesPage } from "./rules/RulesPage";
 import { SpellDialog } from "./spells/SpellInfo";
+import { useSlashSearch } from "./useSlashSearch";
 
 function Screen() {
   switch (view.value) {
@@ -127,8 +127,9 @@ export function App() {
     document.title = heading ? `${heading} · ${appTitle}` : appTitle;
   }, [heading, appTitle]);
 
-  // The character bar is part of the header: under the title on a wide screen, and on a phone
-  // the one row the header is (the title gives way, the menu buttons stay at its end).
+  useSlashSearch();
+
+  // The character bar is part of the header, under the title (a slim row on a phone).
   const withBar = ready && !loadError.value && !isPage(view.value);
 
   return (
@@ -154,7 +155,6 @@ export function App() {
         </div>
         {withBar && <CharacterBar />}
         <div class="app-actions">
-          <SearchButton />
           <AppMenu />
         </div>
       </header>
