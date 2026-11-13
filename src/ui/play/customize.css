@@ -1,7 +1,7 @@
 /* ---- Arranging the panels of Play: a bar for each panel instead of its content ---- */
 
 /* "Customize" takes no row of its own: on a wide screen it ends the strip of quick numbers, on a
-   phone it is under the last panel. */
+   phone it is a picture at the end of the row of the parts. */
 .play .customize-open:not(.pip-btn):not(.info-btn):not(.link) {
   display: inline-flex;
   flex: none;
@@ -22,17 +22,33 @@
   display: none;
 }
 
-.play-foot {
+/* On a phone: a picture at the end of the row of the parts, a box like the one of the numbers. */
+.play-groups-row {
   display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-/* The strip is there: the button under the panels is not needed. */
-@container play (min-width: 42rem) {
-  .play-foot {
-    display: none;
-  }
+.play-groups-row > .play-groups {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+:root[data-style] .play .play-groups-row > .customize-open:not(.pip-btn):not(.info-btn):not(.link) {
+  justify-content: center;
+  width: 2.4rem;
+  min-width: 0;
+  min-height: 2.75rem;
+  margin-top: 0.35rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.play-groups-row .customize-word {
+  display: none;
 }
 
 /* A strip with little room keeps the picture and drops the word (the title still says it). */

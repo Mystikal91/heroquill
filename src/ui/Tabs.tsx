@@ -17,22 +17,29 @@ export function Tabs() {
   const current = view.value;
   const nav = useRef<HTMLElement>(null);
   // The bars that stick below the tabs (sheet, play) start where the tabs end, whatever height
-  // the tabs have in this width and style.
+  // the tabs have in this width and style (`--tabs-height`; `--tabs-bottom` when they are below).
   useEffect(() => {
     const el = nav.current;
     if (!el) return;
     const root = document.documentElement.style;
-    const set = () => root.setProperty("--tabs-height", `${el.offsetHeight}px`);
+    // On a phone the tabs are a bar at the bottom of the window: nothing sticks under them, and
+    // what is fixed to the bottom (the dice button, the notices) and the page end above them.
+    const set = () => {
+      const atBottom = getComputedStyle(el).position === "fixed";
+      root.setProperty("--tabs-height", atBottom ? "0px" : `${el.offsetHeight}px`);
+      root.setProperty("--tabs-bottom", atBottom ? `${el.offsetHeight}px` : "0px");
+    };
     set();
     const observer = new ResizeObserver(set);
     observer.observe(el);
     return () => {
       observer.disconnect();
       root.removeProperty("--tabs-height");
+      root.removeProperty("--tabs-bottom");
     };
   }, []);
   return (
-    <nav class="tabs no-print" aria-label={ui("tab.label")} ref={nav}>
+    <nav class="tabs main-tabs no-print" aria-label={ui("tab.label")} ref={nav}>
       {TABS.map((tab) => (
         <button
           type="button"

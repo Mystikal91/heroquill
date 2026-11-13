@@ -893,7 +893,7 @@ fieldset.segmented {
 .play .dice-fab:not(.pip-btn):not(.info-btn):not(.link) {
   position: fixed;
   right: 1.2rem;
-  bottom: 1.2rem;
+  bottom: calc(1.2rem + var(--tabs-bottom, 0px));
   z-index: 19;
   display: grid;
   place-items: center;
@@ -1093,7 +1093,7 @@ fieldset.segmented {
 
 .roll-toast {
   position: fixed;
-  inset: auto 50% 1rem auto;
+  inset: auto 50% calc(1rem + var(--tabs-bottom, 0px)) auto;
   z-index: 60;
   margin: 0;
   overflow: visible;

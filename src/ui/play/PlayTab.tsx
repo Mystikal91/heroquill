@@ -263,7 +263,10 @@ export function PlayTab() {
           <RageStrip />
           <BeastStrip />
           <StatusBar />
-          <GroupTabs groups={groups} />
+          <div class="play-groups-row">
+            <GroupTabs groups={groups} />
+            {!arranging && <CustomizeButton />}
+          </div>
           {(open === "combat" || open === "checks") && (
             <div class="head-mode">
               <ModePicker />
@@ -342,11 +345,6 @@ export function PlayTab() {
             }
             onShowAll={() => setPlayLayout({ ...layout, hidden: [] })}
           />
-        )}
-        {!arranging && (
-          <div class="play-foot">
-            <CustomizeButton />
-          </div>
         )}
         <DiceButton />
         <DiceDrawer />

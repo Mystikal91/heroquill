@@ -127,6 +127,10 @@ export function App() {
     document.title = heading ? `${heading} · ${appTitle}` : appTitle;
   }, [heading, appTitle]);
 
+  // The character bar is part of the header: under the title on a wide screen, and on a phone
+  // the one row the header is (the title gives way, the menu buttons stay at its end).
+  const withBar = ready && !loadError.value && !isPage(view.value);
+
   return (
     <main class="shell">
       <button
@@ -136,7 +140,7 @@ export function App() {
       >
         {ui("app.skip")}
       </button>
-      <header class="app-header no-print">
+      <header class="app-header no-print" data-bar={withBar || undefined}>
         <div class="app-title">
           <h1>
             <button type="button" class="title-link" onClick={() => showView("about")}>
@@ -148,6 +152,7 @@ export function App() {
             <QuillIcon />
           </div>
         </div>
+        {withBar && <CharacterBar />}
         <div class="app-actions">
           <SearchButton />
           <AppMenu />
@@ -162,7 +167,6 @@ export function App() {
           {!isPage(view.value) && (
             <>
               <PacksNotice />
-              <CharacterBar />
               <Tabs />
             </>
           )}

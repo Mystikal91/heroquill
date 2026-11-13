@@ -194,6 +194,126 @@
   }
 }
 
+/* ---- The character bar in the header: under the title, the whole width ---- */
+
+.app-header[data-bar] {
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.app-header > .bar {
+  order: 3;
+  flex: 1 1 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.bar-new-sign {
+  display: none;
+}
+
+/*
+ * ---- A phone: the header is one row, and the tabs are a bar at the bottom ----
+ * The title gives way to the character (the welcome card and the pages still show it), the
+ * frame of the bar goes, "New" is a plus sign. The tabs leave the top, where the bars of the
+ * sheet and of the play stick, and sit under the thumb.
+ */
+@media (max-width: 42rem) {
+  .app-header[data-bar] {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .app-header[data-bar] > .app-title {
+    display: none;
+  }
+
+  .app-header[data-bar] > .app-actions {
+    gap: 0.35rem;
+  }
+
+  :root[data-style] .app-header > .card.bar {
+    order: 0;
+    flex: 1 1 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    clip-path: none;
+  }
+
+  :root[data-style] .app-header > .card.bar::before,
+  :root[data-style] .app-header > .card.bar::after {
+    content: none;
+  }
+
+  /* Only a save that failed is worth a line here. */
+  .app-header > .bar .bar-head {
+    display: none;
+  }
+
+  .app-header > .bar .bar-head:has(.status-failed) {
+    display: block;
+  }
+
+  .app-header > .bar .bar-head:has(.status-failed) label {
+    display: none;
+  }
+
+  .app-header > .bar .bar-row {
+    gap: 0.35rem;
+  }
+
+  .app-header > .bar .bar-new {
+    min-width: 2.75rem;
+    padding: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .bar-new-sign {
+    display: inline;
+  }
+
+  .bar-new-word {
+    display: none;
+  }
+
+  /* Only the tabs of the app: the About page has tabs of its own, which stay where they are. */
+  .main-tabs,
+  :root[data-style] .main-tabs {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 40;
+    margin: 0;
+    padding: 0 0.25rem env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid var(--border);
+    border-bottom: 0;
+    background: var(--surface);
+    box-shadow: 0 -4px 14px rgb(0 0 0 / 0.12);
+  }
+
+  .main-tabs .tab,
+  :root[data-style] .main-tabs .tab {
+    padding: 0.4rem 0.1rem 0.45rem;
+    border-top: 3px solid transparent;
+    border-bottom: 0;
+  }
+
+  .main-tabs .tab.active,
+  :root[data-style] .main-tabs .tab.active {
+    border-top-color: var(--accent);
+  }
+
+  /* The page ends above the bar. */
+  .shell {
+    padding-bottom: calc(1rem + var(--tabs-bottom, 0px));
+  }
+}
+
 /* ---- Build: a strip with the numbers where the summary would be far away ---- */
 
 .summary-strip {
@@ -257,7 +377,7 @@
 .update-notice {
   position: fixed;
   right: 0.75rem;
-  bottom: 0.75rem;
+  bottom: calc(0.75rem + var(--tabs-bottom, 0px));
   left: 0.75rem;
   z-index: 50;
   display: grid;
@@ -287,7 +407,7 @@
 .install-notice {
   position: fixed;
   right: 0.75rem;
-  bottom: 0.75rem;
+  bottom: calc(0.75rem + var(--tabs-bottom, 0px));
   left: 0.75rem;
   z-index: 50;
   display: grid;

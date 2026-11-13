@@ -61,8 +61,18 @@ export function CharacterBar() {
             </option>
           ))}
         </select>
-        <button type="button" class="bar-new" onClick={() => void startNewCharacter()}>
-          {ui("bar.new")}
+        <button
+          type="button"
+          class="bar-new"
+          aria-label={ui("bar.new")}
+          title={ui("bar.new")}
+          onClick={() => void startNewCharacter()}
+        >
+          {/* A phone has room for the sign only. */}
+          <span class="bar-new-sign" aria-hidden="true">
+            +
+          </span>
+          <span class="bar-new-word">{ui("bar.new")}</span>
         </button>
         <Popover label={<span aria-hidden="true">⋯</span>} title={ui("bar.more")}>
           <ul class="menu-list">
