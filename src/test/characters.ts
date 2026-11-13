@@ -1,5 +1,5 @@
 import { type Character, createCharacter } from "../engine/character";
-import { deriveSheet } from "../engine/derive";
+import { type PackIndex, deriveSheet } from "../engine/derive";
 import type { SpellPick } from "../engine/spells";
 import { srd51Index as index } from "./srd51";
 
@@ -48,11 +48,14 @@ export function build(cls: string, level: number, species: string, subclass = tr
   return c;
 }
 
-/** Fills every open choice and spell pick with the first valid options, as a person would. */
-export function complete(c: Character): Character {
+/**
+ * Fills every open choice and spell pick with the first valid options, as a person would. The
+ * index is the 2014 SRD's unless another one is given (the 2024 characters of the print check).
+ */
+export function complete(c: Character, rules: PackIndex = index): Character {
   const fill = (pick: SpellPick | undefined) => (pick ? pick.pool.slice(0, pick.allowed) : []);
   for (let pass = 0; pass < 6; pass++) {
-    const sheet = deriveSheet(c, index);
+    const sheet = deriveSheet(c, rules);
     let changed = false;
     for (const choice of sheet.choices) {
       if (choice.remaining <= 0) continue;

@@ -57,6 +57,22 @@ jobs:
         env:
           AURORA_CORPUS: ${{ runner.temp }}/aurora
 
+  # The printed sheet in a real Chrome: the pages of each test character, and no block cut in two.
+  # See scripts/print-check/README.md. It does not hold back the deploy (yet): see the note there.
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:print
+        env:
+          CHROME: /usr/bin/google-chrome
+
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: [build, corpus]
