@@ -21,7 +21,8 @@ export interface ThemeSettings {
   scheme: Scheme;
 }
 
-export const DEFAULT_THEME: ThemeSettings = { palette: "notte", scheme: "auto" };
+/** A new person starts with Night and gold in its dark look, the one the app is drawn for. */
+export const DEFAULT_THEME: ThemeSettings = { palette: "notte", scheme: "dark" };
 
 /** The look the app had before there were colour sets: whoever saved a choice then keeps it. */
 export const CLASSIC_PALETTE: PaletteName = "classico";
@@ -35,8 +36,12 @@ export function parseTheme(raw: string | null): ThemeSettings {
   try {
     const saved = JSON.parse(raw ?? "{}") as Record<string, unknown> | null;
     if (!saved || typeof saved !== "object") return DEFAULT_THEME;
+    // A saved "auto" is kept: it cannot be told from a choice (the app saved it for everyone
+    // while it was the default), so only who has nothing saved gets the dark look.
     const scheme =
-      saved.scheme === "light" || saved.scheme === "dark" ? saved.scheme : DEFAULT_THEME.scheme;
+      saved.scheme === "light" || saved.scheme === "dark" || saved.scheme === "auto"
+        ? saved.scheme
+        : DEFAULT_THEME.scheme;
     // A choice saved before the colour sets (it has a style, no set) keeps the look it had.
     const before = !("palette" in saved) && ("style" in saved || "scheme" in saved);
     return {

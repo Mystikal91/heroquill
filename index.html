@@ -19,7 +19,8 @@
         var before = !("palette" in saved) && ("style" in saved || "scheme" in saved);
         root.dataset.palette =
           palettes.indexOf(saved.palette) >= 0 ? saved.palette : before ? "classico" : "notte";
-        if (saved.scheme === "light" || saved.scheme === "dark") root.dataset.theme = saved.scheme;
+        // Dark unless the person chose the light look or to follow the device ("auto": no attribute).
+        if (saved.scheme !== "auto") root.dataset.theme = saved.scheme === "light" ? "light" : "dark";
       } catch (e) {}
     </script>
   </head>

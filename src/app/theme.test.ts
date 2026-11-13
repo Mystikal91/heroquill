@@ -10,6 +10,11 @@ describe("parseTheme", () => {
     expect(parseTheme(JSON.stringify({ palette: "neon", scheme: 3 }))).toEqual(DEFAULT_THEME);
   });
 
+  it("starts dark, and keeps a saved choice to follow the device", () => {
+    expect(parseTheme(null)).toEqual({ palette: "notte", scheme: "dark" });
+    expect(parseTheme(JSON.stringify({ palette: "notte", scheme: "auto" })).scheme).toBe("auto");
+  });
+
   it("keeps valid saved values", () => {
     expect(parseTheme(JSON.stringify({ palette: "foresta", scheme: "dark" }))).toEqual({
       palette: "foresta",

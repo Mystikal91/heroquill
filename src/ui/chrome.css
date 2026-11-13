@@ -308,9 +308,23 @@
     border-top-color: var(--accent);
   }
 
-  /* The page ends above the bar. */
+  /* The page ends above the bar, and keeps less of the width for its margins. */
   .shell {
-    padding-bottom: calc(1rem + var(--tabs-bottom, 0px));
+    padding: 0.75rem 0.6rem calc(1rem + var(--tabs-bottom, 0px));
+  }
+
+  /* One line around a panel, not two, and smaller cut corners: the width goes to the content. */
+  :root[data-style="fantasy"] :is(.card, .stat) {
+    --n: 9px;
+    box-shadow: none;
+  }
+
+  :root[data-style="fantasy"] .stat {
+    --n: 6px;
+  }
+
+  .card {
+    padding: 0.75rem;
   }
 }
 
