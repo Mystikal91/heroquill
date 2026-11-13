@@ -118,26 +118,7 @@ export function RulesPage() {
           {loading ? (
             <p class="muted">{ui("rules.loading")}</p>
           ) : !searching && !rulesKind.value ? (
-            <>
-              <p class="muted">{ui("rules.hint")}</p>
-              {/* The way in: each kind with how many entries it has. */}
-              <ul class="rules-start">
-                {present.map((k) => (
-                  <li key={k}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        showRulesKind(k);
-                        setShown(STEP);
-                      }}
-                    >
-                      <b>{ui(`search.kind.${k}` as UiKey)}</b>
-                      <small>{browse(c, k, ruleset).length}</small>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
+            <p class="muted">{ui("rules.hint")}</p>
           ) : hits.length === 0 ? (
             <p class="muted">{ui("search.none")}</p>
           ) : (

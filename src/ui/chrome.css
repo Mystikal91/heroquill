@@ -1279,31 +1279,6 @@ input:checked + .equip-tag {
   font-weight: 700;
 }
 
-/* The way in to the rules: every kind with how many entries it has. */
-.rules-start {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-  gap: 0.5rem;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.rules-start button {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
-  width: 100%;
-  min-height: 3rem;
-  padding: 0.5rem 0.75rem;
-  text-align: left;
-}
-
-.rules-start small {
-  color: var(--muted);
-}
-
 .rules-kinds {
   min-width: 0;
   margin: 0;

@@ -255,14 +255,19 @@ output.death-status {
 /* The character's own panel: the number, Damage and Heal in one row; the rest smaller under it. */
 .hp-apply {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
+  /* The same three equal columns and height as the row under it, so the edges line up. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.hp-apply input {
+.hp-apply input,
+.hp-controls .hp-apply input {
   min-width: 0;
-  height: 100%;
+  min-height: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.3rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -273,9 +278,11 @@ output.death-status {
   letter-spacing: 0.02em;
 }
 
+.play .hp-apply button:not(.pip-btn):not(.info-btn):not(.link),
 .play .hp-more > button:not(.pip-btn):not(.info-btn):not(.link) {
-  min-height: 2.5rem;
-  font-size: 0.78rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 0.85rem;
 }
 
 /* The name of the button on one line and the factor with the result under it, on one line too. */
