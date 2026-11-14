@@ -1,15 +1,13 @@
 import { useRef, useState } from "preact/hooks";
-import { createHomebrewPack, openHomebrewPack } from "../app/homebrew";
+import { showHomebrewList } from "../app/homebrew";
 import { language } from "../app/language";
 import { leavePage } from "../app/navigation";
 import { content } from "../app/store";
 import { offerUndo } from "../app/undo";
 import {
   addUserPack,
-  exportPack,
   importAuroraFiles,
   importAuroraUrl,
-  importPackFile,
   importProgress,
   importReport,
   isStale,
@@ -57,15 +55,14 @@ function incompleteByKind(record: UserPackRecord): [string, string[]][] {
 
 /** The content packs the user added: what they hold, where they came from, and how to remove them. */
 export function PacksPage() {
-  const fileInput = useRef<HTMLInputElement>(null);
   const auroraInput = useRef<HTMLInputElement>(null);
   const [address, setAddress] = useState("");
-  const [brewName, setBrewName] = useState("");
   // The pack being made again when its address is not known: typed or chosen from files.
   const [target, setTarget] = useState<string | undefined>(undefined);
   const progress = importProgress.value;
   const report = importReport.value;
-  const packs = userPacks.value;
+  // The homebrew packs are in the Homebrew editor: this page is for what comes from other files.
+  const packs = userPacks.value.filter((p) => p.origin !== "homebrew");
   const error = packError.value;
   // The built-in content is spread over several files: count entries per pack id.
   const totals = new Map<string, number>();
@@ -102,6 +99,12 @@ export function PacksPage() {
       <h2>{ui("packs.title")}</h2>
       <p>{ui("packs.intro")}</p>
       <p class="note">{ui("packs.rights")}</p>
+      <p>
+        {ui("packs.homebrewHint")}{" "}
+        <button type="button" class="link" onClick={showHomebrewList}>
+          {ui("packs.openHomebrew")}
+        </button>
+      </p>
 
       <h3>{ui("packs.builtIn")}</h3>
       <ul class="plain">
@@ -171,16 +174,6 @@ export function PacksPage() {
                 {record.source?.files && <div class="muted">{record.source.files.join(", ")}</div>}
               </div>
               <div class="pack-actions">
-                {record.origin === "homebrew" && (
-                  <>
-                    <button type="button" onClick={() => openHomebrewPack(record.id)}>
-                      {ui("hb.edit")}
-                    </button>
-                    <button type="button" onClick={() => exportPack(record)}>
-                      {ui("bar.export")}
-                    </button>
-                  </>
-                )}
                 {record.origin === "personal" && (
                   <button
                     type="button"
@@ -248,43 +241,19 @@ export function PacksPage() {
         </div>
       )}
 
-      <h3>{ui("hb.newPack")}</h3>
-      <label class="check">
-        <input
-          type="checkbox"
-          checked={keepEditions.value}
-          onChange={(e) => {
-            keepEditions.value = e.currentTarget.checked;
-          }}
-        />
-        <span>{ui("packs.keepEditions")}</span>
-      </label>
-      <form
-        class="pack-address"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void createHomebrewPack(brewName);
-          setBrewName("");
-        }}
-      >
-        <input
-          type="text"
-          value={brewName}
-          placeholder={ui("hb.packName")}
-          aria-label={ui("hb.packName")}
-          onInput={(e) => setBrewName(e.currentTarget.value)}
-        />
-        <button type="submit" class="primary">
-          {ui("hb.create")}
-        </button>
-      </form>
-
       <h3>{ui("packs.add")}</h3>
       <div data-tour="aurora">
+        <label class="check">
+          <input
+            type="checkbox"
+            checked={keepEditions.value}
+            onChange={(e) => {
+              keepEditions.value = e.currentTarget.checked;
+            }}
+          />
+          <span>{ui("packs.keepEditions")}</span>
+        </label>
         <div class="pack-actions">
-          <button type="button" onClick={() => fileInput.current?.click()}>
-            {ui("packs.import")}
-          </button>
           <button type="button" class="primary" onClick={() => chooseFiles()}>
             {ui("packs.importAurora")}
           </button>
@@ -299,17 +268,6 @@ export function PacksPage() {
               e.currentTarget.value = "";
               if (files.length > 0) void importAuroraFiles(files, target);
               setTarget(undefined);
-            }}
-          />
-          <input
-            ref={fileInput}
-            type="file"
-            accept=".json,application/json"
-            hidden
-            onChange={(e) => {
-              const file = e.currentTarget.files?.[0];
-              e.currentTarget.value = "";
-              if (file) void importPackFile(file);
             }}
           />
         </div>

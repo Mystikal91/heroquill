@@ -1,15 +1,25 @@
-import { useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import {
+  closeHomebrewPack,
+  createHomebrewPack,
   deleteHomebrewEntry,
   editingPack,
+  openHomebrewPack,
   renameHomebrewPack,
   saveHomebrewEntry,
   takeWaitingDraft,
 } from "../app/homebrew";
-import { showView } from "../app/navigation";
+import { leavePage } from "../app/navigation";
 import { content } from "../app/store";
 import { offerUndo } from "../app/undo";
-import { addUserPack, exportPack } from "../app/userPacks";
+import {
+  addUserPack,
+  exportPack,
+  importPackFile,
+  packError,
+  removeUserPack,
+  userPacks,
+} from "../app/userPacks";
 import {
   ABILITY_IDS,
   CASTING_KINDS,
@@ -633,7 +643,104 @@ function EntryForm({
   );
 }
 
-/** The editor for one homebrew pack: its entries, and a form to make or change them. */
+/** What the page shows when no pack is open: the homebrew packs, to open, export or remove, and a way to add one. */
+function PackList() {
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [name, setName] = useState("");
+  const packs = userPacks.value.filter((p) => p.origin === "homebrew");
+  const error = packError.value;
+
+  const remove = (record: (typeof packs)[number]) => {
+    void removeUserPack(record.id).then(() =>
+      offerUndo(ui("undo.packRemoved", { name: record.name }), () => addUserPack(record)),
+    );
+  };
+
+  return (
+    <article class="card packs">
+      <button type="button" class="secondary" onClick={leavePage}>
+        {ui("credits.back")}
+      </button>
+      <h2>{ui("hb.title")}</h2>
+      <p>{ui("hb.intro")}</p>
+
+      <h3>{ui("hb.packs")}</h3>
+      {packs.length === 0 ? (
+        <p class="muted">{ui("hb.noPacks")}</p>
+      ) : (
+        <ul class="plain pack-list">
+          {packs.map((record) => (
+            <li key={record.id} class="pack">
+              <div>
+                <b>{record.name}</b>
+                <div class="muted">
+                  {editableEntries(record).length} {ui("packs.entries")}
+                </div>
+              </div>
+              <div class="pack-actions">
+                <button type="button" class="primary" onClick={() => openHomebrewPack(record.id)}>
+                  {ui("hb.edit")}
+                </button>
+                <button type="button" onClick={() => exportPack(record)}>
+                  {ui("bar.export")}
+                </button>
+                <button type="button" class="danger" onClick={() => remove(record)}>
+                  {ui("packs.remove")}
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h3>{ui("hb.newPack")}</h3>
+      <form
+        class="pack-address"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void createHomebrewPack(name);
+          setName("");
+        }}
+      >
+        <input
+          type="text"
+          value={name}
+          placeholder={ui("hb.packName")}
+          aria-label={ui("hb.packName")}
+          onInput={(e) => setName(e.currentTarget.value)}
+        />
+        <button type="submit" class="primary">
+          {ui("hb.create")}
+        </button>
+      </form>
+
+      <div class="pack-actions">
+        <button type="button" onClick={() => fileInput.current?.click()}>
+          {ui("hb.addFile")}
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept=".json,application/json"
+          hidden
+          onChange={(e) => {
+            const file = e.currentTarget.files?.[0];
+            e.currentTarget.value = "";
+            if (file) void importPackFile(file);
+          }}
+        />
+      </div>
+      <p class="muted">{ui("hb.importHint")}</p>
+      {(error === "exists" || error === "invalid") && (
+        <p class="note" role="alert">
+          {ui(error === "exists" ? "packs.exists" : "packs.invalid")}
+        </p>
+      )}
+    </article>
+  );
+}
+
+/** The homebrew page: the list of packs, and for the one that is open its entries and a form to make or change them. */
 export function HomebrewPage() {
   // A copy of a rules entry waits here, to be saved as a new one.
   const [open, setOpen] = useState<{ draft: Draft; editing?: string } | undefined>(() => {
@@ -642,16 +749,7 @@ export function HomebrewPage() {
   });
   const [kind, setKind] = useState<HomebrewKind>("spell");
   const record = editingPack();
-  if (!record) {
-    return (
-      <article class="card packs">
-        <button type="button" class="secondary" onClick={() => showView("packs")}>
-          {ui("credits.back")}
-        </button>
-        <p class="muted">{ui("hb.missing")}</p>
-      </article>
-    );
-  }
+  if (!record) return <PackList />;
   const entries = editableEntries(record);
   const edit = (id: string) => {
     const entry = record.pack.entries.find((e) => e.id === id);
@@ -667,7 +765,7 @@ export function HomebrewPage() {
 
   return (
     <article class="card packs">
-      <button type="button" class="secondary" onClick={() => showView("packs")}>
+      <button type="button" class="secondary" onClick={closeHomebrewPack}>
         {ui("credits.back")}
       </button>
       <h2>{ui("hb.title")}</h2>

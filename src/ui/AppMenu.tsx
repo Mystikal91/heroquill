@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { showHomebrewList } from "../app/homebrew";
 import { installApp, installable } from "../app/install";
 import { type View, showView } from "../app/navigation";
 import { startTour } from "../app/tour";
@@ -33,7 +34,10 @@ export function AppMenu() {
       <ul class="menu-list">
         {PAGES.map((page) => (
           <li key={page.view}>
-            <button type="button" onClick={() => showView(page.view)}>
+            <button
+              type="button"
+              onClick={() => (page.view === "homebrew" ? showHomebrewList() : showView(page.view))}
+            >
               <page.icon />
               <span>{ui(page.label)}</span>
             </button>

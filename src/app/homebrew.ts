@@ -25,6 +25,17 @@ export function openHomebrewPack(id: string): void {
   showView("homebrew");
 }
 
+/** Back to the list of homebrew packs, which is what the editor page shows when no pack is open. */
+export function closeHomebrewPack(): void {
+  editingPackId.value = undefined;
+}
+
+/** Opens the homebrew page on its list of packs, from wherever it was last left. */
+export function showHomebrewList(): void {
+  closeHomebrewPack();
+  showView("homebrew");
+}
+
 /** A form waiting to be opened in the editor: the copy of a rules entry. Taken by the editor page. */
 let waitingDraft: Draft | undefined;
 
