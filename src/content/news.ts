@@ -19,7 +19,7 @@ export interface ChangelogEntry {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     version: "1.30 beta",
-    date: "2026-11-12",
+    date: "2026-11-14",
     notes: [
       {
         en: "The 2024 rules (SRD 5.2.1) are here, next to the 2014 ones: when you make a character the app asks which rules it follows. All the classes and subclasses, species, backgrounds with their origin feat, feats, spells, equipment (with mounts, vehicles and poisons), magic items, monsters and alignments of the SRD, with the official translations in the five languages. Wild Shape works as the 2024 book says, and Weapon Mastery, Divine and Primal Order, Metamagic, Eldritch Invocations (the repeatable ones can be taken again) and Heroic Inspiration are in Play.",
@@ -1353,11 +1353,11 @@ export const ROADMAP: RoadmapItem[] = [
   {
     id: "translations",
     text: {
-      en: "The remaining translations: the options of some 2024 traits (draconic ancestors, lineages), a few tables and item names. Automatic translation fills them meanwhile.",
-      it: "Le traduzioni che mancano: le opzioni di alcuni tratti 2024 (antenati draconici, lignaggi), qualche tabella e nome di oggetto. Nel frattempo la traduzione automatica le riempie.",
-      fr: "Les traductions manquantes : les options de certains traits 2024 (ancêtres draconiques, lignages), quelques tables et noms d'objets. La traduction automatique les comble en attendant.",
-      de: "Die fehlenden Übersetzungen: die Optionen einiger Merkmale von 2024 (Drachenahnen, Abstammungen), ein paar Tabellen und Gegenstandsnamen. Die automatische Übersetzung füllt sie in der Zwischenzeit.",
-      es: "Las traducciones que faltan: las opciones de algunos rasgos de 2024 (ancestros dracónicos, linajes), algunas tablas y nombres de objetos. La traducción automática las cubre mientras tanto.",
+      en: "Checking the translations: the 2024 texts in Italian, French, German and Spanish were written in part by hand and need to be read against the books, and some 2014 texts (about 78 class features, the descriptions of the magic item variants) are still English. Automatic translation fills them meanwhile.",
+      it: "Il controllo delle traduzioni: i testi 2024 in italiano, francese, tedesco e spagnolo sono stati scritti in parte a mano e vanno riletti sui libri, e alcuni testi 2014 (circa 78 privilegi di classe, le descrizioni delle varianti degli oggetti magici) sono ancora in inglese. Nel frattempo la traduzione automatica li riempie.",
+      fr: "La relecture des traductions : les textes 2024 en italien, français, allemand et espagnol ont été écrits en partie à la main et doivent être relus sur les livres, et quelques textes 2014 (environ 78 aptitudes de classe, les descriptions des variantes d'objets magiques) sont encore en anglais. La traduction automatique les comble en attendant.",
+      de: "Die Prüfung der Übersetzungen: Die Texte von 2024 auf Italienisch, Französisch, Deutsch und Spanisch wurden zum Teil von Hand geschrieben und müssen noch an den Büchern gelesen werden, und einige Texte von 2014 (etwa 78 Klassenmerkmale, die Beschreibungen der Varianten magischer Gegenstände) sind noch Englisch. Die automatische Übersetzung füllt sie in der Zwischenzeit.",
+      es: "La revisión de las traducciones: los textos de 2024 en italiano, francés, alemán y español se escribieron en parte a mano y hay que leerlos con los libros, y algunos textos de 2014 (unos 78 rasgos de clase, las descripciones de las variantes de objetos mágicos) siguen en inglés. La traducción automática las cubre mientras tanto.",
     },
   },
   {

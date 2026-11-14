@@ -96,7 +96,7 @@ and Aurora Legacy that you already own.
 **Languages and look**
 
 - English, Italian, French, German and Spanish, with the **official SRD translations** (about 94%
-  of the 5.1 rules texts; the 5.2.1 ones are imported the same way). Missing texts show in English; translations are managed with Weblate (see
+  of the 5.1 rules texts; the 5.2.1 texts are complete in all four languages, partly written by hand and still to be read against the books). Missing texts show in English; translations are managed with Weblate (see
   [docs/TRANSLATING.md](docs/TRANSLATING.md)).
 - **Automatic translation** (footer): with your own DeepL key, texts that have no translation yet
   (and the English content you imported) are translated as you read them (the casting time and the
