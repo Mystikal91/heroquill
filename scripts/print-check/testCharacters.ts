@@ -31,6 +31,12 @@ function made2024(cls: string, level: number): Character {
   c.choices.background = "srd52:background/sage";
   c.classes = [{ classId, level, ...(level >= 3 && sub && { subclassId: sub.id }) }];
   c.abilityBase = { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 };
+  // Arms and armor, so that the weapons panel has rows (and, for a class with weapon mastery, a mastery).
+  c.inventory = [
+    { itemId: "srd52:item/battleaxe", quantity: 1, equipped: true },
+    { itemId: "srd52:item/longsword", quantity: 1, equipped: true },
+    { itemId: "srd52:item/chain-mail", quantity: 1, equipped: true },
+  ];
   return complete(c, bothIndex as PackIndex);
 }
 

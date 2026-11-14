@@ -1389,12 +1389,13 @@
   break-inside: avoid;
 }
 
-/* The panels that left the front for the page that follows (see fitFront). */
-.p-front[data-spill="1"] [data-panel="uses"],
+/* The panels that left the front for the page that follows (see fitFront): the class features first,
+   since the pages of features say them all again, then the limited uses, then the traits and feats. */
+.p-front[data-spill="1"] [data-panel="features"],
+.p-front[data-spill="2"] [data-panel="features"],
+.p-front[data-spill="3"] [data-panel="features"],
 .p-front[data-spill="2"] [data-panel="uses"],
 .p-front[data-spill="3"] [data-panel="uses"],
-.p-front[data-spill="2"] [data-panel="traits"],
-.p-front[data-spill="3"] [data-panel="traits"],
-.p-front[data-spill="3"] [data-panel="features"] {
+.p-front[data-spill="3"] [data-panel="traits"] {
   display: none;
 }

@@ -286,6 +286,15 @@ async function main() {
         `${key}: ${pages.length} pages, not in the baseline (ACCEPT=1 adds it)`,
       );
 
+    // Each edition has its own front page: the words that tell them apart are on page 1 of the right one.
+    const first = pages[0] ?? "";
+    const only2024 = ["heroicinspiration", "mastery", "armortraining"];
+    if (name.startsWith("2024"))
+      for (const word of only2024)
+        if (!first.includes(word)) problem(`${key}: the 2024 front page lacks "${word}"`);
+    if (name.startsWith("2014"))
+      for (const word of ["heroicinspiration", "armortraining"])
+        if (first.includes(word)) problem(`${key}: the 2014 front page has "${word}"`);
     for (const w of found.whole) {
       if (process.env.VERBOSE) console.log(`  ${w.label}`);
       // The page that has most of its lines is where it was meant to be: the others are the spill.

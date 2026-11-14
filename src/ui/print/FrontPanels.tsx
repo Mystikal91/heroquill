@@ -27,35 +27,42 @@ function featureRows(c: Content, cl: ClassLevel): [number, string[]][] {
  * (see `frontSpill`): the species traits and feats, the class features and the limited uses. Each
  * reads what it needs itself, so the front and its continuation draw the same thing.
  */
-export function TraitsPanels() {
+export function TraitsPanels({ featsFirst = false }: { featsFirst?: boolean }) {
   const c = content.value;
   const s = printSheet.value;
   if (!c || !s) return null;
   const name = c.name;
   const feats = s.feats.filter((id) => !s.hiddenFeatures.includes(id));
-  return (
+  const traitsPanel = s.traits.length > 0 && (
+    <section class="p-frame p-panel" data-panel="traits">
+      <h3 class="p-h">{ui("sheet.speciesTraits")}</h3>
+      <ul class="p-names">
+        {s.traits.map((id) => (
+          <li key={id}>{name(id)}</li>
+        ))}
+      </ul>
+    </section>
+  );
+  const featsPanel = feats.length > 0 && (
+    <section class="p-frame p-panel" data-panel="traits">
+      <h3 class="p-h">{ui("sheet.feats")}</h3>
+      <ul class="p-names">
+        {feats.map((id) => (
+          <li key={id}>{name(id)}</li>
+        ))}
+      </ul>
+    </section>
+  );
+  // The 2024 sheet puts the feats first: the background gives one, and it says as much as a species trait.
+  return featsFirst ? (
     <>
-      {s.traits.length > 0 && (
-        <section class="p-frame p-panel">
-          <h3 class="p-h">{ui("sheet.speciesTraits")}</h3>
-          <ul class="p-names">
-            {s.traits.map((id) => (
-              <li key={id}>{name(id)}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {feats.length > 0 && (
-        <section class="p-frame p-panel">
-          <h3 class="p-h">{ui("sheet.feats")}</h3>
-          <ul class="p-names">
-            {feats.map((id) => (
-              <li key={id}>{name(id)}</li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {featsPanel}
+      {traitsPanel}
+    </>
+  ) : (
+    <>
+      {traitsPanel}
+      {featsPanel}
     </>
   );
 }

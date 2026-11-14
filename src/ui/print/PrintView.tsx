@@ -6,13 +6,14 @@ import {
   updatePrintSettings,
 } from "../../app/printSettings";
 import { printsNothing } from "../../app/printSettings.logic";
-import { content, printSheet } from "../../app/store";
+import { character, content, printSheet } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { Cards } from "./CardsGroup";
 import { FeatureText } from "./FeatureText";
 import { FrontMore } from "./FrontMore";
 import { FrontPage } from "./FrontPage";
+import { FrontPage2024 } from "./FrontPage2024";
 import { SpellPages } from "./SpellPages";
 import { StoryPage } from "./StoryPage";
 
@@ -133,7 +134,8 @@ export function PrintView() {
       <div class="paper-scroll">
         <div class="paper">
           {nothing && <p class="no-print">{ui("print.nothing")}</p>}
-          {settings.includeSheet && <FrontPage />}
+          {settings.includeSheet &&
+            (character.value.ruleset === "srd52" ? <FrontPage2024 /> : <FrontPage />)}
           {settings.includeSheet && <FrontMore />}
           {settings.includeStory && <StoryPage />}
           {settings.includeFeatureText && <FeatureText />}

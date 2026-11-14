@@ -36,9 +36,15 @@ KEEP=out npm run test:print         # also keep each PDF in out/ to look at it
 ACCEPT=1 npm run test:print         # write the baseline (after looking at the PDFs)
 ```
 
-**When the front page is too full** even at its densest, panels of its right column leave for a page of their own,
-"Sheet, continued" (`FrontMore`): first the limited uses, then the species traits and feats, then the class
-features (`fitFront`, `frontSpill`). The fitting leaves 9 mm to spare, because the printed page comes out taller than
+**Two models of the front page**: `FrontPage` for the 2014 rules and `FrontPage2024` for the 2024 ones, made of the same
+parts (`frontParts.tsx`) in the order each edition wants. The 2024 one has Heroic Inspiration, the mastery of each weapon beside
+its damage (and the text of each mastery on the pages of features), armor training and the feats before the species traits. The
+spells are not listed on the front: a caster's front has the numbers and the slots, and the spells are on their own pages (the
+list goes back on the front only when the spells are not printed). The check reads the words of each edition on page 1.
+
+**When the front page is too full** even at its densest, panels of its right column leave it: first the class features, then
+the limited uses, then the species traits and feats (`fitFront`, `frontSpill`). They are printed at the top of the pages of
+features, or on a page of their own, "Sheet, continued" (`FrontMore`), when those are not printed. The fitting leaves 9 mm to spare, because the printed page comes out taller than
 the screen shows it: a front that fits on screen by a few millimetres lost its last block to a second page in the
 PDF (this test found it in a level 20 Paladin).
 

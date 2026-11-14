@@ -45,7 +45,7 @@ export const SPILL_STEPS = 3;
 /**
  * Makes the front fit its page: it gets denser (`data-density`), and when the densest is not enough
  * a panel of the right column leaves for the page that follows (`data-spill`, one more panel each
- * time: the limited uses, then the traits and feats, then the class features; print.css hides them).
+ * time: the class features, then the limited uses, then the traits and feats; print.css hides them).
  * A panel leaves only when the front is still more than a few millimetres too full at its densest.
  * Returns what it settled on; the page that follows needs the spill.
  */

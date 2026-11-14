@@ -6,6 +6,7 @@ import { distance } from "../../i18n/units";
 import { SourceTag } from "../SourceTag";
 import { recoveryLabel, resourceLabel } from "../play/ResourceControl";
 import { featureValueLabel } from "../sheet/parts";
+import { SpilledPanels } from "./FrontMore";
 
 /** The full text of species traits and class features, flowing over as many pages as needed. */
 export function FeatureText() {
@@ -14,13 +15,21 @@ export function FeatureText() {
   const ids = s
     ? [...s.traits, ...s.features, ...s.feats].filter((id) => !s.hiddenFeatures.includes(id))
     : [];
-  if (!c || !s || ids.length === 0) return null;
+  // The 2024 rules: what each weapon mastery does is written out, once, with the weapons that have it.
+  const masteries = new Map<string, string[]>();
+  for (const weapon of s?.weaponMasteries ?? []) {
+    const property = (c?.index.get(weapon)?.data as { weapon?: { mastery?: string } } | undefined)
+      ?.weapon?.mastery;
+    if (property) masteries.set(property, [...(masteries.get(property) ?? []), weapon]);
+  }
+  if (!c || !s || (ids.length === 0 && masteries.size === 0)) return null;
   const byEntry = resourcesByEntry(s.resources);
   const breath = breathWeaponOf(s, c.index);
   const ruleset = character.value.ruleset;
   return (
     <section class="p-page">
       <h2 class="p-title">{ui("print.page.features")}</h2>
+      <SpilledPanels />
       <div class="p-flow">
         {ids.map((id) => {
           const activation = activationOf(c.index.get(id));
@@ -67,6 +76,16 @@ export function FeatureText() {
             </article>
           );
         })}
+        {[...masteries.entries()].map(([property, weapons]) => (
+          <article key={property}>
+            <h3>
+              {c.name(property)}
+              <span class="p-tag">{ui("choice.kind.mastery")}</span>
+            </h3>
+            <p>{c.text(property, "desc")}</p>
+            <p class="feature-values">{weapons.map((w) => c.name(w)).join(" · ")}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
