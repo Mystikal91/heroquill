@@ -110,7 +110,7 @@ function SlotBoxes({ slots }: { slots: number[] }) {
   const levels = slots.map((n, i) => ({ level: i + 1, n })).filter((x) => x.n > 0);
   if (levels.length === 0) return null;
   return (
-    <table class="p-slots">
+    <table class="p-slot-table">
       <thead>
         <tr>
           <th>{ui("print.slotLevel")}</th>

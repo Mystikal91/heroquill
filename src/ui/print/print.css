@@ -1046,7 +1046,10 @@
   margin-bottom: 3mm;
 }
 
+/* The title of a level stays with the first spell under it, never alone at the foot of a page. */
 .p-level-title {
+  break-after: avoid;
+  break-inside: avoid;
   margin: 2mm 0 1.5mm;
   padding: 0.6mm 2mm;
   background: var(--p-tint);
@@ -1081,7 +1084,7 @@
 }
 
 .p-spell-table th,
-.p-slots th {
+.p-slot-table th {
   padding: 0.6mm 1.5mm;
   border-bottom: 0.3mm solid var(--p-line);
   color: var(--p-muted);
@@ -1091,12 +1094,12 @@
 }
 
 .p-spell-table td,
-.p-slots td {
+.p-slot-table td {
   padding: 1.2mm 1.5mm;
   border-bottom: 0.2mm solid var(--p-line);
 }
 
-.p-slots {
+.p-slot-table {
   width: 100%;
   border-collapse: collapse;
 }
