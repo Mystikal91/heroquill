@@ -215,12 +215,23 @@ features by class (or subclass) and level (the English data knows a feature by t
 mastery by the rows of the weapons table, monsters by the signature of the stat block (armor class,
 hit points, experience, the six scores) and then entry by entry with a second pass for what the first
 left out. The scripts say what they could not pair; the book's own words are never replaced by a guess.
-What is left English stays English on purpose and goes to Weblate: names of items the book does not
-name in a way that can be paired (a dozen), the traits the data composes from a table (Draconic
-Ancestor, Elemental Affinity, the lineages), the texts of the tables themselves (Wild Shape, Circle of
-the Land; the tables of spells of the four other subclasses are rebuilt from the English rows with the
-book's spell names and headings), the short glosses of the data (abilities, skills, schools) and the
-monster entries that share one block of the book (vampires, were-creatures).
+Whatever the books did not pair (about 1,500 texts: the special traits, bonus actions, reactions and
+legendary actions of the monsters, Wild Shape, the Circle of the Land table, the warlock's spellcasting, the
+magic items that come in three strengths, the traits composed from a table such as Draconic Ancestor and the
+lineages, the short glosses of abilities, skills and schools, and the names of the tool proficiencies) was
+written by hand before 1.30 came out, from the terminology of each translated book: distances in metres, the
+carrying capacity of the mounts in kilograms, spell names read from the language's own `spells.json`. Those texts
+are a translator's work and not the book's own words: **they are to be read once against the books** (the French,
+German and Spanish ones especially). A name that is the same word in the language (Rage, Paladin, Trident, Robe,
+Pony, Tiefling...) is left as it is and still shows as "identical to English" in a count of gaps. The English
+data has a few oddities that the translations copy: the third legendary action of the ancient copper dragon is
+named "Spike (level 5 version)" with the text of the one before it.
+
+The pairing by position had also shifted the names and texts of some equipment (the Amulet had the Rations
+text, the Costume the name of the Cobbler's Tools, the Reliquary the name of the Herbalism Kit, the Ladder and
+the String each had the other's name): they were put back by hand, and when `import_equipment52.py` is run
+again its result has to be compared with them. Do not run the importers in place over the files as they are now:
+the later fill scripts add entries that the first one would drop.
 
 ## Automatic translation of what is missing
 
