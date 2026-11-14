@@ -42,6 +42,10 @@ features (`fitFront`, `frontSpill`). The fitting leaves 9 mm to spare, because t
 the screen shows it: a front that fits on screen by a few millimetres lost its last block to a second page in the
 PDF (this test found it in a level 20 Paladin).
 
+To look at the test characters yourself: `npm run export:print-characters` writes them as a transfer file
+(`.cache/print-check-characters.dndtransfer.json`, 46 characters named like "2014 wizard 20 elf"); open it from the menu of
+the character bar (the three dots) > Import / Export > From a file, then go to the Print tab.
+
 A page count that changes is a decision: look at the PDFs (`KEEP`), then `ACCEPT=1`. `known` in the baseline lists
 what is wrong today and is not fixed yet (a front page that does not fit): it is shown, it does not fail, and
 when one is fixed the check fails until its line is removed (`ACCEPT=1`). A page that does not load is tried three
