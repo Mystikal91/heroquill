@@ -1,5 +1,4 @@
 import { useRef, useState } from "preact/hooks";
-import { showHomebrewList } from "../app/homebrew";
 import { language } from "../app/language";
 import { leavePage } from "../app/navigation";
 import { content } from "../app/store";
@@ -11,7 +10,6 @@ import {
   importProgress,
   importReport,
   isStale,
-  keepEditions,
   packError,
   reimportPack,
   reimportStalePacks,
@@ -99,12 +97,6 @@ export function PacksPage() {
       <h2>{ui("packs.title")}</h2>
       <p>{ui("packs.intro")}</p>
       <p class="note">{ui("packs.rights")}</p>
-      <p>
-        {ui("packs.homebrewHint")}{" "}
-        <button type="button" class="link" onClick={showHomebrewList}>
-          {ui("packs.openHomebrew")}
-        </button>
-      </p>
 
       <h3>{ui("packs.builtIn")}</h3>
       <ul class="plain">
@@ -242,19 +234,10 @@ export function PacksPage() {
       )}
 
       <h3>{ui("packs.add")}</h3>
-      <div data-tour="aurora">
-        <label class="check">
-          <input
-            type="checkbox"
-            checked={keepEditions.value}
-            onChange={(e) => {
-              keepEditions.value = e.currentTarget.checked;
-            }}
-          />
-          <span>{ui("packs.keepEditions")}</span>
-        </label>
+      <div data-tour="aurora" class="pack-add">
+        <p class="pack-add-label">{ui("packs.fromFiles")}</p>
         <div class="pack-actions">
-          <button type="button" class="primary" onClick={() => chooseFiles()}>
+          <button type="button" onClick={() => chooseFiles()}>
             {ui("packs.importAurora")}
           </button>
           <input
@@ -271,6 +254,7 @@ export function PacksPage() {
             }}
           />
         </div>
+        <p class="pack-add-label">{ui("packs.fromAddress")}</p>
         <form
           class="pack-address"
           onSubmit={(e) => {
@@ -289,7 +273,7 @@ export function PacksPage() {
             aria-label={ui("packs.addressLabel")}
             onInput={(e) => setAddress(e.currentTarget.value)}
           />
-          <button type="submit" class="primary" disabled={!address.trim() || Boolean(progress)}>
+          <button type="submit" disabled={!address.trim() || Boolean(progress)}>
             {ui("packs.addressGo")}
           </button>
         </form>

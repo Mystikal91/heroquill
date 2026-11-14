@@ -629,6 +629,18 @@ textarea {
   cursor: pointer;
 }
 
+/* Adding content: a small label, then its buttons, for each way of adding it. */
+.pack-add-label {
+  margin: 0.9rem 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.pack-add-label:first-child {
+  margin-top: 0.3rem;
+}
+
 .packs .pack-actions,
 .packs .pack-address {
   display: flex;
