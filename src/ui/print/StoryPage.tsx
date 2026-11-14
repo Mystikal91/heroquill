@@ -4,7 +4,7 @@ import { itemData } from "../../data/items";
 import type { Character } from "../../engine/character";
 import { COINS } from "../../engine/coins";
 import { type UiKey, ui } from "../../i18n/ui";
-import { backgroundFeature } from "../backgroundFeature";
+import { backgroundFeature, originFeat } from "../backgroundFeature";
 import { FitBox } from "./FitBox";
 import { RuledArea } from "./RuledArea";
 
@@ -38,6 +38,20 @@ function slotValue(c: Content, ch: Character, slot: (typeof SLOTS)[number]): str
   return "";
 }
 
+/**
+ * What a 2024 feat gives, by the names of its benefits (the bold lead-ins of its text: "Two Cantrips",
+ * "Level 1 Spell"...), which say more in one line than the sentence that opens it. The first line of
+ * the text when it has none.
+ */
+function benefitNames(text: string | undefined): string {
+  const lines = (text ?? "").split("\n");
+  const names = lines.flatMap((line) => {
+    const lead = /^\*\*(.+?)\.?\*\*/.exec(line.trim());
+    return lead?.[1] ? [lead[1].replace(/\.$/, "")] : [];
+  });
+  return names.length > 0 ? names.join(" · ") : (lines[0] ?? "");
+}
+
 /** A frame to write in: the text the player already wrote, or ruled lines to handwrite on. */
 function Block({
   title,
@@ -68,13 +82,15 @@ export function StoryPage() {
   const magicItems = ch.inventory.filter(isMagic);
   const carried = ch.inventory.filter((i) => !i.equipped && !isMagic(i));
   const story = ch.story;
-  // The background's feature first, then the player's backstory, sized together to fit the frame.
-  const backgroundText = [
-    featureName ? `${featureName}. ${featureDesc?.split("\n\n")[0] ?? ""}` : "",
-    story.backstory,
-  ]
-    .filter((part) => part.trim())
-    .join("\n\n");
+  // The 2014 background gives a feature, the 2024 one a feat of its own (the Origin feat); what it gives
+  // comes first, then the player's backstory, sized together to fit the frame.
+  const origin = ch.ruleset === "srd52" ? originFeat(ch, c) : undefined;
+  const given = origin
+    ? `${ui("print.originFeat")}: ${origin.name}. ${benefitNames(origin.text)}`
+    : featureName
+      ? `${featureName}. ${featureDesc?.split("\n\n")[0] ?? ""}`
+      : "";
+  const backgroundText = [given, story.backstory].filter((part) => part.trim()).join("\n\n");
 
   return (
     <section class="p-page p-story">

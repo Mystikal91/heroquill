@@ -227,11 +227,20 @@ async function main() {
     const key = config === "default" ? name : `${name} [${config}]`;
     if (config !== current) {
       // What the Print tab has ticked is saved in the page's storage, which it reads when it loads.
-      await send("Page.navigate", { url: base });
-      await sleep(1500);
-      await evaluate(
-        `localStorage.setItem("print-settings", ${JSON.stringify(JSON.stringify(SETTINGS[config]))})`,
-      );
+      // The page may not be ready to give its storage yet (the first load after Chrome starts is slow).
+      for (let attempt = 0; ; attempt++) {
+        await send("Page.navigate", { url: base });
+        await sleep(1500);
+        try {
+          await evaluate(
+            `localStorage.setItem("print-settings", ${JSON.stringify(JSON.stringify(SETTINGS[config]))})`,
+          );
+          break;
+        } catch (error) {
+          if (attempt >= 4) throw error;
+          await sleep(1500);
+        }
+      }
       current = config;
     }
     // The page can fail to load now and then (a slow start): it gets three tries before it counts.
@@ -292,6 +301,9 @@ async function main() {
     if (name.startsWith("2024"))
       for (const word of only2024)
         if (!first.includes(word)) problem(`${key}: the 2024 front page lacks "${word}"`);
+    // The 2024 background gives an Origin feat, and the story page says it.
+    if (name.startsWith("2024") && !pages.some((page) => page.includes("originfeat")))
+      problem(`${key}: no page says the Origin feat`);
     if (name.startsWith("2014"))
       for (const word of ["heroicinspiration", "armortraining"])
         if (first.includes(word)) problem(`${key}: the 2014 front page has "${word}"`);
