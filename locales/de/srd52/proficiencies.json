@@ -64,5 +64,13 @@
   "pan-flute.name": "Panflöte",
   "shawm.name": "Schalmei",
   "viol.name": "Gambe",
-  "herbalism-kit.name": "Kräuterkundeausrüstung"
+  "herbalism-kit.name": "Kräuterkundeausrüstung",
+  "tool-calligraphers-supplies.name": "Werkzeug: Kalligrafiewerkzeuge",
+  "tool-dice.name": "Werkzeug: Würfel",
+  "tool-dragonchess.name": "Werkzeug: Drachenschach",
+  "tool-navigators-tools.name": "Werkzeug: Navigationswerkzeuge",
+  "tool-playing-cards.name": "Werkzeug: Spielkarten",
+  "tool-poisoners-kit.name": "Werkzeug: Giftpaket",
+  "tool-thieves-tools.name": "Werkzeug: Diebeswerkzeug",
+  "tool-three-dragon-ante.name": "Werkzeug: Drei-Drachen-Ante (Kartenspiel)"
 }

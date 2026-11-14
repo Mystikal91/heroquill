@@ -17,5 +17,16 @@
   "neutral-evil.abbreviation": "NM",
   "chaotic-evil.name": "Chaotique Mauvais",
   "chaotic-evil.abbreviation": "CM",
-  "unaligned.name": "Non alignée"
+  "unaligned.name": "Non alignée",
+  "chaotic-evil.desc": "Les créatures Chaotiques Mauvaises agissent avec une violence gratuite, poussées par la haine ou la soif de sang. Un scélérat qui poursuit des desseins de vengeance et de ravages sera probablement Chaotique Mauvais.",
+  "chaotic-good.desc": "Les créatures Chaotiques Bonnes agissent selon leur conscience, sans se soucier de ce que les autres attendent d’elles. Un rebelle qui détrousse les collecteurs d’impôts d’un baron cruel et utilise l’argent volé pour aider les pauvres sera probablement Chaotique Bon.",
+  "chaotic-neutral.desc": "Les créatures Chaotiques Neutres suivent leurs caprices et placent leur liberté personnelle au-dessus de tout. Un chenapan qui parcourt le pays en vivant d’expédients sera probablement Chaotique Neutre.",
+  "lawful-evil.desc": "Les créatures Loyales Mauvaises prennent méthodiquement ce qu’elles veulent dans les limites d’un code de tradition, de loyauté ou d’ordre. Un aristocrate qui exploite les citoyens tout en intriguant pour le pouvoir sera probablement Loyal Mauvais.",
+  "lawful-good.desc": "Les créatures Loyales Bonnes s’efforcent de faire ce qui est juste, comme la société l’attend d’elles. Quelqu’un qui combat l’injustice et protège les innocents sans hésiter sera probablement Loyal Bon.",
+  "lawful-neutral.desc": "Les individus Loyaux Neutres agissent selon la loi, la tradition ou des codes personnels. Quelqu’un qui suit une règle de vie rigoureuse, sans se laisser influencer ni par les demandes des nécessiteux ni par les tentations du mal, sera probablement Loyal Neutre.",
+  "neutral-evil.desc": "Neutre Mauvais est l’alignement de ceux que le mal qu’ils causent ne trouble pas, tandis qu’ils poursuivent leurs désirs. Un criminel qui vole et assassine à sa guise sera probablement Neutre Mauvais.",
+  "neutral-good.desc": "Les créatures Neutres Bonnes font de leur mieux, en respectant les règles sans se sentir liées par elles. Une personne bienveillante qui aide les autres selon leurs besoins sera probablement Neutre Bon.",
+  "neutral.desc": "Neutre est l’alignement de ceux qui préfèrent éviter les questions morales et ne prennent pas parti, faisant ce qui leur semble le mieux sur le moment. Quelqu’un qu’ennuient les débats moraux sera probablement Neutre.",
+  "unaligned.abbreviation": "NA",
+  "unaligned.desc": "La plupart des créatures incapables de pensée rationnelle n’ont pas d’alignement : elles sont non alignées. Les requins, par exemple, sont des prédateurs sauvages, mais ils ne sont pas mauvais : ils sont non alignés."
 }

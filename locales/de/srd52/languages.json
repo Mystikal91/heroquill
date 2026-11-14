@@ -14,5 +14,9 @@
   "infernal.name": "Infernalisch",
   "primordial.name": "Urtümlich",
   "sylvan.name": "Sylvanisch",
-  "undercommon.name": "Gemeinsprache der Unterreiche"
+  "undercommon.name": "Gemeinsprache der Unterreiche",
+  "druidic.name": "Druidisch",
+  "thieves-cant.name": "Diebessprache",
+  "common-sign-language.name": "Allgemeine Gebärdensprache",
+  "primordial.note": "Urtümlich umfasst die Dialekte Aquan, Auran, Ignan und Terran. Kreaturen, die einen dieser Dialekte beherrschen, können sich mit solchen verständigen, die einen anderen beherrschen."
 }

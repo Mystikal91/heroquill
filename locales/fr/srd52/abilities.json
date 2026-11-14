@@ -10,5 +10,11 @@
   "wis.name": "Sagesse",
   "wis.abbreviation": "SAG",
   "cha.name": "Charisme",
-  "cha.abbreviation": "CHA"
+  "cha.abbreviation": "CHA",
+  "cha.desc": "Assurance, aplomb et charme",
+  "con.desc": "Santé et endurance",
+  "dex.desc": "Agilité, réflexes et équilibre",
+  "int.desc": "Raisonnement et mémoire",
+  "str.desc": "Puissance physique",
+  "wis.desc": "Perception et force mentale"
 }

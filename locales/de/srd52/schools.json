@@ -1,0 +1,17 @@
+{
+  "divination.name": "Weissagung",
+  "evocation.name": "Schule der Hervorrufungsmagie",
+  "abjuration.desc": "Verhindert oder macht schädliche Effekte rückgängig",
+  "abjuration.name": "Bannmagie",
+  "conjuration.desc": "Befördert Kreaturen oder Gegenstände",
+  "conjuration.name": "Beschwörung",
+  "divination.desc": "Enthüllt Informationen",
+  "enchantment.desc": "Beeinflusst den Geist",
+  "enchantment.name": "Verzauberung",
+  "evocation.desc": "Kanalisiert Energie, um oft zerstörerische Effekte zu erzeugen",
+  "illusion.desc": "Täuscht den Geist oder die Sinne",
+  "necromancy.desc": "Manipuliert Leben und Tod",
+  "necromancy.name": "Nekromantie",
+  "transmutation.desc": "Verwandelt Kreaturen oder Gegenstände",
+  "transmutation.name": "Verwandlung"
+}

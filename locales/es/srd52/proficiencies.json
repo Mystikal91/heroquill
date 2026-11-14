@@ -64,5 +64,13 @@
   "pan-flute.name": "Flauta de pan",
   "shawm.name": "Chirimía",
   "viol.name": "Viola",
-  "herbalism-kit.name": "Útiles de herborista"
+  "herbalism-kit.name": "Útiles de herborista",
+  "tool-calligraphers-supplies.name": "Herramienta: Suministros de calígrafo",
+  "tool-dice.name": "Herramienta: Dados",
+  "tool-dragonchess.name": "Herramienta: Ajedrez de dragones",
+  "tool-navigators-tools.name": "Herramienta: Herramientas de navegante",
+  "tool-playing-cards.name": "Herramienta: Cartas de juego",
+  "tool-poisoners-kit.name": "Herramienta: Útiles de envenenador",
+  "tool-thieves-tools.name": "Herramienta: Herramientas de ladrón",
+  "tool-three-dragon-ante.name": "Herramienta: Tres Dragones (juego de cartas)"
 }

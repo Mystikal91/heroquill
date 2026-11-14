@@ -17,5 +17,16 @@
   "neutral-evil.abbreviation": "NB",
   "chaotic-evil.name": "Chaotisch Böse",
   "chaotic-evil.abbreviation": "CB",
-  "unaligned.name": "Gesinnungslos"
+  "unaligned.name": "Gesinnungslos",
+  "chaotic-evil.desc": "Chaotisch böse Kreaturen handeln mit willkürlicher Gewalt, angetrieben von Hass oder Blutdurst. Ein Bösewicht, der Rache- und Verwüstungspläne verfolgt, ist wahrscheinlich chaotisch böse.",
+  "chaotic-good.desc": "Chaotisch gute Kreaturen handeln nach ihrem Gewissen und kümmern sich wenig darum, was andere erwarten. Ein Rebell, der den Steuereintreibern eines grausamen Barons auflauert und das erbeutete Geld den Armen gibt, ist wahrscheinlich chaotisch gut.",
+  "chaotic-neutral.desc": "Chaotisch neutrale Kreaturen folgen ihren Launen und stellen ihre persönliche Freiheit über alles. Ein Schurke, der durchs Land zieht und sich mit seinem Verstand durchschlägt, ist wahrscheinlich chaotisch neutral.",
+  "lawful-evil.desc": "Rechtschaffen böse Kreaturen nehmen sich methodisch, was sie wollen, im Rahmen eines Kodex aus Tradition, Loyalität oder Ordnung. Ein Aristokrat, der die Bürger ausbeutet und nach Macht strebt, ist wahrscheinlich rechtschaffen böse.",
+  "lawful-good.desc": "Rechtschaffen gute Kreaturen bemühen sich, das Richtige zu tun, wie es die Gesellschaft erwartet. Wer ohne zu zögern gegen Ungerechtigkeit kämpft und die Unschuldigen beschützt, ist wahrscheinlich rechtschaffen gut.",
+  "lawful-neutral.desc": "Rechtschaffen neutrale Individuen handeln gemäß Gesetz, Tradition oder persönlichem Kodex. Wer einer disziplinierten Lebensregel folgt – und sich weder von den Bitten Notleidender noch von den Versuchungen des Bösen beirren lässt –, ist wahrscheinlich rechtschaffen neutral.",
+  "neutral-evil.desc": "Neutral böse ist die Gesinnung derer, die der Schaden, den sie beim Verfolgen ihrer Wünsche anrichten, nicht kümmert. Ein Verbrecher, der nach Belieben raubt und mordet, ist wahrscheinlich neutral böse.",
+  "neutral-good.desc": "Neutral gute Kreaturen tun ihr Bestes, bewegen sich innerhalb der Regeln, fühlen sich aber nicht an sie gebunden. Ein freundlicher Mensch, der anderen hilft, je nachdem, was sie brauchen, ist wahrscheinlich neutral gut.",
+  "neutral.desc": "Neutral ist die Gesinnung derer, die moralischen Fragen lieber aus dem Weg gehen, keine Partei ergreifen und tun, was ihnen im Moment am besten erscheint. Wer sich bei moralischen Debatten langweilt, ist wahrscheinlich neutral.",
+  "unaligned.abbreviation": "GL",
+  "unaligned.desc": "Die meisten Kreaturen, die zu rationalem Denken nicht fähig sind, haben keine Gesinnung; sie sind gesinnungslos. Haie sind zum Beispiel wilde Raubtiere, aber nicht böse; sie sind gesinnungslos."
 }

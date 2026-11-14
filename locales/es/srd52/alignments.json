@@ -17,5 +17,16 @@
   "neutral-evil.abbreviation": "NM",
   "chaotic-evil.name": "Caótico Malvado",
   "chaotic-evil.abbreviation": "CM",
-  "unaligned.name": "Sin alineamiento"
+  "unaligned.name": "Sin alineamiento",
+  "chaotic-evil.desc": "Las criaturas caóticas malvadas actúan con violencia arbitraria, impulsadas por el odio o la sed de sangre. Un villano que maquina venganzas y siembra el caos probablemente sea caótico malvado.",
+  "chaotic-good.desc": "Las criaturas caóticas buenas actúan según les dicta su conciencia, sin preocuparse demasiado por lo que otros esperen de ellas. Un rebelde que embosca a los recaudadores de un barón cruel y usa el dinero robado para ayudar a los pobres probablemente sea caótico bueno.",
+  "chaotic-neutral.desc": "Las criaturas caóticas neutrales siguen sus caprichos y valoran su libertad personal por encima de todo. Un granuja que vaga por las tierras viviendo de su ingenio probablemente sea caótico neutral.",
+  "lawful-evil.desc": "Las criaturas legales malvadas toman metódicamente lo que quieren dentro de los límites de un código de tradición, lealtad u orden. Un aristócrata que explota a los ciudadanos mientras conspira para obtener poder probablemente sea legal malvado.",
+  "lawful-good.desc": "Las criaturas legales buenas se esfuerzan por hacer lo correcto, tal como la sociedad espera. Quien combate la injusticia y protege a los inocentes sin dudar probablemente sea legal bueno.",
+  "lawful-neutral.desc": "Los individuos legales neutrales actúan de acuerdo con la ley, la tradición o códigos personales. Quien sigue una regla de vida disciplinada, sin dejarse influir ni por las súplicas de los necesitados ni por las tentaciones del mal, probablemente sea legal neutral.",
+  "neutral-evil.desc": "Neutral malvado es el alineamiento de quienes no se inquietan por el daño que causan mientras persiguen sus deseos. Un criminal que roba y asesina a su antojo probablemente sea neutral malvado.",
+  "neutral-good.desc": "Las criaturas neutrales buenas hacen lo mejor que pueden, actuando dentro de las reglas sin sentirse atadas a ellas. Una persona amable que ayuda a los demás según sus necesidades probablemente sea neutral bueno.",
+  "neutral.desc": "Neutral es el alineamiento de quienes prefieren evitar las cuestiones morales y no toman partido, haciendo lo que parece mejor en cada momento. Quien se aburre con los debates morales probablemente sea neutral.",
+  "unaligned.abbreviation": "SA",
+  "unaligned.desc": "La mayoría de las criaturas incapaces de pensamiento racional no tienen alineamiento: carecen de él. Los tiburones, por ejemplo, son depredadores salvajes, pero no malvados; no tienen alineamiento."
 }

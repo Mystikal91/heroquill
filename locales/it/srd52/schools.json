@@ -6,5 +6,13 @@
   "evocation.name": "Invocazione",
   "illusion.name": "Illusione",
   "necromancy.name": "Necromanzia",
-  "transmutation.name": "Trasmutazione"
+  "transmutation.name": "Trasmutazione",
+  "abjuration.desc": "Impedisce o annulla effetti dannosi",
+  "conjuration.desc": "Trasporta creature o oggetti",
+  "divination.desc": "Rivela informazioni",
+  "enchantment.desc": "Influenza le menti",
+  "evocation.desc": "Incanala energia per creare effetti spesso distruttivi",
+  "illusion.desc": "Inganna la mente o i sensi",
+  "necromancy.desc": "Manipola la vita e la morte",
+  "transmutation.desc": "Trasforma creature o oggetti"
 }

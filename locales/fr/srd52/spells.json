@@ -1984,5 +1984,6 @@
   "zone-of-truth.desc": "Vous créez une zone magique qui interdit les mensonges dans une Sphère de 4,50 m de rayon centrée sur un point à portée. Jusqu’à la fin du sort, quand une créature entre dans la zone du sort pour la première fois d’un tour ou y commence son tour, elle effectue un jet de sauvegarde de Charisme. En cas d’échec, elle ne peut mentir sciemment tant qu’elle est dans la zone. Vous savez si une telle créature a raté ou réussi son jet de sauvegarde.\nUne créature affectée a conscience du sort et peut éluder les questions auxquelles elle répondrait normalement par un mensonge. Elle peut se montrer évasive, mais ce qu’elle dit doit rester vrai dans son esprit.",
   "zone-of-truth.castingTime": "action",
   "zone-of-truth.range": "18 m",
-  "zone-of-truth.duration": "10 minutes"
+  "zone-of-truth.duration": "10 minutes",
+  "divination.desc": "Ce sort vous met en contact avec un dieu ou avec ses serviteurs. Vous posez une question sur un objectif, un événement ou une activité précis devant survenir dans les 7 jours. Le MJ offre une réponse sincère, qui peut être une courte phrase ou une rime énigmatique. Le sort ne tient pas compte des circonstances susceptibles de changer la réponse, comme le lancement d’autres sorts.\nSi vous lancez le sort plus d’une fois avant de terminer un Repos long, chaque lancement après le premier a 25 % de chances cumulées de ne produire aucune réponse."
 }

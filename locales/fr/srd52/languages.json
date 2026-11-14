@@ -8,11 +8,15 @@
   "goblin.name": "Gobelin",
   "halfling.name": "Halfelin",
   "orc.name": "Orc",
-  "abyssal.name": "Abyssal",
+  "abyssal.name": "abyssal",
   "celestial.name": "Céleste",
   "deep-speech.name": "Profond",
   "infernal.name": "Infernal",
   "primordial.name": "Primordial",
   "sylvan.name": "Sylvestre",
-  "undercommon.name": "Commun des profondeurs"
+  "undercommon.name": "Commun des profondeurs",
+  "druidic.name": "Druidique",
+  "thieves-cant.name": "Argot des voleurs",
+  "common-sign-language.name": "Langue des signes commune",
+  "primordial.note": "Le primordial comprend les dialectes aquan, aurien, ignan et terran. Les créatures qui connaissent l’un de ces dialectes peuvent communiquer avec celles qui en connaissent un autre."
 }

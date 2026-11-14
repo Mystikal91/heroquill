@@ -14,5 +14,9 @@
   "infernal.name": "Infernale",
   "primordial.name": "Primordiale",
   "sylvan.name": "Silvano",
-  "undercommon.name": "Sottocomune"
+  "undercommon.name": "Sottocomune",
+  "druidic.name": "Druidico",
+  "thieves-cant.name": "Gergo ladresco",
+  "common-sign-language.name": "Linguaggio dei segni comune",
+  "primordial.note": "Il Primordiale comprende i dialetti Acquan, Auran, Ignan e Terran. Le creature che conoscono uno di questi dialetti possono comunicare con quelle che ne conoscono un altro."
 }

@@ -90,5 +90,17 @@
   "wizard.spellcasting.5.name": "Attribut zum Zauberwirken",
   "wizard.spellcasting.5.desc": "Dein Attribut zum Wirken der Magierzauber ist Intelligenz.",
   "wizard.spellcasting.6.name": "Zauberfokus",
-  "wizard.spellcasting.6.desc": "Du kannst einen arkanen Fokus oder dein Zauberbuch als Zauberfokus für deine Magierzauber verwenden."
+  "wizard.spellcasting.6.desc": "Du kannst einen arkanen Fokus oder dein Zauberbuch als Zauberfokus für deine Magierzauber verwenden.",
+  "warlock.spellcasting.1.name": "Zaubertricks",
+  "warlock.spellcasting.2.name": "Zauberplätze",
+  "warlock.spellcasting.3.name": "Vorbereitete Zauber ab dem 1. Grad",
+  "warlock.spellcasting.4.name": "Deine vorbereiteten Zauber ändern",
+  "warlock.spellcasting.5.name": "Attribut zum Zauberwirken",
+  "warlock.spellcasting.6.name": "Zauberfokus",
+  "warlock.spellcasting.1.desc": "Du kennst zwei Hexenmeister-Zaubertricks deiner Wahl. Schauriger Strahl und Taschenspielerei werden empfohlen. Immer wenn du eine Hexenmeisterstufe aufsteigst, kannst du einen deiner Zaubertricks aus diesem Merkmal durch einen anderen Hexenmeister-Zaubertrick deiner Wahl ersetzen.\nWenn du die Hexenmeisterstufen 4 und 10 erreichst, lernst du einen weiteren Hexenmeister-Zaubertrick deiner Wahl, wie in der Spalte „Zaubertricks“ der Tabelle „Hexenmeistermerkmale“ angegeben.",
+  "warlock.spellcasting.2.desc": "Die Tabelle „Hexenmeister“ zeigt, wie viele Zauberplätze du zum Wirken deiner Hexenmeisterzauber der Grade 1–5 hast. Sie zeigt auch, welchen Grad diese Zauberplätze haben; alle haben denselben Grad. Du erhältst alle verbrauchten Zauberplätze der Paktmagie zurück, wenn du eine Kurze oder Lange Rast beendest.\nBist du zum Beispiel ein Hexenmeister der Stufe 5, hast du zwei Zauberplätze des 3. Grades. Um den Zauber des 1. Grades Person bezaubern zu wirken, musst du einen dieser Plätze ausgeben, und du wirkst ihn als Zauber des 3. Grades.",
+  "warlock.spellcasting.3.desc": "Du bereitest die Liste der Zauber ab dem 1. Grad vor, die du mit diesem Merkmal wirken kannst. Wähle zu Beginn zwei Hexenmeisterzauber des 1. Grades. Person bezaubern und Verwünschung werden empfohlen.\nDie Zahl der Zauber auf deiner Liste steigt, wenn du Hexenmeisterstufen gewinnst, wie in der Spalte „Vorbereitete Zauber“ der Tabelle „Hexenmeistermerkmale“ angegeben. Immer wenn diese Zahl steigt, wähle weitere Hexenmeisterzauber, bis die Zahl der Zauber auf deiner Liste der Zahl in der Tabelle entspricht. Die gewählten Zauber dürfen höchstens den Grad haben, der in der Spalte „Zauberplatzgrad“ der Tabelle für deine Stufe angegeben ist. Wenn du zum Beispiel Stufe 6 erreichst, lernst du einen neuen Hexenmeisterzauber, der den Grad 1–3 haben kann.\nVerleiht dir ein anderes Hexenmeistermerkmal Zauber, die du immer vorbereitet hast, zählen diese nicht zur Zahl der Zauber, die du mit diesem Merkmal vorbereiten kannst, gelten für dich aber ansonsten als Hexenmeisterzauber.",
+  "warlock.spellcasting.4.desc": "Immer wenn du eine Hexenmeisterstufe aufsteigst, kannst du einen Zauber auf deiner Liste durch einen anderen Hexenmeisterzauber eines zulässigen Grades ersetzen.",
+  "warlock.spellcasting.5.desc": "Charisma ist dein Zauberattribut für deine Hexenmeisterzauber.",
+  "warlock.spellcasting.6.desc": "Du kannst einen Arkanen Fokus als Zauberfokus für deine Hexenmeisterzauber verwenden."
 }

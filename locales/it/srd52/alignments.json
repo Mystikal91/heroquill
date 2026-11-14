@@ -17,5 +17,16 @@
   "neutral-evil.abbreviation": "NM",
   "chaotic-evil.name": "Caotico Malvagio",
   "chaotic-evil.abbreviation": "CM",
-  "unaligned.name": "Senza allineamento"
+  "unaligned.name": "Senza allineamento",
+  "chaotic-evil.desc": "Le creature caotiche malvagie agiscono con violenza arbitraria, spinte dall'odio o dalla sete di sangue. Un cattivo che persegue piani di vendetta e distruzione è probabilmente caotico malvagio.",
+  "chaotic-good.desc": "Le creature caotiche buone agiscono secondo la propria coscienza, senza badare troppo a ciò che gli altri si aspettano. Un ribelle che assale gli esattori di un barone crudele e usa il denaro rubato per aiutare i poveri è probabilmente caotico buono.",
+  "chaotic-neutral.desc": "Le creature caotiche neutrali seguono i propri capricci e danno più valore alla libertà personale che a ogni altra cosa. Un furfante che vaga per il mondo vivendo di espedienti è probabilmente caotico neutrale.",
+  "lawful-evil.desc": "Le creature legali malvagie prendono metodicamente ciò che vogliono entro i limiti di un codice di tradizione, lealtà o ordine. Un aristocratico che sfrutta i cittadini mentre trama per il potere è probabilmente legale malvagio.",
+  "lawful-good.desc": "Le creature legali buone si impegnano a fare la cosa giusta secondo ciò che la società si aspetta. Chi combatte l'ingiustizia e protegge gli innocenti senza esitare è probabilmente legale buono.",
+  "lawful-neutral.desc": "Gli individui legali neutrali agiscono secondo la legge, la tradizione o codici personali. Chi segue una rigida regola di vita, senza lasciarsi influenzare né dalle richieste dei bisognosi né dalle tentazioni del male, è probabilmente legale neutrale.",
+  "neutral-evil.desc": "Neutrale malvagio è l'allineamento di chi non si fa turbare dal male che causa mentre persegue i propri desideri. Un criminale che deruba e uccide a suo piacimento è probabilmente neutrale malvagio.",
+  "neutral-good.desc": "Le creature neutrali buone fanno del loro meglio, rispettando le regole senza sentirsene vincolate. Una persona gentile che aiuta gli altri secondo le loro necessità è probabilmente neutrale buono.",
+  "neutral.desc": "Neutrale è l'allineamento di chi preferisce evitare le questioni morali e non prende posizione, facendo ciò che al momento sembra meglio. Chi si annoia davanti ai dibattiti morali è probabilmente neutrale.",
+  "unaligned.abbreviation": "SA",
+  "unaligned.desc": "La maggior parte delle creature incapaci di pensiero razionale non ha un allineamento: è senza allineamento. Gli squali, per esempio, sono predatori feroci, ma non sono malvagi: sono senza allineamento."
 }

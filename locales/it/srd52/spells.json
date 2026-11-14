@@ -1982,5 +1982,8 @@
   "zone-of-truth.desc": "L'incantatore crea una zona magica che protegge dagli inganni all'interno di una sfera del raggio di 4,5 metri, centrata su un punto entro gittata. Fino al termine dell'incantesimo, una creatura che entra nell'area dell'incantesimo per la prima volta in un turno o che inizia qui il suo turno effettua un tiro salvezza su Carisma. Se lo fallisce, non può mentire deliberatamente mentre si trova nell'area. L'incantatore sa se il bersaglio supera o meno il tiro salvezza.\nUna creatura influenzata è consapevole dell'incantesimo e può evitare di rispondere alle domande a cui normalmente risponderebbe mentendo. In tal caso, deve essere evasiva, ma sincera.",
   "zone-of-truth.castingTime": "azione",
   "zone-of-truth.range": "18 metri",
-  "zone-of-truth.duration": "10 minuti"
+  "zone-of-truth.duration": "10 minuti",
+  "conjure-woodland-beings.higherLevel": "I danni aumentano di 1d8 per ogni slot di livello superiore al 4º.",
+  "conjure-woodland-beings.desc": "Evochi spiriti della natura che svolazzano intorno a te in un'emanazione di 3 metri per la durata. Ogni volta che l'emanazione entra nello spazio di una creatura che puoi vedere, e ogni volta che una creatura che puoi vedere entra nell'emanazione o vi termina il proprio turno, puoi costringerla a effettuare un tiro salvezza su Saggezza. La creatura subisce 5d8 danni da forza se fallisce il tiro salvezza, o la metà di quei danni se lo supera. Una creatura effettua questo tiro salvezza solo una volta per turno.\nInoltre, per la durata dell'incantesimo puoi effettuare l'azione di Disimpegno come azione bonus.",
+  "phantasmal-killer.higherLevel": "I danni aumentano di 1d10 per ogni livello dello slot incantesimo superiore al 4º."
 }

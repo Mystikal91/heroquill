@@ -90,5 +90,17 @@
   "wizard.spellcasting.5.name": "Aptitud mágica",
   "wizard.spellcasting.5.desc": "La Inteligencia es tu aptitud mágica en lo que respecta a tus conjuros de mago.",
   "wizard.spellcasting.6.name": "Canalizador mágico",
-  "wizard.spellcasting.6.desc": "Puedes utilizar un canalizador arcano o tu libro de conjuros como canalizador mágico para tus conjuros de mago."
+  "wizard.spellcasting.6.desc": "Puedes utilizar un canalizador arcano o tu libro de conjuros como canalizador mágico para tus conjuros de mago.",
+  "warlock.spellcasting.1.name": "Trucos",
+  "warlock.spellcasting.2.name": "Espacios de conjuro",
+  "warlock.spellcasting.3.name": "Conjuros preparados de nivel 1 y superiores",
+  "warlock.spellcasting.4.name": "Cambiar los conjuros preparados",
+  "warlock.spellcasting.5.name": "Aptitud mágica",
+  "warlock.spellcasting.6.name": "Canalizador mágico",
+  "warlock.spellcasting.1.desc": "Conoces dos trucos de brujo a tu elección. Se recomiendan descarga sobrenatural y prestidigitación. Siempre que subas un nivel de brujo, puedes sustituir uno de los trucos de este rasgo por otro truco de brujo a tu elección.\nCuando alcances los niveles 4 y 10 de brujo, aprendes otro truco de brujo a tu elección, como se indica en la columna Trucos de la tabla de rasgos del brujo.",
+  "warlock.spellcasting.2.desc": "La tabla del brujo muestra cuántos espacios de conjuro tienes para lanzar tus conjuros de brujo de niveles 1 a 5. La tabla también muestra el nivel de esos espacios, que son todos del mismo nivel. Recuperas todos los espacios de conjuro de Magia de pacto gastados cuando finalizas un descanso corto o largo.\nPor ejemplo, cuando eres un brujo de nivel 5, tienes dos espacios de conjuro de nivel 3. Para lanzar el conjuro de nivel 1 hechizar persona, debes gastar uno de esos espacios y lo lanzas como un conjuro de nivel 3.",
+  "warlock.spellcasting.3.desc": "Preparas la lista de conjuros de nivel 1 o superior que puedes lanzar con este rasgo. Para empezar, elige dos conjuros de brujo de nivel 1. Se recomiendan hechizar persona y maleficio.\nEl número de conjuros de tu lista aumenta a medida que subes de nivel de brujo, como se indica en la columna Conjuros preparados de la tabla de rasgos del brujo. Siempre que ese número aumente, elige conjuros de brujo adicionales hasta que el número de conjuros de tu lista coincida con el de la tabla. Los conjuros elegidos deben ser de un nivel no superior al indicado en la columna Nivel de espacio de la tabla para tu nivel. Cuando alcances el nivel 6, por ejemplo, aprendes un nuevo conjuro de brujo, que puede ser de niveles 1 a 3.\nSi otro rasgo de brujo te concede conjuros que siempre tienes preparados, esos conjuros no cuentan para el número de conjuros que puedes preparar con este rasgo, pero por lo demás cuentan como conjuros de brujo para ti.",
+  "warlock.spellcasting.4.desc": "Siempre que subas un nivel de brujo, puedes sustituir un conjuro de tu lista por otro conjuro de brujo de un nivel admisible.",
+  "warlock.spellcasting.5.desc": "El Carisma es tu característica para lanzar conjuros de brujo.",
+  "warlock.spellcasting.6.desc": "Puedes usar un canalizador arcano como canalizador de conjuros para tus conjuros de brujo."
 }

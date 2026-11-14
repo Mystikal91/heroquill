@@ -64,5 +64,13 @@
   "pan-flute.name": "Flûte de pan",
   "shawm.name": "Chalemie",
   "viol.name": "Viole",
-  "herbalism-kit.name": "Matériel d’herboriste"
+  "herbalism-kit.name": "Matériel d’herboriste",
+  "tool-calligraphers-supplies.name": "Outil: Matériel de calligraphe",
+  "tool-dice.name": "Outil: Dés",
+  "tool-dragonchess.name": "Outil: Échecs draconiques",
+  "tool-navigators-tools.name": "Outil: Instruments de navigateur",
+  "tool-playing-cards.name": "Outil: Cartes à jouer",
+  "tool-poisoners-kit.name": "Outil: Matériel d’empoisonneur",
+  "tool-thieves-tools.name": "Outil: Outils de voleur",
+  "tool-three-dragon-ante.name": "Outil: Trois-Dragons (jeu de cartes)"
 }

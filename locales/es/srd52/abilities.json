@@ -10,5 +10,11 @@
   "wis.name": "Sabiduría",
   "wis.abbreviation": "SAB",
   "cha.name": "Carisma",
-  "cha.abbreviation": "CAR"
+  "cha.abbreviation": "CAR",
+  "cha.desc": "Confianza, aplomo y encanto",
+  "con.desc": "Salud y aguante",
+  "dex.desc": "Agilidad, reflejos y equilibrio",
+  "int.desc": "Razonamiento y memoria",
+  "str.desc": "Poderío físico",
+  "wis.desc": "Percepción y fortaleza mental"
 }

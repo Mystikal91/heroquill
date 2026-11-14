@@ -10,5 +10,11 @@
   "wis.name": "Weisheit",
   "wis.abbreviation": "WEI",
   "cha.name": "Charisma",
-  "cha.abbreviation": "CHA"
+  "cha.abbreviation": "CHA",
+  "cha.desc": "Selbstvertrauen, Haltung und Charme",
+  "con.desc": "Gesundheit und Ausdauer",
+  "dex.desc": "Gewandtheit, Reflexe und Gleichgewicht",
+  "int.desc": "Logisches Denken und Gedächtnis",
+  "str.desc": "Körperliche Kraft",
+  "wis.desc": "Wahrnehmung und geistige Stärke"
 }

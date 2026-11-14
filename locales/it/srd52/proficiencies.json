@@ -64,5 +64,13 @@
   "pan-flute.name": "Flauto di pan",
   "shawm.name": "Ciaramella",
   "viol.name": "Viola",
-  "herbalism-kit.name": "Borsa da erborista"
+  "herbalism-kit.name": "Borsa da erborista",
+  "tool-calligraphers-supplies.name": "Strumento: Scorte da calligrafo",
+  "tool-dice.name": "Strumento: Dadi",
+  "tool-dragonchess.name": "Strumento: Scacchi del drago",
+  "tool-navigators-tools.name": "Strumento: Strumenti da navigatore",
+  "tool-playing-cards.name": "Strumento: Carte da gioco",
+  "tool-poisoners-kit.name": "Strumento: Sostanze da avvelenatore",
+  "tool-thieves-tools.name": "Strumento: Arnesi da scasso",
+  "tool-three-dragon-ante.name": "Strumento: Tre Draghi (gioco di carte)"
 }

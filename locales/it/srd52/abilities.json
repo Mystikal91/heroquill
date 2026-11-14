@@ -10,5 +10,11 @@
   "wis.name": "Saggezza",
   "wis.abbreviation": "SAG",
   "cha.name": "Carisma",
-  "cha.abbreviation": "CAR"
+  "cha.abbreviation": "CAR",
+  "cha.desc": "Sicurezza, portamento e fascino",
+  "con.desc": "Salute e resistenza fisica",
+  "dex.desc": "Agilità, riflessi ed equilibrio",
+  "int.desc": "Ragionamento e memoria",
+  "str.desc": "Forza fisica",
+  "wis.desc": "Percezione e forza mentale"
 }

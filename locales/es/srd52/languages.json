@@ -14,5 +14,9 @@
   "infernal.name": "Infernal",
   "primordial.name": "Primordial",
   "sylvan.name": "Silvano",
-  "undercommon.name": "Infracomún"
+  "undercommon.name": "Infracomún",
+  "druidic.name": "Druídico",
+  "thieves-cant.name": "Jerga de ladrones",
+  "common-sign-language.name": "Lengua de signos común",
+  "primordial.note": "El primordial incluye los dialectos acuano, aurano, ígneo y terrano. Las criaturas que conocen uno de estos dialectos pueden comunicarse con las que conocen otro distinto."
 }

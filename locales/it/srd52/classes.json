@@ -90,5 +90,17 @@
   "wizard.spellcasting.5.name": "Caratteristica da incantatore",
   "wizard.spellcasting.5.desc": "Intelligenza è la caratteristica da incantatore per gli incantesimi da mago.",
   "wizard.spellcasting.6.name": "Focus da incantatore",
-  "wizard.spellcasting.6.desc": "Il mago può usare un focus arcano o il suo libro degli incantesimi come focus da incantatore per i propri incantesimi da mago."
+  "wizard.spellcasting.6.desc": "Il mago può usare un focus arcano o il suo libro degli incantesimi come focus da incantatore per i propri incantesimi da mago.",
+  "warlock.spellcasting.1.name": "Trucchetti",
+  "warlock.spellcasting.2.name": "Slot incantesimo",
+  "warlock.spellcasting.3.name": "Incantesimi preparati di 1º livello o superiore",
+  "warlock.spellcasting.4.name": "Cambiare gli incantesimi preparati",
+  "warlock.spellcasting.5.name": "Caratteristica da incantatore",
+  "warlock.spellcasting.6.name": "Focus da incantatore",
+  "warlock.spellcasting.1.desc": "Conosci due trucchetti da Warlock a tua scelta. Deflagrazione occulta e Prestidigitazione sono consigliati. Ogni volta che ottieni un livello da Warlock, puoi sostituire uno dei trucchetti di questo privilegio con un altro trucchetto da Warlock a tua scelta.\nQuando raggiungi i livelli 4 e 10 da Warlock, impari un altro trucchetto da Warlock a tua scelta, come indicato nella colonna Trucchetti della tabella dei privilegi del Warlock.",
+  "warlock.spellcasting.2.desc": "La tabella del Warlock mostra quanti slot incantesimo hai per lanciare i tuoi incantesimi da Warlock dei livelli 1-5. La tabella mostra anche il livello di quegli slot, che sono tutti dello stesso livello. Recuperi tutti gli slot incantesimo di Magia del patto spesi quando termini un riposo breve o lungo.\nPer esempio, quando sei un Warlock di 5º livello hai due slot incantesimo di 3º livello. Per lanciare l'incantesimo di 1º livello Charme su persone devi spendere uno di quegli slot, e lo lanci come incantesimo di 3º livello.",
+  "warlock.spellcasting.3.desc": "Prepari l'elenco di incantesimi di livello 1+ che puoi lanciare con questo privilegio. Per iniziare, scegli due incantesimi da Warlock di 1º livello. Charme su persone e Sortilegio sono consigliati.\nIl numero di incantesimi del tuo elenco aumenta man mano che ottieni livelli da Warlock, come indicato nella colonna Incantesimi preparati della tabella dei privilegi del Warlock. Ogni volta che quel numero aumenta, scegli altri incantesimi da Warlock finché il numero di incantesimi del tuo elenco corrisponde a quello della tabella. Gli incantesimi scelti devono essere di un livello non superiore a quello indicato nella colonna Livello slot della tabella per il tuo livello. Quando raggiungi il 6º livello, per esempio, impari un nuovo incantesimo da Warlock, che può essere dei livelli 1-3.\nSe un altro privilegio da Warlock ti conferisce incantesimi che hai sempre preparati, tali incantesimi non contano ai fini del numero di incantesimi che puoi preparare con questo privilegio, ma per il resto contano come incantesimi da Warlock per te.",
+  "warlock.spellcasting.4.desc": "Ogni volta che ottieni un livello da Warlock, puoi sostituire un incantesimo del tuo elenco con un altro incantesimo da Warlock di un livello idoneo.",
+  "warlock.spellcasting.5.desc": "Il Carisma è la tua caratteristica da incantatore per i tuoi incantesimi da Warlock.",
+  "warlock.spellcasting.6.desc": "Puoi usare un Focus arcano come Focus da incantatore per i tuoi incantesimi da Warlock."
 }

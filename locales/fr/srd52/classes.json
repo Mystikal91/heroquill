@@ -90,5 +90,17 @@
   "wizard.spellcasting.5.name": "Caractéristique d’incantation",
   "wizard.spellcasting.5.desc": "L’Intelligence est la caractéristique d’incantation de vos sorts de Magicien.",
   "wizard.spellcasting.6.name": "Focaliseur d’incantation",
-  "wizard.spellcasting.6.desc": "Vous pouvez vous servir d’un focaliseur arcanique ou de votre grimoire comme focaliseur d’incantation de vos sorts de Magicien."
+  "wizard.spellcasting.6.desc": "Vous pouvez vous servir d’un focaliseur arcanique ou de votre grimoire comme focaliseur d’incantation de vos sorts de Magicien.",
+  "warlock.spellcasting.1.name": "Sorts mineurs",
+  "warlock.spellcasting.2.name": "Emplacements de sort",
+  "warlock.spellcasting.3.name": "Sorts préparés du 1er niveau et plus",
+  "warlock.spellcasting.4.name": "Modification des sorts préparés",
+  "warlock.spellcasting.5.name": "Caractéristique d’incantation",
+  "warlock.spellcasting.6.name": "Focaliseur d’incantation",
+  "warlock.spellcasting.1.desc": "Vous connaissez deux sorts mineurs d’Occultiste de votre choix. Décharge occulte et Prestidigitation sont recommandés. Chaque fois que vous gagnez un niveau d’Occultiste, vous pouvez remplacer l’un des sorts mineurs de cette aptitude par un autre sort mineur d’Occultiste de votre choix.\nLorsque vous atteignez les niveaux 4 et 10 d’Occultiste, vous apprenez un autre sort mineur d’Occultiste de votre choix, comme indiqué dans la colonne Sorts mineurs de la table des aptitudes de l’Occultiste.",
+  "warlock.spellcasting.2.desc": "La table de l’Occultiste indique le nombre d’emplacements de sorts dont vous disposez pour lancer vos sorts d’Occultiste de niveaux 1 à 5. Elle indique aussi le niveau de ces emplacements, tous du même niveau. Vous récupérez tous vos emplacements de sorts de Magie de pacte dépensés lorsque vous terminez un Repos court ou long.\nPar exemple, lorsque vous êtes Occultiste de niveau 5, vous avez deux emplacements de sort de niveau 3. Pour lancer le sort de niveau 1 charme-personne, vous devez dépenser l’un de ces emplacements, et vous le lancez comme un sort de niveau 3.",
+  "warlock.spellcasting.3.desc": "Vous préparez la liste des sorts de niveau 1 et plus que vous pouvez lancer grâce à cette aptitude. Pour commencer, choisissez deux sorts d’Occultiste de niveau 1. Charme-personne et Maléfice sont recommandés.\nLe nombre de sorts de votre liste augmente à mesure que vous gagnez des niveaux d’Occultiste, comme indiqué dans la colonne Sorts préparés de la table des aptitudes de l’Occultiste. Chaque fois que ce nombre augmente, choisissez d’autres sorts d’Occultiste jusqu’à ce que le nombre de sorts de votre liste corresponde à celui de la table. Les sorts choisis doivent être d’un niveau au plus égal à celui indiqué dans la colonne Niveau d’emplacement de la table pour votre niveau. Lorsque vous atteignez le niveau 6, par exemple, vous apprenez un nouveau sort d’Occultiste, qui peut être de niveau 1 à 3.\nSi une autre aptitude d’Occultiste vous donne des sorts que vous avez toujours préparés, ces sorts ne comptent pas dans le nombre de sorts que vous pouvez préparer grâce à cette aptitude, mais ils comptent par ailleurs comme des sorts d’Occultiste pour vous.",
+  "warlock.spellcasting.4.desc": "Chaque fois que vous gagnez un niveau d’Occultiste, vous pouvez remplacer un sort de votre liste par un autre sort d’Occultiste d’un niveau éligible.",
+  "warlock.spellcasting.5.desc": "Le Charisme est votre caractéristique d’incantation pour vos sorts d’Occultiste.",
+  "warlock.spellcasting.6.desc": "Vous pouvez utiliser un focaliseur arcanique comme focaliseur d’incantation pour vos sorts d’Occultiste."
 }
