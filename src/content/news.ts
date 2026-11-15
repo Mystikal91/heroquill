@@ -18,6 +18,19 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.30.1 beta",
+    date: "2026-11-15",
+    notes: [
+      {
+        en: "Heroquill has a Discord server: to ask for help, show your characters, report a problem or just chat. The invitation is in the footer of the app, on the About page, in the footer of the website and on the Contribute page.",
+        it: "Heroquill ha un server Discord: per chiedere aiuto, mostrare i tuoi personaggi, segnalare un problema o semplicemente chiacchierare. L'invito è nel piè di pagina dell'app, nella pagina Info, nel piè di pagina del sito e nella pagina Contribuisci.",
+        fr: "Heroquill a un serveur Discord : pour demander de l'aide, montrer tes personnages, signaler un problème ou simplement discuter. L'invitation est en bas de l'application, sur la page À propos, en bas du site et sur la page Contribuer.",
+        de: "Heroquill hat einen Discord-Server: um Hilfe zu bekommen, deine Charaktere zu zeigen, ein Problem zu melden oder einfach zu plaudern. Die Einladung steht in der Fußzeile der App, auf der Seite „Info“, in der Fußzeile der Website und auf der Seite „Mitmachen“.",
+        es: "Heroquill tiene un servidor de Discord: para pedir ayuda, enseñar tus personajes, avisar de un problema o simplemente charlar. La invitación está en el pie de la app, en la página Acerca de, en el pie del sitio web y en la página Colabora.",
+      },
+    ],
+  },
+  {
     version: "1.30 beta",
     date: "2026-11-14",
     notes: [
