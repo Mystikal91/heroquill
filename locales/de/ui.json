@@ -1766,5 +1766,19 @@
   "paper.level": "Stufe {n}",
   "studio.print": "Drucken oder teilen…",
   "dev.banner": "Vorschau der neuen Homebrew-Werkstatt. Sie speichert ihre eigenen Daten auf diesem Gerät, getrennt von heroquill.app, und kann sich ändern oder kaputtgehen.",
-  "dev.normal": "Die normale Version öffnen"
+  "dev.normal": "Die normale Version öffnen",
+  "studio.p.required": "{field} wird gebraucht.",
+  "studio.p.number": "{field} muss eine Zahl sein.",
+  "studio.p.min": "{field} muss mindestens {n} sein.",
+  "studio.p.max": "{field} darf höchstens {n} sein.",
+  "studio.p.pick": "Wähle einen Wert für {field}.",
+  "studio.p.unknown": "{field} gibt es bei dieser Art von Eintrag nicht.",
+  "hb.kind.option": "Option",
+  "hb.kind.proficiency": "Übung",
+  "hb.kind.school": "Magieschule",
+  "hb.kind.alignment": "Gesinnung",
+  "hb.kind.ability": "Attribut",
+  "studio.hideSidebar": "Seitenleiste einklappen",
+  "studio.showSidebar": "Seitenleiste zeigen",
+  "studio.packSettings": "Über dieses Paket"
 }

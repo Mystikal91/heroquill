@@ -210,7 +210,28 @@ Rimandato: voce di CHANGELOG e ROADMAP in `news.ts` (si scrivono al rilascio, co
 - Rimuovere il vecchio editor (`model.ts`, `HomebrewPage.tsx`, builder/inverse) e i suoi test.
 - Aggiornare `docs/CONTENT_PACKS.md`, CHANGELOG e ROADMAP.
 
-## Fase 7 — Rifinitura e prova sul campo
+## Fase 7 — Rifinitura e prova sul campo  ✅ fatta per ora (2026-11-15, non committata)
+Fatto: **messaggi di errore in parole** (`ui/studio/problems.ts`: "Dado vita è necessario", "Livello deve essere al
+massimo 9", al posto di `level: must be at most 9`), **scelta delle competenze/lingue/incantesimi/tratti nell'effetto
+"Una scelta"** con le voci del contenuto da spuntare (prima era una lista di parole a mano) e riepilogo con i nomi,
+etichette dei tipi rari (opzione, competenza, scuola, allineamento, caratteristica) tradotte, **un campo nuovo prende il
+cursore sul nome**, su telefono **l'editor si porta in vista** quando si apre una voce. Provato: telefono a 375 px (nessun
+overflow orizzontale, nessun controllo sotto i 32 px) e **prestazioni con un pacchetto di 1000 voci** (apertura 160 ms,
+selezione 60 ms, ogni tasto circa 70 ms, ricerca 30 ms).
+Ancora da fare, in ordine di valore: l'elenco delle voci si ridisegna intero a ogni tasto (da ottimizzare oltre qualche
+migliaio di voci); anteprima fedele per oggetti e mostri; azioni e tratti dei mostri ancora in JSON; `ruleset` per
+voce; riferimenti portabili a pacchetti Aurora (sezione "Riferimenti portabili"); prova della stampa reale e
+dell'apertura in Homebrewery; prove con più testatori sull'anteprima pubblica; CHANGELOG, ROADMAP e versione al rilascio.
+
+### Dopo la Fase 7: un solo pannello a sinistra (2026-11-15)
+Le due colonne (pacchetti e voci) sono diventate **un solo pannello ad albero** (`ui/studio/Explorer.tsx`): i pacchetti
+sono cartelle, quello aperto si apre sulle sue voci (Nuovo, cerca, filtri per tipo, selezione e azioni), e si trascina una
+voce su un pacchetto come prima. Il pannello si **ripiega in una striscia** di 3 rem (pulsanti `«` e `»`, ricordato tra le
+visite). Nome, autore, versione e descrizione del pacchetto, Stampa, Esporta e Rimuovi sono nella **pagina del pacchetto**
+(`PackHome`), che si apre con l'ingranaggio accanto al nome e quando non c'è una voce aperta. Larghezza a sinistra da 33 rem
+a 17 rem; l'anteprima passa sotto il modulo solo sotto 1120 px (prima 1320).
+
+## Fase 7 (progetto originale) — Rifinitura e prova sul campo
 - Passata di UX/estetica sull'intero flusso (principiante vs. avanzato), accessibilità e tastiera.
 - Prova con contenuto reale: ricreare a mano alcune voci note (una classe, una specie, un oggetto magico) e
   verificare che la scheda le applichi; prova su telefono.

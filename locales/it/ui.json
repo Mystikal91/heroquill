@@ -1766,5 +1766,19 @@
   "paper.level": "Livello {n}",
   "studio.print": "Stampa o condividi…",
   "dev.banner": "Anteprima del nuovo studio homebrew. Tiene i suoi dati su questo dispositivo, separati da heroquill.app, e può cambiare o rompersi.",
-  "dev.normal": "Apri la versione normale"
+  "dev.normal": "Apri la versione normale",
+  "studio.p.required": "{field} è necessario.",
+  "studio.p.number": "{field} deve essere un numero.",
+  "studio.p.min": "{field} deve essere almeno {n}.",
+  "studio.p.max": "{field} deve essere al massimo {n}.",
+  "studio.p.pick": "Scegli un valore per {field}.",
+  "studio.p.unknown": "{field} non è qualcosa che questo tipo di voce ha.",
+  "hb.kind.option": "Opzione",
+  "hb.kind.proficiency": "Competenza",
+  "hb.kind.school": "Scuola di magia",
+  "hb.kind.alignment": "Allineamento",
+  "hb.kind.ability": "Caratteristica",
+  "studio.hideSidebar": "Richiudi la barra laterale",
+  "studio.showSidebar": "Mostra la barra laterale",
+  "studio.packSettings": "Informazioni sul pacchetto"
 }

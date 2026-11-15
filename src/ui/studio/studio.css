@@ -21,29 +21,15 @@
 
 .studio-body {
   display: grid;
-  grid-template-columns: 14rem 19rem minmax(0, 1fr);
+  grid-template-columns: var(--explorer, 17rem) minmax(0, 1fr);
   gap: 1.25rem;
   align-items: start;
 }
 
-.studio-library,
-.studio-list,
+.studio-explorer,
 .studio-editor,
 .studio-empty {
   min-width: 0;
-}
-
-.studio-library,
-.studio-list {
-  position: sticky;
-  top: 0.75rem;
-  max-height: calc(100vh - 1.5rem);
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-.studio-wide {
-  grid-column: 2 / -1;
 }
 
 .studio-empty {
@@ -122,7 +108,6 @@
   margin: 0 0 0.9rem;
 }
 
-.studio-pack,
 .studio-entry {
   display: flex;
   width: 100%;
@@ -133,7 +118,6 @@
   background: var(--surface-2);
 }
 
-.studio-pack.on,
 .studio-entry.on {
   border-color: var(--accent);
   box-shadow: inset 3px 0 0 var(--accent);
@@ -164,17 +148,6 @@
 .studio-title input {
   font-size: 1.05rem;
   font-weight: 600;
-}
-
-.studio-details {
-  margin-bottom: 0.6rem;
-}
-
-.studio-details summary {
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
 }
 
 .studio-actions {
@@ -480,7 +453,7 @@
 
 /* ---- Narrower screens: the studio stacks, and the preview goes under the form. ---- */
 
-@media (max-width: 1320px) {
+@media (max-width: 1120px) {
   .studio-work {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -493,17 +466,6 @@
 @media (max-width: 960px) {
   .studio-body {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .studio-library,
-  .studio-list {
-    position: static;
-    max-height: none;
-    overflow: visible;
-  }
-
-  .studio-wide {
-    grid-column: auto;
   }
 
   .studio-row {
@@ -548,8 +510,7 @@
 }
 
 /* Long names shorten with an ellipsis instead of making the list scroll sideways. */
-.studio-entry b,
-.studio-pack b {
+.studio-entry b {
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -567,14 +528,12 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.studio-entry,
-.studio-pack {
+.studio-entry {
   min-width: 0;
   overflow: hidden;
 }
 
-.studio-entry b,
-.studio-pack b {
+.studio-entry b {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -720,4 +679,143 @@
 .studio-drop-target.over {
   outline: 2px dashed var(--accent);
   outline-offset: 2px;
+}
+
+/* ---- The explorer: packs as folders, the open one unfolded to its entries ---- */
+
+.studio-body.rail {
+  --explorer: 3rem;
+}
+
+.studio-explorer {
+  position: sticky;
+  top: 0.75rem;
+  min-width: 0;
+  max-height: calc(100vh - 1.5rem);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.studio-explorer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.studio-explorer-head h3 {
+  margin: 0;
+}
+
+.studio-explorer.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+}
+
+.studio-rail-button {
+  min-width: 2.25rem;
+  padding: 0 0.5rem !important;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.studio-rail-name {
+  max-height: 14rem;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-orientation: mixed;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.studio-tree {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0 0 0.9rem;
+}
+
+.studio-node {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.studio-node.on {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.studio-node button {
+  border: none !important;
+  background: none !important;
+}
+
+.studio-node-main {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  text-align: left;
+}
+
+.studio-node-main b {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.studio-chevron {
+  flex: none;
+  width: 0.9rem;
+  color: var(--accent);
+}
+
+.studio-node-gear {
+  flex: none;
+  color: var(--muted);
+}
+
+.studio-children {
+  margin: 0.4rem 0 0.9rem 0.6rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--border);
+}
+
+.studio-packhome {
+  max-width: 44rem;
+}
+
+@media (max-width: 960px) {
+  .studio-body,
+  .studio-body.rail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .studio-explorer {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .studio-explorer.rail {
+    flex-direction: row;
+  }
+
+  .studio-rail-name {
+    max-height: none;
+    writing-mode: horizontal-tb;
+  }
 }

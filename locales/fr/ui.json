@@ -1766,5 +1766,19 @@
   "paper.level": "Niveau {n}",
   "studio.print": "Imprimer ou partager…",
   "dev.banner": "Aperçu du nouvel atelier homebrew. Il garde ses propres données sur cet appareil, à part de heroquill.app, et peut changer ou se casser.",
-  "dev.normal": "Ouvrir la version normale"
+  "dev.normal": "Ouvrir la version normale",
+  "studio.p.required": "{field} est nécessaire.",
+  "studio.p.number": "{field} doit être un nombre.",
+  "studio.p.min": "{field} doit être d'au moins {n}.",
+  "studio.p.max": "{field} doit être d'au plus {n}.",
+  "studio.p.pick": "Choisis une valeur pour {field}.",
+  "studio.p.unknown": "{field} n'existe pas pour ce type d'entrée.",
+  "hb.kind.option": "Option",
+  "hb.kind.proficiency": "Maîtrise",
+  "hb.kind.school": "École de magie",
+  "hb.kind.alignment": "Alignement",
+  "hb.kind.ability": "Caractéristique",
+  "studio.hideSidebar": "Replier la barre latérale",
+  "studio.showSidebar": "Afficher la barre latérale",
+  "studio.packSettings": "À propos de ce paquet"
 }

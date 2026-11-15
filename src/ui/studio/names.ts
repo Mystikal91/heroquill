@@ -11,6 +11,11 @@ const HB = new Set([
   "class",
   "subclass",
   "property",
+  "option",
+  "proficiency",
+  "school",
+  "alignment",
+  "ability",
 ]);
 const SEARCH = new Set([
   "item",

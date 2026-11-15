@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { studioMode } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
@@ -26,18 +26,25 @@ export function TextBox({
   placeholder,
   hint,
   onCommit,
+  focusOnMount,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   /** Called when the box is left. */
   onCommit?: () => void;
+  /** Takes the focus when it first appears (a new entry waits for its name). */
+  focusOnMount?: boolean;
   area?: boolean;
   rows?: number;
   placeholder?: string;
   hint?: string;
 }) {
   const note = hint && <small class="muted">{hint}</small>;
+  const box = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (focusOnMount) box.current?.focus();
+  }, [focusOnMount]);
   if (area)
     return (
       <label class="field studio-field">
@@ -58,6 +65,7 @@ export function TextBox({
       <input
         type="text"
         value={value}
+        ref={box}
         placeholder={placeholder}
         onInput={(e) => onChange(e.currentTarget.value)}
         onBlur={onCommit}
@@ -192,7 +200,7 @@ function refOptions(kinds: readonly string[] | undefined): Option[] {
 }
 
 /** A list of picks from a long list (spells, items): chosen ones as chips, one more added from a menu. */
-function ChipPicker({
+export function ChipPicker({
   label,
   value,
   options,

@@ -8,12 +8,18 @@ import {
 } from "../../app/arrange";
 import { editingPackId } from "../../app/homebrew";
 import { leavePage } from "../../app/navigation";
-import { flushStudio, history, openStudioPack, redoChange, undoChange } from "../../app/studio";
+import {
+  flushStudio,
+  history,
+  openStudioPack,
+  redoChange,
+  sidebarOpen,
+  undoChange,
+} from "../../app/studio";
 import { userPacksReady } from "../../app/userPacks";
 import { ui } from "../../i18n/ui";
 import { Editor } from "./Editor";
-import { EntryList } from "./EntryList";
-import { Library } from "./Library";
+import { Explorer } from "./Explorer";
 import "./studio.css";
 
 /** True for the places where keys are typing, not commands. */
@@ -79,15 +85,12 @@ export function Studio() {
           <p class="muted">{ui("studio.intro")}</p>
         </div>
       </header>
-      <div class="studio-body">
-        <Library />
+      <div class={sidebarOpen.value ? "studio-body" : "studio-body rail"}>
+        <Explorer record={record} />
         {record ? (
-          <>
-            <EntryList record={record} />
-            <Editor record={record} />
-          </>
+          <Editor record={record} />
         ) : (
-          <section class="studio-empty studio-wide">
+          <section class="studio-empty">
             <p class="muted">{ui("studio.noPackOpen")}</p>
           </section>
         )}

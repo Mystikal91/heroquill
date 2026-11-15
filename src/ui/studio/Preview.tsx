@@ -8,6 +8,7 @@ import { Paragraphs } from "../sheet/parts";
 import { spellFacts } from "../spells/spellFacts";
 import { effectName, summarize } from "./Effects";
 import { kindName } from "./names";
+import { explainProblem } from "./problems";
 
 /** A spell as the rules page shows it, from the entry as it is being written (saved or not). */
 function SpellPreview({ record, entry }: { record: UserPackRecord; entry: Entry }) {
@@ -103,7 +104,9 @@ export function Warnings({ list }: { list: Warning[] }) {
     <ul class="studio-warnings">
       {list.map((w) => (
         <li key={`${w.code}:${w.text ?? ""}`} class={w.severity}>
-          {w.code === "problem" ? w.text : ui(`studio.w.${w.code}`, { ref: w.text ?? "" })}
+          {w.code === "problem"
+            ? explainProblem(w.text ?? "")
+            : ui(`studio.w.${w.code}`, { ref: w.text ?? "" })}
         </li>
       ))}
     </ul>

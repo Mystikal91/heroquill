@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "preact/hooks";
 import { copyEntriesTo, duplicateEntries, moveEntriesTo, nameTheId } from "../../app/arrange";
 import {
   applyChange,
@@ -19,6 +20,7 @@ import type { UserPackRecord } from "../../storage/packs";
 import { PackPicker } from "./Arrange";
 import { TextBox } from "./Controls";
 import { GenericForm } from "./GenericForm";
+import { PackHome } from "./PackHome";
 import { Preview } from "./Preview";
 import { SpellForm } from "./SpellForm";
 import { kindName } from "./names";
@@ -95,21 +97,25 @@ function Delete({ record, entry }: { record: UserPackRecord; entry: Entry }) {
 /** The editor: the open entry, with its preview and checks beside it. */
 export function Editor({ record }: { record: UserPackRecord }) {
   const entry = record.pack.entries.find((e) => e.id === selectedEntry.value);
-  if (!entry)
-    return (
-      <section class="studio-editor studio-empty">
-        <p class="muted">{ui("studio.pickEntry")}</p>
-      </section>
-    );
+  const section = useRef<HTMLElement>(null);
+  const openId = entry?.id;
+  // On a narrow screen the editor is under the list: opening an entry takes the person to it.
+  useEffect(() => {
+    if (openId && matchMedia("(max-width: 960px)").matches)
+      section.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [openId]);
+  if (!entry) return <PackHome record={record} />;
 
   return (
-    <section class="studio-editor">
+    <section class="studio-editor" ref={section}>
       <Toolbar />
       <div class="studio-work">
         <div class="studio-edit">
           <header class="studio-head">
             <p class="muted">{kindName(entry)}</p>
             <TextBox
+              key={entry.id}
+              focusOnMount={!record.strings[`${entry.id}.name`]}
               label={ui("hb.f.name")}
               value={record.strings[`${entry.id}.name`] ?? ""}
               placeholder={ui("studio.unnamed")}

@@ -1,7 +1,7 @@
 import en from "../../../locales/en/ui.json";
 import { content } from "../../app/store";
 import { studioMode } from "../../app/studio";
-import type { Effect } from "../../data/schema";
+import { ABILITIES, type Effect } from "../../data/schema";
 import { blankEffect } from "../../homebrew/blanks";
 import {
   EFFECT_META,
@@ -11,7 +11,8 @@ import {
   effectFields,
 } from "../../homebrew/catalog";
 import { type UiKey, ui } from "../../i18n/ui";
-import { FieldControl } from "./Controls";
+import { entriesOfKind } from "../build/fields";
+import { ChipPicker, FieldControl } from "./Controls";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
 
 const GROUPS: EffectGroup[] = [
@@ -34,6 +35,19 @@ export function effectName(type: string): string {
 function show(value: unknown): string {
   if (typeof value === "string") {
     if (/^[a-z0-9]+:[a-z]+\/[a-z0-9-]+$/.test(value)) return content.value?.name(value) ?? value;
+    // A proficiency as the rules write it (`skill:acrobatics`, `weapon:simple-weapons`): by its name.
+    const proficiency = /^(skill|save|weapon|armor|tool):([a-z0-9-]+)$/.exec(value);
+    if (proficiency) {
+      const [, category = "", target = ""] = proficiency;
+      const id =
+        category === "skill"
+          ? `srd51:skill/${target}`
+          : category === "save"
+            ? `srd51:ability/${target}`
+            : `srd51:proficiency/${target}`;
+      const named = content.value?.index.has(id) ? content.value.name(id) : undefined;
+      return named ?? optionLabel(target);
+    }
     return optionLabel(value);
   }
   if (Array.isArray(value)) return value.map(show).join(", ");
@@ -52,6 +66,44 @@ export function summarize(effect: Effect): string {
     .join(" · ");
 }
 
+/**
+ * What a pick of a `choice` can be, by what it grants: the skills, the languages, the spells... as
+ * the entries of the content, so that "choose two skills" is ticking skills and not writing words.
+ * Undefined for what has no short list (a feat, a size): those keep the generic list.
+ */
+function choiceOptions(grants: string): { id: string; label: string }[] | undefined {
+  const c = content.value;
+  if (!c) return undefined;
+  const slug = (id: string) => id.split("/")[1] ?? id;
+  switch (grants) {
+    case "proficiency":
+    case "expertise": {
+      const skills = entriesOfKind("skill").map((e) => ({
+        id: `skill:${slug(e.id)}`,
+        label: e.label,
+      }));
+      if (grants === "expertise") return skills;
+      const others = entriesOfKind("proficiency").flatMap((e) => {
+        const data = c.index.get(e.id)?.data as { category?: string; target?: string } | undefined;
+        return data?.category && data.target && data.category !== "skill"
+          ? [{ id: `${data.category}:${data.target}`, label: e.label }]
+          : [];
+      });
+      return [...skills, ...others];
+    }
+    case "language":
+      return entriesOfKind("language").map((e) => ({ id: slug(e.id), label: e.label }));
+    case "spell":
+      return entriesOfKind("spell");
+    case "trait":
+      return entriesOfKind("trait");
+    case "abilityBonus":
+      return ABILITIES.map((id) => ({ id, label: optionLabel(id) }));
+    default:
+      return undefined;
+  }
+}
+
 function EffectCard({
   effect,
   onChange,
@@ -66,21 +118,35 @@ function EffectCard({
   const advanced = studioMode.value === "advanced";
   const fields = effectFields(type);
   const optional = fields.filter((f) => f.optional);
-  const control = (spec: (typeof fields)[number]) => (
-    <FieldControl
-      key={spec.key}
-      label={effectFieldLabel(spec.key)}
-      type={spec.type}
-      value={values[spec.key]}
-      optional={spec.optional}
-      onChange={(next) => {
-        const copy = { ...values };
-        if (next === undefined) delete copy[spec.key];
-        else copy[spec.key] = next;
-        onChange(copy as unknown as Effect);
-      }}
-    />
-  );
+  const control = (spec: (typeof fields)[number]) => {
+    const options =
+      type === "choice" && spec.key === "from" ? choiceOptions(String(values.grants)) : undefined;
+    if (options)
+      return (
+        <ChipPicker
+          key={spec.key}
+          label={effectFieldLabel(spec.key)}
+          value={Array.isArray(values.from) ? (values.from as string[]) : []}
+          options={options}
+          onChange={(next) => onChange({ ...values, from: next } as unknown as Effect)}
+        />
+      );
+    return (
+      <FieldControl
+        key={spec.key}
+        label={effectFieldLabel(spec.key)}
+        type={spec.type}
+        value={values[spec.key]}
+        optional={spec.optional}
+        onChange={(next) => {
+          const copy = { ...values };
+          if (next === undefined) delete copy[spec.key];
+          else copy[spec.key] = next;
+          onChange(copy as unknown as Effect);
+        }}
+      />
+    );
+  };
   return (
     <details class="studio-effect" open>
       <summary>

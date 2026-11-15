@@ -41,6 +41,27 @@ export function setStudioMode(mode: StudioMode) {
   }
 }
 
+const SIDEBAR_KEY = "homebrewSidebar";
+
+/** The left column (packs and their entries) is open, or folded into a narrow strip. Remembered. */
+export const sidebarOpen = signal(
+  (() => {
+    try {
+      return localStorage.getItem(SIDEBAR_KEY) !== "closed";
+    } catch {
+      return true;
+    }
+  })(),
+);
+export function setSidebarOpen(open: boolean) {
+  sidebarOpen.value = open;
+  try {
+    localStorage.setItem(SIDEBAR_KEY, open ? "open" : "closed");
+  } catch {
+    // The choice just is not remembered.
+  }
+}
+
 /** The pack being worked on and what can be undone in it; absent while no pack is open. */
 export const history = signal<History<UserPackRecord> | undefined>(undefined);
 

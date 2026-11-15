@@ -1766,5 +1766,19 @@
   "paper.level": "Level {n}",
   "studio.print": "Print or share…",
   "dev.banner": "Preview of the new homebrew studio. It keeps its own data on this device, apart from heroquill.app, and it may change or break.",
-  "dev.normal": "Open the normal version"
+  "dev.normal": "Open the normal version",
+  "studio.p.required": "{field} is needed.",
+  "studio.p.number": "{field} must be a number.",
+  "studio.p.min": "{field} must be at least {n}.",
+  "studio.p.max": "{field} must be at most {n}.",
+  "studio.p.pick": "Choose a value for {field}.",
+  "studio.p.unknown": "{field} is not something this kind of entry has.",
+  "hb.kind.option": "Option",
+  "hb.kind.proficiency": "Proficiency",
+  "hb.kind.school": "School of magic",
+  "hb.kind.alignment": "Alignment",
+  "hb.kind.ability": "Ability",
+  "studio.hideSidebar": "Fold the sidebar",
+  "studio.showSidebar": "Show the sidebar",
+  "studio.packSettings": "About this pack"
 }
