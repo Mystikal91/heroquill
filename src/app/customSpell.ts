@@ -1,8 +1,11 @@
 import { signal } from "@preact/signals";
-import { type Draft, newHomebrewPack, saveDraft } from "../homebrew/model";
+import { applyIdMap, nameBasedId } from "../homebrew/arrange";
+import { startEntry } from "../homebrew/blanks";
+import { updateEntry } from "../homebrew/entries";
+import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
-import { content, updateCharacter } from "./store";
+import { updateCharacter } from "./store";
 import { addUserPack, userPacks } from "./userPacks";
 
 /** The id of the homebrew pack that holds the spells written from a character. */
@@ -23,34 +26,42 @@ function personalPack(): UserPackRecord {
   };
 }
 
-const slugsOf = (kind: string) =>
-  [...(content.value?.index.values() ?? [])]
-    .filter((e) => e.kind === kind)
-    .map((e) => e.id.split("/")[1] ?? "")
-    .filter(Boolean);
+/**
+ * A new spell, empty but valid, in the pack of written spells, for a class: the window edits this
+ * record as it is and nothing is stored until the person saves.
+ */
+export function startCustomSpell(classId: string): { record: UserPackRecord; id: string } {
+  const started = startEntry(personalPack(), "spell");
+  return {
+    id: started.id,
+    record: updateEntry(started.record, started.id, { data: { classes: [classId] } }),
+  };
+}
 
 /**
- * Saves a spell the person wrote for a class and puts it in the character's list for that class:
- * the cantrips for a cantrip, the other list the class picks from for the others.
+ * Saves the spell written in the window and puts it in the character's list for the class: the
+ * cantrips for a cantrip, the other list the class picks from for the others.
  */
 export async function addCustomSpell(
-  draft: Draft,
+  record: UserPackRecord,
+  spellId: string,
   classId: string,
   /** The list of the class for a spell of a level: the one the class picks its spells from. */
   list: "known" | "prepared",
 ): Promise<string> {
-  const saved = saveDraft(
-    personalPack(),
-    { ...draft, values: { ...draft.values, classes: classId } },
-    { languages: slugsOf("language"), skills: slugsOf("skill") },
-  );
-  await addUserPack(saved.record);
-  const level = Number.parseInt(draft.values.level ?? "0", 10) || 0;
+  // The spell was started without a name, so its id is only a stand-in: it gets one from the name.
+  const name = record.strings[`${spellId}.name`] ?? "";
+  const better = nameBasedId(record, spellId, name);
+  const final = better ?? spellId;
+  const saved = better ? applyIdMap(record, new Map([[spellId, better]])) : record;
+  await addUserPack(saved);
+  const entry = saved.pack.entries.find((e) => e.id === final);
+  const level = Number(entry?.data.level) || 0;
   updateCharacter((d) => {
     const lists = d.spells[classId] ?? { cantrips: [], known: [], prepared: [] };
     d.spells[classId] = lists;
     const target = level === 0 ? lists.cantrips : lists[list];
-    if (!target.includes(saved.id)) target.push(saved.id);
+    if (!target.includes(final)) target.push(final);
   });
-  return saved.id;
+  return final;
 }

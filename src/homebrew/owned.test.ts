@@ -12,7 +12,7 @@ import {
   setTable,
   setText,
 } from "./entries";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 
 const pack = () => ({ ...newHomebrewPack("Mine", 1), id: "mine" });
 

@@ -121,7 +121,7 @@ word the app does not know never shuts an option. Feats are checked the same way
 A subclass entry can list spells it always prepares (`spells`), spells it adds to the class's
 list (`expanded`, a warlock patron) and, for a class that does not cast, its own
 `spellcasting`: the ability, the class whose list it picks from and the cantrips, spells known
-and slots per level, like the Eldritch Knight. The homebrew editor offers the third caster's
+and slots per level, like the Eldritch Knight. The homebrew studio offers the third caster's
 tables for a subclass.
 
 Some data fields are not effects:
@@ -143,16 +143,49 @@ The features of the SRD get theirs from `scripts/srd51/effects.ts`; a feature th
 (a fighting style) has a `choice` over its child features. Class features and subclass features
 count once the character has reached their level.
 
-## Homebrew editor
+## Homebrew studio
 
-*New homebrew pack* on the packs page opens an editor with a form for each kind of entry:
-spells, weapons, armor, gear, properties (a title and a text, for weapons and armor), languages,
-feats, species (with their traits), backgrounds, classes and subclasses (with personality tables).
-Weapons and armor can also be made from the inventory: *Customize* on a weapon or armor opens a
-window with the same fields, and saves the result as an item of the first homebrew pack (one is
-made if there is none) that takes the place of the original in the inventory. Entries are saved as soon as the form is saved, appear in the build
-steps like the built-in ones, and can be edited or deleted later. A pack can be exported as a
-file and added on another device. Classes use the standard spell slot tables (full caster, half caster or Pact Magic); every class and subclass feature is a name and a text at a level.
+The *Homebrew studio* (in the menu) is where homebrew packs are written. It has four parts: the **packs**
+on the left, the **entries** of the open pack, the **editor** for the open entry, and a **preview** of how
+it reads with a list of what to check (a missing name, a reference to something that is not there, data
+the engine cannot read). Everything is saved on the device as you type (`Ctrl+S` saves at once; `Ctrl+Z`
+and `Ctrl+Y` undo and redo).
+
+- **Every kind of entry** can be made and edited: spells, items (weapon, armor, gear, magic item), species
+  and sub-species with their traits, classes with their features by level and how they cast, subclasses
+  (also third casters), backgrounds, feats, languages, properties, deities, monsters, options, and the words
+  of the rules. A new entry starts empty but valid. The forms are made from a *catalog*
+  (`src/homebrew/catalog/`) that is read from the engine's own schema, and a test fails when the engine has
+  a kind of entry, an effect or a field of `data` that the catalog does not describe.
+- **Guided and advanced.** The guided mode shows what a beginner needs and the common effects; the advanced
+  mode shows every field and all 33 effects. Effects are written as cards ("Bonus to a score", "Resistance
+  or immunity", "Gives a spell"...) and are applied by the engine like those of the shipped rules.
+- **Packs are books.** A pack has an author, a version and a description, and keeps the texts of each entry
+  in the language they were written in plus translations in other languages.
+- **Arranging.** Entries can be ticked and copied, cut, pasted, duplicated, moved or copied to another pack
+  (with buttons, `Ctrl+C`/`X`/`V`/`D`, or by dragging them onto a pack; hold `Alt` to copy). An id carries its
+  pack, so a move rewrites it everywhere it is written (other entries of every pack, texts, translations and
+  the saved characters) and can be taken back from the notice that follows. What an entry owns (the traits
+  of a species, the features of a class) goes with it, and the entries it refers to can be brought too.
+- **From the rules.** *Copy as new* in Quick edit, and *Customize* on a weapon or armor of the inventory,
+  copy an entry of the rules (or of imported content) into a homebrew pack to change it. Copies of imported
+  content stay on the device (see *Where an entry came from*). *Write a spell* in the spell list makes a
+  spell for a class of the character.
+- **On paper.** *Print or share…* prints a pack, a kind of entry, a selection or one entry as a two-column
+  booklet or as playing-card sized cards, or writes a Markdown file for [Homebrewery](https://homebrewery.naturalcrit.com)
+  (download or copy), all from one description of each entry (`src/ui/studio/paper/`).
+- A pack can be exported as a file and added on another device.
+
+### Editions
+
+A pack is not tied to an edition: it can hold entries for the 2014 and the 2024 rules, and each entry may
+say which (the `ruleset` of an entry, still to be implemented in the editor).
+
+### Where an entry came from
+
+A copy remembers where it came from (`provenance`). A copy of content the person imported from another
+tool is **restricted**: it stays on the device and is left out of exported pack files and of the packs
+that travel with a character, as the imported pack itself is.
 
 ## Aurora XML
 
@@ -199,9 +232,15 @@ you have the right to use.
 
 ## Pack file format
 
-A homebrew pack file is JSON with `format: "dnd-character-maker-pack"`, an `id`, a `name`, the
-`lang` of its texts, a `pack` (manifest and entries, as in `src/data/schema.ts`) and `strings`
-keyed by `<entry id>.<field>` (`name`, `desc`, ...). Pack ids may not be `srd51` or `srd52`.
+A homebrew pack file is JSON with `format: "heroquill-pack"` and a `formatVersion` (now 2), an `id`, a
+`name`, the `lang` of its texts, a `pack` (manifest and entries, as in `src/data/schema.ts`) and `strings`
+keyed by `<entry id>.<field>` (`name`, `desc`, ...). Version 2 adds, all optional: `meta` (`author`,
+`description`, `cover`), `translations` (the same texts by language) and `provenance` (where each entry
+came from). Pack ids may not be `srd51` or `srd52`.
+
+Older packs (version 1, and files that say `dnd-character-maker-pack`) are read and migrated, step by
+step (`src/storage/packFormat.ts`); a pack made by a newer version of the app is refused with a clear
+message. To change the format, add a step to `STEPS` and raise `PACK_FORMAT_VERSION`.
 
 ## The two editions and the packs
 

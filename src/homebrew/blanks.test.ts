@@ -6,7 +6,7 @@ import { checkData } from "./catalog/data";
 import { EFFECT_TYPES, effectFields } from "./catalog/effects";
 import { checkFields } from "./catalog/fields";
 import { entryProblems } from "./entries";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 
 describe("blank entries", () => {
   it("are valid for every kind, as far as the engine needs", () => {

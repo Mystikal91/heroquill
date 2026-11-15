@@ -1,4 +1,4 @@
-import { applyChange, studioMode } from "../../app/studio";
+import { studioMode } from "../../app/studio";
 import type { Entry } from "../../data/schema";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { setText, updateEntry } from "../../homebrew/entries";
@@ -6,6 +6,7 @@ import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
 import { CheckBox, FieldControl, ManyBox, SelectBox, TextBox, humanize } from "./Controls";
+import { useEdit } from "./scope";
 
 /** The fields of a spell the guided form draws itself; the advanced mode adds all the others. */
 const CURATED = new Set(["level", "school", "components", "ritual", "concentration", "classes"]);
@@ -16,7 +17,17 @@ const LEVELS = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 /** The form of a spell: it edits the entry itself, so nothing it does not show is lost. */
-export function SpellForm({ record, entry }: { record: UserPackRecord; entry: Entry }) {
+export function SpellForm({
+  record,
+  entry,
+  hideClasses = false,
+}: {
+  record: UserPackRecord;
+  entry: Entry;
+  /** The classes are already settled by where the form is opened. */
+  hideClasses?: boolean;
+}) {
+  const { apply: applyChange } = useEdit();
   const id = entry.id;
   const data = entry.data as Record<string, unknown>;
   const text = (field: string) => record.strings[`${id}.${field}`] ?? "";
@@ -108,12 +119,14 @@ export function SpellForm({ record, entry }: { record: UserPackRecord; entry: En
           onChange={(v) => writeText("material", v)}
         />
       )}
-      <ManyBox
-        label={ui("hb.f.classes")}
-        value={Array.isArray(data.classes) ? (data.classes as string[]) : []}
-        options={classes}
-        onChange={(v) => writeData("classes", v)}
-      />
+      {!hideClasses && (
+        <ManyBox
+          label={ui("hb.f.classes")}
+          value={Array.isArray(data.classes) ? (data.classes as string[]) : []}
+          options={classes}
+          onChange={(v) => writeData("classes", v)}
+        />
+      )}
       <TextBox
         label={ui("hb.f.desc")}
         value={text("desc")}

@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import type { Effect, Entry } from "../../../data/schema";
 import { addEntry, addOwned, setText, updateEntry } from "../../../homebrew/entries";
-import { newHomebrewPack } from "../../../homebrew/model";
+import { newHomebrewPack } from "../../../homebrew/pack";
 import type { UserPackRecord } from "../../../storage/packs";
 import { type Words, docOf } from "./blocks";
 import { entryMarkdown, monsterMarkdown, toHomebrewery } from "./homebrewery";

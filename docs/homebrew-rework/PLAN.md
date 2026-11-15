@@ -186,7 +186,22 @@ avvisare.
   stampa privata è ammessa.
 Uscita: stampa/export funzionante per tutti i kind.
 
-## Fase 6 — Integrazione con il resto dell'app
+## Fase 6 — Integrazione con il resto dell'app  ✅ fatta (2026-11-15, non committata)
+Realizzato: **il vecchio editor non esiste più** (eliminati `HomebrewPage.tsx`, `PropertyPicker.tsx`, `homebrew/model.ts`,
+`copy.ts` e i loro test; `newHomebrewPack` è in `homebrew/pack.ts`; 18 testi inutilizzati tolti dalle 5 lingue).
+Le finestre fuori dallo studio usano gli stessi moduli: un contesto di modifica (`ui/studio/scope.tsx`) permette a
+`SpellForm`/`GenericForm`/`Owned` di lavorare su un pacchetto locale. **"Scrivi un incantesimo"** (dalla scheda) e
+**"Personalizza"** arma/armatura (dall'inventario) ora sono il modulo vero dello studio, che si salva solo alla fine;
+il Personalizza copia da SRD/Aurora con origine e restrizioni, porta con sé bonus e magia della vecchia casella e
+modifica sul posto un oggetto già homebrew. **Lancio di incantesimi** di classi e sottoclassi in due passaggi
+(`homebrew/casting.ts`: completo, mezzo, Magia del Patto, terzo incantatore, con le tabelle dei 20 livelli generate)
+come faceva il vecchio editor. I test di integrazione col motore sono stati riscritti sul nuovo modello
+(`homebrew/engine.test.ts`). Pacchetti che viaggiano col personaggio: provato che le voci riservate restano fuori
+(`carriedRestricted.test.ts`); backup e trasferimento passano dal migratore (Fase 0). `docs/CONTENT_PACKS.md` aggiornato.
+Perso nel passaggio: scrivere una proprietà nuova al volo dalla finestra Personalizza (ora si crea nello studio).
+Rimandato: voce di CHANGELOG e ROADMAP in `news.ts` (si scrivono al rilascio, con la versione).
+
+## Fase 6 (progetto originale) — Integrazione con il resto dell'app
 - Ricablare i punti d'ingresso: "Copia come nuovo" (Quick edit), "Personalizza" arma/armatura, "Scrivi
   incantesimo" da scheda (e il pack speciale `hbmyspells`).
 - Pack che viaggiano col personaggio (`carried`), backup/trasferimento (`bundle`, `transfer`), Google Drive.

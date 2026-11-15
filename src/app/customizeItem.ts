@@ -1,7 +1,8 @@
 import { signal } from "@preact/signals";
 import { itemData } from "../data/items";
-import { copyDraft } from "../homebrew/copy";
-import { type Draft, draftFromEntry, newHomebrewPack, saveDraft } from "../homebrew/model";
+import { bundleFromIndex, importBundle } from "../homebrew/arrange";
+import { updateEntry } from "../homebrew/entries";
+import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
 import { PERSONAL_SPELLS_PACK } from "./customSpell";
@@ -30,53 +31,64 @@ export function canCustomize(itemId: string): boolean {
   }
 }
 
-/** What the window needs to open: the form, and the pack the result is saved in. */
+/** What the window needs to open: the pack as it will be saved, and the item in it. */
 export interface CustomizePlan {
-  draft: Draft;
-  /** The pack, with what it holds now; a new one when the person has no homebrew pack yet. */
+  /** The pack, with the item in it (a copy of the original, or the item itself when it is homebrew already). */
   record: UserPackRecord;
-  /** The entry that is edited, when the item is homebrew already; otherwise a copy is made. */
-  editing?: string;
+  /** The id of the item to edit in `record`. */
+  id: string;
+  /** The item is homebrew already and is edited where it is; otherwise a copy was made. */
+  editing: boolean;
 }
 
 const packOf = (id: string) => id.split(":")[0] ?? "";
 
 /**
- * The form for an item of the inventory. A homebrew item is edited where it is; any other becomes a
- * copy, in the first homebrew pack (not the one of the spells written from characters) or in a new
- * one. The bonus and the magic the old "Magic weapon" box put on the item itself are carried into
- * the form, so that they are not lost.
+ * The item to edit for an item of the inventory. A homebrew item is edited where it is; any other
+ * becomes a copy, in the first homebrew pack (not the one of the spells written from characters) or in
+ * a new one. The bonus and the magic the old "Magic weapon" box put on the item itself are carried
+ * into the item, so that they are not lost. Nothing is stored until the person saves.
  */
 export function planCustomize(itemId: string): CustomizePlan | undefined {
   const c = content.value;
   const entry = c?.index.get(itemId);
   if (!c || !entry || !canCustomize(itemId)) return undefined;
   const owner = userPacks.value.find((p) => p.origin === "homebrew" && p.id === packOf(itemId));
-  let draft: Draft | undefined;
   let record: UserPackRecord;
+  let id = itemId;
   if (owner) {
-    draft = draftFromEntry(entry, owner.strings, owner.pack.entries);
     record = owner;
   } else {
-    draft = copyDraft(
-      entry,
-      { index: c.index, fields: (i) => c.fields(i), read: (i, f) => c.displayed(i, f) ?? "" },
-      (name) => ui("hb.copyName", { name }),
-    );
-    record =
+    const target =
       userPacks.value.find((p) => p.origin === "homebrew" && p.id !== PERSONAL_SPELLS_PACK) ??
       newHomebrewPack(ui("hb.myPack"));
+    const bundle = bundleFromIndex(
+      c.index,
+      { fields: (i) => c.fields(i), read: (i, f) => c.displayed(i, f) ?? "" },
+      [itemId],
+      target.lang,
+    );
+    const done = importBundle(bundle, target, {
+      rename: (name) => ui("hb.copyName", { name }),
+      restricted: userPacks.value.some((p) => p.origin === "personal" && p.id === packOf(itemId)),
+      from: (original) => original,
+    });
+    record = done.record;
+    id = done.newIds[0] ?? itemId;
   }
-  if (!draft) return undefined;
-  // A copy remembers what it was made from, so a customized club still takes Shillelagh.
-  if (!owner) draft.values.copyOf = itemId;
+  const own = record.pack.entries.find((e) => e.id === id);
   const held = character.value.inventory.find((i) => i.itemId === itemId);
-  if (held) {
-    const bonus = Math.max(Number(draft.values.enhancement) || 0, held.bonus ?? 0);
-    if (draft.kind === "weapon") draft.values.enhancement = String(bonus);
-    if (held.magical) draft.values.magical = "true";
+  const data = own?.data as { weapon?: unknown; enhancement?: number } | undefined;
+  const patch: Record<string, unknown> = {};
+  // A copy remembers what it was made from, so a customized club still takes Shillelagh.
+  if (!owner) patch.copyOf = itemId;
+  if (data?.weapon && held) {
+    const bonus = Math.min(3, Math.max(data.enhancement ?? 0, held.bonus ?? 0));
+    if (bonus > 0) patch.enhancement = bonus;
+    if (held.magical) patch.magical = true;
   }
-  return { draft, record, ...(owner && { editing: itemId }) };
+  if (Object.keys(patch).length > 0) record = updateEntry(record, id, { data: patch });
+  return { record, id, editing: Boolean(owner) };
 }
 
 /** Resolves when the content has an entry (a pack that was just saved is loaded again in a moment). */
@@ -102,38 +114,24 @@ export interface CharacterPart {
 }
 
 /**
- * Saves the form in the pack and puts the result in the inventory in place of the item. Returns the
- * id of the entry. The bonus and the magic of the old box are in the entry now, so the item is
- * cleared of them.
+ * Saves the pack with the edited item and puts the item in the inventory in place of the original.
+ * The bonus and the magic of the old box are in the entry now, so the inventory item is cleared of them.
  */
 export async function saveCustomItem(
   from: string,
   plan: CustomizePlan,
   record: UserPackRecord,
-  draft: Draft,
   part: CharacterPart,
 ): Promise<string> {
-  const c = content.value;
-  const slugs = (kind: string) =>
-    [...(c?.index.values() ?? [])]
-      .filter((e) => e.kind === kind)
-      .map((e) => e.id.split("/")[1] ?? "")
-      .filter(Boolean);
-  const saved = saveDraft(
-    record,
-    draft,
-    { languages: slugs("language"), skills: slugs("skill") },
-    plan.editing,
-  );
-  await addUserPack(saved.record);
-  await whenIndexed(saved.id);
+  await addUserPack(record);
+  await whenIndexed(plan.id);
   updateCharacter((d) => {
     const found = d.inventory.find((i) => i.itemId === from);
     if (!found) return;
-    found.itemId = saved.id;
+    found.itemId = plan.id;
     found.bonus = undefined;
     found.magical = undefined;
     found.enchantment = part.enchantment || undefined;
   });
-  return saved.id;
+  return plan.id;
 }

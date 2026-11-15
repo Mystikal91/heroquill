@@ -15,7 +15,7 @@ import {
   selection,
   toggleSelected,
 } from "../../app/arrange";
-import { legacyForm, selectedEntry } from "../../app/studio";
+import { selectedEntry } from "../../app/studio";
 import { ui } from "../../i18n/ui";
 
 /** The mark that says an entry is being dragged: the ids, as text, since that is what a drop can carry. */
@@ -136,7 +136,6 @@ export function EntryRow({
         onClick={(e) => {
           if (e.ctrlKey || e.metaKey) return toggleSelected(id);
           if (e.shiftKey) return selectRange(ids, id);
-          legacyForm.value = undefined;
           selectedEntry.value = id;
         }}
       >

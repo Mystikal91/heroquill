@@ -14,7 +14,7 @@ import {
   rewriteIds,
 } from "./arrange";
 import { addEntry, addOwned, setText } from "./entries";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 
 const pack = (id: string): UserPackRecord => ({
   ...newHomebrewPack(id, 1),

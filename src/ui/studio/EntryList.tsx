@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { showView } from "../../app/navigation";
-import { applyChange, flushStudio, legacyForm, selectedEntry, studioMode } from "../../app/studio";
+import { applyChange, flushStudio, selectedEntry, studioMode } from "../../app/studio";
 import { exportPack } from "../../app/userPacks";
 import type { Entry } from "../../data/schema";
 import { type Variant, startEntry } from "../../homebrew/blanks";
@@ -86,7 +86,6 @@ function NewMenu({ record }: { record: UserPackRecord }) {
     const started = startEntry(record, found.kind, found.variant);
     applyChange(started.record);
     selectedEntry.value = started.id;
-    legacyForm.value = undefined;
   };
   return (
     <div class="studio-menu">

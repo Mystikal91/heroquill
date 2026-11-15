@@ -9,7 +9,6 @@ import {
   startHistory,
   undo,
 } from "../homebrew/history";
-import type { Draft } from "../homebrew/model";
 import type { UserPackRecord } from "../storage/packs";
 import { editingPackId } from "./homebrew";
 import { addUserPack, userPacks } from "./userPacks";
@@ -47,12 +46,6 @@ export const history = signal<History<UserPackRecord> | undefined>(undefined);
 
 /** The entry open in the editor. */
 export const selectedEntry = signal<string | undefined>(undefined);
-
-/**
- * A form of the previous editor open in the editor's place, for the kinds the new editor does not
- * have yet (and for a copy of a rules entry): a blank draft, or an entry being edited.
- */
-export const legacyForm = signal<{ draft: Draft; editing?: string } | undefined>(undefined);
 
 /** `saved` (on the device), `pending` (a change waits for its turn), `saving`. */
 export const saveState = signal<"saved" | "pending" | "saving">("saved");

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Entry } from "../data/schema";
 import { bundleFromIndex, importBundle } from "./arrange";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 
 const entry = (id: string, kind: Entry["kind"], effects: Entry["effects"] = []): Entry => ({
   id: id as Entry["id"],

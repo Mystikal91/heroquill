@@ -17,6 +17,8 @@ export interface Layout {
   owns?: "trait" | "feature";
   /** The kind of entry the one being edited belongs to (`parent`), when it has one. */
   parent?: EntryKind;
+  /** How it casts, chosen in a few steps from which the level tables follow. */
+  casting?: "class" | "subclass";
   /** Tables of texts, one per line (the personality of a background), with how many the player picks. */
   tables?: [string, number][];
 }
@@ -36,9 +38,10 @@ export const LAYOUTS: Record<EntryKind, Layout> = {
   },
   class: {
     texts: desc,
-    guided: () => ["hitDie", "primaryAbility", "spellcasting"],
+    guided: () => ["hitDie", "primaryAbility"],
     effects: true,
     owns: "feature",
+    casting: "class",
   },
   subclass: {
     texts: desc,
@@ -46,6 +49,7 @@ export const LAYOUTS: Record<EntryKind, Layout> = {
     effects: true,
     owns: "feature",
     parent: "class",
+    casting: "subclass",
   },
   feature: { texts: desc, guided: () => ["activation"], effects: true },
   background: {

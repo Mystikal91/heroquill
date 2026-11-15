@@ -1,4 +1,3 @@
-import { applyChange } from "../../app/studio";
 import type { Entry } from "../../data/schema";
 import {
   addOwned,
@@ -13,6 +12,7 @@ import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { NumberBox, TextBox } from "./Controls";
 import { EffectList } from "./Effects";
+import { useEdit } from "./scope";
 
 /**
  * The traits of a species or the features of a class, written inside their owner: each has a name, a
@@ -27,6 +27,7 @@ export function OwnedList({
   owner: Entry;
   kind: "trait" | "feature";
 }) {
+  const { apply: applyChange } = useEdit();
   const items = ownedOfKind(record, owner.id, kind);
   const title = ui(kind === "trait" ? "studio.traits" : "studio.features");
   const text = (e: Entry, field: string) => record.strings[`${e.id}.${field}`] ?? "";

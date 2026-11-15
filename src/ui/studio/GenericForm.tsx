@@ -1,4 +1,4 @@
-import { applyChange, studioMode } from "../../app/studio";
+import { studioMode } from "../../app/studio";
 import type { Entry } from "../../data/schema";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { readTable, setTable, setText, updateEntry } from "../../homebrew/entries";
@@ -6,17 +6,20 @@ import { syncItemData } from "../../homebrew/sync";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
+import { ClassCasting, SubclassCasting } from "./Casting";
 import { FieldControl, SelectBox, TextBox } from "./Controls";
 import { EffectList } from "./Effects";
 import { OwnedList } from "./Owned";
 import { fieldLabel } from "./labels";
 import { LAYOUTS } from "./layouts";
+import { useEdit } from "./scope";
 
 /**
  * The form of any kind of entry, made from its layout and the catalog: the texts, the fields of the
  * data (a beginner's first, the rest in the advanced mode), the effects, and what the entry owns.
  */
 export function GenericForm({ record, entry }: { record: UserPackRecord; entry: Entry }) {
+  const { apply: applyChange } = useEdit();
   const id = entry.id;
   const layout = LAYOUTS[entry.kind];
   const advanced = studioMode.value === "advanced";
@@ -94,6 +97,9 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
       ))}
 
       {shown.map(control)}
+
+      {layout.casting === "class" && <ClassCasting record={record} entry={entry} />}
+      {layout.casting === "subclass" && <SubclassCasting record={record} entry={entry} />}
 
       {layout.effects && (
         <section class="studio-effects-section">

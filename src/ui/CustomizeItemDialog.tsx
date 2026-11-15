@@ -8,85 +8,40 @@ import {
   saveCustomItem,
 } from "../app/customizeItem";
 import { character, content } from "../app/store";
-import {
-  DAMAGE_TYPES,
-  type Draft,
-  type DraftTrait,
-  draftReady,
-  saveDraft,
-} from "../homebrew/model";
-import { type UiKey, ui } from "../i18n/ui";
-import { Check, Cost, type FormApi, Num, Pick, Text } from "./HomebrewPage";
-import { PropertyPicker } from "./PropertyPicker";
+import { setText } from "../homebrew/entries";
+import { ui } from "../i18n/ui";
 import { entriesOfKind } from "./build/fields";
-
-const option = (key: string) => ui(`hb.o.${key}` as UiKey);
-
-/** One block of the form, with a title, so a long form on a phone reads as a few short parts. */
-function Section({ title, children }: { title: string; children: preact.ComponentChildren }) {
-  return (
-    <section class="item-section">
-      <h4>{title}</h4>
-      {children}
-    </section>
-  );
-}
+import { TextBox } from "./studio/Controls";
+import { GenericForm } from "./studio/GenericForm";
+import { EditProvider } from "./studio/scope";
 
 function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
-  const [draft, setDraft] = useState<Draft>(plan.draft);
+  // The item is edited as a copy kept here; the pack is written only when the person saves.
   const [record, setRecord] = useState(plan.record);
   const held = character.value.inventory.find((i) => i.itemId === itemId);
   const [enchantment, setEnchantment] = useState(held?.enchantment ?? "");
   const [saving, setSaving] = useState(false);
   const c = content.value;
-
-  // The properties that are in the content, and those just written here, which are not saved yet.
-  const written = record.pack.entries
-    .filter((e) => e.kind === "property")
-    .map((e) => ({ id: e.id as string, label: record.strings[`${e.id}.name`] ?? e.id }));
-  const known = entriesOfKind("property");
-  const options = [...known, ...written.filter((w) => !known.some((k) => k.id === w.id))].sort(
-    (a, b) => a.label.localeCompare(b.label),
-  );
-
-  const api: FormApi = {
-    draft,
-    set: (key, value) => setDraft((d) => ({ ...d, values: { ...d.values, [key]: value } })),
-    setTraits: (traits: DraftTrait[]) => setDraft((d) => ({ ...d, traits })),
-    properties: {
-      options,
-      create: (name, desc) => {
-        const saved = saveDraft(
-          record,
-          { kind: "property", values: { name, desc }, traits: [] },
-          { languages: [] },
-        );
-        setRecord(saved.record);
-        return saved.id;
-      },
-    },
-  };
-
-  const weapon = draft.kind === "weapon";
+  const entry = record.pack.entries.find((e) => e.id === plan.id);
+  const name = record.strings[`${plan.id}.name`] ?? "";
+  const ready = name.trim() !== "";
+  const weapon = Boolean((entry?.data as { weapon?: unknown } | undefined)?.weapon);
   const enchantments = c
     ? entriesOfKind("item").filter((o) => c.index.get(o.id)?.data.enchants)
     : [];
-  const ready = draftReady(draft);
-  const name = c?.name(itemId) ?? itemId;
-  const packName = record.name;
 
   const save = async () => {
     if (!ready || saving) return;
     setSaving(true);
     const part: CharacterPart = { enchantment };
-    await saveCustomItem(itemId, plan, record, draft, part);
+    await saveCustomItem(itemId, plan, record, part);
     closeCustomize();
   };
 
   return (
-    <>
+    <EditProvider value={{ apply: (next) => setRecord(next) }}>
       <div class="item-dialog-head">
-        <h3>{ui("item.customize.title", { name })}</h3>
+        <h3>{ui("item.customize.title", { name: c?.name(itemId) ?? itemId })}</h3>
         <button type="button" class="link" onClick={closeCustomize}>
           {ui("hb.cancel")}
         </button>
@@ -95,90 +50,21 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
         <p class="muted">
           {plan.editing
             ? ui("item.customize.hintEdit")
-            : ui("item.customize.hintCopy", { pack: packName })}
+            : ui("item.customize.hintCopy", { pack: record.name })}
         </p>
-
-        <Section title={ui("item.customize.basics")}>
-          <Text api={api} name="name" />
-          <Text api={api} name="desc" area />
-        </Section>
-
-        {weapon ? (
-          <Section title={ui("item.customize.combat")}>
-            <div class="hb-row">
-              <Pick
-                api={api}
-                name="wcategory"
-                fallback="simple"
-                options={["simple", "martial"].map((id) => ({ id, label: option(id) }))}
-              />
-              <Pick
-                api={api}
-                name="wkind"
-                fallback="melee"
-                options={["melee", "ranged"].map((id) => ({ id, label: option(id) }))}
-              />
-            </div>
-            <div class="hb-row">
-              <Text api={api} name="damage" />
-              <Pick
-                api={api}
-                name="damageType"
-                fallback="slashing"
-                options={DAMAGE_TYPES.map((id) => ({ id, label: option(id) }))}
-              />
-              <Text api={api} name="versatile" />
-            </div>
-            <div class="hb-row">
-              <Num api={api} name="rangeNormal" min={0} />
-              <Num api={api} name="rangeLong" min={0} />
-            </div>
-            <div class="hb-row">
-              <Pick
-                api={api}
-                name="enhancement"
-                fallback="0"
-                options={[0, 1, 2, 3].map((n) => ({
-                  id: String(n),
-                  label: n === 0 ? "—" : `+${n}`,
-                }))}
-              />
-            </div>
-            <Check api={api} name="magical" />
-          </Section>
-        ) : (
-          <Section title={ui("item.customize.armor")}>
-            <div class="hb-row">
-              <Pick
-                api={api}
-                name="acategory"
-                fallback="light"
-                options={["light", "medium", "heavy", "shield"].map((id) => ({
-                  id,
-                  label: option(id),
-                }))}
-              />
-              <Num api={api} name="base" min={0} />
-              <Num api={api} name="maxDex" min={0} />
-              <Num api={api} name="strMin" min={0} />
-            </div>
-            <div class="hb-grid">
-              <Check api={api} name="dexBonus" />
-              <Check api={api} name="stealth" />
-            </div>
-          </Section>
-        )}
-
-        <Section title={ui("item.customize.properties")}>
-          <PropertyPicker api={api} />
-        </Section>
-
-        <Section title={ui("item.customize.value")}>
-          <Cost api={api} />
-        </Section>
+        <section class="item-section">
+          <h4>{ui("item.customize.basics")}</h4>
+          <TextBox
+            label={ui("hb.f.name")}
+            value={name}
+            onChange={(v) => setRecord(setText(record, plan.id, "name", v))}
+          />
+        </section>
+        {entry && <GenericForm record={record} entry={entry} />}
 
         {weapon && enchantments.length > 0 && (
-          <Section title={ui("item.customize.character")}>
+          <section class="item-section">
+            <h4>{ui("item.customize.character")}</h4>
             <label class="field">
               <span>{ui("weapon.enchantment")}</span>
               <select value={enchantment} onChange={(e) => setEnchantment(e.currentTarget.value)}>
@@ -190,7 +76,7 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
                 ))}
               </select>
             </label>
-          </Section>
+          </section>
         )}
       </div>
       <div class="item-dialog-actions">
@@ -206,14 +92,13 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
           {ui("hb.cancel")}
         </button>
       </div>
-    </>
+    </EditProvider>
   );
 }
 
 /**
- * The window that changes a weapon or an armor of the inventory: its name and its numbers, and its
- * properties, which can be ticked or written anew. The result is saved as an item of the homebrew
- * pack, in place of the one in the inventory.
+ * The window that changes a weapon or an armor of the inventory: the same form the studio has for an
+ * item. The result is saved as an item of the homebrew pack, in place of the one in the inventory.
  */
 export function CustomizeItemDialog() {
   const itemId = customizing.value;

@@ -6,16 +6,9 @@ import {
   duplicateEntries,
   pasteHere,
 } from "../../app/arrange";
-import { editingPackId, takeWaitingDraft } from "../../app/homebrew";
+import { editingPackId } from "../../app/homebrew";
 import { leavePage } from "../../app/navigation";
-import {
-  flushStudio,
-  history,
-  legacyForm,
-  openStudioPack,
-  redoChange,
-  undoChange,
-} from "../../app/studio";
+import { flushStudio, history, openStudioPack, redoChange, undoChange } from "../../app/studio";
 import { userPacksReady } from "../../app/userPacks";
 import { ui } from "../../i18n/ui";
 import { Editor } from "./Editor";
@@ -40,12 +33,6 @@ export function Studio() {
     if (!ready) return;
     if (packId !== history.peek()?.present.id) void openStudioPack(packId);
   }, [packId, ready]);
-
-  // A copy of a rules entry waits for the studio to open it.
-  useEffect(() => {
-    const draft = takeWaitingDraft();
-    if (draft) legacyForm.value = { draft };
-  }, []);
 
   // Ctrl+S saves now; Ctrl+Z and Ctrl+Y undo and redo, except where the field has its own undo.
   useEffect(() => {

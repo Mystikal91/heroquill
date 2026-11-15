@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Entry } from "../data/schema";
 import type { UserPackRecord } from "../storage/packs";
-import { DATA_FIELDS } from "./catalog/data";
 import {
   EntryError,
   addEntry,
@@ -12,8 +11,7 @@ import {
   setText,
   updateEntry,
 } from "./entries";
-import { type Draft, buildDraft } from "./model";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 
 const pack = (): UserPackRecord => ({
   ...newHomebrewPack("Mine", 1),
@@ -157,108 +155,5 @@ describe("entries worked on directly", () => {
       effects: [{ type: "abilityBonus", ability: "luck", value: 1 }],
     } as unknown as Entry;
     expect(entryProblems(worse).length).toBeGreaterThan(0);
-  });
-});
-
-describe("what the current editor builds fits the catalog", () => {
-  const context = { languages: ["common"], skills: ["arcana"] };
-  const drafts: Draft[] = [
-    {
-      kind: "spell",
-      values: {
-        name: "Glow",
-        level: "1",
-        school: "evocation",
-        compV: "true",
-        classes: "srd51:class/wizard",
-      },
-      traits: [],
-    },
-    {
-      kind: "weapon",
-      values: {
-        name: "Blade",
-        wcategory: "martial",
-        damage: "1d8",
-        damageType: "slashing",
-        properties: "srd51:property/finesse",
-        enhancement: "1",
-      },
-      traits: [],
-    },
-    {
-      kind: "armor",
-      values: { name: "Plate", acategory: "heavy", base: "18", strMin: "15", stealth: "true" },
-      traits: [],
-    },
-    { kind: "gear", values: { name: "Rope", costAmount: "1", weight: "10" }, traits: [] },
-    { kind: "property", values: { name: "Sharp" }, traits: [] },
-    { kind: "language", values: { name: "Sylvan" }, traits: [] },
-    {
-      kind: "feat",
-      values: {
-        name: "Lucky",
-        bonusAbility: "dex",
-        bonusValue: "1",
-        prereqAbility: "int",
-        prereqMin: "13",
-      },
-      traits: [],
-    },
-    {
-      kind: "species",
-      values: { name: "Sprite", speed: "30", size: "small", "bonus-dex": "2", languages: "common" },
-      traits: [{ name: "Glow", text: "Light." }],
-    },
-    {
-      kind: "background",
-      values: {
-        name: "Hermit",
-        skills: "arcana",
-        languageChoices: "1",
-        personalityTraits: "Quiet",
-      },
-      traits: [],
-    },
-    {
-      kind: "class",
-      values: {
-        name: "Tinker",
-        hitDie: "8",
-        casting: "half",
-        preparation: "known",
-        cantrips: "2",
-        skills: "arcana",
-        multiAbility: "int",
-      },
-      traits: [{ name: "Gadget", text: "Tinker.", level: "1" }],
-    },
-    {
-      kind: "subclass",
-      values: { name: "Storm", parent: "srd51:class/wizard", casting: "third" },
-      traits: [{ name: "Gust", text: "Wind.", level: "3" }],
-    },
-  ];
-
-  it.each(drafts.map((d) => [d.kind, d] as const))("%s", (_kind, draft) => {
-    const entityKind = ["weapon", "armor", "gear"].includes(draft.kind) ? "item" : draft.kind;
-    const built = buildDraft(draft, `mine:${entityKind}/x` as Entry["id"], context);
-    for (const entry of built.entries) expect(entryProblems(entry), entry.id).toEqual([]);
-  });
-
-  it("covers every key the old editor writes for an item", () => {
-    const keys = DATA_FIELDS.item.map((f) => f.key);
-    expect(keys).toEqual(
-      expect.arrayContaining([
-        "category",
-        "cost",
-        "weight",
-        "enhancement",
-        "magical",
-        "copyOf",
-        "weapon",
-        "armor",
-      ]),
-    );
   });
 });

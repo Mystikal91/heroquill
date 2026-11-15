@@ -11,7 +11,7 @@ import {
   renameId,
 } from "../homebrew/arrange";
 import { dropEntries, ownedEntries } from "../homebrew/entries";
-import { newHomebrewPack } from "../homebrew/model";
+import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
 import { askConfirm } from "./confirm";

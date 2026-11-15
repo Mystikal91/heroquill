@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Entry } from "../data/schema";
 import type { UserPackRecord } from "../storage/packs";
 import { addEntry } from "./entries";
-import { newHomebrewPack } from "./model";
+import { newHomebrewPack } from "./pack";
 import { warningsFor } from "./warnings";
 
 const empty = (): UserPackRecord => ({

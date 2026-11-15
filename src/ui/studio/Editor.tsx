@@ -1,10 +1,7 @@
-import { useEffect } from "preact/hooks";
 import { copyEntriesTo, duplicateEntries, moveEntriesTo, nameTheId } from "../../app/arrange";
 import {
   applyChange,
-  flushStudio,
   history,
-  legacyForm,
   redoChange,
   saveState,
   selectedEntry,
@@ -17,10 +14,8 @@ import type { Entry } from "../../data/schema";
 import { KIND_META } from "../../homebrew/catalog";
 import { deleteEntry, setText } from "../../homebrew/entries";
 import { canRedo, canUndo } from "../../homebrew/history";
-import type { Draft } from "../../homebrew/model";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
-import { EntryForm } from "../HomebrewPage";
 import { PackPicker } from "./Arrange";
 import { TextBox } from "./Controls";
 import { GenericForm } from "./GenericForm";
@@ -97,45 +92,8 @@ function Delete({ record, entry }: { record: UserPackRecord; entry: Entry }) {
   );
 }
 
-/** The previous form, for an entry of a kind the new editor does not have yet. */
-function LegacyForm({
-  draft,
-  editing,
-  onDone,
-}: {
-  draft: Draft;
-  editing?: string | undefined;
-  onDone: () => void;
-}) {
-  // The form saves through the packs of the device: what waits here goes there first.
-  useEffect(() => {
-    void flushStudio();
-  }, []);
-  return (
-    <div class="studio-legacy">
-      <p class="muted">{ui("studio.legacyNote")}</p>
-      <EntryForm initial={draft} editing={editing} onDone={onDone} />
-    </div>
-  );
-}
-
 /** The editor: the open entry, with its preview and checks beside it. */
 export function Editor({ record }: { record: UserPackRecord }) {
-  const form = legacyForm.value;
-  if (form)
-    return (
-      <section class="studio-editor">
-        <LegacyForm
-          key={form.editing ?? "new"}
-          draft={form.draft}
-          editing={form.editing}
-          onDone={() => {
-            legacyForm.value = undefined;
-          }}
-        />
-      </section>
-    );
-
   const entry = record.pack.entries.find((e) => e.id === selectedEntry.value);
   if (!entry)
     return (

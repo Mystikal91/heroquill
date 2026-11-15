@@ -1,28 +1,33 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { addCustomSpell, customSpellFor } from "../app/customSpell";
-import { type Draft, type DraftTrait, blankDraft, draftReady } from "../homebrew/model";
+import { addCustomSpell, customSpellFor, startCustomSpell } from "../app/customSpell";
+import { setText } from "../homebrew/entries";
 import { ui } from "../i18n/ui";
-import { SpellFields } from "./HomebrewPage";
+import { TextBox } from "./studio/Controls";
+import { SpellForm } from "./studio/SpellForm";
+import { EditProvider } from "./studio/scope";
 
 const close = () => {
   customSpellFor.value = undefined;
 };
 
 function Form({ classId, list }: { classId: string; list: "known" | "prepared" }) {
-  const [draft, setDraft] = useState<Draft>(() => blankDraft("spell"));
+  // The spell is made once, empty, and edited as it is until the person saves it.
+  const [started] = useState(() => startCustomSpell(classId));
+  const [record, setRecord] = useState(started.record);
   const [saving, setSaving] = useState(false);
-  const api = {
-    draft,
-    set: (key: string, value: string) =>
-      setDraft((d) => ({ ...d, values: { ...d.values, [key]: value } })),
-    setTraits: (traits: DraftTrait[]) => setDraft((d) => ({ ...d, traits })),
-    hide: ["classes"],
-  };
-  const ready = draftReady(draft);
+  const id = started.id;
+  const entry = record.pack.entries.find((e) => e.id === id);
+  const name = record.strings[`${id}.name`] ?? "";
+  const ready = name.trim() !== "";
   return (
-    <>
+    <EditProvider value={{ apply: (next) => setRecord(next) }}>
       <p class="muted">{ui("spells.createHint")}</p>
-      <SpellFields api={api} />
+      <TextBox
+        label={ui("hb.f.name")}
+        value={name}
+        onChange={(v) => setRecord(setText(record, id, "name", v))}
+      />
+      {entry && <SpellForm record={record} entry={entry} hideClasses />}
       <div class="quick-edit-actions">
         <button
           type="button"
@@ -30,7 +35,7 @@ function Form({ classId, list }: { classId: string; list: "known" | "prepared" }
           disabled={!ready || saving}
           onClick={async () => {
             setSaving(true);
-            await addCustomSpell(draft, classId, list);
+            await addCustomSpell(record, id, classId, list);
             close();
           }}
         >
@@ -40,7 +45,7 @@ function Form({ classId, list }: { classId: string; list: "known" | "prepared" }
           {ui("hb.cancel")}
         </button>
       </div>
-    </>
+    </EditProvider>
   );
 }
 

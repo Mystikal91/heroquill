@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import { loadContent } from "../content/browser";
-import { removeEntry } from "../homebrew/model";
+import { deleteEntry } from "../homebrew/entries";
 import { mergeCarried } from "./carried";
 import { PACK_FORMAT_VERSION, migratePackRecord, versionOf } from "./packFormat";
 import {
@@ -165,7 +165,7 @@ describe("copies of content that may not be shared", () => {
 
 describe("keeping the extra fields while the pack is worked on", () => {
   it("removes the translations and notes of an entry that is deleted", () => {
-    const gone = removeEntry(
+    const gone = deleteEntry(
       record({
         provenance: { [SPARK]: { from: "srd51:spell/spark" } },
         translations: { it: { [`${SPARK}.name`]: "Scintilla", [`${GLOW}.name`]: "Bagliore" } },
