@@ -67,6 +67,15 @@ Da fare:
 - Test: pack con riferimento ad Aurora esportato e letto su un dispositivo con id diverso (ricollegato) e senza
   il contenuto (avviso, scheda integra).
 
+### Edizioni 2014/2024 (aggiunto 2026-11-15; decisione 11)
+- Campo `ruleset` opzionale sulla voce (`srd51` | `srd52`; assente = entrambe): nel formato v2, nel catalogo,
+  in `addEntry`/`updateEntry`, e nel caricamento (una voce "solo 2014" non appare a un personaggio 2024).
+- Riferimenti neutri all'SRD nel selettore di voci, risolti per edizione con la logica già esistente
+  (`localizeSpells`, `spellFor2024`, `subclassOf` in `engine/rulesets.ts`); segnalazione dei gemelli mancanti.
+- Catalogo: campi marcati per edizione (es. specie: aumenti di punteggio solo 2014; talento: `category` e
+  prerequisiti 2024), usati dall'editor per mostrare solo ciò che serve.
+- Avvisi di compatibilità nel pannello avvisi della Fase 2.
+
 ## Fase 2 — Guscio dell'editor (desktop-first)
 Obiettivo: l'ambiente in cui si lavora, bello e comodo, con un primo tipo di voce completo (fetta verticale).
 - Layout a più pannelli: **libreria** (pack, sezioni per tipo) · **elenco voci** (ricerca, filtri, ordinamento)

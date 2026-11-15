@@ -36,6 +36,19 @@ Aggiornato il 2026-11-15. Vedi `RECON.md` per lo stato di partenza.
     voci, nei personaggi salvati (esiste un precedente: `migrateSavedCharacters` / `migrationMap`) e nelle voci
     figlie (tratti, feature, sottoclassi di una classe); la copia deve evitare collisioni di slug; annulla (`offerUndo`).
 
+11. **Edizioni 2014/2024: proprietà della voce, non del pack.** Un pack è neutro e può contenere voci per
+    entrambe le edizioni. Ogni voce ha un campo opzionale `ruleset`: entrambe (predefinito), solo 2014, solo 2024.
+    - Per il principiante è quasi invisibile (selettore con "entrambe" già scelto).
+    - **Riferimenti all'SRD neutri:** scegliere "Mago" o "Fireball" si salva come riferimento neutro, che si
+      risolve nell'edizione del personaggio quando esiste un gemello (come oggi fanno `localizeSpells` /
+      `spellFor2024` / `subclassOf`); dove non c'è gemello l'editor lo dice.
+    - **Campi per edizione:** l'editor mostra solo ciò che vale per l'edizione della voce (es. specie 2024 senza
+      aumenti di punteggio, che arrivano dal background; talenti 2024 con categorie e requisiti propri).
+    - **Avvisi, non muri:** una voce per "entrambe" che usa qualcosa di una sola edizione viene segnalata
+      nell'anteprima, con la proposta di restringerla.
+    - Dati: campo opzionale `ruleset` sulla voce nel formato v2 (catalogo + migrazione). Niente pack legati a
+      una sola edizione (obbligherebbe a duplicare e complicherebbe lo spostamento tra pack).
+
 ## Capisaldi (valgono per ogni scelta del rework)
 - **Massima semplicità, soprattutto nella versione "principiante"**, e massima comodità d'uso.
 - **Funzionalità, bellezza estetica, UX e QoL sono tutte al primo posto**: nessuna sacrificata alle altre.
