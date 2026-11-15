@@ -6,7 +6,7 @@ so small and focused contributions are the easiest to look at.
 You do not need to write code to help:
 
 - **Say you like it.** Write in [Discussions](https://github.com/Mystikal91/heroquill/discussions)
-  or to hello@heroquill.app.
+  or to hello@heroquill.app, or come to the [Discord server](https://discord.gg/k6utY79gYs).
 - **Translate it.** Translations are done in the browser on
   [Weblate](https://weblate.mystikal.it/projects/heroquill/), with no code and no GitHub account
   needed. Weblate sends the changes to this repository as a pull request.

@@ -2,7 +2,7 @@ import { aboutTab } from "../app/about";
 import { language } from "../app/language";
 import { leavePage, showView } from "../app/navigation";
 import { STAGE, VERSION } from "../app/version";
-import { CHANGELOG, ROADMAP, contributePath, newsPath, pick } from "../content/news";
+import { CHANGELOG, DISCORD_URL, ROADMAP, contributePath, newsPath, pick } from "../content/news";
 import { type UiKey, ui } from "../i18n/ui";
 
 const REPO_URL = "https://github.com/Mystikal91/heroquill";
@@ -45,6 +45,10 @@ function Home() {
           {" · "}
           <a href={contributePath(language.value)} target="_blank" rel="noopener noreferrer">
             {ui("about.contribute")}
+          </a>
+          {" · "}
+          <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            {ui("about.discord")}
           </a>
           {" · "}
           <button type="button" class="link" onClick={() => showView("credits")}>

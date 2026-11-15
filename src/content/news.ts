@@ -1491,6 +1491,9 @@ export const CONTRIBUTE_SLUGS: Record<LanguageCode, string> = {
   es: "colaborar",
 };
 
+/** The invitation to the Discord server (the website has the same address in `site/contribute.mjs`). */
+export const DISCORD_URL = "https://discord.gg/k6utY79gYs";
+
 /** `/contribute/` for English, `/it/contribuisci/` for Italian, and so on. */
 export const contributePath = (language: string): string => {
   const slug =

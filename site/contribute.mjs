@@ -4,6 +4,7 @@ export const COMMUNITY = {
   repo: "https://github.com/Mystikal91/heroquill",
   issues: "https://github.com/Mystikal91/heroquill/issues",
   discussions: "https://github.com/Mystikal91/heroquill/discussions",
+  discord: "https://discord.gg/k6utY79gYs",
   weblate: "https://weblate.mystikal.it/projects/heroquill/",
   email: "hello@heroquill.app",
 };
@@ -22,6 +23,7 @@ export const CONTRIBUTE = {
       heading: "Tell me you like it",
       body: "The easiest way to help, and the one that keeps this going: say that you use it. A message about a character you made, or a table you played at, is a good day.",
       discussions: "Say hello in Discussions",
+      discord: "Join the Discord server",
       email: "Write an email",
     },
     translate: {
@@ -55,6 +57,7 @@ export const CONTRIBUTE = {
       heading: "Fammi sapere che ti piace",
       body: "È l’aiuto più semplice, e quello che mantiene vivo il progetto: dimmi che lo usi. Un messaggio su un personaggio che hai creato o su un tavolo a cui hai giocato rende la giornata migliore.",
       discussions: "Saluta nelle Discussions",
+      discord: "Entra nel server Discord",
       email: "Scrivi una mail",
     },
     translate: {
@@ -88,6 +91,7 @@ export const CONTRIBUTE = {
       heading: "Dis-moi que ça te plaît",
       body: "C’est l’aide la plus simple, et celle qui fait durer le projet : dis-moi que tu t’en sers. Un message sur un personnage que tu as créé ou une table où tu as joué fait une belle journée.",
       discussions: "Dis bonjour dans Discussions",
+      discord: "Rejoins le serveur Discord",
       email: "Écrire un e-mail",
     },
     translate: {
@@ -121,6 +125,7 @@ export const CONTRIBUTE = {
       heading: "Sag mir, dass es dir gefällt",
       body: "Die einfachste Hilfe, und die, die das Projekt am Leben hält: sag, dass du es benutzt. Eine Nachricht über einen Charakter, den du gebaut hast, oder eine Runde, die du gespielt hast, macht den Tag besser.",
       discussions: "Sag Hallo in den Discussions",
+      discord: "Tritt dem Discord-Server bei",
       email: "E-Mail schreiben",
     },
     translate: {
@@ -154,6 +159,7 @@ export const CONTRIBUTE = {
       heading: "Dime que te gusta",
       body: "Es la ayuda más sencilla, y la que mantiene vivo el proyecto: dime que lo usas. Un mensaje sobre un personaje que has creado o una mesa en la que has jugado alegra el día.",
       discussions: "Saluda en Discussions",
+      discord: "Únete al servidor de Discord",
       email: "Escribir un correo",
     },
     translate: {

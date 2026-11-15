@@ -158,7 +158,8 @@ vite-plugin-pwa.
 
 Code, translations ([Weblate](https://weblate.mystikal.it/projects/heroquill/)), bug reports and
 a hello are all welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Questions and ideas go in
-[Discussions](https://github.com/Mystikal91/heroquill/discussions).
+[Discussions](https://github.com/Mystikal91/heroquill/discussions), and there is a
+[Discord server](https://discord.gg/k6utY79gYs) to chat.
 
 ## Versions and changelog
 

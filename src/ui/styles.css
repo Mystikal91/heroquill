@@ -140,7 +140,8 @@ legend {
   min-height: 2.5rem;
 }
 
-button.link {
+button.link,
+.site-footer a.link {
   background: none;
   border: 0;
   color: var(--accent);
@@ -148,6 +149,11 @@ button.link {
   cursor: pointer;
   min-height: 2.5rem;
   padding: 0 0.25rem;
+}
+
+.site-footer a.link {
+  display: inline-flex;
+  align-items: center;
 }
 
 .sr-only {

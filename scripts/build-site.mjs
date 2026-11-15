@@ -425,8 +425,9 @@ function contributeBody(lang) {
           <p class="actions">${actions.filter(Boolean).join("\n            ")}</p>
         </section>`;
   return [
-    (COMMUNITY.discussions || COMMUNITY.email) &&
+    (COMMUNITY.discussions || COMMUNITY.discord || COMMUNITY.email) &&
       section("like", c.like.heading, c.like.body, [
+        COMMUNITY.discord && link(COMMUNITY.discord, c.like.discord, ' class="button"'),
         COMMUNITY.discussions && link(COMMUNITY.discussions, c.like.discussions, ' class="button"'),
         COMMUNITY.email && other(link(mail, `${c.like.email}: ${COMMUNITY.email}`)),
       ]),

@@ -11,6 +11,7 @@ import {
 } from "../app/store";
 import { loadUserPacks, userPacks, userPacksReady } from "../app/userPacks";
 import { loadContent } from "../content/browser";
+import { DISCORD_URL } from "../content/news";
 import { ui } from "../i18n/ui";
 import { CharacterBar } from "./CharacterBar";
 import { Credits } from "./Credits";
@@ -197,6 +198,10 @@ export function App() {
           <button type="button" class="link" onClick={() => showView("about")}>
             {ui("footer.about")}
           </button>
+          {" · "}
+          <a class="link" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            Discord
+          </a>
           {" · "}
           <button type="button" class="link" onClick={() => showView("packs")}>
             {ui("footer.packs")}
