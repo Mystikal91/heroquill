@@ -1,0 +1,161 @@
+/* ---- Paper: homebrew printed in the app ---- */
+
+.hq-toolbar .print-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hq-toolbar .print-top h2 {
+  margin: 0;
+}
+
+.hq-toolbar .print-top button {
+  margin: 0;
+}
+
+.hq-outputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hq-toolbar button {
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  cursor: pointer;
+}
+
+.hq-toolbar button.primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.hq-toolbar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hq-markdown {
+  width: 100%;
+  min-height: 28rem;
+  margin-top: 1rem;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.8rem;
+}
+
+/* A booklet: two columns of text, entries kept whole, a section title across both. */
+.hq-booklet {
+  column-count: 2;
+  column-gap: 8mm;
+  column-rule: 0.2mm solid var(--p-line, #c8bfae);
+}
+
+.hq-booklet .hq-section {
+  column-span: all;
+  margin: 0 0 3mm;
+  padding-bottom: 1mm;
+  border-bottom: 0.4mm solid var(--p-ink);
+  font-size: 14pt;
+}
+
+.hq-entry {
+  break-inside: avoid;
+  margin: 0 0 4.5mm;
+}
+
+.hq-entry h3 {
+  font-size: 11pt;
+  border-bottom: 0.25mm solid var(--p-line, #c8bfae);
+  margin-bottom: 1mm;
+}
+
+.hq-entry h4 {
+  margin: 2mm 0 0.5mm;
+  font-size: 9.5pt;
+}
+
+.hq-entry p,
+.hq-entry li {
+  margin: 0 0 1.2mm;
+  font-size: 8.6pt;
+}
+
+.hq-entry ul {
+  margin: 0 0 1.5mm;
+  padding-left: 4mm;
+}
+
+.hq-sub {
+  color: var(--p-muted);
+  font-style: italic;
+}
+
+.hq-facts {
+  margin: 0 0 1.5mm;
+}
+
+.hq-facts > div {
+  display: flex;
+  gap: 1.5mm;
+  font-size: 8.4pt;
+}
+
+.hq-facts dt {
+  font-weight: 700;
+}
+
+.hq-facts dt::after {
+  content: ":";
+}
+
+.hq-facts dd {
+  margin: 0;
+}
+
+.hq-table {
+  width: 100%;
+  margin: 1mm 0 2mm;
+  border-collapse: collapse;
+  font-size: 7.4pt;
+}
+
+.hq-table th,
+.hq-table td {
+  padding: 0.4mm 1mm;
+  border: 0.2mm solid var(--p-line, #c8bfae);
+  text-align: left;
+}
+
+.hq-table th {
+  background: var(--p-tint, #efe8d8);
+}
+
+/* Cards: nine to a page, the size of a playing card. */
+.hq-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 63mm);
+  grid-auto-rows: 88mm;
+  justify-content: center;
+  align-content: start;
+}
+
+.hq-card {
+  min-height: 0;
+  border-radius: 2mm;
+}
+
+.hq-card .p-card-head h3 {
+  font-size: 9pt;
+}
+
+.hq-facts-small > div {
+  font-size: 6.4pt;
+}
+
+@media print {
+  .hq-booklet {
+    column-fill: balance;
+  }
+}

@@ -160,7 +160,24 @@ testi vanno nelle traduzioni; spostare una classe lascia le sue sottoclassi dove
 - Copia da SRD e da Aurora (quest'ultima resta non esportabile).
 Uscita: un pannello di riordino comodo, con test sulle riscritture di id.
 
-## Fase 5 — Carta: stampa e Homebrewery
+## Fase 5 — Carta: stampa e Homebrewery  ✅ fatta (2026-11-15, non committata)
+**Decisione presa: ibrido.** Un unico modello `EntryDoc` (blocchi: sottotitolo, fatti, paragrafi, titoletti, liste,
+tabelle) in `src/ui/studio/paper/blocks.ts`, da cui si derivano la stampa interna e il file per Homebrewery, quindi i due
+dicono sempre la stessa cosa. Documenti per ogni tipo: incantesimo (come la pagina Regole), oggetto, specie/sottospecie
+con i tratti, classe con tabella dei livelli (e slot) e privilegi per livello, sottoclasse, talento/background, mostro in
+riquadro, e un modello generico per il resto. Nuova vista "Stampa e condividi su carta" (`PaperView`, dal pulsante
+"Stampa o condividi…" dell'elenco): ambito (voce aperta, voci selezionate, un tipo, tutto il pacchetto), formato
+(**libretto** a due colonne con titoli di sezione e pagina di titolo, **carte** da gioco 9 per pagina con testo che si
+adatta con `FitText`, **file Homebrewery** in Markdown con `\page`, tabelle e riquadro del mostro: scarica o copia),
+carta A4/Letter e poco inchiostro dalle impostazioni di stampa esistenti. Le voci sono ordinate come in un manuale.
+Gli effetti si stampano a parole (si omettono flag e condizioni, che dicono solo cose alla macchina). 10 test
+(`paper.test.ts`); provato nel browser: libretto, carte, Markdown.
+Da rifinire: provare l'apertura del file dentro Homebrewery vero (formato modellato su ciò che il sito usa, non verificato
+sul sito); stampa reale con il dialogo del browser non provata (solo l'anteprima); le carte per oggetti e mostri sono
+generiche; per le voci copiate da Aurora ("riservate") la stampa privata è consentita, non l'export: da decidere se
+avvisare.
+
+## Fase 5 (progetto originale) — Carta: stampa e Homebrewery
 - Decidere (prototipo breve di entrambe) tra **stampa interna** (riuso di `src/ui/print/`), **export Markdown per
   Homebrewery**, o **ibrido** con un unico modello "voce → blocchi" da cui derivarli.
 - Ambiti: singola voce, sezione, pack intero; layout carta (A4/Letter come la scheda) e opzioni (colonne, copertina,

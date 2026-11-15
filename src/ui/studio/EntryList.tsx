@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { showView } from "../../app/navigation";
 import { applyChange, flushStudio, legacyForm, selectedEntry, studioMode } from "../../app/studio";
 import { exportPack } from "../../app/userPacks";
 import type { Entry } from "../../data/schema";
@@ -174,6 +175,12 @@ export function EntryList({ record }: { record: UserPackRecord }) {
       </label>
       <Details record={record} />
       <div class="studio-actions">
+        <button
+          type="button"
+          onClick={() => void flushStudio().then(() => showView("homebrewPrint"))}
+        >
+          {ui("studio.print")}
+        </button>
         <button type="button" onClick={() => void flushStudio().then(() => exportPack(record))}>
           {ui("bar.export")}
         </button>

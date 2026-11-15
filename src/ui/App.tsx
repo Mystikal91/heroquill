@@ -49,6 +49,7 @@ import { RuleDialog } from "./rules/EntryDetail";
 import { RulesPage } from "./rules/RulesPage";
 import { SpellDialog } from "./spells/SpellInfo";
 import { Studio } from "./studio/Studio";
+import { PaperView } from "./studio/paper/PaperView";
 import { useSlashSearch } from "./useSlashSearch";
 
 function Screen() {
@@ -59,6 +60,8 @@ function Screen() {
       return <PacksPage />;
     case "homebrew":
       return <Studio />;
+    case "homebrewPrint":
+      return <PaperView />;
     case "translate":
       return <AutoTranslatePage />;
     case "about":
