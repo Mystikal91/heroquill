@@ -28,7 +28,20 @@ Obiettivo: decidere e fissare *cosa è* un pack, prima di costruirci sopra.
 - Test: round-trip, migrazione di pack di esempio, validazione.
 Uscita: nuovo formato + migratore + test, senza UI nuova.
 
-## Fase 1 — Il catalogo: l'editor deriva dal motore
+## Fase 1 — Il catalogo: l'editor deriva dal motore  ✅ fatta (2026-11-15, non ancora committata)
+Realizzato, in `src/homebrew/catalog/`: `fields.ts` (piccolo linguaggio di descrizione dei campi + `checkValue`/
+`checkFields`, validazione generica), `introspect.ts` (legge lo schema valibot del motore), `effects.ts`
+(`EFFECT_META` esaustivo: un effetto nuovo nello schema non compila finché non lo si classifica; i campi di ogni
+effetto vengono dallo schema stesso), `kinds.ts` (`KIND_META`, ruoli main/owned/vocabulary, cosa possiede cosa),
+`data.ts` (`DATA_FIELDS`: tutto il `data` di ogni kind, scritto a mano ma **verificato contro ogni voce delle SRD**).
+In `src/homebrew/entries.ts`: modifica diretta delle voci (`addEntry`, `updateEntry` che non ricostruisce nulla,
+`setText` anche per le traduzioni, `ownedEntries`, `deleteEntry`, `newEntryId`, `entryProblems`).
+Test di copertura: catalogo vs schema (kind ed effetti), vs dati SRD 5.1/5.2, vs gli schemi dati del motore
+(item, classe, sottoclasse), vs ciò che produce l'editor attuale. Scoperte utili: `startingGold`, `proficiencyChoices`,
+`subclassSpecific`, `dc.desc`, specie senza `size` (2024).
+Non ancora coperto: l'output dell'importer Aurora (serve `AURORA_CORPUS`; da aggiungere al corpus test), e i campi
+`json` opachi (`featureSpecific`, `traitSpecific`, azioni dei mostri, `forms`), da descrivere nella Fase 3.
+Da fare nelle fasi successive: riferimenti portabili (vedi sotto), ricollegare le chiavi i18n dell'editor.
 Obiettivo: niente più form scritti a mano per ogni kind/effetto.
 - **Catalogo dichiarativo** dei kind di voce e dei tipi di effetto (campi, tipi, etichette, aiuti, livello
   "guidato" o "avanzato", in che kind sono ammessi), costruito sopra `schema.ts` e il motore.

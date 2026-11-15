@@ -103,7 +103,7 @@ export const SPEND_POOLS = [
 ] as const;
 export type SpendPool = (typeof SPEND_POOLS)[number];
 
-const PlainEffectSchema = v.variant("type", [
+export const PlainEffectSchema = v.variant("type", [
   /**
    * A name other rules can ask for (`when.requires`), for a rule that says "this is held" without
    * being an entry of its own. Entries themselves are held by their id.
