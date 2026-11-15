@@ -4,8 +4,11 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 // The app lives under /app/ of heroquill.app; the welcome page and the legal pages are in site/.
+// The preview of a branch (see .github/workflows/deploy-develop.yml) is built with VITE_CHANNEL=develop.
 export default defineConfig(() => {
   const base = "/app/";
+  const develop = process.env.VITE_CHANNEL === "develop";
+  const name = develop ? "Heroquill (develop)" : "Heroquill";
   return {
     base,
     build: { outDir: "dist/app", emptyOutDir: true },
@@ -15,8 +18,8 @@ export default defineConfig(() => {
         registerType: "prompt",
         includeAssets: ["icon.svg", "apple-touch-icon.png"],
         manifest: {
-          name: "Heroquill",
-          short_name: "Heroquill",
+          name,
+          short_name: name,
           description: "Create, print and play D&D 5e characters, online or offline.",
           start_url: base,
           scope: base,

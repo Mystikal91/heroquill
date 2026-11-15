@@ -1782,5 +1782,7 @@
   "paper.copied": "Copied",
   "paper.nothing": "Nothing to print here. Pick an entry, or choose another scope.",
   "paper.level": "Level {n}",
-  "studio.print": "Print or share…"
+  "studio.print": "Print or share…",
+  "dev.banner": "Preview of the new homebrew studio. It keeps its own data on this device, apart from heroquill.app, and it may change or break.",
+  "dev.normal": "Open the normal version"
 }

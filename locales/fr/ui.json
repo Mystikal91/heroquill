@@ -1782,5 +1782,7 @@
   "paper.copied": "Copié",
   "paper.nothing": "Rien à imprimer ici. Choisis une entrée, ou une autre portée.",
   "paper.level": "Niveau {n}",
-  "studio.print": "Imprimer ou partager…"
+  "studio.print": "Imprimer ou partager…",
+  "dev.banner": "Aperçu du nouvel atelier homebrew. Il garde ses propres données sur cet appareil, à part de heroquill.app, et peut changer ou se casser.",
+  "dev.normal": "Ouvrir la version normale"
 }

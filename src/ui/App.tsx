@@ -28,6 +28,7 @@ import { CustomizeItemDialog } from "./CustomizeItemDialog";
 import { EditionDialog } from "./EditionDialog";
 import { ExplainDialog } from "./Explain";
 
+import { DevBanner } from "./DevBanner";
 import { InstallNotice } from "./InstallNotice";
 import { ItemPickerDialog } from "./ItemPicker";
 import { ConfirmDialog, UndoNotice } from "./Notices";
@@ -184,6 +185,7 @@ export function App() {
       <UndoNotice />
       <ConfirmDialog />
       <EditionDialog />
+      <DevBanner />
       <UpdateNotice />
       <InstallNotice />
       <SpellDialog />
