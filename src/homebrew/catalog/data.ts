@@ -93,7 +93,10 @@ const ARMOR_CLASS: FieldType = object(
   field("plus", text),
 );
 
-const RANGE: FieldType = object(field("normal", number, { required: true }), field("long", number));
+const RANGE: FieldType = object(
+  field("normal", number, { required: true }),
+  field("long", number, { level: "guided" }),
+);
 const DAMAGE: FieldType = object(
   field("dice", dice, { required: true }),
   field("type", text, { required: true }),
@@ -142,12 +145,12 @@ const ITEM: FieldSpec[] = [
       field("category", choice("simple", "martial"), { required: true }),
       field("kind", choice("melee", "ranged"), { required: true }),
       field("damage", DAMAGE),
-      field("twoHandedDamage", DAMAGE),
+      field("twoHandedDamage", DAMAGE, { level: g }),
       field("properties", refs("property"), { required: true }),
       field("range", RANGE, { required: true }),
       field("throwRange", RANGE),
       field("mastery", ref("property")),
-      field("proficiency", list(text), { required: true }),
+      field("proficiency", list(text), { required: true, level: "advanced" }),
     ),
     { level: g },
   ),
@@ -157,11 +160,11 @@ const ITEM: FieldSpec[] = [
       field("category", choice("light", "medium", "heavy", "shield"), { required: true }),
       field("base", number, { required: true }),
       field("dexBonus", bool, { required: true }),
-      field("maxDexBonus", number),
+      field("maxDexBonus", number, { level: g }),
       field("strengthMinimum", number, { required: true }),
       field("stealthDisadvantage", bool, { required: true }),
-      field("properties", refs("property")),
-      field("proficiency", list(text), { required: true }),
+      field("properties", refs("property"), { level: g }),
+      field("proficiency", list(text), { required: true, level: "advanced" }),
     ),
     { level: g },
   ),

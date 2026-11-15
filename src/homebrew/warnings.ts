@@ -9,7 +9,7 @@ import { entryProblems } from "./entries";
  */
 export interface Warning {
   severity: "error" | "hint";
-  code: "noName" | "noDesc" | "noClasses" | "broken" | "problem";
+  code: "noName" | "noDesc" | "noClasses" | "noParent" | "broken" | "problem";
   text?: string;
 }
 
@@ -31,6 +31,8 @@ export function warningsFor(record: UserPackRecord, entry: Entry, around: Surrou
     if (broken.from === entry.id)
       found.push({ severity: "error", code: "broken", text: broken.ref });
 
+  if ((entry.kind === "subclass" || entry.kind === "subspecies") && !entry.parent)
+    found.push({ severity: "error", code: "noParent" });
   if (entry.kind === "spell" && ((entry.data.classes as unknown[] | undefined) ?? []).length === 0)
     found.push({ severity: "hint", code: "noClasses" });
   if (!record.strings[`${entry.id}.desc`]?.trim() && entry.kind !== "property")

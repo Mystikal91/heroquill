@@ -185,3 +185,160 @@ export function dropEntries(record: UserPackRecord, ids: readonly string[]): Use
 export function deleteEntry(record: UserPackRecord, id: string): UserPackRecord {
   return dropEntries(record, [id, ...ownedEntries(record, id).map((e) => e.id)]);
 }
+
+type OwnedKind = "trait" | "feature";
+
+/** The rows of the level table of a class or subclass. */
+type LevelRow = { level: number; features: string[]; [key: string]: unknown };
+
+const levelRows = (entry: Entry): LevelRow[] =>
+  ((entry.data as { levels?: LevelRow[] }).levels ?? []).map((row) => ({
+    ...row,
+    features: [...(row.features ?? [])],
+  }));
+
+/** Whether the owner holds a kind in its level table (a class) or among its effects (a species). */
+export const holdsInLevels = (owner: Entry) => owner.kind === "class" || owner.kind === "subclass";
+
+/**
+ * Adds a trait or a feature that belongs to `ownerId` and links it: a trait is given by an effect
+ * of its owner, a feature of a class or subclass comes at a level of its table.
+ */
+export function addOwned(
+  record: UserPackRecord,
+  ownerId: string,
+  kind: OwnedKind,
+  options: { level?: number } = {},
+): { record: UserPackRecord; id: string } {
+  const owner = record.pack.entries.find((e) => e.id === ownerId);
+  if (!owner) throw new EntryError("No such entry");
+  const level = Math.min(20, Math.max(1, options.level ?? 1));
+  const id = newEntryId(record, kind, "");
+  const classId = owner.kind === "subclass" ? (owner.parent ?? ownerId) : ownerId;
+  const data: Record<string, unknown> =
+    kind === "feature"
+      ? {
+          class: classId,
+          ...(owner.kind === "subclass" && { subclass: ownerId }),
+          level,
+        }
+      : {};
+  let next = addEntry(record, { id, kind, effects: [], data });
+  if (kind === "trait") {
+    next = updateEntry(next, ownerId, { effects: [...owner.effects, { type: "trait", id }] });
+  } else {
+    const rows = levelRows(owner);
+    const row = rows.find((r) => r.level === level);
+    if (row) row.features.push(id);
+    else rows.push({ level, features: [id] });
+    rows.sort((a, b) => a.level - b.level);
+    next = updateEntry(next, ownerId, { data: { levels: rows } });
+  }
+  return { record: next, id };
+}
+
+/** Takes a trait or a feature out of its owner and deletes it, with its texts. */
+export function removeOwned(record: UserPackRecord, ownerId: string, id: string): UserPackRecord {
+  const owner = record.pack.entries.find((e) => e.id === ownerId);
+  if (!owner) throw new EntryError("No such entry");
+  let next = record;
+  const removeTrait = (effects: Effect[]): Effect[] =>
+    effects
+      .filter((e) => !(e.type === "trait" && e.id === id))
+      .map((e) => (e.type === "when" ? { ...e, effects: removeTrait(e.effects) } : e));
+  next = updateEntry(next, ownerId, {
+    effects: removeTrait(owner.effects),
+    ...(holdsInLevels(owner) && {
+      data: {
+        levels: levelRows(owner).map((r) => ({
+          ...r,
+          features: r.features.filter((f) => f !== id),
+        })),
+      },
+    }),
+  });
+  return deleteEntry(next, id);
+}
+
+/** Moves a feature of a class or subclass to another level of its table. */
+export function moveFeature(
+  record: UserPackRecord,
+  ownerId: string,
+  id: string,
+  level: number,
+): UserPackRecord {
+  const owner = record.pack.entries.find((e) => e.id === ownerId);
+  if (!owner) throw new EntryError("No such entry");
+  const to = Math.min(20, Math.max(1, Math.trunc(level)));
+  const rows: LevelRow[] = levelRows(owner).map((r) => ({
+    ...r,
+    features: r.features.filter((f) => f !== id),
+  }));
+  const row = rows.find((r) => r.level === to);
+  if (row) row.features.push(id);
+  else rows.push({ level: to, features: [id] });
+  rows.sort((a, b) => a.level - b.level);
+  // Rows a feature left and nothing else needs are kept for a class (its table has all twenty), dropped for a subclass.
+  const kept =
+    owner.kind === "subclass"
+      ? rows.filter(
+          (r) =>
+            r.features.length > 0 || r.cantripsKnown !== undefined || r.spellSlots !== undefined,
+        )
+      : rows;
+  return updateEntry(updateEntry(record, ownerId, { data: { levels: kept } }), id, {
+    data: { level: to },
+  });
+}
+
+/** The level a feature comes at, according to the table of its owner. */
+export function levelOf(owner: Entry, id: string): number | undefined {
+  return levelRows(owner).find((r) => r.features.includes(id))?.level;
+}
+
+/** The owned entries of an entry, of one kind, in the order they are given (by level for features). */
+export function ownedOfKind(record: UserPackRecord, ownerId: string, kind: OwnedKind): Entry[] {
+  const owner = record.pack.entries.find((e) => e.id === ownerId);
+  if (!owner) return [];
+  const owned = ownedEntries(record, ownerId).filter((e) => e.kind === kind);
+  if (kind === "feature")
+    return owned.sort((a, b) => (levelOf(owner, a.id) ?? 99) - (levelOf(owner, b.id) ?? 99));
+  return owned;
+}
+
+/**
+ * Writes the lines of a table of texts (the personality traits of a background): one text per
+ * line, numbered, with the number the player picks from it kept in the entry's data.
+ */
+export function setTable(
+  record: UserPackRecord,
+  id: string,
+  field: string,
+  lines: string[],
+  picks: number,
+): UserPackRecord {
+  const prefix = `${id}.${field}.`;
+  const kept = Object.fromEntries(
+    Object.entries(record.strings).filter(([key]) => !key.startsWith(prefix)),
+  );
+  const rows = lines.map((l) => l.trim()).filter(Boolean);
+  const strings = {
+    ...kept,
+    ...Object.fromEntries(rows.map((row, i) => [`${prefix}${i + 1}`, row])),
+  };
+  const entry = record.pack.entries.find((e) => e.id === id);
+  const choose = {
+    ...((entry?.data as { choose?: Record<string, number> } | undefined)?.choose ?? {}),
+  };
+  if (rows.length === 0) delete choose[field];
+  else choose[field] = Math.min(picks, rows.length);
+  return updateEntry({ ...record, strings }, id, { data: { choose } });
+}
+
+/** The lines of a table of texts, in order. */
+export function readTable(record: UserPackRecord, id: string, field: string): string[] {
+  const rows: string[] = [];
+  for (let n = 1; record.strings[`${id}.${field}.${n}`] !== undefined; n++)
+    rows.push(record.strings[`${id}.${field}.${n}`] ?? "");
+  return rows;
+}

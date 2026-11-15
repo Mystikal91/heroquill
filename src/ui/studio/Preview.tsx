@@ -1,11 +1,12 @@
 import { content } from "../../app/store";
 import type { Entry } from "../../data/schema";
+import { ownedOfKind } from "../../homebrew/entries";
 import { type Warning, warningsFor } from "../../homebrew/warnings";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
-import { EntryDetail } from "../rules/EntryDetail";
 import { Paragraphs } from "../sheet/parts";
 import { spellFacts } from "../spells/spellFacts";
+import { effectName, summarize } from "./Effects";
 import { kindName } from "./names";
 
 /** A spell as the rules page shows it, from the entry as it is being written (saved or not). */
@@ -63,17 +64,38 @@ function SpellPreview({ record, entry }: { record: UserPackRecord; entry: Entry 
   );
 }
 
-/** Any other entry: the page of the rules when the app already has it, else its name and text. */
+/** Any other entry, as it is being written: its name, its text, and what it does. */
 function PlainPreview({ record, entry }: { record: UserPackRecord; entry: Entry }) {
-  if (content.value?.index.has(entry.id)) return <EntryDetail id={entry.id} />;
+  const text = (field: string) => record.strings[`${entry.id}.${field}`] ?? "";
+  const traits = ownedOfKind(record, entry.id, "trait");
+  const features = ownedOfKind(record, entry.id, "feature");
+  const lines = entry.effects
+    .filter((e) => e.type !== "trait")
+    .map((e) => `${effectName(e.type)}: ${summarize(e)}`);
   return (
     <div class="rule-detail">
-      <h3>{record.strings[`${entry.id}.name`] || ui("studio.unnamed")}</h3>
+      <h3>{text("name") || ui("studio.unnamed")}</h3>
       <p class="muted">{kindName(entry)}</p>
-      <Paragraphs text={record.strings[`${entry.id}.desc`] ?? ""} />
+      <Paragraphs text={text("desc")} />
+      {lines.length > 0 && (
+        <ul class="studio-effect-lines">
+          {lines.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      )}
+      {[...traits, ...features].map((e) => (
+        <p key={e.id}>
+          <b>{text2(record, e.id, "name") || ui("studio.unnamed")}.</b>{" "}
+          {text2(record, e.id, "desc")}
+        </p>
+      ))}
     </div>
   );
 }
+
+const text2 = (record: UserPackRecord, id: string, field: string) =>
+  record.strings[`${id}.${field}`] ?? "";
 
 export function Warnings({ list }: { list: Warning[] }) {
   if (list.length === 0) return <p class="studio-ok">{ui("studio.allGood")}</p>;

@@ -16,17 +16,15 @@ import type { Entry } from "../../data/schema";
 import { KIND_META } from "../../homebrew/catalog";
 import { deleteEntry, setText } from "../../homebrew/entries";
 import { canRedo, canUndo } from "../../homebrew/history";
-import { draftFromEntry } from "../../homebrew/model";
+import type { Draft } from "../../homebrew/model";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { EntryForm } from "../HomebrewPage";
 import { TextBox } from "./Controls";
+import { GenericForm } from "./GenericForm";
 import { Preview } from "./Preview";
 import { SpellForm } from "./SpellForm";
 import { kindName } from "./names";
-
-/** The kinds the new editor draws itself. Others go to the previous form, or are only shown. */
-const NEW_EDITOR = new Set(["spell"]);
 
 function SaveState() {
   const state = saveState.value;
@@ -97,23 +95,13 @@ function Delete({ record, entry }: { record: UserPackRecord; entry: Entry }) {
   );
 }
 
-/** An entry of a kind the new editor does not draw yet: what it holds, to read. */
-function RawView({ entry }: { entry: Entry }) {
-  return (
-    <div class="studio-form">
-      <p class="note">{ui("studio.rawNote")}</p>
-      <pre class="studio-raw">{JSON.stringify(entry, null, 2)}</pre>
-    </div>
-  );
-}
-
 /** The previous form, for an entry of a kind the new editor does not have yet. */
 function LegacyForm({
   draft,
   editing,
   onDone,
 }: {
-  draft: NonNullable<ReturnType<typeof draftFromEntry>>;
+  draft: Draft;
   editing?: string | undefined;
   onDone: () => void;
 }) {
@@ -154,23 +142,6 @@ export function Editor({ record }: { record: UserPackRecord }) {
       </section>
     );
 
-  const legacyDraft = !NEW_EDITOR.has(entry.kind)
-    ? draftFromEntry(entry, record.strings, record.pack.entries)
-    : undefined;
-  if (legacyDraft)
-    return (
-      <section class="studio-editor">
-        <LegacyForm
-          key={entry.id}
-          draft={legacyDraft}
-          editing={entry.id}
-          onDone={() => {
-            selectedEntry.value = undefined;
-          }}
-        />
-      </section>
-    );
-
   return (
     <section class="studio-editor">
       <Toolbar />
@@ -190,7 +161,7 @@ export function Editor({ record }: { record: UserPackRecord }) {
           {entry.kind === "spell" ? (
             <SpellForm record={record} entry={entry} />
           ) : (
-            <RawView entry={entry} />
+            <GenericForm record={record} entry={entry} />
           )}
           {KIND_META[entry.kind].role !== "owned" && (
             <div class="studio-actions">

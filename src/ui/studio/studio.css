@@ -579,3 +579,78 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---- Effects and owned entries ---- */
+
+.studio-effect,
+.studio-owned-item {
+  margin-bottom: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.studio-effect > summary,
+.studio-owned-item > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.studio-effect > summary .muted {
+  flex: 1 1 8rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.studio-effect > summary button {
+  margin-left: auto;
+  min-height: 1.8rem;
+}
+
+.studio-effect .studio-grid,
+.studio-owned-item .studio-grid {
+  margin-top: 0.6rem;
+}
+
+.studio-add-effect {
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.6rem;
+  background-color: var(--bg);
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.studio-effects-section,
+.studio-owned {
+  margin-top: 1.25rem;
+}
+
+.studio-effects-section h4,
+.studio-owned h4 {
+  margin-top: 0;
+}
+
+.studio-effect-lines {
+  margin: 0.5rem 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+
+.studio-more {
+  margin-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+.studio-more > summary {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}

@@ -53,7 +53,7 @@ export const field = (
   key,
   type,
   optional: !options.required,
-  level: options.level ?? "advanced",
+  level: options.level ?? (options.required ? "guided" : "advanced"),
   ...(options.doc && { doc: options.doc }),
 });
 

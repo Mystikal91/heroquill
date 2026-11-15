@@ -104,7 +104,25 @@ Obiettivo: l'ambiente in cui si lavora, bello e comodo, con un primo tipo di voc
   `brokenReferences`, campi mancanti, effetti incoerenti).
 Uscita: si crea e si modifica un incantesimo nel nuovo editor, con anteprima e avvisi.
 
-## Fase 3 — Tutti i tipi di voce e il costruttore di effetti
+## Fase 3 — Tutti i tipi di voce e il costruttore di effetti  ✅ fatta nella sostanza (2026-11-15, non committata)
+Realizzato: **tutti i 21 tipi di voce sono creabili e modificabili sul nuovo editor** (il vecchio form non è più
+usato, resta solo per "Copia come nuovo"). `src/homebrew/blanks.ts` (voci vuote ma valide per ogni tipo, `blankEffect`,
+test che ogni tipo di effetto si possa creare), `src/ui/studio/layouts.ts` (come si presenta ogni tipo: testi, campi
+per il principiante, effetti, cosa possiede, genitore, tabelle di testo), `GenericForm` (modulo di qualunque tipo dal
+catalogo), `Effects.tsx` (costruttore di effetti: schede per effetto, campi obbligatori e "Altre opzioni", menu per
+gruppo, solo gli effetti guidati per il principiante, tutti in Avanzata), `Owned.tsx` (tratti di specie e privilegi di
+classe per livello, ognuno con testo ed effetti propri), `entries.ts` (`addOwned`, `removeOwned`, `moveFeature`,
+`setTable`), `sync.ts` (la competenza segue la categoria di armi/armature), etichette localizzate in 5 lingue
+(`fx.*`, `fd.*`). I campi obbligatori sono "guidati", gli altri avanzati (`field()`), e gli oggetti annidati nascondono
+i campi avanzati al principiante. Provato nel browser: specie con effetti e tratti, arma, oggetto magico, classe con
+privilegio, sottoclasse (avviso se manca la classe), background con tabelle.
+Da rifinire (resta della Fase 3/7): messaggi di validazione ancora tecnici; il costruttore degli effetti `choice`
+(competenze a scelta, liste di incantesimi) è ancora generico e scomodo; il livello per livello della classe (tabelle
+degli slot, risorse di classe `classSpecific`) è solo in Avanzata e a mano; mostri: azioni e tratti sono JSON;
+prerequisiti dei talenti in forma generica; `ruleset` per voce; anteprima degli oggetti e dei mostri non fedele;
+alcune etichette di tipi rari non tradotte ("Option", "Proficiency"...).
+
+## Fase 3 (progetto originale) — Tutti i tipi di voce e il costruttore di effetti
 Obiettivo: copertura completa, nell'ordine in cui rendono di più.
 1. Oggetti (armi, armature, equipaggiamento, **oggetti magici**: rarità, sintonia, effetti da equipaggiato).
 2. Talenti, background, lingue, proprietà.

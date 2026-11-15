@@ -2,63 +2,89 @@ import { useState } from "preact/hooks";
 import { applyChange, flushStudio, legacyForm, selectedEntry, studioMode } from "../../app/studio";
 import { exportPack } from "../../app/userPacks";
 import type { Entry } from "../../data/schema";
-import { KIND_META } from "../../homebrew/catalog";
-import { addEntry, newEntryId } from "../../homebrew/entries";
-import { blankDraft } from "../../homebrew/model";
-import type { HomebrewKind } from "../../homebrew/model";
+import { type Variant, startEntry } from "../../homebrew/blanks";
+import { type EntryKind, KIND_META } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import { type UserPackRecord, restrictedIds } from "../../storage/packs";
 import { TextBox } from "./Controls";
 import { removePack, visibleEntries } from "./Library";
 import { kindName } from "./names";
 
-/** The kinds a new entry can start as: the new editor's own first, the rest still on the previous form. */
-const NEW_KINDS: { id: string; label: () => string; level: "guided" | "advanced" }[] = [
-  { id: "spell", label: () => ui("hb.kind.spell"), level: "guided" },
-  { id: "weapon", label: () => ui("hb.kind.weapon"), level: "guided" },
-  { id: "armor", label: () => ui("hb.kind.armor"), level: "guided" },
-  { id: "gear", label: () => ui("hb.kind.gear"), level: "guided" },
-  { id: "species", label: () => ui("hb.kind.species"), level: "guided" },
-  { id: "class", label: () => ui("hb.kind.class"), level: "guided" },
-  { id: "subclass", label: () => ui("hb.kind.subclass"), level: "guided" },
-  { id: "background", label: () => ui("hb.kind.background"), level: "guided" },
-  { id: "feat", label: () => ui("hb.kind.feat"), level: "guided" },
-  { id: "language", label: () => ui("hb.kind.language"), level: "advanced" },
-  { id: "property", label: () => ui("hb.kind.property"), level: "advanced" },
+/** What a new entry can start as: a kind, and for items which sort. Beginners see the common ones. */
+const NEW_KINDS: {
+  id: string;
+  kind: EntryKind;
+  variant?: Variant;
+  label: () => string;
+  level: "guided" | "advanced";
+}[] = [
+  { id: "spell", kind: "spell", label: () => ui("hb.kind.spell"), level: "guided" },
+  {
+    id: "weapon",
+    kind: "item",
+    variant: "weapon",
+    label: () => ui("hb.kind.weapon"),
+    level: "guided",
+  },
+  {
+    id: "armor",
+    kind: "item",
+    variant: "armor",
+    label: () => ui("hb.kind.armor"),
+    level: "guided",
+  },
+  { id: "gear", kind: "item", variant: "gear", label: () => ui("hb.kind.gear"), level: "guided" },
+  {
+    id: "magic",
+    kind: "item",
+    variant: "magic",
+    label: () => ui("studio.kind.magic"),
+    level: "guided",
+  },
+  { id: "species", kind: "species", label: () => ui("hb.kind.species"), level: "guided" },
+  {
+    id: "subspecies",
+    kind: "subspecies",
+    label: () => ui("search.kind.subspecies"),
+    level: "guided",
+  },
+  { id: "class", kind: "class", label: () => ui("hb.kind.class"), level: "guided" },
+  { id: "subclass", kind: "subclass", label: () => ui("hb.kind.subclass"), level: "guided" },
+  { id: "background", kind: "background", label: () => ui("hb.kind.background"), level: "guided" },
+  { id: "feat", kind: "feat", label: () => ui("hb.kind.feat"), level: "guided" },
+  { id: "language", kind: "language", label: () => ui("hb.kind.language"), level: "guided" },
+  { id: "property", kind: "property", label: () => ui("hb.kind.property"), level: "guided" },
+  ...(
+    [
+      "option",
+      "deity",
+      "monster",
+      "skill",
+      "proficiency",
+      "school",
+      "condition",
+      "alignment",
+      "ability",
+    ] as EntryKind[]
+  ).map((kind) => ({
+    id: kind,
+    kind,
+    label: () => kindName({ kind, data: {} }),
+    level: "advanced" as const,
+  })),
 ];
-
-/** A spell with nothing written yet: valid, so the engine can read it at once. */
-function blankSpell(record: UserPackRecord): Entry {
-  return {
-    id: newEntryId(record, "spell", ""),
-    kind: "spell",
-    effects: [],
-    data: {
-      level: 0,
-      school: "evocation",
-      components: ["V", "S"],
-      ritual: false,
-      concentration: false,
-      classes: [],
-    },
-  };
-}
 
 function NewMenu({ record }: { record: UserPackRecord }) {
   const [open, setOpen] = useState(false);
   const advanced = studioMode.value === "advanced";
-  const choose = async (id: string) => {
+  const choose = (id: string) => {
     setOpen(false);
-    if (id === "spell") {
-      const entry = blankSpell(record);
-      applyChange(addEntry(record, entry));
-      selectedEntry.value = entry.id;
-      legacyForm.value = undefined;
-      return;
-    }
-    await flushStudio();
-    selectedEntry.value = undefined;
-    legacyForm.value = { draft: blankDraft(id as HomebrewKind) };
+    const found = NEW_KINDS.find((k) => k.id === id);
+    if (!found) return;
+    const started = startEntry(record, found.kind, found.variant);
+    applyChange(started.record);
+    selectedEntry.value = started.id;
+    legacyForm.value = undefined;
   };
   return (
     <div class="studio-menu">
@@ -69,7 +95,7 @@ function NewMenu({ record }: { record: UserPackRecord }) {
         <ul class="plain studio-menu-list">
           {NEW_KINDS.filter((k) => advanced || k.level === "guided").map((k) => (
             <li key={k.id}>
-              <button type="button" onClick={() => void choose(k.id)}>
+              <button type="button" onClick={() => choose(k.id)}>
                 {k.label()}
               </button>
             </li>

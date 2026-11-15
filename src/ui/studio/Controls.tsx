@@ -1,13 +1,12 @@
 import { useState } from "preact/hooks";
+import { studioMode } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import { entriesOfKind } from "../build/fields";
+import { EffectList } from "./Effects";
+import { fieldLabel, humanize, optionLabel } from "./labels";
 
-/** `healAtSlotLevel` -> `Heal at slot level`: a label for a field no one has translated yet. */
-export function humanize(key: string): string {
-  const words = key.replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase();
-  return words.charAt(0).toUpperCase() + words.slice(1);
-}
+export { humanize };
 
 export interface Option {
   id: string;
@@ -333,7 +332,7 @@ export function FieldControl({
         <SelectBox
           label={label}
           value={typeof value === "string" ? value : undefined}
-          options={type.options.map((id) => ({ id, label: humanize(id) }))}
+          options={type.options.map((id) => ({ id, label: optionLabel(id) }))}
           blank={optional ? ui("form.none") : undefined}
           onChange={onChange}
         />
@@ -381,6 +380,13 @@ export function FieldControl({
       );
     case "record":
       return <RecordControl label={label} type={type} value={value} onChange={onChange} />;
+    case "effects":
+      return (
+        <fieldset class="studio-many">
+          <legend>{label}</legend>
+          <EffectList effects={Array.isArray(value) ? value : []} onChange={onChange} />
+        </fieldset>
+      );
     default:
       return <JsonBox label={label} value={value} onChange={onChange} />;
   }
@@ -492,8 +498,10 @@ function ObjectControl({
     // An object with nothing in it is no object, unless a field of it must be there.
     onChange(Object.keys(copy).length === 0 && optional ? undefined : copy);
   };
-  const short = fields.filter((f) => isShort(f.type) || f.type.type === "number");
-  const long = fields.filter((f) => !short.includes(f));
+  // A beginner sees the guided fields of an object; the advanced mode shows all of them.
+  const shown = fields.filter((f) => studioMode.value === "advanced" || f.level === "guided");
+  const short = shown.filter((f) => isShort(f.type) || f.type.type === "number");
+  const long = shown.filter((f) => !short.includes(f));
   return (
     <fieldset class="studio-many">
       <legend>{label}</legend>
@@ -506,7 +514,7 @@ function ObjectControl({
         {short.map((f) => (
           <FieldControl
             key={f.key}
-            label={humanize(f.key)}
+            label={fieldLabel(f.key)}
             type={f.type}
             value={here[f.key]}
             optional={f.optional}
@@ -517,7 +525,7 @@ function ObjectControl({
       {long.map((f) => (
         <FieldControl
           key={f.key}
-          label={humanize(f.key)}
+          label={fieldLabel(f.key)}
           type={f.type}
           value={here[f.key]}
           optional={f.optional}
