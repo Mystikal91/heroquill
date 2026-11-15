@@ -3,7 +3,7 @@ import { withOriginRules } from "../data/originRules";
 import { type Pack, parsePack } from "../data/schema";
 import { type PackIndex, indexPacks } from "../engine/derive";
 import { convertText } from "../i18n/units";
-import { type UserPackRecord, orderUserPacks } from "../storage/packs";
+import { type UserPackRecord, orderUserPacks, packTexts } from "../storage/packs";
 import { autoText, displayedText } from "../translate/auto";
 import { applyOverlays } from "./overlays";
 import { spellTerm } from "./spellTerms";
@@ -98,7 +98,7 @@ export async function loadContent(
     const pack = parsePack(record.pack);
     if (packs.some((p) => p.manifest.id === pack.manifest.id)) continue;
     packs.push(pack);
-    for (const [key, value] of Object.entries(record.strings)) {
+    for (const [key, value] of Object.entries(packTexts(record, locales))) {
       if (!value) continue;
       if (record.origin === "edits") {
         if (!original.has(key)) original.set(key, texts.get(key));

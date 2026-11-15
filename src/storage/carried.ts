@@ -1,5 +1,5 @@
 import type { Character } from "../engine/character";
-import { type UserPackRecord, parseUserPack } from "./packs";
+import { type UserPackRecord, parseUserPack, withoutRestricted } from "./packs";
 
 /**
  * The homebrew packs a character uses: those with an entry the character refers to (a spell it
@@ -18,7 +18,8 @@ export function homebrewUsedBy(character: Character, packs: UserPackRecord[]): U
       pending.push(JSON.stringify(pack.pack.entries));
     }
   }
-  return [...used.values()];
+  // What was copied from imported content stays on this device, as the imported packs do.
+  return [...used.values()].map(withoutRestricted);
 }
 
 /** Reads the packs that came with a character file; the ones that cannot be read are left out. */
@@ -50,13 +51,27 @@ export function mergeCarried(
   const fresh = incoming.pack.entries.filter((e) => !known.has(e.id));
   if (fresh.length === 0) return { record: here, added: 0 };
   const names = new Set(fresh.map((e) => e.id));
+  const isNew = (key: string) => [...names].some((id) => key.startsWith(`${id}.`));
   const strings = { ...here.strings };
   for (const [key, text] of Object.entries(incoming.strings))
-    if (!(key in strings) && [...names].some((id) => key.startsWith(`${id}.`))) strings[key] = text;
+    if (!(key in strings) && isNew(key)) strings[key] = text;
+  // The translations of the new entries come along, language by language.
+  const translations = { ...here.translations };
+  for (const [language, texts] of Object.entries(incoming.translations ?? {})) {
+    const merged = { ...translations[language] };
+    for (const [key, text] of Object.entries(texts))
+      if (!(key in merged) && isNew(key)) merged[key] = text;
+    if (Object.keys(merged).length > 0) translations[language] = merged;
+  }
+  const provenance = { ...here.provenance };
+  for (const [id, origin] of Object.entries(incoming.provenance ?? {}))
+    if (names.has(id as never)) provenance[id] = origin;
   return {
     record: {
       ...here,
       strings,
+      ...(Object.keys(translations).length > 0 && { translations }),
+      ...(Object.keys(provenance).length > 0 && { provenance }),
       pack: { ...here.pack, entries: [...here.pack.entries, ...fresh] },
     },
     added: fresh.length,

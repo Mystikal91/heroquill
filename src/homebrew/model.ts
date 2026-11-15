@@ -1,6 +1,7 @@
 import type { Effect, Entry } from "../data/schema";
 import { MULTICLASS_SLOTS } from "../engine/multiclass";
 import { slugify } from "../import/aurora/xml";
+import { PACK_FORMAT_VERSION } from "../storage/packFormat";
 import type { UserPackRecord } from "../storage/packs";
 
 /** What the editor can make. Weapons, armor and gear are all `item` entries. */
@@ -735,6 +736,7 @@ export function newHomebrewPack(name: string, now = Date.now()): UserPackRecord 
     origin: "homebrew",
     addedAt: now,
     lang: "en",
+    formatVersion: PACK_FORMAT_VERSION,
     pack: {
       manifest: {
         id,
@@ -773,9 +775,22 @@ export function removeEntry(record: UserPackRecord, id: string): UserPackRecord 
       ([key]) => ![...gone].some((g) => key.startsWith(`${g}.`)),
     ),
   );
+  const isGone = (key: string) => [...gone].some((g) => key.startsWith(`${g}.`));
+  const { translations, provenance, ...rest } = record;
   return {
-    ...record,
+    ...rest,
     strings,
+    ...(translations && {
+      translations: Object.fromEntries(
+        Object.entries(translations).map(([language, texts]) => [
+          language,
+          Object.fromEntries(Object.entries(texts).filter(([key]) => !isGone(key))),
+        ]),
+      ),
+    }),
+    ...(provenance && {
+      provenance: Object.fromEntries(Object.entries(provenance).filter(([id]) => !gone.has(id))),
+    }),
     pack: { ...record.pack, entries: record.pack.entries.filter((e) => !gone.has(e.id)) },
   };
 }

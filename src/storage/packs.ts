@@ -2,6 +2,32 @@ import * as v from "valibot";
 import type { Overlay } from "../content/overlays";
 import { EffectSchema, type Pack, parsePack } from "../data/schema";
 import { dbDelete, dbGetAll, dbPut } from "./db";
+import {
+  LEGACY_PACK_FILE_FORMAT,
+  PACK_FILE_FORMAT,
+  PACK_FORMAT_VERSION,
+  PackTooNewError,
+  migratePackRecord,
+} from "./packFormat";
+
+/** The details of a pack as a "book": who wrote it and what it is. */
+export interface PackMeta {
+  author?: string;
+  description?: string;
+  /** A small picture for the cover, as a data address. */
+  cover?: string;
+}
+
+/** Where an entry was copied from, so the copy can be traced and its limits kept. */
+export interface EntryOrigin {
+  /** The id of the entry it was copied from. */
+  from: string;
+  /**
+   * The copy was made from content the person may not share (an imported pack): it stays on this
+   * device and is left out of exports and of the packs that travel with a character.
+   */
+  restricted?: boolean;
+}
 
 /**
  * A pack the user added on this device, with its texts.
@@ -21,6 +47,14 @@ export interface UserPackRecord {
   strings: Record<string, string>;
   /** Language the texts are written in, e.g. `en`. */
   lang: string;
+  /** The version of the pack format; `parseUserPack` always sets it (see `packFormat.ts`). */
+  formatVersion?: number;
+  /** The details of the pack as a book. */
+  meta?: PackMeta;
+  /** The same texts in other languages: by language, then `<entry id>.<field>`. `strings` is in `lang`. */
+  translations?: Record<string, Record<string, string>>;
+  /** Where entries were copied from, by entry id. */
+  provenance?: Record<string, EntryOrigin>;
   /** Where an imported pack came from: the address, or the names of the files. */
   source?: { url?: string; urls?: string[]; files?: string[] };
   /** The version of the importer that made it (see `AURORA_IMPORT_VERSION`); absent in old packs. */
@@ -52,6 +86,18 @@ const RecordSchema = v.object({
   pack: v.unknown(),
   strings: v.record(v.string(), v.string()),
   lang: v.string(),
+  formatVersion: v.optional(v.number()),
+  meta: v.optional(
+    v.object({
+      author: v.optional(v.string()),
+      description: v.optional(v.string()),
+      cover: v.optional(v.pipe(v.string(), v.maxLength(300_000))),
+    }),
+  ),
+  translations: v.optional(v.record(v.string(), v.record(v.string(), v.string()))),
+  provenance: v.optional(
+    v.record(v.string(), v.object({ from: v.string(), restricted: v.optional(v.boolean()) })),
+  ),
   source: v.optional(
     v.object({
       url: v.optional(v.string()),
@@ -105,7 +151,14 @@ export class PackParseError extends Error {}
 
 /** Validates what comes out of storage or a file; throws `PackParseError` when it is not a pack. */
 export function parseUserPack(raw: unknown): UserPackRecord {
-  const parsed = v.safeParse(RecordSchema, raw);
+  let migrated: unknown;
+  try {
+    migrated = migratePackRecord(raw);
+  } catch (error) {
+    if (error instanceof PackTooNewError) throw new PackParseError(error.message);
+    throw error;
+  }
+  const parsed = v.safeParse(RecordSchema, migrated);
   if (!parsed.success) throw new PackParseError("Not a content pack");
   let pack: Pack;
   try {
@@ -117,7 +170,7 @@ export function parseUserPack(raw: unknown): UserPackRecord {
     throw new PackParseError("That pack id belongs to the content that ships with the app");
   if (pack.manifest.id !== parsed.output.id)
     throw new PackParseError("The pack id does not match its entries");
-  return { ...parsed.output, pack };
+  return { ...parsed.output, formatVersion: PACK_FORMAT_VERSION, pack };
 }
 
 export async function listUserPacks(): Promise<UserPackRecord[]> {
@@ -139,13 +192,73 @@ export async function saveUserPack(record: UserPackRecord): Promise<void> {
 
 export const deleteUserPack = (id: string) => dbDelete("packs", id);
 
-const FORMAT = "dnd-character-maker-pack";
+/** The languages a pack has texts in: the one it was written in first, then its translations. */
+export const packLanguages = (record: UserPackRecord): string[] => [
+  record.lang,
+  ...Object.keys(record.translations ?? {}).filter((l) => l !== record.lang),
+];
 
-/** The text of a pack file. Only homebrew packs may be exported. */
+/**
+ * The texts of a pack for the languages in use, `locales` being the languages of the app in order
+ * of preference. A text is taken from the first preferred language that has it; the language the
+ * pack was written in is the last resort, so nothing is ever missing.
+ */
+export function packTexts(record: UserPackRecord, locales: string[]): Record<string, string> {
+  const translations = record.translations;
+  if (!translations) return record.strings;
+  // Languages the person prefers over the original one; those after it never beat it.
+  const own = locales.indexOf(record.lang);
+  const preferred = own === -1 ? locales : locales.slice(0, own);
+  const out = { ...record.strings };
+  for (const locale of [...preferred].reverse()) {
+    for (const [key, value] of Object.entries(translations[locale] ?? {}))
+      if (value) out[key] = value;
+  }
+  return out;
+}
+
+/** The ids of the entries that may not leave this device (copies of imported content). */
+export const restrictedIds = (record: UserPackRecord): string[] =>
+  Object.entries(record.provenance ?? {}).flatMap(([id, from]) => (from.restricted ? [id] : []));
+
+/**
+ * The pack without the entries that may not be shared, and their texts and notes of origin. The
+ * same pack when there are none.
+ */
+export function withoutRestricted(record: UserPackRecord): UserPackRecord {
+  const gone = restrictedIds(record);
+  if (gone.length === 0) return record;
+  const goes = (key: string) => gone.some((id) => key.startsWith(`${id}.`));
+  const keep = (texts: Record<string, string>) =>
+    Object.fromEntries(Object.entries(texts).filter(([key]) => !goes(key)));
+  const provenance = Object.fromEntries(
+    Object.entries(record.provenance ?? {}).filter(([id]) => !gone.includes(id)),
+  );
+  const { translations, ...rest } = record;
+  return {
+    ...rest,
+    strings: keep(record.strings),
+    pack: { ...record.pack, entries: record.pack.entries.filter((e) => !gone.includes(e.id)) },
+    ...(translations && {
+      translations: Object.fromEntries(Object.entries(translations).map(([l, t]) => [l, keep(t)])),
+    }),
+    provenance,
+  };
+}
+
+/**
+ * The text of a pack file. Only homebrew packs may be exported, and the entries copied from
+ * imported content are left out (`restrictedIds` tells which, so the person can be told).
+ */
 export function serializePack(record: UserPackRecord): string {
   if (record.origin !== "homebrew") throw new PackParseError("Personal packs cannot be exported");
-  const { origin: _origin, addedAt: _addedAt, ...rest } = record;
-  return `${JSON.stringify({ format: FORMAT, ...rest }, null, 2)}\n`;
+  const { origin: _origin, addedAt: _addedAt, ...rest } = withoutRestricted(record);
+  return `${JSON.stringify(
+    { format: PACK_FILE_FORMAT, ...rest, formatVersion: PACK_FORMAT_VERSION },
+    null,
+    2,
+  )}
+`;
 }
 
 export function packFileName(record: UserPackRecord): string {
@@ -164,7 +277,12 @@ export function parsePackFile(text: string, now = Date.now()): UserPackRecord {
   } catch {
     throw new PackParseError("The file is not valid JSON");
   }
-  if (typeof raw !== "object" || raw === null || (raw as { format?: unknown }).format !== FORMAT)
+  const format = (raw as { format?: unknown } | null)?.format;
+  if (
+    typeof raw !== "object" ||
+    raw === null ||
+    (format !== PACK_FILE_FORMAT && format !== LEGACY_PACK_FILE_FORMAT)
+  )
     throw new PackParseError("This is not a content pack file");
   return parseUserPack({ ...(raw as object), origin: "homebrew", addedAt: now });
 }
