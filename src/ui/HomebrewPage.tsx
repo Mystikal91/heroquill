@@ -594,7 +594,7 @@ export function SpellFields({ api }: { api: FormApi }) {
     </>
   );
 }
-function EntryForm({
+export function EntryForm({
   initial,
   editing,
   onDone,

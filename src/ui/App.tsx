@@ -27,7 +27,7 @@ import { CustomSpellDialog } from "./CustomSpellDialog";
 import { CustomizeItemDialog } from "./CustomizeItemDialog";
 import { EditionDialog } from "./EditionDialog";
 import { ExplainDialog } from "./Explain";
-import { HomebrewPage } from "./HomebrewPage";
+
 import { InstallNotice } from "./InstallNotice";
 import { ItemPickerDialog } from "./ItemPicker";
 import { ConfirmDialog, UndoNotice } from "./Notices";
@@ -48,6 +48,7 @@ import { PrintView } from "./print/PrintView";
 import { RuleDialog } from "./rules/EntryDetail";
 import { RulesPage } from "./rules/RulesPage";
 import { SpellDialog } from "./spells/SpellInfo";
+import { Studio } from "./studio/Studio";
 import { useSlashSearch } from "./useSlashSearch";
 
 function Screen() {
@@ -57,7 +58,7 @@ function Screen() {
     case "packs":
       return <PacksPage />;
     case "homebrew":
-      return <HomebrewPage />;
+      return <Studio />;
     case "translate":
       return <AutoTranslatePage />;
     case "about":

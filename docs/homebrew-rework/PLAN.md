@@ -76,7 +76,24 @@ Da fare:
   prerequisiti 2024), usati dall'editor per mostrare solo ciò che serve.
 - Avvisi di compatibilità nel pannello avvisi della Fase 2.
 
-## Fase 2 — Guscio dell'editor (desktop-first)
+## Fase 2 — Guscio dell'editor (desktop-first)  ✅ fatta nelle parti essenziali (2026-11-15, non committata)
+Realizzato: `src/ui/studio/` (Studio, Library, EntryList, Editor, SpellForm, Preview, Controls, studio.css) e
+`src/app/studio.ts` (sessione del pack aperto, salvataggio ritardato 700 ms, cronologia annulla/ripeti con unione
+delle digitazioni in `src/homebrew/history.ts`, modalità Guidata/Avanzata ricordata, Ctrl+S / Ctrl+Z / Ctrl+Y).
+Layout a 4 pannelli (biblioteca · elenco · editor · anteprima) che si impila sotto 1320 e 960 px. L'incantesimo è
+il primo tipo completo sul nuovo editor; in Avanzata compaiono tutti gli altri campi del catalogo tramite il
+renderer generico `FieldControl` (liste, oggetti, record, scelte). Anteprima dal vivo dell'incantesimo (anche non
+salvato) e pannello Controlli (`src/homebrew/warnings.ts`). Metadati del pack (autore, versione, descrizione)
+modificabili. Gli altri tipi aprono ancora il vecchio form dentro il nuovo guscio (ponte `legacyForm`); i tipi senza
+editor (mostro, opzione, divinità...) non sono ancora creabili. Testi in 5 lingue (`studio.*`). Provato nel browser:
+creazione pack, nuovo incantesimo, digitazione, annulla/ripeti, modalità avanzata con righe annidate, salvataggio in
+IndexedDB (formato v2), ponte verso il vecchio form (specie).
+Da rifinire (Fasi 3 e 7): messaggi di errore del catalogo ancora tecnici in inglese; id di una voce nuova fissato
+al momento della creazione (`spell/spell` finché senza nome: sistemare con la riscrittura degli id della Fase 4);
+anteprima solo per l'incantesimo (gli altri tipi usano la pagina Regole quando la voce è già caricata);
+`ruleset` per voce non ancora implementato; ricerca/ordinamento/duplicazione avanzati; versione telefono da rifinire.
+
+## Fase 2 (progetto originale) — Guscio dell'editor (desktop-first)
 Obiettivo: l'ambiente in cui si lavora, bello e comodo, con un primo tipo di voce completo (fetta verticale).
 - Layout a più pannelli: **libreria** (pack, sezioni per tipo) · **elenco voci** (ricerca, filtri, ordinamento)
   · **editor** · **anteprima**. Su telefono collassa in una navigazione a schermate.

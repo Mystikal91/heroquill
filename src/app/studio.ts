@@ -1,0 +1,146 @@
+import { effect, signal } from "@preact/signals";
+import {
+  type History,
+  canRedo,
+  canUndo,
+  change,
+  redo,
+  replacePresent,
+  startHistory,
+  undo,
+} from "../homebrew/history";
+import type { Draft } from "../homebrew/model";
+import type { UserPackRecord } from "../storage/packs";
+import { editingPackId } from "./homebrew";
+import { addUserPack, userPacks } from "./userPacks";
+
+/**
+ * The homebrew studio: the pack that is open is held here while it is worked on, so that every
+ * keystroke shows at once (in the preview and the list) and the device is written to a moment after
+ * the last one. Rewriting the content of the app on every letter would be far too slow.
+ */
+
+export type StudioMode = "guided" | "advanced";
+const MODE_KEY = "homebrewMode";
+
+function savedMode(): StudioMode {
+  try {
+    return localStorage.getItem(MODE_KEY) === "advanced" ? "advanced" : "guided";
+  } catch {
+    return "guided";
+  }
+}
+
+/** Guided shows what a beginner needs; advanced shows every control. Remembered between visits. */
+export const studioMode = signal<StudioMode>(savedMode());
+export function setStudioMode(mode: StudioMode) {
+  studioMode.value = mode;
+  try {
+    localStorage.setItem(MODE_KEY, mode);
+  } catch {
+    // The choice just is not remembered.
+  }
+}
+
+/** The pack being worked on and what can be undone in it; absent while no pack is open. */
+export const history = signal<History<UserPackRecord> | undefined>(undefined);
+
+/** The entry open in the editor. */
+export const selectedEntry = signal<string | undefined>(undefined);
+
+/**
+ * A form of the previous editor open in the editor's place, for the kinds the new editor does not
+ * have yet (and for a copy of a rules entry): a blank draft, or an entry being edited.
+ */
+export const legacyForm = signal<{ draft: Draft; editing?: string } | undefined>(undefined);
+
+/** `saved` (on the device), `pending` (a change waits for its turn), `saving`. */
+export const saveState = signal<"saved" | "pending" | "saving">("saved");
+
+/** The pack as it is now, with the changes not yet written. */
+export const workingPack = (): UserPackRecord | undefined => history.value?.present;
+
+const SAVE_MS = 700;
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+async function write() {
+  clearTimeout(timer);
+  timer = undefined;
+  const record = workingPack();
+  if (!record) return;
+  saveState.value = "saving";
+  await addUserPack(record);
+  // Something was changed while it was written: that is not saved yet.
+  saveState.value = timer ? "pending" : "saved";
+}
+
+/** Writes at once what waits, for before leaving the pack or handing it to another editor. */
+export async function flushStudio(): Promise<void> {
+  if (saveState.value === "pending") await write();
+}
+
+function schedule() {
+  saveState.value = "pending";
+  clearTimeout(timer);
+  timer = setTimeout(() => void write(), SAVE_MS);
+}
+
+/** Makes a change to the pack. A `key` (entry and field) joins quick changes of one thing into one undo step. */
+export function applyChange(next: UserPackRecord, key?: string) {
+  const h = history.value;
+  if (!h) return;
+  const updated = change(h, next, key);
+  if (updated === h) return;
+  history.value = updated;
+  schedule();
+}
+
+export function undoChange() {
+  const h = history.value;
+  if (!h || !canUndo(h)) return;
+  history.value = undo(h);
+  schedule();
+}
+
+export function redoChange() {
+  const h = history.value;
+  if (!h || !canRedo(h)) return;
+  history.value = redo(h);
+  schedule();
+}
+
+/** Opens a pack: its record is taken from the packs of the device, with a clean history. */
+export async function openStudioPack(id: string | undefined): Promise<void> {
+  await flushStudio();
+  const record = id
+    ? userPacks.value.find((p) => p.id === id && p.origin === "homebrew")
+    : undefined;
+  editingPackId.value = record?.id;
+  history.value = record ? startHistory(record) : undefined;
+  selectedEntry.value = undefined;
+  saveState.value = "saved";
+}
+
+/**
+ * The pack was changed somewhere else (an import, the old forms, another entry point): when
+ * nothing here waits to be saved, follow it; and when the pack is gone, close it.
+ */
+effect(() => {
+  const stored = userPacks.value;
+  const h = history.peek();
+  if (!h) return;
+  const here = stored.find((p) => p.id === h.present.id);
+  if (!here) {
+    history.value = undefined;
+    editingPackId.value = undefined;
+    selectedEntry.value = undefined;
+    return;
+  }
+  if (here !== h.present && saveState.peek() === "saved") history.value = replacePresent(h, here);
+});
+
+/** The entry open in the editor, if it is still there. */
+export function currentEntry() {
+  const id = selectedEntry.value;
+  return id ? workingPack()?.pack.entries.find((e) => e.id === id) : undefined;
+}
