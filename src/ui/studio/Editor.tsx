@@ -1,4 +1,5 @@
 import { useEffect } from "preact/hooks";
+import { copyEntriesTo, duplicateEntries, moveEntriesTo, nameTheId } from "../../app/arrange";
 import {
   applyChange,
   flushStudio,
@@ -20,6 +21,7 @@ import type { Draft } from "../../homebrew/model";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { EntryForm } from "../HomebrewPage";
+import { PackPicker } from "./Arrange";
 import { TextBox } from "./Controls";
 import { GenericForm } from "./GenericForm";
 import { Preview } from "./Preview";
@@ -156,6 +158,7 @@ export function Editor({ record }: { record: UserPackRecord }) {
               onChange={(v) =>
                 applyChange(setText(record, entry.id, "name", v), `${entry.id}.name`)
               }
+              onCommit={() => void nameTheId(entry.id)}
             />
           </header>
           {entry.kind === "spell" ? (
@@ -165,6 +168,17 @@ export function Editor({ record }: { record: UserPackRecord }) {
           )}
           {KIND_META[entry.kind].role !== "owned" && (
             <div class="studio-actions">
+              <button type="button" onClick={() => void duplicateEntries([entry.id])}>
+                {ui("studio.duplicate")}
+              </button>
+              <PackPicker
+                label={ui("studio.moveTo")}
+                onPick={(id) => void moveEntriesTo(id, [entry.id])}
+              />
+              <PackPicker
+                label={ui("studio.copyTo")}
+                onPick={(id) => void copyEntriesTo(id, [entry.id])}
+              />
               <Delete record={record} entry={entry} />
             </div>
           )}

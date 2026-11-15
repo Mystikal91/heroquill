@@ -6,6 +6,7 @@ import { type Variant, startEntry } from "../../homebrew/blanks";
 import { type EntryKind, KIND_META } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import { type UserPackRecord, restrictedIds } from "../../storage/packs";
+import { ArrangeBar, EntryRow } from "./Arrange";
 import { TextBox } from "./Controls";
 import { removePack, visibleEntries } from "./Library";
 import { kindName } from "./names";
@@ -208,6 +209,7 @@ export function EntryList({ record }: { record: UserPackRecord }) {
         </fieldset>
       )}
 
+      <ArrangeBar ids={shown.map((e) => e.id)} />
       {all.length === 0 ? (
         <p class="muted">{ui("studio.noEntries")}</p>
       ) : shown.length === 0 ? (
@@ -216,18 +218,12 @@ export function EntryList({ record }: { record: UserPackRecord }) {
         <ul class="plain studio-entries">
           {shown.map((e) => (
             <li key={e.id}>
-              <button
-                type="button"
-                class={selectedEntry.value === e.id ? "studio-entry on" : "studio-entry"}
-                aria-current={selectedEntry.value === e.id}
-                onClick={() => {
-                  legacyForm.value = undefined;
-                  selectedEntry.value = e.id;
-                }}
-              >
-                <b>{name(e) || ui("studio.unnamed")}</b>
-                <span class="pack-tag">{kindName(e)}</span>
-              </button>
+              <EntryRow
+                id={e.id}
+                label={name(e) || ui("studio.unnamed")}
+                tag={kindName(e)}
+                ids={shown.map((x) => x.id)}
+              />
             </li>
           ))}
         </ul>

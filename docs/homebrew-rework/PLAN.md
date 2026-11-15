@@ -135,7 +135,22 @@ Obiettivo: copertura completa, nell'ordine in cui rendono di più.
 - A ogni kind: anteprima e avvisi specifici; test che il risultato funzioni davvero sulla scheda (motore).
 Uscita: ogni kind del catalogo è creabile e modificabile.
 
-## Fase 4 — Riordino tra pacchetti
+## Fase 4 — Riordino tra pacchetti  ✅ fatta (2026-11-15, non committata)
+Realizzato: `src/homebrew/arrange.ts` (logica pura: `rewriteIds` che riscrive gli id ovunque, anche nelle chiavi dei
+testi e nelle espressioni dei requisiti; `bundleOf`/`bundleFromIndex`; `dependenciesOf`; `importBundle`; `copyEntries`;
+`moveEntries` che aggiorna le voci degli altri pacchetti; `renameId`/`nameBasedId`; `applyIdMap`), 21 test. Livello
+app `src/app/arrange.ts`: selezione multipla, appunti (copia/taglia/incolla), duplica, copia in / sposta in un altro
+pacchetto, elimina, con salvataggio, migrazione dei personaggi salvati (`migrateSavedCharacters`) e **annulla** che
+ripristina pacchetti e personaggi; domanda "porto anche le {n} voci a cui rimanda?"; id dal nome alla prima
+denominazione (`spell/spell` diventa `spell/frost-bite` se nessuno lo cita); copia di voci dell'SRD o di Aurora in un
+pacchetto (`copyFromRules`, con tratti inclusi, nota di origine e voci riservate per Aurora, usata da Modifica rapida).
+UI: caselle di selezione con Shift/Ctrl, barra delle azioni, trascinamento sui pacchetti (Alt = copia), scorciatoie
+Ctrl+C/X/V/D, menu "Sposta in…/Copia in…" anche sulla voce aperta. Provato nel browser: selezione, spostamento con
+tratto al seguito, annulla, rinomina dell'id, duplicato, copia di Palla di fuoco e Nano dall'SRD.
+Da rifinire: trascinamento non provato con il mouse reale (solo logica); in una copia tra pacchetti di lingue diverse i
+testi vanno nelle traduzioni; spostare una classe lascia le sue sottoclassi dove sono (restano valide, puntano al nuovo id).
+
+## Fase 4 (progetto originale) — Riordino tra pacchetti
 - Selezione multipla; **copia, taglia, incolla, sposta**, anche trascinando tra pack; duplica.
 - Lo spostamento cambia l'id (`pack:kind/slug`): aggiorna le voci figlie (tratti, feature, sottoclassi),
   i riferimenti in altre voci, i personaggi salvati (come `migrationMap` / `migrateSavedCharacters`), con anteprima

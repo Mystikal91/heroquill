@@ -13,6 +13,7 @@ import {
 import { KIND_META } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
+import { PackDrop } from "./Arrange";
 
 /** How many entries a pack shows in its list: the ones that belong to others (traits, features) are not counted. */
 export const visibleEntries = (record: UserPackRecord) =>
@@ -34,15 +35,17 @@ export function Library() {
         <ul class="plain studio-packs">
           {packs.map((record) => (
             <li key={record.id}>
-              <button
-                type="button"
-                class={editingPackId.value === record.id ? "studio-pack on" : "studio-pack"}
-                aria-current={editingPackId.value === record.id}
-                onClick={() => void openStudioPack(record.id)}
-              >
-                <b>{record.name}</b>
-                <span class="muted">{visibleEntries(record).length}</span>
-              </button>
+              <PackDrop id={record.id}>
+                <button
+                  type="button"
+                  class={editingPackId.value === record.id ? "studio-pack on" : "studio-pack"}
+                  aria-current={editingPackId.value === record.id}
+                  onClick={() => void openStudioPack(record.id)}
+                >
+                  <b>{record.name}</b>
+                  <span class="muted">{visibleEntries(record).length}</span>
+                </button>
+              </PackDrop>
             </li>
           ))}
         </ul>

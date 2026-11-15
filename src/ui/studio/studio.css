@@ -654,3 +654,70 @@
   font-weight: 400;
   color: var(--muted);
 }
+
+/* ---- Selecting, moving and copying entries ---- */
+
+.studio-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.studio-entry-row .studio-entry {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.studio-tick {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.studio-entry-row.ticked .studio-entry {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+}
+
+.studio-arrange {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.6rem;
+  padding: 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.studio-arrange-count {
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.studio-arrange button,
+.studio-pick {
+  min-height: 2rem;
+  font-size: 0.85rem;
+}
+
+.studio-pick {
+  max-width: 100%;
+  padding: 0 0.5rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.studio-drop-target {
+  border-radius: var(--radius-sm);
+}
+
+.studio-drop-target.over {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+}

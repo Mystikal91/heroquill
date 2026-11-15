@@ -1,4 +1,11 @@
 import { useEffect } from "preact/hooks";
+import {
+  clipboard,
+  copySelection,
+  cutSelection,
+  duplicateEntries,
+  pasteHere,
+} from "../../app/arrange";
 import { editingPackId, takeWaitingDraft } from "../../app/homebrew";
 import { leavePage } from "../../app/navigation";
 import {
@@ -55,6 +62,16 @@ export function Studio() {
       } else if (!isTyping(e.target) && key === "y") {
         e.preventDefault();
         redoChange();
+      } else if (!isTyping(e.target) && key === "c") {
+        copySelection();
+      } else if (!isTyping(e.target) && key === "x") {
+        cutSelection();
+      } else if (!isTyping(e.target) && key === "v" && clipboard.value) {
+        e.preventDefault();
+        void pasteHere();
+      } else if (!isTyping(e.target) && key === "d") {
+        e.preventDefault();
+        void duplicateEntries();
       }
     };
     addEventListener("keydown", onKey);

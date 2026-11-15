@@ -139,9 +139,12 @@ function referencedIds(entry: Entry): string[] {
   return found;
 }
 
-/** The entries of the pack that `id` owns (and what they own in turn), by what the catalog says each kind owns. */
-export function ownedEntries(record: UserPackRecord, id: string): Entry[] {
-  const byId = new Map(record.pack.entries.map((e) => [e.id as string, e]));
+/**
+ * The entries that `id` owns (and what they own in turn), by what the catalog says each kind owns,
+ * looked up through `byId`. What an entry owns is in the pack of the entry.
+ */
+export function ownedFrom(byId: ReadonlyMap<string, Entry>, id: string): Entry[] {
+  const pack = packOf(id);
   const owned: Entry[] = [];
   const seen = new Set([id]);
   const queue = [byId.get(id)];
@@ -151,14 +154,18 @@ export function ownedEntries(record: UserPackRecord, id: string): Entry[] {
     const kinds = KIND_META[entry.kind].owns ?? [];
     for (const ref of referencedIds(entry)) {
       const child = byId.get(ref);
-      if (!child || seen.has(ref) || packOf(ref) !== record.id || !kinds.includes(child.kind))
-        continue;
+      if (!child || seen.has(ref) || packOf(ref) !== pack || !kinds.includes(child.kind)) continue;
       seen.add(ref);
       owned.push(child);
       queue.push(child);
     }
   }
   return owned;
+}
+
+/** The entries of the pack that `id` owns. */
+export function ownedEntries(record: UserPackRecord, id: string): Entry[] {
+  return ownedFrom(new Map(record.pack.entries.map((e) => [e.id as string, e])), id);
 }
 
 /** Takes entries out of a pack with their texts, translations and notes of origin. */

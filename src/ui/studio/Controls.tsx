@@ -25,10 +25,13 @@ export function TextBox({
   rows = 4,
   placeholder,
   hint,
+  onCommit,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  /** Called when the box is left. */
+  onCommit?: () => void;
   area?: boolean;
   rows?: number;
   placeholder?: string;
@@ -44,6 +47,7 @@ export function TextBox({
           value={value}
           placeholder={placeholder}
           onInput={(e) => onChange(e.currentTarget.value)}
+          onBlur={onCommit}
         />
         {note}
       </label>
@@ -56,6 +60,7 @@ export function TextBox({
         value={value}
         placeholder={placeholder}
         onInput={(e) => onChange(e.currentTarget.value)}
+        onBlur={onCommit}
       />
       {note}
     </label>
