@@ -10,6 +10,7 @@ import {
 import { character, content } from "../app/store";
 import { setText } from "../homebrew/entries";
 import { ui } from "../i18n/ui";
+import { packUnits } from "../storage/packs";
 import { entriesOfKind } from "./build/fields";
 import { TextBox } from "./studio/Controls";
 import { GenericForm } from "./studio/GenericForm";
@@ -39,7 +40,7 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
   };
 
   return (
-    <EditProvider value={{ apply: (next) => setRecord(next) }}>
+    <EditProvider value={{ apply: (next) => setRecord(next), units: packUnits(record) }}>
       <div class="item-dialog-head">
         <h3>{ui("item.customize.title", { name: c?.name(itemId) ?? itemId })}</h3>
         <button type="button" class="link" onClick={closeCustomize}>

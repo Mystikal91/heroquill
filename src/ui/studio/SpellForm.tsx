@@ -5,7 +5,8 @@ import { setText, updateEntry } from "../../homebrew/entries";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
-import { CheckBox, FieldControl, ManyBox, SelectBox, TextBox, humanize } from "./Controls";
+import { CheckBox, FieldControl, ManyBox, SelectBox, TextBox } from "./Controls";
+import { fieldLabel } from "./labels";
 import { useEdit } from "./scope";
 
 /** The fields of a spell the guided form draws itself; the advanced mode adds all the others. */
@@ -65,19 +66,19 @@ export function SpellForm({
         <TextBox
           label={ui("hb.f.castingTime")}
           value={text("castingTime")}
-          placeholder="1 action"
+          placeholder={ui("hint.castingTime")}
           onChange={(v) => writeText("castingTime", v)}
         />
         <TextBox
           label={ui("hb.f.range")}
           value={text("range")}
-          placeholder="60 feet"
+          placeholder={ui("hint.range")}
           onChange={(v) => writeText("range", v)}
         />
         <TextBox
           label={ui("hb.f.duration")}
           value={text("duration")}
-          placeholder="Instantaneous"
+          placeholder={ui("hint.duration")}
           onChange={(v) => writeText("duration", v)}
         />
       </div>
@@ -129,6 +130,7 @@ export function SpellForm({
       )}
       <TextBox
         label={ui("hb.f.desc")}
+        placeholder={ui("hint.desc")}
         value={text("desc")}
         area
         rows={7}
@@ -148,7 +150,7 @@ export function SpellForm({
           {extra.map((spec) => (
             <FieldControl
               key={spec.key}
-              label={humanize(spec.key)}
+              label={fieldLabel(spec.key)}
               type={spec.type}
               value={data[spec.key]}
               optional={spec.optional}

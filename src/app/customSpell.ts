@@ -5,6 +5,7 @@ import { updateEntry } from "../homebrew/entries";
 import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
+import { language } from "./language";
 import { updateCharacter } from "./store";
 import { addUserPack, userPacks } from "./userPacks";
 
@@ -18,7 +19,7 @@ export const customSpellFor = signal<string | undefined>(undefined);
 function personalPack(): UserPackRecord {
   const found = userPacks.value.find((p) => p.id === PERSONAL_SPELLS_PACK);
   if (found) return found;
-  const record = newHomebrewPack(ui("spells.myPack"));
+  const record = newHomebrewPack(ui("spells.myPack"), Date.now(), language.value);
   return {
     ...record,
     id: PERSONAL_SPELLS_PACK,

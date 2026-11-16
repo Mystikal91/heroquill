@@ -1,5 +1,6 @@
 import { signal } from "@preact/signals";
 import { newHomebrewPack } from "../homebrew/pack";
+import { language } from "./language";
 import { showView } from "./navigation";
 import { addUserPack, userPacks } from "./userPacks";
 
@@ -8,7 +9,7 @@ export const editingPackId = signal<string | undefined>(undefined);
 
 /** Starts a homebrew pack and opens it in the studio. */
 export async function createHomebrewPack(name: string): Promise<void> {
-  const record = newHomebrewPack(name);
+  const record = newHomebrewPack(name, Date.now(), language.value);
   await addUserPack(record);
   openHomebrewPack(record.id);
 }

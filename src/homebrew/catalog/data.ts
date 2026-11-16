@@ -13,6 +13,9 @@ const text: FieldType = { type: "text" };
 const dice: FieldType = { type: "dice" };
 const bool: FieldType = { type: "boolean" };
 const number: FieldType = { type: "number" };
+/** A distance in feet and a weight in pounds: the editor shows them in the units of the pack. */
+const feet: FieldType = { type: "number", min: 0, unit: "distance" };
+const pounds: FieldType = { type: "number", min: 0, unit: "weight" };
 const whole = (min?: number, max?: number): FieldType => ({
   type: "number",
   integer: true,
@@ -94,12 +97,14 @@ const ARMOR_CLASS: FieldType = object(
 );
 
 const RANGE: FieldType = object(
-  field("normal", number, { required: true }),
-  field("long", number, { level: "guided" }),
+  field("normal", feet, { required: true }),
+  field("long", feet, { level: "guided" }),
 );
+/** A kind of damage, chosen by name from the thirteen of the rules. */
+const damageKind: FieldType = { type: "text", pick: "damage" };
 const DAMAGE: FieldType = object(
   field("dice", dice, { required: true }),
-  field("type", text, { required: true }),
+  field("type", damageKind, { required: true }),
 );
 
 const g = "guided" as const;
@@ -118,7 +123,7 @@ const ITEM: FieldSpec[] = [
     ),
     { required: true, level: g },
   ),
-  field("weight", number, { level: g }),
+  field("weight", pounds, { level: g }),
   field("rarity", text, {
     level: g,
     doc: "A magic item: common, uncommon, rare, very-rare, legendary, artifact.",
@@ -225,7 +230,7 @@ const MONSTER: FieldSpec[] = [
   field("saves", abilityKeys),
   field("skills", { type: "record", of: number }),
   field("conditionImmunities", list(text)),
-  field("senses", { type: "record", of: number }),
+  field("senses", { type: "record", of: feet }),
   field("blindBeyond", list(text)),
   field("passivePerception", number),
   field("challenge", number, { level: g }),
@@ -244,7 +249,10 @@ const MONSTER: FieldSpec[] = [
 /** The `data` fields of every kind of entry. A kind added to the schema fails to compile until it is listed. */
 export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
   species: [
-    field("speed", whole(0), { required: true, level: g }),
+    field("speed", { ...(whole(0) as object), unit: "distance" } as FieldType, {
+      required: true,
+      level: g,
+    }),
     field("size", choice(...CREATURE_SIZES), {
       level: g,
       doc: "Absent when the species lets the person pick a size (a `size` choice).",
@@ -254,7 +262,7 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
     field("replacesSpecies", bool, {
       doc: "Stands in for its species: the species' own effects are not applied.",
     }),
-    field("speed", whole(0)),
+    field("speed", { ...(whole(0) as object), unit: "distance" } as FieldType),
     field("size", choice(...CREATURE_SIZES)),
   ],
   class: [
@@ -435,9 +443,9 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
       "damage",
       list(
         object(
-          field("damageType", object(field("index", text, { required: true }))),
-          field("damageAtSlotLevel", { type: "record", of: dice }),
-          field("damageAtCharacterLevel", { type: "record", of: dice }),
+          field("damageType", object(field("index", damageKind, { required: true }))),
+          field("damageAtSlotLevel", { type: "record", of: dice, levels: "slot" }),
+          field("damageAtCharacterLevel", { type: "record", of: dice, levels: "character" }),
         ),
       ),
     ),
@@ -449,7 +457,7 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
         field("desc", text),
       ),
     ),
-    field("healAtSlotLevel", { type: "record", of: dice }),
+    field("healAtSlotLevel", { type: "record", of: dice, levels: "slot" }),
     field("areaOfEffect", object(field("type", text), field("size", number))),
   ],
   item: ITEM,

@@ -19,6 +19,39 @@
   margin: 0.15rem 0 0;
 }
 
+/* The Back button keeps the size of its text; it never shrinks under it. */
+.studio-top > button {
+  flex: none;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* On a phone the button has a row of its own, and the title is smaller, so it does not crowd. */
+@media (max-width: 640px) {
+  .studio {
+    padding: 0.9rem;
+  }
+
+  .studio-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .studio-top > button {
+    align-self: flex-start;
+  }
+
+  .studio-top h2 {
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+  }
+
+  .studio-top p {
+    font-size: 0.9rem;
+  }
+}
+
 .studio-body {
   display: grid;
   grid-template-columns: var(--explorer, 17rem) minmax(0, 1fr);
@@ -818,4 +851,546 @@
     max-height: none;
     writing-mode: horizontal-tb;
   }
+}
+
+/* ---- Starting from an existing entry ---- */
+
+.studio-menu-wide {
+  grid-column: 1 / -1;
+}
+
+.studio-start {
+  width: min(40rem, calc(100vw - 1rem));
+}
+
+.studio-start-list {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.5rem 0 0;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.studio-start-list button {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.7rem;
+  text-align: left;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.studio-start-list button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.studio-start-list .muted {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+/* ---- Trying an entry on a character ---- */
+
+.studio-tryon {
+  margin: 0 0 1.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.studio-tryon > summary {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.studio-tryon-table {
+  width: 100%;
+  margin: 0.4rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.studio-tryon-table th,
+.studio-tryon-table td {
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.studio-tryon-table tr.changed th,
+.studio-tryon-table tr.changed td {
+  color: var(--fg);
+}
+
+.studio-tryon-table tr.changed td b {
+  color: var(--accent);
+}
+
+.studio-tryon-list {
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+/* ---- Languages and translating ---- */
+
+.studio-languages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.studio-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem !important;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.studio-lang small {
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.studio-lang.on {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.studio-lang.on small {
+  color: var(--fg);
+}
+
+.studio-tr-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--border);
+}
+
+.studio-tr-original small {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.studio-tr-original p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.studio-pack-language {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.studio-pack-languages {
+  margin: 1rem 0;
+}
+
+@media (max-width: 960px) {
+  .studio-tr-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Sections that fold, the jump bar and the strip of levels ---- */
+
+.studio-section > summary {
+  list-style: revert;
+  cursor: pointer;
+}
+
+.studio-section > summary h4 {
+  display: inline;
+  margin: 0;
+}
+
+.studio-jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.studio-jump button {
+  min-height: 1.8rem !important;
+  padding: 0 0.7rem !important;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.studio-strip {
+  margin: 1.25rem 0 0.75rem;
+}
+
+.studio-strip h4 {
+  margin: 0 0 0.5rem;
+}
+
+.studio-levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.6rem, 1fr));
+  gap: 0.35rem;
+}
+
+.studio-levels li {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  min-width: 0;
+  min-height: 3.4rem;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.studio-levels li.has {
+  border-color: var(--accent);
+}
+
+.studio-levels header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.studio-levels header b {
+  color: var(--accent);
+}
+
+.studio-asi {
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+
+.studio-level-add {
+  margin-left: auto;
+  min-height: 1.4rem !important;
+  min-width: 1.4rem;
+  padding: 0 !important;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.studio-level-feature {
+  min-height: 1.5rem !important;
+  padding: 0 0.3rem !important;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+}
+
+.studio-levels small {
+  font-size: 0.7rem;
+}
+
+/* ---- A denser list: a dot for the kind, a mark for what needs fixing ---- */
+
+.studio-dot {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.studio-dot[data-group="character"] {
+  background: #7e94e0;
+}
+
+.studio-dot[data-group="magic"] {
+  background: #b684dc;
+}
+
+.studio-dot[data-group="items"] {
+  background: #d9a84c;
+}
+
+.studio-dot[data-group="world"] {
+  background: #6db48c;
+}
+
+.studio-dot[data-group="rules"] {
+  background: #9a9a9a;
+}
+
+.studio-entry {
+  justify-content: flex-start !important;
+}
+
+.studio-warn {
+  flex: none;
+  margin-left: auto;
+  color: var(--danger, #e07a7a);
+  font-size: 0.85rem;
+}
+
+.studio-sort {
+  margin: 0 0 0.5rem;
+}
+
+/* ---- The palette and the list of keys ---- */
+
+.studio-palette {
+  width: min(34rem, calc(100vw - 1rem));
+  margin-top: 8vh;
+}
+
+.studio-palette-list {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0.5rem 0 0;
+}
+
+.studio-palette-list button {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.7rem;
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.studio-palette-list button.on {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+
+.studio-keys > div {
+  display: flex;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.studio-keys dt {
+  flex: 0 0 14rem;
+}
+
+.studio-keys dd {
+  margin: 0;
+}
+
+.studio-keys kbd {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-2);
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+/* ---- Breathing room between chips, menus and the buttons under them ---- */
+
+.studio .studio-kinds {
+  margin: 0 0 0.75rem !important;
+}
+
+.studio-children > * + * {
+  margin-top: 0.6rem;
+}
+
+.studio-children .studio-entries {
+  margin-top: 0.75rem;
+}
+
+.studio-many > select {
+  margin-bottom: 0.6rem;
+}
+
+.studio-many > select + .studio-chips {
+  margin-bottom: 0.25rem;
+}
+
+.studio-many .studio-chips {
+  margin-top: 0.1rem;
+  gap: 0.5rem;
+}
+
+.studio-chip {
+  margin-bottom: 0.1rem;
+}
+
+/* A condition and the effects under it: one column, so the nested cards have the whole width. */
+.studio-grid.studio-grid-one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.studio-effect {
+  min-width: 0;
+}
+
+.studio-effect .studio-many {
+  min-width: 0;
+  margin-inline: 0;
+}
+
+.studio-effect > summary > b {
+  flex: 0 0 auto;
+}
+
+/* ---- Remove buttons: on a line of their own, at the right, never over a field ---- */
+
+.studio-drop {
+  float: none;
+  display: block;
+  margin: 0 0 0.5rem auto;
+}
+
+.studio-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.studio-row:has(> :nth-child(3)) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+}
+
+.studio-row > button.danger {
+  align-self: end;
+  min-height: 2.5rem;
+}
+
+.studio-effect > button.danger,
+.studio-owned-item > button.danger {
+  display: block;
+  margin: 0.6rem 0 0 auto;
+}
+
+/* Lists of chips and nested boxes take the whole row; switches sit together under the fields. */
+.studio-grid > .studio-many {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.studio-checks {
+  margin-top: 0.6rem;
+  gap: 0.5rem 1.5rem;
+}
+
+/* ---- The requirement of an effect, as sentences ---- */
+
+.studio-req {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.studio-req-clause {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.studio-req-lead {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.studio-req-line {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.studio-word {
+  min-height: 2.25rem;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.studio-word-search {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.studio-word-list {
+  max-height: 14rem;
+  overflow-y: auto;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.studio-word-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2rem;
+  border: 0;
+  text-align: left;
+}
+
+@media (max-width: 40rem) {
+  .studio-req-line {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .studio-req-line select {
+    grid-column: 1 / -1;
+  }
+}
+
+/* A remove button next to fields is as tall as the fields, and sits on their line. */
+.studio-row > button.danger {
+  min-height: 0;
+  height: 2.4rem;
+  padding-block: 0;
+}
+
+/* Rows of fields and their remove button: no stray margins, so the button sits level with the inputs. */
+.studio-row > .field,
+.studio-row > .studio-field {
+  margin-bottom: 0;
+}
+
+.studio-row > fieldset {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.studio-many > small {
+  display: block;
+  margin-bottom: 0.6rem;
 }

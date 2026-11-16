@@ -44,3 +44,12 @@ export function convertText(text: string, metric = metricUnits.value, locale = u
     .replace(MILES, (_, n: string) => `${format(amount(n) * MILES_TO_KM, locale)} km`)
     .replace(POUNDS, (_, n: string) => `${format(amount(n) * POUNDS_TO_KG, locale)} kg`);
 }
+
+/** A distance in feet as a number in the units asked for (meters when metric), the game's own way. */
+export const feetTo = (feet: number, metric: boolean) => (metric ? feet * FEET_TO_METERS : feet);
+/** A distance typed in the units asked for, as feet. */
+export const feetFrom = (value: number, metric: boolean) =>
+  metric ? value / FEET_TO_METERS : value;
+/** A weight in pounds as a number in the units asked for (kilograms when metric). */
+export const poundsTo = (pounds: number, metric: boolean) =>
+  metric ? pounds * POUNDS_TO_KG : pounds;

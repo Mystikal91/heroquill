@@ -9,6 +9,7 @@ import { entriesOfKind } from "../build/fields";
 import { ClassCasting, SubclassCasting } from "./Casting";
 import { FieldControl, SelectBox, TextBox } from "./Controls";
 import { EffectList } from "./Effects";
+import { LevelStrip } from "./LevelStrip";
 import { OwnedList } from "./Owned";
 import { fieldLabel } from "./labels";
 import { LAYOUTS } from "./layouts";
@@ -58,6 +59,16 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
 
   return (
     <div class="studio-form">
+      <JumpBar
+        sections={[
+          layout.effects && ["sec-effects", ui("studio.effects")],
+          layout.owns && [
+            "sec-owned",
+            ui(layout.owns === "trait" ? "studio.traits" : "studio.features"),
+          ],
+          advanced && rest.length > 0 && ["sec-more", ui("studio.advancedFields")],
+        ]}
+      />
       {layout.parent && (
         <SelectBox
           label={ui("studio.parent")}
@@ -79,6 +90,7 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
           value={record.strings[`${id}.${field}`] ?? ""}
           area={area}
           rows={area ? 5 : undefined}
+          placeholder={field === "desc" ? ui("hint.desc") : undefined}
           onChange={(v) => writeText(field, v)}
         />
       ))}
@@ -102,8 +114,10 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
       {layout.casting === "subclass" && <SubclassCasting record={record} entry={entry} />}
 
       {layout.effects && (
-        <section class="studio-effects-section">
-          <h4>{ui("studio.effects")}</h4>
+        <details class="studio-effects-section studio-section" id="sec-effects" open>
+          <summary>
+            <h4>{ui("studio.effects")}</h4>
+          </summary>
           <EffectList
             hidden={layout.owns === "trait" ? ["trait"] : []}
             effects={entry.effects}
@@ -111,17 +125,45 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
               applyChange(updateEntry(record, id, { effects }), `${id}.effects`)
             }
           />
-        </section>
+        </details>
       )}
 
+      {layout.owns === "feature" && <LevelStrip record={record} entry={entry} />}
       {layout.owns && <OwnedList record={record} owner={entry} kind={layout.owns} />}
 
       {advanced && rest.length > 0 && (
-        <section class="studio-advanced">
-          <h4>{ui("studio.advancedFields")}</h4>
+        <details class="studio-advanced studio-section" id="sec-more" open>
+          <summary>
+            <h4>{ui("studio.advancedFields")}</h4>
+          </summary>
           {rest.map(control)}
-        </section>
+        </details>
       )}
     </div>
+  );
+}
+
+/** Links to the sections of a long form, for the kinds that have several (a class, a species). */
+function JumpBar({ sections }: { sections: (false | undefined | [string, string])[] }) {
+  const found = sections.filter((s): s is [string, string] => Array.isArray(s));
+  if (found.length < 2) return null;
+  return (
+    <nav class="studio-jump" aria-label={ui("studio.jump")}>
+      <span class="muted">{ui("studio.jump")}</span>
+      {found.map(([id, label]) => (
+        <button
+          type="button"
+          key={id}
+          onClick={() => {
+            const section = document.getElementById(id) as HTMLDetailsElement | null;
+            if (!section) return;
+            section.open = true;
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        >
+          {label}
+        </button>
+      ))}
+    </nav>
   );
 }

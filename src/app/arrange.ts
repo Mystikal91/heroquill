@@ -225,7 +225,10 @@ export async function copyFromRules(ids: string[]): Promise<boolean> {
   await flushStudio();
   let pack = (editingPackId.value && find(editingPackId.value)) || homebrewPacks()[0];
   // A new pack is written in the language of the app, since the texts of the copy are read in it.
-  if (!pack) pack = { ...newHomebrewPack(ui("hb.myPack")), lang: language.value };
+  if (!pack) pack = newHomebrewPack(ui("hb.myPack"), Date.now(), language.value);
+  // An empty pack takes the language the copied texts are read in.
+  else if (pack.pack.entries.length === 0 && pack.lang !== language.value)
+    pack = { ...pack, lang: language.value };
   const bundle = bundleFromIndex(
     c.index,
     { fields: (id) => c.fields(id), read: (id, field) => c.displayed(id, field) ?? "" },

@@ -98,11 +98,15 @@ export function EntryRow({
   id,
   label,
   tag,
+  group,
+  bad,
   ids,
 }: {
   id: string;
   label: string;
   tag: string;
+  group: string;
+  bad: boolean;
   ids: string[];
 }) {
   const open = selectedEntry.value === id;
@@ -139,8 +143,18 @@ export function EntryRow({
           selectedEntry.value = id;
         }}
       >
+        <span class="studio-dot" data-group={group} title={tag} role="img" aria-label={tag} />
         <b>{label}</b>
-        <span class="pack-tag">{tag}</span>
+        {bad && (
+          <span
+            class="studio-warn"
+            title={ui("studio.hasProblems")}
+            role="img"
+            aria-label={ui("studio.hasProblems")}
+          >
+            ⚠
+          </span>
+        )}
       </button>
     </div>
   );

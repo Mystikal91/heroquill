@@ -7,6 +7,7 @@ import {
   saveState,
   selectedEntry,
   setStudioMode,
+  studioLanguage,
   studioMode,
   undoChange,
 } from "../../app/studio";
@@ -16,6 +17,7 @@ import { KIND_META } from "../../homebrew/catalog";
 import { deleteEntry, setText } from "../../homebrew/entries";
 import { canRedo, canUndo } from "../../homebrew/history";
 import { ui } from "../../i18n/ui";
+import { packTexts } from "../../storage/packs";
 import type { UserPackRecord } from "../../storage/packs";
 import { PackPicker } from "./Arrange";
 import { TextBox } from "./Controls";
@@ -23,6 +25,7 @@ import { GenericForm } from "./GenericForm";
 import { PackHome } from "./PackHome";
 import { Preview } from "./Preview";
 import { SpellForm } from "./SpellForm";
+import { LanguageBar, TranslationPanel } from "./Translate";
 import { kindName } from "./names";
 
 function SaveState() {
@@ -99,6 +102,13 @@ export function Editor({ record }: { record: UserPackRecord }) {
   const entry = record.pack.entries.find((e) => e.id === selectedEntry.value);
   const section = useRef<HTMLElement>(null);
   const openId = entry?.id;
+  // A translation that is not in the pack any more is not written in.
+  const language =
+    studioLanguage.value && record.translations?.[studioLanguage.value]
+      ? studioLanguage.value
+      : undefined;
+  // The preview reads in the language being written, with the original where nothing is translated.
+  const shown = language ? { ...record, strings: packTexts(record, [language]) } : record;
   // On a narrow screen the editor is under the list: opening an entry takes the person to it.
   useEffect(() => {
     if (openId && matchMedia("(max-width: 960px)").matches)
@@ -109,6 +119,7 @@ export function Editor({ record }: { record: UserPackRecord }) {
   return (
     <section class="studio-editor" ref={section}>
       <Toolbar />
+      <LanguageBar record={record} entry={entry} />
       <div class="studio-work">
         <div class="studio-edit">
           <header class="studio-head">
@@ -125,7 +136,9 @@ export function Editor({ record }: { record: UserPackRecord }) {
               onCommit={() => void nameTheId(entry.id)}
             />
           </header>
-          {entry.kind === "spell" ? (
+          {language ? (
+            <TranslationPanel record={record} entry={entry} language={language} />
+          ) : entry.kind === "spell" ? (
             <SpellForm record={record} entry={entry} />
           ) : (
             <GenericForm record={record} entry={entry} />
@@ -147,7 +160,7 @@ export function Editor({ record }: { record: UserPackRecord }) {
             </div>
           )}
         </div>
-        <Preview record={record} entry={entry} />
+        <Preview record={shown} entry={entry} />
       </div>
     </section>
   );

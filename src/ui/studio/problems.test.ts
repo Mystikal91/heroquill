@@ -6,13 +6,13 @@ import { explainProblem } from "./problems";
 describe("what is wrong, in words", () => {
   it("says what a field needs", () => {
     expect(explainProblem("hitDie: required")).toBe("Hit die is needed.");
-    expect(explainProblem("speed: expected a number")).toBe("Speed (ft) must be a number.");
+    expect(explainProblem("speed: expected a number")).toBe("Speed must be a number.");
     expect(explainProblem("level: must be at most 9")).toBe("Level must be at most 9.");
     expect(explainProblem("hitDie: must be at least 4")).toBe("Hit die must be at least 4.");
   });
 
   it("names the field at the end of a path, not the way to it", () => {
-    expect(explainProblem("damage[0].damageType.index: required")).toBe("Index is needed.");
+    expect(explainProblem("damage[0].damageType.index: required")).toBe("Name is needed.");
     expect(explainProblem("weapon.range.normal: expected a number")).toContain("Normal range");
   });
 

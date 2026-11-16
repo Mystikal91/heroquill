@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { studioMode } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
+import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
 import { entriesOfKind } from "../build/fields";
 import { EffectList } from "./Effects";
 import { fieldLabel, humanize, optionLabel } from "./labels";
+import { useMetric } from "./scope";
 
 export { humanize };
 
@@ -82,6 +84,7 @@ export function NumberBox({
   min,
   max,
   placeholder,
+  unit,
 }: {
   label: string;
   value: number | undefined;
@@ -89,20 +92,40 @@ export function NumberBox({
   min?: number | undefined;
   max?: number | undefined;
   placeholder?: string;
+  /** The number is a distance (feet) or a weight (pounds): shown and typed in the units of the pack. */
+  unit?: "distance" | "weight" | undefined;
 }) {
+  const metric = useMetric();
+  // While the person types, what they typed stays as it is: converting back and forth would round it under their fingers.
+  const [typed, setTyped] = useState<string | undefined>(undefined);
+  const suffix =
+    unit === "distance" ? (metric ? "m" : "ft") : unit === "weight" ? (metric ? "kg" : "lb") : "";
+  const shown = (v: number) => {
+    const n = unit === "distance" ? feetTo(v, metric) : unit === "weight" ? poundsTo(v, metric) : v;
+    return Math.round(n * 100) / 100;
+  };
+  const stored = (v: number) =>
+    unit === "distance"
+      ? Math.round(feetFrom(v, metric))
+      : unit === "weight"
+        ? Math.round((metric ? v / 0.5 : v) * 100) / 100
+        : v;
   return (
     <label class="field studio-field">
-      <span>{label}</span>
+      <span>{suffix ? `${label} (${suffix})` : label}</span>
       <input
         type="number"
-        min={min}
-        max={max}
-        value={value ?? ""}
+        step={unit ? "any" : undefined}
+        min={unit ? undefined : min}
+        max={unit ? undefined : max}
+        value={typed ?? (value === undefined ? "" : shown(value))}
         placeholder={placeholder}
         onInput={(e) => {
           const raw = e.currentTarget.value;
-          onChange(raw === "" || Number.isNaN(Number(raw)) ? undefined : Number(raw));
+          setTyped(raw);
+          onChange(raw === "" || Number.isNaN(Number(raw)) ? undefined : stored(Number(raw)));
         }}
+        onBlur={() => setTyped(undefined)}
       />
     </label>
   );
@@ -194,6 +217,30 @@ export function ManyBox({
   );
 }
 
+/** The kinds of damage of the rules, as their ids. */
+export const DAMAGE_KINDS = [
+  "acid",
+  "bludgeoning",
+  "cold",
+  "fire",
+  "force",
+  "lightning",
+  "necrotic",
+  "piercing",
+  "poison",
+  "psychic",
+  "radiant",
+  "slashing",
+  "thunder",
+];
+
+/** The options of a menu, with the value already written kept in it when the list does not know it. */
+export function withCurrent(options: Option[], value: unknown): Option[] {
+  return typeof value === "string" && value !== "" && !options.some((o) => o.id === value)
+    ? [...options, { id: value, label: value }]
+    : options;
+}
+
 /** Entries the person can point at, for a field that names some kinds of entry. */
 function refOptions(kinds: readonly string[] | undefined): Option[] {
   return (kinds ?? []).flatMap((kind) => entriesOfKind(kind));
@@ -215,20 +262,6 @@ export function ChipPicker({
   return (
     <fieldset class="studio-many">
       <legend>{label}</legend>
-      <div class="studio-chips">
-        {value.map((id) => (
-          <span class="studio-chip" key={id}>
-            {name(id)}
-            <button
-              type="button"
-              aria-label={`${ui("form.remove")}: ${name(id)}`}
-              onClick={() => onChange(value.filter((x) => x !== id))}
-            >
-              ×
-            </button>
-          </span>
-        ))}
-      </div>
       <select
         value=""
         onChange={(e) => {
@@ -245,6 +278,20 @@ export function ChipPicker({
             </option>
           ))}
       </select>
+      <div class="studio-chips">
+        {value.map((id) => (
+          <span class="studio-chip" key={id}>
+            {name(id)}
+            <button
+              type="button"
+              aria-label={`${ui("form.remove")}: ${name(id)}`}
+              onClick={() => onChange(value.filter((x) => x !== id))}
+            >
+              ×
+            </button>
+          </span>
+        ))}
+      </div>
     </fieldset>
   );
 }
@@ -313,6 +360,26 @@ export function FieldControl({
 }) {
   switch (type.type) {
     case "text":
+      if (type.type === "text" && type.pick === "damage")
+        return (
+          <SelectBox
+            label={label}
+            value={typeof value === "string" ? value : undefined}
+            options={withCurrent(
+              DAMAGE_KINDS.map((id) => ({ id, label: optionLabel(id) })),
+              value,
+            )}
+            blank={ui("form.none")}
+            onChange={onChange}
+          />
+        );
+      return (
+        <TextBox
+          label={label}
+          value={typeof value === "string" ? value : ""}
+          onChange={(v) => onChange(v === "" && optional ? undefined : v)}
+        />
+      );
     case "dice":
       return (
         <TextBox
@@ -329,6 +396,7 @@ export function FieldControl({
           value={typeof value === "number" ? value : undefined}
           min={type.min}
           max={type.max}
+          unit={type.unit}
           onChange={onChange}
         />
       );
@@ -423,7 +491,7 @@ function ListControl({
       <ManyBox
         label={label}
         value={items.filter((x): x is string => typeof x === "string")}
-        options={of.options.map((id) => ({ id, label: id }))}
+        options={of.options.map((id) => ({ id, label: optionLabel(id) }))}
         onChange={set}
       />
     );
@@ -513,8 +581,11 @@ function ObjectControl({
   };
   // A beginner sees the guided fields of an object; the advanced mode shows all of them.
   const shown = fields.filter((f) => studioMode.value === "advanced" || f.level === "guided");
-  const short = shown.filter((f) => isShort(f.type) || f.type.type === "number");
-  const long = shown.filter((f) => !short.includes(f));
+  const flags = shown.filter((f) => f.type.type === "boolean");
+  const short = shown.filter(
+    (f) => !flags.includes(f) && (isShort(f.type) || f.type.type === "number"),
+  );
+  const long = shown.filter((f) => !short.includes(f) && !flags.includes(f));
   return (
     <fieldset class="studio-many">
       <legend>{label}</legend>
@@ -535,6 +606,20 @@ function ObjectControl({
           />
         ))}
       </div>
+      {flags.length > 0 && (
+        <div class="studio-checks">
+          {flags.map((f) => (
+            <FieldControl
+              key={f.key}
+              label={fieldLabel(f.key)}
+              type={f.type}
+              value={here[f.key]}
+              optional={f.optional}
+              onChange={(next) => set(f.key, next)}
+            />
+          ))}
+        </div>
+      )}
       {long.map((f) => (
         <FieldControl
           key={f.key}
@@ -561,7 +646,15 @@ function RecordControl({
   onChange: (value: unknown) => void;
 }) {
   const record = isObject(value) ? value : {};
-  const keys = Object.keys(record);
+  // A table by level is read from the lowest level up, and its keys are a level each.
+  const keys = type.levels
+    ? Object.keys(record).sort((a, b) => Number(a) - Number(b))
+    : Object.keys(record);
+  const levelKeys = type.levels
+    ? Array.from({ length: type.levels === "slot" ? 9 : 20 }, (_, i) => String(i + 1))
+    : type.keys;
+  const keyName = (k: string) =>
+    type.levels && /^\d+$/.test(k) ? `${ui("hb.f.level")} ${k}` : optionLabel(k);
   const set = (next: Record<string, unknown>) =>
     onChange(Object.keys(next).length === 0 ? undefined : next);
   const rename = (from: string, to: string) => {
@@ -571,15 +664,33 @@ function RecordControl({
   return (
     <fieldset class="studio-many">
       <legend>{label}</legend>
+      {type.levels && (
+        <small class="muted">
+          {ui(type.levels === "slot" ? "studio.levelsHint.slot" : "studio.levelsHint.character")}
+        </small>
+      )}
       {keys.map((key) => (
         <div class="studio-row" key={key}>
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: the control is inside, in one of two forms */}
           <label class="field studio-field">
-            <span>{ui("studio.key")}</span>
-            <input
-              type="text"
-              value={key}
-              onChange={(e) => rename(key, e.currentTarget.value.trim())}
-            />
+            <span>{ui(type.levels ? "hb.f.level" : "studio.key")}</span>
+            {levelKeys ? (
+              <select value={key} onChange={(e) => rename(key, e.currentTarget.value)}>
+                {(levelKeys.includes(key) ? levelKeys : [...levelKeys, key])
+                  .filter((k) => k === key || !(k in record))
+                  .map((k) => (
+                    <option key={k} value={k}>
+                      {keyName(k)}
+                    </option>
+                  ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={key}
+                onChange={(e) => rename(key, e.currentTarget.value.trim())}
+              />
+            )}
           </label>
           <FieldControl
             label={ui("studio.value")}
@@ -602,7 +713,8 @@ function RecordControl({
       <button
         type="button"
         onClick={() => {
-          const free = type.keys?.find((k) => !(k in record));
+          const free = levelKeys?.find((k) => !(k in record));
+          if (levelKeys && free === undefined) return;
           let name = free ?? "new";
           for (let n = 2; name in record; n++) name = `new${n}`;
           set({ ...record, [name]: blankOf(type.of) });

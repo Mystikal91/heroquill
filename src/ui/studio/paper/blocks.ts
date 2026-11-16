@@ -173,7 +173,7 @@ function itemBlocks(entry: Entry, text: Texts, words: Words): Block[] {
     const a = data.armor;
     rows.push([
       ui("fd.base"),
-      `${a.base}${a.dexBonus ? ` + Dex${a.maxDexBonus !== undefined ? ` (max ${a.maxDexBonus})` : ""}` : ""}`,
+      `${a.base}${a.dexBonus ? ` + ${words.word("ability", "dex")}${a.maxDexBonus !== undefined ? ` (max ${a.maxDexBonus})` : ""}` : ""}`,
     ]);
     if (a.strengthMinimum > 0) rows.push([ui("fd.strengthMinimum"), String(a.strengthMinimum)]);
     if (a.stealthDisadvantage) rows.push([ui("fd.stealthDisadvantage"), "✓"]);

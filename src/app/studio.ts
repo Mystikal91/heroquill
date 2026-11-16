@@ -65,6 +65,19 @@ export function setSidebarOpen(open: boolean) {
 /** The pack being worked on and what can be undone in it; absent while no pack is open. */
 export const history = signal<History<UserPackRecord> | undefined>(undefined);
 
+/** The search, the kind and the order of the list of entries of the open pack. */
+export const entrySearch = signal("");
+export const entryKind = signal("");
+export const entrySort = signal<"name" | "kind">("name");
+
+/** The command palette, the window to start from an existing entry, and the list of keys are open. */
+export const paletteOpen = signal(false);
+export const startFromOpen = signal(false);
+export const helpOpen = signal(false);
+
+/** The language the texts are being written in: undefined for the pack's own, a code for a translation. */
+export const studioLanguage = signal<string | undefined>(undefined);
+
 /** The entry open in the editor. */
 export const selectedEntry = signal<string | undefined>(undefined);
 

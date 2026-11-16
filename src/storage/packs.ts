@@ -14,6 +14,8 @@ import {
 export interface PackMeta {
   author?: string;
   description?: string;
+  /** The units numbers are typed in while editing: by default those of the language of the pack. */
+  units?: "metric" | "imperial";
   /** A small picture for the cover, as a data address. */
   cover?: string;
 }
@@ -91,6 +93,7 @@ const RecordSchema = v.object({
     v.object({
       author: v.optional(v.string()),
       description: v.optional(v.string()),
+      units: v.optional(v.picklist(["metric", "imperial"])),
       cover: v.optional(v.pipe(v.string(), v.maxLength(300_000))),
     }),
   ),
@@ -286,3 +289,10 @@ export function parsePackFile(text: string, now = Date.now()): UserPackRecord {
     throw new PackParseError("This is not a content pack file");
   return parseUserPack({ ...(raw as object), origin: "homebrew", addedAt: now });
 }
+
+/**
+ * The units a pack is edited in: its own choice, else metric for every language but English. The
+ * data is always in feet and pounds; this only says how the numbers are typed and shown in the editor.
+ */
+export const packUnits = (record: UserPackRecord): "metric" | "imperial" =>
+  record.meta?.units ?? (record.lang === "en" ? "imperial" : "metric");

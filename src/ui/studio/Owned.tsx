@@ -33,10 +33,12 @@ export function OwnedList({
   const text = (e: Entry, field: string) => record.strings[`${e.id}.${field}`] ?? "";
 
   return (
-    <section class="studio-owned">
-      <h4>{title}</h4>
+    <details class="studio-owned studio-section" id="sec-owned" open>
+      <summary>
+        <h4>{title}</h4>
+      </summary>
       {items.map((e) => (
-        <details class="studio-owned-item" key={e.id} open>
+        <details class="studio-owned-item" key={e.id} id={`owned-${e.id}`} open>
           <summary>
             <b>{text(e, "name") || ui("studio.unnamed")}</b>
             {kind === "feature" && (
@@ -97,6 +99,6 @@ export function OwnedList({
       >
         {ui(kind === "trait" ? "studio.addTrait" : "studio.addFeature")}
       </button>
-    </section>
+    </details>
   );
 }

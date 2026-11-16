@@ -6,6 +6,7 @@ import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
 import { PERSONAL_SPELLS_PACK } from "./customSpell";
+import { language } from "./language";
 import { character, content, updateCharacter } from "./store";
 import { addUserPack, userPacks } from "./userPacks";
 
@@ -61,7 +62,7 @@ export function planCustomize(itemId: string): CustomizePlan | undefined {
   } else {
     const target =
       userPacks.value.find((p) => p.origin === "homebrew" && p.id !== PERSONAL_SPELLS_PACK) ??
-      newHomebrewPack(ui("hb.myPack"));
+      newHomebrewPack(ui("hb.myPack"), Date.now(), language.value);
     const bundle = bundleFromIndex(
       c.index,
       { fields: (i) => c.fields(i), read: (i, f) => c.displayed(i, f) ?? "" },

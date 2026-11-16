@@ -1,11 +1,15 @@
 import { useRef, useState } from "preact/hooks";
 import { createHomebrewPack, editingPackId } from "../../app/homebrew";
+import { fold } from "../../app/search";
 import {
-  applyChange,
+  entryKind,
+  entrySearch,
+  entrySort,
   openStudioPack,
   selectedEntry,
   setSidebarOpen,
   sidebarOpen,
+  startFromOpen,
   studioMode,
 } from "../../app/studio";
 import { offerUndo } from "../../app/undo";
@@ -17,12 +21,13 @@ import {
   userPacks,
 } from "../../app/userPacks";
 import type { Entry } from "../../data/schema";
-import { type Variant, startEntry } from "../../homebrew/blanks";
-import { type EntryKind, KIND_META } from "../../homebrew/catalog";
+import { KIND_META } from "../../homebrew/catalog";
+import { entryProblems } from "../../homebrew/entries";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { ArrangeBar, EntryRow, PackDrop } from "./Arrange";
 import { kindName } from "./names";
+import { NEW_KINDS, startNew } from "./newKinds";
 
 /** How many entries a pack shows in its list: the ones that belong to others (traits, features) are not counted. */
 export const visibleEntries = (record: UserPackRecord) =>
@@ -35,81 +40,9 @@ export function removePack(record: UserPackRecord) {
   );
 }
 
-/** What a new entry can start as: a kind, and for items which sort. Beginners see the common ones. */
-const NEW_KINDS: {
-  id: string;
-  kind: EntryKind;
-  variant?: Variant;
-  label: () => string;
-  level: "guided" | "advanced";
-}[] = [
-  { id: "spell", kind: "spell", label: () => ui("hb.kind.spell"), level: "guided" },
-  {
-    id: "weapon",
-    kind: "item",
-    variant: "weapon",
-    label: () => ui("hb.kind.weapon"),
-    level: "guided",
-  },
-  {
-    id: "armor",
-    kind: "item",
-    variant: "armor",
-    label: () => ui("hb.kind.armor"),
-    level: "guided",
-  },
-  { id: "gear", kind: "item", variant: "gear", label: () => ui("hb.kind.gear"), level: "guided" },
-  {
-    id: "magic",
-    kind: "item",
-    variant: "magic",
-    label: () => ui("studio.kind.magic"),
-    level: "guided",
-  },
-  { id: "species", kind: "species", label: () => ui("hb.kind.species"), level: "guided" },
-  {
-    id: "subspecies",
-    kind: "subspecies",
-    label: () => ui("search.kind.subspecies"),
-    level: "guided",
-  },
-  { id: "class", kind: "class", label: () => ui("hb.kind.class"), level: "guided" },
-  { id: "subclass", kind: "subclass", label: () => ui("hb.kind.subclass"), level: "guided" },
-  { id: "background", kind: "background", label: () => ui("hb.kind.background"), level: "guided" },
-  { id: "feat", kind: "feat", label: () => ui("hb.kind.feat"), level: "guided" },
-  { id: "language", kind: "language", label: () => ui("hb.kind.language"), level: "guided" },
-  { id: "property", kind: "property", label: () => ui("hb.kind.property"), level: "guided" },
-  ...(
-    [
-      "option",
-      "deity",
-      "monster",
-      "skill",
-      "proficiency",
-      "school",
-      "condition",
-      "alignment",
-      "ability",
-    ] as EntryKind[]
-  ).map((kind) => ({
-    id: kind,
-    kind,
-    label: () => kindName({ kind, data: {} }),
-    level: "advanced" as const,
-  })),
-];
-
 function NewMenu({ record }: { record: UserPackRecord }) {
   const [open, setOpen] = useState(false);
   const advanced = studioMode.value === "advanced";
-  const choose = (id: string) => {
-    setOpen(false);
-    const found = NEW_KINDS.find((k) => k.id === id);
-    if (!found) return;
-    const started = startEntry(record, found.kind, found.variant);
-    applyChange(started.record);
-    selectedEntry.value = started.id;
-  };
   return (
     <div class="studio-menu">
       <button type="button" class="primary" aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -117,9 +50,26 @@ function NewMenu({ record }: { record: UserPackRecord }) {
       </button>
       {open && (
         <ul class="plain studio-menu-list">
+          <li class="studio-menu-wide">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                startFromOpen.value = true;
+              }}
+            >
+              {ui("studio.startFrom")}
+            </button>
+          </li>
           {NEW_KINDS.filter((k) => advanced || k.level === "guided").map((k) => (
             <li key={k.id}>
-              <button type="button" onClick={() => choose(k.id)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  startNew(record, k.id);
+                }}
+              >
                 {k.label()}
               </button>
             </li>
@@ -130,17 +80,40 @@ function NewMenu({ record }: { record: UserPackRecord }) {
   );
 }
 
+/** The entries the list shows now: filtered by the search and the kind, in the order chosen. */
+export function shownEntries(record: UserPackRecord): Entry[] {
+  const name = (e: Entry) => record.strings[`${e.id}.name`] ?? "";
+  const search = fold(entrySearch.value.trim());
+  const kind = entryKind.value;
+  return visibleEntries(record)
+    .filter((e) => !kind || kindName(e) === kind)
+    .filter((e) => fold(name(e)).includes(search))
+    .sort((a, b) =>
+      entrySort.value === "kind"
+        ? kindName(a).localeCompare(kindName(b)) || name(a).localeCompare(name(b))
+        : name(a).localeCompare(name(b)),
+    );
+}
+
+/** Whether an entry has something that will not work (data the engine cannot read): remembered for each entry as it is. */
+const problems = new WeakMap<Entry, boolean>();
+function hasProblem(entry: Entry): boolean {
+  let known = problems.get(entry);
+  if (known === undefined) {
+    known = entryProblems(entry).length > 0;
+    problems.set(entry, known);
+  }
+  return known;
+}
+
 /** What is in the open pack: a button to start an entry, a search, the kinds, and the entries. */
 function Contents({ record }: { record: UserPackRecord }) {
-  const [search, setSearch] = useState("");
-  const [kind, setKind] = useState("");
+  const search = entrySearch.value;
+  const kind = entryKind.value;
   const all = visibleEntries(record);
   const name = (e: Entry) => record.strings[`${e.id}.name`] ?? "";
   const kinds = [...new Set(all.map((e) => kindName(e)))].sort();
-  const shown = all
-    .filter((e) => !kind || kindName(e) === kind)
-    .filter((e) => name(e).toLowerCase().includes(search.trim().toLowerCase()))
-    .sort((a, b) => name(a).localeCompare(name(b)));
+  const shown = shownEntries(record);
 
   return (
     <div class="studio-children">
@@ -152,7 +125,9 @@ function Contents({ record }: { record: UserPackRecord }) {
           value={search}
           placeholder={ui("studio.search")}
           aria-label={ui("studio.search")}
-          onInput={(e) => setSearch(e.currentTarget.value)}
+          onInput={(e) => {
+            entrySearch.value = e.currentTarget.value;
+          }}
         />
       </div>
       {kinds.length > 1 && (
@@ -162,12 +137,27 @@ function Contents({ record }: { record: UserPackRecord }) {
               type="button"
               key={k || "all"}
               class={kind === k ? "studio-kind on" : "studio-kind"}
-              onClick={() => setKind(k)}
+              onClick={() => {
+                entryKind.value = k;
+              }}
             >
               {k || ui("studio.all")}
             </button>
           ))}
         </fieldset>
+      )}
+      {all.length > 1 && (
+        <select
+          class="studio-pick studio-sort"
+          value={entrySort.value}
+          aria-label={ui("studio.sortName")}
+          onChange={(e) => {
+            entrySort.value = e.currentTarget.value === "kind" ? "kind" : "name";
+          }}
+        >
+          <option value="name">{ui("studio.sortName")}</option>
+          <option value="kind">{ui("studio.sortKind")}</option>
+        </select>
       )}
       <ArrangeBar ids={shown.map((e) => e.id)} />
       {all.length === 0 ? (
@@ -182,6 +172,8 @@ function Contents({ record }: { record: UserPackRecord }) {
                 id={e.id}
                 label={name(e) || ui("studio.unnamed")}
                 tag={kindName(e)}
+                group={KIND_META[e.kind].group}
+                bad={hasProblem(e)}
                 ids={shown.map((x) => x.id)}
               />
             </li>

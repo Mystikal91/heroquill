@@ -92,8 +92,18 @@ const options = (PlainEffectSchema as unknown as { options: Option[] }).options;
 const literalOf = (option: Option) =>
   (option.entries?.type as { literal?: string } | undefined)?.literal ?? "";
 
+/** Fields of effects that are distances in feet. */
+const DISTANCES = new Set(["movement.feet", "sense.range"]);
+
 function refined(type: string, specs: FieldSpec[]): FieldSpec[] {
   return specs.map((spec) => {
+    if (
+      spec.type.type === "text" &&
+      (spec.key === "damageType" || (type === "defense" && spec.key === "damage"))
+    )
+      return { ...spec, type: { type: "text", pick: "damage" } };
+    if (DISTANCES.has(`${type}.${spec.key}`) && spec.type.type === "number")
+      return { ...spec, type: { ...spec.type, unit: "distance" as const } };
     const refs = REFS[`${type}.${spec.key}`];
     const slug = SLUGS[`${type}.${spec.key}`];
     if (refs && spec.type.type === "ref") return { ...spec, type: { type: "ref", kinds: refs } };

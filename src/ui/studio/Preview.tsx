@@ -7,6 +7,7 @@ import type { UserPackRecord } from "../../storage/packs";
 import { Paragraphs } from "../sheet/parts";
 import { spellFacts } from "../spells/spellFacts";
 import { effectName, summarize } from "./Effects";
+import { TryOn } from "./TryOn";
 import { kindName } from "./names";
 import { explainProblem } from "./problems";
 
@@ -126,6 +127,7 @@ export function Preview({ record, entry }: { record: UserPackRecord; entry: Entr
           <PlainPreview record={record} entry={entry} />
         )}
       </div>
+      <TryOn record={record} entry={entry} />
       <h3>{ui("studio.check")}</h3>
       <Warnings list={list} />
     </aside>

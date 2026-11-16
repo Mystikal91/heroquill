@@ -12,7 +12,8 @@ import {
 } from "../../homebrew/catalog";
 import { type UiKey, ui } from "../../i18n/ui";
 import { entriesOfKind } from "../build/fields";
-import { ChipPicker, FieldControl } from "./Controls";
+import { ChipPicker, FieldControl, SelectBox, withCurrent } from "./Controls";
+import { RequirementBuilder, describeRequirement } from "./Requirement";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
 
 const GROUPS: EffectGroup[] = [
@@ -55,13 +56,28 @@ function show(value: unknown): string {
   return String(value);
 }
 
+/** A line that says what an effect is for: in words for the common ones, the developer's line in the advanced mode. */
+function helpFor(type: EffectType, advanced: boolean): string {
+  const key = `fxhelp.${type}`;
+  if (key in en) return ui(key as UiKey);
+  return advanced ? EFFECT_META[type].doc : "";
+}
+
 /** One line that says what an effect does, for its card to show while it is closed. */
 export function summarize(effect: Effect): string {
   const { type: _type, ...rest } = effect as Effect & Record<string, unknown>;
-  if (effect.type === "when") return `${effect.requires} (${effect.effects.length})`;
+  if (effect.type === "when")
+    return `${describeRequirement(effect.requires)} (${effect.effects.length})`;
   return Object.entries(rest)
     .filter(([, v]) => v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0))
-    .map(([k, v]) => `${effectFieldLabel(k)}: ${show(v)}`.trim())
+    .map(([k, v]) => {
+      // What a proficiency is in, by its name in the language.
+      const named =
+        effect.type === "proficiency" && k === "target"
+          ? proficiencyTargets(effect.category)?.find((o) => o.id === v)?.label
+          : undefined;
+      return `${effectFieldLabel(k)}: ${named ?? show(v)}`.trim();
+    })
     .filter((line) => !line.endsWith(":"))
     .join(" · ");
 }
@@ -104,6 +120,32 @@ function choiceOptions(grants: string): { id: string; label: string }[] | undefi
   }
 }
 
+/** What a proficiency of a category can be in, by name: the skills, the abilities, the languages, the kinds of weapon... */
+function proficiencyTargets(category: string): { id: string; label: string }[] | undefined {
+  const c = content.value;
+  if (!c) return undefined;
+  const slug = (id: string) => id.split("/")[1] ?? id;
+  switch (category) {
+    case "skill":
+      return entriesOfKind("skill").map((e) => ({ id: slug(e.id), label: e.label }));
+    case "save":
+      return ABILITIES.map((id) => ({ id, label: optionLabel(id) }));
+    case "language":
+      return entriesOfKind("language").map((e) => ({ id: slug(e.id), label: e.label }));
+    case "weapon":
+    case "armor":
+    case "tool":
+      return entriesOfKind("proficiency").flatMap((e) => {
+        const data = c.index.get(e.id)?.data as { category?: string; target?: string } | undefined;
+        return data?.category === category && data.target
+          ? [{ id: data.target, label: e.label }]
+          : [];
+      });
+    default:
+      return undefined;
+  }
+}
+
 function EffectCard({
   effect,
   onChange,
@@ -118,6 +160,8 @@ function EffectCard({
   const advanced = studioMode.value === "advanced";
   const fields = effectFields(type);
   const optional = fields.filter((f) => f.optional);
+  const Flags = ({ specs }: { specs: typeof fields }) =>
+    specs.length === 0 ? null : <div class="studio-checks">{specs.map(control)}</div>;
   const control = (spec: (typeof fields)[number]) => {
     const options =
       type === "choice" && spec.key === "from" ? choiceOptions(String(values.grants)) : undefined;
@@ -131,17 +175,52 @@ function EffectCard({
           onChange={(next) => onChange({ ...values, from: next } as unknown as Effect)}
         />
       );
+    // The requirement of "only when": sentences with names, not the words the engine reads.
+    if (type === "when" && spec.key === "requires")
+      return (
+        <RequirementBuilder
+          key={spec.key}
+          value={String(values.requires ?? "")}
+          raw={advanced}
+          onChange={(text) => onChange({ ...values, requires: text } as unknown as Effect)}
+        />
+      );
+    // What a proficiency is in: a menu of the names of its category, not a word to write.
+    if (type === "proficiency" && spec.key === "target") {
+      const list = proficiencyTargets(String(values.category ?? ""));
+      if (list)
+        return (
+          <SelectBox
+            key={spec.key}
+            label={effectFieldLabel(spec.key)}
+            value={typeof values.target === "string" && values.target ? values.target : undefined}
+            options={withCurrent(list, values.target)}
+            blank={ui("form.none")}
+            onChange={(next) => onChange({ ...values, target: next ?? "" } as unknown as Effect)}
+          />
+        );
+    }
+    // What a bonus to speed adds is a distance; the other bonuses are plain numbers.
+    const fieldType =
+      effect.type === "modifier" &&
+      spec.key === "value" &&
+      values.target === "speed" &&
+      spec.type.type === "number"
+        ? { ...spec.type, unit: "distance" as const }
+        : spec.type;
     return (
       <FieldControl
         key={spec.key}
         label={effectFieldLabel(spec.key)}
-        type={spec.type}
+        type={fieldType}
         value={values[spec.key]}
         optional={spec.optional}
         onChange={(next) => {
           const copy = { ...values };
           if (next === undefined) delete copy[spec.key];
           else copy[spec.key] = next;
+          // A new category has other things to be proficient in: the old one no longer fits.
+          if (type === "proficiency" && spec.key === "category") copy.target = "";
           onChange(copy as unknown as Effect);
         }}
       />
@@ -163,17 +242,23 @@ function EffectCard({
           {ui("form.remove")}
         </button>
       </summary>
-      <div class="studio-grid">{fields.filter((f) => !f.optional).map(control)}</div>
+      <div class={type === "when" ? "studio-grid studio-grid-one" : "studio-grid"}>
+        {fields.filter((f) => !f.optional && f.type.type !== "boolean").map(control)}
+      </div>
+      <Flags specs={fields.filter((f) => !f.optional && f.type.type === "boolean")} />
       {optional.length > 0 && (
         <details
           class="studio-more"
           open={advanced || optional.some((f) => values[f.key] !== undefined)}
         >
           <summary>{ui("studio.moreOptions")}</summary>
-          <div class="studio-grid">{optional.map(control)}</div>
+          <div class="studio-grid">
+            {optional.filter((f) => f.type.type !== "boolean").map(control)}
+          </div>
+          <Flags specs={optional.filter((f) => f.type.type === "boolean")} />
         </details>
       )}
-      {advanced && <small class="muted">{EFFECT_META[type].doc}</small>}
+      <small class="muted">{helpFor(type, advanced)}</small>
     </details>
   );
 }

@@ -231,6 +231,31 @@ visite). Nome, autore, versione e descrizione del pacchetto, Stampa, Esporta e R
 (`PackHome`), che si apre con l'ingranaggio accanto al nome e quando non c'è una voce aperta. Larghezza a sinistra da 33 rem
 a 17 rem; l'anteprima passa sotto il modulo solo sotto 1120 px (prima 1320).
 
+### Tre idee in più (2026-11-16)
+1. **Parti da una voce esistente** (`StartFrom.tsx`, dal menu Nuovo): cerca tra SRD 2014/2024, contenuti importati e altri
+   pacchetti, e apre una copia (con tratti, origine e restrizioni) nel pacchetto aperto.
+2. **Prova su un personaggio** (`homebrew/tryon.ts`, `TryOn.tsx`, nell'anteprima): mette la voce (specie, sottospecie, classe,
+   sottoclasse, background, talento, oggetto) su un personaggio d'esempio (regole, classe e livello a scelta) e mostra cosa
+   cambia sulla scheda: CA, PF, velocità, caratteristiche, sensi, resistenze, tratti e competenze che porta. Conta anche
+   quello che non è ancora salvato.
+3. **Traduzioni nell'editor** (`homebrew/translate.ts`, `Translate.tsx`): schede delle lingue sopra il modulo (con quanti
+   testi mancano), pannello con l'originale a sinistra e la traduzione a destra anche per tratti e privilegi, anteprima nella
+   lingua scritta, pagina del pacchetto con l'avanzamento di ogni lingua. I nuovi pacchetti si scrivono nella lingua dell'app.
+Inoltre: il titolo dello studio su telefono non si sovrappone più al pulsante Indietro.
+
+### Le altre idee, fatte (2026-11-16; saltati i modelli di effetto e il pacchetto d'esempio, su richiesta)
+- **Striscia dei livelli** (`homebrew/overview.ts`, `LevelStrip.tsx`): per classe e sottoclasse, i livelli con i privilegi come
+  etichette che portano alla loro scheda, il segno degli aumenti di punteggio, i trucchetti e gli slot; il "+" di ogni livello
+  aggiunge un privilegio lì.
+- **Sezioni che si richiudono** (effetti, tratti/privilegi, altri dettagli) e **barra "Vai a"** nei moduli lunghi.
+- **Elenco più denso**: un puntino colorato per gruppo di tipo al posto dell'etichetta, un ⚠ sulle voci con dati che il motore non
+  legge, ordine per nome o per tipo.
+- **Palette di comandi** (`Ctrl+K`, `Palette.tsx`): voci del pacchetto, nuove voci di ogni tipo, parti da una voce esistente,
+  stampa, esporta, annulla/ripeti, modalità, barra laterale, apri pacchetto. **Frecce** su e giù per scorrere le voci e **`?`** per
+  l'elenco delle scorciatoie (`Shortcuts.tsx`).
+- **Aiuti nei campi**: esempi tradotti nei campi dell'incantesimo, "Di' cosa fa…" nelle descrizioni, e una riga di spiegazione su ogni
+  scheda effetto comune.
+
 ## Fase 7 (progetto originale) — Rifinitura e prova sul campo
 - Passata di UX/estetica sull'intero flusso (principiante vs. avanzato), accessibilità e tastiera.
 - Prova con contenuto reale: ricreare a mano alcune voci note (una classe, una specie, un oggetto magico) e

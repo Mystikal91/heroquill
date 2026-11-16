@@ -7,8 +7,9 @@ import type { EntryKind } from "./kinds";
  * from these descriptions, so a field exists in one place only.
  */
 export type FieldType =
-  | { type: "text" }
-  | { type: "number"; integer?: boolean; min?: number; max?: number }
+  /** Free text; `pick` says it is one of a short closed list the editor offers by name (kinds of damage). */
+  | { type: "text"; pick?: "damage" }
+  | { type: "number"; integer?: boolean; min?: number; max?: number; unit?: "distance" | "weight" }
   | { type: "boolean" }
   | { type: "choice"; options: readonly string[] }
   | { type: "literal"; value: string | number | boolean }
@@ -21,7 +22,13 @@ export type FieldType =
   | { type: "list"; of: FieldType }
   | { type: "object"; fields: FieldSpec[] }
   /** Values by key; `keys` lists the keys that make sense (the abilities, the speeds...). */
-  | { type: "record"; of: FieldType; keys?: readonly string[] }
+  | {
+      type: "record";
+      of: FieldType;
+      keys?: readonly string[];
+      /** The keys are levels: of the spell slot (1 to 9) or of the character (1 to 20). */
+      levels?: "slot" | "character";
+    }
   | { type: "union"; of: FieldType[] }
   | { type: "variant"; on: string; cases: Record<string, FieldSpec[]> }
   /** A list of effects, as in `when`. */

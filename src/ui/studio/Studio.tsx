@@ -10,16 +10,23 @@ import { editingPackId } from "../../app/homebrew";
 import { leavePage } from "../../app/navigation";
 import {
   flushStudio,
+  helpOpen,
   history,
   openStudioPack,
+  paletteOpen,
   redoChange,
+  selectedEntry,
   sidebarOpen,
+  startFromOpen,
   undoChange,
 } from "../../app/studio";
 import { userPacksReady } from "../../app/userPacks";
 import { ui } from "../../i18n/ui";
 import { Editor } from "./Editor";
-import { Explorer } from "./Explorer";
+import { Explorer, shownEntries } from "./Explorer";
+import { Palette } from "./Palette";
+import { Shortcuts } from "./Shortcuts";
+import { StartFromDialog } from "./StartFrom";
 import "./studio.css";
 
 /** True for the places where keys are typing, not commands. */
@@ -43,7 +50,37 @@ export function Studio() {
   // Ctrl+S saves now; Ctrl+Z and Ctrl+Y undo and redo, except where the field has its own undo.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Without Ctrl: the arrows walk the list, and ? shows the keys, unless a field is being typed in.
+      if (
+        !(e.ctrlKey || e.metaKey) &&
+        !e.altKey &&
+        !isTyping(e.target) &&
+        !document.querySelector("dialog[open]")
+      ) {
+        if (e.key === "?") {
+          helpOpen.value = true;
+          return;
+        }
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          const open = history.peek()?.present;
+          const ids = open ? shownEntries(open).map((x) => x.id) : [];
+          if (ids.length === 0) return;
+          e.preventDefault();
+          const at = ids.indexOf(selectedEntry.peek() ?? "");
+          const next =
+            e.key === "ArrowDown"
+              ? Math.min(ids.length - 1, at + 1)
+              : Math.max(0, at < 0 ? 0 : at - 1);
+          selectedEntry.value = ids[next];
+        }
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey)) return;
+      if (e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        paletteOpen.value = true;
+        return;
+      }
       const key = e.key.toLowerCase();
       if (key === "s") {
         e.preventDefault();
@@ -85,6 +122,15 @@ export function Studio() {
           <p class="muted">{ui("studio.intro")}</p>
         </div>
       </header>
+      {paletteOpen.value && <Palette />}
+      {startFromOpen.value && (
+        <StartFromDialog
+          onClose={() => {
+            startFromOpen.value = false;
+          }}
+        />
+      )}
+      {helpOpen.value && <Shortcuts />}
       <div class={sidebarOpen.value ? "studio-body" : "studio-body rail"}>
         <Explorer record={record} />
         {record ? (

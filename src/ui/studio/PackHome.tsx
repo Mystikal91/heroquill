@@ -5,6 +5,7 @@ import { ui } from "../../i18n/ui";
 import { type UserPackRecord, restrictedIds } from "../../storage/packs";
 import { TextBox } from "./Controls";
 import { removePack } from "./Explorer";
+import { PackLanguages } from "./Translate";
 
 /**
  * The page of the open pack, shown while no entry is open: its name, who wrote it, its version and
@@ -54,6 +55,29 @@ export function PackHome({ record }: { record: UserPackRecord }) {
         rows={4}
         onChange={(v) => setMeta("description", v)}
       />
+      <label class="field studio-field">
+        <span>{ui("studio.units")}</span>
+        <select
+          value={meta.units ?? ""}
+          onChange={(e) => {
+            const { units: _old, ...rest } = meta;
+            const value = e.currentTarget.value;
+            applyChange(
+              {
+                ...record,
+                meta: value === "metric" || value === "imperial" ? { ...rest, units: value } : rest,
+              },
+              "pack.units",
+            );
+          }}
+        >
+          <option value="">{ui("studio.unitsAuto")}</option>
+          <option value="metric">{ui("studio.unitsMetric")}</option>
+          <option value="imperial">{ui("studio.unitsImperial")}</option>
+        </select>
+        <small class="muted">{ui("studio.unitsHint")}</small>
+      </label>
+      <PackLanguages record={record} />
       {kept > 0 && <p class="note">{ui("studio.restricted", { n: kept })}</p>}
       <div class="studio-actions">
         <button
