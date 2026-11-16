@@ -2232,5 +2232,7 @@
   "fd.color": "Farbe des Leuchtens",
   "studio.damageAdd": "+ Eine neue Schadensart",
   "studio.damageNew": "Name der Schadensart",
-  "studio.colorFree": "Eine beliebige andere Farbe"
+  "studio.colorFree": "Eine beliebige andere Farbe",
+  "studio.profGroups": "Gruppen",
+  "studio.profSingles": "Einzeln"
 }

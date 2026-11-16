@@ -2232,5 +2232,7 @@
   "fd.color": "Colore dell'alone",
   "studio.damageAdd": "+ Un nuovo tipo di danno",
   "studio.damageNew": "Nome del tipo di danno",
-  "studio.colorFree": "Un altro colore a scelta"
+  "studio.colorFree": "Un altro colore a scelta",
+  "studio.profGroups": "Gruppi",
+  "studio.profSingles": "Singole"
 }

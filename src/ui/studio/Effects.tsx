@@ -12,7 +12,7 @@ import {
 } from "../../homebrew/catalog";
 import { type UiKey, ui } from "../../i18n/ui";
 import { entriesOfKind } from "../build/fields";
-import { ChipPicker, FieldControl, SelectBox, withCurrent } from "./Controls";
+import { ChipPicker, FieldControl, type Option, SelectBox, withCurrent } from "./Controls";
 import { RequirementBuilder, describeRequirement } from "./Requirement";
 import { TermControl, isPlainTerm, termText } from "./Term";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
@@ -124,8 +124,14 @@ function choiceOptions(grants: string): { id: string; label: string }[] | undefi
   }
 }
 
+/** The proficiencies that stand for a whole group, in the order they are listed. */
+const PROFICIENCY_GROUPS: Record<string, string[]> = {
+  armor: ["all-armor", "light-armor", "medium-armor", "heavy-armor", "shields"],
+  weapon: ["simple-weapons", "martial-weapons"],
+};
+
 /** What a proficiency of a category can be in, by name: the skills, the abilities, the languages, the kinds of weapon... */
-function proficiencyTargets(category: string): { id: string; label: string }[] | undefined {
+function proficiencyTargets(category: string): Option[] | undefined {
   const c = content.value;
   if (!c) return undefined;
   const slug = (id: string) => id.split("/")[1] ?? id;
@@ -138,13 +144,26 @@ function proficiencyTargets(category: string): { id: string; label: string }[] |
       return entriesOfKind("language").map((e) => ({ id: slug(e.id), label: e.label }));
     case "weapon":
     case "armor":
-    case "tool":
-      return entriesOfKind("proficiency").flatMap((e) => {
+    case "tool": {
+      const all = entriesOfKind("proficiency").flatMap((e) => {
         const data = c.index.get(e.id)?.data as { category?: string; target?: string } | undefined;
         return data?.category === category && data.target
           ? [{ id: data.target, label: e.label }]
           : [];
       });
+      // Weapons and armor come in groups (light armor, simple weapons) and one by one: the groups first, apart.
+      if (category === "tool") return all;
+      const groups = PROFICIENCY_GROUPS[category] ?? [];
+      return [
+        ...groups.flatMap((id) => {
+          const o = all.find((x) => x.id === id);
+          return o ? [{ ...o, group: ui("studio.profGroups") }] : [];
+        }),
+        ...all
+          .filter((o) => !groups.includes(o.id))
+          .map((o) => ({ ...o, group: ui("studio.profSingles") })),
+      ];
+    }
     default:
       return undefined;
   }

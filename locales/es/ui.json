@@ -2232,5 +2232,7 @@
   "fd.color": "Color del resplandor",
   "studio.damageAdd": "+ Un nuevo tipo de daño",
   "studio.damageNew": "Nombre del tipo de daño",
-  "studio.colorFree": "Cualquier otro color"
+  "studio.colorFree": "Cualquier otro color",
+  "studio.profGroups": "Grupos",
+  "studio.profSingles": "Una por una"
 }

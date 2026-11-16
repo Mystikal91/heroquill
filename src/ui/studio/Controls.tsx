@@ -14,10 +14,23 @@ export { humanize };
 export interface Option {
   id: string;
   label: string;
+  /** A heading to list the option under, when the menu has more than one kind of option. */
+  group?: string;
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v);
+
+/** The options in the order they come, gathered under their headings (those without one stay as they are). */
+function groupsOf(options: Option[]): { group: string | undefined; items: Option[] }[] {
+  const out: { group: string | undefined; items: Option[] }[] = [];
+  for (const o of options) {
+    const at = out.find((g) => g.group === o.group);
+    if (at) at.items.push(o);
+    else out.push({ group: o.group, items: [o] });
+  }
+  return out;
+}
 
 /** One text box, with its label above. */
 export function TextBox({
@@ -151,11 +164,23 @@ export function SelectBox({
       <span>{label}</span>
       <select value={value ?? ""} onChange={(e) => onChange(e.currentTarget.value || undefined)}>
         {blank !== undefined && <option value="">{blank}</option>}
-        {options.map((o) => (
-          <option key={o.id} value={o.id}>
-            {o.label}
-          </option>
-        ))}
+        {groupsOf(options).map(({ group, items }) =>
+          group === undefined ? (
+            items.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+              </option>
+            ))
+          ) : (
+            <optgroup key={group} label={group}>
+              {items.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
+            </optgroup>
+          ),
+        )}
       </select>
     </label>
   );

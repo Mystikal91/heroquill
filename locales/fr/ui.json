@@ -2232,5 +2232,7 @@
   "fd.color": "Couleur de la lueur",
   "studio.damageAdd": "+ Un nouveau type de dégâts",
   "studio.damageNew": "Nom du type de dégâts",
-  "studio.colorFree": "Une autre couleur au choix"
+  "studio.colorFree": "Une autre couleur au choix",
+  "studio.profGroups": "Groupes",
+  "studio.profSingles": "Une par une"
 }

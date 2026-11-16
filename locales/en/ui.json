@@ -2232,5 +2232,7 @@
   "fd.color": "Glow colour",
   "studio.damageAdd": "+ A new kind of damage",
   "studio.damageNew": "Name of the kind of damage",
-  "studio.colorFree": "Any other colour"
+  "studio.colorFree": "Any other colour",
+  "studio.profGroups": "Groups",
+  "studio.profSingles": "One by one"
 }
