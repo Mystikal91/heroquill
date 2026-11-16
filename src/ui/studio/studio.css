@@ -620,9 +620,9 @@
   border-radius: var(--radius-sm);
 }
 
-.studio-effects-section,
-.studio-owned {
-  margin-top: 1.25rem;
+/* Every section of a form is set apart from the one before by the same space. */
+.studio-section {
+  margin-top: 1rem;
 }
 
 .studio-effects-section h4,
@@ -1046,7 +1046,7 @@
 }
 
 .studio-strip {
-  margin: 1.25rem 0 0.75rem;
+  margin: 1rem 0 0;
 }
 
 .studio-strip h4 {
@@ -1673,4 +1673,361 @@
 /* Room between the last pack and the form that makes a new one. */
 .studio-newpack {
   margin-top: 0.9rem;
+}
+
+/* ---- Moving things: the handle, the drop mark, and the buttons a touch screen uses instead ---- */
+
+.studio-move {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.studio-move-handle {
+  min-height: 1.8rem;
+  padding: 0 0.4rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: grab;
+  letter-spacing: 0;
+}
+
+.studio-move-handle:hover,
+.studio-move-handle:focus-visible {
+  color: var(--accent);
+}
+
+.studio-move-step {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .studio-move-handle {
+    display: none;
+  }
+
+  .studio-move-step {
+    display: inline-block;
+    min-height: 2rem;
+    padding: 0 0.6rem;
+  }
+}
+
+[data-over="on"] {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+}
+
+.studio-row.has-handle {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.studio-effects-tools {
+  display: flex;
+  gap: 0.9rem;
+  justify-content: flex-end;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+}
+
+/* ---- A check that takes you to its field, which lights up for a moment ---- */
+
+.studio-warning-jump {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+.studio-flash {
+  animation: studio-flash 1.6s ease-out;
+}
+
+@keyframes studio-flash {
+  0% {
+    box-shadow: 0 0 0 4px var(--accent);
+  }
+  100% {
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+
+/* ---- The glow of a condition, as the play screen will show it ---- */
+
+.studio-glow-preview {
+  display: grid;
+  place-items: center;
+  height: 4rem;
+  margin-top: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  box-shadow: inset 0 0 40px 8px var(--aura, transparent);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* In the start dialog the type chips sit apart from the search box above them. */
+.spell-dialog .studio-kinds {
+  margin-top: 0.9rem !important;
+}
+
+/* ---- A "?" by a label, and the line it opens ---- */
+
+.studio-helped {
+  position: relative;
+}
+
+.studio-help-mark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.studio-help-mark:hover,
+.studio-help-mark[aria-expanded="true"] {
+  opacity: 1;
+}
+
+.studio-help-text {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border-left: 2px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--muted, inherit);
+}
+
+.studio-damage-name {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+/* ---- Easier to see and to hit ---- */
+
+/* The "?" is as big as the smallest target that is easy to hit (24px). */
+.studio-help-mark {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* The hint in an empty box stays readable on the dark background. */
+.studio input::placeholder,
+.studio textarea::placeholder {
+  color: rgb(155, 155, 168);
+  opacity: 1;
+}
+
+/* Whoever asked for less motion gets the field marked without the flash. */
+@media (prefers-reduced-motion: reduce) {
+  .studio-flash {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--accent);
+  }
+}
+
+.studio-help-mark:focus-visible,
+.studio-move-step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- The step-by-step guide for a new entry ---- */
+
+.studio-wizard {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 40rem;
+}
+
+.studio-wizard h3 {
+  margin: 0;
+}
+
+.studio-wizard-head progress {
+  width: 100%;
+  height: 0.4rem;
+  accent-color: var(--accent);
+}
+
+.studio-wizard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.studio-wizard-actions .primary {
+  min-width: 7rem;
+}
+
+/* ---- Tables by level (spells, values of a class) ---- */
+
+.studio-table-block {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.studio-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.studio-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.studio-table th,
+.studio-table td {
+  padding: 0.15rem 0.3rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.studio-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+}
+
+.studio-table tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  font-weight: 700;
+}
+
+.studio-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.studio-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.studio-cell input {
+  width: 3.4rem;
+  min-height: 2rem;
+  padding: 0.1rem 0.25rem;
+  text-align: center;
+}
+
+.studio-fill,
+.studio-col-remove {
+  min-height: 0 !important;
+  padding: 0 0.3rem !important;
+  line-height: 1.4;
+}
+
+/* "Repeat below" shows only in the cell that has the focus, so the table stays quiet. */
+.studio-fill {
+  visibility: hidden;
+}
+
+.studio-cell:focus-within .studio-fill,
+.studio-fill:focus-visible {
+  visibility: visible;
+}
+
+@media (pointer: coarse) {
+  .studio-fill {
+    visibility: visible;
+  }
+}
+
+.studio-col-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* The cells keep their size, whatever the rules for the boxes of a form say. */
+.studio .studio-table {
+  width: max-content;
+}
+
+.studio .studio-table .studio-cell input {
+  width: 2.7rem;
+  min-width: 2.7rem;
+  height: 1.9rem;
+  min-height: 1.9rem;
+  padding: 0.1rem 0.2rem;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.studio .studio-table .studio-cell input::-webkit-inner-spin-button,
+.studio .studio-table .studio-cell input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* The "repeat below" button sits beside the box without taking room, so every box of a column lines up (the last level has none). */
+.studio-cell {
+  position: relative;
+}
+
+.studio-cell .studio-fill {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ---- A short explanation under a choice, and a framed group of related fields ---- */
+
+.studio-callout {
+  margin: 0.4rem 0 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.studio-callout.warn {
+  border-left-color: #d9822b;
+  background: color-mix(in srgb, #d9822b 10%, transparent);
+}
+
+.studio-subgroup {
+  margin: 0.9rem 0;
+  padding: 0.75rem 0.9rem 0.4rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.studio-subgroup > h5 {
+  margin: 0 0 0.6rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
 }

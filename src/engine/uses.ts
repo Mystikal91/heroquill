@@ -1,6 +1,9 @@
 import type { Entry } from "../data/schema";
 import type { SourcedEffect } from "./choices";
 import { MAX_CUSTOM_USES } from "./custom";
+
+/** The most points a reserve can hold (a high-level psion has well over a hundred). */
+const MAX_RESERVE = 9999;
 import type { DerivedSheet } from "./derive";
 import { type FeatureValueState, termNumber } from "./featureValues";
 import { isHiddenByDefault, supersededBy } from "./replaced";
@@ -58,18 +61,49 @@ export function deriveUses(sourced: SourcedEffect[], state: FeatureValueState): 
       recovery: ResourceRecovery;
       pool: boolean;
       min: number;
+      /** A reserve shared by name: the entries that add to it. */
+      reserve?: string;
+    }
+  >();
+  // Points added to a reserve by name are one resource, whoever gives them.
+  const reserves = new Map<
+    string,
+    {
+      sum: number;
+      step: Map<string, { level: number; value: number }>;
+      recovery: ResourceRecovery;
+      min: number;
     }
   >();
   for (const { effect, source } of sourced) {
     if (effect.type !== "uses") continue;
     const level = effect.minLevel;
     if (level !== undefined && state.levelOf(source) < level) continue;
+    if (effect.reserve) {
+      const r = reserves.get(effect.reserve) ?? {
+        sum: 0,
+        step: new Map(),
+        recovery: effect.recharge,
+        min: 0,
+      };
+      reserves.set(effect.reserve, r);
+      r.recovery = effect.recharge;
+      if (effect.min !== undefined) r.min = Math.max(r.min, effect.min);
+      const value = termNumber(effect.term, state, source);
+      // The terms of one source that come at a level replace one another; the sources add up.
+      if (level === undefined) r.sum += value;
+      else {
+        const at = r.step.get(source);
+        if (!at || level >= at.level) r.step.set(source, { level, value });
+      }
+      continue;
+    }
     const acc = found.get(source) ?? { sum: 0, recovery: effect.recharge, pool: false, min: 0 };
     found.set(source, acc);
     acc.recovery = effect.recharge;
     if (effect.pool) acc.pool = true;
     if (effect.min !== undefined) acc.min = Math.max(acc.min, effect.min);
-    const value = termNumber(effect.term, state);
+    const value = termNumber(effect.term, state, source);
     if (level === undefined) acc.sum += value;
     else if (!acc.step || level >= acc.step.level) acc.step = { level, value };
   }
@@ -86,6 +120,20 @@ export function deriveUses(sourced: SourcedEffect[], state: FeatureValueState): 
       max,
       recovery: acc.recovery,
       ...(acc.pool && { pool: true }),
+    });
+  }
+  for (const [reserve, r] of reserves) {
+    const total = Math.max(r.min, r.sum + [...r.step.values()].reduce((a, b) => a + b.value, 0));
+    const max = Math.min(Math.floor(total), MAX_RESERVE);
+    if (max < 1) continue;
+    resources.push({
+      id: `reserve:${reserve}`,
+      kind: "reserve",
+      classId: "",
+      reserve,
+      max,
+      recovery: r.recovery,
+      pool: true,
     });
   }
   return resources;

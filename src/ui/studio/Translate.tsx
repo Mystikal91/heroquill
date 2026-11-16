@@ -1,7 +1,17 @@
+import { useState } from "preact/hooks";
 import { LANGUAGES } from "../../app/language.logic";
 import { applyChange, studioLanguage } from "../../app/studio";
 import type { Entry } from "../../data/schema";
+import { DAMAGE_OWNER, damageLabel, ownDamageTypes, setDamageName } from "../../homebrew/damage";
 import { ownedEntries, setText } from "../../homebrew/entries";
+import {
+  RESERVE_OWNER,
+  addReserve,
+  ownReserves,
+  removeReserve,
+  reserveLabel,
+  setReserveName,
+} from "../../homebrew/reserves";
 import {
   addLanguage,
   progress,
@@ -10,7 +20,7 @@ import {
   textOwners,
 } from "../../homebrew/translate";
 import { ui } from "../../i18n/ui";
-import { type UserPackRecord, packLanguages } from "../../storage/packs";
+import { type UserPackRecord, damageSlug, packLanguages } from "../../storage/packs";
 import { TextBox } from "./Controls";
 import { fieldLabel } from "./labels";
 
@@ -178,6 +188,171 @@ export function PackLanguages({ record }: { record: UserPackRecord }) {
         })}
       </ul>
       <AddLanguage record={record} />
+    </section>
+  );
+}
+
+/**
+ * The names of the kinds of damage the pack adds, one box per language of the pack: they belong to no
+ * entry, so this is where they are written and translated. Nothing when the pack adds none.
+ */
+export function DamageNames({ record }: { record: UserPackRecord }) {
+  const types = ownDamageTypes(record);
+  if (types.length === 0) return null;
+  const languages = packLanguages(record);
+  return (
+    <section class="studio-pack-languages studio-damage-names">
+      <h4>{ui("studio.damageNames")}</h4>
+      <p class="muted">{ui("studio.damageNamesHint")}</p>
+      {types.map((slug) => (
+        <fieldset key={slug} class="studio-damage-name">
+          <legend>{damageLabel(record, slug, record.lang)}</legend>
+          {languages.map((code) => (
+            <TextBox
+              key={code}
+              label={languageName(code)}
+              value={
+                code === record.lang
+                  ? (record.strings[`${DAMAGE_OWNER}.${slug}`] ?? "")
+                  : (record.translations?.[code]?.[`${DAMAGE_OWNER}.${slug}`] ?? "")
+              }
+              onChange={(v) =>
+                applyChange(setDamageName(record, slug, v, code), `dmg.${slug}.${code}`)
+              }
+            />
+          ))}
+        </fieldset>
+      ))}
+    </section>
+  );
+}
+
+/**
+ * The reserves of points the pack declares (psi points, mana): their names in each language of the
+ * pack, a way to declare one and to take one away. A feature adds points to one by name, and what
+ * spends points takes them from it.
+ */
+export function Reserves({ record }: { record: UserPackRecord }) {
+  const [name, setName] = useState("");
+  const reserves = ownReserves(record);
+  const languages = packLanguages(record);
+  const add = () => {
+    const made = addReserve(record, name);
+    if (!made) return;
+    applyChange(made.record, `reserve.${made.slug}`);
+    setName("");
+  };
+  return (
+    <section class="studio-pack-languages studio-reserves">
+      <h4>{ui("studio.reserves")}</h4>
+      <p class="muted">{ui("studio.reservesHint")}</p>
+      {reserves.map((slug) => (
+        <fieldset key={slug} class="studio-damage-name">
+          <legend>{reserveLabel(record, slug, record.lang)}</legend>
+          {languages.map((code) => (
+            <TextBox
+              key={code}
+              label={languageName(code)}
+              value={
+                code === record.lang
+                  ? (record.strings[`${RESERVE_OWNER}.${slug}`] ?? "")
+                  : (record.translations?.[code]?.[`${RESERVE_OWNER}.${slug}`] ?? "")
+              }
+              onChange={(v) =>
+                applyChange(setReserveName(record, slug, v, code), `reserve.${slug}.${code}`)
+              }
+            />
+          ))}
+          <button
+            type="button"
+            class="danger"
+            onClick={() => applyChange(removeReserve(record, slug), `reserve.${slug}`)}
+          >
+            {ui("form.remove")}
+          </button>
+        </fieldset>
+      ))}
+      <div class="studio-damage-new">
+        <input
+          type="text"
+          value={name}
+          placeholder={ui("studio.reserveNew")}
+          aria-label={ui("studio.reserveNew")}
+          onInput={(e) => setName(e.currentTarget.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              add();
+            }
+          }}
+        />
+        <button type="button" disabled={!damageSlug(name)} onClick={add}>
+          {ui("studio.add")}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The spell components the pack adds to V, S and M, by their short code (A, O): the spell form then
+ * offers a tick for each. Nothing to translate: a component is its letter.
+ */
+export function ComponentCodes({ record }: { record: UserPackRecord }) {
+  const [code, setCode] = useState("");
+  const codes = record.meta?.components ?? [];
+  const clean = code.trim().toUpperCase().slice(0, 3);
+  const taken = ["V", "S", "M", ...codes].includes(clean);
+  const set = (next: string[]) =>
+    applyChange({ ...record, meta: { ...record.meta, components: next } }, "pack.components");
+  return (
+    <section class="studio-pack-languages studio-components">
+      <h4>{ui("studio.components")}</h4>
+      <p class="muted">{ui("studio.componentsHint")}</p>
+      {codes.length > 0 && (
+        <ul class="plain studio-component-codes">
+          {codes.map((c) => (
+            <li key={c}>
+              <b>{c}</b>
+              <button
+                type="button"
+                class="link"
+                aria-label={ui("studio.componentRemove", { code: c })}
+                onClick={() => set(codes.filter((x) => x !== c))}
+              >
+                ×
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="studio-damage-new">
+        <input
+          type="text"
+          value={code}
+          maxLength={3}
+          placeholder={ui("studio.componentNew")}
+          aria-label={ui("studio.componentNew")}
+          onInput={(e) => setCode(e.currentTarget.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && clean && !taken) {
+              e.preventDefault();
+              set([...codes, clean]);
+              setCode("");
+            }
+          }}
+        />
+        <button
+          type="button"
+          disabled={!clean || taken}
+          onClick={() => {
+            set([...codes, clean]);
+            setCode("");
+          }}
+        >
+          {ui("studio.add")}
+        </button>
+      </div>
     </section>
   );
 }

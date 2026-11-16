@@ -74,6 +74,9 @@ export const entrySort = signal<"name" | "kind">("name");
 /** The command palette, the window to start from an existing entry, and the list of keys are open. */
 export const paletteOpen = signal(false);
 export const startFromOpen = signal(false);
+
+/** The entry that is being made step by step, when one is: the editor shows the guide in place of the form. */
+export const wizardFor = signal<string | undefined>(undefined);
 export const helpOpen = signal(false);
 
 /** The language the texts are being written in: undefined for the pack's own, a code for a translation. */

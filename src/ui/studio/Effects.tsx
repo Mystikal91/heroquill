@@ -1,3 +1,4 @@
+import type { ComponentChildren } from "preact";
 import en from "../../../locales/en/ui.json";
 import { content } from "../../app/store";
 import { studioMode } from "../../app/studio";
@@ -20,6 +21,7 @@ import {
   focusNewItem,
   withCurrent,
 } from "./Controls";
+import { moved, useReorder } from "./Reorder";
 import { RequirementBuilder, describeRequirement } from "./Requirement";
 import { TermControl, isPlainTerm, termText } from "./Term";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
@@ -183,17 +185,27 @@ function EffectCard({
   effect,
   onChange,
   onRemove,
+  handle,
+  itemProps,
 }: {
   effect: Effect;
   onChange: (next: Effect) => void;
   onRemove: () => void;
+  /** The handle that moves the card in the list, and what the list needs on the card to take a drop. */
+  handle?: ComponentChildren;
+  itemProps?: Record<string, unknown>;
 }) {
   const type = effect.type as EffectType;
   const values = effect as unknown as Record<string, unknown>;
   const advanced = studioMode.value === "advanced";
   const points = effect.type === "uses" && effect.pool === true;
   const fields = effectFields(type).filter((f) => !(type === "uses" && f.key === "pool"));
-  const optional = fields.filter((f) => f.optional);
+  // The reserve a feature adds to or spends from is part of the question, not an extra.
+  const isMain = (f: (typeof fields)[number]) =>
+    !f.optional ||
+    (type === "uses" && f.key === "reserve") ||
+    (type === "spends" && (f.key === "reserve" || f.key === "pool"));
+  const optional = fields.filter((f) => !isMain(f));
   const Flags = ({ specs }: { specs: typeof fields }) =>
     specs.length === 0 ? null : <div class="studio-checks">{specs.map(control)}</div>;
   const control = (spec: (typeof fields)[number]) => {
@@ -271,8 +283,9 @@ function EffectCard({
     );
   };
   return (
-    <details class="studio-effect" open>
+    <details class="studio-effect" open {...itemProps}>
       <summary>
+        {handle}
         <b>{points ? ui("fx.points") : effectName(type)}</b>
         <span class="muted">{summarize(effect)}</span>
         <button
@@ -287,9 +300,9 @@ function EffectCard({
         </button>
       </summary>
       <div class={type === "when" ? "studio-grid studio-grid-one" : "studio-grid"}>
-        {fields.filter((f) => !f.optional && f.type.type !== "boolean").map(control)}
+        {fields.filter((f) => isMain(f) && f.type.type !== "boolean").map(control)}
       </div>
-      <Flags specs={fields.filter((f) => !f.optional && f.type.type === "boolean")} />
+      <Flags specs={fields.filter((f) => isMain(f) && f.type.type === "boolean")} />
       {optional.length > 0 && (
         <details
           class="studio-more"
@@ -325,12 +338,36 @@ export function EffectList({
   const shown = effects
     .map((effect, i) => ({ effect, i }))
     .filter(({ effect }) => !hidden.includes(effect.type));
+  // The cards are put in another order by their handles; the effects another part of the form keeps stay where they are.
+  const reorder = useReorder(shown.length, (from, to) => {
+    const a = shown[from]?.i;
+    const b = shown[to]?.i;
+    if (a !== undefined && b !== undefined) onChange(moved(effects, a, b));
+  });
+  const fold = (e: { currentTarget: HTMLElement }, open: boolean) => {
+    for (const card of e.currentTarget
+      .closest(".studio-effects")
+      ?.querySelectorAll<HTMLDetailsElement>(":scope > details.studio-effect") ?? [])
+      card.open = open;
+  };
   return (
     <div class="studio-effects">
       {shown.length === 0 && <p class="muted">{ui("studio.noEffects")}</p>}
-      {shown.map(({ effect, i }) => (
+      {shown.length > 1 && (
+        <div class="studio-effects-tools">
+          <button type="button" class="link" onClick={(e) => fold(e, false)}>
+            {ui("studio.collapseAll")}
+          </button>
+          <button type="button" class="link" onClick={(e) => fold(e, true)}>
+            {ui("studio.expandAll")}
+          </button>
+        </div>
+      )}
+      {shown.map(({ effect, i }, k) => (
         <EffectCard
           key={i}
+          handle={reorder.handle(k)}
+          itemProps={reorder.item(k)}
           effect={effect}
           onChange={(next) => onChange(effects.map((e, j) => (j === i ? next : e)))}
           onRemove={() => onChange(effects.filter((_, j) => j !== i))}

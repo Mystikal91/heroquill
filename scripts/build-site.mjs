@@ -6,6 +6,7 @@
 // anything).
 import { cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { COMMUNITY, CONTRIBUTE } from "../site/contribute.mjs";
+import { renderMarkdown } from "../site/docs-page.mjs";
 import { GUIDE } from "../site/guide.mjs";
 import { GUIDES, MORE } from "../site/guides.mjs";
 import { NEWS } from "../site/news.mjs";
@@ -225,8 +226,7 @@ function articleDocument(lang, pathOf, a) {
     <meta name="description" content="${escapeAttr(a.desc)}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="${url}" />
-${alternatesOf(pathOf)}
-    <meta property="og:type" content="${a.ogType}" />
+${a.single ? "" : `${alternatesOf(pathOf)}\n`}    <meta property="og:type" content="${a.ogType}" />
     <meta property="og:site_name" content="Heroquill" />
     <meta property="og:title" content="${escapeAttr(a.title)}" />
     <meta property="og:description" content="${escapeAttr(a.desc)}" />
@@ -269,9 +269,20 @@ ${alternatesOf(pathOf)}
       </section>
 
       <article class="band on-light">
-        <div class="wrap narrow prose${a.plain ? " plain" : ""}">
+${
+  a.toc
+    ? `        <div class="wrap docs">
+          <nav class="doc-toc" aria-label="Contents">
+${a.toc}
+          </nav>
+          <div class="prose doc-body">
 ${a.body}
-        </div>
+          </div>
+        </div>`
+    : `        <div class="wrap narrow prose${a.plain ? " plain" : ""}">
+${a.body}
+        </div>`
+}
       </article>
 
       <section class="cta on-dark">
@@ -476,8 +487,50 @@ function contributePage(lang) {
   });
 }
 
+// ---- the technical page on the pack format: docs/PACK_FORMAT.md, in English only ----
+const DOCS_PACKS = "/docs/packs/";
+
+function docsPage() {
+  const { html, headings, title } = renderMarkdown(readFileSync("docs/PACK_FORMAT.md", "utf8"));
+  // The first heading is the title of the page; the contents list the sections and, under each,
+  // the parts that are written by hand (the generated reference is listed by its kinds only).
+  const sections = headings.filter((h) => h.level === 2);
+  const toc = sections
+    .map((h) => `            <a href="#${h.id}">${escapeHtml(h.text)}</a>`)
+    .join("\n");
+  // The first heading repeats the title of the page: leave it out of the body.
+  const body = html.replace(/^<h1 [^>]*>[\s\S]*?<\/h1>\n?/, "");
+  const intro =
+    "Everything a Heroquill pack file can hold and how the app reads it: for people who write packs by hand, and for programs and AIs that turn a book into a pack.";
+  return articleDocument("en", () => DOCS_PACKS, {
+    title: `${title} – Heroquill`,
+    desc: intro,
+    h1: title,
+    intro,
+    crumb: "Pack format",
+    cta: "Ready to write your own?",
+    ogType: "article",
+    single: true,
+    toc,
+    body,
+    main: (url) => ({
+      "@type": "TechArticle",
+      headline: title,
+      description: intro,
+      inLanguage: "en",
+      mainEntityOfPage: url,
+      dateModified: today,
+      image: `${ORIGIN}/og-image.png`,
+      author: { "@type": "Organization", name: "Heroquill", url: `${ORIGIN}/` },
+      publisher: { "@type": "Organization", name: "Heroquill", url: `${ORIGIN}/` },
+    }),
+  });
+}
+
 // ---- the pages ----
 mkdirSync("dist", { recursive: true });
+mkdirSync(`dist${DOCS_PACKS.slice(0, -1)}`, { recursive: true });
+writeFileSync(`dist${DOCS_PACKS}index.html`, docsPage());
 for (const lang of LANGUAGES) {
   const directory = lang === "en" ? "dist" : `dist/${lang}`;
   mkdirSync(directory, { recursive: true });
@@ -549,6 +602,7 @@ const entries = [
   ),
   ...LANGUAGES.map((lang) => entryOf(newsPagePath, lang)),
   ...LANGUAGES.map((lang) => entryOf(contributePagePath, lang)),
+  `  <url>\n    <loc>${ORIGIN}${DOCS_PACKS}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`,
 ].join("\n");
 writeFileSync(
   "dist/sitemap.xml",

@@ -6,7 +6,7 @@ import { MULTICLASS_SLOTS } from "../engine/multiclass";
  * rules give them, so the person does not write twenty rows by hand.
  */
 
-export const CASTING_KINDS = ["none", "full", "half", "pact"] as const;
+export const CASTING_KINDS = ["none", "full", "half", "pact", "points"] as const;
 export type CastingKind = (typeof CASTING_KINDS)[number];
 export const PREPARATION_KINDS = ["prepared", "known", "spellbook"] as const;
 export type Preparation = (typeof PREPARATION_KINDS)[number];
@@ -55,16 +55,46 @@ export interface ClassCasting {
   ability: string;
   preparation: Preparation;
   cantrips: number;
+  /** For a class that casts without slots (`points`): the reserve its spells take points from. */
+  reserve?: string;
+  /** The highest spell level it knows: `half` of the class level, or the name of a column of the table. */
+  maxLevel?: string;
+  /** The column of the table that limits the points one spell can take ("" for no limit). */
+  limit?: string;
 }
 
 /** How a class casts, read from its data (the form shows it, and changing it writes it again). */
 export function readClassCasting(data: Record<string, unknown>): ClassCasting {
   const c = data.spellcasting as
-    | { ability?: string; startsAtLevel?: number; pact?: boolean; preparation?: { type?: string } }
+    | {
+        ability?: string;
+        startsAtLevel?: number;
+        pact?: boolean;
+        preparation?: { type?: string };
+        slots?: string;
+        reserve?: string;
+        maxLevel?: string | { column?: string };
+        limit?: string;
+      }
     | undefined;
   const rows = (data.levels as { cantripsKnown?: number }[] | undefined) ?? [];
   return {
-    kind: !c ? "none" : c.pact ? "pact" : (c.startsAtLevel ?? 1) > 1 ? "half" : "full",
+    kind: !c
+      ? "none"
+      : c.slots === "none"
+        ? "points"
+        : c.pact
+          ? "pact"
+          : (c.startsAtLevel ?? 1) > 1
+            ? "half"
+            : "full",
+    // What only a class that casts with points has.
+    ...(c?.slots === "none" && {
+      reserve: c.reserve ?? "",
+      maxLevel:
+        typeof c.maxLevel === "object" ? (c.maxLevel.column ?? "half") : (c.maxLevel ?? "half"),
+      limit: c.limit ?? "",
+    }),
     ability: c?.ability ?? "int",
     preparation: (PREPARATION_KINDS as readonly string[]).includes(c?.preparation?.type ?? "")
       ? (c?.preparation?.type as Preparation)
@@ -80,7 +110,8 @@ export function applyClassCasting(
 ): { spellcasting: Record<string, unknown> | undefined; levels: Row[] } {
   const rows = ((data.levels as Row[] | undefined) ?? []).map(bare);
   const none = casting.kind === "none";
-  const kind = casting.kind === "none" ? "full" : casting.kind;
+  const points = casting.kind === "points";
+  const kind = casting.kind === "none" || casting.kind === "points" ? "full" : casting.kind;
   const startsAt = kind === "half" ? 2 : 1;
   const cantrips = Math.max(0, Math.min(9, Math.trunc(casting.cantrips)));
   const levels = rows.map((row) => {
@@ -96,7 +127,8 @@ export function applyClassCasting(
             ? Math.floor(row.level / 2) + 1
             : Math.min(kind === "pact" ? 15 : 20, row.level + 1),
       }),
-      spellSlots: slotsFor(kind, row.level),
+      // A class that casts with points has no slots, and keeps the values of the columns it has.
+      ...(points ? {} : { spellSlots: slotsFor(kind, row.level) }),
     };
   });
   const spellcasting = none
@@ -105,6 +137,15 @@ export function applyClassCasting(
         ability: casting.ability,
         startsAtLevel: startsAt,
         ...(kind === "pact" && { pact: true }),
+        ...(points && {
+          slots: "none",
+          ...(casting.reserve && { reserve: casting.reserve }),
+          maxLevel:
+            !casting.maxLevel || casting.maxLevel === "half"
+              ? "half"
+              : { column: casting.maxLevel },
+          ...(casting.limit && { limit: casting.limit }),
+        }),
         preparation:
           casting.preparation === "known"
             ? { type: "known" }

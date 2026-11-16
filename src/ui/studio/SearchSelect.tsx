@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { fold } from "../../app/search";
 import { ui } from "../../i18n/ui";
+import { announce } from "./announce";
 
 export interface PickOption {
   id: string;
@@ -54,6 +55,15 @@ export function PickerPanel({
     active.current?.scrollIntoView({ block: "nearest" });
   }, [at]);
 
+  // How many remain is said as the person types, since the list changes out of sight of a screen reader.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: it must run when the query changes, and only then
+  useEffect(() => {
+    if (query)
+      announce(
+        found.length === 0 ? ui("studio.noMatch") : ui("studio.results", { n: found.length }),
+      );
+  }, [query]);
+
   let lastGroup: string | undefined;
   return (
     <div class="studio-picker">
@@ -70,12 +80,16 @@ export function PickerPanel({
             setAt(0);
           }}
           onKeyDown={(e) => {
-            if (e.key === "ArrowDown") {
+            if (e.key === "ArrowDown" || e.key === "ArrowUp") {
               e.preventDefault();
-              setAt(Math.min(rows.length - 1, at + 1));
-            } else if (e.key === "ArrowUp") {
-              e.preventDefault();
-              setAt(Math.max(0, at - 1));
+              const to = Math.max(
+                0,
+                Math.min(rows.length - 1, at + (e.key === "ArrowDown" ? 1 : -1)),
+              );
+              setAt(to);
+              // The row the arrows are on is said, since the focus stays in the search box.
+              const row = rows[to];
+              if (row) announce(`${row.label}, ${to + 1} / ${rows.length}`);
             } else if (e.key === "Enter") {
               e.preventDefault();
               const row = rows[at];

@@ -8,6 +8,8 @@ import { Paragraphs } from "../sheet/parts";
 import { spellFacts } from "../spells/spellFacts";
 import { effectName, summarize } from "./Effects";
 import { TryOn } from "./TryOn";
+import { jumpToField } from "./jump";
+import { fieldLabel } from "./labels";
 import { kindName } from "./names";
 import { explainProblem } from "./problems";
 
@@ -99,17 +101,58 @@ function PlainPreview({ record, entry }: { record: UserPackRecord; entry: Entry 
 const text2 = (record: UserPackRecord, id: string, field: string) =>
   record.strings[`${id}.${field}`] ?? "";
 
+/** The label of the field a check is about, so that the check can take the person there. */
+function targetOf(w: Warning): string | undefined {
+  switch (w.code) {
+    case "noName":
+      return ui("hb.f.name");
+    case "noDesc":
+      return ui("hb.f.desc");
+    case "noClasses":
+      return ui("hb.f.classes");
+    case "noParent":
+      return ui("studio.parent");
+    case "problem": {
+      const path = (w.text ?? "").split(": ")[0] ?? "";
+      if (path === "effects") return ui("studio.effects");
+      const key = path
+        .split(/[.[\]]/)
+        .filter((part) => part && !/^\d+$/.test(part))
+        .pop();
+      return key ? fieldLabel(key) : undefined;
+    }
+    default:
+      return undefined;
+  }
+}
+
 export function Warnings({ list }: { list: Warning[] }) {
   if (list.length === 0) return <p class="studio-ok">{ui("studio.allGood")}</p>;
   return (
     <ul class="studio-warnings">
-      {list.map((w) => (
-        <li key={`${w.code}:${w.text ?? ""}`} class={w.severity}>
-          {w.code === "problem"
+      {list.map((w) => {
+        const text =
+          w.code === "problem"
             ? explainProblem(w.text ?? "")
-            : ui(`studio.w.${w.code}`, { ref: w.text ?? "" })}
-        </li>
-      ))}
+            : ui(`studio.w.${w.code}`, { ref: w.text ?? "" });
+        const target = targetOf(w);
+        return (
+          <li key={`${w.code}:${w.text ?? ""}`} class={w.severity}>
+            {target ? (
+              <button
+                type="button"
+                class="studio-warning-jump"
+                title={ui("studio.jump")}
+                onClick={() => jumpToField(target)}
+              >
+                {text}
+              </button>
+            ) : (
+              text
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }

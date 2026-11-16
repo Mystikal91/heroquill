@@ -1,8 +1,9 @@
-import { applyChange, selectedEntry } from "../../app/studio";
+import { applyChange, selectedEntry, studioMode, wizardFor } from "../../app/studio";
 import { type Variant, startEntry } from "../../homebrew/blanks";
 import type { EntryKind } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
+import { WIZARD_KINDS } from "./Wizard";
 import { kindName } from "./names";
 
 /** What a new entry can start as: a kind, and for items which sort. Beginners see the common ones. */
@@ -76,11 +77,13 @@ export const NEW_KINDS: NewKind[] = [
   })),
 ];
 
-/** Starts an entry of a kind in the open pack and opens it. */
+/** Starts an entry of a kind in the open pack and opens it; a beginner is led through it, step by step. */
 export function startNew(record: UserPackRecord, id: string): void {
   const found = NEW_KINDS.find((k) => k.id === id);
   if (!found) return;
   const started = startEntry(record, found.kind, found.variant);
   applyChange(started.record);
   selectedEntry.value = started.id;
+  wizardFor.value =
+    studioMode.value !== "advanced" && WIZARD_KINDS.includes(found.id) ? started.id : undefined;
 }

@@ -21,7 +21,8 @@
     "export:print-characters": "tsx scripts/print-check/export.ts",
     "icons": "node scripts/make-icons.mjs",
     "data:srd51": "tsx scripts/srd51/build.ts",
-    "data:srd52": "tsx scripts/srd52/build.ts"
+    "data:srd52": "tsx scripts/srd52/build.ts",
+    "docs:pack": "tsx scripts/pack-docs.ts"
   },
   "dependencies": {
     "@fontsource/cinzel": "^5.3.0",

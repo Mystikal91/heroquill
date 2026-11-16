@@ -66,6 +66,10 @@ export interface SpellcastingResult {
   spellsKnown?: number;
   /** Slots for spell levels 1..9. */
   spellSlots: number[];
+  /** A class that casts without slots: the reserve its spells take points from. */
+  reserve?: string;
+  /** For such a class: the most points a single spell can take at this level (absent: no limit). */
+  spellLimit?: number;
   /** What the class may pick and what is picked. */
   lists: SpellLists;
 }
@@ -433,9 +437,18 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     const subCasting = subEntry ? subclassData(subEntry).spellcasting : undefined;
     const cast = (subEntry && withSubclassCasting(data, subclassData(subEntry))) || data;
     const castRow = cast.levels.find((l) => l.level === cl.level);
-    if (cast.spellcasting && cl.level >= cast.spellcasting.startsAtLevel && castRow?.spellSlots) {
+    const slotless = cast.spellcasting?.slots === "none";
+    if (
+      cast.spellcasting &&
+      cl.level >= cast.spellcasting.startsAtLevel &&
+      (castRow?.spellSlots || slotless)
+    ) {
       const kind = subCasting && cast !== data ? subCasting.kind : casterKind(cl.classId, data);
-      if (kind) casterInputs.push({ kind, level: cl.level, ownSlots: castRow.spellSlots });
+      // A class with no slots has nothing to add to the slots that classes share.
+      if (kind && !slotless && castRow?.spellSlots)
+        casterInputs.push({ kind, level: cl.level, ownSlots: castRow.spellSlots });
+      const limitKey = cast.spellcasting.limit;
+      const limit = limitKey ? castRow?.classSpecific?.[limitKey] : undefined;
       const ability = cast.spellcasting.ability;
       const modifier = abilities[ability].modifier;
       casters.push({
@@ -447,9 +460,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
           8 + proficiencyBonus + modifier,
         attackBonus:
           numberOverride(character.overrides, OVERRIDE.spellAttack) ?? proficiencyBonus + modifier,
-        ...(castRow.cantripsKnown !== undefined && { cantripsKnown: castRow.cantripsKnown }),
-        ...(castRow.spellsKnown !== undefined && { spellsKnown: castRow.spellsKnown }),
-        spellSlots: castRow.spellSlots,
+        ...(castRow?.cantripsKnown !== undefined && { cantripsKnown: castRow.cantripsKnown }),
+        ...(castRow?.spellsKnown !== undefined && { spellsKnown: castRow.spellsKnown }),
+        spellSlots: castRow?.spellSlots ?? [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ...(slotless && cast.spellcasting.reserve && { reserve: cast.spellcasting.reserve }),
+        ...(slotless && typeof limit === "number" && { spellLimit: limit }),
         lists: deriveSpellLists({
           classId: subCasting && cast !== data ? subCasting.list : cl.classId,
           data: cast,
@@ -470,7 +485,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   // The slots a sorcerer made from sorcery points count with the others until a long rest.
   const created = character.play.createdSlots;
   const slots = created ? pools.slots.map((n, i) => n + (created[i] ?? 0)) : pools.slots;
-  for (const caster of casters) caster.spellSlots = slots;
+  for (const caster of casters) if (caster.reserve === undefined) caster.spellSlots = slots;
   const spellcasting = casters[0];
 
   // Multiclassing asks for a minimum in the key abilities of every class involved.
@@ -691,6 +706,14 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       character.classes
         .filter((cl) => cl.classId.split("/")[1] === slug)
         .reduce((sum, cl) => sum + cl.level, 0),
+    tableValue: (source: string, key: string) => {
+      const owner = index.get(source)?.data.class as string | undefined;
+      const cl = character.classes.find((c) => c.classId === owner);
+      const entry = owner ? index.get(owner) : undefined;
+      if (!cl || !entry) return 0;
+      const value = classData(entry).levels.find((l) => l.level === cl.level)?.classSpecific?.[key];
+      return typeof value === "number" ? value : 0;
+    },
   };
   // What features and traits say about how often they can be used.
   resources.push(...deriveUses(sourced, valueState), ...deriveFreeSpells(sourced, levelOf));

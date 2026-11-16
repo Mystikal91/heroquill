@@ -3,6 +3,7 @@ import { character, content, shownSheet } from "../../app/store";
 import type { Warning } from "../../engine/warnings";
 import { type UiKey, ui } from "../../i18n/ui";
 import { Coins } from "../Coins";
+import { damageTitle } from "../damageName";
 import { EquipmentBoard } from "../equipment/EquipmentBoard";
 import { Panel, RulesText } from "./parts";
 
@@ -59,10 +60,7 @@ export function Defenses() {
       s.defenses[kind].length > 0 || (kind === "immunity" && s.conditionImmunities.length > 0),
   );
   if (kinds.length === 0) return null;
-  const damage = (type: string) => {
-    const key = `hb.o.${type}` as UiKey;
-    return ui(key) === key ? type : ui(key);
-  };
+  const damage = damageTitle;
   return (
     <Panel title={ui("sheet.defenses")}>
       <dl class="pairs">

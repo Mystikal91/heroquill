@@ -107,6 +107,26 @@ function resolvePick(
   return { allowed, chosen, pool, ...(limit && { restriction: limit.restriction }) };
 }
 
+/**
+ * The highest spell level a class can know at a level: the highest it has slots for, or for a class
+ * without slots the cap its data gives (half the level, rounded up, or a column of its table).
+ */
+export function highestSpellLevel(data: ClassData, level: number): number {
+  const casting = data.spellcasting;
+  const row = data.levels.find((l) => l.level === level);
+  if (casting?.slots === "none") {
+    const cap = casting.maxLevel;
+    const n =
+      cap === "half"
+        ? Math.ceil(level / 2)
+        : cap
+          ? Number(row?.classSpecific?.[cap.column] ?? 0)
+          : 9;
+    return Math.max(0, Math.min(9, Math.trunc(Number.isFinite(n) ? n : 0)));
+  }
+  return (row?.spellSlots ?? []).reduce((max, n, i) => (n > 0 ? i + 1 : max), 0);
+}
+
 /** The spell lists of one casting class at its current level (call only once it can cast). */
 export function deriveSpellLists(input: Input): SpellLists {
   const { classId, data, level, abilityModifier, picks, index, subclass, warnings } = input;
@@ -115,7 +135,7 @@ export function deriveSpellLists(input: Input): SpellLists {
   // The spells the subclass of a book names are those of the 2014 SRD: a 2024 class takes the 2024 spells.
   const twin = classId.startsWith("srd52:");
   const row = data.levels.find((l) => l.level === level);
-  const maxSpellLevel = (row?.spellSlots ?? []).reduce((max, n, i) => (n > 0 ? i + 1 : max), 0);
+  const maxSpellLevel = highestSpellLevel(data, level);
 
   const alwaysPrepared = subclass
     ? subclassData(subclass)

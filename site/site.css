@@ -1814,3 +1814,165 @@ h3 {
     display: none;
   }
 }
+
+/* ---- Technical pages: a wide page with its contents beside it (the format of a pack) ---- */
+
+.wrap.docs {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: 2.5rem;
+  width: min(100% - 2.5rem, 78rem);
+  align-items: start;
+}
+
+.doc-toc {
+  position: sticky;
+  top: 4.5rem;
+  display: grid;
+  gap: 0.15rem;
+  max-height: calc(100vh - 5.5rem);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.doc-toc a {
+  padding: 0.25rem 0.6rem;
+  border-left: 2px solid var(--border);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.doc-toc a:hover,
+.doc-toc a:focus-visible {
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+.doc-body {
+  min-width: 0;
+}
+
+.doc-body h2,
+.doc-body h3,
+.doc-body h4 {
+  scroll-margin-top: 4.5rem;
+}
+
+.band .doc-body h2 {
+  margin: 3rem 0 0.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+.band .doc-body h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.doc-body h2::before {
+  content: none;
+}
+
+.doc-body h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.doc-body h4 {
+  margin: 1.6rem 0 0.4rem;
+  font-size: 1.05rem;
+  font-family: "Cinzel", "EB Garamond", Georgia, serif;
+  color: var(--ink);
+}
+
+.doc-body code {
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.88em;
+}
+
+.doc-body pre {
+  margin: 0 0 1.2rem;
+  padding: 0.9rem 1.1rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  line-height: 1.45;
+}
+
+.doc-body pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.85rem;
+  white-space: pre;
+}
+
+.doc-body ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.doc-body ol li::marker {
+  color: var(--accent);
+}
+
+.doc-body .table-wrap {
+  margin: 0 0 1.3rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.doc-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.doc-body th,
+.doc-body td {
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc-body th {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.doc-body tr:last-child td {
+  border-bottom: 0;
+}
+
+.doc-body td code {
+  white-space: nowrap;
+}
+
+.doc-body td:last-child code {
+  white-space: normal;
+}
+
+@media (max-width: 62rem) {
+  .wrap.docs {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
+
+  .doc-toc {
+    position: static;
+    max-height: none;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    padding: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+}

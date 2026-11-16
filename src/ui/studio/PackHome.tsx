@@ -6,7 +6,7 @@ import { ui } from "../../i18n/ui";
 import { type UserPackRecord, restrictedIds } from "../../storage/packs";
 import { TextBox } from "./Controls";
 import { removePack } from "./Explorer";
-import { PackLanguages } from "./Translate";
+import { ComponentCodes, DamageNames, PackLanguages, Reserves } from "./Translate";
 
 /**
  * The page of the open pack, shown while no entry is open: its name, who wrote it, its version and
@@ -80,6 +80,14 @@ export function PackHome({ record }: { record: UserPackRecord }) {
         <small class="muted">{ui("studio.unitsHint")}</small>
       </label>
       <PackLanguages record={record} />
+      <p class="muted">
+        <a href="/docs/packs/" target="_blank" rel="noreferrer noopener">
+          {ui("studio.packDocs")}
+        </a>
+      </p>
+      <Reserves record={record} />
+      <DamageNames record={record} />
+      <ComponentCodes record={record} />
       <p class="muted">
         {copied === undefined
           ? ui("studio.backup.never")

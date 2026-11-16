@@ -62,14 +62,19 @@ export function conditionTint(
   colorOf: (id: string) => string | undefined,
 ): string | undefined {
   for (const id of [...play.conditions].reverse()) {
-    const color = colorOf(id);
-    if (color && color in CONDITION_TINTS) return CONDITION_TINTS[color];
-    // Any colour a person picked: `#rrggbb`, glowing as the named ones do.
-    const hex = color && /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(color);
-    if (hex)
-      return `rgba(${Number.parseInt(hex[1] ?? "0", 16)}, ${Number.parseInt(hex[2] ?? "0", 16)}, ${Number.parseInt(hex[3] ?? "0", 16)}, 0.55)`;
+    const tint = tintOf(colorOf(id));
+    if (tint) return tint;
   }
   return undefined;
+}
+
+/** The glow of a colour a condition was given: one of the names, or any `#rrggbb`. */
+export function tintOf(color: string | undefined): string | undefined {
+  if (color && color in CONDITION_TINTS) return CONDITION_TINTS[color];
+  const hex = color && /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(color);
+  if (!hex) return undefined;
+  const [r, g, b] = [hex[1], hex[2], hex[3]].map((h) => Number.parseInt(h ?? "0", 16));
+  return `rgba(${r}, ${g}, ${b}, 0.55)`;
 }
 
 /** The states as the data attributes the styles read, for the aura and for the screen itself. */

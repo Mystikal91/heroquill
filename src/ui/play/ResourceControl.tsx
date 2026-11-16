@@ -3,11 +3,13 @@ import { character, content } from "../../app/store";
 import { resourceLeft, setResourceUsed } from "../../engine/play";
 import type { ClassResource } from "../../engine/resources";
 import { type UiKey, ui } from "../../i18n/ui";
+import { reserveName } from "../reserveName";
 
 /** What a limited-use resource is called: a name written by the person, a free spell, its entry or its kind. */
 export function resourceLabel(r: ClassResource): string {
   return (
     r.name ??
+    (r.reserve && reserveName(r.reserve)) ??
     (r.spell && ui("resource.freeSpell", { name: content.value?.name(r.spell) ?? "" })) ??
     (r.entry && content.value?.name(r.entry)) ??
     ui(`resource.${r.kind}` as UiKey, { level: r.level ?? 0 })

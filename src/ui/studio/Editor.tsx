@@ -10,6 +10,7 @@ import {
   studioLanguage,
   studioMode,
   undoChange,
+  wizardFor,
 } from "../../app/studio";
 import { offerUndo } from "../../app/undo";
 import type { Entry } from "../../data/schema";
@@ -26,6 +27,7 @@ import { PackHome } from "./PackHome";
 import { Preview } from "./Preview";
 import { SpellForm } from "./SpellForm";
 import { LanguageBar, TranslationPanel } from "./Translate";
+import { WIZARD_KINDS, Wizard } from "./Wizard";
 import { kindName } from "./names";
 
 function SaveState() {
@@ -97,6 +99,15 @@ function Delete({ record, entry }: { record: UserPackRecord; entry: Entry }) {
   );
 }
 
+/** The id the new menu uses for the kind of an entry that has a guided path (`weapon` for an item with a weapon). */
+function wizardKind(entry: Entry): string | undefined {
+  if (entry.kind !== "item") return WIZARD_KINDS.includes(entry.kind) ? entry.kind : undefined;
+  const data = entry.data as { weapon?: unknown; armor?: unknown; rarity?: unknown };
+  if (data.weapon) return "weapon";
+  if (data.armor) return "armor";
+  return data.rarity !== undefined ? "magic" : "gear";
+}
+
 /** The editor: the open entry, with its preview and checks beside it. */
 export function Editor({ record }: { record: UserPackRecord }) {
   const entry = record.pack.entries.find((e) => e.id === selectedEntry.value);
@@ -114,7 +125,17 @@ export function Editor({ record }: { record: UserPackRecord }) {
     if (openId && matchMedia("(max-width: 960px)").matches)
       section.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [openId]);
+  // The guide belongs to the entry it was started for: going to another one ends it.
+  useEffect(() => {
+    const guided = wizardFor.value;
+    const here = selectedEntry.value;
+    // The guide ends when another entry that exists is opened. (An entry that is being renamed is
+    // briefly neither here nor there: the guide follows it.)
+    if (guided && here && guided !== here && record.pack.entries.some((e) => e.id === here))
+      wizardFor.value = undefined;
+  });
   if (!entry) return <PackHome record={record} />;
+  const guide = wizardFor.value === entry.id ? wizardKind(entry) : undefined;
 
   return (
     <section class="studio-editor" ref={section}>
@@ -122,42 +143,47 @@ export function Editor({ record }: { record: UserPackRecord }) {
       <LanguageBar record={record} entry={entry} />
       <div class="studio-work">
         <div class="studio-edit">
-          <header class="studio-head">
-            <p class="muted">{kindName(entry)}</p>
-            <TextBox
-              key={entry.id}
-              focusOnMount={!record.strings[`${entry.id}.name`]}
-              label={ui("hb.f.name")}
-              value={record.strings[`${entry.id}.name`] ?? ""}
-              placeholder={ui("studio.unnamed")}
-              onChange={(v) =>
-                applyChange(setText(record, entry.id, "name", v), `${entry.id}.name`)
-              }
-              onCommit={() => void nameTheId(entry.id)}
-            />
-          </header>
-          {language ? (
-            <TranslationPanel record={record} entry={entry} language={language} />
-          ) : entry.kind === "spell" ? (
-            <SpellForm record={record} entry={entry} />
-          ) : (
-            <GenericForm record={record} entry={entry} />
-          )}
-          {KIND_META[entry.kind].role !== "owned" && (
-            <div class="studio-actions">
-              <button type="button" onClick={() => void duplicateEntries([entry.id])}>
-                {ui("studio.duplicate")}
-              </button>
-              <PackPicker
-                label={ui("studio.moveTo")}
-                onPick={(id) => void moveEntriesTo(id, [entry.id])}
-              />
-              <PackPicker
-                label={ui("studio.copyTo")}
-                onPick={(id) => void copyEntriesTo(id, [entry.id])}
-              />
-              <Delete record={record} entry={entry} />
-            </div>
+          {guide && <Wizard record={record} entry={entry} kindId={guide} />}
+          {!guide && (
+            <>
+              <header class="studio-head">
+                <p class="muted">{kindName(entry)}</p>
+                <TextBox
+                  key={entry.id}
+                  focusOnMount={!record.strings[`${entry.id}.name`]}
+                  label={ui("hb.f.name")}
+                  value={record.strings[`${entry.id}.name`] ?? ""}
+                  placeholder={ui("studio.unnamed")}
+                  onChange={(v) =>
+                    applyChange(setText(record, entry.id, "name", v), `${entry.id}.name`)
+                  }
+                  onCommit={() => void nameTheId(entry.id)}
+                />
+              </header>
+              {language ? (
+                <TranslationPanel record={record} entry={entry} language={language} />
+              ) : entry.kind === "spell" ? (
+                <SpellForm record={record} entry={entry} />
+              ) : (
+                <GenericForm record={record} entry={entry} />
+              )}
+              {KIND_META[entry.kind].role !== "owned" && (
+                <div class="studio-actions">
+                  <button type="button" onClick={() => void duplicateEntries([entry.id])}>
+                    {ui("studio.duplicate")}
+                  </button>
+                  <PackPicker
+                    label={ui("studio.moveTo")}
+                    onPick={(id) => void moveEntriesTo(id, [entry.id])}
+                  />
+                  <PackPicker
+                    label={ui("studio.copyTo")}
+                    onPick={(id) => void copyEntriesTo(id, [entry.id])}
+                  />
+                  <Delete record={record} entry={entry} />
+                </div>
+              )}
+            </>
           )}
         </div>
         <Preview record={shown} entry={entry} />

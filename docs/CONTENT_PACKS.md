@@ -1,5 +1,9 @@
 # Content packs
 
+> **Writing or converting a pack?** The complete description of the pack file, with every field and
+> effect, is [PACK_FORMAT.md](PACK_FORMAT.md), also published as a page of the site:
+> <https://heroquill.app/docs/packs/>.
+
 The app ships with the SRD 5.1 (the 2014 rules) and the SRD 5.2.1 (the 2024 rules). People can add
 their own content as **packs**, which live
 in the browser (IndexedDB) of the device that added them. Open them from the footer link

@@ -89,6 +89,8 @@ export const FeatureTermSchema = v.union([
   v.object({ score: AbilitySchema }),
   /** The level in one class, by the slug of the class. */
   v.object({ classLevel: v.string() }),
+  /** A column of the table of the class that gives the feature (`classSpecific`), at the level the character has in it. */
+  v.object({ table: v.string() }),
 ]);
 export type FeatureTerm = v.InferOutput<typeof FeatureTermSchema>;
 
@@ -394,6 +396,11 @@ export const PlainEffectSchema = v.variant("type", [
     recharge: v.picklist(["short", "long"]),
     minLevel: v.optional(v.number()),
     pool: v.optional(v.boolean()),
+    /**
+     * The name (a slug) of a reserve the pack declares ("psi", "mana"): the uses are points added to
+     * that reserve, which every source with the same name shares, instead of a counter of this entry.
+     */
+    reserve: v.optional(v.string()),
     /** The total is at least this many (a bonus of Charisma that cannot go below 1). */
     min: v.optional(v.number()),
   }),
@@ -405,7 +412,9 @@ export const PlainEffectSchema = v.variant("type", [
    */
   v.object({
     type: v.literal("spends"),
-    pool: v.picklist(SPEND_POOLS),
+    pool: v.optional(v.picklist(SPEND_POOLS)),
+    /** A reserve the pack declares (see `uses`), instead of one of the pools of a class. */
+    reserve: v.optional(v.string()),
     cost: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(9))),
   }),
   v.object({

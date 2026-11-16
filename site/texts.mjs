@@ -87,6 +87,7 @@ export const TEXTS = {
     "faq.guideLink": "Read the step-by-step guide",
     "faq.contributeLink": "See how to help",
     "foot.contribute": "Contribute",
+    "foot.packDocs": "Pack format",
     "nav.contribute": "Contribute",
   },
   it: {
@@ -178,6 +179,7 @@ export const TEXTS = {
     "faq.guideLink": "Leggi la guida passo per passo",
     "faq.contributeLink": "Scopri come aiutare",
     "foot.contribute": "Contribuisci",
+    "foot.packDocs": "Formato dei pacchetti (inglese)",
     "nav.contribute": "Contribuisci",
   },
   fr: {
@@ -269,6 +271,7 @@ export const TEXTS = {
     "faq.guideLink": "Lis le guide pas à pas",
     "faq.contributeLink": "Découvre comment aider",
     "foot.contribute": "Contribuer",
+    "foot.packDocs": "Format des packs (anglais)",
     "nav.contribute": "Contribuer",
   },
   de: {
@@ -359,6 +362,7 @@ export const TEXTS = {
     "faq.guideLink": "Lies die Schritt-für-Schritt-Anleitung",
     "faq.contributeLink": "So kannst du helfen",
     "foot.contribute": "Mitmachen",
+    "foot.packDocs": "Paketformat (Englisch)",
     "nav.contribute": "Mitmachen",
   },
   es: {
@@ -449,6 +453,7 @@ export const TEXTS = {
     "faq.guideLink": "Lee la guía paso a paso",
     "faq.contributeLink": "Descubre cómo ayudar",
     "foot.contribute": "Colabora",
+    "foot.packDocs": "Formato de paquetes (inglés)",
     "nav.contribute": "Colabora",
   },
 };

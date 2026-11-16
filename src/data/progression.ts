@@ -29,6 +29,16 @@ export const ClassDataSchema = v.object({
       startsAtLevel: v.number(),
       /** Pact Magic: slots all of one level, regained on a short rest. */
       pact: v.optional(v.boolean()),
+      /**
+       * A class that casts without spell slots: the spells it knows cost points of a reserve (`reserve`),
+       * and the highest spell level it can know is `maxLevel` (half the class level, rounded up, or a
+       * column of the class table). `limit` is a column of the class table too: the most points one
+       * spell can take.
+       */
+      slots: v.optional(v.literal("none")),
+      reserve: v.optional(v.string()),
+      maxLevel: v.optional(v.union([v.literal("half"), v.object({ column: v.string() })])),
+      limit: v.optional(v.string()),
       preparation: v.variant("type", [
         v.object({ type: v.literal("known") }),
         v.object({

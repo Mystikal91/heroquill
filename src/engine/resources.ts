@@ -22,6 +22,8 @@ export interface ClassResource {
   unlimited?: boolean;
   /** A level of spell or similar number the label needs. */
   level?: number;
+  /** For a reserve the pack declares and several sources share: its name as a slug (the label is the pack's text for it). */
+  reserve?: string;
   /** The name to show, for what a person wrote (a custom feature): there is nothing to translate. */
   name?: string;
   /** The entry (feature, trait, feat) that gives these uses: its name is the label. */

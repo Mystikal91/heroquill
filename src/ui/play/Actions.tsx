@@ -12,6 +12,7 @@ import { type ClassResource, resourcesByEntry } from "../../engine/resources";
 import { canSpend, spendPool } from "../../engine/spends";
 import { type UiKey, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
+import { reserveName } from "../reserveName";
 import { ruleDetail } from "../rules/EntryDetail";
 import { Panel } from "../sheet/parts";
 import { ResourceControl } from "./ResourceControl";
@@ -121,7 +122,9 @@ function ActionCard({
                 <small>
                   {ui("play.actionCost", {
                     cost: `−${spend.cost}`,
-                    pool: ui(`resource.${spend.pool}` as UiKey).toLowerCase(),
+                    pool: spend.reserve
+                      ? reserveName(spend.reserve).toLowerCase()
+                      : ui(`resource.${spend.pool}` as UiKey).toLowerCase(),
                   })}
                 </small>
               )}

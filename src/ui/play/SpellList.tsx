@@ -16,11 +16,14 @@ import {
   applyHealing,
   castSpell,
   endConcentration,
+  resourceLeft,
+  setResourceUsed,
   slotsLeft,
   startConcentration,
 } from "../../engine/play";
 import { type SpellRollData, spellRolls } from "../../engine/spellRolls";
 import { signed, ui } from "../../i18n/ui";
+import { reserveName } from "../reserveName";
 import { damageLabel } from "../rules/ActionButtons";
 import { Panel } from "../sheet/parts";
 import { type SpellRow, collectSpellRows } from "../spellRows";
@@ -108,6 +111,7 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
     school?: string;
     concentration?: boolean;
     ritual?: boolean;
+    pointCost?: number;
   };
   const name = c.name(id);
   const caster = s.spellcasters.find((x) => data.classes?.includes(x.classId)) ?? s.spellcasters[0];
@@ -144,7 +148,41 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
     rolls.save !== undefined ||
     data.concentration === true;
 
+  // A class without slots pays for its spells from a reserve of points, up to a limit for each spell.
+  const reserveCounter = caster?.reserve
+    ? s.resources.find((r) => r.id === `reserve:${caster.reserve}`)
+    : undefined;
+  const pointCost = typeof data.pointCost === "number" ? data.pointCost : level;
+  const castFromReserve = () => {
+    if (!caster?.reserve) return;
+    const label = reserveName(caster.reserve);
+    if (caster.spellLimit !== undefined && pointCost > caster.spellLimit) {
+      addLog({ label: name, detail: ui("play.overLimit", { n: caster.spellLimit }) });
+      return;
+    }
+    const left = reserveCounter ? resourceLeft(play, reserveCounter.id, reserveCounter.max) : 0;
+    if (!reserveCounter || left < pointCost) {
+      addLog({ label: name, detail: ui("play.noPoints", { reserve: label.toLowerCase() }) });
+      return;
+    }
+    changePlay((p) =>
+      setResourceUsed(
+        p,
+        reserveCounter.id,
+        (p.resourcesUsed?.[reserveCounter.id] ?? 0) + pointCost,
+        reserveCounter.max,
+      ),
+    );
+    addLog({
+      label: name,
+      detail: ui("play.castPoints", { n: pointCost, reserve: label.toLowerCase() }),
+    });
+  };
   const cast = () => {
+    if (caster?.reserve) {
+      castFromReserve();
+      return;
+    }
     const done = castSpell(play, castLevel, s.spellSlots, s.pactSlots);
     if (!done) {
       addLog({ label: name, detail: ui("play.noSlot") });
@@ -215,9 +253,10 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
             if (el) el.inert = s.armorClass.untrained;
           }}
         >
-          {level > 0 && (
+          {(level > 0 || (caster?.reserve && pointCost > 0)) && (
             <button type="button" class="card-btn card-primary" onClick={cast}>
               {ui("play.cast")}
+              {caster?.reserve && <small> −{pointCost}</small>}
             </button>
           )}
           {rolls.attack && caster && (

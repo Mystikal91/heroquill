@@ -1,5 +1,6 @@
 import { studioMode } from "../../app/studio";
 import type { Entry } from "../../data/schema";
+import { readClassCasting, readSubclassCasting } from "../../homebrew/casting";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { readTable, setTable, setText, updateEntry } from "../../homebrew/entries";
 import { syncItemData } from "../../homebrew/sync";
@@ -9,7 +10,9 @@ import { entriesOfKind } from "../build/fields";
 import { ClassCasting, SubclassCasting } from "./Casting";
 import { FieldControl, SelectBox, TextBox } from "./Controls";
 import { EffectList } from "./Effects";
+import { fieldHelp } from "./Help";
 import { LevelStrip } from "./LevelStrip";
+import { SpellTable, ValuesTable } from "./LevelTables";
 import { OwnedList } from "./Owned";
 import { fieldLabel } from "./labels";
 import { LAYOUTS } from "./layouts";
@@ -28,7 +31,14 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
   const specs = DATA_FIELDS[entry.kind];
   const guided = layout.guided(entry);
   const shown = specs.filter((s) => guided.includes(s.key));
-  const rest = specs.filter((s) => !guided.includes(s.key));
+  // The level tables of a class or subclass have sections of their own: the raw list is not offered twice.
+  const rest = specs.filter(
+    (s) => !guided.includes(s.key) && !(layout.casting && s.key === "levels"),
+  );
+  const casts =
+    layout.casting === "class"
+      ? readClassCasting(data).kind !== "none"
+      : layout.casting === "subclass" && readSubclassCasting(data).enabled;
 
   const writeText = (field: string, value: string) =>
     applyChange(setText(record, id, field, value), `${id}.${field}`);
@@ -50,6 +60,7 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
     <FieldControl
       key={spec.key}
       label={fieldLabel(spec.key)}
+      help={fieldHelp(spec.key)}
       type={spec.type}
       value={data[spec.key]}
       optional={spec.optional}
@@ -61,6 +72,8 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
     <div class="studio-form">
       <JumpBar
         sections={[
+          layout.casting && ["sec-spells", ui("studio.spellsSection")],
+          entry.kind === "class" && ["sec-values", ui("studio.valuesSection")],
           layout.effects && ["sec-effects", ui("studio.effects")],
           layout.owns && [
             "sec-owned",
@@ -110,8 +123,16 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
 
       {shown.map(control)}
 
-      {layout.casting === "class" && <ClassCasting record={record} entry={entry} />}
-      {layout.casting === "subclass" && <SubclassCasting record={record} entry={entry} />}
+      {layout.casting && (
+        <details class="studio-section studio-spells" id="sec-spells" open>
+          <summary>
+            <h4>{ui("studio.spellsSection")}</h4>
+          </summary>
+          {layout.casting === "class" && <ClassCasting record={record} entry={entry} />}
+          {layout.casting === "subclass" && <SubclassCasting record={record} entry={entry} />}
+          {casts && <SpellTable record={record} entry={entry} />}
+        </details>
+      )}
 
       {layout.effects && (
         <details class="studio-effects-section studio-section" id="sec-effects" open>
@@ -125,6 +146,15 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
               applyChange(updateEntry(record, id, { effects }), `${id}.effects`)
             }
           />
+        </details>
+      )}
+
+      {entry.kind === "class" && (
+        <details class="studio-section studio-values" id="sec-values" open>
+          <summary>
+            <h4>{ui("studio.valuesSection")}</h4>
+          </summary>
+          <ValuesTable record={record} entry={entry} />
         </details>
       )}
 

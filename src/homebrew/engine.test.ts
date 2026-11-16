@@ -239,3 +239,35 @@ describe("spellcasting of a subclass", () => {
     expect(off.levels).toEqual([{ level: 3, features: ["x:feature/a"] }]);
   });
 });
+
+describe("a class that casts with points", () => {
+  it("is written without slots and read back as it was chosen", () => {
+    const wanted = {
+      kind: "points" as const,
+      ability: "int",
+      preparation: "known" as const,
+      cantrips: 3,
+      reserve: "psi",
+      maxLevel: "half",
+      limit: "Limit",
+    };
+    const data = {
+      levels: Array.from({ length: 20 }, (_, i) => ({
+        level: i + 1,
+        features: [],
+        abilityScoreImprovements: 0,
+        classSpecific: { Limit: 2 },
+      })),
+    };
+    const written = applyClassCasting(data, wanted);
+    expect(written.spellcasting).toMatchObject({
+      slots: "none",
+      reserve: "psi",
+      maxLevel: "half",
+      limit: "Limit",
+    });
+    expect(written.levels.every((r) => r.spellSlots === undefined)).toBe(true);
+    expect(written.levels[0]?.cantripsKnown).toBe(3);
+    expect(readClassCasting({ ...data, ...written })).toEqual(wanted);
+  });
+});

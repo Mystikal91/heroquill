@@ -102,6 +102,10 @@ function refined(type: string, specs: FieldSpec[]): FieldSpec[] {
       (spec.key === "damageType" || (type === "defense" && spec.key === "damage"))
     )
       return { ...spec, type: { type: "text", pick: "damage" } };
+    if ((type === "uses" || type === "spends") && spec.key === "reserve")
+      return { ...spec, type: { type: "text", pick: "reserve" } };
+    if (type === "choice" && spec.key === "chooseBy" && spec.type.type === "text")
+      return { ...spec, type: { type: "text", pick: "column" } };
     if (DISTANCES.has(`${type}.${spec.key}`) && spec.type.type === "number")
       return { ...spec, type: { ...spec.type, unit: "distance" as const } };
     const refs = REFS[`${type}.${spec.key}`];

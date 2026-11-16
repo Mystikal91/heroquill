@@ -8,7 +8,9 @@ import type { ClassResource } from "./resources";
 export interface Spend {
   /** The entry (feature, trait, feat) that is used. */
   entry: string;
-  pool: SpendPool;
+  pool: SpendPool | undefined;
+  /** The reserve of the pack it takes from, when it is not a pool of a class. */
+  reserve?: string;
   /** How many points or uses it takes. */
   cost: number;
   /** The counter of the character it takes them from (`ClassResource.id`). */
@@ -28,13 +30,16 @@ export function deriveSpends(
   const found: Record<string, Spend> = {};
   for (const { effect, source } of sourced) {
     if (effect.type !== "spends" || found[source]) continue;
-    const ofKind = resources.filter((r) => r.kind === effect.pool);
+    const ofKind = effect.reserve
+      ? resources.filter((r) => r.reserve === effect.reserve)
+      : resources.filter((r) => r.kind === effect.pool);
     const own = classOf(source);
     const resource = ofKind.find((r) => r.classId === own) ?? ofKind[0];
     if (!resource) continue;
     found[source] = {
       entry: source,
       pool: effect.pool,
+      ...(effect.reserve && { reserve: effect.reserve }),
       cost: effect.cost ?? 1,
       resource: resource.id,
     };

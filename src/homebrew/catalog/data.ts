@@ -303,6 +303,18 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
         field("ability", ability, { required: true }),
         field("startsAtLevel", number, { required: true }),
         field("pact", bool),
+        field("slots", choice("none"), {
+          doc: "none: the class casts without spell slots; its spells cost points of `reserve`.",
+        }),
+        field("reserve", text, {
+          doc: "The reserve of the pack that a class without slots pays from.",
+        }),
+        field("maxLevel", json, {
+          doc: 'For a class without slots: "half" (half the class level, rounded up) or { column } of the class table.',
+        }),
+        field("limit", text, {
+          doc: "A column of the class table: the most points one spell can take.",
+        }),
         field(
           "preparation",
           {
@@ -432,10 +444,17 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
   spell: [
     field("level", whole(0, 9), { required: true, level: g }),
     field("school", { type: "slug", kind: "school" }, { required: true, level: g }),
-    field("components", list(choice("V", "S", "M")), { required: true, level: g }),
+    field("components", list(text), {
+      required: true,
+      level: g,
+      doc: "V, S, M, or a component code the pack declares.",
+    }),
     field("ritual", bool, { required: true, level: g }),
     field("concentration", bool, { required: true, level: g }),
     field("classes", refs("class"), { required: true, level: g }),
+    field("pointCost", number, {
+      doc: "Points it takes from the reserve of a class that casts without slots (its level when absent).",
+    }),
     field("attackType", choice("melee", "ranged"), {
       doc: "The spell is cast with an attack roll.",
     }),

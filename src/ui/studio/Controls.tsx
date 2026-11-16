@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { studioMode } from "../../app/studio";
+import { tintOf } from "../../app/playStates";
+import { studioLanguage, studioMode } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
+import { addDamageType, damageLabel, ownDamageTypes } from "../../homebrew/damage";
+import { packColumns } from "../../homebrew/levelTables";
+import { addReserve, ownReserves, reserveLabel } from "../../homebrew/reserves";
 import { ui } from "../../i18n/ui";
 import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
 import { damageSlug } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
 import { EffectList } from "./Effects";
+import { Helped, fieldHelp } from "./Help";
+import { columnLabel } from "./LevelTables";
+import { moved, useReorder } from "./Reorder";
 import { LONG_LIST, SearchSelect } from "./SearchSelect";
 import { fieldLabel, humanize, optionLabel } from "./labels";
 import { useEdit, useMetric, usePack } from "./scope";
@@ -299,6 +306,7 @@ function ColorPick({
   const hex = current in GLOW_COLORS ? (GLOW_COLORS[current] ?? "#888888") : current;
   const picked = /^#[0-9a-f]{6}$/i.test(hex) ? hex : "#888888";
   const custom = /^#[0-9a-f]{6}$/i.test(current);
+  const tint = tintOf(current);
   return (
     <fieldset class="studio-many studio-colors">
       <legend>{label}</legend>
@@ -330,6 +338,11 @@ function ColorPick({
           <span>{ui("studio.colorFree")}</span>
         </label>
       </div>
+      {tint && (
+        <div class="studio-glow-preview" style={{ "--aura": tint }}>
+          {ui("studio.glowPreview")}
+        </div>
+      )}
     </fieldset>
   );
 }
@@ -353,21 +366,22 @@ function DamagePick({
   const latest = useRef(onChange);
   latest.current = onChange;
   const [name, setName] = useState("");
-  const own = pack?.meta?.damageTypes ?? [];
+  const own = pack ? ownDamageTypes(pack) : [];
+  const language = studioLanguage.value ?? pack?.lang ?? "en";
   const options = withCurrent(
     [
       ...DAMAGE_KINDS.map((id) => ({ id, label: optionLabel(id) })),
-      ...own.map((id) => ({ id, label: optionLabel(id) })),
+      ...own.map((id) => ({ id, label: pack ? damageLabel(pack, id, language) : id })),
     ],
     value,
   );
   const add = () => {
+    if (!pack) return;
+    // The name a person wrote is kept as a text of the pack, so it can be translated.
     const id = damageSlug(name);
-    if (!id || !pack) return;
-    // Written by a person, the name is what the sheet shows: it is kept as the label of the kind.
-    const known = [...DAMAGE_KINDS, ...own];
-    if (!known.includes(id))
-      scope.apply({ ...pack, meta: { ...pack.meta, damageTypes: [...own, id] } }, "pack.damage");
+    if (!id) return;
+    const made = DAMAGE_KINDS.includes(id) ? undefined : addDamageType(pack, name);
+    if (made && made.record !== pack) scope.apply(made.record, "pack.damage");
     // The pack changes first; the value is written once the form has seen it, or it would write the old pack back.
     setTimeout(() => latest.current(id), 0);
     setName("");
@@ -414,6 +428,116 @@ function DamagePick({
           </button>
         ))}
     </div>
+  );
+}
+
+/**
+ * A reserve of points the pack declares ("Psi points"): picked from a menu, with a way to declare
+ * a new one without leaving the form. Empty means the points are the entry's own.
+ */
+function ReservePick({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: unknown;
+  onChange: (value: string | undefined) => void;
+}) {
+  const scope = useEdit();
+  const pack = usePack();
+  const [adding, setAdding] = useState(false);
+  const [name, setName] = useState("");
+  const latest = useRef(onChange);
+  latest.current = onChange;
+  const language = studioLanguage.value ?? pack?.lang ?? "en";
+  const own = pack ? ownReserves(pack) : [];
+  const add = () => {
+    if (!pack) return;
+    const made = addReserve(pack, name);
+    if (!made) return;
+    if (made.record !== pack) scope.apply(made.record, "pack.reserve");
+    // The pack changes first; the value is written once the form has seen it.
+    setTimeout(() => latest.current(made.slug), 0);
+    setName("");
+    setAdding(false);
+  };
+  return (
+    <div class="studio-damage-pick">
+      <SelectBox
+        label={label}
+        value={typeof value === "string" && value !== "" ? value : undefined}
+        options={withCurrent(
+          own.map((id) => ({ id, label: pack ? reserveLabel(pack, id, language) : id })),
+          value,
+        )}
+        blank={ui("studio.reserveOwn")}
+        onChange={onChange}
+      />
+      {pack &&
+        (adding ? (
+          <div class="studio-damage-new">
+            <input
+              type="text"
+              value={name}
+              // biome-ignore lint/a11y/noAutofocus: it opens because the person asked for a new reserve
+              autoFocus
+              placeholder={ui("studio.reserveNew")}
+              aria-label={ui("studio.reserveNew")}
+              onInput={(e) => setName(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  add();
+                }
+                if (e.key === "Escape") setAdding(false);
+              }}
+            />
+            <button type="button" disabled={!damageSlug(name)} onClick={add}>
+              {ui("studio.add")}
+            </button>
+            <button type="button" class="link" onClick={() => setAdding(false)}>
+              {ui("hb.cancel")}
+            </button>
+          </div>
+        ) : (
+          <button type="button" class="link" onClick={() => setAdding(true)}>
+            {ui("studio.reserveAdd")}
+          </button>
+        ))}
+    </div>
+  );
+}
+
+/**
+ * A column of the table of values of a class ("Punti ki"): picked from those the classes of the open
+ * pack have, with a line that says where to make one when there is none yet.
+ */
+function ColumnPick({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: unknown;
+  onChange: (value: string | undefined) => void;
+}) {
+  const pack = usePack();
+  const columns = packColumns(pack?.pack.entries ?? []);
+  return (
+    <>
+      <SelectBox
+        label={label}
+        value={typeof value === "string" && value !== "" ? value : undefined}
+        options={withCurrent(
+          columns.map((id) => ({ id, label: columnLabel(id) })),
+          value,
+        )}
+        blank={ui("form.none")}
+        onChange={onChange}
+      />
+      {columns.length === 0 && <small class="muted">{ui("studio.noColumns")}</small>}
+    </>
   );
 }
 
@@ -538,6 +662,26 @@ const isShort = (type: FieldType): boolean =>
  * added to the catalog gets a control here without anyone drawing one.
  */
 export function FieldControl({
+  help,
+  ...props
+}: {
+  label: string;
+  type: FieldType;
+  value: unknown;
+  /** `undefined` takes the value away. */
+  onChange: (value: unknown) => void;
+  optional?: boolean;
+  /** What the field is for, in a line: shown under a "?" that sits by the label. */
+  help?: string | undefined;
+}) {
+  return (
+    <Helped help={help}>
+      <PlainFieldControl {...props} />
+    </Helped>
+  );
+}
+
+function PlainFieldControl({
   label,
   type,
   value,
@@ -547,7 +691,6 @@ export function FieldControl({
   label: string;
   type: FieldType;
   value: unknown;
-  /** `undefined` takes the value away. */
   onChange: (value: unknown) => void;
   optional?: boolean;
 }) {
@@ -555,6 +698,10 @@ export function FieldControl({
     case "text":
       if (type.type === "text" && type.pick === "color")
         return <ColorPick label={label} value={value} onChange={onChange} />;
+      if (type.type === "text" && type.pick === "reserve")
+        return <ReservePick label={label} value={value} onChange={onChange} />;
+      if (type.type === "text" && type.pick === "column")
+        return <ColumnPick label={label} value={value} onChange={onChange} />;
       if (type.type === "text" && type.pick === "damage")
         return <DamagePick label={label} value={value} onChange={onChange} />;
       return (
@@ -670,6 +817,7 @@ function ListControl({
 }) {
   const items = Array.isArray(value) ? value : [];
   const set = (next: unknown[]) => onChange(next.length === 0 ? undefined : next);
+  const reorder = useReorder(items.length, (from, to) => set(moved(items, from, to)));
   if (of.type === "choice")
     return (
       <ManyBox
@@ -696,8 +844,13 @@ function ListControl({
     <fieldset class="studio-many" onKeyDown={(e) => enterAdds(e, () => addItem(e.currentTarget))}>
       <legend>{label}</legend>
       {items.map((item, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: rows have no identity of their own
-        <div class="studio-row" key={i}>
+        <div
+          class={items.length > 1 ? "studio-row has-handle" : "studio-row"}
+          // biome-ignore lint/suspicious/noArrayIndexKey: rows have no identity of their own
+          key={i}
+          {...reorder.item(i)}
+        >
+          {reorder.handle(i)}
           <FieldControl
             label={`${i + 1}`}
             type={of}
@@ -814,6 +967,7 @@ function ObjectControl({
           <FieldControl
             key={f.key}
             label={fieldLabel(f.key)}
+            help={fieldHelp(f.key)}
             type={f.type}
             value={here[f.key]}
             optional={f.optional}
@@ -827,6 +981,7 @@ function ObjectControl({
             <FieldControl
               key={f.key}
               label={fieldLabel(f.key)}
+              help={fieldHelp(f.key)}
               type={f.type}
               value={here[f.key]}
               optional={f.optional}
@@ -839,6 +994,7 @@ function ObjectControl({
         <FieldControl
           key={f.key}
           label={fieldLabel(f.key)}
+          help={fieldHelp(f.key)}
           type={f.type}
           value={here[f.key]}
           optional={f.optional}
