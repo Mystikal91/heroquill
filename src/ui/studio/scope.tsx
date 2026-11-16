@@ -11,6 +11,8 @@ import { type UserPackRecord, packUnits } from "../../storage/packs";
 export interface EditScope {
   /** The units numbers are typed in; the open pack's own when a window does not say. */
   units?: "metric" | "imperial";
+  /** The pack being edited, when a window keeps its own copy; the open pack of the studio otherwise. */
+  pack?: UserPackRecord;
   /** Takes the pack as it is after the change; `key` joins quick changes of one thing into one step. */
   apply: (next: UserPackRecord, key?: string) => void;
 }
@@ -26,4 +28,9 @@ export function useMetric(): boolean {
   if (scope.units) return scope.units === "metric";
   const open = workingPack();
   return open ? packUnits(open) === "metric" : false;
+}
+
+/** The pack the forms are editing. */
+export function usePack(): UserPackRecord | undefined {
+  return useEdit().pack ?? workingPack();
 }

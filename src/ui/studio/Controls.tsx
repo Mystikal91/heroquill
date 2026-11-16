@@ -3,10 +3,11 @@ import { studioMode } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
 import { ui } from "../../i18n/ui";
 import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
+import { damageSlug } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
 import { EffectList } from "./Effects";
 import { fieldLabel, humanize, optionLabel } from "./labels";
-import { useMetric } from "./scope";
+import { useEdit, useMetric, usePack } from "./scope";
 
 export { humanize };
 
@@ -234,6 +235,152 @@ export const DAMAGE_KINDS = [
   "thunder",
 ];
 
+/** The colours of a glow that have a name; the person can pick any other with the colour box. */
+const GLOW_COLORS: Record<string, string> = {
+  red: "#d6463c",
+  orange: "#eb8728",
+  yellow: "#e6c83c",
+  green: "#50b45a",
+  teal: "#32afaa",
+  blue: "#4678e1",
+  violet: "#8c5ad7",
+  pink: "#e86aa3",
+  grey: "#969ba5",
+  black: "#000000",
+};
+
+/** A colour: ten with a name to tap, and a box that opens the colour picker of the device for any other. */
+function ColorPick({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: unknown;
+  onChange: (value: string | undefined) => void;
+}) {
+  const current = typeof value === "string" ? value : "";
+  const hex = current in GLOW_COLORS ? (GLOW_COLORS[current] ?? "#888888") : current;
+  const picked = /^#[0-9a-f]{6}$/i.test(hex) ? hex : "#888888";
+  const custom = /^#[0-9a-f]{6}$/i.test(current);
+  return (
+    <fieldset class="studio-many studio-colors">
+      <legend>{label}</legend>
+      <div class="studio-swatches">
+        {Object.entries(GLOW_COLORS).map(([id, color]) => (
+          <button
+            type="button"
+            key={id}
+            class="studio-swatch"
+            style={{ background: color }}
+            aria-label={optionLabel(id)}
+            aria-pressed={current === id}
+            title={optionLabel(id)}
+            onClick={() => onChange(current === id ? undefined : id)}
+          />
+        ))}
+        <label class="studio-swatch-free" title={ui("studio.colorFree")}>
+          <span
+            class="studio-swatch"
+            data-custom={custom ? "on" : undefined}
+            style={custom ? { background: picked } : undefined}
+          />
+          <input
+            type="color"
+            value={picked}
+            aria-label={ui("studio.colorFree")}
+            onInput={(e) => onChange(e.currentTarget.value)}
+          />
+          <span>{ui("studio.colorFree")}</span>
+        </label>
+      </div>
+    </fieldset>
+  );
+}
+
+/**
+ * A kind of damage: a menu with the thirteen of the rules, those the pack adds, and a way to
+ * add one more without leaving the form.
+ */
+function DamagePick({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: unknown;
+  onChange: (value: string | undefined) => void;
+}) {
+  const scope = useEdit();
+  const pack = usePack();
+  const [adding, setAdding] = useState(false);
+  const latest = useRef(onChange);
+  latest.current = onChange;
+  const [name, setName] = useState("");
+  const own = pack?.meta?.damageTypes ?? [];
+  const options = withCurrent(
+    [
+      ...DAMAGE_KINDS.map((id) => ({ id, label: optionLabel(id) })),
+      ...own.map((id) => ({ id, label: optionLabel(id) })),
+    ],
+    value,
+  );
+  const add = () => {
+    const id = damageSlug(name);
+    if (!id || !pack) return;
+    // Written by a person, the name is what the sheet shows: it is kept as the label of the kind.
+    const known = [...DAMAGE_KINDS, ...own];
+    if (!known.includes(id))
+      scope.apply({ ...pack, meta: { ...pack.meta, damageTypes: [...own, id] } }, "pack.damage");
+    // The pack changes first; the value is written once the form has seen it, or it would write the old pack back.
+    setTimeout(() => latest.current(id), 0);
+    setName("");
+    setAdding(false);
+  };
+  return (
+    <div class="studio-damage-pick">
+      <SelectBox
+        label={label}
+        value={typeof value === "string" ? value : undefined}
+        options={options}
+        blank={ui("form.none")}
+        onChange={onChange}
+      />
+      {pack &&
+        (adding ? (
+          <div class="studio-damage-new">
+            <input
+              type="text"
+              value={name}
+              // biome-ignore lint/a11y/noAutofocus: it opens because the person asked for a new kind
+              autoFocus
+              placeholder={ui("studio.damageNew")}
+              aria-label={ui("studio.damageNew")}
+              onInput={(e) => setName(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  add();
+                }
+                if (e.key === "Escape") setAdding(false);
+              }}
+            />
+            <button type="button" disabled={!damageSlug(name)} onClick={add}>
+              {ui("studio.add")}
+            </button>
+            <button type="button" class="link" onClick={() => setAdding(false)}>
+              {ui("hb.cancel")}
+            </button>
+          </div>
+        ) : (
+          <button type="button" class="link" onClick={() => setAdding(true)}>
+            {ui("studio.damageAdd")}
+          </button>
+        ))}
+    </div>
+  );
+}
+
 /** The options of a menu, with the value already written kept in it when the list does not know it. */
 export function withCurrent(options: Option[], value: unknown): Option[] {
   return typeof value === "string" && value !== "" && !options.some((o) => o.id === value)
@@ -360,19 +507,10 @@ export function FieldControl({
 }) {
   switch (type.type) {
     case "text":
+      if (type.type === "text" && type.pick === "color")
+        return <ColorPick label={label} value={value} onChange={onChange} />;
       if (type.type === "text" && type.pick === "damage")
-        return (
-          <SelectBox
-            label={label}
-            value={typeof value === "string" ? value : undefined}
-            options={withCurrent(
-              DAMAGE_KINDS.map((id) => ({ id, label: optionLabel(id) })),
-              value,
-            )}
-            blank={ui("form.none")}
-            onChange={onChange}
-          />
-        );
+        return <DamagePick label={label} value={value} onChange={onChange} />;
       return (
         <TextBox
           label={label}

@@ -16,6 +16,8 @@ export interface PackMeta {
   description?: string;
   /** The units numbers are typed in while editing: by default those of the language of the pack. */
   units?: "metric" | "imperial";
+  /** Kinds of damage the pack adds to those of the rules, by the word the data uses for them (`sonic`). */
+  damageTypes?: string[];
   /** A small picture for the cover, as a data address. */
   cover?: string;
 }
@@ -94,6 +96,7 @@ const RecordSchema = v.object({
       author: v.optional(v.string()),
       description: v.optional(v.string()),
       units: v.optional(v.picklist(["metric", "imperial"])),
+      damageTypes: v.optional(v.array(v.string())),
       cover: v.optional(v.pipe(v.string(), v.maxLength(300_000))),
     }),
   ),
@@ -296,3 +299,12 @@ export function parsePackFile(text: string, now = Date.now()): UserPackRecord {
  */
 export const packUnits = (record: UserPackRecord): "metric" | "imperial" =>
   record.meta?.units ?? (record.lang === "en" ? "imperial" : "metric");
+
+/** The word the data uses for a kind of damage written by a person: lower case, no accents, dashes between words. */
+export const damageSlug = (name: string): string =>
+  name
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");

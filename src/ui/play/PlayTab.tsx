@@ -11,7 +11,7 @@ import {
   playLayout,
   setPlayLayout,
 } from "../../app/playLayout";
-import { playStates, stateAttributes } from "../../app/playStates";
+import { conditionTint, playStates, stateAttributes } from "../../app/playStates";
 import { type PlayGroup, playGroup, showPlayGroup } from "../../app/playView";
 import { character, content, sheet } from "../../app/store";
 import { ACTIVATIONS, characterActions } from "../../engine/actions";
@@ -245,10 +245,20 @@ export function PlayTab() {
 
   // What the character is going through colours the screen: an aura at its edges, and the cards.
   const states = stateAttributes(playStates(character.value.play, s.hitPoints.max));
+  // A condition written in a pack can have a colour of its own: it glows in it.
+  const tint = conditionTint(
+    character.value.play,
+    (id) => (content.value?.index.get(id)?.data as { color?: string } | undefined)?.color,
+  );
 
   return (
     <>
-      <div class="play-aura" aria-hidden="true" {...states}>
+      <div
+        class="play-aura"
+        aria-hidden="true"
+        {...states}
+        style={tint ? { "--aura": tint } : undefined}
+      >
         {states["data-bardic"] && <BardNotes />}
       </div>
       <div

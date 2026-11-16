@@ -44,7 +44,7 @@ export const KIND_META: Record<EntryKind, KindMeta> = {
   skill: { group: "rules", role: "vocabulary", level: "advanced" },
   proficiency: { group: "rules", role: "vocabulary", level: "advanced" },
   school: { group: "rules", role: "vocabulary", level: "advanced" },
-  condition: { group: "rules", role: "vocabulary", level: "advanced" },
+  condition: { group: "rules", role: "vocabulary", level: "guided" },
   alignment: { group: "rules", role: "vocabulary", level: "advanced" },
 };
 

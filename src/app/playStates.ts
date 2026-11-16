@@ -42,6 +42,36 @@ export function playStates(play: PlayState, max: number): PlayStates {
   };
 }
 
+/** The colours a condition of a pack can give to the glow at the edges of the screen. */
+export const CONDITION_TINTS: Record<string, string> = {
+  red: "rgba(214, 70, 60, 0.55)",
+  orange: "rgba(235, 135, 40, 0.55)",
+  yellow: "rgba(230, 200, 60, 0.5)",
+  green: "rgba(80, 180, 90, 0.5)",
+  teal: "rgba(50, 175, 170, 0.5)",
+  blue: "rgba(70, 120, 225, 0.55)",
+  violet: "rgba(140, 90, 215, 0.55)",
+  pink: "rgba(232, 106, 163, 0.5)",
+  grey: "rgba(150, 155, 165, 0.55)",
+  black: "rgba(0, 0, 0, 0.75)",
+};
+
+/** The glow of the condition the character took last that has a colour of its own, if any. */
+export function conditionTint(
+  play: PlayState,
+  colorOf: (id: string) => string | undefined,
+): string | undefined {
+  for (const id of [...play.conditions].reverse()) {
+    const color = colorOf(id);
+    if (color && color in CONDITION_TINTS) return CONDITION_TINTS[color];
+    // Any colour a person picked: `#rrggbb`, glowing as the named ones do.
+    const hex = color && /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(color);
+    if (hex)
+      return `rgba(${Number.parseInt(hex[1] ?? "0", 16)}, ${Number.parseInt(hex[2] ?? "0", 16)}, ${Number.parseInt(hex[3] ?? "0", 16)}, 0.55)`;
+  }
+  return undefined;
+}
+
 /** The states as the data attributes the styles read, for the aura and for the screen itself. */
 export function stateAttributes(states: PlayStates) {
   return {

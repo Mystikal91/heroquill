@@ -20,7 +20,7 @@ function Form({ classId, list }: { classId: string; list: "known" | "prepared" }
   const name = record.strings[`${id}.name`] ?? "";
   const ready = name.trim() !== "";
   return (
-    <EditProvider value={{ apply: (next) => setRecord(next) }}>
+    <EditProvider value={{ apply: (next) => setRecord(next), pack: record }}>
       <p class="muted">{ui("spells.createHint")}</p>
       <TextBox
         label={ui("hb.f.name")}

@@ -471,7 +471,16 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
   ],
   ability: [],
   school: [],
-  condition: [],
+  condition: [
+    field(
+      "color",
+      { type: "text", pick: "color" },
+      {
+        level: g,
+        doc: "The glow at the edges of the play screen while the condition lasts: a colour name or #rrggbb.",
+      },
+    ),
+  ],
   alignment: [],
 };
 

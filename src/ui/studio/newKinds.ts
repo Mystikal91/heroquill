@@ -51,6 +51,12 @@ export const NEW_KINDS: NewKind[] = [
   { id: "feat", kind: "feat", label: () => ui("hb.kind.feat"), level: "guided" },
   { id: "language", kind: "language", label: () => ui("hb.kind.language"), level: "guided" },
   { id: "property", kind: "property", label: () => ui("hb.kind.property"), level: "guided" },
+  {
+    id: "condition",
+    kind: "condition",
+    label: () => kindName({ kind: "condition", data: {} }),
+    level: "guided",
+  },
   ...(
     [
       "option",
@@ -59,7 +65,6 @@ export const NEW_KINDS: NewKind[] = [
       "skill",
       "proficiency",
       "school",
-      "condition",
       "alignment",
       "ability",
     ] as EntryKind[]

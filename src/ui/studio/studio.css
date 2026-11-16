@@ -1394,3 +1394,93 @@
   display: block;
   margin-bottom: 0.6rem;
 }
+
+/* A kind of damage: the menu, and the small way to add one more under it. */
+.studio-damage-pick {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+
+.studio-damage-new {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.studio-damage-new input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+/* Fields side by side start on the same line, whatever sits under one of them. */
+.studio-effect .studio-grid,
+.studio-owned-item .studio-grid {
+  align-items: start;
+}
+
+.studio-damage-pick > button.link {
+  justify-self: start;
+  min-height: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* The colour of a glow: round swatches to tap, and one that opens the colour picker. */
+.studio-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.studio-swatch {
+  width: 2rem;
+  height: 2rem;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.studio-swatch[aria-pressed="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.studio-swatch-free {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.4rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--border);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Any other colour: a wheel of colours until one is chosen, then that colour. */
+.studio-swatch-free .studio-swatch {
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+}
+
+.studio-swatch-free .studio-swatch[data-custom="on"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* The real colour box sits invisibly over the wheel, so the picker opens beside it. */
+.studio-swatch-free input[type="color"] {
+  position: absolute;
+  left: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}

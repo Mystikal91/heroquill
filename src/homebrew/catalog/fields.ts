@@ -8,7 +8,7 @@ import type { EntryKind } from "./kinds";
  */
 export type FieldType =
   /** Free text; `pick` says it is one of a short closed list the editor offers by name (kinds of damage). */
-  | { type: "text"; pick?: "damage" }
+  | { type: "text"; pick?: "damage" | "color" }
   | { type: "number"; integer?: boolean; min?: number; max?: number; unit?: "distance" | "weight" }
   | { type: "boolean" }
   | { type: "choice"; options: readonly string[] }

@@ -40,7 +40,9 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
   };
 
   return (
-    <EditProvider value={{ apply: (next) => setRecord(next), units: packUnits(record) }}>
+    <EditProvider
+      value={{ apply: (next) => setRecord(next), units: packUnits(record), pack: record }}
+    >
       <div class="item-dialog-head">
         <h3>{ui("item.customize.title", { name: c?.name(itemId) ?? itemId })}</h3>
         <button type="button" class="link" onClick={closeCustomize}>

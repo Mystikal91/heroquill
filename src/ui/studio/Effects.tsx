@@ -14,6 +14,7 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { entriesOfKind } from "../build/fields";
 import { ChipPicker, FieldControl, SelectBox, withCurrent } from "./Controls";
 import { RequirementBuilder, describeRequirement } from "./Requirement";
+import { TermControl, isPlainTerm, termText } from "./Term";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
 
 const GROUPS: EffectGroup[] = [
@@ -69,14 +70,17 @@ export function summarize(effect: Effect): string {
   if (effect.type === "when")
     return `${describeRequirement(effect.requires)} (${effect.effects.length})`;
   return Object.entries(rest)
-    .filter(([, v]) => v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0))
+    .filter(
+      ([k, v]) =>
+        k !== "pool" && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0),
+    )
     .map(([k, v]) => {
       // What a proficiency is in, by its name in the language.
       const named =
         effect.type === "proficiency" && k === "target"
           ? proficiencyTargets(effect.category)?.find((o) => o.id === v)?.label
           : undefined;
-      return `${effectFieldLabel(k)}: ${named ?? show(v)}`.trim();
+      return `${effectFieldLabel(k)}: ${named ?? (k === "term" ? termText(v) : show(v))}`.trim();
     })
     .filter((line) => !line.endsWith(":"))
     .join(" · ");
@@ -146,6 +150,9 @@ function proficiencyTargets(category: string): { id: string; label: string }[] |
   }
 }
 
+/** Effects the schema has but the sheet never reads: not offered, so no one writes one that does nothing. */
+const UNUSED = new Set<string>(["resource"]);
+
 function EffectCard({
   effect,
   onChange,
@@ -158,7 +165,8 @@ function EffectCard({
   const type = effect.type as EffectType;
   const values = effect as unknown as Record<string, unknown>;
   const advanced = studioMode.value === "advanced";
-  const fields = effectFields(type);
+  const points = effect.type === "uses" && effect.pool === true;
+  const fields = effectFields(type).filter((f) => !(type === "uses" && f.key === "pool"));
   const optional = fields.filter((f) => f.optional);
   const Flags = ({ specs }: { specs: typeof fields }) =>
     specs.length === 0 ? null : <div class="studio-checks">{specs.map(control)}</div>;
@@ -183,6 +191,16 @@ function EffectCard({
           value={String(values.requires ?? "")}
           raw={advanced}
           onChange={(text) => onChange({ ...values, requires: text } as unknown as Effect)}
+        />
+      );
+    // How many: a number, or something of the character, in words.
+    if (spec.key === "term" && isPlainTerm(values.term))
+      return (
+        <TermControl
+          key={spec.key}
+          label={effectFieldLabel(spec.key)}
+          value={values.term}
+          onChange={(next) => onChange({ ...values, term: next } as unknown as Effect)}
         />
       );
     // What a proficiency is in: a menu of the names of its category, not a word to write.
@@ -229,7 +247,7 @@ function EffectCard({
   return (
     <details class="studio-effect" open>
       <summary>
-        <b>{effectName(type)}</b>
+        <b>{points ? ui("fx.points") : effectName(type)}</b>
         <span class="muted">{summarize(effect)}</span>
         <button
           type="button"
@@ -258,7 +276,7 @@ function EffectCard({
           <Flags specs={optional.filter((f) => f.type.type === "boolean")} />
         </details>
       )}
-      <small class="muted">{helpFor(type, advanced)}</small>
+      <small class="muted">{points ? ui("fxhelp.points") : helpFor(type, advanced)}</small>
     </details>
   );
 }
@@ -276,7 +294,7 @@ export function EffectList({
 }) {
   const advanced = studioMode.value === "advanced";
   const choices = EFFECT_TYPES.filter(
-    (t) => !hidden.includes(t) && (advanced || EFFECT_META[t].level === "guided"),
+    (t) => !hidden.includes(t) && !UNUSED.has(t) && (advanced || EFFECT_META[t].level === "guided"),
   );
   const shown = effects
     .map((effect, i) => ({ effect, i }))
@@ -297,8 +315,11 @@ export function EffectList({
         value=""
         aria-label={ui("studio.addEffect")}
         onChange={(e) => {
-          const type = e.currentTarget.value as EffectType;
-          if (type) onChange([...effects, blankEffect(type)]);
+          const picked = e.currentTarget.value;
+          // Points to spend are the uses of a feature counted as a number (the ki of a monk).
+          if (picked === "points")
+            onChange([...effects, { ...blankEffect("uses"), pool: true } as Effect]);
+          else if (picked) onChange([...effects, blankEffect(picked as EffectType)]);
         }}
       >
         <option value="">{ui("studio.addEffect")}</option>
@@ -306,11 +327,18 @@ export function EffectList({
           const inGroup = choices.filter((t) => EFFECT_META[t].group === group);
           return inGroup.length === 0 ? null : (
             <optgroup key={group} label={ui(`fx.group.${group}` as UiKey)}>
-              {inGroup.map((t) => (
+              {inGroup.flatMap((t) => [
                 <option key={t} value={t}>
                   {effectName(t)}
-                </option>
-              ))}
+                </option>,
+                ...(t === "uses"
+                  ? [
+                      <option key="points" value="points">
+                        {ui("fx.points")}
+                      </option>,
+                    ]
+                  : []),
+              ])}
             </optgroup>
           );
         })}
