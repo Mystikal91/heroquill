@@ -14,6 +14,7 @@ import {
   saveUserPack,
   serializePack,
 } from "../storage/packs";
+import { noteExport } from "./backup";
 import { migrateSavedCharacters } from "./migrate";
 import { content } from "./store";
 
@@ -80,6 +81,7 @@ export function exportPack(record: UserPackRecord): void {
   link.download = packFileName(record);
   link.click();
   URL.revokeObjectURL(url);
+  noteExport(record.id);
 }
 
 /** What the last import of Aurora files did, shown on the packs page. */

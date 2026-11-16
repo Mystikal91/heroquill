@@ -10,6 +10,7 @@ import {
   undo,
 } from "../homebrew/history";
 import type { UserPackRecord } from "../storage/packs";
+import { noteChange } from "./backup";
 import { editingPackId } from "./homebrew";
 import { addUserPack, userPacks } from "./userPacks";
 
@@ -119,6 +120,7 @@ export function applyChange(next: UserPackRecord, key?: string) {
   const updated = change(h, next, key);
   if (updated === h) return;
   history.value = updated;
+  noteChange(updated.present.id);
   schedule();
 }
 

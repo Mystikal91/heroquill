@@ -1843,7 +1843,7 @@
   "studio.sortKind": "By kind",
   "studio.hasProblems": "Something here needs fixing",
   "studio.units": "Units of measure",
-  "studio.unitsAuto": "Follow the language of the pack",
+  "studio.unitsAuto": "Automatic (by the language of the pack)",
   "studio.unitsMetric": "Metric (meters, kilograms)",
   "studio.unitsImperial": "Imperial (feet, pounds)",
   "studio.unitsHint": "Only changes how you type distances and weights here. The pack keeps feet and pounds, and whoever reads it sees the units they have chosen.",
@@ -2234,5 +2234,11 @@
   "studio.damageNew": "Name of the kind of damage",
   "studio.colorFree": "Any other colour",
   "studio.profGroups": "Groups",
-  "studio.profSingles": "One by one"
+  "studio.profSingles": "One by one",
+  "studio.pickerSearch": "Search…",
+  "studio.backup.text": "“{name}” has had changes for {n} days with no copy. Your packs live on this device only: export it to keep it safe.",
+  "studio.backup.export": "Export a copy",
+  "studio.backup.later": "Later",
+  "studio.backup.last": "Last copy: {date}",
+  "studio.backup.never": "No copy yet: use Export to keep one."
 }

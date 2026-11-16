@@ -22,6 +22,7 @@ import {
 } from "../../app/studio";
 import { userPacksReady } from "../../app/userPacks";
 import { ui } from "../../i18n/ui";
+import { BackupNudge } from "./BackupNudge";
 import { Editor } from "./Editor";
 import { Explorer, shownEntries } from "./Explorer";
 import { Palette } from "./Palette";
@@ -131,6 +132,7 @@ export function Studio() {
         />
       )}
       {helpOpen.value && <Shortcuts />}
+      <BackupNudge record={record} />
       <div class={sidebarOpen.value ? "studio-body" : "studio-body rail"}>
         <Explorer record={record} />
         {record ? (

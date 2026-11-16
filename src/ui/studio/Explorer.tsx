@@ -26,6 +26,7 @@ import { entryProblems } from "../../homebrew/entries";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { ArrangeBar, EntryRow, PackDrop } from "./Arrange";
+import { PickerPanel } from "./SearchSelect";
 import { kindName } from "./names";
 import { NEW_KINDS, startNew } from "./newKinds";
 
@@ -43,38 +44,29 @@ export function removePack(record: UserPackRecord) {
 function NewMenu({ record }: { record: UserPackRecord }) {
   const [open, setOpen] = useState(false);
   const advanced = studioMode.value === "advanced";
+  // One column with a search: "start from an entry" first, then the kinds, each with the dot of its colour.
+  const kinds = NEW_KINDS.filter((k) => advanced || k.level === "guided").map((k) => ({
+    id: k.id,
+    label: k.label(),
+    dot: KIND_META[k.kind].group,
+  }));
   return (
     <div class="studio-menu">
       <button type="button" class="primary" aria-expanded={open} onClick={() => setOpen(!open)}>
         + {ui("studio.new")}
       </button>
       {open && (
-        <ul class="plain studio-menu-list">
-          <li class="studio-menu-wide">
-            <button
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                startFromOpen.value = true;
-              }}
-            >
-              {ui("studio.startFrom")}
-            </button>
-          </li>
-          {NEW_KINDS.filter((k) => advanced || k.level === "guided").map((k) => (
-            <li key={k.id}>
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  startNew(record, k.id);
-                }}
-              >
-                {k.label()}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div class="studio-menu-panel">
+          <PickerPanel
+            options={[{ id: "start", label: ui("studio.startFrom") }, ...kinds]}
+            onClose={() => setOpen(false)}
+            onPick={(id) => {
+              setOpen(false);
+              if (id === "start") startFromOpen.value = true;
+              else if (id) startNew(record, id);
+            }}
+          />
+        </div>
       )}
     </div>
   );

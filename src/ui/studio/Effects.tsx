@@ -12,7 +12,14 @@ import {
 } from "../../homebrew/catalog";
 import { type UiKey, ui } from "../../i18n/ui";
 import { entriesOfKind } from "../build/fields";
-import { ChipPicker, FieldControl, type Option, SelectBox, withCurrent } from "./Controls";
+import {
+  ChipPicker,
+  FieldControl,
+  type Option,
+  SelectBox,
+  focusNewItem,
+  withCurrent,
+} from "./Controls";
 import { RequirementBuilder, describeRequirement } from "./Requirement";
 import { TermControl, isPlainTerm, termText } from "./Term";
 import { effectFieldLabel, humanize, optionLabel } from "./labels";
@@ -339,6 +346,7 @@ export function EffectList({
           if (picked === "points")
             onChange([...effects, { ...blankEffect("uses"), pool: true } as Effect]);
           else if (picked) onChange([...effects, blankEffect(picked as EffectType)]);
+          if (picked) focusNewItem(e.currentTarget.parentElement, ":scope > .studio-effect");
         }}
       >
         <option value="">{ui("studio.addEffect")}</option>

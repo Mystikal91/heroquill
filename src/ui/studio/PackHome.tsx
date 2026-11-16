@@ -1,3 +1,4 @@
+import { lastExport } from "../../app/backup";
 import { showView } from "../../app/navigation";
 import { applyChange, flushStudio } from "../../app/studio";
 import { exportPack } from "../../app/userPacks";
@@ -21,6 +22,7 @@ export function PackHome({ record }: { record: UserPackRecord }) {
     );
   };
   const kept = restrictedIds(record).length;
+  const copied = lastExport(record.id);
   return (
     <section class="studio-editor studio-packhome">
       <TextBox
@@ -78,6 +80,11 @@ export function PackHome({ record }: { record: UserPackRecord }) {
         <small class="muted">{ui("studio.unitsHint")}</small>
       </label>
       <PackLanguages record={record} />
+      <p class="muted">
+        {copied === undefined
+          ? ui("studio.backup.never")
+          : ui("studio.backup.last", { date: new Date(copied).toLocaleDateString() })}
+      </p>
       {kept > 0 && <p class="note">{ui("studio.restricted", { n: kept })}</p>}
       <div class="studio-actions">
         <button

@@ -1843,7 +1843,7 @@
   "studio.sortKind": "Nach Art",
   "studio.hasProblems": "Hier gibt es etwas zu beheben",
   "studio.units": "Maßeinheiten",
-  "studio.unitsAuto": "Der Sprache des Pakets folgen",
+  "studio.unitsAuto": "Automatisch (nach der Sprache des Pakets)",
   "studio.unitsMetric": "Metrisch (Meter, Kilogramm)",
   "studio.unitsImperial": "Imperial (Fuß, Pfund)",
   "studio.unitsHint": "Ändert nur, wie du Entfernungen und Gewichte hier eingibst. Das Paket behält Fuß und Pfund, und jeder sieht die Einheiten, die er gewählt hat.",
@@ -2234,5 +2234,11 @@
   "studio.damageNew": "Name der Schadensart",
   "studio.colorFree": "Eine beliebige andere Farbe",
   "studio.profGroups": "Gruppen",
-  "studio.profSingles": "Einzeln"
+  "studio.profSingles": "Einzeln",
+  "studio.pickerSearch": "Suchen…",
+  "studio.backup.text": "„{name}“ hat seit {n} Tagen Änderungen ohne Kopie. Pakete liegen nur auf diesem Gerät: exportiere es, um es zu sichern.",
+  "studio.backup.export": "Kopie exportieren",
+  "studio.backup.later": "Später",
+  "studio.backup.last": "Letzte Kopie: {date}",
+  "studio.backup.never": "Noch keine Kopie: nutze Exportieren, um eine zu behalten."
 }

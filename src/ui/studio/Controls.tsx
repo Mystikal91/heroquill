@@ -6,6 +6,7 @@ import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
 import { damageSlug } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
 import { EffectList } from "./Effects";
+import { LONG_LIST, SearchSelect } from "./SearchSelect";
 import { fieldLabel, humanize, optionLabel } from "./labels";
 import { useEdit, useMetric, usePack } from "./scope";
 
@@ -159,6 +160,16 @@ export function SelectBox({
   /** The text of the empty choice, when there is one. */
   blank?: string;
 }) {
+  if (options.length > LONG_LIST)
+    return (
+      <SearchSelect
+        label={label}
+        shown={options.find((o) => o.id === value)?.label ?? blank ?? ""}
+        options={options}
+        {...(blank !== undefined && { blank })}
+        onPick={onChange}
+      />
+    );
   return (
     <label class="field studio-field">
       <span>{label}</span>
@@ -434,22 +445,32 @@ export function ChipPicker({
   return (
     <fieldset class="studio-many">
       <legend>{label}</legend>
-      <select
-        value=""
-        onChange={(e) => {
-          const id = e.currentTarget.value;
-          if (id && !value.includes(id)) onChange([...value, id]);
-        }}
-      >
-        <option value="">{ui("studio.add")}</option>
-        {options
-          .filter((o) => !value.includes(o.id))
-          .map((o) => (
-            <option key={o.id} value={o.id}>
-              {o.label}
-            </option>
-          ))}
-      </select>
+      {options.length > LONG_LIST ? (
+        <SearchSelect
+          shown={ui("studio.add")}
+          options={options.filter((o) => !value.includes(o.id))}
+          onPick={(id) => {
+            if (id && !value.includes(id)) onChange([...value, id]);
+          }}
+        />
+      ) : (
+        <select
+          value=""
+          onChange={(e) => {
+            const id = e.currentTarget.value;
+            if (id && !value.includes(id)) onChange([...value, id]);
+          }}
+        >
+          <option value="">{ui("studio.add")}</option>
+          {options
+            .filter((o) => !value.includes(o.id))
+            .map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+              </option>
+            ))}
+        </select>
+      )}
       <div class="studio-chips">
         {value.map((id) => (
           <span class="studio-chip" key={id}>
@@ -667,8 +688,12 @@ function ListControl({
         onChange={set}
       />
     );
+  const addItem = (from: Element | null) => {
+    set([...items, blankOf(of)]);
+    focusNewItem(from, ":scope > .studio-row");
+  };
   return (
-    <fieldset class="studio-many">
+    <fieldset class="studio-many" onKeyDown={(e) => enterAdds(e, () => addItem(e.currentTarget))}>
       <legend>{label}</legend>
       {items.map((item, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: rows have no identity of their own
@@ -685,11 +710,38 @@ function ListControl({
           </button>
         </div>
       ))}
-      <button type="button" onClick={() => set([...items, blankOf(of)])}>
+      <button type="button" onClick={(e) => addItem(e.currentTarget.closest("fieldset"))}>
         {ui("studio.addRow")}
       </button>
     </fieldset>
   );
+}
+
+/**
+ * Puts the cursor on the first field of the last item of a group, once it has been drawn: after
+ * "add a row" the person types at once, without reaching for the mouse.
+ */
+export function focusNewItem(group: Element | null | undefined, item: string): void {
+  setTimeout(() => {
+    const items = group?.querySelectorAll(item);
+    const last = items?.[items.length - 1];
+    last
+      ?.querySelector<HTMLElement>(
+        "input:not([type=checkbox]):not([type=hidden]):not([type=search]), textarea, select, .studio-select-button",
+      )
+      ?.focus();
+  }, 60);
+}
+
+/** Enter in the last row of a list adds the next one, as in any list of a form. */
+function enterAdds(e: KeyboardEvent, add: () => void) {
+  const target = e.target as HTMLElement;
+  if (e.key !== "Enter" || target.tagName !== "INPUT") return;
+  const row = target.closest(".studio-row");
+  const rows = (e.currentTarget as HTMLElement).querySelectorAll(":scope > .studio-row");
+  if (!row || rows[rows.length - 1] !== row) return;
+  e.preventDefault();
+  add();
 }
 
 /** A fresh value for a row of a list: empty, of the right shape. */
@@ -824,8 +876,16 @@ function RecordControl({
     if (!to || (to !== from && to in record)) return;
     set(Object.fromEntries(Object.entries(record).map(([k, v]) => [k === from ? to : k, v])));
   };
+  const addRow = (from: Element | null) => {
+    const free = levelKeys?.find((k) => !(k in record));
+    if (levelKeys && free === undefined) return;
+    let name = free ?? "new";
+    for (let n = 2; name in record; n++) name = `new${n}`;
+    set({ ...record, [name]: blankOf(type.of) });
+    focusNewItem(from, ":scope > .studio-row");
+  };
   return (
-    <fieldset class="studio-many">
+    <fieldset class="studio-many" onKeyDown={(e) => enterAdds(e, () => addRow(e.currentTarget))}>
       <legend>{label}</legend>
       {type.levels && (
         <small class="muted">
@@ -873,16 +933,7 @@ function RecordControl({
           </button>
         </div>
       ))}
-      <button
-        type="button"
-        onClick={() => {
-          const free = levelKeys?.find((k) => !(k in record));
-          if (levelKeys && free === undefined) return;
-          let name = free ?? "new";
-          for (let n = 2; name in record; n++) name = `new${n}`;
-          set({ ...record, [name]: blankOf(type.of) });
-        }}
-      >
+      <button type="button" onClick={(e) => addRow(e.currentTarget.closest("fieldset"))}>
         {ui("studio.addRow")}
       </button>
     </fieldset>

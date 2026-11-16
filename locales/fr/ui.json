@@ -1843,7 +1843,7 @@
   "studio.sortKind": "Par type",
   "studio.hasProblems": "Il y a quelque chose à corriger ici",
   "studio.units": "Unités de mesure",
-  "studio.unitsAuto": "Suivre la langue du paquet",
+  "studio.unitsAuto": "Automatiques (selon la langue du paquet)",
   "studio.unitsMetric": "Métriques (mètres, kilos)",
   "studio.unitsImperial": "Impériales (pieds, livres)",
   "studio.unitsHint": "Change seulement la façon dont tu écris distances et poids ici. Le paquet garde pieds et livres, et chacun voit les unités qu'il a choisies.",
@@ -2234,5 +2234,11 @@
   "studio.damageNew": "Nom du type de dégâts",
   "studio.colorFree": "Une autre couleur au choix",
   "studio.profGroups": "Groupes",
-  "studio.profSingles": "Une par une"
+  "studio.profSingles": "Une par une",
+  "studio.pickerSearch": "Chercher…",
+  "studio.backup.text": "« {name} » a des modifications depuis {n} jours sans copie. Les paquets ne vivent que sur cet appareil : exporte-le pour le garder en sécurité.",
+  "studio.backup.export": "Exporter une copie",
+  "studio.backup.later": "Plus tard",
+  "studio.backup.last": "Dernière copie : {date}",
+  "studio.backup.never": "Pas encore de copie : utilise Exporter pour en garder une."
 }

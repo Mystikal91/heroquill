@@ -10,7 +10,7 @@ import {
 } from "../../homebrew/entries";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
-import { NumberBox, TextBox } from "./Controls";
+import { NumberBox, TextBox, focusNewItem } from "./Controls";
 import { EffectList } from "./Effects";
 import { useEdit } from "./scope";
 
@@ -90,11 +90,13 @@ export function OwnedList({
       ))}
       <button
         type="button"
-        onClick={() => {
+        onClick={(e) => {
+          const group = e.currentTarget.parentElement;
           // A new feature comes at the level after the last one that has a feature.
           const last =
             items.length > 0 ? (levelOf(owner, items[items.length - 1]?.id ?? "") ?? 1) : 1;
           applyChange(addOwned(record, owner.id, kind, { level: last }).record);
+          focusNewItem(group, ":scope > .studio-owned-item");
         }}
       >
         {ui(kind === "trait" ? "studio.addTrait" : "studio.addFeature")}
