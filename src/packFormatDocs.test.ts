@@ -34,6 +34,10 @@ describe("docs/PACK_FORMAT.md", () => {
       "subclass",
     ])
       expect(PAGE).toContain(`#### \`${kind}\``);
+    // The ids of the rules are there, for both editions.
+    expect(PAGE).toContain("### Ids of the rules");
+    expect(PAGE).toMatch(/fireball/);
+    expect(PAGE).toMatch(/skill:arcana/);
     for (const effect of ["abilityBonus", "uses", "spends", "when", "choice", "trait"])
       expect(PAGE).toContain(`#### \`${effect}\``);
   });

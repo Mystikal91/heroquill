@@ -6,6 +6,9 @@ turns a document (a homebrew book, a PDF, a wiki) into a pack. Every field that 
 the [reference](#reference) at the end, which is generated from the code and checked by a test, so
 it cannot go out of date.
 
+**For an AI:** a plain Markdown copy of this page, without menus or HTML, is easier to read as
+input: [PACK_FORMAT.md](PACK_FORMAT.md). It is the same text.
+
 If you only want to make a pack, the **Homebrew studio** in the app writes this format for you; you
 never have to touch a file. Read on when you want to know what is behind the forms, to write a pack
 in bulk, or to convert a book.
@@ -1697,5 +1700,485 @@ Holds its `effects` only while `requires` is true, checked every time the sheet 
 | --- | --- | --- | --- |
 | `requires` | text | **yes** |  |
 | `effects` | list of effects | **yes** |  |
+
+### Ids of the rules
+
+These are the ids of the shipped rules that a pack can refer to. The id of an entry is `srd51:kind/slug` for the 2014 rules and `srd52:kind/slug` for the 2024 rules; below, the slug of every entry of the kinds a pack usually refers to. A slug listed under *both* exists in the two editions (use `srd51:` or `srd52:` as the character requires: a reference to a 2014 spell is carried over to the 2024 one when it exists). `monster`, `feature` and `trait` have hundreds of entries and follow the same pattern.
+
+Where a field asks for the **slug of a word of the rules** (a skill, a school, a condition, a language, a proficiency target), write the slug without the pack and kind. A `proficiency` is written `category:target`, which is how `choice` options write it (`skill:arcana`, `tool:smiths-tools`); in a `proficiency` effect, `category` and `target` are separate fields.
+
+#### `ability`
+
+6 in the 2014 rules, 6 in the 2024 rules.
+
+Both editions (6):
+
+```text
+cha, con, dex, int, str, wis
+```
+
+#### `skill`
+
+18 in the 2014 rules, 18 in the 2024 rules.
+
+Both editions (18):
+
+```text
+acrobatics, animal-handling, arcana, athletics, deception, history, insight, intimidation,
+investigation, medicine, nature, perception, performance, persuasion, religion, sleight-of-hand,
+stealth, survival
+```
+
+#### `proficiency`
+
+117 in the 2014 rules, 74 in the 2024 rules.
+
+Both editions (66):
+
+```text
+armor:all-armor, armor:heavy-armor, armor:light-armor, armor:medium-armor, armor:shields,
+save:cha, save:con, save:dex, save:int, save:str, save:wis, skill:acrobatics,
+skill:animal-handling, skill:arcana, skill:athletics, skill:deception, skill:history,
+skill:insight, skill:intimidation, skill:investigation, skill:medicine, skill:nature,
+skill:perception, skill:performance, skill:persuasion, skill:religion, skill:sleight-of-hand,
+skill:stealth, skill:survival, tool:alchemists-supplies, tool:bagpipes, tool:brewers-supplies,
+tool:carpenters-tools, tool:cartographers-tools, tool:cobblers-tools, tool:cooks-utensils,
+tool:disguise-kit, tool:drum, tool:dulcimer, tool:flute, tool:forgery-kit,
+tool:glassblowers-tools, tool:herbalism-kit, tool:horn, tool:jewelers-tools,
+tool:leatherworkers-tools, tool:lute, tool:lyre, tool:masons-tools, tool:painters-supplies,
+tool:pan-flute, tool:potters-tools, tool:shawm, tool:smiths-tools, tool:tinkers-tools, tool:viol,
+tool:weavers-tools, tool:woodcarvers-tools, weapon:hand-crossbows, weapon:longswords,
+weapon:martial-weapons, weapon:rapiers, weapon:scimitars, weapon:shortswords,
+weapon:simple-weapons, weapon:whips
+```
+
+Only the 2014 rules (`srd51`) (51):
+
+```text
+armor:breastplate, armor:chain-mail, armor:chain-shirt, armor:half-plate-armor, armor:hide-armor,
+armor:leather-armor, armor:padded-armor, armor:plate-armor, armor:ring-mail, armor:scale-mail,
+armor:splint-armor, armor:studded-leather-armor, tool:calligraphers-supplies, tool:dice-set,
+tool:land-vehicles, tool:navigators-tools, tool:playing-card-set, tool:poisoners-kit,
+tool:thieves-tools, tool:water-vehicles, weapon:battleaxes, weapon:blowguns, weapon:clubs,
+weapon:crossbows-heavy, weapon:crossbows-light, weapon:daggers, weapon:darts, weapon:flails,
+weapon:glaives, weapon:greataxes, weapon:greatclubs, weapon:greatswords, weapon:halberds,
+weapon:handaxes, weapon:javelins, weapon:lances, weapon:light-hammers, weapon:longbows,
+weapon:maces, weapon:mauls, weapon:morningstars, weapon:nets, weapon:pikes, weapon:quarterstaffs,
+weapon:shortbows, weapon:sickles, weapon:slings, weapon:spears, weapon:tridents,
+weapon:war-picks, weapon:warhammers
+```
+
+Only the 2024 rules (`srd52`) (8):
+
+```text
+tool:tool-calligraphers-supplies, tool:tool-dice, tool:tool-dragonchess,
+tool:tool-navigators-tools, tool:tool-playing-cards, tool:tool-poisoners-kit,
+tool:tool-thieves-tools, tool:tool-three-dragon-ante
+```
+
+#### `school`
+
+8 in the 2014 rules, 8 in the 2024 rules.
+
+Both editions (8):
+
+```text
+abjuration, conjuration, divination, enchantment, evocation, illusion, necromancy, transmutation
+```
+
+#### `condition`
+
+15 in the 2014 rules, 15 in the 2024 rules.
+
+Both editions (15):
+
+```text
+blinded, charmed, deafened, exhaustion, frightened, grappled, incapacitated, invisible,
+paralyzed, petrified, poisoned, prone, restrained, stunned, unconscious
+```
+
+#### `language`
+
+16 in the 2014 rules, 19 in the 2024 rules.
+
+Both editions (16):
+
+```text
+abyssal, celestial, common, deep-speech, draconic, dwarvish, elvish, giant, gnomish, goblin,
+halfling, infernal, orc, primordial, sylvan, undercommon
+```
+
+Only the 2024 rules (`srd52`) (3):
+
+```text
+common-sign-language, druidic, thieves-cant
+```
+
+#### `alignment`
+
+9 in the 2014 rules, 10 in the 2024 rules.
+
+Both editions (9):
+
+```text
+chaotic-evil, chaotic-good, chaotic-neutral, lawful-evil, lawful-good, lawful-neutral, neutral,
+neutral-evil, neutral-good
+```
+
+Only the 2024 rules (`srd52`) (1):
+
+```text
+unaligned
+```
+
+#### `property`
+
+11 in the 2014 rules, 18 in the 2024 rules.
+
+Both editions (9):
+
+```text
+ammunition, finesse, heavy, light, loading, reach, thrown, two-handed, versatile
+```
+
+Only the 2014 rules (`srd51`) (2):
+
+```text
+monk, special
+```
+
+Only the 2024 rules (`srd52`) (9):
+
+```text
+mastery-cleave, mastery-graze, mastery-nick, mastery-push, mastery-sap, mastery-slow,
+mastery-topple, mastery-vex, range
+```
+
+#### `class`
+
+12 in the 2014 rules, 12 in the 2024 rules.
+
+Both editions (12):
+
+```text
+barbarian, bard, cleric, druid, fighter, monk, paladin, ranger, rogue, sorcerer, warlock, wizard
+```
+
+#### `subclass`
+
+12 in the 2014 rules, 12 in the 2024 rules.
+
+Both editions (3):
+
+```text
+champion, hunter, thief
+```
+
+Only the 2014 rules (`srd51`) (9):
+
+```text
+berserker, devotion, draconic, evocation, fiend, land, life, lore, open-hand
+```
+
+Only the 2024 rules (`srd52`) (9):
+
+```text
+circle-of-the-land, college-of-lore, draconic-sorcery, evoker, fiend-patron, life-domain,
+oath-of-devotion, path-of-the-berserker, warrior-of-the-open-hand
+```
+
+#### `species`
+
+9 in the 2014 rules, 9 in the 2024 rules.
+
+Both editions (7):
+
+```text
+dragonborn, dwarf, elf, gnome, halfling, human, tiefling
+```
+
+Only the 2014 rules (`srd51`) (2):
+
+```text
+half-elf, half-orc
+```
+
+Only the 2024 rules (`srd52`) (2):
+
+```text
+goliath, orc
+```
+
+#### `subspecies`
+
+4 in the 2014 rules, 0 in the 2024 rules.
+
+Only the 2014 rules (`srd51`) (4):
+
+```text
+high-elf, hill-dwarf, lightfoot-halfling, rock-gnome
+```
+
+#### `background`
+
+1 in the 2014 rules, 4 in the 2024 rules.
+
+Both editions (1):
+
+```text
+acolyte
+```
+
+Only the 2024 rules (`srd52`) (3):
+
+```text
+criminal, sage, soldier
+```
+
+#### `feat`
+
+0 in the 2014 rules, 17 in the 2024 rules.
+
+Only the 2024 rules (`srd52`) (17):
+
+```text
+ability-score-improvement, alert, archery, boon-of-combat-prowess, boon-of-dimensional-travel,
+boon-of-fate, boon-of-irresistible-offense, boon-of-spell-recall, boon-of-the-night-spirit,
+boon-of-truesight, defense, grappler, great-weapon-fighting, magic-initiate, savage-attacker,
+skilled, two-weapon-fighting
+```
+
+#### `spell`
+
+319 in the 2014 rules, 339 in the 2024 rules.
+
+Both editions (317):
+
+```text
+acid-arrow, acid-splash, aid, alarm, alter-self, animal-friendship, animal-messenger,
+animal-shapes, animate-dead, animate-objects, antilife-shell, antimagic-field,
+antipathy-sympathy, arcane-eye, arcane-hand, arcane-lock, arcane-sword, arcanists-magic-aura,
+astral-projection, augury, awaken, bane, banishment, barkskin, beacon-of-hope, bestow-curse,
+black-tentacles, blade-barrier, bless, blight, blindness-deafness, blink, blur, burning-hands,
+call-lightning, calm-emotions, chain-lightning, charm-person, chill-touch, circle-of-death,
+clairvoyance, clone, cloudkill, color-spray, command, commune, commune-with-nature,
+comprehend-languages, compulsion, cone-of-cold, confusion, conjure-animals, conjure-celestial,
+conjure-elemental, conjure-fey, conjure-minor-elementals, conjure-woodland-beings,
+contact-other-plane, contagion, contingency, continual-flame, control-water, control-weather,
+counterspell, create-food-and-water, create-or-destroy-water, create-undead, creation,
+cure-wounds, dancing-lights, darkness, darkvision, daylight, death-ward, delayed-blast-fireball,
+demiplane, detect-evil-and-good, detect-magic, detect-poison-and-disease, detect-thoughts,
+dimension-door, disguise-self, disintegrate, dispel-evil-and-good, dispel-magic, divination,
+divine-favor, divine-word, dominate-beast, dominate-monster, dominate-person, dream, druidcraft,
+earthquake, eldritch-blast, enhance-ability, enlarge-reduce, entangle, enthrall, etherealness,
+expeditious-retreat, eyebite, fabricate, faerie-fire, faithful-hound, false-life, fear,
+feather-fall, find-familiar, find-steed, find-the-path, find-traps, finger-of-death, fire-bolt,
+fire-shield, fire-storm, fireball, flame-blade, flame-strike, flaming-sphere, flesh-to-stone,
+floating-disk, fly, fog-cloud, forbiddance, forcecage, foresight, freedom-of-movement,
+freezing-sphere, gaseous-form, gate, geas, gentle-repose, giant-insect, glibness,
+globe-of-invulnerability, glyph-of-warding, goodberry, grease, greater-invisibility,
+greater-restoration, guardian-of-faith, guards-and-wards, guidance, guiding-bolt, gust-of-wind,
+hallow, hallucinatory-terrain, harm, haste, heal, healing-word, heat-metal, hellish-rebuke,
+heroes-feast, heroism, hideous-laughter, hold-monster, hold-person, holy-aura, hunters-mark,
+hypnotic-pattern, ice-storm, identify, illusory-script, imprisonment, incendiary-cloud,
+inflict-wounds, insect-plague, instant-summons, invisibility, irresistible-dance, jump, knock,
+legend-lore, lesser-restoration, levitate, light, lightning-bolt, locate-animals-or-plants,
+locate-creature, locate-object, longstrider, mage-armor, mage-hand, magic-circle, magic-jar,
+magic-missile, magic-mouth, magic-weapon, magnificent-mansion, major-image, mass-cure-wounds,
+mass-heal, mass-healing-word, mass-suggestion, maze, meld-into-stone, mending, message,
+meteor-swarm, mind-blank, minor-illusion, mirage-arcane, mirror-image, mislead, misty-step,
+modify-memory, moonbeam, move-earth, nondetection, pass-without-trace, passwall,
+phantasmal-killer, phantom-steed, planar-ally, planar-binding, plane-shift, plant-growth,
+poison-spray, polymorph, power-word-kill, power-word-stun, prayer-of-healing, prestidigitation,
+prismatic-spray, prismatic-wall, private-sanctum, produce-flame, programmed-illusion,
+project-image, protection-from-energy, protection-from-evil-and-good, protection-from-poison,
+purify-food-and-drink, raise-dead, ray-of-enfeeblement, ray-of-frost, regenerate, reincarnate,
+remove-curse, resilient-sphere, resistance, resurrection, reverse-gravity, revivify, rope-trick,
+sacred-flame, sanctuary, scorching-ray, scrying, secret-chest, see-invisibility, seeming,
+sending, sequester, shapechange, shatter, shield, shield-of-faith, shillelagh, shocking-grasp,
+silence, silent-image, simulacrum, sleep, sleet-storm, slow, spare-the-dying, speak-with-animals,
+speak-with-dead, speak-with-plants, spider-climb, spike-growth, spirit-guardians,
+spiritual-weapon, stinking-cloud, stone-shape, stoneskin, storm-of-vengeance, suggestion,
+sunbeam, sunburst, symbol, telekinesis, telepathic-bond, teleport, teleportation-circle,
+thaumaturgy, thunderwave, time-stop, tiny-hut, tongues, transport-via-plants, tree-stride,
+true-polymorph, true-resurrection, true-seeing, true-strike, unseen-servant, vampiric-touch,
+vicious-mockery, wall-of-fire, wall-of-force, wall-of-ice, wall-of-stone, wall-of-thorns,
+warding-bond, water-breathing, water-walk, web, weird, wind-walk, wind-wall, wish,
+word-of-recall, zone-of-truth
+```
+
+Only the 2014 rules (`srd51`) (2):
+
+```text
+branding-smite, feeblemind
+```
+
+Only the 2024 rules (`srd52`) (22):
+
+```text
+aura-of-life, befuddlement, charm-monster, chromatic-orb, dissonant-whispers, divine-smite,
+dragons-breath, elementalism, ensnaring-strike, hex, ice-knife, mind-spike, phantasmal-force,
+power-word-heal, ray-of-sickness, searing-smite, shining-smite, sorcerous-burst, starry-wisp,
+summon-dragon, tsunami, vitriolic-sphere
+```
+
+#### `item`
+
+578 in the 2014 rules, 491 in the 2024 rules.
+
+Both editions (385):
+
+```text
+adamantine-armor, alchemists-supplies, ammunition-1, ammunition-2, ammunition-3, amulet,
+amulet-of-health, amulet-of-proof-against-detection-and-location, amulet-of-the-planes,
+animated-shield, apparatus-of-the-crab, armor-1, armor-2, armor-3, armor-of-invulnerability,
+armor-of-resistance, armor-of-vulnerability, arrow-catching-shield, backpack, bag-of-beans,
+bag-of-devouring, bag-of-holding, bagpipes, barrel, basket, battleaxe, bead-of-force, bedroll,
+bell, belt-of-dwarvenkind, berserker-axe, blanket, block-and-tackle, blowgun, book,
+boots-of-elvenkind, boots-of-levitation, boots-of-speed, boots-of-striding-and-springing,
+boots-of-the-winterlands, bottle-glass, bowl-of-commanding-water-elementals, bracers-of-archery,
+bracers-of-defense, brazier-of-commanding-fire-elementals, breastplate, brewers-supplies,
+brooch-of-shielding, broom-of-flying, bucket, burglars-pack, calligraphers-supplies, caltrops,
+camel, candle, candle-of-invocation, cape-of-the-mountebank, carpenters-tools, carriage, cart,
+case-crossbow-bolt, case-map-or-scroll, censer-of-controlling-air-elementals, chain-mail,
+chain-shirt, chariot, chest, chime-of-opening, circlet-of-blasting, climbers-kit,
+cloak-of-arachnida, cloak-of-displacement, cloak-of-elvenkind, cloak-of-protection,
+cloak-of-the-bat, cloak-of-the-manta-ray, clothes-fine, clothes-travelers, club, cobblers-tools,
+component-pouch, cooks-utensils, crowbar, crystal, crystal-ball-of-mind-reading,
+crystal-ball-of-telepathy, crystal-ball-of-true-seeing, cube-of-force, cubic-gate, dagger,
+dagger-of-venom, dancing-sword, dart, decanter-of-endless-water, deck-of-illusions, defender,
+demon-armor, dimensional-shackles, disguise-kit, dragon-slayer, drum, dulcimer,
+dust-of-disappearance, dust-of-dryness, dust-of-sneezing-and-choking, dwarven-plate,
+dwarven-thrower, efficient-quiver, efreeti-bottle, elephant, elven-chain, emblem,
+entertainers-pack, eversmoking-bottle, explorers-pack, eyes-of-charming, eyes-of-minute-seeing,
+eyes-of-the-eagle, flail, flame-tongue, flute, folding-boat, forgery-kit, frost-brand, galley,
+gauntlets-of-ogre-power, gem-of-brightness, gem-of-seeing, giant-slayer, glaive,
+glassblowers-tools, gloves-of-missile-snaring, gloves-of-swimming-and-climbing, goggles-of-night,
+grappling-hook, greataxe, greatclub, greatsword, halberd, half-plate-armor,
+hammer-of-thunderbolts, handaxe, handy-haversack, hat-of-disguise, headband-of-intellect,
+healers-kit, helm-of-brilliance, helm-of-comprehending-languages, helm-of-telepathy,
+helm-of-teleportation, herbalism-kit, hide-armor, holy-avenger, horn, horn-of-blasting,
+horseshoes-of-a-zephyr, horseshoes-of-speed, hunting-trap, immovable-rod, ink-pen,
+instant-fortress, iron-flask, javelin, javelin-of-lightning, jewelers-tools, keelboat, lamp,
+lance, lantern-bullseye, lantern-hooded, lantern-of-revealing, leather-armor,
+leatherworkers-tools, light-hammer, lock, longbow, longship, longsword, luck-blade, lute, lyre,
+mace, mace-of-disruption, mace-of-smiting, mace-of-terror, magnifying-glass, manacles,
+mantle-of-spell-resistance, manual-of-bodily-health, manual-of-gainful-exercise,
+manual-of-quickness-of-action, marvelous-pigments, masons-tools, mastiff, maul,
+medallion-of-thoughts, mirror-of-life-trapping, mithral-armor, morningstar, mule,
+navigators-tools, necklace-of-adaptation, necklace-of-fireballs, necklace-of-prayer-beads, net,
+nine-lives-stealer, oathbow, oil-of-etherealness, oil-of-sharpness, oil-of-slipperiness, orb,
+padded-armor, painters-supplies, pan-flute, pearl-of-power, periapt-of-health,
+periapt-of-proof-against-poison, periapt-of-wound-closure, philter-of-love, pike,
+pipes-of-haunting, pipes-of-the-sewers, plate-armor, plate-armor-of-etherealness, poisoners-kit,
+pony, portable-hole, pot-iron, potion-of-animal-friendship, potion-of-clairvoyance,
+potion-of-climbing, potion-of-diminution, potion-of-flying, potion-of-gaseous-form,
+potion-of-growth, potion-of-heroism, potion-of-invisibility, potion-of-mind-reading,
+potion-of-poison, potion-of-speed, potion-of-water-breathing, potters-tools, pouch, priests-pack,
+quarterstaff, quiver, ram-portable, rapier, reliquary, ring-mail, ring-of-animal-influence,
+ring-of-djinni-summoning, ring-of-evasion, ring-of-feather-falling, ring-of-free-action,
+ring-of-invisibility, ring-of-jumping, ring-of-mind-shielding, ring-of-protection,
+ring-of-regeneration, ring-of-shooting-stars, ring-of-spell-storing, ring-of-spell-turning,
+ring-of-swimming, ring-of-telekinesis, ring-of-the-ram, ring-of-three-wishes, ring-of-warmth,
+ring-of-water-walking, ring-of-x-ray-vision, robe-of-eyes, robe-of-scintillating-colors,
+robe-of-stars, robe-of-the-archmagi, robe-of-useful-items, rod, rod-of-absorption,
+rod-of-alertness, rod-of-lordly-might, rod-of-rulership, rod-of-security, rope-of-climbing,
+rope-of-entanglement, rowboat, sack, saddle-exotic, saddle-military, saddle-riding, sailing-ship,
+scale-mail, scarab-of-protection, scholars-pack, scimitar, scimitar-of-speed, shawm, shield,
+shield-of-missile-attraction, shortbow, shortsword, shovel, sickle, signal-whistle, sled, sling,
+slippers-of-spider-climbing, smiths-tools, sovereign-glue, spear, spell-scroll-cantrip,
+spellbook, spellguard-shield, sphere-of-annihilation, splint-armor, sprig-of-mistletoe, spyglass,
+staff, staff-of-charming, staff-of-fire, staff-of-frost, staff-of-healing, staff-of-power,
+staff-of-striking, staff-of-swarming-insects, staff-of-the-magi, staff-of-the-python,
+staff-of-the-woodlands, staff-of-thunder-and-lightning, staff-of-withering,
+stone-of-controlling-earth-elementals, stone-of-good-luck-luckstone, studded-leather-armor,
+sun-blade, sword-of-life-stealing, sword-of-sharpness, sword-of-wounding, talisman-of-pure-good,
+talisman-of-the-sphere, talisman-of-ultimate-evil, thieves-tools, tinderbox, tinkers-tools,
+tome-of-clear-thought, tome-of-leadership-and-influence, tome-of-understanding, torch, trident,
+trident-of-fish-command, universal-solvent, vial, vicious-weapon, viol, vorpal-sword, wagon,
+wand, wand-of-binding, wand-of-enemy-detection, wand-of-fear, wand-of-fireballs,
+wand-of-lightning-bolts, wand-of-magic-detection, wand-of-magic-missiles, wand-of-paralysis,
+wand-of-polymorph, wand-of-secrets, wand-of-the-war-mage-1, wand-of-the-war-mage-2,
+wand-of-the-war-mage-3, wand-of-web, wand-of-wonder, war-pick, warhammer, warhorse, warship,
+waterskin, weapon-1, weapon-2, weapon-3, weavers-tools, well-of-many-worlds, whip, wind-fan,
+winged-boots, wings-of-flying, woodcarvers-tools, yew-wand
+```
+
+Only the 2014 rules (`srd51`) (193):
+
+```text
+abacus, acid-vial, alchemists-fire-flask, alms-box, animal-feed-1-day, antitoxin-vial, arrow,
+arrow-of-slaying, bag-of-tricks-gray, bag-of-tricks-rust, bag-of-tricks-tan,
+ball-bearings-bag-of-1000, barding-breastplate, barding-chain-mail, barding-chain-shirt,
+barding-half-plate, barding-hide, barding-leather, barding-padded, barding-plate,
+barding-ring-mail, barding-scale-mail, barding-splint, barding-studded-leather,
+belt-of-giant-strength-cloud, belt-of-giant-strength-fire, belt-of-giant-strength-frost,
+belt-of-giant-strength-hill, belt-of-giant-strength-stone, belt-of-giant-strength-storm,
+bit-and-bridle, block-of-incense, blowgun-needle, carpet-of-flying-3x5, carpet-of-flying-4x6,
+carpet-of-flying-5x7, carpet-of-flying-6x9, cartographers-tools, censer, chain-10-feet,
+chalk-1-piece, clothes-common, clothes-costume, crossbow-bolt, crossbow-hand, crossbow-heavy,
+crossbow-light, deck-of-many-things, dice-set, diplomats-pack, donkey, dragon-scale-mail-black,
+dragon-scale-mail-blue, dragon-scale-mail-brass, dragon-scale-mail-bronze,
+dragon-scale-mail-copper, dragon-scale-mail-gold, dragon-scale-mail-green, dragon-scale-mail-red,
+dragon-scale-mail-silver, dragon-scale-mail-white, dungeoneers-pack, elemental-gem-air,
+elemental-gem-earth, elemental-gem-fire, elemental-gem-water, feather-token-anchor,
+feather-token-bird, feather-token-fan, feather-token-swan-boat, feather-token-tree,
+feather-token-whip, figurine-of-wondrous-power-bronze-griffon,
+figurine-of-wondrous-power-ebony-fly, figurine-of-wondrous-power-golden-lions,
+figurine-of-wondrous-power-ivory-goats, figurine-of-wondrous-power-marble-elephant,
+figurine-of-wondrous-power-obsidian-steed, figurine-of-wondrous-power-onyx-dog,
+figurine-of-wondrous-power-serpentine-owl, figurine-of-wondrous-power-silver-raven,
+fishing-tackle, flask-or-tankard, glamoured-studded-leather-armor, hammer, hammer-sledge,
+holy-water-flask, horn-of-valhalla-brass, horn-of-valhalla-bronze, horn-of-valhalla-iron,
+horn-of-valhalla-silver, horse-draft, horse-riding, hourglass, ink-1-ounce-bottle,
+ioun-stone-of-absorption, ioun-stone-of-agility, ioun-stone-of-awareness,
+ioun-stone-of-fortitude, ioun-stone-of-greater-absorption, ioun-stone-of-insight,
+ioun-stone-of-intellect, ioun-stone-of-leadership, ioun-stone-of-mastery,
+ioun-stone-of-protection, ioun-stone-of-regeneration, ioun-stone-of-reserve,
+ioun-stone-of-strength, ioun-stone-of-sustenance, iron-bands-of-binding, jug-or-pitcher,
+ladder-10-foot, little-bag-of-sand, manual-of-golems-clay, manual-of-golems-flesh,
+manual-of-golems-iron, manual-of-golems-stone, mess-kit, mirror-steel, oil-flask,
+orb-of-dragonkind, paper-one-sheet, parchment-one-sheet, perfume-vial, pick-miners, piton,
+playing-card-set, poison-basic-vial, pole-10-foot, potion-of-giant-strength-cloud,
+potion-of-giant-strength-fire, potion-of-giant-strength-frost, potion-of-giant-strength-hill,
+potion-of-giant-strength-stone, potion-of-giant-strength-storm, potion-of-healing-common,
+potion-of-healing-greater, potion-of-healing-superior, potion-of-healing-supreme,
+potion-of-resistance-acid, potion-of-resistance-cold, potion-of-resistance-fire,
+potion-of-resistance-force, potion-of-resistance-lightning, potion-of-resistance-necrotic,
+potion-of-resistance-poison, potion-of-resistance-psychic, potion-of-resistance-radiant,
+potion-of-resistance-thunder, rations-1-day, restorative-ointment, ring-of-elemental-command-air,
+ring-of-elemental-command-earth, ring-of-elemental-command-fire, ring-of-elemental-command-water,
+ring-of-resistance-acid, ring-of-resistance-cold, ring-of-resistance-fire,
+ring-of-resistance-force, ring-of-resistance-lightning, ring-of-resistance-necrotic,
+ring-of-resistance-poison, ring-of-resistance-psychic, ring-of-resistance-radiant,
+ring-of-resistance-thunder, robes, rope-hempen-50-feet, rope-silk-50-feet, saddle-pack,
+saddlebags, scale-merchants, sealing-wax, signet-ring, sling-bullet, small-knife, soap,
+spell-scroll-1st, spell-scroll-2nd, spell-scroll-3rd, spell-scroll-4th, spell-scroll-5th,
+spell-scroll-6th, spell-scroll-7th, spell-scroll-8th, spell-scroll-9th, spike-iron,
+stabling-1-day, string-10-feet, tent-two-person, totem, vestments, whetstone, wooden-staff
+```
+
+Only the 2024 rules (`srd52`) (106):
+
+```text
+acid, airship, alchemists-fire, ammunition-of-slaying, antitoxin, arrows, assassins-blood,
+bag-of-tricks, ball-bearings, bead-of-nourishment, belt-of-giant-strength, bolts,
+bullets-firearm, bullets-sling, burnt-othur-fumes, carpet-of-flying, cartographer-tools, chain,
+cloak-of-invisibility, costume, crawler-mucus, crystal-ball, dice, diplomat-pack, draft-horse,
+dragon-orb, dragon-scale-mail, dragonchess, dungeoneer-pack, elemental-gem, elixir-of-health,
+energy-bow, essence-of-ether, feather-token, feed-per-day, figurine-of-wondrous-power, flask,
+glamoured-studded-leather, gloves-of-thievery, hand-crossbow, hat-of-many-spells, heavy-crossbow,
+holy-water, horn-of-valhalla-1, horn-of-valhalla-2, horn-of-valhalla-3, horn-of-valhalla-4, ink,
+ioun-stone, iron-bands, jug, ladder, light-crossbow, malice, manual-of-golems, map,
+midnight-tears, mirror, musket, mysterious-deck, needles, oil, oil-of-taggit, pale-tincture,
+paper, parchment, perfume, pistol, playing-cards, poison-basic, pole, potion-of-giant-strength,
+potion-of-healing, potion-of-invulnerability, potion-of-longevity, potion-of-resistance,
+potion-of-vitality, potions-of-healing, purple-worm-poison, quarterstaff-of-the-acrobat, rations,
+riding-horse, ring-of-elemental-command, ring-of-resistance, robe, rod-of-resurrection, rope,
+sending-stones, sentinel-shield, serpent-venom, shield-1, shield-2, shield-3,
+shield-of-the-cavalier, spell-scroll, spell-scroll-level-1, spiders-sting, spikes-iron, string,
+tent, three-dragon-ante, thunderous-greatclub, torpor, truth-serum, weapon-of-warning,
+wyvern-poison
+```
 
 <!-- /generated:reference -->

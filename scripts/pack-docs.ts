@@ -3,7 +3,7 @@
  * not drift from the code: the kinds of entry, the fields of the `data` of each, and the effects
  * with their fields. Run with `npm run docs:pack`; a test fails when the page is out of date.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ENTRY_KINDS } from "../src/data/schema";
 import {
@@ -137,6 +137,94 @@ const NOTES: Record<EffectType, string> = {
   when: 'Holds its `effects` only while `requires` is true, checked every time the sheet is worked out. The requirement is written with names (entry ids or flags), `,` for "and", `||` for "or", `!` for "not" and brackets to group.',
 };
 
+type RuleEntry = { id: string; kind: string; data?: Record<string, unknown> };
+
+/** Every entry of the rules of an edition (`data/srd51`, `data/srd52`), read from the files the app ships. */
+function rulesOf(edition: "srd51" | "srd52"): RuleEntry[] {
+  const dir = new URL(`../data/${edition}/`, import.meta.url);
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".json"))
+    .flatMap((f) => {
+      const file = JSON.parse(readFileSync(new URL(f, dir), "utf8")) as
+        | { entries: RuleEntry[] }
+        | RuleEntry[];
+      return Array.isArray(file) ? file : file.entries;
+    });
+}
+
+/** The kinds whose ids the page lists (the rest, with hundreds of entries, follow the same pattern). */
+const LISTED_KINDS = [
+  "ability",
+  "skill",
+  "proficiency",
+  "school",
+  "condition",
+  "language",
+  "alignment",
+  "property",
+  "class",
+  "subclass",
+  "species",
+  "subspecies",
+  "background",
+  "feat",
+  "spell",
+  "item",
+] as const;
+
+/** An id of the rules as the pages write it: the slug, or `category:target` for a proficiency. */
+const nameOf = (e: RuleEntry) => {
+  const slug = e.id.slice(e.id.indexOf("/") + 1);
+  if (e.kind !== "proficiency") return slug;
+  return `${String(e.data?.category ?? "?")}:${String(e.data?.target ?? slug)}`;
+};
+
+/** Words in lines of at most ~96 characters, for a block that is read as it is. */
+function wrap(words: string[]): string {
+  const lines: string[] = [];
+  let line = "";
+  for (const w of words) {
+    const next = line ? `${line}, ${w}` : w;
+    if (next.length > 96 && line) {
+      lines.push(`${line},`);
+      line = w;
+    } else line = next;
+  }
+  if (line) lines.push(line);
+  return lines.join("\n");
+}
+
+/** The ids of the rules by kind: those both editions have, then those of one only. */
+function rulesIds(): string[] {
+  const a = rulesOf("srd51");
+  const b = rulesOf("srd52");
+  const out: string[] = ["### Ids of the rules", ""];
+  out.push(
+    "These are the ids of the shipped rules that a pack can refer to. The id of an entry is `srd51:kind/slug` for the 2014 rules and `srd52:kind/slug` for the 2024 rules; below, the slug of every entry of the kinds a pack usually refers to. A slug listed under *both* exists in the two editions (use `srd51:` or `srd52:` as the character requires: a reference to a 2014 spell is carried over to the 2024 one when it exists). `monster`, `feature` and `trait` have hundreds of entries and follow the same pattern.",
+    "",
+    "Where a field asks for the **slug of a word of the rules** (a skill, a school, a condition, a language, a proficiency target), write the slug without the pack and kind. A `proficiency` is written `category:target`, which is how `choice` options write it (`skill:arcana`, `tool:smiths-tools`); in a `proficiency` effect, `category` and `target` are separate fields.",
+    "",
+  );
+  for (const kind of LISTED_KINDS) {
+    const old = new Set(a.filter((e) => e.kind === kind).map(nameOf));
+    const now = new Set(b.filter((e) => e.kind === kind).map(nameOf));
+    const both = [...old].filter((n) => now.has(n)).sort();
+    const only14 = [...old].filter((n) => !now.has(n)).sort();
+    const only24 = [...now].filter((n) => !old.has(n)).sort();
+    out.push(`#### \`${kind}\``, "");
+    out.push(`${old.size} in the 2014 rules, ${now.size} in the 2024 rules.`, "");
+    for (const [label, list] of [
+      ["Both editions", both],
+      ["Only the 2014 rules (`srd51`)", only14],
+      ["Only the 2024 rules (`srd52`)", only24],
+    ] as const) {
+      if (list.length === 0) continue;
+      out.push(`${label} (${list.length}):`, "", "```text", wrap(list), "```", "");
+    }
+  }
+  return out;
+}
+
 const cell = (text: string) => text.replace(/\|/g, "\\|").replace(/\n/g, " ");
 
 /** The rows of a table of fields; nested object fields follow as `parent.child` rows. */
@@ -190,6 +278,7 @@ export function reference(): string {
     out.push(`#### \`${type}\``, "", NOTES[type], "");
     if (specs.length) out.push(...HEAD, ...rows(specs), "");
   }
+  out.push(...rulesIds());
   return out.join("\n");
 }
 

@@ -1,6 +1,10 @@
 /changelog.json
   Cache-Control: no-cache
 
+/docs/packs/PACK_FORMAT.md
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: no-cache
+
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 

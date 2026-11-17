@@ -531,6 +531,8 @@ function docsPage() {
 mkdirSync("dist", { recursive: true });
 mkdirSync(`dist${DOCS_PACKS.slice(0, -1)}`, { recursive: true });
 writeFileSync(`dist${DOCS_PACKS}index.html`, docsPage());
+// The same page as plain Markdown, for whoever reads it with a program or gives it to an AI.
+cpSync("docs/PACK_FORMAT.md", `dist${DOCS_PACKS}PACK_FORMAT.md`);
 for (const lang of LANGUAGES) {
   const directory = lang === "en" ? "dist" : `dist/${lang}`;
   mkdirSync(directory, { recursive: true });
