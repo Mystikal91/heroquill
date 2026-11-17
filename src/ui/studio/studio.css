@@ -770,8 +770,14 @@
 
 .studio-tree {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
   margin: 0 0 0.9rem;
+}
+
+.studio-tree > li,
+.studio-node {
+  min-width: 0;
 }
 
 .studio-node {

@@ -2,6 +2,7 @@ import { signal } from "@preact/signals";
 
 interface WakeLockSentinelLike {
   release(): Promise<void>;
+  addEventListener(type: "release", listener: () => void): void;
 }
 
 const KEY = "keepAwake";
@@ -21,17 +22,28 @@ function remembered(): boolean {
 export const keepAwake = signal(canKeepAwake && remembered());
 
 let lock: WakeLockSentinelLike | undefined;
+let asking = false;
 
 async function acquire() {
+  if (lock || asking) return;
+  asking = true;
   try {
     const api = (
       navigator as unknown as {
         wakeLock: { request(type: "screen"): Promise<WakeLockSentinelLike> };
       }
     ).wakeLock;
-    lock = await api.request("screen");
+    const sentinel = await api.request("screen");
+    lock = sentinel;
+    // The browser lets the lock go by itself when the page is hidden or the battery is low: it must not
+    // be taken for a lock still held, or it would never be asked for again.
+    sentinel.addEventListener("release", () => {
+      if (lock === sentinel) lock = undefined;
+    });
   } catch {
     lock = undefined; // refused (low battery, hidden page): it is tried again when the page is shown
+  } finally {
+    asking = false;
   }
 }
 

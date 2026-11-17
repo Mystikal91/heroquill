@@ -18,6 +18,19 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.31.1",
+    date: "2026-11-17",
+    notes: [
+      {
+        en: "A pack with a long name no longer widens the list of packs of the Homebrew studio: the name is cut with “…”, on a computer and on a phone. “Keep the screen on” now works again after you leave the app and come back: the browser lets the lock go when the page is hidden, and it is asked for again when the page is shown.",
+        it: "Un pacchetto con un nome lungo non allarga più l'elenco dei pacchetti dello Studio homebrew: il nome viene tagliato con «…», sul computer e sul telefono. «Tieni lo schermo acceso» funziona di nuovo anche dopo che esci dall'app e ci torni: il browser rilascia il blocco quando la pagina è nascosta, e viene richiesto di nuovo quando la pagina torna visibile.",
+        fr: "Un paquet au nom long n'élargit plus la liste des paquets de l'Atelier homebrew : le nom est coupé avec « … », sur ordinateur comme sur téléphone. « Garder l'écran allumé » refonctionne après avoir quitté l'application et y être revenu : le navigateur relâche le verrou quand la page est cachée, et il est redemandé quand la page réapparaît.",
+        de: "Ein Paket mit langem Namen macht die Paketliste der Homebrew-Werkstatt nicht mehr breiter: Der Name wird mit „…“ gekürzt, am Computer und am Handy. „Bildschirm eingeschaltet lassen“ funktioniert wieder, auch nachdem du die App verlassen hast und zurückkommst: Der Browser gibt die Sperre frei, wenn die Seite verborgen ist, und sie wird neu angefordert, wenn die Seite wieder erscheint.",
+        es: "Un paquete con un nombre largo ya no ensancha la lista de paquetes del Taller homebrew: el nombre se corta con «…», en el ordenador y en el teléfono. «Mantener la pantalla encendida» vuelve a funcionar después de salir de la app y volver: el navegador suelta el bloqueo cuando la página está oculta y se vuelve a pedir cuando la página se muestra.",
+      },
+    ],
+  },
+  {
     version: "1.31",
     date: "2026-11-17",
     notes: [
