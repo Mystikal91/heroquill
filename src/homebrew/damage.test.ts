@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { addDamageType, damageLabel, ownDamageTypes, setDamageName } from "./damage";
+import {
+  addDamageType,
+  damageLabel,
+  ownDamageTypes,
+  removeDamageType,
+  setDamageName,
+} from "./damage";
 import { newHomebrewPack } from "./pack";
 import { addLanguage } from "./translate";
 
@@ -18,6 +24,17 @@ describe("kinds of damage a pack adds", () => {
     const twice = addDamageType(once, "sonico")?.record ?? pack();
     expect(ownDamageTypes(twice)).toEqual(["sonico"]);
     expect(damageLabel(twice, "sonico", "it")).toBe("Sonico");
+  });
+
+  it("takes a kind away with its names in every language", () => {
+    let record = addLanguage(addDamageType(pack(), "Sonico")?.record ?? pack(), "en");
+    record = setDamageName(record, "sonico", "Sonic", "en");
+    const gone = removeDamageType(record, "sonico");
+    expect(ownDamageTypes(gone)).toEqual([]);
+    expect(Object.keys(gone.strings).some((k) => k.startsWith("damage."))).toBe(false);
+    expect(Object.keys(gone.translations?.en ?? {}).some((k) => k.startsWith("damage."))).toBe(
+      false,
+    );
   });
 
   it("says a name in the language asked, the original where there is no translation", () => {

@@ -2309,6 +2309,7 @@
   "studio.componentsHint": "Components the pack adds to V, S and M (for example A and O in a psionic book). Each one becomes a tick in the form of a spell.",
   "studio.componentNew": "Code (e.g. A)",
   "studio.componentRemove": "Remove the component {code}",
+  "studio.componentAdd": "+ A new component",
   "studio.pointsNoColumns": "The level cap and the limit can follow a column of the table: add one in \"Values by level\" of this class, then choose it here.",
   "studio.pointsPays": "How it pays for spells",
   "studio.packDocs": "How a pack file is written: the technical page (in English)",

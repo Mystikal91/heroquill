@@ -2309,6 +2309,7 @@
   "studio.componentsHint": "Componenti che il pacchetto aggiunge a V, S e M (per esempio A e O in un libro di psionica). Ognuna diventa una spunta nel modulo dell'incantesimo.",
   "studio.componentNew": "Sigla (es. A)",
   "studio.componentRemove": "Togli la componente {code}",
+  "studio.componentAdd": "+ Una nuova componente",
   "studio.pointsNoColumns": "Il livello massimo e il limite possono seguire una colonna della tabella: aggiungila in «Valori per livello» di questa classe, poi scegliila qui.",
   "studio.pointsPays": "Come paga gli incantesimi",
   "studio.packDocs": "Come è fatto il file di un pacchetto: la pagina tecnica (in inglese)",

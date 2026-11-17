@@ -2309,6 +2309,7 @@
   "studio.componentsHint": "Composantes que le pack ajoute à V, S et M (par exemple A et O dans un livre de psionique). Chacune devient une case dans le formulaire d'un sort.",
   "studio.componentNew": "Code (ex. A)",
   "studio.componentRemove": "Retirer la composante {code}",
+  "studio.componentAdd": "+ Une nouvelle composante",
   "studio.pointsNoColumns": "Le niveau maximal et la limite peuvent suivre une colonne de la table : ajoute-en une dans « Valeurs par niveau » de cette classe, puis choisis-la ici.",
   "studio.pointsPays": "Comment il paie les sorts",
   "studio.packDocs": "Comment est fait le fichier d'un pack : la page technique (en anglais)",

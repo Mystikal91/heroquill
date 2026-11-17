@@ -1660,6 +1660,11 @@
   .studio-menu-panel .studio-picker {
     position: fixed;
   }
+
+  /* Beats the 18rem cap above (more specific than the phone rule): the list fills the screen. */
+  .studio-menu-panel .studio-picker-list {
+    max-height: none;
+  }
 }
 
 .studio-picker-list button {

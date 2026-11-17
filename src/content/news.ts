@@ -18,6 +18,26 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.31.2",
+    date: "2026-11-17",
+    notes: [
+      {
+        en: "On a phone, the menu of new entries in the Homebrew studio is no longer cut off after a few lines: the whole list shows and scrolls.",
+        it: "Su telefono, il menu delle nuove voci dello Studio homebrew non si ferma più dopo poche righe: la lista si vede tutta e scorre.",
+        fr: "Sur téléphone, le menu des nouvelles entrées de l'Atelier homebrew n'est plus coupé après quelques lignes : toute la liste s'affiche et défile.",
+        de: "Auf dem Handy wird das Menü für neue Einträge in der Homebrew-Werkstatt nicht mehr nach wenigen Zeilen abgeschnitten: Die ganze Liste ist zu sehen und scrollt.",
+        es: "En el móvil, el menú de nuevas entradas del Taller homebrew ya no se corta tras unas pocas líneas: se ve toda la lista y se desplaza.",
+      },
+      {
+        en: "Kinds of damage can be added and removed in the pack's Rules tab, like the reserves of points, and a new spell component can be added from the form of a spell.",
+        it: "I tipi di danno si aggiungono e si tolgono dalla scheda Regole del pacchetto, come le riserve di punti, e una nuova componente degli incantesimi si aggiunge dal modulo di un incantesimo.",
+        fr: "Les types de dégâts s'ajoutent et se retirent dans l'onglet Règles du paquet, comme les réserves de points, et une nouvelle composante de sort s'ajoute depuis le formulaire d'un sort.",
+        de: "Schadensarten lassen sich im Tab Regeln des Pakets hinzufügen und entfernen, wie die Punktevorräte, und eine neue Zauberkomponente lässt sich im Formular eines Zaubers hinzufügen.",
+        es: "Los tipos de daño se añaden y se quitan en la pestaña Reglas del paquete, como las reservas de puntos, y un nuevo componente de hechizo se añade desde el formulario de un hechizo.",
+      },
+    ],
+  },
+  {
     version: "1.31.1",
     date: "2026-11-17",
     notes: [

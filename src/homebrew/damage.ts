@@ -47,3 +47,21 @@ export function addDamageType(
     : setDamageName(next, slug, name.trim());
   return { record: named, slug };
 }
+
+/** Takes a kind of damage away, with its names in every language. Effects that name it keep the word. */
+export function removeDamageType(record: UserPackRecord, slug: string): UserPackRecord {
+  const key = `${DAMAGE_OWNER}.${slug}`;
+  const without = (texts: Record<string, string>) =>
+    Object.fromEntries(Object.entries(texts).filter(([k]) => k !== key));
+  const { translations } = record;
+  return {
+    ...record,
+    meta: { ...record.meta, damageTypes: ownDamageTypes(record).filter((d) => d !== slug) },
+    strings: without(record.strings),
+    ...(translations && {
+      translations: Object.fromEntries(
+        Object.entries(translations).map(([l, t]) => [l, without(t)]),
+      ),
+    }),
+  };
+}

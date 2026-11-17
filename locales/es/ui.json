@@ -2309,6 +2309,7 @@
   "studio.componentsHint": "Componentes que el paquete añade a V, S y M (por ejemplo A y O en un libro de psiónica). Cada una se convierte en una casilla en el formulario del conjuro.",
   "studio.componentNew": "Código (p. ej. A)",
   "studio.componentRemove": "Quitar el componente {code}",
+  "studio.componentAdd": "+ Un nuevo componente",
   "studio.pointsNoColumns": "El nivel máximo y el límite pueden seguir una columna de la tabla: añade una en «Valores por nivel» de esta clase y elígela aquí.",
   "studio.pointsPays": "Cómo paga los conjuros",
   "studio.packDocs": "Cómo es el archivo de un paquete: la página técnica (en inglés)",

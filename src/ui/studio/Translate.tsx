@@ -2,7 +2,14 @@ import { useState } from "preact/hooks";
 import { LANGUAGES } from "../../app/language.logic";
 import { applyChange, studioLanguage } from "../../app/studio";
 import type { Entry } from "../../data/schema";
-import { DAMAGE_OWNER, damageLabel, ownDamageTypes, setDamageName } from "../../homebrew/damage";
+import {
+  DAMAGE_OWNER,
+  addDamageType,
+  damageLabel,
+  ownDamageTypes,
+  removeDamageType,
+  setDamageName,
+} from "../../homebrew/damage";
 import { ownedEntries, setText } from "../../homebrew/entries";
 import {
   RESERVE_OWNER,
@@ -21,7 +28,7 @@ import {
 } from "../../homebrew/translate";
 import { ui } from "../../i18n/ui";
 import { type UserPackRecord, damageSlug, packLanguages } from "../../storage/packs";
-import { TextBox } from "./Controls";
+import { DAMAGE_KINDS, TextBox } from "./Controls";
 import { fieldLabel } from "./labels";
 
 /** A language by its own name. */
@@ -193,13 +200,23 @@ export function PackLanguages({ record }: { record: UserPackRecord }) {
 }
 
 /**
- * The names of the kinds of damage the pack adds, one box per language of the pack: they belong to no
- * entry, so this is where they are written and translated. Nothing when the pack adds none.
+ * The kinds of damage the pack adds: a way to declare one (the form of a spell has the same) and, for
+ * each, one box per language of the pack. They belong to no entry, so this is where they are written
+ * and translated.
  */
 export function DamageNames({ record }: { record: UserPackRecord }) {
+  const [name, setName] = useState("");
   const types = ownDamageTypes(record);
-  if (types.length === 0) return null;
   const languages = packLanguages(record);
+  const slug = damageSlug(name);
+  const known = !!slug && (DAMAGE_KINDS.includes(slug) || types.includes(slug));
+  const add = () => {
+    if (!slug || known) return;
+    const made = addDamageType(record, name);
+    if (!made) return;
+    applyChange(made.record, `dmg.${made.slug}`);
+    setName("");
+  };
   return (
     <section class="studio-pack-languages studio-damage-names">
       <h4>{ui("studio.damageNames")}</h4>
@@ -221,8 +238,33 @@ export function DamageNames({ record }: { record: UserPackRecord }) {
               }
             />
           ))}
+          <button
+            type="button"
+            class="danger"
+            onClick={() => applyChange(removeDamageType(record, slug), `dmg.${slug}`)}
+          >
+            {ui("form.remove")}
+          </button>
         </fieldset>
       ))}
+      <div class="studio-damage-new">
+        <input
+          type="text"
+          value={name}
+          placeholder={ui("studio.damageNew")}
+          aria-label={ui("studio.damageNew")}
+          onInput={(e) => setName(e.currentTarget.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              add();
+            }
+          }}
+        />
+        <button type="button" disabled={!slug || known} onClick={add}>
+          {ui("studio.add")}
+        </button>
+      </div>
     </section>
   );
 }

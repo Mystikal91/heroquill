@@ -2309,6 +2309,7 @@
   "studio.componentsHint": "Komponenten, die das Paket zu V, S und M hinzufügt (zum Beispiel A und O in einem Psionik-Buch). Jede wird zu einem Häkchen im Zauberformular.",
   "studio.componentNew": "Kürzel (z. B. A)",
   "studio.componentRemove": "Komponente {code} entfernen",
+  "studio.componentAdd": "+ Eine neue Komponente",
   "studio.pointsNoColumns": "Die höchste Stufe und das Limit können einer Spalte der Tabelle folgen: Füge in „Werte pro Stufe“ dieser Klasse eine hinzu und wähle sie dann hier.",
   "studio.pointsPays": "Wie er Zauber bezahlt",
   "studio.packDocs": "Wie eine Paketdatei aufgebaut ist: die technische Seite (auf Englisch)",

@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import type { Entry } from "../../data/schema";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { setText, updateEntry } from "../../homebrew/entries";
@@ -75,10 +76,25 @@ export function SpellLevelSchool({ record, entry }: Props) {
 export function SpellCasting({ record, entry }: Props) {
   const { data, text, writeText, writeData } = useSpell(record, entry);
   const pack = usePack();
+  const scope = useEdit();
+  const [adding, setAdding] = useState(false);
+  const [code, setCode] = useState("");
   // The components of the rules, then those the pack declares (a psionic book's A and O).
   const own = pack?.meta?.components ?? [];
   const codes = ["V", "S", "M", ...own];
   const components = Array.isArray(data.components) ? (data.components as string[]) : [];
+  const newCode = code.trim().toUpperCase().slice(0, 3);
+  const addComponent = () => {
+    if (!pack || !newCode || codes.includes(newCode)) return;
+    scope.apply(
+      { ...pack, meta: { ...pack.meta, components: [...own, newCode] } },
+      "pack.components",
+    );
+    // The pack changes first; the new component is ticked once the form has seen it.
+    setTimeout(() => writeData("components", [...components, newCode]), 0);
+    setCode("");
+    setAdding(false);
+  };
   return (
     <>
       <div class="studio-grid">
@@ -134,6 +150,42 @@ export function SpellCasting({ record, entry }: Props) {
             }
           />
         ))}
+        {pack &&
+          (adding ? (
+            <span class="studio-damage-new">
+              <input
+                type="text"
+                value={code}
+                maxLength={3}
+                // biome-ignore lint/a11y/noAutofocus: it opens because the person asked for a new component
+                autoFocus
+                placeholder={ui("studio.componentNew")}
+                aria-label={ui("studio.componentNew")}
+                onInput={(e) => setCode(e.currentTarget.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addComponent();
+                  }
+                  if (e.key === "Escape") setAdding(false);
+                }}
+              />
+              <button
+                type="button"
+                disabled={!newCode || codes.includes(newCode)}
+                onClick={addComponent}
+              >
+                {ui("studio.add")}
+              </button>
+              <button type="button" class="link" onClick={() => setAdding(false)}>
+                {ui("hb.cancel")}
+              </button>
+            </span>
+          ) : (
+            <button type="button" class="link" onClick={() => setAdding(true)}>
+              {ui("studio.componentAdd")}
+            </button>
+          ))}
         <CheckBox
           label={ui("hb.f.ritual")}
           checked={data.ritual === true}
