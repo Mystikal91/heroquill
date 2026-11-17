@@ -1594,6 +1594,8 @@ input:checked + .equip-tag {
   max-width: 32rem;
   margin: 0;
   font-size: 0.95rem;
+  /* Two even lines, not a full one and a last word on its own. */
+  text-wrap: balance;
 }
 
 .hero-actions {

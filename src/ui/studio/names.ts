@@ -31,7 +31,13 @@ const SEARCH = new Set([
 /** What an entry is called in a list: an item is a weapon, an armor or gear, the rest by their kind. */
 export function kindName(entry: Pick<Entry, "kind" | "data">): string {
   if (entry.kind === "item") {
-    const data = entry.data as { weapon?: unknown; armor?: unknown; rarity?: unknown };
+    const data = entry.data as {
+      weapon?: unknown;
+      armor?: unknown;
+      rarity?: unknown;
+      enchants?: unknown;
+    };
+    if (data.enchants === true) return ui("studio.kind.enchantment");
     if (data.rarity !== undefined) return ui("studio.kind.magic");
     if (data.weapon) return ui("hb.kind.weapon");
     if (data.armor) return ui("hb.kind.armor");

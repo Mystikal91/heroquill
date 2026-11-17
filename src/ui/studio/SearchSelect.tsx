@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { fold } from "../../app/search";
 import { ui } from "../../i18n/ui";
+import { HelpMark } from "./Help";
 import { announce } from "./announce";
 
 export interface PickOption {
@@ -169,7 +170,12 @@ export function SearchSelect({
         if (open && !root.current?.contains(e.relatedTarget as Node | null)) close(false);
       }}
     >
-      {label && <span>{label}</span>}
+      {label && (
+        <span>
+          {label}
+          <HelpMark />
+        </span>
+      )}
       <button
         type="button"
         class="studio-select-button"

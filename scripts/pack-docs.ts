@@ -23,6 +23,7 @@ export const MARK_END = "<!-- /generated:reference -->";
 export function describe(type: FieldType): string {
   switch (type.type) {
     case "text":
+      if (type.options) return `${type.options.map((o) => `\`${o}\``).join(" or ")} (a menu)`;
       return type.pick ? `text (picked: ${type.pick})` : "text";
     case "number": {
       const bits = [

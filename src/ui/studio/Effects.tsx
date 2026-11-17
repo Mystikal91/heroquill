@@ -1,7 +1,6 @@
 import type { ComponentChildren } from "preact";
 import en from "../../../locales/en/ui.json";
 import { content } from "../../app/store";
-import { studioMode } from "../../app/studio";
 import { ABILITIES, type Effect } from "../../data/schema";
 import { blankEffect } from "../../homebrew/blanks";
 import {
@@ -67,10 +66,10 @@ function show(value: unknown): string {
 }
 
 /** A line that says what an effect is for: in words for the common ones, the developer's line in the advanced mode. */
-function helpFor(type: EffectType, advanced: boolean): string {
+function helpFor(type: EffectType): string {
   const key = `fxhelp.${type}`;
   if (key in en) return ui(key as UiKey);
-  return advanced ? EFFECT_META[type].doc : "";
+  return EFFECT_META[type].doc;
 }
 
 /** One line that says what an effect does, for its card to show while it is closed. */
@@ -140,7 +139,7 @@ const PROFICIENCY_GROUPS: Record<string, string[]> = {
 };
 
 /** What a proficiency of a category can be in, by name: the skills, the abilities, the languages, the kinds of weapon... */
-function proficiencyTargets(category: string): Option[] | undefined {
+export function proficiencyTargets(category: string): Option[] | undefined {
   const c = content.value;
   if (!c) return undefined;
   const slug = (id: string) => id.split("/")[1] ?? id;
@@ -197,7 +196,6 @@ function EffectCard({
 }) {
   const type = effect.type as EffectType;
   const values = effect as unknown as Record<string, unknown>;
-  const advanced = studioMode.value === "advanced";
   const points = effect.type === "uses" && effect.pool === true;
   const fields = effectFields(type).filter((f) => !(type === "uses" && f.key === "pool"));
   // The reserve a feature adds to or spends from is part of the question, not an extra.
@@ -205,7 +203,18 @@ function EffectCard({
     !f.optional ||
     (type === "uses" && f.key === "reserve") ||
     (type === "spends" && (f.key === "reserve" || f.key === "pool"));
-  const optional = fields.filter((f) => !isMain(f));
+  // What a choice can be set with depends on what it grants: the spell options only matter for a spell,
+  // the amount for an ability bonus.
+  const relevant = (f: (typeof fields)[number]) => {
+    if (type !== "choice") return true;
+    const grants = String(values.grants);
+    if (f.key === "value") return grants === "abilityBonus";
+    if (["spellLevel", "spellUpTo", "spellClass", "ritual", "free", "atWill"].includes(f.key))
+      return grants === "spell";
+    if (f.key === "rest") return grants === "spell" && values.free === true;
+    return true;
+  };
+  const optional = fields.filter((f) => !isMain(f) && relevant(f));
   const Flags = ({ specs }: { specs: typeof fields }) =>
     specs.length === 0 ? null : <div class="studio-checks">{specs.map(control)}</div>;
   const control = (spec: (typeof fields)[number]) => {
@@ -227,7 +236,7 @@ function EffectCard({
         <RequirementBuilder
           key={spec.key}
           value={String(values.requires ?? "")}
-          raw={advanced}
+          raw
           onChange={(text) => onChange({ ...values, requires: text } as unknown as Effect)}
         />
       );
@@ -304,10 +313,7 @@ function EffectCard({
       </div>
       <Flags specs={fields.filter((f) => isMain(f) && f.type.type === "boolean")} />
       {optional.length > 0 && (
-        <details
-          class="studio-more"
-          open={advanced || optional.some((f) => values[f.key] !== undefined)}
-        >
+        <details class="studio-more" open>
           <summary>{ui("studio.moreOptions")}</summary>
           <div class="studio-grid">
             {optional.filter((f) => f.type.type !== "boolean").map(control)}
@@ -315,7 +321,7 @@ function EffectCard({
           <Flags specs={optional.filter((f) => f.type.type === "boolean")} />
         </details>
       )}
-      <small class="muted">{points ? ui("fxhelp.points") : helpFor(type, advanced)}</small>
+      <small class="muted">{points ? ui("fxhelp.points") : helpFor(type)}</small>
     </details>
   );
 }
@@ -331,10 +337,7 @@ export function EffectList({
   /** Types of effect another part of the form manages: not listed, not offered, but kept. */
   hidden?: string[];
 }) {
-  const advanced = studioMode.value === "advanced";
-  const choices = EFFECT_TYPES.filter(
-    (t) => !hidden.includes(t) && !UNUSED.has(t) && (advanced || EFFECT_META[t].level === "guided"),
-  );
+  const choices = EFFECT_TYPES.filter((t) => !hidden.includes(t) && !UNUSED.has(t) && true);
   const shown = effects
     .map((effect, i) => ({ effect, i }))
     .filter(({ effect }) => !hidden.includes(effect.type));

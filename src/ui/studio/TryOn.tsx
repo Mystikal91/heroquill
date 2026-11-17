@@ -34,7 +34,16 @@ export function TryOn({ record, entry }: { record: UserPackRecord; entry: Entry 
   const index = new Map(c.index);
   for (const e of record.pack.entries) index.set(e.id, e);
   const needsClass = !withEntry(entry, options);
-  const result = needsClass ? undefined : tryOn(entry, index, options);
+  const result = needsClass
+    ? undefined
+    : (() => {
+        try {
+          return tryOn(entry, index, options);
+        } catch {
+          // An entry that is not finished (a section missing its fields) cannot be tried yet.
+          return undefined;
+        }
+      })();
   const rows = result?.facts.filter((f) => all || f.changed) ?? [];
   const name = (id: string) => c.name(id) ?? id;
 

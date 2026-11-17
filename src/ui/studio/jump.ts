@@ -1,5 +1,3 @@
-import { setStudioMode, studioMode } from "../../app/studio";
-
 /** The place in the editor of a field that the label names: the label itself, a box's title, a section's heading. */
 function find(label: string): Element | undefined {
   const root = document.querySelector(".studio-editor");
@@ -39,12 +37,5 @@ export function jumpToField(label: string): void {
   if (mark) {
     show(mark);
     return;
-  }
-  if (studioMode.value !== "advanced") {
-    setStudioMode("advanced");
-    setTimeout(() => {
-      const late = find(label);
-      if (late) show(late);
-    }, 150);
   }
 }

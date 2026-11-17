@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { createHomebrewPack, editingPackId } from "../../app/homebrew";
 import { fold } from "../../app/search";
 import {
@@ -10,7 +10,6 @@ import {
   setSidebarOpen,
   sidebarOpen,
   startFromOpen,
-  studioMode,
 } from "../../app/studio";
 import { offerUndo } from "../../app/undo";
 import {
@@ -43,9 +42,8 @@ export function removePack(record: UserPackRecord) {
 
 function NewMenu({ record }: { record: UserPackRecord }) {
   const [open, setOpen] = useState(false);
-  const advanced = studioMode.value === "advanced";
   // One column with a search: "start from an entry" first, then the kinds, each with the dot of its colour.
-  const kinds = NEW_KINDS.filter((k) => advanced || k.level === "guided").map((k) => ({
+  const kinds = NEW_KINDS.map((k) => ({
     id: k.id,
     label: k.label(),
     dot: KIND_META[k.kind].group,
@@ -106,22 +104,54 @@ function Contents({ record }: { record: UserPackRecord }) {
   const name = (e: Entry) => record.strings[`${e.id}.name`] ?? "";
   const kinds = [...new Set(all.map((e) => kindName(e)))].sort();
   const shown = shownEntries(record);
+  // The search is a button with a lens; it opens its box under the line, and closing it clears it.
+  const [searching, setSearching] = useState(search !== "");
+  const searchBox = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (searching) searchBox.current?.focus();
+  }, [searching]);
+  const closeSearch = () => {
+    entrySearch.value = "";
+    setSearching(false);
+  };
 
   return (
     <div class="studio-children">
       <div class="studio-toolbar">
         <NewMenu record={record} />
+        <button
+          type="button"
+          class={searching ? "studio-searchbtn on" : "studio-searchbtn"}
+          aria-pressed={searching}
+          aria-label={ui("studio.search")}
+          title={ui("studio.search")}
+          onClick={() => (searching ? closeSearch() : setSearching(true))}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M15 15l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      {searching && (
         <input
           type="search"
-          class="studio-search"
+          class="studio-search studio-search-row"
           value={search}
+          ref={searchBox}
           placeholder={ui("studio.search")}
           aria-label={ui("studio.search")}
           onInput={(e) => {
             entrySearch.value = e.currentTarget.value;
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              e.stopPropagation();
+              closeSearch();
+            }
+          }}
         />
-      </div>
+      )}
       {kinds.length > 1 && (
         <fieldset class="studio-kinds" aria-label={ui("studio.kinds")}>
           {["", ...kinds].map((k) => (
@@ -220,6 +250,60 @@ export function Explorer({ record }: { record: UserPackRecord | undefined }) {
         </button>
       </header>
 
+      <form
+        class="studio-newpack"
+        onSubmit={(e) => {
+          e.preventDefault();
+          setFolded(false);
+          void createHomebrewPack(name);
+          setName("");
+        }}
+      >
+        <input
+          type="text"
+          value={name}
+          placeholder={ui("hb.f.name")}
+          aria-label={ui("studio.newPackName")}
+          onInput={(e) => setName(e.currentTarget.value)}
+        />
+        <button type="submit" class="primary">
+          {ui("studio.create")}
+        </button>
+        <button
+          type="button"
+          class="studio-openbtn"
+          aria-label={ui("hb.addFile")}
+          title={ui("hb.addFile")}
+          onClick={() => fileInput.current?.click()}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path
+              d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 9.7V18a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </form>
+      <input
+        ref={fileInput}
+        type="file"
+        accept=".json,application/json"
+        hidden
+        onChange={(e) => {
+          const file = e.currentTarget.files?.[0];
+          e.currentTarget.value = "";
+          if (file) void importPackFile(file);
+        }}
+      />
+      {(error === "exists" || error === "invalid") && (
+        <p class="note" role="alert">
+          {ui(error === "exists" ? "packs.exists" : "packs.invalid")}
+        </p>
+      )}
+
       {packs.length === 0 ? (
         <p class="muted">{ui("studio.noPacks")}</p>
       ) : (
@@ -271,47 +355,6 @@ export function Explorer({ record }: { record: UserPackRecord | undefined }) {
             );
           })}
         </ul>
-      )}
-
-      <form
-        class="studio-newpack"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setFolded(false);
-          void createHomebrewPack(name);
-          setName("");
-        }}
-      >
-        <input
-          type="text"
-          value={name}
-          placeholder={ui("studio.newPackName")}
-          aria-label={ui("studio.newPackName")}
-          onInput={(e) => setName(e.currentTarget.value)}
-        />
-        <button type="submit" class="primary">
-          {ui("studio.create")}
-        </button>
-      </form>
-
-      <button type="button" class="studio-link" onClick={() => fileInput.current?.click()}>
-        {ui("hb.addFile")}
-      </button>
-      <input
-        ref={fileInput}
-        type="file"
-        accept=".json,application/json"
-        hidden
-        onChange={(e) => {
-          const file = e.currentTarget.files?.[0];
-          e.currentTarget.value = "";
-          if (file) void importPackFile(file);
-        }}
-      />
-      {(error === "exists" || error === "invalid") && (
-        <p class="note" role="alert">
-          {ui(error === "exists" ? "packs.exists" : "packs.invalid")}
-        </p>
       )}
     </nav>
   );

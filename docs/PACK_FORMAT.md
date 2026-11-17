@@ -1195,16 +1195,16 @@ it by hand. Run `npm run docs:pack` to update it.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `category` | text | **yes** | weapon, armor, adventuring-gear, tools, mounts-and-vehicles, magic-items |
+| `category` | `weapon` or `armor` or `adventuring-gear` or `tools` or `mounts-and-vehicles` or `magic-items` (a menu) | **yes** |  |
 | `cost` | object { amount, unit } | **yes** |  |
 | `cost.amount` | number | **yes** |  |
 | `cost.unit` | `cp` or `sp` or `gp` | **yes** |  |
 | `weight` | number (min 0, pounds) | no |  |
-| `rarity` | text | no | A magic item: common, uncommon, rare, very-rare, legendary, artifact. |
+| `rarity` | `common` or `uncommon` or `rare` or `very-rare` or `legendary` or `artifact` (a menu) | no | A magic item. |
 | `attunement` | boolean | no | The item asks to be attuned to; at most three are. |
-| `slot` | text | no | Where it is worn or held: body, neck, shield, waist, oneHand, feet, arms, shoulders... |
+| `slot` | `head` or `neck` or `shoulders` or `body` or `arms` or `hands` or `ring` or `waist` or `feet` or `shield` or `oneHand` or `twoHands` (a menu) | no | Where it is worn or held. |
 | `enhancement` | number (integer, min 0, max 3) | no | +1 to +3 to attack and damage. |
-| `copyOf` | text | no | The item a customized copy was made from. |
+| `copyOf` | entry id (item) | no | The item a customized copy was made from. |
 | `magical` | boolean | no | Counts as magic without a rarity. |
 | `use` | object { heal? } | no | What using the item does when it can be worked out. |
 | `use.heal` | dice (`1d8`, `2d6+3`) | no |  |
@@ -1226,7 +1226,7 @@ it by hand. Run `npm run docs:pack` to update it.
 | `weapon.throwRange.normal` | number (min 0, feet) | **yes** |  |
 | `weapon.throwRange.long` | number (min 0, feet) | no |  |
 | `weapon.mastery` | entry id (property) | no |  |
-| `weapon.proficiency` | list of text | **yes** |  |
+| `weapon.proficiency` | list of text (picked: weaponProf) | **yes** |  |
 | `armor` | object { category, base, dexBonus, maxDexBonus?, strengthMinimum, stealthDisadvantage, properties?, proficiency } | no |  |
 | `armor.category` | `light` or `medium` or `heavy` or `shield` | **yes** |  |
 | `armor.base` | number | **yes** |  |
@@ -1235,17 +1235,17 @@ it by hand. Run `npm run docs:pack` to update it.
 | `armor.strengthMinimum` | number | **yes** |  |
 | `armor.stealthDisadvantage` | boolean | **yes** |  |
 | `armor.properties` | list of entry id (property) | no |  |
-| `armor.proficiency` | list of text | **yes** |  |
+| `armor.proficiency` | list of text (picked: armorProf) | **yes** |  |
 | `gear` | object { category?, bundleSize?, contents? } | no |  |
-| `gear.category` | text | no |  |
+| `gear.category` | `standard-gear` or `kits` or `equipment-packs` or `ammunition` or `arcane-foci` or `druidic-foci` or `holy-symbols` or `poisons` (a menu) | no |  |
 | `gear.bundleSize` | number | no |  |
 | `gear.contents` | list of object { item, quantity } | no |  |
 | `gear.contents[].item` | entry id (item) | **yes** |  |
 | `gear.contents[].quantity` | number | **yes** |  |
 | `tool` | object { category? } | no |  |
-| `tool.category` | text | no |  |
+| `tool.category` | `artisans-tools` or `musical-instruments` or `gaming-sets` or `other-tools` (a menu) | no |  |
 | `vehicle` | object { category?, speed?, crew?, passengers?, cargo?, armorClass?, hitPoints?, damageThreshold? } | no |  |
-| `vehicle.category` | text | no |  |
+| `vehicle.category` | `mounts-and-other-animals` or `tack-harness-and-drawn-vehicles` or `waterborne-vehicles` (a menu) | no |  |
 | `vehicle.speed` | object { amount, unit } | no |  |
 | `vehicle.speed.amount` | number | **yes** |  |
 | `vehicle.speed.unit` | text | **yes** |  |
@@ -1278,13 +1278,13 @@ No fields: the entry is its name and its text.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `type` | text | no | standard or exotic. |
+| `type` | `standard` or `exotic` (a menu) | no |  |
 
 #### `feat`
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `category` | text | no | origin, general, fighting-style, epic-boon. |
+| `category` | `origin` or `general` or `fighting-style` or `epic-boon` (a menu) | no |  |
 | `builtIn` | boolean | no |  |
 | `prerequisites` | list of object { type, level } or object { type, feature } or object { type, spell } or object { ability, minimum } | no |  |
 | `requires` | text | no |  |
@@ -1316,8 +1316,8 @@ No fields: the entry is its name and its text.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `size` | text | no |  |
-| `type` | text | no |  |
+| `size` | `tiny` or `small` or `medium` or `large` or `huge` or `gargantuan` (a menu) | no |  |
+| `type` | `aberration` or `beast` or `celestial` or `construct` or `dragon` or `elemental` or `fey` or `fiend` or `giant` or `humanoid` or `monstrosity` or `ooze` or `plant` or `undead` (a menu) | no |  |
 | `subtype` | text | no |  |
 | `swarm` | text | no |  |
 | `armorClass` | list of object { value, type?, armor?, spell?, condition?, plus? } | no |  |
@@ -1341,11 +1341,66 @@ No fields: the entry is its name and its text.
 | `challenge` | number | no |  |
 | `xp` | number | no |  |
 | `proficiencyBonus` | number | no |  |
-| `special` | list of any JSON | no | Traits of the creature; their texts are `special.N.name\|desc`. |
-| `actions` | list of any JSON | no |  |
-| `bonusActions` | list of any JSON | no |  |
-| `reactions` | list of any JSON | no |  |
-| `legendary` | list of any JSON | no |  |
+| `special` | list of object { attackBonus?, damage?, dc?, usage?, multiattack?, spellcasting? } | no | Traits of the creature; their texts are `special.N.name\|desc`. |
+| `special[].attackBonus` | number | no |  |
+| `special[].damage` | list of object { type, dice } | no |  |
+| `special[].damage[].type` | text (picked: damage) | **yes** |  |
+| `special[].damage[].dice` | dice (`1d8`, `2d6+3`) | **yes** |  |
+| `special[].dc` | object { ability?, value?, onSave? } | no |  |
+| `special[].dc.ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | no |  |
+| `special[].dc.value` | number | no |  |
+| `special[].dc.onSave` | `none` or `half` (a menu) | no |  |
+| `special[].usage` | any JSON | no | How often it can be used (per day, recharge...). |
+| `special[].multiattack` | any JSON | no | The attacks of a multiattack: the position of each action and how many times. |
+| `special[].spellcasting` | any JSON | no |  |
+| `actions` | list of object { attackBonus?, damage?, dc?, usage?, multiattack?, spellcasting? } | no |  |
+| `actions[].attackBonus` | number | no |  |
+| `actions[].damage` | list of object { type, dice } | no |  |
+| `actions[].damage[].type` | text (picked: damage) | **yes** |  |
+| `actions[].damage[].dice` | dice (`1d8`, `2d6+3`) | **yes** |  |
+| `actions[].dc` | object { ability?, value?, onSave? } | no |  |
+| `actions[].dc.ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | no |  |
+| `actions[].dc.value` | number | no |  |
+| `actions[].dc.onSave` | `none` or `half` (a menu) | no |  |
+| `actions[].usage` | any JSON | no | How often it can be used (per day, recharge...). |
+| `actions[].multiattack` | any JSON | no | The attacks of a multiattack: the position of each action and how many times. |
+| `actions[].spellcasting` | any JSON | no |  |
+| `bonusActions` | list of object { attackBonus?, damage?, dc?, usage?, multiattack?, spellcasting? } | no |  |
+| `bonusActions[].attackBonus` | number | no |  |
+| `bonusActions[].damage` | list of object { type, dice } | no |  |
+| `bonusActions[].damage[].type` | text (picked: damage) | **yes** |  |
+| `bonusActions[].damage[].dice` | dice (`1d8`, `2d6+3`) | **yes** |  |
+| `bonusActions[].dc` | object { ability?, value?, onSave? } | no |  |
+| `bonusActions[].dc.ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | no |  |
+| `bonusActions[].dc.value` | number | no |  |
+| `bonusActions[].dc.onSave` | `none` or `half` (a menu) | no |  |
+| `bonusActions[].usage` | any JSON | no | How often it can be used (per day, recharge...). |
+| `bonusActions[].multiattack` | any JSON | no | The attacks of a multiattack: the position of each action and how many times. |
+| `bonusActions[].spellcasting` | any JSON | no |  |
+| `reactions` | list of object { attackBonus?, damage?, dc?, usage?, multiattack?, spellcasting? } | no |  |
+| `reactions[].attackBonus` | number | no |  |
+| `reactions[].damage` | list of object { type, dice } | no |  |
+| `reactions[].damage[].type` | text (picked: damage) | **yes** |  |
+| `reactions[].damage[].dice` | dice (`1d8`, `2d6+3`) | **yes** |  |
+| `reactions[].dc` | object { ability?, value?, onSave? } | no |  |
+| `reactions[].dc.ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | no |  |
+| `reactions[].dc.value` | number | no |  |
+| `reactions[].dc.onSave` | `none` or `half` (a menu) | no |  |
+| `reactions[].usage` | any JSON | no | How often it can be used (per day, recharge...). |
+| `reactions[].multiattack` | any JSON | no | The attacks of a multiattack: the position of each action and how many times. |
+| `reactions[].spellcasting` | any JSON | no |  |
+| `legendary` | list of object { attackBonus?, damage?, dc?, usage?, multiattack?, spellcasting? } | no |  |
+| `legendary[].attackBonus` | number | no |  |
+| `legendary[].damage` | list of object { type, dice } | no |  |
+| `legendary[].damage[].type` | text (picked: damage) | **yes** |  |
+| `legendary[].damage[].dice` | dice (`1d8`, `2d6+3`) | **yes** |  |
+| `legendary[].dc` | object { ability?, value?, onSave? } | no |  |
+| `legendary[].dc.ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | no |  |
+| `legendary[].dc.value` | number | no |  |
+| `legendary[].dc.onSave` | `none` or `half` (a menu) | no |  |
+| `legendary[].usage` | any JSON | no | How often it can be used (per day, recharge...). |
+| `legendary[].multiattack` | any JSON | no | The attacks of a multiattack: the position of each action and how many times. |
+| `legendary[].spellcasting` | any JSON | no |  |
 | `forms` | any JSON | no | The creatures a shapechanger can become. |
 
 #### `deity`

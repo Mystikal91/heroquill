@@ -1656,11 +1656,6 @@
   }
 }
 
-/* While the menu of new entries is open its search is the one that counts: the list's own steps aside. */
-.studio-toolbar:has(.studio-menu-panel) > .studio-search {
-  display: none;
-}
-
 .studio-picker-list button {
   display: flex;
   align-items: center;
@@ -1788,25 +1783,6 @@
   position: relative;
 }
 
-.studio-help-mark {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 1.4rem;
-  height: 1.4rem;
-  min-height: 0 !important;
-  padding: 0 !important;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  line-height: 1;
-  opacity: 0.75;
-}
-
-.studio-help-mark:hover,
-.studio-help-mark[aria-expanded="true"] {
-  opacity: 1;
-}
-
 .studio-help-text {
   display: block;
   margin-top: 0.25rem;
@@ -1823,12 +1799,6 @@
 }
 
 /* ---- Easier to see and to hit ---- */
-
-/* The "?" is as big as the smallest target that is easy to hit (24px). */
-.studio-help-mark {
-  width: 1.6rem;
-  height: 1.6rem;
-}
 
 /* The hint in an empty box stays readable on the dark background. */
 .studio input::placeholder,
@@ -1852,34 +1822,6 @@
 }
 
 /* ---- The step-by-step guide for a new entry ---- */
-
-.studio-wizard {
-  display: grid;
-  gap: 0.9rem;
-  max-width: 40rem;
-}
-
-.studio-wizard h3 {
-  margin: 0;
-}
-
-.studio-wizard-head progress {
-  width: 100%;
-  height: 0.4rem;
-  accent-color: var(--accent);
-}
-
-.studio-wizard-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.studio-wizard-actions .primary {
-  min-width: 7rem;
-}
 
 /* ---- Tables by level (spells, values of a class) ---- */
 
@@ -2030,4 +1972,480 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent);
+}
+
+/* ---- The top of the studio: the mode is chosen here, before anything is open ---- */
+
+.studio-title-box {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.studio-modebox {
+  display: grid;
+  justify-items: end;
+  gap: 0.3rem;
+  margin-left: auto;
+  flex: none;
+}
+
+.studio-modebox .studio-mode {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.studio-modebox small {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .studio-modebox {
+    justify-items: start;
+    margin-left: 0;
+  }
+}
+
+/* ---- The packs column is a panel of its own, darker than the page ---- */
+
+.studio-explorer {
+  padding: 0.8rem 0.7rem;
+  background: color-mix(in srgb, var(--bg) 72%, #000);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.studio-explorer.rail {
+  padding: 0.6rem 0;
+}
+
+/* ---- On a computer, the studio is closer to what a desktop program is: smaller controls, more on screen ---- */
+
+@media (hover: hover) and (pointer: fine) {
+  .studio {
+    padding: 1rem;
+    font-size: 0.97rem;
+  }
+
+  .studio-top {
+    margin-bottom: 0.75rem;
+  }
+
+  .studio-body {
+    --explorer: 15rem;
+    gap: 1rem;
+  }
+
+  .studio button {
+    min-height: 1.9rem;
+    padding: 0 0.65rem;
+    font-size: 0.88rem;
+  }
+
+  .studio-explorer button,
+  .studio-explorer .studio-entry {
+    min-height: 1.75rem;
+    padding: 0 0.55rem;
+    font-size: 0.82rem;
+  }
+
+  .studio-explorer .studio-entry b {
+    font-size: 0.85rem;
+  }
+
+  .studio-packs,
+  .studio-entries {
+    gap: 0.2rem;
+  }
+
+  .studio-kind {
+    min-height: 1.5rem !important;
+    padding: 0 0.5rem !important;
+    font-size: 0.74rem;
+  }
+
+  .studio-field input[type="text"],
+  .studio-field input[type="number"],
+  .studio-field select,
+  .studio-search,
+  .studio-pick {
+    min-height: 2rem;
+    padding-block: 0.15rem;
+    font-size: 0.95rem;
+  }
+
+  .studio-field {
+    margin-bottom: 0.45rem;
+  }
+
+  .studio-bar {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .studio-work {
+    gap: 1.1rem;
+  }
+
+  .studio-effect,
+  .studio-owned-item {
+    padding: 0.4rem 0.65rem;
+  }
+}
+
+/* ---- One line for the entries: "+ New" and a lens that opens the search under it ---- */
+
+.studio-toolbar .studio-menu > button {
+  flex: 1 1 auto;
+}
+
+.studio .studio-searchbtn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.1rem;
+  padding: 0;
+}
+
+.studio .studio-searchbtn.on {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.studio-search-row {
+  width: 100%;
+  margin: 0 0 0.5rem;
+}
+
+/* ---- The packs column: every button and every box has the same height, so the rows line up ---- */
+
+.studio-explorer {
+  --control: 2.4rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .studio-explorer {
+    --control: 1.85rem;
+  }
+}
+
+.studio .studio-explorer button,
+.studio .studio-explorer input[type="text"],
+.studio .studio-explorer input[type="search"],
+.studio .studio-explorer select,
+.studio .studio-explorer .studio-entry,
+.studio .studio-explorer .studio-node-main {
+  box-sizing: border-box;
+  height: var(--control);
+  min-height: var(--control) !important;
+  padding-block: 0;
+  line-height: 1;
+}
+
+.studio .studio-explorer .studio-kind {
+  height: var(--control);
+  min-height: var(--control) !important;
+}
+
+.studio .studio-explorer .studio-link {
+  height: auto;
+  min-height: 0 !important;
+}
+
+/* The row that starts a pack is at the top: the input takes the room, the button keeps its size. */
+.studio-explorer .studio-newpack {
+  margin: 0 0 0.35rem;
+}
+
+.studio-explorer > .studio-link {
+  display: block;
+  margin: 0 auto 0.75rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* The button that opens a pack file sits beside "Create", the same size as the other controls. */
+.studio .studio-openbtn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--control, 1.85rem);
+  padding: 0;
+}
+
+/* ---- Tabs: the sections of a page one at a time ---- */
+
+.studio-tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.studio .studio-tab {
+  flex: none;
+  min-height: 2.1rem;
+  padding: 0 0.9rem;
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: transparent;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.studio .studio-tab:hover:not(:disabled) {
+  color: var(--fg);
+  border-color: var(--border);
+  border-bottom-color: transparent;
+}
+
+.studio .studio-tab.on {
+  color: var(--fg);
+  background: var(--bg);
+  border-color: var(--border);
+  border-bottom-color: var(--bg);
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.studio-tab-badge {
+  display: inline-block;
+  min-width: 1.3em;
+  margin-left: 0.4rem;
+  padding: 0 0.35em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.78em;
+  text-align: center;
+}
+
+.studio-tabpanel {
+  min-width: 0;
+}
+
+.studio-pp-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 0 0 1rem;
+}
+
+.studio-pp-checks {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 1rem;
+}
+
+.studio-pp-checks li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.8rem;
+}
+
+/* A page in tabs has no preview beside it: the form takes the whole width. */
+.studio-work.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* The title of a page in tabs: the name is edited in its first tab, here it is only read. */
+.studio-entry-title {
+  margin: 0 0 0.6rem;
+  font-size: 1.35rem;
+  overflow-wrap: anywhere;
+}
+
+/* A row of a list that is a box of its own has its remove button at the top of the box, not beside it. */
+.studio-row.is-box {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.studio-row.is-box.has-handle {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+/* "Remove" of a box sits on its top edge, at the right, on the line of its title: no row of its own. */
+.studio-many {
+  position: relative;
+}
+
+.studio .studio-many > button.studio-drop {
+  position: absolute;
+  /* A box is positioned from under its title, and its border runs through the middle of the title. */
+  top: -1.45rem;
+  right: 0.75rem;
+  display: block;
+  height: 1.55rem;
+  min-height: 1.55rem !important;
+  margin: 0;
+  padding: 0 0.6rem;
+  background: var(--surface);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* ---- Every one-line control of the editor has the same height, so a row of them lines up ---- */
+
+.studio {
+  --field-h: 2.4rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .studio {
+    --field-h: 2rem;
+  }
+}
+
+.studio .studio-editor input[type="text"],
+.studio .studio-editor input[type="number"],
+.studio .studio-editor input[type="search"],
+.studio .studio-editor select,
+.studio .studio-editor .studio-select-button,
+.studio .studio-editor .studio-row > button,
+.studio .studio-editor .studio-damage-new button {
+  box-sizing: border-box;
+  height: var(--field-h);
+  min-height: var(--field-h) !important;
+  padding-block: 0;
+}
+
+/* The small boxes of a table keep their own, smaller size. */
+.studio .studio-table .studio-cell input {
+  height: 1.9rem;
+  min-height: 1.9rem !important;
+}
+
+/* The help "i": a small circle right after the label, as tall as the text of the label. */
+.studio-helped {
+  position: relative;
+}
+
+.studio .studio-help-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  min-height: 0 !important;
+  margin-left: 0.45em;
+  padding: 0 !important;
+  vertical-align: -0.15em;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font: italic 700 0.8em / 1 var(--font-display, inherit);
+  cursor: pointer;
+}
+
+.studio .studio-help-mark:hover,
+.studio .studio-help-mark:focus-visible,
+.studio .studio-help-mark[aria-expanded="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* The sections that can be added to an item: buttons side by side, and an opened one takes the whole line. */
+.studio-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.studio-sections > .studio-field,
+.studio-sections > .studio-helped {
+  margin: 0;
+}
+
+.studio-sections > fieldset,
+.studio-sections > .studio-helped:has(fieldset) {
+  flex: 1 1 100%;
+}
+
+.studio-checks + h4 {
+  margin-top: 1.4rem;
+}
+
+/* A line of short fields that start at the same height, whatever the box each one draws. */
+.studio-grid-line {
+  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+
+/* A field that is only a button (the first of a list): it sits on the line of the inputs next to it, not of their labels. */
+.studio-grid > .studio-field:has(> button:only-child) {
+  align-self: end;
+}
+
+.studio-grid > .studio-field > button:only-child {
+  min-height: var(--field-h, 2.6rem);
+  height: auto;
+}
+
+/* The starting equipment: a row is the kind, what it is, how many, and the button that takes it away. */
+.studio-gear h4 {
+  margin: 1rem 0 0.2rem;
+}
+
+.studio-gear-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.studio-gear-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 11rem) minmax(10rem, 1fr) 6.5rem auto;
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.studio-gear-row > .danger {
+  height: var(--field-h, 2.6rem);
+}
+
+.studio-gear-option {
+  margin: 0 0 0.8rem;
+}
+
+@media (max-width: 40rem) {
+  .studio-gear-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.studio-gear-row > .studio-field,
+.studio-gear-row > label {
+  margin-bottom: 0;
+}
+
+/* A requirement and the like: the kind, then what it asks, side by side and on one line of inputs. */
+.studio-union {
+  display: grid;
+  grid-template-columns: minmax(9rem, 12rem) repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.5rem;
+  align-items: end;
+  flex: 1;
+}
+
+.studio-union > * {
+  margin-bottom: 0;
+}
+
+/* A list of requirements takes the whole line: each row is a kind and its values. */
+.studio-grid > .studio-helped:has(.studio-union) {
+  grid-column: 1 / -1;
+}
+
+.studio-row > .studio-union {
+  min-width: 0;
+}
+
+.studio-union > .studio-field,
+.studio-union > .studio-helped {
+  margin-bottom: 0;
 }

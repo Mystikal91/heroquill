@@ -30,6 +30,8 @@ const list = (of: FieldType): FieldType => ({ type: "list", of });
 const object = (...fields: FieldSpec[]): FieldType => ({ type: "object", fields });
 const choice = (...options: string[]): FieldType => ({ type: "choice", options });
 const json: FieldType = { type: "json" };
+/** Text that is one word of a closed list: the editor offers the list as a menu. */
+const oneOf = (...options: string[]): FieldType => ({ type: "text", options });
 
 /** A thing a class or background starts with: an item, any item of a category, or gold. */
 const STARTING_ITEM: FieldType = {
@@ -63,11 +65,11 @@ const PREREQUISITE: FieldType = {
     ),
     object(
       field("type", { type: "literal", value: "feature" }, { required: true }),
-      field("feature", text, { required: true }),
+      field("feature", ref("feature"), { required: true }),
     ),
     object(
       field("type", { type: "literal", value: "spell" }, { required: true }),
-      field("spell", text, { required: true }),
+      field("spell", ref("spell"), { required: true }),
     ),
     object(
       field("ability", ability, { required: true }),
@@ -110,11 +112,11 @@ const DAMAGE: FieldType = object(
 const g = "guided" as const;
 
 const ITEM: FieldSpec[] = [
-  field("category", text, {
-    required: true,
-    level: g,
-    doc: "weapon, armor, adventuring-gear, tools, mounts-and-vehicles, magic-items",
-  }),
+  field(
+    "category",
+    oneOf("weapon", "armor", "adventuring-gear", "tools", "mounts-and-vehicles", "magic-items"),
+    { required: true, level: g },
+  ),
   field(
     "cost",
     object(
@@ -124,19 +126,34 @@ const ITEM: FieldSpec[] = [
     { required: true, level: g },
   ),
   field("weight", pounds, { level: g }),
-  field("rarity", text, {
+  field("rarity", oneOf("common", "uncommon", "rare", "very-rare", "legendary", "artifact"), {
     level: g,
-    doc: "A magic item: common, uncommon, rare, very-rare, legendary, artifact.",
+    doc: "A magic item.",
   }),
   field("attunement", bool, {
     level: g,
     doc: "The item asks to be attuned to; at most three are.",
   }),
-  field("slot", text, {
-    doc: "Where it is worn or held: body, neck, shield, waist, oneHand, feet, arms, shoulders...",
-  }),
+  field(
+    "slot",
+    oneOf(
+      "head",
+      "neck",
+      "shoulders",
+      "body",
+      "arms",
+      "hands",
+      "ring",
+      "waist",
+      "feet",
+      "shield",
+      "oneHand",
+      "twoHands",
+    ),
+    { doc: "Where it is worn or held." },
+  ),
   field("enhancement", whole(0, 3), { level: g, doc: "+1 to +3 to attack and damage." }),
-  field("copyOf", text, { doc: "The item a customized copy was made from." }),
+  field("copyOf", ref("item"), { doc: "The item a customized copy was made from." }),
   field("magical", bool, { doc: "Counts as magic without a rarity." }),
   field("use", object(field("heal", dice)), {
     doc: "What using the item does when it can be worked out.",
@@ -151,11 +168,16 @@ const ITEM: FieldSpec[] = [
       field("kind", choice("melee", "ranged"), { required: true }),
       field("damage", DAMAGE),
       field("twoHandedDamage", DAMAGE, { level: g }),
-      field("properties", refs("property"), { required: true }),
+      field("properties", list({ type: "ref", kinds: ["property"], mastery: false }), {
+        required: true,
+      }),
       field("range", RANGE, { required: true }),
       field("throwRange", RANGE),
-      field("mastery", ref("property")),
-      field("proficiency", list(text), { required: true, level: "advanced" }),
+      field("mastery", { type: "ref", kinds: ["property"], mastery: true }),
+      field("proficiency", list({ type: "text", pick: "weaponProf" }), {
+        required: true,
+        level: "advanced",
+      }),
     ),
     { level: g },
   ),
@@ -168,15 +190,32 @@ const ITEM: FieldSpec[] = [
       field("maxDexBonus", number, { level: g }),
       field("strengthMinimum", number, { required: true }),
       field("stealthDisadvantage", bool, { required: true }),
-      field("properties", refs("property"), { level: g }),
-      field("proficiency", list(text), { required: true, level: "advanced" }),
+      field("properties", list({ type: "ref", kinds: ["property"], mastery: false }), {
+        level: g,
+      }),
+      field("proficiency", list({ type: "text", pick: "armorProf" }), {
+        required: true,
+        level: "advanced",
+      }),
     ),
     { level: g },
   ),
   field(
     "gear",
     object(
-      field("category", text),
+      field(
+        "category",
+        oneOf(
+          "standard-gear",
+          "kits",
+          "equipment-packs",
+          "ammunition",
+          "arcane-foci",
+          "druidic-foci",
+          "holy-symbols",
+          "poisons",
+        ),
+      ),
       field("bundleSize", number),
       field(
         "contents",
@@ -189,11 +228,22 @@ const ITEM: FieldSpec[] = [
       ),
     ),
   ),
-  field("tool", object(field("category", text))),
+  field(
+    "tool",
+    object(
+      field(
+        "category",
+        oneOf("artisans-tools", "musical-instruments", "gaming-sets", "other-tools"),
+      ),
+    ),
+  ),
   field(
     "vehicle",
     object(
-      field("category", text),
+      field(
+        "category",
+        oneOf("mounts-and-other-animals", "tack-harness-and-drawn-vehicles", "waterborne-vehicles"),
+      ),
       field(
         "speed",
         object(
@@ -212,9 +262,56 @@ const ITEM: FieldSpec[] = [
   field("poison", object(field("delivery", choice("ingested", "inhaled", "contact", "injury")))),
 ];
 
+/** What the game reads of a trait or an action of a stat block (its name and text are texts of the pack). */
+export const MONSTER_ACTION_FIELDS: FieldSpec[] = [
+  field("attackBonus", number),
+  field(
+    "damage",
+    list(
+      object(
+        field("type", damageKind, { required: true }),
+        field("dice", dice, { required: true }),
+      ),
+    ),
+  ),
+  field(
+    "dc",
+    object(
+      field("ability", ability),
+      field("value", number),
+      field("onSave", { type: "text", options: ["none", "half"] }),
+    ),
+  ),
+  field("usage", json, { doc: "How often it can be used (per day, recharge...)." }),
+  field("multiattack", json, {
+    doc: "The attacks of a multiattack: the position of each action and how many times.",
+  }),
+  field("spellcasting", json),
+];
+const MONSTER_ACTION: FieldType = object(...MONSTER_ACTION_FIELDS);
+
 const MONSTER: FieldSpec[] = [
-  field("size", text, { level: g }),
-  field("type", text, { level: g }),
+  field("size", oneOf(...CREATURE_SIZES), { level: g }),
+  field(
+    "type",
+    oneOf(
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "plant",
+      "undead",
+    ),
+    { level: g },
+  ),
   field("subtype", text),
   field("swarm", text),
   field("armorClass", list(ARMOR_CLASS), { level: g }),
@@ -236,13 +333,13 @@ const MONSTER: FieldSpec[] = [
   field("challenge", number, { level: g }),
   field("xp", number),
   field("proficiencyBonus", number),
-  field("special", list(json), {
+  field("special", list(MONSTER_ACTION), {
     doc: "Traits of the creature; their texts are `special.N.name|desc`.",
   }),
-  field("actions", list(json)),
-  field("bonusActions", list(json)),
-  field("reactions", list(json)),
-  field("legendary", list(json)),
+  field("actions", list(MONSTER_ACTION)),
+  field("bonusActions", list(MONSTER_ACTION)),
+  field("reactions", list(MONSTER_ACTION)),
+  field("legendary", list(MONSTER_ACTION)),
   field("forms", json, { doc: "The creatures a shapechanger can become." }),
 ];
 
@@ -423,7 +520,7 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
     }),
   ],
   feat: [
-    field("category", text, { level: g, doc: "origin, general, fighting-style, epic-boon." }),
+    field("category", oneOf("origin", "general", "fighting-style", "epic-boon"), { level: g }),
     field("builtIn", bool),
     field("prerequisites", list(PREREQUISITE), { level: g }),
     field("requires", text),
@@ -481,7 +578,7 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
   ],
   item: ITEM,
   property: [field("mastery", bool, { doc: "A weapon mastery property of the 2024 rules." })],
-  language: [field("type", text, { level: g, doc: "standard or exotic." })],
+  language: [field("type", oneOf("standard", "exotic"), { level: g })],
   monster: MONSTER,
   skill: [field("ability", ability, { required: true })],
   proficiency: [

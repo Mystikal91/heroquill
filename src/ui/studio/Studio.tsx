@@ -118,7 +118,7 @@ export function Studio() {
         <button type="button" class="secondary" onClick={leavePage}>
           {ui("credits.back")}
         </button>
-        <div>
+        <div class="studio-title-box">
           <h2>{ui("studio.title")}</h2>
           <p class="muted">{ui("studio.intro")}</p>
         </div>

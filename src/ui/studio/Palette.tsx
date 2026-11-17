@@ -7,10 +7,8 @@ import {
   redoChange,
   selectedEntry,
   setSidebarOpen,
-  setStudioMode,
   sidebarOpen,
   startFromOpen,
-  studioMode,
   undoChange,
   workingPack,
 } from "../../app/studio";
@@ -42,9 +40,7 @@ function commands(): Command[] {
           selectedEntry.value = e.id;
         },
       });
-    for (const k of NEW_KINDS.filter(
-      (n) => n.level === "guided" || studioMode.value === "advanced",
-    ))
+    for (const k of NEW_KINDS)
       list.push({
         id: `new:${k.id}`,
         label: ui("studio.cmd.new", { kind: k.label() }),
@@ -76,22 +72,12 @@ function commands(): Command[] {
       { id: "redo", label: ui("studio.redo"), hint: "Ctrl+Y", run: redoChange },
     );
   }
-  list.push(
-    {
-      id: "mode",
-      label: ui("studio.cmd.mode", {
-        mode: ui(studioMode.value === "advanced" ? "studio.guided" : "studio.advanced"),
-      }),
-      hint: "",
-      run: () => setStudioMode(studioMode.value === "advanced" ? "guided" : "advanced"),
-    },
-    {
-      id: "sidebar",
-      label: ui(sidebarOpen.value ? "studio.hideSidebar" : "studio.showSidebar"),
-      hint: "",
-      run: () => setSidebarOpen(!sidebarOpen.value),
-    },
-  );
+  list.push({
+    id: "sidebar",
+    label: ui(sidebarOpen.value ? "studio.hideSidebar" : "studio.showSidebar"),
+    hint: "",
+    run: () => setSidebarOpen(!sidebarOpen.value),
+  });
   for (const p of userPacks.value.filter((x) => x.origin === "homebrew"))
     list.push({
       id: `pack:${p.id}`,

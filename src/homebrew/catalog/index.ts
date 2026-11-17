@@ -1,4 +1,4 @@
-export { DATA_FIELDS, checkData } from "./data";
+export { DATA_FIELDS, MONSTER_ACTION_FIELDS, checkData } from "./data";
 export {
   EFFECT_META,
   EFFECT_TYPES,

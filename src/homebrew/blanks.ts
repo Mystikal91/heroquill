@@ -74,7 +74,7 @@ export function blankEffect(type: EffectType): Effect {
 }
 
 /** What a new entry of a kind starts with in its `data`. Variants only differ for items. */
-export type Variant = "weapon" | "armor" | "gear" | "magic";
+export type Variant = "weapon" | "armor" | "gear" | "magic" | "enchantment";
 
 const DEFAULT_ASI = [4, 8, 12, 16, 19];
 
@@ -142,6 +142,14 @@ export function blankData(kind: EntryKind, variant?: Variant): Record<string, un
               stealthDisadvantage: false,
               proficiency: ["armor:light-armor"],
             },
+          };
+        case "enchantment":
+          return {
+            category: "magic-items",
+            cost: { amount: 0, unit: "gp" },
+            rarity: "uncommon",
+            enhancement: 1,
+            enchants: true,
           };
         case "magic":
           return { category: "magic-items", cost, rarity: "uncommon", attunement: false };

@@ -1,18 +1,23 @@
+import { signal } from "@preact/signals";
 import { lastExport } from "../../app/backup";
 import { showView } from "../../app/navigation";
-import { applyChange, flushStudio } from "../../app/studio";
+import { content } from "../../app/store";
+import { applyChange, flushStudio, selectedEntry } from "../../app/studio";
 import { exportPack } from "../../app/userPacks";
+import { warningsFor } from "../../homebrew/warnings";
 import { ui } from "../../i18n/ui";
 import { type UserPackRecord, restrictedIds } from "../../storage/packs";
 import { TextBox } from "./Controls";
-import { removePack } from "./Explorer";
+import { removePack, visibleEntries } from "./Explorer";
+import { type TabSpec, Tabs } from "./Tabs";
 import { ComponentCodes, DamageNames, PackLanguages, Reserves } from "./Translate";
+import { kindName } from "./names";
 
-/**
- * The page of the open pack, shown while no entry is open: its name, who wrote it, its version and
- * description (a pack is a book), and what can be done with the pack as a whole.
- */
-export function PackHome({ record }: { record: UserPackRecord }) {
+/** The tab of the pack page that is open; kept while the person goes to an entry and comes back. */
+const packTab = signal("main");
+
+/** The name, the author, the version, the description and the units: what a pack is as a book. */
+function MainData({ record }: { record: UserPackRecord }) {
   const meta = record.meta ?? {};
   const setMeta = (key: "author" | "description", value: string) => {
     const { [key]: _old, ...rest } = meta;
@@ -21,10 +26,8 @@ export function PackHome({ record }: { record: UserPackRecord }) {
       `pack.${key}`,
     );
   };
-  const kept = restrictedIds(record).length;
-  const copied = lastExport(record.id);
   return (
-    <section class="studio-editor studio-packhome">
+    <>
       <TextBox
         label={ui("hb.packName")}
         value={record.name}
@@ -79,15 +82,69 @@ export function PackHome({ record }: { record: UserPackRecord }) {
         </select>
         <small class="muted">{ui("studio.unitsHint")}</small>
       </label>
-      <PackLanguages record={record} />
-      <p class="muted">
-        <a href="/docs/packs/" target="_blank" rel="noreferrer noopener">
-          {ui("studio.packDocs")}
-        </a>
-      </p>
-      <Reserves record={record} />
-      <DamageNames record={record} />
-      <ComponentCodes record={record} />
+    </>
+  );
+}
+
+/**
+ * What the pack holds and what is left to check, over the whole pack: the entries by kind, and the
+ * entries that have something to look at (a click opens the entry).
+ */
+function PackPreview({ record }: { record: UserPackRecord }) {
+  const entries = visibleEntries(record);
+  const packs = content.value?.packs ?? [];
+  const counts = new Map<string, number>();
+  for (const e of entries) counts.set(kindName(e), (counts.get(kindName(e)) ?? 0) + 1);
+  const toCheck = entries
+    .map((entry) => ({ entry, list: warningsFor(record, entry, { packs }) }))
+    .filter(({ list }) => list.length > 0);
+  return (
+    <>
+      <h4>{ui("studio.pp.contents")}</h4>
+      {entries.length === 0 ? (
+        <p class="muted">{ui("studio.pp.empty")}</p>
+      ) : (
+        <ul class="plain studio-pp-counts">
+          {[...counts].sort().map(([kind, n]) => (
+            <li key={kind}>
+              <b>{n}</b> {kind}
+            </li>
+          ))}
+        </ul>
+      )}
+      <h4>{ui("studio.pp.checks")}</h4>
+      {toCheck.length === 0 ? (
+        <p class="studio-ok">{ui("studio.pp.ok")}</p>
+      ) : (
+        <ul class="plain studio-pp-checks">
+          {toCheck.map(({ entry, list }) => (
+            <li key={entry.id}>
+              <button
+                type="button"
+                class="studio-link"
+                onClick={() => {
+                  selectedEntry.value = entry.id;
+                }}
+              >
+                {record.strings[`${entry.id}.name`] || ui("studio.unnamed")}
+              </button>
+              <span class="muted">
+                {kindName(entry)} · {ui("studio.pp.things", { n: list.length })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
+
+/** What can be done with the pack as a whole: print or share it, export it, remove it. */
+function Tools({ record }: { record: UserPackRecord }) {
+  const kept = restrictedIds(record).length;
+  const copied = lastExport(record.id);
+  return (
+    <>
       <p class="muted">
         {copied === undefined
           ? ui("studio.backup.never")
@@ -108,6 +165,61 @@ export function PackHome({ record }: { record: UserPackRecord }) {
           {ui("packs.remove")}
         </button>
       </div>
+      <p class="muted">
+        <a href="/docs/packs/" target="_blank" rel="noreferrer noopener">
+          {ui("studio.packDocs")}
+        </a>
+      </p>
+    </>
+  );
+}
+
+/**
+ * The page of the open pack, shown while no entry is open: in tabs, so that it is never one long
+ * page. The first has what a pack is as a book; the others hold its languages, what it adds to the
+ * rules, how it reads and what to check, and what can be done with it.
+ */
+export function PackHome({ record }: { record: UserPackRecord }) {
+  const packs = content.value?.packs ?? [];
+  const problems = visibleEntries(record).filter(
+    (entry) => warningsFor(record, entry, { packs }).length > 0,
+  ).length;
+  const tabs: TabSpec[] = [
+    { id: "main", label: ui("studio.tab.main"), body: () => <MainData record={record} /> },
+    {
+      id: "languages",
+      label: ui("studio.tab.languages"),
+      body: () => <PackLanguages record={record} />,
+    },
+    {
+      id: "rules",
+      label: ui("studio.tab.rules"),
+      body: () => (
+        <>
+          <Reserves record={record} />
+          <DamageNames record={record} />
+          <ComponentCodes record={record} />
+        </>
+      ),
+    },
+    {
+      id: "preview",
+      label: ui("studio.tab.preview"),
+      badge: problems,
+      body: () => <PackPreview record={record} />,
+    },
+    { id: "tools", label: ui("studio.tab.tools"), body: () => <Tools record={record} /> },
+  ];
+  return (
+    <section class="studio-editor studio-packhome">
+      <Tabs
+        tabs={tabs}
+        current={packTab.value}
+        onChange={(id) => {
+          packTab.value = id;
+        }}
+        label={ui("studio.tab.packLabel")}
+      />
       <p class="muted">{ui("studio.pickEntry")}</p>
     </section>
   );

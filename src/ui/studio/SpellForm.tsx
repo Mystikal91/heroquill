@@ -1,4 +1,3 @@
-import { studioMode } from "../../app/studio";
 import type { Entry } from "../../data/schema";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { setText, updateEntry } from "../../homebrew/entries";
@@ -7,6 +6,7 @@ import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
 import { CheckBox, FieldControl, ManyBox, NumberBox, SelectBox, TextBox } from "./Controls";
+import { fieldHelp } from "./Help";
 import { fieldLabel } from "./labels";
 import { useEdit, usePack } from "./scope";
 
@@ -201,6 +201,27 @@ export function SpellTexts({ record, entry }: Props) {
   );
 }
 
+/** The fields of a spell the guided form does not draw: damage, saving throw, healing, area, the cost in points. */
+export function SpellNumbers({ record, entry }: Props) {
+  const { data, writeData } = useSpell(record, entry);
+  const extra = DATA_FIELDS.spell.filter((f) => !CURATED.has(f.key));
+  return (
+    <>
+      {extra.map((spec) => (
+        <FieldControl
+          key={spec.key}
+          label={fieldLabel(spec.key)}
+          help={fieldHelp(spec.key)}
+          type={spec.type}
+          value={data[spec.key]}
+          optional={spec.optional}
+          onChange={(v) => writeData(spec.key, v)}
+        />
+      ))}
+    </>
+  );
+}
+
 /** The form of a spell: it edits the entry itself, so nothing it does not show is lost. */
 export function SpellForm({
   record,
@@ -213,7 +234,6 @@ export function SpellForm({
   hideClasses?: boolean;
 }) {
   const { data, writeData } = useSpell(record, entry);
-  const advanced = studioMode.value === "advanced";
   const extra = DATA_FIELDS.spell.filter((f) => !CURATED.has(f.key));
 
   return (
@@ -223,21 +243,19 @@ export function SpellForm({
       {!hideClasses && <SpellClasses record={record} entry={entry} />}
       <SpellTexts record={record} entry={entry} />
 
-      {advanced && (
-        <section class="studio-advanced">
-          <h4>{ui("studio.advancedFields")}</h4>
-          {extra.map((spec) => (
-            <FieldControl
-              key={spec.key}
-              label={fieldLabel(spec.key)}
-              type={spec.type}
-              value={data[spec.key]}
-              optional={spec.optional}
-              onChange={(v) => writeData(spec.key, v)}
-            />
-          ))}
-        </section>
-      )}
+      <section class="studio-advanced">
+        <h4>{ui("studio.advancedFields")}</h4>
+        {extra.map((spec) => (
+          <FieldControl
+            key={spec.key}
+            label={fieldLabel(spec.key)}
+            type={spec.type}
+            value={data[spec.key]}
+            optional={spec.optional}
+            onChange={(v) => writeData(spec.key, v)}
+          />
+        ))}
+      </section>
     </div>
   );
 }

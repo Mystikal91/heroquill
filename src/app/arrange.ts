@@ -25,7 +25,6 @@ import {
   openStudioPack,
   selectedEntry,
   undoChange,
-  wizardFor,
   workingPack,
 } from "./studio";
 import { offerUndo } from "./undo";
@@ -212,8 +211,6 @@ export async function nameTheId(id: string) {
   if (isReferenced(mine, id)) return;
   const done = renameId(record, id, next, []);
   for (const r of done.records) await addUserPack(r);
-  // A guide in progress follows the entry to its new id.
-  if (wizardFor.value === id) wizardFor.value = next;
   await reopen(record.id, next);
 }
 

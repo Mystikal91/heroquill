@@ -1,33 +1,34 @@
 import { useEffect, useRef } from "preact/hooks";
-import { copyEntriesTo, duplicateEntries, moveEntriesTo, nameTheId } from "../../app/arrange";
+import { nameTheId } from "../../app/arrange";
 import {
   applyChange,
   history,
   redoChange,
   saveState,
   selectedEntry,
-  setStudioMode,
   studioLanguage,
-  studioMode,
   undoChange,
-  wizardFor,
 } from "../../app/studio";
-import { offerUndo } from "../../app/undo";
-import type { Entry } from "../../data/schema";
-import { KIND_META } from "../../homebrew/catalog";
-import { deleteEntry, setText } from "../../homebrew/entries";
+import { setText } from "../../homebrew/entries";
 import { canRedo, canUndo } from "../../homebrew/history";
 import { ui } from "../../i18n/ui";
 import { packTexts } from "../../storage/packs";
 import type { UserPackRecord } from "../../storage/packs";
-import { PackPicker } from "./Arrange";
 import { TextBox } from "./Controls";
+import {
+  ClassTabs,
+  EntryTools,
+  ItemTabs,
+  LAYOUT_TABBED,
+  LayoutTabs,
+  SpeciesTabs,
+  SpellTabs,
+} from "./EntryTabs";
 import { GenericForm } from "./GenericForm";
+import { MonsterTabs } from "./MonsterTabs";
 import { PackHome } from "./PackHome";
 import { Preview } from "./Preview";
-import { SpellForm } from "./SpellForm";
 import { LanguageBar, TranslationPanel } from "./Translate";
-import { WIZARD_KINDS, Wizard } from "./Wizard";
 import { kindName } from "./names";
 
 function SaveState() {
@@ -45,30 +46,11 @@ function SaveState() {
   );
 }
 
-/** Guided or advanced, undo and redo, and whether the work is safe on the device. */
+/** Undo and redo, and whether the work is safe on the device. */
 function Toolbar() {
   const h = history.value;
-  const advanced = studioMode.value === "advanced";
   return (
     <div class="studio-bar">
-      <fieldset class="studio-mode" aria-label={ui("studio.mode")}>
-        <button
-          type="button"
-          class={advanced ? "" : "on"}
-          onClick={() => setStudioMode("guided")}
-          title={ui("studio.guidedHint")}
-        >
-          {ui("studio.guided")}
-        </button>
-        <button
-          type="button"
-          class={advanced ? "on" : ""}
-          onClick={() => setStudioMode("advanced")}
-          title={ui("studio.advancedHint")}
-        >
-          {ui("studio.advanced")}
-        </button>
-      </fieldset>
       <div class="studio-undo">
         <button type="button" disabled={!h || !canUndo(h)} onClick={undoChange} title="Ctrl+Z">
           ↶ {ui("studio.undo")}
@@ -82,31 +64,17 @@ function Toolbar() {
   );
 }
 
-function Delete({ record, entry }: { record: UserPackRecord; entry: Entry }) {
-  const name = record.strings[`${entry.id}.name`] || ui("studio.unnamed");
-  return (
-    <button
-      type="button"
-      class="danger"
-      onClick={() => {
-        applyChange(deleteEntry(record, entry.id));
-        selectedEntry.value = undefined;
-        offerUndo(ui("undo.deleted", { name }), undoChange);
-      }}
-    >
-      {ui("studio.delete")}
-    </button>
-  );
-}
-
-/** The id the new menu uses for the kind of an entry that has a guided path (`weapon` for an item with a weapon). */
-function wizardKind(entry: Entry): string | undefined {
-  if (entry.kind !== "item") return WIZARD_KINDS.includes(entry.kind) ? entry.kind : undefined;
-  const data = entry.data as { weapon?: unknown; armor?: unknown; rarity?: unknown };
-  if (data.weapon) return "weapon";
-  if (data.armor) return "armor";
-  return data.rarity !== undefined ? "magic" : "gear";
-}
+/** The kinds whose page is in tabs; the others still have a long form with the preview beside it. */
+const TABBED = new Set([
+  "spell",
+  "item",
+  "species",
+  "subspecies",
+  "class",
+  "subclass",
+  "monster",
+  ...LAYOUT_TABBED,
+]);
 
 /** The editor: the open entry, with its preview and checks beside it. */
 export function Editor({ record }: { record: UserPackRecord }) {
@@ -125,29 +93,22 @@ export function Editor({ record }: { record: UserPackRecord }) {
     if (openId && matchMedia("(max-width: 960px)").matches)
       section.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [openId]);
-  // The guide belongs to the entry it was started for: going to another one ends it.
-  useEffect(() => {
-    const guided = wizardFor.value;
-    const here = selectedEntry.value;
-    // The guide ends when another entry that exists is opened. (An entry that is being renamed is
-    // briefly neither here nor there: the guide follows it.)
-    if (guided && here && guided !== here && record.pack.entries.some((e) => e.id === here))
-      wizardFor.value = undefined;
-  });
   if (!entry) return <PackHome record={record} />;
-  const guide = wizardFor.value === entry.id ? wizardKind(entry) : undefined;
 
   return (
     <section class="studio-editor" ref={section}>
       <Toolbar />
-      <LanguageBar record={record} entry={entry} />
-      <div class="studio-work">
+      {!TABBED.has(entry.kind) && <LanguageBar record={record} entry={entry} />}
+      <div class={TABBED.has(entry.kind) ? "studio-work single" : "studio-work"}>
         <div class="studio-edit">
-          {guide && <Wizard record={record} entry={entry} kindId={guide} />}
-          {!guide && (
-            <>
-              <header class="studio-head">
-                <p class="muted">{kindName(entry)}</p>
+          <>
+            <header class="studio-head">
+              <p class="muted">{kindName(entry)}</p>
+              {TABBED.has(entry.kind) ? (
+                <h3 class="studio-entry-title">
+                  {record.strings[`${entry.id}.name`] || ui("studio.unnamed")}
+                </h3>
+              ) : (
                 <TextBox
                   key={entry.id}
                   focusOnMount={!record.strings[`${entry.id}.name`]}
@@ -159,34 +120,33 @@ export function Editor({ record }: { record: UserPackRecord }) {
                   }
                   onCommit={() => void nameTheId(entry.id)}
                 />
-              </header>
-              {language ? (
-                <TranslationPanel record={record} entry={entry} language={language} />
-              ) : entry.kind === "spell" ? (
-                <SpellForm record={record} entry={entry} />
-              ) : (
-                <GenericForm record={record} entry={entry} />
               )}
-              {KIND_META[entry.kind].role !== "owned" && (
-                <div class="studio-actions">
-                  <button type="button" onClick={() => void duplicateEntries([entry.id])}>
-                    {ui("studio.duplicate")}
-                  </button>
-                  <PackPicker
-                    label={ui("studio.moveTo")}
-                    onPick={(id) => void moveEntriesTo(id, [entry.id])}
-                  />
-                  <PackPicker
-                    label={ui("studio.copyTo")}
-                    onPick={(id) => void copyEntriesTo(id, [entry.id])}
-                  />
-                  <Delete record={record} entry={entry} />
-                </div>
-              )}
-            </>
-          )}
+            </header>
+            {entry.kind === "spell" ? (
+              <SpellTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : entry.kind === "item" ? (
+              <ItemTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : entry.kind === "species" || entry.kind === "subspecies" ? (
+              <SpeciesTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : entry.kind === "class" || entry.kind === "subclass" ? (
+              <ClassTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : entry.kind === "monster" ? (
+              <MonsterTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : LAYOUT_TABBED.has(entry.kind) ? (
+              <LayoutTabs record={record} shown={shown} entry={entry} language={language} />
+            ) : (
+              <>
+                {language ? (
+                  <TranslationPanel record={record} entry={entry} language={language} />
+                ) : (
+                  <GenericForm record={record} entry={entry} />
+                )}
+                <EntryTools record={record} entry={entry} />
+              </>
+            )}
+          </>
         </div>
-        <Preview record={shown} entry={entry} />
+        {!TABBED.has(entry.kind) && <Preview record={shown} entry={entry} />}
       </div>
     </section>
   );

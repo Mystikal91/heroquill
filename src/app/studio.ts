@@ -20,28 +20,6 @@ import { addUserPack, userPacks } from "./userPacks";
  * the last one. Rewriting the content of the app on every letter would be far too slow.
  */
 
-export type StudioMode = "guided" | "advanced";
-const MODE_KEY = "homebrewMode";
-
-function savedMode(): StudioMode {
-  try {
-    return localStorage.getItem(MODE_KEY) === "advanced" ? "advanced" : "guided";
-  } catch {
-    return "guided";
-  }
-}
-
-/** Guided shows what a beginner needs; advanced shows every control. Remembered between visits. */
-export const studioMode = signal<StudioMode>(savedMode());
-export function setStudioMode(mode: StudioMode) {
-  studioMode.value = mode;
-  try {
-    localStorage.setItem(MODE_KEY, mode);
-  } catch {
-    // The choice just is not remembered.
-  }
-}
-
 const SIDEBAR_KEY = "homebrewSidebar";
 
 /** The left column (packs and their entries) is open, or folded into a narrow strip. Remembered. */
@@ -75,8 +53,6 @@ export const entrySort = signal<"name" | "kind">("name");
 export const paletteOpen = signal(false);
 export const startFromOpen = signal(false);
 
-/** The entry that is being made step by step, when one is: the editor shows the guide in place of the form. */
-export const wizardFor = signal<string | undefined>(undefined);
 export const helpOpen = signal(false);
 
 /** The language the texts are being written in: undefined for the pack's own, a code for a translation. */

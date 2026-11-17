@@ -157,11 +157,11 @@ export function Warnings({ list }: { list: Warning[] }) {
   );
 }
 
-/** The right-hand side of the studio: how the entry reads, and what to fix. */
-export function Preview({ record, entry }: { record: UserPackRecord; entry: Entry }) {
+/** How the entry reads, with the way to try it on a character, and what to fix. */
+export function PreviewBody({ record, entry }: { record: UserPackRecord; entry: Entry }) {
   const list = warningsFor(record, entry, { packs: content.value?.packs ?? [] });
   return (
-    <aside class="studio-preview">
+    <>
       <h3>{ui("studio.preview")}</h3>
       <div class="studio-preview-card">
         {entry.kind === "spell" ? (
@@ -173,6 +173,15 @@ export function Preview({ record, entry }: { record: UserPackRecord; entry: Entr
       <TryOn record={record} entry={entry} />
       <h3>{ui("studio.check")}</h3>
       <Warnings list={list} />
+    </>
+  );
+}
+
+/** The right-hand side of the studio: how the entry reads, and what to fix. */
+export function Preview({ record, entry }: { record: UserPackRecord; entry: Entry }) {
+  return (
+    <aside class="studio-preview">
+      <PreviewBody record={record} entry={entry} />
     </aside>
   );
 }

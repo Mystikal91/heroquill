@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from "preact/hooks";
+import en from "../../../locales/en/ui.json";
 import { tintOf } from "../../app/playStates";
-import { studioLanguage, studioMode } from "../../app/studio";
+import { content } from "../../app/store";
+import { studioLanguage } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
 import { addDamageType, damageLabel, ownDamageTypes } from "../../homebrew/damage";
 import { packColumns } from "../../homebrew/levelTables";
 import { addReserve, ownReserves, reserveLabel } from "../../homebrew/reserves";
-import { ui } from "../../i18n/ui";
+import { type UiKey, ui } from "../../i18n/ui";
 import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
 import { damageSlug } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
-import { EffectList } from "./Effects";
-import { Helped, fieldHelp } from "./Help";
+import { EffectList, proficiencyTargets } from "./Effects";
+import { HelpMark, Helped, NoHelp, fieldHelp } from "./Help";
 import { columnLabel } from "./LevelTables";
 import { moved, useReorder } from "./Reorder";
 import { LONG_LIST, SearchSelect } from "./SearchSelect";
@@ -72,7 +74,10 @@ export function TextBox({
   if (area)
     return (
       <label class="field studio-field">
-        <span>{label}</span>
+        <span>
+          {label}
+          <HelpMark />
+        </span>
         <textarea
           rows={rows}
           value={value}
@@ -85,7 +90,10 @@ export function TextBox({
     );
   return (
     <label class="field studio-field">
-      <span>{label}</span>
+      <span>
+        {label}
+        <HelpMark />
+      </span>
       <input
         type="text"
         value={value}
@@ -179,7 +187,10 @@ export function SelectBox({
     );
   return (
     <label class="field studio-field">
-      <span>{label}</span>
+      <span>
+        {label}
+        <HelpMark />
+      </span>
       <select value={value ?? ""} onChange={(e) => onChange(e.currentTarget.value || undefined)}>
         {blank !== undefined && <option value="">{blank}</option>}
         {groupsOf(options).map(({ group, items }) =>
@@ -220,7 +231,10 @@ export function CheckBox({
         checked={checked}
         onChange={(e) => onChange(e.currentTarget.checked)}
       />
-      <span>{label}</span>
+      <span>
+        {label}
+        <HelpMark />
+      </span>
     </label>
   );
 }
@@ -240,23 +254,28 @@ export function ManyBox({
   const picked = new Set(value);
   return (
     <fieldset class="studio-many">
-      <legend>{label}</legend>
-      <div class="studio-checks">
-        {options.map((o) => (
-          <CheckBox
-            key={o.id}
-            label={o.label}
-            checked={picked.has(o.id)}
-            onChange={(on) => {
-              const next = new Set(picked);
-              if (on) next.add(o.id);
-              else next.delete(o.id);
-              // Keep the order of the options, not the order of the clicks.
-              onChange(options.map((x) => x.id).filter((id) => next.has(id)));
-            }}
-          />
-        ))}
-      </div>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
+      <NoHelp>
+        <div class="studio-checks">
+          {options.map((o) => (
+            <CheckBox
+              key={o.id}
+              label={o.label}
+              checked={picked.has(o.id)}
+              onChange={(on) => {
+                const next = new Set(picked);
+                if (on) next.add(o.id);
+                else next.delete(o.id);
+                // Keep the order of the options, not the order of the clicks.
+                onChange(options.map((x) => x.id).filter((id) => next.has(id)));
+              }}
+            />
+          ))}
+        </div>
+      </NoHelp>
     </fieldset>
   );
 }
@@ -309,7 +328,10 @@ function ColorPick({
   const tint = tintOf(current);
   return (
     <fieldset class="studio-many studio-colors">
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
       <div class="studio-swatches">
         {Object.entries(GLOW_COLORS).map(([id, color]) => (
           <button
@@ -549,8 +571,18 @@ export function withCurrent(options: Option[], value: unknown): Option[] {
 }
 
 /** Entries the person can point at, for a field that names some kinds of entry. */
-function refOptions(kinds: readonly string[] | undefined): Option[] {
-  return (kinds ?? []).flatMap((kind) => entriesOfKind(kind));
+function refOptions(kinds: readonly string[] | undefined, mastery?: boolean): Option[] {
+  const all = (kinds ?? []).flatMap((kind) => entriesOfKind(kind));
+  if (mastery === undefined) return all;
+  const index = content.value?.index;
+  const isMastery = (id: string) => index?.get(id)?.data.mastery === true;
+  // The masteries are a rule of 2024: they are offered whatever the edition of the open sheet.
+  if (mastery)
+    return [...(index?.values() ?? [])]
+      .filter((e) => e.kind === "property" && e.data.mastery === true)
+      .map((e) => ({ id: e.id, label: content.value?.name(e.id) ?? e.id }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  return all.filter((o) => !isMastery(o.id));
 }
 
 /** A list of picks from a long list (spells, items): chosen ones as chips, one more added from a menu. */
@@ -568,7 +600,10 @@ export function ChipPicker({
   const name = (id: string) => options.find((o) => o.id === id)?.label ?? id;
   return (
     <fieldset class="studio-many">
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
       {options.length > LONG_LIST ? (
         <SearchSelect
           shown={ui("studio.add")}
@@ -627,7 +662,10 @@ function JsonBox({
   const [bad, setBad] = useState(false);
   return (
     <label class="field studio-field">
-      <span>{label}</span>
+      <span>
+        {label}
+        <HelpMark />
+      </span>
       <textarea
         rows={4}
         class="studio-json"
@@ -665,6 +703,8 @@ export function FieldControl({
   help,
   ...props
 }: {
+  /** For a box that is a row of a list: the button that takes the row away, at the top of the box. */
+  onRemove?: (() => void) | undefined;
   label: string;
   type: FieldType;
   value: unknown;
@@ -687,17 +727,32 @@ function PlainFieldControl({
   value,
   onChange,
   optional = true,
+  onRemove,
 }: {
   label: string;
   type: FieldType;
   value: unknown;
   onChange: (value: unknown) => void;
   optional?: boolean;
+  onRemove?: (() => void) | undefined;
 }) {
   switch (type.type) {
     case "text":
       if (type.type === "text" && type.pick === "color")
         return <ColorPick label={label} value={value} onChange={onChange} />;
+      if (type.type === "text" && type.options)
+        return (
+          <SelectBox
+            label={label}
+            value={typeof value === "string" && value !== "" ? value : undefined}
+            options={withCurrent(
+              type.options.map((id) => ({ id, label: optionLabel(id) })),
+              value,
+            )}
+            blank={optional ? ui("form.none") : undefined}
+            onChange={(v) => onChange(v === undefined || v === "" ? undefined : v)}
+          />
+        );
       if (type.type === "text" && type.pick === "reserve")
         return <ReservePick label={label} value={value} onChange={onChange} />;
       if (type.type === "text" && type.pick === "column")
@@ -752,7 +807,7 @@ function PlainFieldControl({
     case "literal":
       return null;
     case "ref": {
-      const options = refOptions(type.kinds);
+      const options = withCurrent(refOptions(type.kinds, type.mastery), value);
       return (
         <SelectBox
           label={label}
@@ -788,14 +843,23 @@ function PlainFieldControl({
           value={value}
           onChange={onChange}
           optional={optional}
+          onRemove={onRemove}
         />
       );
     case "record":
       return <RecordControl label={label} type={type} value={value} onChange={onChange} />;
+    case "union": {
+      const branches = branchesOf(type);
+      if (branches) return <UnionControl branches={branches} value={value} onChange={onChange} />;
+      return <JsonBox label={label} value={value} onChange={onChange} />;
+    }
     case "effects":
       return (
         <fieldset class="studio-many">
-          <legend>{label}</legend>
+          <legend>
+            {label}
+            <HelpMark />
+          </legend>
           <EffectList effects={Array.isArray(value) ? value : []} onChange={onChange} />
         </fieldset>
       );
@@ -827,12 +891,26 @@ function ListControl({
         onChange={set}
       />
     );
+  if (of.type === "text" && (of.pick === "weaponProf" || of.pick === "armorProf")) {
+    const category = of.pick === "weaponProf" ? "weapon" : "armor";
+    return (
+      <ChipPicker
+        label={label}
+        value={items.filter((x): x is string => typeof x === "string")}
+        options={(proficiencyTargets(category) ?? []).map((o) => ({
+          ...o,
+          id: `${category}:${o.id}`,
+        }))}
+        onChange={set}
+      />
+    );
+  }
   if (of.type === "ref")
     return (
       <ChipPicker
         label={label}
         value={items.filter((x): x is string => typeof x === "string")}
-        options={refOptions(of.kinds)}
+        options={refOptions(of.kinds, of.mastery)}
         onChange={set}
       />
     );
@@ -840,12 +918,25 @@ function ListControl({
     set([...items, blankOf(of)]);
     focusNewItem(from, ":scope > .studio-row");
   };
+  // Nothing in the list yet: a button, like the other parts that are not there until asked for.
+  if (items.length === 0)
+    return (
+      <div class="studio-field">
+        <button type="button" onClick={() => set([blankOf(of)])}>
+          {ui("studio.addNamed", { name: label })}
+        </button>
+      </div>
+    );
+  const boxes = of.type === "object";
   return (
     <fieldset class="studio-many" onKeyDown={(e) => enterAdds(e, () => addItem(e.currentTarget))}>
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
       {items.map((item, i) => (
         <div
-          class={items.length > 1 ? "studio-row has-handle" : "studio-row"}
+          class={`studio-row${items.length > 1 ? " has-handle" : ""}${boxes ? " is-box" : ""}`}
           // biome-ignore lint/suspicious/noArrayIndexKey: rows have no identity of their own
           key={i}
           {...reorder.item(i)}
@@ -857,10 +948,17 @@ function ListControl({
             value={item}
             optional={false}
             onChange={(next) => set(items.map((x, j) => (j === i ? next : x)))}
+            onRemove={boxes ? () => set(items.filter((_, j) => j !== i)) : undefined}
           />
-          <button type="button" class="danger" onClick={() => set(items.filter((_, j) => j !== i))}>
-            {ui("form.remove")}
-          </button>
+          {!boxes && (
+            <button
+              type="button"
+              class="danger"
+              onClick={() => set(items.filter((_, j) => j !== i))}
+            >
+              {ui("form.remove")}
+            </button>
+          )}
         </div>
       ))}
       <button type="button" onClick={(e) => addItem(e.currentTarget.closest("fieldset"))}>
@@ -900,6 +998,10 @@ function enterAdds(e: KeyboardEvent, add: () => void) {
 /** A fresh value for a row of a list: empty, of the right shape. */
 function blankOf(type: FieldType): unknown {
   switch (type.type) {
+    case "union": {
+      const branches = branchesOf(type);
+      return branches?.[0] ? blankBranch(branches[0]) : "";
+    }
     case "object":
       return {};
     case "list":
@@ -923,12 +1025,14 @@ function ObjectControl({
   value,
   onChange,
   optional,
+  onRemove,
 }: {
   label: string;
   fields: FieldSpec[];
   value: unknown;
   onChange: (value: unknown) => void;
   optional: boolean;
+  onRemove?: (() => void) | undefined;
 }) {
   const object = isObject(value) ? value : undefined;
   if (!object && optional)
@@ -948,7 +1052,7 @@ function ObjectControl({
     onChange(Object.keys(copy).length === 0 && optional ? undefined : copy);
   };
   // A beginner sees the guided fields of an object; the advanced mode shows all of them.
-  const shown = fields.filter((f) => studioMode.value === "advanced" || f.level === "guided");
+  const shown = fields;
   const flags = shown.filter((f) => f.type.type === "boolean");
   const short = shown.filter(
     (f) => !flags.includes(f) && (isShort(f.type) || f.type.type === "number"),
@@ -956,9 +1060,16 @@ function ObjectControl({
   const long = shown.filter((f) => !short.includes(f) && !flags.includes(f));
   return (
     <fieldset class="studio-many">
-      <legend>{label}</legend>
-      {optional && (
-        <button type="button" class="danger studio-drop" onClick={() => onChange(undefined)}>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
+      {(optional || onRemove) && (
+        <button
+          type="button"
+          class="danger studio-drop"
+          onClick={() => (onRemove ? onRemove() : onChange(undefined))}
+        >
           {ui("form.remove")}
         </button>
       )}
@@ -1040,9 +1151,21 @@ function RecordControl({
     set({ ...record, [name]: blankOf(type.of) });
     focusNewItem(from, ":scope > .studio-row");
   };
+  // Nothing in it yet: a button that opens it with its first row.
+  if (keys.length === 0)
+    return (
+      <div class="studio-field">
+        <button type="button" onClick={() => addRow(null)}>
+          {ui("studio.addNamed", { name: label })}
+        </button>
+      </div>
+    );
   return (
     <fieldset class="studio-many" onKeyDown={(e) => enterAdds(e, () => addRow(e.currentTarget))}>
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        <HelpMark />
+      </legend>
       {type.levels && (
         <small class="muted">
           {ui(type.levels === "slot" ? "studio.levelsHint.slot" : "studio.levelsHint.character")}
@@ -1095,3 +1218,92 @@ function RecordControl({
     </fieldset>
   );
 }
+
+type ObjectType = Extract<FieldType, { type: "object" }>;
+
+/** The branches of a union of objects, when that is all it is. */
+function branchesOf(type: FieldType): ObjectType[] | undefined {
+  if (type.type !== "union") return undefined;
+  const all = type.of.filter((t): t is ObjectType => t.type === "object");
+  return all.length === type.of.length ? all : undefined;
+}
+
+/** What names a branch: the word its `type` field is fixed to, or else its first field. */
+function branchId(branch: ObjectType): string {
+  const fixed = branch.fields.find((f) => f.type.type === "literal");
+  return fixed && fixed.type.type === "literal"
+    ? String(fixed.type.value)
+    : (branch.fields[0]?.key ?? "");
+}
+
+/** The branch a value is: the one whose fixed word it carries, else the one that has its fields. */
+function branchOfValue(branches: ObjectType[], value: unknown): ObjectType {
+  const object = isObject(value) ? value : {};
+  const found = branches.find((b) => {
+    const fixed = b.fields.find((f) => f.type.type === "literal");
+    if (fixed && fixed.type.type === "literal") return object[fixed.key] === fixed.type.value;
+    return (
+      Object.keys(object).length > 0 &&
+      Object.keys(object).every((k) => b.fields.some((f) => f.key === k))
+    );
+  });
+  return found ?? (branches[0] as ObjectType);
+}
+
+/** A fresh value of a branch: its fixed words, and an empty or zero value for the rest. */
+function blankBranch(branch: ObjectType): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const f of branch.fields) {
+    if (f.type.type === "literal") out[f.key] = f.type.value;
+    else if (!f.optional) out[f.key] = blankOf(f.type);
+  }
+  return out;
+}
+
+/** One thing of several kinds (a requirement: a level, a feature, a spell, a score): the kind, then what that kind asks. */
+function UnionControl({
+  branches,
+  value,
+  onChange,
+}: {
+  branches: ObjectType[];
+  value: unknown;
+  onChange: (value: unknown) => void;
+}) {
+  const object = isObject(value) ? value : {};
+  const now = branchOfValue(branches, value);
+  const id = branchId(now);
+  return (
+    <div class="studio-union">
+      <SelectBox
+        label={ui("studio.need.kind")}
+        value={id}
+        options={branches.map((b) => ({ id: branchId(b), label: unionLabel(branchId(b)) }))}
+        onChange={(v) => {
+          const next = branches.find((b) => branchId(b) === v);
+          if (next && next !== now) onChange(blankBranch(next));
+        }}
+      />
+      {now.fields
+        .filter((f) => f.type.type !== "literal")
+        .map((f) => (
+          <FieldControl
+            key={f.key}
+            label={fieldLabel(f.key)}
+            type={f.type}
+            value={object[f.key]}
+            optional={f.optional}
+            onChange={(v) => {
+              const { [f.key]: _old, ...others } = object;
+              onChange(v === undefined ? others : { ...others, [f.key]: v });
+            }}
+          />
+        ))}
+    </div>
+  );
+}
+
+const unionLabel = (id: string) => {
+  const key = `studio.need.${id}`;
+  return key in en ? ui(key as UiKey) : humanize(id);
+};

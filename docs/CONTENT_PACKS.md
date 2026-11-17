@@ -161,8 +161,7 @@ and `Ctrl+Y` undo and redo).
   of the rules. A new entry starts empty but valid. The forms are made from a *catalog*
   (`src/homebrew/catalog/`) that is read from the engine's own schema, and a test fails when the engine has
   a kind of entry, an effect or a field of `data` that the catalog does not describe.
-- **Guided and advanced.** The guided mode shows what a beginner needs and the common effects; the advanced
-  mode shows every field and all 33 effects. Effects are written as cards ("Bonus to a score", "Resistance
+- **One editor.** Every field and all 33 effects are there, in tabs for each entry. Effects are written as cards ("Bonus to a score", "Resistance
   or immunity", "Gives a spell"...) and are applied by the engine like those of the shipped rules.
 - **Packs are books.** A pack has an author, a version and a description, and keeps the texts of each entry
   in the language they were written in plus translations in other languages.

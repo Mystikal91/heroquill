@@ -1,9 +1,7 @@
-import { studioMode } from "../../app/studio";
 import type { Entry } from "../../data/schema";
 import { readClassCasting, readSubclassCasting } from "../../homebrew/casting";
 import { DATA_FIELDS } from "../../homebrew/catalog";
-import { readTable, setTable, setText, updateEntry } from "../../homebrew/entries";
-import { syncItemData } from "../../homebrew/sync";
+import { readTable, setTable, updateEntry } from "../../homebrew/entries";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
@@ -14,6 +12,7 @@ import { fieldHelp } from "./Help";
 import { LevelStrip } from "./LevelStrip";
 import { SpellTable, ValuesTable } from "./LevelTables";
 import { OwnedList } from "./Owned";
+import { useEntryWrites } from "./entryWrites";
 import { fieldLabel } from "./labels";
 import { LAYOUTS } from "./layouts";
 import { useEdit } from "./scope";
@@ -26,7 +25,6 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
   const { apply: applyChange } = useEdit();
   const id = entry.id;
   const layout = LAYOUTS[entry.kind];
-  const advanced = studioMode.value === "advanced";
   const data = entry.data as Record<string, unknown>;
   const specs = DATA_FIELDS[entry.kind];
   const guided = layout.guided(entry);
@@ -40,21 +38,7 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
       ? readClassCasting(data).kind !== "none"
       : layout.casting === "subclass" && readSubclassCasting(data).enabled;
 
-  const writeText = (field: string, value: string) =>
-    applyChange(setText(record, id, field, value), `${id}.${field}`);
-  const writeData = (key: string, value: unknown) => {
-    const next = { ...data };
-    if (value === undefined) delete next[key];
-    else next[key] = value;
-    const patch = entry.kind === "item" ? syncItemData(next) : next;
-    // Replace the whole data: a key taken away must be gone, which a merge cannot say.
-    const cleared = Object.fromEntries(
-      Object.keys(data)
-        .filter((k) => !(k in patch))
-        .map((k) => [k, undefined]),
-    );
-    applyChange(updateEntry(record, id, { data: { ...patch, ...cleared } }), `${id}.data.${key}`);
-  };
+  const { writeText, writeData } = useEntryWrites(record, entry);
 
   const control = (spec: (typeof specs)[number]) => (
     <FieldControl
@@ -79,7 +63,7 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
             "sec-owned",
             ui(layout.owns === "trait" ? "studio.traits" : "studio.features"),
           ],
-          advanced && rest.length > 0 && ["sec-more", ui("studio.advancedFields")],
+          rest.length > 0 && ["sec-more", ui("studio.advancedFields")],
         ]}
       />
       {layout.parent && (
@@ -161,7 +145,7 @@ export function GenericForm({ record, entry }: { record: UserPackRecord; entry: 
       {layout.owns === "feature" && <LevelStrip record={record} entry={entry} />}
       {layout.owns && <OwnedList record={record} owner={entry} kind={layout.owns} />}
 
-      {advanced && rest.length > 0 && (
+      {rest.length > 0 && (
         <details class="studio-advanced studio-section" id="sec-more" open>
           <summary>
             <h4>{ui("studio.advancedFields")}</h4>

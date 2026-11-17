@@ -8,13 +8,23 @@ import type { EntryKind } from "./kinds";
  */
 export type FieldType =
   /** Free text; `pick` says it is one of a short closed list the editor offers by name (kinds of damage). */
-  | { type: "text"; pick?: "damage" | "color" | "column" | "reserve" }
+  | {
+      type: "text";
+      pick?: "damage" | "color" | "column" | "reserve" | "weaponProf" | "armorProf";
+      /** A closed list the editor offers as a menu; a text the data already has outside it is kept as it is. */
+      options?: readonly string[];
+    }
   | { type: "number"; integer?: boolean; min?: number; max?: number; unit?: "distance" | "weight" }
   | { type: "boolean" }
   | { type: "choice"; options: readonly string[] }
   | { type: "literal"; value: string | number | boolean }
   /** The id of an entry (`pack:kind/slug`), of one of these kinds when they are named. */
-  | { type: "ref"; kinds?: readonly EntryKind[] }
+  | {
+      type: "ref";
+      kinds?: readonly EntryKind[];
+      /** For a `property`: `true` offers only the weapon masteries of the 2024 rules, `false` only the others. */
+      mastery?: boolean;
+    }
   /** The slug of an entry of a kind (a skill, a school, a language): the form the rules write it in. */
   | { type: "slug"; kind: EntryKind }
   /** A dice expression: `1d8`, `2d6+3`, `1d8 + MOD`. */
