@@ -87,7 +87,15 @@
 
   // A person who chose a language before (here, or in the app) finds it again on the English
   // page. This only moves people; the pages themselves stay as they are for everyone else.
-  if (here === "en" && LANGUAGES.includes(stored) && stored !== "en" && !location.hash) {
+  // A page that exists in English only (the technical pages) leads every language to itself: it
+  // stays where it is instead of moving to the page it is already on, again and again.
+  if (
+    here === "en" &&
+    LANGUAGES.includes(stored) &&
+    stored !== "en" &&
+    !location.hash &&
+    pageOf(stored) !== location.pathname
+  ) {
     location.replace(pageOf(stored));
     return;
   }
