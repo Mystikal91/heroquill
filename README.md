@@ -11,9 +11,9 @@ stay on your device, and the app works without a connection once it has been ope
 English, Italian, French, German and Spanish, and it reads the content files made for Aurora Builder
 and Aurora Legacy that you already own.
 
-> **Version 1.0 beta.** It works, but it needs more testing, so some numbers may be wrong in
-> places. If something looks off, please [open an issue](https://github.com/Mystikal91/heroquill/issues).
-> What is still missing is on the roadmap, inside the app (click the title).
+> If something looks off, a number does not add up or a text is missing, please
+> [open an issue](https://github.com/Mystikal91/heroquill/issues). What is still missing is on the
+> roadmap, inside the app (click the title).
 >
 > A note on how it was made: a lot of this project was written with the help of an AI assistant
 > (Claude). It is a hobby project, made for fun and for my own table.
@@ -86,7 +86,7 @@ and Aurora Legacy that you already own.
   edition chosen when it was made; content from Aurora is 2014 rules and works with both (see
   [docs/CONTENT_PACKS.md](docs/CONTENT_PACKS.md)).
 - **Content packs** (footer, *Content packs*):
-  - a **homebrew editor** for spells, weapons, armor, gear, properties, languages, feats, species,
+  - the **Homebrew studio**, an editor for spells, weapons, armor, gear, properties, languages, feats, species,
     backgrounds, classes and subclasses, with export and import of your packs; weapons and armor
     can also be customized from the inventory (*Customize*);
   - an importer for **Aurora** XML files that you already have, by file, by index file (every file
@@ -142,7 +142,7 @@ translations from their PDFs into `locales/`; see [docs/TRANSLATING.md](docs/TRA
 | `src/data/` | Schemas of the content packs and of class progression |
 | `src/content/` | Loading the packs and their texts; the roadmap and changelog |
 | `src/import/aurora/` | The Aurora XML reader |
-| `src/homebrew/` | The homebrew editor's model (forms to pack entries and back) |
+| `src/homebrew/` | The Homebrew studio's model (forms to pack entries and back) |
 | `src/translate/` | Automatic translation: DeepL client, cache and queue |
 | `src/storage/` | IndexedDB: characters, packs, saved translations; sharing links |
 | `src/app/` | App state (signals): character, navigation, language, theme, units |
@@ -163,7 +163,7 @@ a hello are all welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Questions and i
 
 ## Versions and changelog
 
-The version and its stage (`beta`) are in `src/app/version.ts`. What changed in each version is
+The version is in `src/app/version.ts`. What changed in each version is
 listed in `src/content/news.ts` (`CHANGELOG`, newest first: write the lines in English and, if
 possible, in the other languages) next to the `ROADMAP` of what is still missing. Both show in
 the app, under the title.

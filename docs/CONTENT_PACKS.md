@@ -149,11 +149,12 @@ count once the character has reached their level.
 
 ## Homebrew studio
 
-The *Homebrew studio* (in the menu) is where homebrew packs are written. It has four parts: the **packs**
-on the left, the **entries** of the open pack, the **editor** for the open entry, and a **preview** of how
-it reads with a list of what to check (a missing name, a reference to something that is not there, data
-the engine cannot read). Everything is saved on the device as you type (`Ctrl+S` saves at once; `Ctrl+Z`
-and `Ctrl+Y` undo and redo).
+The *Homebrew studio* (in the menu) is where homebrew packs are written. The **packs** and their **entries**
+are on the left; the open entry is on the right, in tabs: the main data, one tab for each topic (a weapon
+tab for a weapon, the spells of a class...), *Translation*, *Preview* (how it reads, with a list of what to
+check: a missing name, a reference to something that is not there, data the engine cannot read) and
+*Actions*. Everything is saved on the device as you type (`Ctrl+S` saves at once; `Ctrl+Z` and `Ctrl+Y`
+undo and redo).
 
 - **Every kind of entry** can be made and edited: spells, items (weapon, armor, gear, magic item), species
   and sub-species with their traits, classes with their features by level and how they cast, subclasses
@@ -161,8 +162,10 @@ and `Ctrl+Y` undo and redo).
   of the rules. A new entry starts empty but valid. The forms are made from a *catalog*
   (`src/homebrew/catalog/`) that is read from the engine's own schema, and a test fails when the engine has
   a kind of entry, an effect or a field of `data` that the catalog does not describe.
-- **One editor.** Every field and all 33 effects are there, in tabs for each entry. Effects are written as cards ("Bonus to a score", "Resistance
-  or immunity", "Gives a spell"...) and are applied by the engine like those of the shipped rules.
+- **Every field is there.** All the fields of an entry and all 33 effects, with a menu wherever the choice is
+  from a closed list (a rarity, a category, a proficiency, a weapon mastery...). Effects are written as cards
+  ("Bonus to a score", "Resistance or immunity", "Gives a spell"...) and are applied by the engine like those
+  of the shipped rules.
 - **Packs are books.** A pack has an author, a version and a description, and keeps the texts of each entry
   in the language they were written in plus translations in other languages.
 - **Arranging.** Entries can be ticked and copied, cut, pasted, duplicated, moved or copied to another pack

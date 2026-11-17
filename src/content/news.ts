@@ -18,6 +18,68 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.31",
+    date: "2026-11-17",
+    notes: [
+      {
+        en: "Heroquill is no longer a beta: this is version 1.31, the first official release.",
+        it: "Heroquill non è più in beta: questa è la versione 1.31, la prima ufficiale.",
+        fr: "Heroquill n'est plus une bêta : voici la version 1.31, la première version officielle.",
+        de: "Heroquill ist keine Beta mehr: Das ist Version 1.31, die erste offizielle Version.",
+        es: "Heroquill ya no es una beta: esta es la versión 1.31, la primera oficial.",
+      },
+      {
+        en: "The homebrew editor is now the Homebrew studio, built from scratch. Your packs and their entries are on the left; the open entry is on the right, in tabs: the main data, one tab for each topic (a weapon has its weapon tab, a class its spells and its values by level), Translation, Preview (how it reads, with what to check) and Actions. Everything is saved as you type, with undo and redo.",
+        it: "L'editor homebrew è ora lo Studio homebrew, rifatto da zero. A sinistra i tuoi pacchetti e le loro voci; a destra la voce aperta, in tab: i dati principali, una tab per ogni argomento (un'arma ha la sua tab Arma, una classe i suoi incantesimi e i valori per livello), Traduzione, Anteprima (come si legge, con cosa controllare) e Operazioni. Tutto si salva mentre scrivi, con annulla e ripeti.",
+        fr: "L'éditeur homebrew est maintenant l'Atelier homebrew, refait de zéro. À gauche, tes paquets et leurs entrées ; à droite, l'entrée ouverte, en onglets : les données principales, un onglet par sujet (une arme a son onglet Arme, une classe ses sorts et ses valeurs par niveau), Traduction, Aperçu (comment elle se lit, avec ce qu'il faut vérifier) et Actions. Tout est enregistré pendant que tu écris, avec annuler et rétablir.",
+        de: "Der Homebrew-Editor ist jetzt die Homebrew-Werkstatt, von Grund auf neu gebaut. Links stehen deine Pakete und ihre Einträge; rechts der geöffnete Eintrag in Tabs: die Hauptdaten, ein Tab für jedes Thema (eine Waffe hat ihren Waffen-Tab, eine Klasse ihre Zauber und ihre Werte pro Stufe), Übersetzung, Vorschau (wie er sich liest, mit dem, was zu prüfen ist) und Aktionen. Alles wird beim Schreiben gespeichert, mit Rückgängig und Wiederholen.",
+        es: "El editor homebrew es ahora el Taller homebrew, rehecho desde cero. A la izquierda tus paquetes y sus entradas; a la derecha la entrada abierta, en pestañas: los datos principales, una pestaña por cada tema (un arma tiene su pestaña de Arma, una clase sus conjuros y sus valores por nivel), Traducción, Vista previa (cómo se lee, con lo que hay que revisar) y Acciones. Todo se guarda mientras escribes, con deshacer y rehacer.",
+      },
+      {
+        en: "You can write every kind of entry: spells, items, enchantments, species and sub-species, classes and subclasses, backgrounds (2014 and 2024), feats, languages, properties, deities, monsters and conditions, with the 33 kinds of effects. Wherever the choice is from a closed list (rarity, category, proficiency, weapon mastery, starting equipment, the requirements of a feat) there is a menu or a picker, not a text or a code to write.",
+        it: "Puoi scrivere ogni tipo di voce: incantesimi, oggetti, incantamenti, specie e sottospecie, classi e sottoclassi, background (2014 e 2024), talenti, lingue, proprietà, divinità, mostri e condizioni, con i 33 tipi di effetti. Dove la scelta è da una lista chiusa (rarità, categoria, competenza, maestria nelle armi, equipaggiamento iniziale, requisiti di un talento) c'è un menu o un selettore, non un testo o un codice da scrivere.",
+        fr: "Tu peux écrire tous les types d'entrées : sorts, objets, enchantements, espèces et sous-espèces, classes et sous-classes, historiques (2014 et 2024), dons, langues, propriétés, divinités, monstres et conditions, avec les 33 types d'effets. Partout où le choix se fait dans une liste fermée (rareté, catégorie, maîtrise, maîtrise d'arme, équipement de départ, prérequis d'un don), il y a un menu ou un sélecteur, pas un texte ou un code à écrire.",
+        de: "Du kannst jede Art von Eintrag schreiben: Zauber, Gegenstände, Verzauberungen, Völker und Unterarten, Klassen und Unterklassen, Hintergründe (2014 und 2024), Talente, Sprachen, Eigenschaften, Gottheiten, Monster und Zustände, mit den 33 Arten von Wirkungen. Wo die Wahl aus einer geschlossenen Liste kommt (Seltenheit, Kategorie, Übung, Waffenmeisterschaft, Startausrüstung, die Voraussetzungen eines Talents), gibt es ein Menü oder eine Auswahl, keinen Text und keinen Code zum Schreiben.",
+        es: "Puedes escribir todo tipo de entrada: hechizos, objetos, encantamientos, especies y subespecies, clases y subclases, trasfondos (2014 y 2024), dotes, idiomas, propiedades, deidades, monstruos y condiciones, con los 33 tipos de efectos. Donde la elección es de una lista cerrada (rareza, categoría, competencia, maestría con armas, equipo inicial, los requisitos de una dote) hay un menú o un selector, no un texto o un código que escribir.",
+      },
+      {
+        en: "Spells that cost points instead of slots, classes that cast without slots, named reserves of points shared by several features, custom conditions with a glow colour in Play, custom kinds of damage, and distances and weights in the units of each pack.",
+        it: "Incantesimi che costano punti invece di slot, classi che lanciano senza slot, riserve di punti con un nome condivise da più privilegi, condizioni tue con un bagliore colorato in Gioca, tipi di danno tuoi e distanze e pesi nelle unità di ogni pacchetto.",
+        fr: "Des sorts qui coûtent des points au lieu d'emplacements, des classes qui lancent des sorts sans emplacements, des réserves de points nommées partagées par plusieurs aptitudes, des conditions à toi avec une lueur colorée dans Jouer, des types de dégâts à toi, et des distances et des poids dans les unités de chaque paquet.",
+        de: "Zauber, die Punkte statt Plätze kosten, Klassen, die ohne Zauberplätze wirken, benannte Punktevorräte, die mehrere Merkmale teilen, eigene Zustände mit farbigem Leuchten im Spielmodus, eigene Schadensarten sowie Entfernungen und Gewichte in den Einheiten jedes Pakets.",
+        es: "Hechizos que cuestan puntos en lugar de espacios, clases que lanzan sin espacios, reservas de puntos con nombre compartidas por varios rasgos, condiciones propias con un resplandor de color en Jugar, tipos de daño propios, y distancias y pesos en las unidades de cada paquete.",
+      },
+      {
+        en: "A pack is a book: author, version, description and texts in several languages. Entries can be reordered, copied, cut, duplicated and moved between packs (the ids are rewritten everywhere, characters included, and you can take it back), and printed as a booklet or as cards, or written as Markdown for Homebrewery.",
+        it: "Un pacchetto è un libro: autore, versione, descrizione e testi in più lingue. Le voci si riordinano, copiano, tagliano, duplicano e spostano fra pacchetti (gli id vengono riscritti ovunque, personaggi compresi, e si può annullare), e si stampano come libretto o come carte, oppure si scrivono in Markdown per Homebrewery.",
+        fr: "Un paquet est un livre : auteur, version, description et textes en plusieurs langues. Les entrées se réordonnent, se copient, se coupent, se dupliquent et se déplacent d'un paquet à l'autre (les identifiants sont réécrits partout, personnages compris, et tu peux annuler), et s'impriment en livret ou en cartes, ou s'écrivent en Markdown pour Homebrewery.",
+        de: "Ein Paket ist ein Buch: Autor, Version, Beschreibung und Texte in mehreren Sprachen. Einträge lassen sich umordnen, kopieren, ausschneiden, duplizieren und zwischen Paketen verschieben (die IDs werden überall neu geschrieben, Charaktere eingeschlossen, und du kannst es rückgängig machen), und als Heft oder als Karten drucken oder als Markdown für Homebrewery schreiben.",
+        es: "Un paquete es un libro: autor, versión, descripción y textos en varios idiomas. Las entradas se reordenan, copian, cortan, duplican y mueven entre paquetes (los identificadores se reescriben en todas partes, personajes incluidos, y puedes deshacerlo), y se imprimen como librito o como cartas, o se escriben en Markdown para Homebrewery.",
+      },
+      {
+        en: "Try an entry on a sample character before using it, start from an entry of the rules, searchable menus for long lists, and a reminder to export a pack that has changed for a day without a copy.",
+        it: "Prova una voce su un personaggio d'esempio prima di usarla, parti da una voce delle regole, menu con ricerca per le liste lunghe e un promemoria per esportare un pacchetto che è cambiato da un giorno senza una copia.",
+        fr: "Essaie une entrée sur un personnage d'exemple avant de l'utiliser, pars d'une entrée des règles, des menus avec recherche pour les longues listes, et un rappel pour exporter un paquet modifié depuis un jour sans copie.",
+        de: "Probiere einen Eintrag an einem Beispielcharakter aus, bevor du ihn benutzt, beginne mit einem Eintrag der Regeln, durchsuchbare Menüs für lange Listen und eine Erinnerung, ein Paket zu exportieren, das seit einem Tag ohne Kopie geändert wurde.",
+        es: "Prueba una entrada en un personaje de ejemplo antes de usarla, parte de una entrada de las reglas, menús con búsqueda para las listas largas y un aviso para exportar un paquete que lleva un día cambiando sin copia.",
+      },
+      {
+        en: "A technical page on the pack format, with the ids of the rules, at heroquill.app/docs/packs/: to write a pack by hand, or to give to an AI so that it builds one from a book (there is also a plain Markdown copy).",
+        it: "Una pagina tecnica sul formato dei pacchetti, con gli id delle regole, su heroquill.app/docs/packs/: per scrivere un pacchetto a mano, o da dare a un'IA perché ne costruisca uno da un libro (c'è anche una copia in Markdown semplice).",
+        fr: "Une page technique sur le format des paquets, avec les identifiants des règles, sur heroquill.app/docs/packs/ : pour écrire un paquet à la main, ou à donner à une IA pour qu'elle en construise un à partir d'un livre (il y a aussi une copie en Markdown simple).",
+        de: "Eine technische Seite zum Paketformat, mit den IDs der Regeln, unter heroquill.app/docs/packs/: um ein Paket von Hand zu schreiben oder um es einer KI zu geben, damit sie eines aus einem Buch baut (es gibt auch eine einfache Markdown-Kopie).",
+        es: "Una página técnica sobre el formato de los paquetes, con los identificadores de las reglas, en heroquill.app/docs/packs/: para escribir un paquete a mano, o para dárselo a una IA y que construya uno a partir de un libro (también hay una copia en Markdown simple).",
+      },
+      {
+        en: "Your packs from before are read and converted by themselves; nothing is lost. The footer of the welcome page no longer widens the page on a phone.",
+        it: "I pacchetti di prima si leggono e si convertono da soli, senza perdere nulla. Il piè di pagina della pagina iniziale non allarga più la pagina sul telefono.",
+        fr: "Tes paquets d'avant sont lus et convertis tout seuls, sans rien perdre. Le pied de page de la page d'accueil n'élargit plus la page sur un téléphone.",
+        de: "Deine früheren Pakete werden von selbst gelesen und umgewandelt, ohne dass etwas verloren geht. Die Fußzeile der Startseite macht die Seite auf dem Handy nicht mehr breiter.",
+        es: "Tus paquetes de antes se leen y se convierten solos, sin perder nada. El pie de la página de inicio ya no ensancha la página en el teléfono.",
+      },
+    ],
+  },
+  {
     version: "1.30.1 beta",
     date: "2026-11-15",
     notes: [
@@ -1354,16 +1416,6 @@ export interface RoadmapItem {
 /** What is still missing, from the nearest to the furthest. */
 export const ROADMAP: RoadmapItem[] = [
   {
-    id: "testing",
-    text: {
-      en: "More testing, on more devices and with more kinds of characters: this is a beta.",
-      it: "Più prove, su più dispositivi e con più tipi di personaggi: questa è una beta.",
-      fr: "Plus de tests, sur plus d'appareils et avec plus de types de personnages : c'est une bêta.",
-      de: "Mehr Tests, auf mehr Geräten und mit mehr Arten von Charakteren: Das ist eine Beta.",
-      es: "Más pruebas, en más dispositivos y con más tipos de personajes: esto es una beta.",
-    },
-  },
-  {
     id: "translations",
     text: {
       en: "Checking the translations: the 2024 texts in Italian, French, German and Spanish were written in part by hand and need to be read against the books, and some 2014 texts (about 78 class features, the descriptions of the magic item variants) are still English. Automatic translation fills them meanwhile.",
@@ -1431,16 +1483,6 @@ export const ROADMAP: RoadmapItem[] = [
       fr: "Plus de ce que font les objets sur la fiche et dans Jouer : utiliser un objet ne fait que le décompter pour l’instant, sauf les potions de soin, qui soignent ; et aussi bonus d’armes, charges, et le tableau des emplacements à l’étape Créer et sur la fiche imprimée.",
       de: "Mehr davon, was Gegenstände auf dem Bogen und im Spielmodus bewirken: Ein Gegenstand wird beim Benutzen vorerst nur abgezählt, außer den Heiltränken, die heilen; dazu Waffenboni, Ladungen und die Platztafel im Schritt Erstellen und auf dem gedruckten Bogen.",
       es: "Más de lo que hacen los objetos en la hoja y en Jugar: usar un objeto por ahora solo lo descuenta, salvo las pociones de curación, que curan; y también bonos de armas, cargas y el tablero de lugares en el paso Crear y en la hoja impresa.",
-    },
-  },
-  {
-    id: "homebrew",
-    text: {
-      en: "A richer homebrew editor: effects of features, subclass spells and more kinds of entries.",
-      it: "Un editor homebrew più ricco: effetti dei privilegi, incantesimi di sottoclasse e più tipi di voci.",
-      fr: "Un éditeur homebrew plus riche : effets des aptitudes, sorts de sous-classe et plus de types d'entrées.",
-      de: "Ein reicherer Homebrew-Editor: Wirkungen von Merkmalen, Unterklassen-Zauber und mehr Arten von Einträgen.",
-      es: "Un editor homebrew más completo: efectos de los rasgos, hechizos de subclase y más tipos de entradas.",
     },
   },
   {

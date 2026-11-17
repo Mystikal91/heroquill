@@ -43,7 +43,7 @@ export const GUIDE = {
       [
         "Pick a background",
         [
-          "A background gives two skills, some tool proficiencies or languages, starting equipment and a feature, and it tells where the hero comes from. The SRD includes one, the Acolyte. Other backgrounds come from other books: in Heroquill you can import the content files you already own, or write your own with the homebrew editor.",
+          "A background gives two skills, some tool proficiencies or languages, starting equipment and a feature, and it tells where the hero comes from. The SRD includes one, the Acolyte. Other backgrounds come from other books: in Heroquill you can import the content files you already own, or write your own with the Homebrew studio.",
         ],
       ],
       [
@@ -120,7 +120,7 @@ export const GUIDE = {
       [
         "Scegli un background",
         [
-          "Un background dà due abilità, qualche competenza in strumenti o linguaggi, equipaggiamento iniziale e un privilegio, e racconta da dove viene l’eroe. L’SRD ne comprende uno, l’Accolito. Gli altri vengono da altri libri: in Heroquill puoi importare i file di contenuto che già possiedi, o scriverne di tuoi con l’editor homebrew.",
+          "Un background dà due abilità, qualche competenza in strumenti o linguaggi, equipaggiamento iniziale e un privilegio, e racconta da dove viene l’eroe. L’SRD ne comprende uno, l’Accolito. Gli altri vengono da altri libri: in Heroquill puoi importare i file di contenuto che già possiedi, o scriverne di tuoi con lo Studio homebrew.",
         ],
       ],
       [
@@ -197,7 +197,7 @@ export const GUIDE = {
       [
         "Choisis un historique",
         [
-          "Un historique donne deux compétences, quelques maîtrises d’outils ou de langues, de l’équipement de départ et une aptitude, et dit d’où vient le héros. Le SRD en comprend un, l’Acolyte. Les autres viennent d’autres livres : dans Heroquill tu peux importer les fichiers de contenu que tu possèdes déjà, ou écrire les tiens avec l’éditeur homebrew.",
+          "Un historique donne deux compétences, quelques maîtrises d’outils ou de langues, de l’équipement de départ et une aptitude, et dit d’où vient le héros. Le SRD en comprend un, l’Acolyte. Les autres viennent d’autres livres : dans Heroquill tu peux importer les fichiers de contenu que tu possèdes déjà, ou écrire les tiens avec l’atelier homebrew.",
         ],
       ],
       [
@@ -274,7 +274,7 @@ export const GUIDE = {
       [
         "Wähle einen Hintergrund",
         [
-          "Ein Hintergrund gibt zwei Fertigkeiten, einige Werkzeug- oder Sprachkenntnisse, Startausrüstung und ein Merkmal, und er erzählt, woher der Held kommt. Das SRD enthält einen, den Akolythen. Andere stammen aus anderen Büchern: In Heroquill kannst du die Inhaltsdateien importieren, die du schon besitzt, oder mit dem Homebrew-Editor eigene schreiben.",
+          "Ein Hintergrund gibt zwei Fertigkeiten, einige Werkzeug- oder Sprachkenntnisse, Startausrüstung und ein Merkmal, und er erzählt, woher der Held kommt. Das SRD enthält einen, den Akolythen. Andere stammen aus anderen Büchern: In Heroquill kannst du die Inhaltsdateien importieren, die du schon besitzt, oder mit der Homebrew-Werkstatt eigene schreiben.",
         ],
       ],
       [
@@ -351,7 +351,7 @@ export const GUIDE = {
       [
         "Elige un trasfondo",
         [
-          "Un trasfondo da dos habilidades, algunas competencias con herramientas o idiomas, equipo inicial y un rasgo, y cuenta de dónde viene el héroe. El SRD incluye uno, el Acólito. Los demás vienen de otros libros: en Heroquill puedes importar los archivos de contenido que ya tienes, o escribir los tuyos con el editor homebrew.",
+          "Un trasfondo da dos habilidades, algunas competencias con herramientas o idiomas, equipo inicial y un rasgo, y cuenta de dónde viene el héroe. El SRD incluye uno, el Acólito. Los demás vienen de otros libros: en Heroquill puedes importar los archivos de contenido que ya tienes, o escribir los tuyos con el taller homebrew.",
         ],
       ],
       [

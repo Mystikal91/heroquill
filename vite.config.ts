@@ -4,11 +4,9 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 // The app lives under /app/ of heroquill.app; the welcome page and the legal pages are in site/.
-// The preview of a branch (see .github/workflows/deploy-develop.yml) is built with VITE_CHANNEL=develop.
 export default defineConfig(() => {
   const base = "/app/";
-  const develop = process.env.VITE_CHANNEL === "develop";
-  const name = develop ? "Heroquill (develop)" : "Heroquill";
+  const name = "Heroquill";
   return {
     base,
     build: { outDir: "dist/app", emptyOutDir: true },

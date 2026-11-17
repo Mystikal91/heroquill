@@ -656,7 +656,9 @@ level.
 - A **weapon** has `data.weapon`: `category` (`simple` or `martial`), `kind` (`melee` or `ranged`),
   `damage` (`dice` and `type`), `twoHandedDamage` for a versatile weapon, `properties` (ids of
   `property` entries: `srd51:property/finesse`), `range` (`normal` and `long`, in feet; melee reach is
-  5), `throwRange`, `mastery` and `proficiency` (`["weapon:simple-weapons"]`).
+  5), `throwRange`, `mastery` (the id of a `property` with `data.mastery: true`, a weapon mastery of the
+  2024 rules: `srd52:property/mastery-vex`) and `proficiency` (`["weapon:simple-weapons"]`: any one of them
+  makes the wielder proficient). `data.magical: true` makes a weapon count as magic without a rarity.
 - An **armor** has `data.armor`: `category` (`light`, `medium`, `heavy`, `shield`), `base` (the armor
   class), `dexBonus`, `maxDexBonus`, `strengthMinimum`, `stealthDisadvantage`, `proficiency`.
 - A **magic item** has `data.rarity` (`common`, `uncommon`, `rare`, `very-rare`, `legendary`,
@@ -666,7 +668,7 @@ level.
   +1 armor class and a resistance is a `modifier` and a `defense` on the item.
 - **Gear** has `data.gear` (`category`, `contents` for a pack, `bundleSize` for ammunition).
 - `data.enchants: true` makes an item an enchantment put on a weapon of the inventory instead of
-  something carried; `data.copyOf` records the item a customized copy was made from.
+  something carried (its `cost` is 0; it gives a `rarity`, an `enhancement` and effects); `data.copyOf` records the item a customized copy was made from.
 
 A `property` is a weapon property (`finesse`, `reach`): a name and a text, no effect. A weapon's
 `properties` lists their ids; the properties of the rules already exist as `srd51:property/...`.

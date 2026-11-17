@@ -778,22 +778,7 @@ textarea {
   color: var(--muted);
 }
 
-/* ---- Title, beta badge and the About page ---- */
-
-.beta-badge {
-  display: inline-block;
-  padding: 0.05rem 0.5rem;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  color: var(--accent);
-  font-family: var(--font-body, inherit);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  vertical-align: middle;
-  white-space: nowrap;
-}
+/* ---- Title and the About page ---- */
 
 button.title-link {
   padding: 0;

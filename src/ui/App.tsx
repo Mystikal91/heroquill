@@ -18,7 +18,7 @@ import { Credits } from "./Credits";
 import "../app/translate";
 import { startBackClose } from "../app/backClose";
 import { monstersWanted } from "../app/rulesView";
-import { STAGE, VERSION } from "../app/version";
+import { VERSION } from "../app/version";
 import { startKeepingAwake } from "../app/wakeLock";
 import { AboutPage } from "./AboutPage";
 import { AppMenu } from "./AppMenu";
@@ -28,7 +28,6 @@ import { CustomizeItemDialog } from "./CustomizeItemDialog";
 import { EditionDialog } from "./EditionDialog";
 import { ExplainDialog } from "./Explain";
 
-import { DevBanner } from "./DevBanner";
 import { InstallNotice } from "./InstallNotice";
 import { ItemPickerDialog } from "./ItemPicker";
 import { ConfirmDialog, UndoNotice } from "./Notices";
@@ -152,8 +151,7 @@ export function App() {
           <h1>
             <button type="button" class="title-link" onClick={() => showView("about")}>
               {ui("app.title")}
-            </button>{" "}
-            <span class="beta-badge">{STAGE}</span>
+            </button>
           </h1>
           <div class="title-ornament" aria-hidden="true">
             <QuillIcon />
@@ -185,7 +183,6 @@ export function App() {
       <UndoNotice />
       <ConfirmDialog />
       <EditionDialog />
-      <DevBanner />
       <UpdateNotice />
       <InstallNotice />
       <SpellDialog />
@@ -221,9 +218,7 @@ export function App() {
             {ui("footer.credits")}
           </button>
         </p>
-        <p class="muted">
-          v{VERSION} {STAGE}
-        </p>
+        <p class="muted">v{VERSION}</p>
       </footer>
     </main>
   );

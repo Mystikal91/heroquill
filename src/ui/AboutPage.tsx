@@ -1,7 +1,7 @@
 import { aboutTab } from "../app/about";
 import { language } from "../app/language";
 import { leavePage, showView } from "../app/navigation";
-import { STAGE, VERSION } from "../app/version";
+import { VERSION } from "../app/version";
 import { CHANGELOG, DISCORD_URL, ROADMAP, contributePath, newsPath, pick } from "../content/news";
 import { type UiKey, ui } from "../i18n/ui";
 
@@ -34,13 +34,11 @@ function Home() {
         </section>
       ))}
       <section>
-        <h3>
-          {ui("about.home.beta.title")} <span class="beta-badge">{STAGE}</span>
-        </h3>
-        <p>{ui("about.home.beta.body", { version: `${VERSION} ${STAGE}` })}</p>
+        <h3>{ui("about.home.version.title")}</h3>
+        <p>{ui("about.home.version.body", { version: VERSION })}</p>
         <p>
           <a href={`${REPO_URL}/issues`} target="_blank" rel="noopener noreferrer">
-            {ui("about.home.beta.report")}
+            {ui("about.home.version.report")}
           </a>
           {" · "}
           <a href={contributePath(language.value)} target="_blank" rel="noopener noreferrer">
@@ -114,7 +112,7 @@ export function AboutPage() {
         {ui("credits.back")}
       </button>
       <h2>
-        {ui("app.title")} <span class="beta-badge">{STAGE}</span>
+        {ui("app.title")}
         <small class="muted"> v{VERSION}</small>
       </h2>
       <nav class="tabs" aria-label={ui("about.tabs")}>
