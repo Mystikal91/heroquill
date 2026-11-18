@@ -645,6 +645,8 @@ classes whose spell list the spell is on (ids of `class` entries; the Wizard is
 `srd51:class/wizard`). A spell with an empty `classes` is on no list and cannot be picked by a
 class, though it can still be granted.
 
+A spell may have `effects` (a `modifier` of the armor class or the speed, an `unarmoredDefense`, a `defense`...): in Play a button on the spell, "In effect", turns them on as if the character held them, until a long rest, until it is turned off, or until the concentration on that spell ends. Mage Armor, Shield of Faith, Shield and Longstrider of the SRD have them.
+
 The numbers Play can roll come from `data.damage` (a list; each has `damageType.index` and either
 `damageAtSlotLevel`, a record from slot level to dice, or `damageAtCharacterLevel` for cantrips),
 `data.dc` (a saving throw: `dcType.index` is the ability and `dcSuccess` is `none` or `half`),

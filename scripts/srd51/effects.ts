@@ -488,6 +488,19 @@ export const ITEM_EFFECTS_2024: Record<string, Effect[]> = Object.fromEntries(
   ].flatMap((index) => (ITEM_EFFECTS[index] ? [[index, ITEM_EFFECTS[index]]] : [])),
 );
 
+/**
+ * The effect of the spells that change a number of the sheet while they last, written by hand from their
+ * text: they apply when the person turns the spell on in Play. Barkskin (armor class of at least 16, also in
+ * armor) and Haste (a doubled speed and more) are left out: the engine has no minimum for the armor class,
+ * and the rest of what these spells do is text.
+ */
+export const SPELL_EFFECTS: Record<string, Effect[]> = {
+  "mage-armor": [{ type: "unarmoredDefense", base: 13, add: [], shield: true }],
+  "shield-of-faith": [modifier("ac", 2)],
+  shield: [modifier("ac", 5)],
+  longstrider: [modifier("speed", 10)],
+};
+
 export const ITEM_HEALING: Record<string, string> = {
   "potion-of-healing-common": "2d4+2",
   "potion-of-healing-greater": "4d4+4",

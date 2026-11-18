@@ -173,6 +173,7 @@ const CharacterSchema = v.object({
         bonus: v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(3)),
       }),
     ),
+    activeSpells: v.optional(v.array(v.string())),
   }),
   asi: v.array(v.pipe(v.array(AbilitySchema), v.minLength(1), v.maxLength(2))),
   feats: v.array(v.string()),

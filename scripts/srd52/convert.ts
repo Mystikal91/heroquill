@@ -8,7 +8,7 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { cleanData, convertMonsters } from "../srd51/convert";
-import { ITEM_EFFECTS_2024, magicItemSlot } from "../srd51/effects";
+import { ITEM_EFFECTS_2024, SPELL_EFFECTS, magicItemSlot } from "../srd51/effects";
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
@@ -1117,7 +1117,12 @@ function convertSpells(raw: RawSource): Converted {
     }
     // The 2024 file gives one damage object; the data model (as the 5.1 file's) holds a list of them.
     if (s.damage !== undefined) data.damage = [cleanData(s.damage)];
-    entries.push({ id: id("spell", s.index), kind: "spell", effects: [], data });
+    entries.push({
+      id: id("spell", s.index),
+      kind: "spell",
+      effects: SPELL_EFFECTS[s.index] ?? [],
+      data,
+    });
     strings[`${s.index}.name`] = s.name;
     strings[`${s.index}.desc`] = text(s.description);
     if (s.higher_level) strings[`${s.index}.higherLevel`] = text(s.higher_level);

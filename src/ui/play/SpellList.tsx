@@ -18,6 +18,7 @@ import {
   endConcentration,
   resourceLeft,
   setResourceUsed,
+  setSpellActive,
   slotsLeft,
   startConcentration,
 } from "../../engine/play";
@@ -140,7 +141,11 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
   // "1 reaction, which you take when..." is long: the first words say how long it takes.
   const time = c.text(id, "castingTime")?.split(",")[0];
 
+  // A spell that changes a number of the sheet (Mage Armor) can be turned on while it lasts.
+  const hasEffects = (c.index.get(id)?.effects.length ?? 0) > 0;
+  const active = (play.activeSpells ?? []).includes(id);
   const hasActions =
+    hasEffects ||
     level > 0 ||
     rolls.attack ||
     rolls.damage.length > 0 ||
@@ -359,6 +364,17 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
             >
               <FocusIcon />
               <span>{ui("play.concentrate")}</span>
+            </button>
+          )}
+          {hasEffects && (
+            <button
+              type="button"
+              class="card-btn spell-effect-btn"
+              aria-pressed={active}
+              title={ui("play.spellEffectHint")}
+              onClick={() => changePlay((p) => setSpellActive(p, id, !active))}
+            >
+              <span>{ui("play.spellEffect")}</span>
             </button>
           )}
         </div>

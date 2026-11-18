@@ -265,6 +265,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
         return entry && entry.effects.length > 0 ? [entry] : [];
       }),
     );
+  // A spell the person has turned on adds its effects while it lasts (Mage Armor's armor class).
+  const activeSpells = (character.play.activeSpells ?? []).flatMap((id) => {
+    const entry = index.get(id);
+    return entry && entry.effects.length > 0 ? [entry] : [];
+  });
   // A variant of a species (a half-elf of another descent) carries the species' effects itself.
   const standsIn = chosen.some((e) => e.kind === "subspecies" && e.data.replacesSpecies === true);
   const contributing = standsIn ? chosen.filter((e) => e.kind !== "species") : chosen;
@@ -274,7 +279,13 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     choices,
     seen: heldIds,
   } = collectEffects(
-    [...contributing, ...wornWithEffects, ...(starting?.entry ? [starting.entry] : []), ...reached],
+    [
+      ...contributing,
+      ...wornWithEffects,
+      ...activeSpells,
+      ...(starting?.entry ? [starting.entry] : []),
+      ...reached,
+    ],
     { index, selections: character.selections, warnings, levelOf, ruleset: character.ruleset },
     [
       ...character.classes.flatMap((cl) => [cl.classId, cl.subclassId ?? ""]),

@@ -149,6 +149,7 @@ export function SpellTabs({
   language: string | undefined;
 }) {
   const { translation, preview, tools } = commonTabs(record, shown, entry, language);
+  const { writeEffects } = useEntryWrites(record, entry);
   const tabs: TabSpec[] = [
     {
       id: "main",
@@ -190,6 +191,17 @@ export function SpellTabs({
         ),
       },
     ],
+    {
+      id: "effects",
+      label: ui("studio.effects"),
+      badge: entry.effects.length,
+      body: () => (
+        <div class="studio-form">
+          <p class="muted">{ui("studio.spellEffectsHint")}</p>
+          <EffectList effects={entry.effects} onChange={writeEffects} />
+        </div>
+      ),
+    },
     translation,
     preview,
     tools,

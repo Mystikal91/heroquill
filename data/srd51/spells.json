@@ -4884,7 +4884,13 @@
     {
       "id": "srd51:spell/longstrider",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "speed",
+          "value": 10
+        }
+      ],
       "data": {
         "level": 1,
         "school": "transmutation",
@@ -4906,7 +4912,14 @@
     {
       "id": "srd51:spell/mage-armor",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "unarmoredDefense",
+          "base": 13,
+          "add": [],
+          "shield": true
+        }
+      ],
       "data": {
         "level": 1,
         "school": "abjuration",
@@ -6748,7 +6761,13 @@
     {
       "id": "srd51:spell/shield",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "ac",
+          "value": 5
+        }
+      ],
       "data": {
         "level": 1,
         "school": "abjuration",
@@ -6767,7 +6786,13 @@
     {
       "id": "srd51:spell/shield-of-faith",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "ac",
+          "value": 2
+        }
+      ],
       "data": {
         "level": 1,
         "school": "abjuration",

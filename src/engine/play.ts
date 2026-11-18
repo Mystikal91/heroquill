@@ -271,8 +271,17 @@ export function startConcentration(
 }
 
 export function endConcentration(play: PlayState): PlayState {
-  const { concentration: _ended, ...rest } = play;
-  return withoutRounds(rest, ["concentration"]);
+  const { concentration: ended, ...rest } = play;
+  // The effect of the spell that was held ends with the concentration.
+  return withoutRounds(ended ? setSpellActive(rest, ended, false) : rest, ["concentration"]);
+}
+
+/** Turns the effect of a spell on or off on the sheet (Mage Armor...): a long rest turns them all off. */
+export function setSpellActive(play: PlayState, id: string, on: boolean): PlayState {
+  const others = (play.activeSpells ?? []).filter((s) => s !== id);
+  const next = on ? [...others, id] : others;
+  const { activeSpells: _old, ...rest } = play;
+  return next.length > 0 ? { ...rest, activeSpells: next } : rest;
 }
 
 /** The Constitution save DC to keep concentrating after taking damage: 10 or half, if higher. */

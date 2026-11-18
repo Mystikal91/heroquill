@@ -11,6 +11,7 @@ import {
   ITEM_HEALING,
   OPTION_FEATURES,
   PRICES,
+  SPELL_EFFECTS,
   SUBCLASS_FIXES,
   magicItemSlot,
 } from "./effects";
@@ -380,7 +381,12 @@ function convertSpells(raw: RawSource): Converted {
     for (const key of ["attack_type", "damage", "dc", "heal_at_slot_level", "area_of_effect"]) {
       if (s[key] !== undefined) data[cleanKey(key)] = cleanData(s[key]);
     }
-    entries.push({ id: id("spell", s.index), kind: "spell", effects: [], data });
+    entries.push({
+      id: id("spell", s.index),
+      kind: "spell",
+      effects: SPELL_EFFECTS[s.index] ?? [],
+      data,
+    });
     strings[`${s.index}.name`] = s.name;
     strings[`${s.index}.desc`] = text(s.desc) ?? "";
     if (s.higher_level) strings[`${s.index}.higherLevel`] = text(s.higher_level) ?? "";

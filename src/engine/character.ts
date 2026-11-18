@@ -130,6 +130,11 @@ export interface PlayState {
    * it gives (+1, +2 or +3 by the level of the slot): the weapon is magical until a rest ends it.
    */
   magicWeapon?: { itemId: string; bonus: number };
+  /**
+   * Spells whose effect is counted on the sheet while it lasts (Mage Armor, Shield of Faith): the effects of
+   * the spell entry apply as if it were held. A long rest ends them, and so does ending the concentration on one.
+   */
+  activeSpells?: string[];
 }
 
 export function createPlayState(): PlayState {
