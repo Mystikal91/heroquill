@@ -645,7 +645,7 @@ classes whose spell list the spell is on (ids of `class` entries; the Wizard is
 `srd51:class/wizard`). A spell with an empty `classes` is on no list and cannot be picked by a
 class, though it can still be granted.
 
-A spell may have `effects` (a `modifier` of the armor class or the speed, an `unarmoredDefense`, a `defense`...): in Play a button on the spell, "In effect", turns them on as if the character held them, until a long rest, until it is turned off, or until the concentration on that spell ends. Mage Armor, Shield of Faith, Shield and Longstrider of the SRD have them.
+A spell may have `effects` (a `modifier` of the armor class or the speed, an `unarmoredDefense`, a `defense`...): in Play a button on the spell, "In effect", turns them on as if the character held them, until a long rest, until it is turned off, or until the concentration on that spell ends. Mage Armor, Shield of Faith, Shield, Barkskin (an `armorClassFloor`) and Longstrider of the SRD have them.
 
 The numbers Play can roll come from `data.damage` (a list; each has `damageType.index` and either
 `damageAtSlotLevel`, a record from slot level to dice, or `damageAtCharacterLevel` for cantrips),
@@ -1449,7 +1449,7 @@ No fields: the entry is its name and its text.
 
 ### Effects
 
-34 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
+35 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
 
 #### `flag`
 
@@ -1628,6 +1628,14 @@ The ability score is at least `value` (Gauntlets of Ogre Power); it never lowers
 | --- | --- | --- | --- |
 | `ability` | `str` or `dex` or `con` or `int` or `wis` or `cha` | **yes** |  |
 | `value` | number | **yes** |  |
+
+#### `armorClassFloor`
+
+The armor class is at least `value`, whatever armor is worn (Barkskin): if the calculation is lower the sheet makes up the difference, before the bonuses that come on top of it.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `value` | number (integer, min 1) | **yes** |  |
 
 #### `weaponAbility`
 

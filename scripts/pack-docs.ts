@@ -105,6 +105,8 @@ const NOTES: Record<EffectType, string> = {
   expertise:
     "Double proficiency bonus on a skill the character is already proficient in (`skill` is the slug of a skill).",
   size: "The size of the creature, for a species that lets the person pick one through a `choice` that grants `size`. A species with one size has it in `data.size`.",
+  armorClassFloor:
+    "The armor class is at least `value`, whatever armor is worn (Barkskin): if the calculation is lower the sheet makes up the difference, before the bonuses that come on top of it.",
   abilityFloor:
     "The ability score is at least `value` (Gauntlets of Ogre Power); it never lowers it.",
   weaponAbility:

@@ -8,7 +8,7 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { cleanData, convertMonsters } from "../srd51/convert";
-import { ITEM_EFFECTS_2024, SPELL_EFFECTS, magicItemSlot } from "../srd51/effects";
+import { ITEM_EFFECTS_2024, SPELL_EFFECTS_2024, magicItemSlot } from "../srd51/effects";
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
@@ -1120,7 +1120,7 @@ function convertSpells(raw: RawSource): Converted {
     entries.push({
       id: id("spell", s.index),
       kind: "spell",
-      effects: SPELL_EFFECTS[s.index] ?? [],
+      effects: SPELL_EFFECTS_2024[s.index] ?? [],
       data,
     });
     strings[`${s.index}.name`] = s.name;

@@ -561,7 +561,12 @@
     {
       "id": "srd51:spell/barkskin",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "armorClassFloor",
+          "value": 16
+        }
+      ],
       "data": {
         "level": 2,
         "school": "transmutation",

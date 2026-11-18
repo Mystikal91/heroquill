@@ -490,15 +490,21 @@ export const ITEM_EFFECTS_2024: Record<string, Effect[]> = Object.fromEntries(
 
 /**
  * The effect of the spells that change a number of the sheet while they last, written by hand from their
- * text: they apply when the person turns the spell on in Play. Barkskin (armor class of at least 16, also in
- * armor) and Haste (a doubled speed and more) are left out: the engine has no minimum for the armor class,
- * and the rest of what these spells do is text.
+ * text: they apply when the person turns the spell on in Play. Haste (a doubled speed and more) is left out:
+ * the rest of what it does is text. Barkskin is a floor of 16 in the 2014 SRD and of 17 in the 2024 one.
  */
 export const SPELL_EFFECTS: Record<string, Effect[]> = {
   "mage-armor": [{ type: "unarmoredDefense", base: 13, add: [], shield: true }],
   "shield-of-faith": [modifier("ac", 2)],
   shield: [modifier("ac", 5)],
   longstrider: [modifier("speed", 10)],
+  barkskin: [{ type: "armorClassFloor", value: 16 }],
+};
+
+/** The same for the 2024 SRD, where Barkskin makes the armor class at least 17. */
+export const SPELL_EFFECTS_2024: Record<string, Effect[]> = {
+  ...SPELL_EFFECTS,
+  barkskin: [{ type: "armorClassFloor", value: 17 }],
 };
 
 export const ITEM_HEALING: Record<string, string> = {

@@ -278,6 +278,11 @@ export const PlainEffectSchema = v.variant("type", [
   /** The ability score is at least this high (Gauntlets of Ogre Power): it never lowers it. */
   v.object({ type: v.literal("abilityFloor"), ability: AbilitySchema, value: v.number() }),
   /**
+   * The armor class is at least this high, whatever armor is worn (Barkskin): if the calculation is lower
+   * the sheet makes up the difference, before the bonuses that come on top of it (a Shield spell still adds).
+   */
+  v.object({ type: v.literal("armorClassFloor"), value: v.pipe(v.number(), v.integer(), v.minValue(1)) }),
+  /**
    * Attacks with weapons may use this ability instead of Strength or Dexterity (Hex Warrior,
    * Battle Ready). The attack takes the best ability that applies. `when` narrows the weapons:
    * `oneHanded` (without the two-handed property) or `magic` (a magic item). `proficient` asks

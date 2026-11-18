@@ -205,6 +205,15 @@ function deriveArmorClass(ctx: Context, state: ArmorState): ArmorClassResult {
   }
   const shield = shields[0];
   if (shield) parts.push({ source: "shield", value: shield.armor.base });
+  // An armor class that cannot be lower than a value (Barkskin): a part makes up the difference, and
+  // the bonuses come on top of it.
+  let floor: { value: number; source: string } | undefined;
+  for (const { effect, source } of ctx.sourced)
+    if (effect.type === "armorClassFloor" && (!floor || effect.value > floor.value))
+      floor = { value: effect.value, source };
+  const calculated = parts.reduce((sum, p) => sum + p.value, 0);
+  if (floor && calculated < floor.value)
+    parts.push({ source: "feature", value: floor.value - calculated, feature: floor.source });
   for (const m of appliedModifiers(ctx.sourced, "ac", {
     armor: state,
     levelOf: ctx.levelOf,
