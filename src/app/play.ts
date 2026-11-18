@@ -30,10 +30,12 @@ import {
   endRage,
   endRageIfDown,
   enterRage,
+  removeCustomEffect,
   resourceLeft,
   setBardicDie,
   setInspiration,
   setResourceUsed,
+  setSpellActive,
 } from "../engine/play";
 import { beastPool, damageBeast, endShapeIfDown } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
@@ -168,6 +170,26 @@ export function rollCheck(
     ),
   );
   const roll = rollD20(bonus, mode, undefined, options);
+  // Dice that an effect adds to this kind of roll (Bless: a d4 on attacks and saves) are rolled with it.
+  const used = (sheet.value?.rollDice ?? []).filter(
+    (d) => type !== undefined && d.on.includes(type),
+  );
+  const extras = used.map((d) => ({ die: d.die, face: cryptoRandomInt(d.die) + 1 }));
+  // A die that is spent by one roll (Guidance) ends the spell or the effect that gave it.
+  const spent = used.filter((d) => d.once).map((d) => d.source);
+  if (spent.length > 0)
+    changePlay(
+      (p) =>
+        spent.reduce(
+          (play, source) =>
+            source.startsWith("custom:effect/")
+              ? removeCustomEffect(play, source.slice("custom:effect/".length))
+              : setSpellActive(play, source, false),
+          p,
+        ),
+      { undo: false },
+    );
+  const extra = extras.reduce((sum, e) => sum + e.face, 0);
   const faces =
     roll.dice.length > 1
       ? `[${roll.dice.join(", ")}] → ${roll.used}`
@@ -176,8 +198,8 @@ export function rollCheck(
         : `${roll.used}`;
   addLog({
     label,
-    detail: `d20 ${faces}${signedBonus(bonus)}`,
-    total: roll.total,
+    detail: `d20 ${faces}${signedBonus(bonus)}${extras.map((e) => ` + d${e.die} (${e.face})`).join("")}`,
+    total: roll.total + extra,
     ...(roll.critical && { tone: "critical" as const }),
     ...(roll.fumble && { tone: "fumble" as const }),
     redo: {
@@ -189,7 +211,7 @@ export function rollCheck(
       ...(ability && { ability }),
     },
   });
-  return roll;
+  return extra > 0 ? { ...roll, total: roll.total + extra } : roll;
 }
 
 /** Spends the inspiration to roll a d20 again: the new roll is the one that counts. */

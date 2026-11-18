@@ -38,6 +38,12 @@ export const EFFECT_META: Record<EffectType, EffectMeta> = {
   abilityBonus: meta("scores", "guided", "Raises an ability score."),
   abilityFloor: meta("scores", "advanced", "Sets a score to at least a value."),
   armorClassFloor: meta("body", "advanced", "An armor class that cannot be lower than a value."),
+  speedMultiplier: meta("body", "advanced", "Every speed is multiplied (Haste doubles it)."),
+  rollDie: meta(
+    "combat",
+    "advanced",
+    "A die added to some rolls (Bless: a d4 on attacks and saves).",
+  ),
   proficiency: meta("proficiency", "guided", "A skill, save, weapon, armor, tool or language."),
   expertise: meta("proficiency", "guided", "Double proficiency on a skill."),
   halfProficiency: meta("proficiency", "advanced", "Half proficiency on checks that lack it."),

@@ -73,6 +73,45 @@ describe("the effect of a spell that is turned on", () => {
     expect(sheetOf(["srd52:spell/barkskin"], [], "srd52").armorClass.value).toBe(17);
   });
 
+  it("makes Haste double the speed and add 2 to the armor class, in both editions", () => {
+    for (const [ruleset, id] of [
+      ["srd51", "srd51:spell/haste"],
+      ["srd52", "srd52:spell/haste"],
+    ] as const) {
+      const base = sheetOf([], [], ruleset);
+      const hasted = sheetOf([id], [], ruleset);
+      expect(hasted.speed).toBe((base.speed ?? 0) * 2);
+      expect(hasted.armorClass.value).toBe(base.armorClass.value + 2);
+      // The swimming and climbing speeds follow the walking one.
+      expect(hasted.movement.swim?.feet).toBe(
+        base.movement.swim?.feet ? base.movement.swim.feet * 2 : undefined,
+      );
+    }
+  });
+
+  it("gives Bless a d4 on attack rolls and saving throws", () => {
+    expect(sheetOf(["srd51:spell/bless"]).rollDice).toEqual([
+      { die: 4, on: ["attack", "save"], source: "srd51:spell/bless" },
+    ]);
+    expect(sheetOf([]).rollDice).toEqual([]);
+  });
+
+  it("adds 5 to the hit point maximum with Aid, in both editions", () => {
+    for (const [ruleset, id] of [
+      ["srd51", "srd51:spell/aid"],
+      ["srd52", "srd52:spell/aid"],
+    ] as const) {
+      const base = sheetOf([], [], ruleset).hitPoints.max;
+      expect(sheetOf([id], [], ruleset).hitPoints.max).toBe(base + 5);
+    }
+  });
+
+  it("gives Guidance one d4 on an ability check, spent by it", () => {
+    expect(sheetOf(["srd51:spell/guidance"]).rollDice).toEqual([
+      { die: 4, on: ["check"], source: "srd51:spell/guidance", once: true },
+    ]);
+  });
+
   it("ignores a spell that has no effect", () => {
     expect(sheetOf(["srd51:spell/fireball"]).armorClass.value).toBe(sheetOf([]).armorClass.value);
   });

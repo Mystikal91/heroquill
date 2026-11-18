@@ -490,8 +490,7 @@ export const ITEM_EFFECTS_2024: Record<string, Effect[]> = Object.fromEntries(
 
 /**
  * The effect of the spells that change a number of the sheet while they last, written by hand from their
- * text: they apply when the person turns the spell on in Play. Haste (a doubled speed and more) is left out:
- * the rest of what it does is text. Barkskin is a floor of 16 in the 2014 SRD and of 17 in the 2024 one.
+ * text: they apply when the person turns the spell on in Play. Barkskin is a floor of 16 in the 2014 SRD and of 17 in the 2024 one.
  */
 export const SPELL_EFFECTS: Record<string, Effect[]> = {
   "mage-armor": [{ type: "unarmoredDefense", base: 13, add: [], shield: true }],
@@ -499,6 +498,13 @@ export const SPELL_EFFECTS: Record<string, Effect[]> = {
   shield: [modifier("ac", 5)],
   longstrider: [modifier("speed", 10)],
   barkskin: [{ type: "armorClassFloor", value: 16 }],
+  // Advantage on Dexterity saves and the extra action are text, as is the lethargy when it ends.
+  haste: [modifier("ac", 2), { type: "speedMultiplier", value: 2 }],
+  bless: [{ type: "rollDie", die: 4, on: ["attack", "save"] }],
+  // Guidance is one d4 for one ability check: it is spent by the first one.
+  guidance: [{ type: "rollDie", die: 4, on: ["check"], once: true }],
+  // Aid: +5 to the hit point maximum; the bigger slots (+5 for each level above the 2nd) are an effect of one's own.
+  aid: [modifier("hp", 5)],
 };
 
 /** The same for the 2024 SRD, where Barkskin makes the armor class at least 17. */

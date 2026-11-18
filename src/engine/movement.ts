@@ -20,11 +20,13 @@ export function deriveMovement(
   state: ModifierState,
   walking: number,
   speedBonus: number,
+  /** What every speed is multiplied by (Haste doubles it). */
+  factor = 1,
 ): Movement {
   const given: Partial<Record<MovementMode, number>> = {};
   for (const { effect } of sourced) {
     if (effect.type !== "movement" || !holds(effect.when, state)) continue;
-    const feet = effect.feet === "walk" ? walking : effect.feet + speedBonus;
+    const feet = effect.feet === "walk" ? walking : (effect.feet + speedBonus) * factor;
     given[effect.mode] = Math.max(given[effect.mode] ?? 0, feet);
   }
   const half = Math.floor(walking / 2);

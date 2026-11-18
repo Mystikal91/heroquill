@@ -69,6 +69,9 @@ export function blankEffect(type: EffectType): Effect {
     sense: { sense: "darkvision", range: 60 },
     defense: { kind: "resistance", damage: "fire" },
     uses: { term: 1, recharge: "long" },
+    rollDie: { die: 4, on: ["attack", "save"] },
+    speedMultiplier: { value: 2 },
+    armorClassFloor: { value: 16 },
   };
   return { type, ...fields, ...better[type] } as Effect;
 }

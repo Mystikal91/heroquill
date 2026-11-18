@@ -120,6 +120,8 @@ export interface DerivedSheet extends EquipmentResult, ChecksResult {
   attacksPerAction: number;
   /** The features that add a die to a failed ability check by using up a use of another: the feature, the dice and the entry whose use is spent. */
   checkBoosts: { feature: string; dice: string; spends: string }[];
+  /** Dice rolled and added to some rolls while an effect holds (Bless): the die, the rolls and where it comes from. */
+  rollDice: { die: number; on: ("check" | "attack" | "save")[]; source: string; once?: boolean }[];
   /** What a feature heals the character for when used (Second Wind: 1d10 + fighter level), by entry; the bonus already counts the levels. */
   selfHeals: Record<string, { dice?: string; bonus: number; minimum?: number }>;
   /** A die lower than this counts as this on checks with a skill the character is proficient in (0: none). */
@@ -676,16 +678,21 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     if (numberOverride(character.overrides, OVERRIDE.spellSaveDc) === undefined)
       caster.saveDc += total(spellDcMods);
   }
+  // A multiplier of the speed (Haste) comes after the bonuses.
+  const speedFactor = Math.max(
+    1,
+    ...sourced.flatMap(({ effect }) => (effect.type === "speedMultiplier" ? [effect.value] : [])),
+  );
   const plainSpeed =
     overrideNumber(character, "speed") ??
-    (typeof baseSpeed === "number" ? baseSpeed + total(speedMods) : undefined);
+    (typeof baseSpeed === "number" ? (baseSpeed + total(speedMods)) * speedFactor : undefined);
   // The 2014 exhaustion halves the speed and then takes it away; the 2024 one is a modifier that cannot go under 0.
   const speed =
     plainSpeed === undefined
       ? undefined
       : exhaustedSpeed(character.ruleset, exhaustion, plainSpeed);
   const movement =
-    speed === undefined ? {} : deriveMovement(sourced, state, speed, total(speedMods));
+    speed === undefined ? {} : deriveMovement(sourced, state, speed, total(speedMods), speedFactor);
   const senses = deriveSenses(sourced, state);
   // A feature of a class counts that class's levels; a trait of the species counts all of them.
   const hpBonus = hpMods.reduce((sum, m) => {
@@ -796,6 +803,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
           ? [effect.attacks]
           : [],
       ),
+    ),
+    rollDice: sourced.flatMap(({ effect, source }) =>
+      effect.type === "rollDie"
+        ? [{ die: effect.die, on: effect.on, source, ...(effect.once && { once: true }) }]
+        : [],
     ),
     checkBoosts: sourced.flatMap(({ effect, source }) =>
       effect.type === "checkBoost"

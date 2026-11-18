@@ -24,7 +24,6 @@ import { distance } from "../../i18n/units";
 import { Panel, Paragraphs } from "../sheet/parts";
 import { useHoldRepeat } from "../useHoldRepeat";
 import { ActiveEffectsList, AddEffectButton } from "./ActiveEffects";
-import { InspirationCards } from "./Inspiration";
 import { ConditionIcon } from "./icons";
 
 /** The slug of a condition: `srd51:condition/blinded` is `blinded`. */
@@ -206,7 +205,6 @@ export function Conditions() {
     <Panel title={ui("play.activeEffects")} className="conditions-panel">
       <AddEffectButton />
       <ActiveEffectsList />
-      <InspirationCards />
       <hr class="effects-rule" />
       {immune.length > 0 && (
         <p class="muted">
@@ -281,7 +279,7 @@ export function Conditions() {
         </ul>
       )}
       <details class="add-condition" open={active.length === 0}>
-        <summary>{ui("play.addCondition")}</summary>
+        <summary class="add-condition-btn">{ui("play.addCondition")}</summary>
         <p class="muted">{ui("play.conditionsHint")}</p>
         <div class="cond-picks">
           {others.map((e) => (

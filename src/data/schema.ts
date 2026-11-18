@@ -283,6 +283,22 @@ export const PlainEffectSchema = v.variant("type", [
    */
   v.object({ type: v.literal("armorClassFloor"), value: v.pipe(v.number(), v.integer(), v.minValue(1)) }),
   /**
+   * A die rolled and added to some rolls while this holds (Bless: a d4 on attack rolls and saving throws).
+   * `on` lists the rolls: `check` (an ability check), `attack` and `save`. With `once` the die is spent by the
+   * first roll it is added to (Guidance), and the spell or effect that gave it ends.
+   */
+  v.object({
+    type: v.literal("rollDie"),
+    die: v.pipe(v.number(), v.integer(), v.minValue(2), v.maxValue(100)),
+    on: v.pipe(v.array(v.picklist(["check", "attack", "save"])), v.minLength(1)),
+    once: v.optional(v.boolean()),
+  }),
+  /** Every speed is multiplied (Haste doubles it): after the bonuses, before the exhaustion. */
+  v.object({
+    type: v.literal("speedMultiplier"),
+    value: v.pipe(v.number(), v.integer(), v.minValue(2), v.maxValue(4)),
+  }),
+  /**
    * Attacks with weapons may use this ability instead of Strength or Dexterity (Hex Warrior,
    * Battle Ready). The attack takes the best ability that applies. `when` narrows the weapons:
    * `oneHanded` (without the two-handed property) or `magic` (a magic item). `proficient` asks

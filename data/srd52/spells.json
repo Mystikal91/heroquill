@@ -89,7 +89,13 @@
     {
       "id": "srd52:spell/aid",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "hp",
+          "value": 5
+        }
+      ],
       "data": {
         "level": 2,
         "school": "abjuration",
@@ -783,7 +789,16 @@
     {
       "id": "srd52:spell/bless",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "rollDie",
+          "die": 4,
+          "on": [
+            "attack",
+            "save"
+          ]
+        }
+      ],
       "data": {
         "level": 1,
         "school": "enchantment",
@@ -4121,7 +4136,16 @@
     {
       "id": "srd52:spell/guidance",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "rollDie",
+          "die": 4,
+          "on": [
+            "check"
+          ],
+          "once": true
+        }
+      ],
       "data": {
         "level": 0,
         "school": "divination",
@@ -4292,7 +4316,17 @@
     {
       "id": "srd52:spell/haste",
       "kind": "spell",
-      "effects": [],
+      "effects": [
+        {
+          "type": "modifier",
+          "target": "ac",
+          "value": 2
+        },
+        {
+          "type": "speedMultiplier",
+          "value": 2
+        }
+      ],
       "data": {
         "level": 3,
         "school": "transmutation",

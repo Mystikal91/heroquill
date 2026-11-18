@@ -645,7 +645,7 @@ classes whose spell list the spell is on (ids of `class` entries; the Wizard is
 `srd51:class/wizard`). A spell with an empty `classes` is on no list and cannot be picked by a
 class, though it can still be granted.
 
-A spell may have `effects` (a `modifier` of the armor class or the speed, an `unarmoredDefense`, a `defense`...): in Play a button on the spell, "In effect", turns them on as if the character held them, until a long rest, until it is turned off, or until the concentration on that spell ends. Mage Armor, Shield of Faith, Shield, Barkskin (an `armorClassFloor`) and Longstrider of the SRD have them.
+A spell may have `effects` (a `modifier` of the armor class or the speed, an `unarmoredDefense`, a `defense`...): in Play a button on the spell, "In effect", turns them on as if the character held them, until a long rest, until it is turned off, or until the concentration on that spell ends. Mage Armor, Shield of Faith, Shield, Barkskin (an `armorClassFloor`), Longstrider, Haste (a `speedMultiplier`), Aid, Bless and Guidance (a `rollDie`) of the SRD have them.
 
 The numbers Play can roll come from `data.damage` (a list; each has `damageType.index` and either
 `damageAtSlotLevel`, a record from slot level to dice, or `damageAtCharacterLevel` for cantrips),
@@ -1449,7 +1449,7 @@ No fields: the entry is its name and its text.
 
 ### Effects
 
-35 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
+37 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
 
 #### `flag`
 
@@ -1636,6 +1636,24 @@ The armor class is at least `value`, whatever armor is worn (Barkskin): if the c
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `value` | number (integer, min 1) | **yes** |  |
+
+#### `rollDie`
+
+A die rolled and added to some rolls while the effect holds (Bless: `die` 4 `on` attack and save). `on` lists `check`, `attack` and `save`; Play rolls the die with the d20 and writes it in the log. With `once` the first roll it is added to spends it, and the spell or effect that gave it ends (Guidance).
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `die` | number (integer, min 2, max 100) | **yes** |  |
+| `on` | list of `check` or `attack` or `save` | **yes** |  |
+| `once` | boolean | no |  |
+
+#### `speedMultiplier`
+
+Every speed is multiplied by `value` (2 for Haste), after the bonuses to the speed.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `value` | number (integer, min 2, max 4) | **yes** |  |
 
 #### `weaponAbility`
 

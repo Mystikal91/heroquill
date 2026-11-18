@@ -105,6 +105,10 @@ const NOTES: Record<EffectType, string> = {
   expertise:
     "Double proficiency bonus on a skill the character is already proficient in (`skill` is the slug of a skill).",
   size: "The size of the creature, for a species that lets the person pick one through a `choice` that grants `size`. A species with one size has it in `data.size`.",
+  speedMultiplier:
+    "Every speed is multiplied by `value` (2 for Haste), after the bonuses to the speed.",
+  rollDie:
+    "A die rolled and added to some rolls while the effect holds (Bless: `die` 4 `on` attack and save). `on` lists `check`, `attack` and `save`; Play rolls the die with the d20 and writes it in the log. With `once` the first roll it is added to spends it, and the spell or effect that gave it ends (Guidance).",
   armorClassFloor:
     "The armor class is at least `value`, whatever armor is worn (Barkskin): if the calculation is lower the sheet makes up the difference, before the bonuses that come on top of it.",
   abilityFloor:

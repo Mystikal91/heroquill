@@ -4,14 +4,21 @@ import { changePlay } from "../../app/play";
 import { fold } from "../../app/search";
 import { character, content } from "../../app/store";
 import type { Effect } from "../../data/schema";
-import { addCustomEffect, removeCustomEffect, setSpellActive } from "../../engine/play";
+import {
+  BARDIC_DICE,
+  addCustomEffect,
+  removeCustomEffect,
+  setBardicDie,
+  setInspiration,
+  setSpellActive,
+} from "../../engine/play";
 import { inRuleset } from "../../engine/rulesets";
 import { EFFECT_TYPES } from "../../homebrew/catalog";
 import { signed, ui } from "../../i18n/ui";
 import { damageName } from "../damageName";
 import { EffectList, summarize } from "../studio/Effects";
 import { optionLabel } from "../studio/labels";
-import { ConditionIcon } from "./icons";
+import { ConditionIcon, NoteIcon, StarIcon } from "./icons";
 
 /** Whether the window that adds an effect is open. */
 export const addEffectOpen = signal(false);
@@ -52,6 +59,10 @@ export function effectLine(effect: Effect): string {
         : summarize(effect);
     case "armorClassFloor":
       return `${ui("fx.armorClassFloor")}: ${effect.value}`;
+    case "speedMultiplier":
+      return `${ui("fx.speedMultiplier")}: \u00d7${effect.value}`;
+    case "rollDie":
+      return `${ui("fx.rollDie")}: d${effect.die} (${effect.on.map(optionLabel).join(", ")})`;
     default:
       return summarize(effect);
   }
@@ -80,9 +91,72 @@ export function ActiveEffectsList() {
   if (!c) return null;
   const spells = play.activeSpells ?? [];
   const custom = play.customEffects ?? [];
-  if (spells.length === 0 && custom.length === 0) return null;
+  const bardic = play.bardicDie;
+  // The 2024 rules call it Heroic Inspiration, and it rolls any die again, not only the d20.
+  const heroic = character.value.ruleset === "srd52";
+  if (spells.length === 0 && custom.length === 0 && !play.inspiration && bardic === undefined)
+    return null;
   return (
     <ul class="plain card-list">
+      {play.inspiration && (
+        <li
+          class="play-card cond-card effect-card insp-card"
+          data-kind="inspiration"
+          data-focus="on"
+        >
+          <span class="card-badge" aria-hidden="true">
+            <StarIcon />
+          </span>
+          <div class="card-head">
+            <b class="feat-name">{ui(heroic ? "play.heroic" : "play.inspiration")}</b>
+            <span class="card-meta">{ui(heroic ? "play.heroicHint" : "play.inspirationHint")}</span>
+          </div>
+          <button
+            type="button"
+            class="card-btn cond-remove"
+            aria-label={`${ui("play.effectRemove")}: ${ui(heroic ? "play.heroic" : "play.inspiration")}`}
+            title={ui("play.effectRemove")}
+            onClick={() => changePlay((p) => setInspiration(p, false))}
+          >
+            ✕
+          </button>
+        </li>
+      )}
+      {bardic !== undefined && (
+        <li class="play-card cond-card effect-card insp-card" data-kind="bardic" data-focus="on">
+          <span class="card-badge" aria-hidden="true">
+            <NoteIcon />
+          </span>
+          <div class="card-head">
+            <b class="feat-name">{ui("play.bardic")}</b>
+            <span class="card-meta">{ui("play.bardicHint")}</span>
+          </div>
+          <button
+            type="button"
+            class="card-btn cond-remove"
+            aria-label={`${ui("play.effectRemove")}: ${ui("play.bardic")}`}
+            title={ui("play.effectRemove")}
+            onClick={() => changePlay((p) => setBardicDie(p, undefined))}
+          >
+            ✕
+          </button>
+          <div class="spell-slot-pick insp-dice">
+            <small>{ui("play.bardicDie")}</small>
+            {BARDIC_DICE.map((die) => (
+              <button
+                key={die}
+                type="button"
+                class="card-btn spell-slot-btn"
+                aria-pressed={die === bardic}
+                aria-label={`${ui("play.bardicDie")}: d${die}`}
+                onClick={() => changePlay((p) => setBardicDie(p, die))}
+              >
+                d{die}
+              </button>
+            ))}
+          </div>
+        </li>
+      )}
       {spells.map((id) => (
         <li class="play-card cond-card effect-card" data-kind="spell" key={id}>
           <span class="card-badge" aria-hidden="true">
@@ -195,6 +269,28 @@ export function AddEffectDialog() {
           </button>
           <h3 id="add-effect-title">{ui("play.effectTitle")}</h3>
           <p class="muted">{ui("play.effectHint")}</p>
+
+          <h4>{ui("play.inspiration")}</h4>
+          <div class="cond-picks">
+            <button
+              type="button"
+              class="card-btn cond-pick"
+              aria-pressed={play.inspiration}
+              onClick={() => changePlay((p) => setInspiration(p, !p.inspiration))}
+            >
+              {ui(character.value.ruleset === "srd52" ? "play.heroic" : "play.inspiration")}
+            </button>
+            <button
+              type="button"
+              class="card-btn cond-pick"
+              aria-pressed={play.bardicDie !== undefined}
+              onClick={() =>
+                changePlay((p) => setBardicDie(p, p.bardicDie === undefined ? 6 : undefined))
+              }
+            >
+              {ui("play.bardic")}
+            </button>
+          </div>
 
           <h4>{ui("play.effectSpells")}</h4>
           <input
