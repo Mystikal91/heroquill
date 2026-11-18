@@ -16,12 +16,6 @@ export interface PackMeta {
   description?: string;
   /** The units numbers are typed in while editing: by default those of the language of the pack. */
   units?: "metric" | "imperial";
-  /** Kinds of damage the pack adds to those of the rules, by the word the data uses for them (`sonic`). */
-  damageTypes?: string[];
-  /** Reserves of points the pack declares (`psi-points`, `mana`), by slug; their names are texts of the pack. */
-  reserves?: string[];
-  /** Codes of the spell components the pack adds to V, S and M (a psionic book's `A` and `O`). */
-  components?: string[];
   /** A small picture for the cover, as a data address. */
   cover?: string;
 }
@@ -100,9 +94,6 @@ const RecordSchema = v.object({
       author: v.optional(v.string()),
       description: v.optional(v.string()),
       units: v.optional(v.picklist(["metric", "imperial"])),
-      damageTypes: v.optional(v.array(v.string())),
-      reserves: v.optional(v.array(v.string())),
-      components: v.optional(v.array(v.string())),
       cover: v.optional(v.pipe(v.string(), v.maxLength(300_000))),
     }),
   ),

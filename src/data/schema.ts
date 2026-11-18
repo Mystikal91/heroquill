@@ -465,6 +465,9 @@ export const ENTRY_KINDS = [
   "monster",
   "deity",
   "option",
+  "reserve",
+  "damage",
+  "component",
 ] as const;
 
 export const EntrySchema = v.object({

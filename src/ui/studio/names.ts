@@ -16,6 +16,9 @@ const HB = new Set([
   "school",
   "alignment",
   "ability",
+  "reserve",
+  "damage",
+  "component",
 ]);
 const SEARCH = new Set([
   "item",

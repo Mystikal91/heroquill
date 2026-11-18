@@ -38,6 +38,7 @@ import { type Spend, deriveSpends } from "./spends";
 import { withSubclassCasting } from "./subclassCasting";
 import { deriveFreeSpells, deriveUses, withFeatureSettings } from "./uses";
 import { type Warning, warn } from "./warnings";
+import { wordEntry } from "./words";
 
 export type PackIndex = Map<string, Entry>;
 
@@ -716,7 +717,14 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     },
   };
   // What features and traits say about how often they can be used.
-  resources.push(...deriveUses(sourced, valueState), ...deriveFreeSpells(sourced, levelOf));
+  const reserveRecharge = (reserve: string) => {
+    const recharge = wordEntry(index, "reserve", reserve)?.data.recharge;
+    return recharge === "short" || recharge === "long" ? recharge : undefined;
+  };
+  resources.push(
+    ...deriveUses(sourced, valueState, reserveRecharge),
+    ...deriveFreeSpells(sourced, levelOf),
+  );
 
   return {
     ...equipment,

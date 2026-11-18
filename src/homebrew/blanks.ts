@@ -105,6 +105,8 @@ export function blankData(kind: EntryKind, variant?: Variant): Record<string, un
       return { level: 1 };
     case "skill":
       return { ability: "str" };
+    case "reserve":
+      return { recharge: "long" };
     case "monster":
       return {
         size: "medium",

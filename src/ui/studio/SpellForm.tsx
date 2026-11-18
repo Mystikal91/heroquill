@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import type { Entry } from "../../data/schema";
 import { DATA_FIELDS } from "../../homebrew/catalog";
 import { setText, updateEntry } from "../../homebrew/entries";
-import { ownReserves } from "../../homebrew/reserves";
+import { addWord } from "../../homebrew/words";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
@@ -10,6 +10,7 @@ import { CheckBox, FieldControl, ManyBox, NumberBox, SelectBox, TextBox } from "
 import { fieldHelp } from "./Help";
 import { fieldLabel } from "./labels";
 import { useEdit, usePack } from "./scope";
+import { wordOptions } from "./wordOptions";
 
 /** The fields of a spell the guided form draws itself; the advanced mode adds all the others. */
 const CURATED = new Set([
@@ -80,18 +81,20 @@ export function SpellCasting({ record, entry }: Props) {
   const [adding, setAdding] = useState(false);
   const [code, setCode] = useState("");
   // The components of the rules, then those the pack declares (a psionic book's A and O).
-  const own = pack?.meta?.components ?? [];
+  const own = wordOptions("component", pack, pack?.lang ?? "en").map((o) => o.id);
   const codes = ["V", "S", "M", ...own];
   const components = Array.isArray(data.components) ? (data.components as string[]) : [];
   const newCode = code.trim().toUpperCase().slice(0, 3);
   const addComponent = () => {
     if (!pack || !newCode || codes.includes(newCode)) return;
+    const made = addWord(pack, "component", newCode);
+    if (!made) return;
+    // One change for both: the new component and its tick on this spell. Written apart, the second
+    // would be made from the pack as it was before the first and would take the component away again.
     scope.apply(
-      { ...pack, meta: { ...pack.meta, components: [...own, newCode] } },
-      "pack.components",
+      updateEntry(made.record, entry.id, { data: { components: [...components, made.word] } }),
+      `${entry.id}.data.components`,
     );
-    // The pack changes first; the new component is ticked once the form has seen it.
-    setTimeout(() => writeData("components", [...components, newCode]), 0);
     setCode("");
     setAdding(false);
   };
@@ -197,7 +200,7 @@ export function SpellCasting({ record, entry }: Props) {
           onChange={(on) => writeData("concentration", on)}
         />
       </div>
-      {ownReserves(pack ?? ({} as UserPackRecord)).length > 0 && (
+      {wordOptions("reserve", pack, pack?.lang ?? "en").length > 0 && (
         <NumberBox
           label={fieldLabel("pointCost")}
           min={0}

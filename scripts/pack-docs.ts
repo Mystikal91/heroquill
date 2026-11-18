@@ -110,7 +110,7 @@ const NOTES: Record<EffectType, string> = {
   weaponAbility:
     "Attacks with weapons may use `ability` instead of Strength or Dexterity; the best ability that applies wins. `when` narrows the weapons to one-handed ones (`oneHanded`) or magic ones (`magic`); `proficient` asks for a weapon the character is proficient with.",
   defense:
-    "A resistance, an immunity or a vulnerability to a kind of damage. `damage` is one of the thirteen of the rules or a kind the pack declares in `meta.damageTypes`.",
+    "A resistance, an immunity or a vulnerability to a kind of damage. `damage` is one of the thirteen of the rules or a kind the pack adds as an entry of kind `damage` (the end of its id).",
   halfProficiency:
     "Half the proficiency bonus on ability checks that do not use it (Jack of All Trades): every ability, or only those in `abilities`. `round` is `down` or `up`.",
   unarmoredDefense:

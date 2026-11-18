@@ -46,6 +46,9 @@ export const KIND_META: Record<EntryKind, KindMeta> = {
   school: { group: "rules", role: "vocabulary", level: "advanced" },
   condition: { group: "rules", role: "vocabulary", level: "guided" },
   alignment: { group: "rules", role: "vocabulary", level: "advanced" },
+  reserve: { group: "rules", role: "vocabulary", level: "guided" },
+  damage: { group: "rules", role: "vocabulary", level: "guided" },
+  component: { group: "rules", role: "vocabulary", level: "guided" },
 };
 
 /** The kinds a person can start an entry of, in the order the library lists them. */

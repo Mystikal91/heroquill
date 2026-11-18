@@ -4,9 +4,8 @@ import { tintOf } from "../../app/playStates";
 import { content } from "../../app/store";
 import { studioLanguage } from "../../app/studio";
 import type { FieldSpec, FieldType } from "../../homebrew/catalog";
-import { addDamageType, damageLabel, ownDamageTypes } from "../../homebrew/damage";
 import { packColumns } from "../../homebrew/levelTables";
-import { addReserve, ownReserves, reserveLabel } from "../../homebrew/reserves";
+import { addWord } from "../../homebrew/words";
 import { type UiKey, ui } from "../../i18n/ui";
 import { feetFrom, feetTo, poundsTo } from "../../i18n/units";
 import { damageSlug } from "../../storage/packs";
@@ -18,6 +17,7 @@ import { moved, useReorder } from "./Reorder";
 import { LONG_LIST, SearchSelect } from "./SearchSelect";
 import { fieldLabel, humanize, optionLabel } from "./labels";
 import { useEdit, useMetric, usePack } from "./scope";
+import { wordOptions } from "./wordOptions";
 
 export { humanize };
 
@@ -388,12 +388,11 @@ function DamagePick({
   const latest = useRef(onChange);
   latest.current = onChange;
   const [name, setName] = useState("");
-  const own = pack ? ownDamageTypes(pack) : [];
   const language = studioLanguage.value ?? pack?.lang ?? "en";
   const options = withCurrent(
     [
       ...DAMAGE_KINDS.map((id) => ({ id, label: optionLabel(id) })),
-      ...own.map((id) => ({ id, label: pack ? damageLabel(pack, id, language) : id })),
+      ...wordOptions("damage", pack, language),
     ],
     value,
   );
@@ -402,7 +401,7 @@ function DamagePick({
     // The name a person wrote is kept as a text of the pack, so it can be translated.
     const id = damageSlug(name);
     if (!id) return;
-    const made = DAMAGE_KINDS.includes(id) ? undefined : addDamageType(pack, name);
+    const made = DAMAGE_KINDS.includes(id) ? undefined : addWord(pack, "damage", name);
     if (made && made.record !== pack) scope.apply(made.record, "pack.damage");
     // The pack changes first; the value is written once the form has seen it, or it would write the old pack back.
     setTimeout(() => latest.current(id), 0);
@@ -473,14 +472,13 @@ function ReservePick({
   const latest = useRef(onChange);
   latest.current = onChange;
   const language = studioLanguage.value ?? pack?.lang ?? "en";
-  const own = pack ? ownReserves(pack) : [];
   const add = () => {
     if (!pack) return;
-    const made = addReserve(pack, name);
+    const made = addWord(pack, "reserve", name);
     if (!made) return;
     if (made.record !== pack) scope.apply(made.record, "pack.reserve");
     // The pack changes first; the value is written once the form has seen it.
-    setTimeout(() => latest.current(made.slug), 0);
+    setTimeout(() => latest.current(made.word), 0);
     setName("");
     setAdding(false);
   };
@@ -489,10 +487,7 @@ function ReservePick({
       <SelectBox
         label={label}
         value={typeof value === "string" && value !== "" ? value : undefined}
-        options={withCurrent(
-          own.map((id) => ({ id, label: pack ? reserveLabel(pack, id, language) : id })),
-          value,
-        )}
+        options={withCurrent(wordOptions("reserve", pack, language), value)}
         blank={ui("studio.reserveOwn")}
         onChange={onChange}
       />

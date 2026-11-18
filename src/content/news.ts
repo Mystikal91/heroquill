@@ -18,6 +18,33 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.31.3",
+    date: "2026-11-18",
+    notes: [
+      {
+        en: 'Reserves of points, kinds of damage and spell components are now entries like the others: you make them from + New, they show in the list of the pack, and you can copy them, move them between packs and translate them. The "Additions to the rules" tab is gone. A reserve also says when its points come back, after a long or a short rest. Packs you already have are converted by themselves.',
+        it: "Le riserve di punti, i tipi di danno e le componenti degli incantesimi sono ora voci come le altre: si creano da + Nuovo, compaiono nell'elenco del pacchetto e si possono copiare, spostare tra pacchetti e tradurre. La scheda \"Aggiunte alle regole\" non c'è più. Una riserva dice anche quando tornano i suoi punti, dopo un riposo lungo o breve. I pacchetti che hai già si convertono da soli.",
+        fr: "Les réserves de points, les types de dégâts et les composantes de sorts sont désormais des entrées comme les autres : on les crée depuis + Nouveau, elles apparaissent dans la liste du paquet, et on peut les copier, les déplacer d'un paquet à l'autre et les traduire. L'onglet « Ajouts aux règles » a disparu. Une réserve dit aussi quand ses points reviennent, après un repos long ou court. Les paquets que tu as déjà sont convertis tout seuls.",
+        de: "Punktereserven, Schadensarten und Zauberkomponenten sind jetzt Einträge wie die anderen: Du legst sie über + Neu an, sie stehen in der Liste des Pakets, und du kannst sie kopieren, zwischen Paketen verschieben und übersetzen. Der Tab „Ergänzungen der Regeln“ ist weg. Eine Reserve sagt auch, wann ihre Punkte zurückkehren, nach einer langen oder einer kurzen Rast. Pakete, die du schon hast, werden von selbst umgewandelt.",
+        es: "Las reservas de puntos, los tipos de daño y los componentes de hechizo son ahora entradas como las demás: se crean desde + Nuevo, aparecen en la lista del paquete y se pueden copiar, mover entre paquetes y traducir. La pestaña «Añadidos a las reglas» ya no está. Una reserva también dice cuándo vuelven sus puntos, tras un descanso largo o corto. Los paquetes que ya tienes se convierten solos.",
+      },
+      {
+        en: "On a phone, the lists of the Homebrew studio (the menu of new entries and the long menus of the forms) now start at the top of the screen: the search box and the first row are no longer hidden under the header.",
+        it: "Su telefono, le liste dello Studio homebrew (il menu delle nuove voci e i menu lunghi dei moduli) ora partono dall'alto dello schermo: la casella di ricerca e la prima riga non restano più nascoste sotto l'intestazione.",
+        fr: "Sur téléphone, les listes de l'Atelier homebrew (le menu des nouvelles entrées et les longs menus des formulaires) commencent maintenant tout en haut de l'écran : la zone de recherche et la première ligne ne sont plus cachées sous l'en-tête.",
+        de: "Auf dem Handy beginnen die Listen der Homebrew-Werkstatt (das Menü für neue Einträge und die langen Menüs der Formulare) jetzt ganz oben auf dem Bildschirm: Das Suchfeld und die erste Zeile sind nicht mehr unter der Kopfzeile versteckt.",
+        es: "En el móvil, las listas del Taller homebrew (el menú de nuevas entradas y los menús largos de los formularios) ahora empiezan en la parte superior de la pantalla: el cuadro de búsqueda y la primera fila ya no quedan ocultos bajo la cabecera.",
+      },
+      {
+        en: "A new spell component added from the form of a spell now stays, and is ticked on that spell; before it vanished at once.",
+        it: "Una nuova componente aggiunta dal modulo di un incantesimo ora resta, e viene spuntata su quell'incantesimo; prima spariva subito.",
+        fr: "Une nouvelle composante ajoutée depuis le formulaire d'un sort reste maintenant, et est cochée sur ce sort ; avant, elle disparaissait aussitôt.",
+        de: "Eine neue Zauberkomponente, die im Formular eines Zaubers hinzugefügt wird, bleibt jetzt erhalten und wird bei diesem Zauber angekreuzt; vorher verschwand sie sofort.",
+        es: "Un nuevo componente de hechizo añadido desde el formulario de un hechizo ahora se queda, y se marca en ese hechizo; antes desaparecía de inmediato.",
+      },
+    ],
+  },
+  {
     version: "1.31.2",
     date: "2026-11-17",
     notes: [

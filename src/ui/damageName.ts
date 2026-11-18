@@ -1,4 +1,5 @@
 import { content } from "../app/store";
+import { wordEntry } from "../engine/words";
 import { type UiKey, ui } from "../i18n/ui";
 
 const DAMAGE_TYPES = new Set([
@@ -18,7 +19,11 @@ const DAMAGE_TYPES = new Set([
 ]);
 
 /** The name a pack gave to a kind of damage it adds, in the language in use. */
-const packName = (type: string) => content.value?.text("damage", type);
+const packName = (type: string) => {
+  const c = content.value;
+  const entry = c && wordEntry(c.index, "damage", type);
+  return entry && c ? c.name(entry.id) : undefined;
+};
 
 /** A kind of damage in the language ("tagliente"), or as it is written when it is not a usual one. */
 export const damageName = (type: string) =>

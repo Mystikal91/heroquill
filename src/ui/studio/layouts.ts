@@ -114,4 +114,7 @@ export const LAYOUTS: Record<EntryKind, Layout> = {
   school: { texts: desc, guided: none, effects: false },
   condition: { texts: desc, guided: none, effects: false },
   alignment: { texts: desc, guided: none, effects: false },
+  reserve: { texts: desc, guided: () => ["recharge"], effects: false },
+  damage: { texts: desc, guided: none, effects: false },
+  component: { texts: desc, guided: () => ["code"], effects: false },
 };

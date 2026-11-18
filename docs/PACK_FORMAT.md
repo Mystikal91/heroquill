@@ -68,7 +68,7 @@ the browser. The top level:
 | Field | Required | Meaning |
 | --- | --- | --- |
 | `format` | in a file | The string `"heroquill-pack"`. Old files say `"dnd-character-maker-pack"` and are still read. |
-| `formatVersion` | in a file | The version of the format, now `2`. Older versions are migrated when read; a newer one than the app knows is refused. |
+| `formatVersion` | in a file | The version of the format, now `3`. Older versions are migrated when read; a newer one than the app knows is refused. |
 | `id` | yes | The id of the pack: lower case letters and digits only (`mybook`). It prefixes every entry id. `srd51` and `srd52` are taken by the rules. |
 | `name` | yes | The name shown in the list of packs. |
 | `lang` | yes | The language the texts of `strings` are written in (`en`, `it`, `fr`, `de`, `es`). |
@@ -103,9 +103,7 @@ Everything is optional.
 | `author`, `description` | Shown on the page of the pack. |
 | `cover` | A small picture as a `data:` address (at most 300,000 characters). |
 | `units` | `"metric"` or `"imperial"`: the units the editor types distances and weights in. Absent: metric for every language but English. The data is **always** stored in feet and pounds; this only changes how numbers are typed and shown while editing. |
-| `damageTypes` | Kinds of damage the pack adds to the thirteen of the rules, as slugs (`"sonic"`). Their names are texts of the pack under `damage.<slug>` (see [texts](#texts-and-translations)). They can then be used wherever a damage type is asked: a weapon, a spell, a resistance. |
-| `reserves` | Reserves of points the pack declares (`"psi-points"`, `"mana"`), as slugs. Their names are texts under `pool.<slug>`. See [reserves](#resources-points-and-reserves). |
-| `components` | Codes of spell components the pack adds to V, S and M (`"A"`, `"O"`). A spell lists them in its `components`. |
+
 
 ### Ids and slugs
 
@@ -132,7 +130,7 @@ A pack with one spell. Everything in it is required for the spell to work:
 ```json example
 {
   "format": "heroquill-pack",
-  "formatVersion": 2,
+  "formatVersion": 3,
   "id": "firstpack",
   "name": "My first pack",
   "lang": "en",
@@ -188,15 +186,13 @@ short (three levels instead of twenty), but every kind of link is there:
 ```json example
 {
   "format": "heroquill-pack",
-  "formatVersion": 2,
+  "formatVersion": 3,
   "id": "mindbook",
   "name": "Mind Book",
   "lang": "en",
   "meta": {
     "author": "Jane Doe",
-    "units": "imperial",
-    "reserves": ["focus-points"],
-    "components": ["A"]
+    "units": "imperial"
   },
   "pack": {
     "manifest": {
@@ -212,6 +208,18 @@ short (three levels instead of twenty), but every kind of link is there:
         "kind": "school",
         "effects": [],
         "data": {}
+      },
+      {
+        "id": "mindbook:reserve/focus-points",
+        "kind": "reserve",
+        "effects": [],
+        "data": { "recharge": "long" }
+      },
+      {
+        "id": "mindbook:component/a",
+        "kind": "component",
+        "effects": [],
+        "data": { "code": "A" }
       },
       {
         "id": "mindbook:trait/inner-calm",
@@ -343,7 +351,8 @@ short (three levels instead of twenty), but every kind of link is there:
     ]
   },
   "strings": {
-    "pool.focus-points": "Focus points",
+    "mindbook:reserve/focus-points.name": "Focus points",
+    "mindbook:component/a.name": "Aura",
     "mindbook:school/telepathy.name": "Telepathy",
     "mindbook:school/telepathy.desc": "Powers that link one mind to another.",
     "mindbook:trait/inner-calm.name": "Inner Calm",
@@ -430,6 +439,7 @@ The kinds are listed with their role in the [reference](#kinds-of-entry-1). In s
 | `item`, `property` | Weapons, armor, gear, tools, magic items, vehicles; and the weapon properties they refer to. |
 | `monster` | Stat blocks: creatures, companions, summons. |
 | `language`, `deity`, `condition` | Languages, deities (picked in the Story step), conditions a character can have. |
+| `reserve`, `damage`, `component` | The small vocabulary a pack adds: a reserve of points (`data.recharge`: `long` or `short`), a kind of damage, a spell component (`data.code`, one to three characters). The data names them by the end of the id (`mypack:damage/sonic` is `sonic`) or, for a component, by its code. |
 | `ability`, `skill`, `proficiency`, `school`, `alignment` | Words of the rules. A pack rarely needs to add one, but a system with new schools of magic or new skills can. |
 
 ## Texts and translations
@@ -457,12 +467,9 @@ The personality tables of a background are numbered lines: `bg.personalityTraits
 `bg.personalityTraits.2`... and the same for `ideals`, `bonds` and `flaws` (`bg` stands for the
 entry id). Number from 1 without gaps; a line that is missing ends the table.
 
-### Special names
+### Names of reserves, kinds of damage and components
 
-Some texts do not belong to an entry:
-
-- `damage.<slug>` is the name of a kind of damage the pack declares in `meta.damageTypes`;
-- `pool.<slug>` is the name of a reserve declared in `meta.reserves`.
+A reserve of points, a kind of damage and a spell component are entries of their own kinds (`reserve`, `damage`, `component`), so their names are the `name` text of the entry like any other.
 
 ### Translations
 
@@ -489,7 +496,7 @@ was written in (`lang`); nothing is ever missing. A pack in one language is comp
   and so on) to have a name.
 - **Damage types** are the thirteen of the rules (`acid`, `bludgeoning`, `cold`, `fire`, `force`,
   `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder`) and the
-  ones in `meta.damageTypes`.
+  ones the pack adds as entries of kind `damage` (the end of the id, `mindbook:damage/sonic` -> `sonic`, is the word the data uses).
 
 ## Effects
 
@@ -633,7 +640,7 @@ player take a feat whose requirement is not met.
 ### Spells
 
 `data.level` is 0 for a cantrip. `data.school` is the slug of a `school` entry. `data.components` is
-a list of `V`, `S`, `M` and any code the pack declares in `meta.components`. `data.classes` lists the
+a list of `V`, `S`, `M` and the `code` of any `component` entry. `data.classes` lists the
 classes whose spell list the spell is on (ids of `class` entries; the Wizard is
 `srd51:class/wizard`). A spell with an empty `classes` is on no list and cannot be picked by a
 class, though it can still be granted.
@@ -814,12 +821,10 @@ button in Play: `{ "type": "spends", "pool": "ki", "cost": 2 }`. `pool` names th
 
 ### Reserves
 
-A **reserve** is a pool the pack names itself and **every source can add to**. It is declared in
-`meta.reserves` with its name in `strings` under `pool.<slug>`:
+A **reserve** is a pool the pack names itself and **every source can add to**. It is an entry of kind `reserve`; its `data.recharge` (`long` or `short`) says when the points come back, and its name is its `name` text:
 
 ```json
-"meta": { "reserves": ["psi-points"] },
-"strings": { "pool.psi-points": "Psi points" }
+{ "id": "mypack:reserve/psi-points", "kind": "reserve", "effects": [], "data": { "recharge": "long" } }
 ```
 
 Then any `uses` effect with `reserve` adds points to it, and any `spends` effect with `reserve` takes
@@ -973,8 +978,8 @@ be converted is not lost: it stays in the text.
 | A magic item | An `item` with `rarity`, `attunement`, `slot`; effects only for bonuses the engine knows |
 | A stat block | A `monster`, see [Monsters](#monsters-1) |
 | A feat | A `feat` with `data.prerequisites` if it has one |
-| A point pool (psi points, mana, Luck) | A reserve in `meta.reserves`, `uses` effects with `reserve` for what gives points, a class `spellcasting` with `slots: "none"` if it casts with them |
-| A new school of magic, a new damage type, a new skill | An entry of kind `school`, `skill`, or the name in `meta.damageTypes` |
+| A point pool (psi points, mana, Luck) | A `reserve` entry, `uses` effects with `reserve` for what gives points, a class `spellcasting` with `slots: "none"` if it casts with them |
+| A new school of magic, a new damage type, a new skill | An entry of kind `school`, `skill` or `damage` |
 
 ### Rules of thumb
 
@@ -996,7 +1001,7 @@ be converted is not lost: it stays in the text.
 | --- | --- | --- |
 | "You can spend X points to ignore the limit", "once per turn, when..." | The engine has no effect for a rule that modifies another feature | Keep it in the text of the feature |
 | A rule that needs the player to decide a story detail | Not computable | The text |
-| A new kind of component, a new action economy, a new mechanic | No effect type | A text, plus the data the pack format has room for (`meta.components`, reserves) |
+| A new kind of component, a new action economy, a new mechanic | No effect type | A text, plus the data the pack format has room for (`component` and `reserve` entries) |
 | A scaling that is not a column of the level table | No term for it | Add a column and use `{ "table": ... }`, or leave the number in the text |
 
 ## Limits
@@ -1040,6 +1045,9 @@ it by hand. Run `npm run docs:pack` to update it.
 | `monster` | main | world |  |
 | `deity` | main | world |  |
 | `option` | main | character |  |
+| `reserve` | vocabulary | rules |  |
+| `damage` | vocabulary | rules |  |
+| `component` | vocabulary | rules |  |
 
 ### The `data` of each kind
 
@@ -1421,6 +1429,22 @@ No fields: the entry is its name and its text.
 | `prerequisites` | list of object { type, level } or object { type, feature } or object { type, spell } or object { ability, minimum } | no |  |
 | `requires` | text | no |  |
 
+#### `reserve`
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `recharge` | `long` or `short` | no | When the points of the reserve come back: after a long rest or after a short one. |
+
+#### `damage`
+
+No fields: the entry is its name and its text.
+
+#### `component`
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `code` | text | **yes** | The short code of the component (one to three letters or digits, such as A or O), ticked in the form of a spell. |
+
 ### Effects
 
 33 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
@@ -1615,7 +1639,7 @@ Attacks with weapons may use `ability` instead of Strength or Dexterity; the bes
 
 #### `defense`
 
-A resistance, an immunity or a vulnerability to a kind of damage. `damage` is one of the thirteen of the rules or a kind the pack declares in `meta.damageTypes`.
+A resistance, an immunity or a vulnerability to a kind of damage. `damage` is one of the thirteen of the rules or a kind the pack adds as an entry of kind `damage` (the end of its id).
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |

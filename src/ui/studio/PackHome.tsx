@@ -10,7 +10,7 @@ import { type UserPackRecord, restrictedIds } from "../../storage/packs";
 import { TextBox } from "./Controls";
 import { removePack, visibleEntries } from "./Explorer";
 import { type TabSpec, Tabs } from "./Tabs";
-import { ComponentCodes, DamageNames, PackLanguages, Reserves } from "./Translate";
+import { PackLanguages } from "./Translate";
 import { kindName } from "./names";
 
 /** The tab of the pack page that is open; kept while the person goes to an entry and comes back. */
@@ -190,17 +190,6 @@ export function PackHome({ record }: { record: UserPackRecord }) {
       id: "languages",
       label: ui("studio.tab.languages"),
       body: () => <PackLanguages record={record} />,
-    },
-    {
-      id: "rules",
-      label: ui("studio.tab.rules"),
-      body: () => (
-        <>
-          <Reserves record={record} />
-          <DamageNames record={record} />
-          <ComponentCodes record={record} />
-        </>
-      ),
     },
     {
       id: "preview",

@@ -12,7 +12,6 @@ import {
 } from "../../homebrew/casting";
 import { updateEntry } from "../../homebrew/entries";
 import { levelRows, valueColumns } from "../../homebrew/levelTables";
-import { ownReserves, reserveLabel } from "../../homebrew/reserves";
 import { ui } from "../../i18n/ui";
 import type { UserPackRecord } from "../../storage/packs";
 import { entriesOfKind } from "../build/fields";
@@ -20,6 +19,7 @@ import { CheckBox, ManyBox, NumberBox, SelectBox } from "./Controls";
 import { columnLabel } from "./LevelTables";
 import { fieldLabel, optionLabel } from "./labels";
 import { useEdit, usePack } from "./scope";
+import { wordOptions } from "./wordOptions";
 
 const abilityOptions = () => ABILITIES.map((id) => ({ id, label: optionLabel(id) }));
 
@@ -88,10 +88,7 @@ export function ClassCasting({ record, entry }: { record: UserPackRecord; entry:
             <SelectBox
               label={ui("studio.pointsReserve")}
               value={now.reserve || undefined}
-              options={ownReserves(pack ?? ({} as UserPackRecord)).map((id) => ({
-                id,
-                label: pack ? reserveLabel(pack, id, language) : id,
-              }))}
+              options={wordOptions("reserve", pack, language)}
               blank={ui("form.none")}
               onChange={(v) => write({ reserve: v ?? "" })}
             />
@@ -109,7 +106,7 @@ export function ClassCasting({ record, entry }: { record: UserPackRecord; entry:
               onChange={(v) => write({ limit: v ?? "" })}
             />
           </div>
-          {(pack ? ownReserves(pack).length === 0 : true) && (
+          {wordOptions("reserve", pack, language).length === 0 && (
             <p class="studio-callout warn">{ui("studio.pointsNoReserve")}</p>
           )}
           {columns.length === 0 && (

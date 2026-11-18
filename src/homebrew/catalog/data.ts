@@ -598,6 +598,20 @@ export const DATA_FIELDS: Record<EntryKind, FieldSpec[]> = {
     ),
   ],
   alignment: [],
+  reserve: [
+    field("recharge", choice("long", "short"), {
+      level: g,
+      doc: "When the points of the reserve come back: after a long rest or after a short one.",
+    }),
+  ],
+  damage: [],
+  component: [
+    field("code", text, {
+      required: true,
+      level: g,
+      doc: "The short code of the component (one to three letters or digits, such as A or O), ticked in the form of a spell.",
+    }),
+  ],
 };
 
 /** What is wrong with the `data` of an entry of a kind (empty when it fits what the engine reads). */

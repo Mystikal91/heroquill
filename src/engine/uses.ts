@@ -52,7 +52,12 @@ export interface FeatureSetting {
  * The terms of an entry add up; those that come at a level replace one another (the latest one
  * the level has reached counts). An entry that works out to no uses gives nothing.
  */
-export function deriveUses(sourced: SourcedEffect[], state: FeatureValueState): ClassResource[] {
+export function deriveUses(
+  sourced: SourcedEffect[],
+  state: FeatureValueState,
+  /** When the points of a reserve come back, as its own entry says (the effects of the sources otherwise). */
+  reserveRecharge?: (reserve: string) => ResourceRecovery | undefined,
+): ClassResource[] {
   const found = new Map<
     string,
     {
@@ -132,7 +137,7 @@ export function deriveUses(sourced: SourcedEffect[], state: FeatureValueState): 
       classId: "",
       reserve,
       max,
-      recovery: r.recovery,
+      recovery: reserveRecharge?.(reserve) ?? r.recovery,
       pool: true,
     });
   }

@@ -167,3 +167,29 @@ describe("a class that casts without spell slots", () => {
     expect(caster(5)?.spellLimit).toBe(6);
   });
 });
+
+describe("when the points of a reserve come back", () => {
+  const reserve = (recharge: unknown): Entry => ({
+    id: "test:reserve/psi" as Entry["id"],
+    kind: "reserve",
+    effects: [],
+    data: { recharge },
+  });
+  const sheetWith = (entry?: Entry) => {
+    const c = createCharacter("srd51");
+    c.choices.species = KIN;
+    c.classes = [{ classId: CLASS, level: 5 }];
+    const withReserve = entry ? new Map(index).set(entry.id, entry) : index;
+    return deriveSheet(c, withReserve).resources.find((r) => r.reserve === "psi");
+  };
+
+  it("is read from the entry of the reserve", () => {
+    expect(sheetWith(reserve("short"))?.recovery).toBe("short");
+    expect(sheetWith(reserve("long"))?.recovery).toBe("long");
+  });
+
+  it("falls back to what the sources say when the pack has no entry for it", () => {
+    expect(sheetWith()?.recovery).toBe("long");
+    expect(sheetWith(reserve("never"))?.recovery).toBe("long");
+  });
+});

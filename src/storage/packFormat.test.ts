@@ -69,9 +69,14 @@ describe("pack format versions", () => {
   it("reads a file in the old format and writes the new one", () => {
     const old = JSON.stringify({ format: "dnd-character-maker-pack", ...record() });
     const read = parsePackFile(old, 5);
-    expect(read).toMatchObject({ id: "mine", origin: "homebrew", formatVersion: 2, addedAt: 5 });
+    expect(read).toMatchObject({
+      id: "mine",
+      origin: "homebrew",
+      formatVersion: PACK_FORMAT_VERSION,
+      addedAt: 5,
+    });
     const written = JSON.parse(serializePack(read));
-    expect(written).toMatchObject({ format: "heroquill-pack", formatVersion: 2 });
+    expect(written).toMatchObject({ format: "heroquill-pack", formatVersion: PACK_FORMAT_VERSION });
     expect(written.origin).toBeUndefined();
     expect(parsePackFile(JSON.stringify(written)).strings[`${GLOW}.name`]).toBe("Glow");
   });

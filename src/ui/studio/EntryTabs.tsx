@@ -579,6 +579,9 @@ export const LAYOUT_TABBED = new Set([
   "alignment",
   "ability",
   "option",
+  "reserve",
+  "damage",
+  "component",
 ]);
 
 /**

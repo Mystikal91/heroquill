@@ -67,6 +67,9 @@ export const NEW_KINDS: NewKind[] = [
       "school",
       "alignment",
       "ability",
+      "reserve",
+      "damage",
+      "component",
     ] as EntryKind[]
   ).map((kind) => ({
     id: kind,
