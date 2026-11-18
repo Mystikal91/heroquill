@@ -68,10 +68,10 @@ export function Credits() {
       <h3>{ui("credits.legal")}</h3>
       <ul>
         <li>
-          <a href="/privacy.html">{ui("credits.privacy")}</a>
+          <a href="/privacy">{ui("credits.privacy")}</a>
         </li>
         <li>
-          <a href="/terms.html">{ui("credits.terms")}</a>
+          <a href="/terms">{ui("credits.terms")}</a>
         </li>
       </ul>
 
