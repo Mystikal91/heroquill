@@ -327,7 +327,7 @@ export function AddEffectDialog() {
           <EffectList effects={effects} onChange={setEffects} hidden={NOT_FREE} />
           <button
             type="button"
-            class="card-btn card-primary"
+            class="card-btn card-primary add-effect-confirm"
             disabled={name.trim() === "" || effects.length === 0}
             onClick={add}
           >

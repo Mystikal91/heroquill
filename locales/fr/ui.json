@@ -739,7 +739,6 @@
   "play.effectName": "Nom de l'effet",
   "play.effectAdd": "Ajouter l'effet",
   "play.effectRemove": "Retirer l'effet",
-  "play.conditionsHint": "Touche un état pour l'appliquer ou le retirer.",
   "play.conditionActive": "En cours",
   "play.conditionRules": "Règles",
   "play.conditionRemove": "Retirer",

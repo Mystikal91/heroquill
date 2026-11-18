@@ -259,33 +259,16 @@
 }
 
 /* The Active effects panel: the button, the effects in force and a line before the conditions. */
-/* Both buttons that add something (an effect, a condition) take the whole width, above the over-the-generic rules of Play. */
-.play .add-effect:not(.pip-btn):not(.info-btn):not(.link) {
+/* The two buttons that add an effect (the panel's, and the window's) take the whole width, over the generic rules of Play. */
+.play .add-effect:not(.pip-btn):not(.info-btn):not(.link),
+.play .add-effect-confirm:not(.pip-btn):not(.info-btn):not(.link) {
   width: 100%;
   max-width: none;
   margin-bottom: 0.6rem;
 }
 
-.conditions-panel .add-condition > summary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 2.75rem;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: var(--accent-contrast);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  list-style: none;
-}
-
-.conditions-panel .add-condition > summary::-webkit-details-marker {
-  display: none;
+.play .add-effect-confirm:not(.pip-btn):not(.info-btn):not(.link) {
+  margin: 0.8rem 0 0;
 }
 
 .effects-rule {

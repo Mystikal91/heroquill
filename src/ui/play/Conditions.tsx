@@ -279,8 +279,7 @@ export function Conditions() {
         </ul>
       )}
       <details class="add-condition" open={active.length === 0}>
-        <summary class="add-condition-btn">{ui("play.addCondition")}</summary>
-        <p class="muted">{ui("play.conditionsHint")}</p>
+        <summary>{ui("play.addCondition")}</summary>
         <div class="cond-picks">
           {others.map((e) => (
             <button
