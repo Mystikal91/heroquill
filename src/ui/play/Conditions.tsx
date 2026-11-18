@@ -23,6 +23,8 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { Panel, Paragraphs } from "../sheet/parts";
 import { useHoldRepeat } from "../useHoldRepeat";
+import { ActiveEffectsList, AddEffectButton } from "./ActiveEffects";
+import { InspirationCards } from "./Inspiration";
 import { ConditionIcon } from "./icons";
 
 /** The slug of a condition: `srd51:condition/blinded` is `blinded`. */
@@ -201,7 +203,11 @@ export function Conditions() {
   };
 
   return (
-    <Panel title={ui("play.conditions")} className="conditions-panel">
+    <Panel title={ui("play.activeEffects")} className="conditions-panel">
+      <AddEffectButton />
+      <ActiveEffectsList />
+      <InspirationCards />
+      <hr class="effects-rule" />
       {immune.length > 0 && (
         <p class="muted">
           {ui("sheet.immunities")}: {immune.map((id) => c.name(id)).join(", ")}

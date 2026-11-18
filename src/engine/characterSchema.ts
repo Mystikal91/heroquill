@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { AbilitySchema } from "../data/schema";
+import { AbilitySchema, EffectSchema } from "../data/schema";
 import {
   CHARACTER_SCHEMA_VERSION,
   type Character,
@@ -174,6 +174,9 @@ const CharacterSchema = v.object({
       }),
     ),
     activeSpells: v.optional(v.array(v.string())),
+    customEffects: v.optional(
+      v.array(v.object({ id: v.string(), name: v.string(), effects: v.array(EffectSchema) })),
+    ),
   }),
   asi: v.array(v.pipe(v.array(AbilitySchema), v.minLength(1), v.maxLength(2))),
   feats: v.array(v.string()),

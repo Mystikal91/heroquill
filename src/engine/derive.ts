@@ -270,6 +270,13 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     const entry = index.get(id);
     return entry && entry.effects.length > 0 ? [entry] : [];
   });
+  // What the person added by hand is an entry of its own while it lasts, named by its id (see `customEffects`).
+  const customEntries: Entry[] = (character.play.customEffects ?? []).map((e) => ({
+    id: `custom:effect/${e.id}`,
+    kind: "option",
+    effects: e.effects,
+    data: {},
+  }));
   // A variant of a species (a half-elf of another descent) carries the species' effects itself.
   const standsIn = chosen.some((e) => e.kind === "subspecies" && e.data.replacesSpecies === true);
   const contributing = standsIn ? chosen.filter((e) => e.kind !== "species") : chosen;
@@ -283,6 +290,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       ...contributing,
       ...wornWithEffects,
       ...activeSpells,
+      ...customEntries,
       ...(starting?.entry ? [starting.entry] : []),
       ...reached,
     ],

@@ -22,8 +22,6 @@ export const GROUPS: readonly (readonly string[])[] = [
   // Spells and the slots they take.
   ["slots", "spells"],
   ["companions"],
-  // Inspiration: the state of the character, spent on a d20 roll, so it sits before the rolls.
-  ["inspiration"],
   // What do I roll.
   ["checks"],
   // What I have to use and get back.
@@ -66,14 +64,14 @@ export function estimateHeights(f: LayoutFacts): Record<string, number> {
   return {
     hp: 320,
     death: 0,
-    conditions: 560,
+    // The active effects and the inspiration cards, then the conditions.
+    conditions: 560 + 340 + (f.bardic ? 150 : 0),
     rage: (f.rage ? 130 : 0) + (f.wildShape ? 200 : 0),
     attacks: 150 + 150 * f.attacks + 100 * f.extraDamage,
     actions: 310 + 105 * f.actionCards + 55 * f.actionGroups,
     slots: 540,
     spells: 160 + 175 * f.spells,
     companions: 195 + 150 * f.companions,
-    inspiration: 340 + (f.bardic ? 150 : 0),
     checks: 830,
     classres: 150 + 90 * f.resources,
     hitdice: 100 + 115 * f.hitDiceKinds,

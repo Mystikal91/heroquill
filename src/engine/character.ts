@@ -1,4 +1,4 @@
-import { ABILITIES, type Ability } from "../data/schema";
+import { ABILITIES, type Ability, type Effect } from "../data/schema";
 import type { Coins } from "./coins";
 import type { CustomFeature } from "./custom";
 import type { BoardSlot } from "./slots";
@@ -135,6 +135,19 @@ export interface PlayState {
    * the spell entry apply as if it were held. A long rest ends them, and so does ending the concentration on one.
    */
   activeSpells?: string[];
+  /**
+   * Effects the person added by hand, with a name: what another player or the DM put on the character (a
+   * blessing, a potion, a ruling). They count on the sheet until they are removed or a long rest ends them.
+   */
+  customEffects?: CustomEffect[];
+}
+
+/** An effect of the Active effects panel written by hand: a name and what it does. */
+export interface CustomEffect {
+  /** Unique in the list; the name of the effect on the sheet comes from it (`custom:effect/<id>`). */
+  id: string;
+  name: string;
+  effects: Effect[];
 }
 
 export function createPlayState(): PlayState {

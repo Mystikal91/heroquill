@@ -21,13 +21,14 @@ import { CoinsPanel } from "../Coins";
 import { collectSpellRows } from "../spellRows";
 import { neighbour, useSwipe } from "../useSwipe";
 import { ActionsPanel } from "./Actions";
+import { AddEffectDialog } from "./ActiveEffects";
 import { BeastStrip } from "./BeastStrip";
 import { Companions } from "./Companions";
 import { Conditions } from "./Conditions";
 import { CustomizeButton, CustomizeToolbar, HiddenPanels, PanelBar } from "./Customize";
 import { DiceButton, DiceDrawer } from "./DiceDrawer";
 import { PlayFeatures, shownFeatures } from "./Features";
-import { BardNotes, Inspiration } from "./Inspiration";
+import { BardNotes } from "./Inspiration";
 import { PlayInventory } from "./Inventory";
 import { MoreStatsDialog } from "./MoreStats";
 import { PrepareSpellsDialog } from "./PrepareSpells";
@@ -66,7 +67,6 @@ const Part = ({
 type PanelKey =
   | "hp"
   | "rage"
-  | "inspiration"
   | "death"
   | "hitdice"
   | "rests"
@@ -105,7 +105,6 @@ const PANELS: Record<PanelKey, PanelDef> = {
       </>
     ),
   },
-  inspiration: { group: "combat", order: 5, render: () => <Inspiration /> },
   death: { group: "combat", order: 2, render: () => <DeathSaves /> },
   hitdice: { group: "resources", order: 2, render: () => <HitDice /> },
   rests: { group: "resources", order: 3, render: () => <Rests /> },
@@ -286,6 +285,7 @@ export function PlayTab() {
         </div>
         <QuickStats>{!arranging && <CustomizeButton />}</QuickStats>
         <MoreStatsDialog />
+        <AddEffectDialog />
         <RageStrip wide />
         <BeastStrip wide />
         {arranging && (

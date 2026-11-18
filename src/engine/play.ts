@@ -1,3 +1,4 @@
+import type { Effect } from "../data/schema";
 import { type PlayState, createPlayState } from "./character";
 import { RAGE_ROUNDS, SACRED_WEAPON_ROUNDS, SHILLELAGH_ROUNDS } from "./durations";
 import { exhaustionLevel, setExhaustion } from "./exhaustion";
@@ -274,6 +275,41 @@ export function endConcentration(play: PlayState): PlayState {
   const { concentration: ended, ...rest } = play;
   // The effect of the spell that was held ends with the concentration.
   return withoutRounds(ended ? setSpellActive(rest, ended, false) : rest, ["concentration"]);
+}
+
+/** The id of an effect made by hand: its name as a slug, made unique among the ones there are. */
+function customId(play: PlayState, name: string): string {
+  const base =
+    name
+      .normalize("NFD")
+      .replace(/\p{M}/gu, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "effect";
+  const taken = new Set((play.customEffects ?? []).map((e) => e.id));
+  let id = base;
+  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+  return id;
+}
+
+/** Puts an effect written by hand on the character: it counts on the sheet until it is removed or a long rest. */
+export function addCustomEffect(play: PlayState, name: string, effects: Effect[]): PlayState {
+  const label = name.trim();
+  if (!label || effects.length === 0) return play;
+  return {
+    ...play,
+    customEffects: [
+      ...(play.customEffects ?? []),
+      { id: customId(play, label), name: label, effects },
+    ],
+  };
+}
+
+/** Takes an effect written by hand off the character. */
+export function removeCustomEffect(play: PlayState, id: string): PlayState {
+  const next = (play.customEffects ?? []).filter((e) => e.id !== id);
+  const { customEffects: _old, ...rest } = play;
+  return next.length > 0 ? { ...rest, customEffects: next } : rest;
 }
 
 /** Turns the effect of a spell on or off on the sheet (Mage Armor...): a long rest turns them all off. */
