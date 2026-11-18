@@ -393,16 +393,5 @@ output.death-status {
 }
 
 .damage-effects {
-  display: grid;
-  gap: 0.4rem;
-  margin: 0.4rem 0 0;
-}
-
-.damage-effects dt {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.damage-effects dd {
-  margin: 0;
+  margin-top: 0.4rem;
 }

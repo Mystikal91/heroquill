@@ -1,15 +1,14 @@
 import { sheet } from "../../app/store";
 import { ui } from "../../i18n/ui";
 import { damageTitle } from "../damageName";
-import { reductionLabel } from "../damageReduction";
+import { reductionRow } from "../damageReduction";
 
 /** What the character does to damage, as lines of a name and what it covers: nothing is counted for the person. */
 export function damageEffectRows(): [name: string, text: string][] {
   const s = sheet.value;
   if (!s) return [];
   const rows: [string, string][] = [];
-  if (s.damageReductions.length > 0)
-    rows.push([ui("sheet.damageReduction"), s.damageReductions.map(reductionLabel).join("; ")]);
+  for (const reduction of s.damageReductions) rows.push(reductionRow(reduction));
   const kinds = [
     ["vulnerability", "sheet.vulnerabilities"],
     ["immunity", "sheet.immunities"],
@@ -21,16 +20,17 @@ export function damageEffectRows(): [name: string, text: string][] {
   return rows;
 }
 
-/** The lines of `damageEffectRows` as a list of pairs. */
+/** The lines of `damageEffectRows`, in the rows the other numbers of the dialog and the sheet use. */
 export function DamageEffectsList({ rows }: { rows: [string, string][] }) {
   return (
-    <dl class="damage-effects">
-      {rows.map(([name, text]) => (
-        <div key={name}>
-          <dt>{name}</dt>
-          <dd>{text}</dd>
-        </div>
+    <ul class="explain-lines damage-effects">
+      {rows.map(([name, value], i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: a fixed list of lines that is rebuilt as a whole
+        <li key={i}>
+          <span>{name}</span>
+          <b>{value}</b>
+        </li>
       ))}
-    </dl>
+    </ul>
   );
 }
