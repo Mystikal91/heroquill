@@ -1665,6 +1665,14 @@
   .studio-menu-panel .studio-picker-list {
     max-height: none;
   }
+
+  /*
+   * The cut corners of the studio's frame are a clip-path, and a clip-path also cuts what is fixed inside
+   * it: the full-screen list started under the header. While a list is open the frame is not cut.
+   */
+  :root[data-style] .card.studio:has(.studio-picker) {
+    clip-path: none;
+  }
 }
 
 .studio-picker-list button {
