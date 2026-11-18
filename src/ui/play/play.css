@@ -722,6 +722,11 @@ fieldset.segmented {
   .play[data-group="resources"] .pg[data-g="resources"] {
     display: block;
   }
+
+  /* A panel that draws nothing (the death saves while the character is not dying) takes no place, and no gap. */
+  .play .pg[data-g]:empty {
+    display: none;
+  }
 }
 
 .play-status {
