@@ -1,5 +1,4 @@
 import { CREATURE_SIZES, type Effect } from "../../data/schema";
-import { damageReductionEffects } from "./damageReductions";
 import { emit } from "./emit";
 import { naturalWeaponEffects } from "./naturalWeapons";
 import { REPLACED_BY_FLAG } from "./optionalFeatures";
@@ -239,8 +238,7 @@ function prerequisites(el: Element): { ability: string; minimum: number }[] {
 }
 
 export function importFeat(ctx: Context, source: Source): void {
-  const { effects: base } = baseEffects(ctx, source, "feat");
-  const effects = [...base, ...damageReductionEffects(source.aid)];
+  const { effects } = baseEffects(ctx, source, "feat");
   const requirements = clean(source.el.querySelector(":scope > requirements")?.textContent);
   emit(
     ctx,
