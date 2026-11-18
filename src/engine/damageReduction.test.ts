@@ -75,3 +75,55 @@ describe("damage reduction", () => {
     expect(sheetOf([], ["plate-armor"]).damageReductions).toEqual([]);
   });
 });
+
+describe("defenses written by hand", () => {
+  const withHand = (extra: NonNullable<ReturnType<typeof createCharacter>["extraDefenses"]>) => {
+    const c = createCharacter("srd51");
+    c.classes = [{ classId: "srd51:class/fighter", level: 3 }];
+    c.extraDefenses = extra;
+    return deriveSheet(c, index);
+  };
+
+  it("are added to the list of resistances, immunities and vulnerabilities", () => {
+    const s = withHand([
+      { kind: "resistance", damage: "fire" },
+      { kind: "immunity", damage: "poison" },
+      { kind: "vulnerability", damage: "cold" },
+    ]);
+    expect(s.defenses).toEqual({
+      resistance: ["fire"],
+      immunity: ["poison"],
+      vulnerability: ["cold"],
+    });
+  });
+
+  it("add a reduction with no source, for a kind of damage or for every kind", () => {
+    const s = withHand([
+      { kind: "reduction", damage: "fire", amount: 2 },
+      { kind: "reduction", amount: 1, note: "nonmagical" },
+    ]);
+    expect(s.damageReductions).toEqual([
+      { source: "", amount: 2, damage: ["fire"] },
+      { source: "", amount: 1, note: "nonmagical" },
+    ]);
+  });
+
+  it("do not repeat what the rules already give, and ignore a reduction with no amount", () => {
+    const c = createCharacter("srd51");
+    c.classes = [{ classId: "srd51:class/fighter", level: 3 }];
+    c.feats = [FEAT];
+    c.inventory = [{ itemId: "srd51:item/ring-of-resistance-fire", quantity: 1, equipped: true }];
+    c.extraDefenses = [
+      { kind: "resistance", damage: "fire" },
+      { kind: "reduction", damage: "fire" },
+    ];
+    const s = deriveSheet(c, index);
+    expect(s.defenses.resistance).toEqual(["fire"]);
+    expect(s.damageReductions).toEqual([]);
+  });
+
+  it("are nothing for a character who wrote none", () => {
+    const s = deriveSheet(createCharacter("srd51"), index);
+    expect(s.defenses).toEqual({ resistance: [], immunity: [], vulnerability: [] });
+  });
+});

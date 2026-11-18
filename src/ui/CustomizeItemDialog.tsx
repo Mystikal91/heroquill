@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import {
   type CharacterPart,
   type CustomizePlan,
+  NEW_PACK,
   closeCustomize,
+  copyTargets,
   customizing,
   planCustomize,
   saveCustomItem,
@@ -16,7 +18,15 @@ import { TextBox } from "./studio/Controls";
 import { GenericForm } from "./studio/GenericForm";
 import { EditProvider } from "./studio/scope";
 
-function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
+function Form({
+  itemId,
+  plan,
+  onTarget,
+}: {
+  itemId: string;
+  plan: CustomizePlan;
+  onTarget: (target: string) => void;
+}) {
   // The item is edited as a copy kept here; the pack is written only when the person saves.
   const [record, setRecord] = useState(plan.record);
   const held = character.value.inventory.find((i) => i.itemId === itemId);
@@ -55,6 +65,22 @@ function Form({ itemId, plan }: { itemId: string; plan: CustomizePlan }) {
             ? ui("item.customize.hintEdit")
             : ui("item.customize.hintCopy", { pack: record.name })}
         </p>
+        {!plan.editing && (
+          <label class="field">
+            <span>{ui("item.customize.saveIn")}</span>
+            <select
+              value={plan.fresh ? NEW_PACK : plan.record.id}
+              onChange={(e) => onTarget(e.currentTarget.value)}
+            >
+              {copyTargets().map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+              <option value={NEW_PACK}>{ui("item.customize.newPack")}</option>
+            </select>
+          </label>
+        )}
         <section class="item-section">
           <h4>{ui("item.customize.basics")}</h4>
           <TextBox
@@ -107,6 +133,9 @@ export function CustomizeItemDialog() {
   const itemId = customizing.value;
   const dialog = useRef<HTMLDialogElement>(null);
   const [plan, setPlan] = useState<{ id: string; plan: CustomizePlan } | undefined>();
+  // The pack the person chose for the copy; without a choice the plan picks one (see `planCustomize`).
+  const [choice, setChoice] = useState<{ item?: string; target?: string }>({});
+  const target = choice.item === itemId ? choice.target : undefined;
 
   // The form is made once for each item opened, from what the content says at that moment.
   useEffect(() => {
@@ -114,10 +143,10 @@ export function CustomizeItemDialog() {
       setPlan(undefined);
       return;
     }
-    const made = planCustomize(itemId);
+    const made = planCustomize(itemId, target);
     if (made) setPlan({ id: itemId, plan: made });
     else closeCustomize();
-  }, [itemId]);
+  }, [itemId, target]);
 
   useEffect(() => {
     const node = dialog.current;
@@ -129,7 +158,14 @@ export function CustomizeItemDialog() {
   if (!itemId) return null;
   return (
     <dialog ref={dialog} class="quick-edit item-dialog" onClose={closeCustomize}>
-      {plan && plan.id === itemId && <Form key={itemId} itemId={itemId} plan={plan.plan} />}
+      {plan && plan.id === itemId && (
+        <Form
+          key={`${itemId}:${plan.plan.record.id}`}
+          itemId={itemId}
+          plan={plan.plan}
+          onTarget={(t) => setChoice({ item: itemId, target: t })}
+        />
+      )}
     </dialog>
   );
 }

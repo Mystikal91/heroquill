@@ -1,10 +1,11 @@
+import type { ExtraDefense } from "./character";
 import type { SourcedEffect } from "./choices";
 import { holds } from "./modifiers";
 import type { ModifierState } from "./modifiers";
 
 /** A flat amount a character takes off a hit, with where it comes from and what it covers. */
 export interface DamageReduction {
-  /** The entry that gives it (a feat, an item). */
+  /** The entry that gives it (a feat, an item); empty when the person wrote it by hand. */
   source: string;
   /** What is taken off a hit (never below 0 once applied). */
   amount: number;
@@ -43,4 +44,20 @@ export function deriveDamageReductions(
     if (!same) found.push(next);
   }
   return found;
+}
+
+/** The reductions the person wrote by hand in Free edit. */
+export function handReductions(extra: ExtraDefense[] | undefined): DamageReduction[] {
+  return (extra ?? []).flatMap((d) =>
+    d.kind === "reduction" && d.amount !== undefined && d.amount > 0
+      ? [
+          {
+            source: "",
+            amount: d.amount,
+            ...(d.damage && { damage: [d.damage] }),
+            ...(d.note?.trim() && { note: d.note.trim() }),
+          },
+        ]
+      : [],
+  );
 }

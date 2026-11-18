@@ -177,6 +177,17 @@ const CharacterSchema = v.object({
   asi: v.array(v.pipe(v.array(AbilitySchema), v.minLength(1), v.maxLength(2))),
   feats: v.array(v.string()),
   overrides: v.record(v.string(), v.union([v.number(), v.string(), v.boolean()])),
+  /** Defenses the person wrote by hand in Free edit: they are added to what the rules give. */
+  extraDefenses: v.optional(
+    v.array(
+      v.object({
+        kind: v.picklist(["resistance", "immunity", "vulnerability", "reduction"]),
+        damage: v.optional(v.string()),
+        amount: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(999))),
+        note: v.optional(v.string()),
+      }),
+    ),
+  ),
 });
 
 /**

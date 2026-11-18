@@ -819,3 +819,21 @@ p.edition-current {
 .step-body > label.check {
   margin-block: 0.6rem;
 }
+
+/* The defenses written by hand in Free edit: a row each, that wraps on a phone. */
+.hand-defense {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0.4rem 0;
+}
+
+.hand-defense input[type="number"] {
+  width: 5rem;
+}
+
+.hand-defense input[type="text"] {
+  flex: 1 1 8rem;
+  min-width: 0;
+}

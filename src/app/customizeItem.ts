@@ -6,6 +6,7 @@ import { newHomebrewPack } from "../homebrew/pack";
 import { ui } from "../i18n/ui";
 import type { UserPackRecord } from "../storage/packs";
 import { PERSONAL_SPELLS_PACK } from "./customSpell";
+import { editingPackId } from "./homebrew";
 import { language } from "./language";
 import { character, content, updateCharacter } from "./store";
 import { addUserPack, userPacks } from "./userPacks";
@@ -32,6 +33,50 @@ export function canCustomize(itemId: string): boolean {
   }
 }
 
+/** The choice that stands for a pack that does not exist yet. */
+export const NEW_PACK = "new";
+
+const LAST_PACK_KEY = "customizePack";
+
+/** The pack the last copy went to on this device, if it is remembered. */
+export function lastCustomizePack(): string | undefined {
+  try {
+    return localStorage.getItem(LAST_PACK_KEY) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function rememberPack(id: string): void {
+  try {
+    localStorage.setItem(LAST_PACK_KEY, id);
+  } catch {
+    // Nothing to remember it with: the default is used next time.
+  }
+}
+
+/** The packs a copy of an item can go to: the homebrew ones, but not the one of the spells written from characters. */
+export const copyTargets = (): UserPackRecord[] =>
+  userPacks.value.filter((p) => p.origin === "homebrew" && p.id !== PERSONAL_SPELLS_PACK);
+
+/**
+ * The pack a copy goes to: the one chosen; without a choice the one of the last copy, the one open in the
+ * studio, the first one there is, and a new one when there is none.
+ */
+function targetFor(choice: string | undefined): UserPackRecord {
+  const targets = copyTargets();
+  const fresh = () => newHomebrewPack(ui("hb.myPack"), Date.now(), language.value);
+  if (choice === NEW_PACK) return fresh();
+  const wanted = (id: string | undefined) => targets.find((p) => p.id === id);
+  return (
+    wanted(choice) ??
+    wanted(lastCustomizePack()) ??
+    wanted(editingPackId.value) ??
+    targets[0] ??
+    fresh()
+  );
+}
+
 /** What the window needs to open: the pack as it will be saved, and the item in it. */
 export interface CustomizePlan {
   /** The pack, with the item in it (a copy of the original, or the item itself when it is homebrew already). */
@@ -40,17 +85,19 @@ export interface CustomizePlan {
   id: string;
   /** The item is homebrew already and is edited where it is; otherwise a copy was made. */
   editing: boolean;
+  /** The copy goes to a pack that does not exist yet. */
+  fresh: boolean;
 }
 
 const packOf = (id: string) => id.split(":")[0] ?? "";
 
 /**
  * The item to edit for an item of the inventory. A homebrew item is edited where it is; any other
- * becomes a copy, in the first homebrew pack (not the one of the spells written from characters) or in
- * a new one. The bonus and the magic the old "Magic weapon" box put on the item itself are carried
+ * becomes a copy, in the pack the person chose (`target`, or `NEW_PACK`) or, without a choice, in the one
+ * of the last copy, the one open in the studio or the first homebrew one (see `targetFor`). The bonus and the magic the old "Magic weapon" box put on the item itself are carried
  * into the item, so that they are not lost. Nothing is stored until the person saves.
  */
-export function planCustomize(itemId: string): CustomizePlan | undefined {
+export function planCustomize(itemId: string, target?: string): CustomizePlan | undefined {
   const c = content.value;
   const entry = c?.index.get(itemId);
   if (!c || !entry || !canCustomize(itemId)) return undefined;
@@ -60,16 +107,14 @@ export function planCustomize(itemId: string): CustomizePlan | undefined {
   if (owner) {
     record = owner;
   } else {
-    const target =
-      userPacks.value.find((p) => p.origin === "homebrew" && p.id !== PERSONAL_SPELLS_PACK) ??
-      newHomebrewPack(ui("hb.myPack"), Date.now(), language.value);
+    const into = targetFor(target);
     const bundle = bundleFromIndex(
       c.index,
       { fields: (i) => c.fields(i), read: (i, f) => c.displayed(i, f) ?? "" },
       [itemId],
-      target.lang,
+      into.lang,
     );
-    const done = importBundle(bundle, target, {
+    const done = importBundle(bundle, into, {
       rename: (name) => ui("hb.copyName", { name }),
       restricted: userPacks.value.some((p) => p.origin === "personal" && p.id === packOf(itemId)),
       from: (original) => original,
@@ -89,7 +134,12 @@ export function planCustomize(itemId: string): CustomizePlan | undefined {
     if (held.magical) patch.magical = true;
   }
   if (Object.keys(patch).length > 0) record = updateEntry(record, id, { data: patch });
-  return { record, id, editing: Boolean(owner) };
+  return {
+    record,
+    id,
+    editing: Boolean(owner),
+    fresh: !owner && !userPacks.value.some((p) => p.id === record.id),
+  };
 }
 
 /** Resolves when the content has an entry (a pack that was just saved is loaded again in a moment). */
@@ -125,6 +175,7 @@ export async function saveCustomItem(
   part: CharacterPart,
 ): Promise<string> {
   await addUserPack(record);
+  if (!plan.editing) rememberPack(record.id);
   await whenIndexed(plan.id);
   updateCharacter((d) => {
     const found = d.inventory.find((i) => i.itemId === from);

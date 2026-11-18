@@ -2,7 +2,8 @@ import { content } from "../app/store";
 import { wordEntry } from "../engine/words";
 import { type UiKey, ui } from "../i18n/ui";
 
-const DAMAGE_TYPES = new Set([
+/** The thirteen kinds of damage of the rules. */
+export const DAMAGE_TYPE_IDS = [
   "acid",
   "bludgeoning",
   "cold",
@@ -16,7 +17,9 @@ const DAMAGE_TYPES = new Set([
   "radiant",
   "slashing",
   "thunder",
-]);
+] as const;
+
+const DAMAGE_TYPES = new Set<string>(DAMAGE_TYPE_IDS);
 
 /** The name a pack gave to a kind of damage it adds, in the language in use. */
 const packName = (type: string) => {

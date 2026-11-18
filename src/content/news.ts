@@ -35,6 +35,20 @@ export const CHANGELOG: ChangelogEntry[] = [
         de: "Die magischen Gegenstände des SRD, die eine Resistenz oder Immunität geben, tun das jetzt auf dem Bogen, solange du sie trägst oder hältst: die Ringe des Widerstands (alle zehn Arten), die Drachenschuppenpanzer, der Ring der Wärme, die Stiefel der Winterlande, der Umhang der Spinnentiere, die Brosche des Abschirmens, der Anhänger des Giftschutzes, Frostbrand und die Stäbe des Feuers und des Frosts. Sie erscheinen in der Liste der Wirkungen auf Schaden. Tränke und Gegenstände, die von einer Wahl oder einer Bedingung abhängen, bleiben Text.",
         es: "Los objetos mágicos del SRD que dan una resistencia o una inmunidad ahora lo hacen en la hoja mientras los llevas o los empuñas: los anillos de resistencia (los diez tipos), las armaduras de escamas de dragón, el anillo de calidez, las botas de las tierras invernales, la capa arácnida, el broche escudo, el colgante de inmunidad al veneno, el hierro de escarcha y los bastones de fuego y de escarcha. Aparecen en la lista de efectos sobre el daño. Las pociones y los objetos que dependen de una elección o de una condición siguen siendo texto.",
       },
+      {
+        en: 'Customizing a weapon or an armor now asks where to save the copy ("Save the copy in"): any of your homebrew packs, or a new one. The choice is remembered for the next copy; without one, the copy goes to the pack open in the Homebrew studio.',
+        it: "Personalizzare un'arma o un'armatura ora chiede dove salvare la copia (\"Salva la copia in\"): uno dei tuoi pacchetti homebrew o uno nuovo. La scelta viene ricordata per la copia successiva; senza una scelta, la copia va nel pacchetto aperto nello Studio homebrew.",
+        fr: "Personnaliser une arme ou une armure demande maintenant où enregistrer la copie (« Enregistrer la copie dans ») : l'un de tes paquets homebrew ou un nouveau. Le choix est retenu pour la copie suivante ; sans choix, la copie va dans le paquet ouvert dans l'Atelier homebrew.",
+        de: "Beim Anpassen einer Waffe oder Rüstung wird jetzt gefragt, wo die Kopie gespeichert wird („Kopie speichern in“): in einem deiner Homebrew-Pakete oder in einem neuen. Die Wahl wird für die nächste Kopie gemerkt; ohne Wahl kommt die Kopie in das Paket, das in der Homebrew-Werkstatt offen ist.",
+        es: "Al personalizar un arma o una armadura ahora se pregunta dónde guardar la copia («Guardar la copia en»): uno de tus paquetes homebrew o uno nuevo. La elección se recuerda para la copia siguiente; sin elección, la copia va al paquete abierto en el Taller homebrew.",
+      },
+      {
+        en: "In Free edit you can write defenses by hand: a resistance, an immunity, a vulnerability or a flat damage reduction. They are added to what the rules give, in the list of effects on damage.",
+        it: "Nella Modifica libera puoi scrivere le difese a mano: una resistenza, un'immunità, una vulnerabilità o una riduzione del danno fissa. Si aggiungono a quelle delle regole, nell'elenco degli effetti sui danni.",
+        fr: "Dans l'Édition libre, tu peux écrire des défenses à la main : une résistance, une immunité, une vulnérabilité ou une réduction des dégâts fixe. Elles s'ajoutent à celles des règles, dans la liste des effets sur les dégâts.",
+        de: "In der Freien Bearbeitung kannst du Abwehr von Hand schreiben: eine Resistenz, eine Immunität, eine Verwundbarkeit oder eine feste Schadensreduzierung. Sie werden zu dem hinzugefügt, was die Regeln geben, in der Liste der Wirkungen auf Schaden.",
+        es: "En la Edición libre puedes escribir defensas a mano: una resistencia, una inmunidad, una vulnerabilidad o una reducción de daño fija. Se suman a las que dan las reglas, en la lista de efectos sobre el daño.",
+      },
     ],
   },
   {

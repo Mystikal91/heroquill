@@ -9,6 +9,7 @@ import {
   withOverride,
 } from "../../engine/overrides";
 import { ui } from "../../i18n/ui";
+import { HandDefenses } from "./HandDefenses";
 import { parseWhole } from "./fields";
 
 /** One number the player may force: empty means automatic, and the calculated value is shown. */
@@ -166,6 +167,8 @@ export function FreeEditStep() {
           </div>
         </fieldset>
       )}
+
+      <HandDefenses />
 
       {forcedCount > 0 && (
         <button

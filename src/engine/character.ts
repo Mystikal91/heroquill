@@ -233,6 +233,19 @@ export interface Character {
   feats: string[];
   /** Free edit: a forced value for a derived field, e.g. `ability.int`. Always wins. */
   overrides: Record<string, number | string | boolean>;
+  /** Free edit: defenses written by hand (a resistance, an immunity, a vulnerability or a flat reduction), added to the rules'. */
+  extraDefenses?: ExtraDefense[] | undefined;
+}
+
+/**
+ * A defense the person wrote by hand. `damage` is a kind of damage (`fire`, or one a pack adds); for a
+ * reduction it may be empty (every kind), and `amount` is what is taken off a hit.
+ */
+export interface ExtraDefense {
+  kind: "resistance" | "immunity" | "vulnerability" | "reduction";
+  damage?: string | undefined;
+  amount?: number | undefined;
+  note?: string | undefined;
 }
 
 export function createCharacter(ruleset: Character["ruleset"]): Character {

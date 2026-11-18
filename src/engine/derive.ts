@@ -11,10 +11,11 @@ import {
 } from "../data/schema";
 import { abilityModifier } from "./abilities";
 import { inBeastShape, withBeastChecks } from "./beastForm";
-import type { Character } from "./character";
+import type { Character, ExtraDefense } from "./character";
 import { type ChecksResult, deriveChecks, halfBonus } from "./checks";
 import { type PendingChoice, collectEffects } from "./choices";
 import { customResources } from "./custom";
+import { handReductions } from "./damageReduction";
 import { type EquipmentResult, deriveEquipment, proficiencyKeys } from "./equipment";
 import {
   exhaustedHitPoints,
@@ -184,10 +185,14 @@ function sizeChoices(feature: Entry, table: Record<string, unknown> | undefined)
   return { ...feature, effects };
 }
 
-function defensesOf(effects: Effect[]): DerivedSheet["defenses"] {
+function defensesOf(effects: Effect[], byHand?: ExtraDefense[]): DerivedSheet["defenses"] {
   const found: DerivedSheet["defenses"] = { resistance: [], immunity: [], vulnerability: [] };
   for (const e of effects) {
     if (e.type === "defense" && !found[e.kind].includes(e.damage)) found[e.kind].push(e.damage);
+  }
+  for (const d of byHand ?? []) {
+    if (d.kind !== "reduction" && d.damage && !found[d.kind].includes(d.damage))
+      found[d.kind].push(d.damage);
   }
   return found;
 }
@@ -752,7 +757,8 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     },
     proficiencies,
     traits,
-    defenses: defensesOf(effects),
+    defenses: defensesOf(effects, character.extraDefenses),
+    damageReductions: [...equipment.damageReductions, ...handReductions(character.extraDefenses)],
     features: [...new Set(features)],
     featureSources: featureSources(index, character, sourced),
     conditionImmunities: [
