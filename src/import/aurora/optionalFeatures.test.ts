@@ -53,6 +53,19 @@ const FILE = `<?xml version="1.0" encoding="utf-8" ?><elements><info><name>Test<
     <supports>Background Feature, Acolyte</supports>
     <description><p>Not optional: a background's own feature.</p></description>
   </element>
+  <element name="Test Hermit" type="Background" source="Test Book" id="ID_TEST_BG_HERMIT">
+    <description><p>You lived alone.</p></description>
+    <rules>
+      <grant type="Background Feature" id="ID_TEST_BGF_SHELTER" requirements="!ID_INTERNAL_GRANT_OPTIONAL_BACKGROUND_FEATURE" />
+      <select type="Background Feature" name="Variant Feature" supports="Optional Background Feature" optional="true" />
+    </rules>
+  </element>
+  <element name="Test Heir" type="Background" source="Test Book" id="ID_TEST_BG_HEIR">
+    <description><p>You must pick.</p></description>
+    <rules>
+      <select type="Background Feature" name="Legacy" supports="Optional Background Feature" />
+    </rules>
+  </element>
 </elements>`;
 
 const parse = () =>
@@ -94,6 +107,22 @@ describe("optional features as options", () => {
     expect(result.strings[`${inheritor?.id}.name`]).toBe("Inheritor");
     // A background's own feature is not an option.
     expect(result.entries.some((e) => /shelter/.test(e.id))).toBe(false);
+  });
+
+  it("does not make a choice of a select Aurora marks optional: the optional rules offer it", () => {
+    const choices = (slug: string) =>
+      result.entries
+        .find((e) => e.id === `imp1:background/${slug}`)
+        ?.effects.filter((e) => e.type === "choice") ?? [];
+    // `optional="true"`: the person may leave it empty, so nothing is left to choose.
+    expect(choices("test-hermit")).toEqual([]);
+    // Without it the select stays a choice to make.
+    expect(choices("test-heir")).toHaveLength(1);
+    // The feature itself is still an option of the optional rules.
+    expect(
+      result.entries.find((e) => e.id.endsWith("option/optional-feature-inheritor"))?.data
+        .backgroundFeature,
+    ).toBe(true);
   });
 
   it("every id the table names exists in the SRD or is the Beast Master's, which the SRD lacks", () => {

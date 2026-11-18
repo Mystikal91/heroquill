@@ -42,6 +42,13 @@ export const CHANGELOG: ChangelogEntry[] = [
         de: "Eine neue Zauberkomponente, die im Formular eines Zaubers hinzugefügt wird, bleibt jetzt erhalten und wird bei diesem Zauber angekreuzt; vorher verschwand sie sofort.",
         es: "Un nuevo componente de hechizo añadido desde el formulario de un hechizo ahora se queda, y se marca en ese hechizo; antes desaparecía de inmediato.",
       },
+      {
+        en: 'Backgrounds imported from Aurora no longer ask for a choice that was only optional (the "variant feature"): it stayed to be made for ever and showed the same option twice. That option is still in the optional rules. Packs imported before show "Needs updating": one click and they are redone.',
+        it: 'I background importati da Aurora non chiedono più una scelta che era solo facoltativa (la "funzione variante"): restava da fare per sempre e mostrava due volte la stessa opzione. L\'opzione c\'è ancora nelle regole facoltative. I pacchetti importati prima mostrano "Da aggiornare": con un clic si rifanno.',
+        fr: "Les historiques importés d'Aurora ne demandent plus un choix qui n'était que facultatif (la « variante de capacité ») : il restait à faire pour toujours et montrait deux fois la même option. Cette option reste dans les règles facultatives. Les paquets importés avant affichent « À mettre à jour » : un clic et ils sont refaits.",
+        de: "Aus Aurora importierte Hintergründe verlangen keine Wahl mehr, die nur optional war (das „Variantenmerkmal“): Sie blieb für immer offen und zeigte dieselbe Option doppelt. Die Option steht weiterhin in den optionalen Regeln. Früher importierte Pakete zeigen „Aktualisierung nötig“: Mit einem Klick werden sie neu erstellt.",
+        es: "Los trasfondos importados de Aurora ya no piden una elección que era solo opcional (el «rasgo variante»): se quedaba pendiente para siempre y mostraba dos veces la misma opción. Esa opción sigue en las reglas opcionales. Los paquetes importados antes muestran «Por actualizar»: con un clic se rehacen.",
+      },
     ],
   },
   {

@@ -1069,6 +1069,10 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
       else if (/^(?:Ability Score Improvement\s*,\s*Class|Feat)$/i.test(rule.supports.trim())) {
         // The increase of a class at its levels, or a feat in its place: the app offers them itself.
       } else mapped.unsupported += 1;
+    } else if (rule.type === "Background Feature" && rule.optional) {
+      // "Variant Feature", `optional="true"`: the person may leave it empty. The optional features it
+      // would list are already in the optional rules of the build screen (`data.backgroundFeature`),
+      // so a choice here would stay to be made forever and show the same thing twice.
     } else if (
       FEATURE_TYPES.has(rule.type) ||
       rule.type === "Archetype" ||
