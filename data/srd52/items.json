@@ -4858,7 +4858,13 @@
     {
       "id": "srd52:item/boots-of-the-winterlands",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -4931,7 +4937,13 @@
     {
       "id": "srd52:item/brooch-of-shielding",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "force"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5046,7 +5058,13 @@
     {
       "id": "srd52:item/cloak-of-arachnida",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5652,7 +5670,13 @@
     {
       "id": "srd52:item/frost-brand",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6493,7 +6517,17 @@
     {
       "id": "srd52:item/periapt-of-proof-against-poison",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "immunity",
+          "damage": "poison"
+        },
+        {
+          "type": "conditionImmunity",
+          "condition": "poisoned"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -7616,7 +7650,13 @@
     {
       "id": "srd52:item/staff-of-fire",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -7631,7 +7671,13 @@
     {
       "id": "srd52:item/staff-of-frost",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {

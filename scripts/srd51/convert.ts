@@ -7,6 +7,7 @@ import type { StartingChoice, StartingPart } from "../../src/data/startingEquipm
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
+  ITEM_EFFECTS,
   ITEM_HEALING,
   OPTION_FEATURES,
   PRICES,
@@ -802,7 +803,7 @@ function convertItems(raw: RawSource): Converted {
     entries.push({
       id: id("item", m.index),
       kind: "item",
-      effects: [],
+      effects: ITEM_EFFECTS[m.index] ?? [],
       data: {
         category: "magic-items",
         // The SRD gives magic items no price, except the potion of healing in its gear table.

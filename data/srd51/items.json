@@ -5421,7 +5421,13 @@
     {
       "id": "srd51:item/boots-of-the-winterlands",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5494,7 +5500,13 @@
     {
       "id": "srd51:item/brooch-of-shielding",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "force"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5651,7 +5663,13 @@
     {
       "id": "srd51:item/cloak-of-arachnida",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5927,7 +5945,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-black",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5942,7 +5966,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-blue",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5957,7 +5987,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-brass",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5972,7 +6008,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-bronze",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -5987,7 +6029,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-copper",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6002,7 +6050,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-gold",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6017,7 +6071,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-green",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6032,7 +6092,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-red",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6047,7 +6113,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-silver",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6062,7 +6134,13 @@
     {
       "id": "srd51:item/dragon-scale-mail-white",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -6561,7 +6639,13 @@
     {
       "id": "srd51:item/frost-brand",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -7585,7 +7669,17 @@
     {
       "id": "srd51:item/periapt-of-proof-against-poison",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "immunity",
+          "damage": "poison"
+        },
+        {
+          "type": "conditionImmunity",
+          "condition": "poisoned"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8204,7 +8298,13 @@
     {
       "id": "srd51:item/ring-of-elemental-command-air",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8219,7 +8319,13 @@
     {
       "id": "srd51:item/ring-of-elemental-command-earth",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8234,7 +8340,13 @@
     {
       "id": "srd51:item/ring-of-elemental-command-fire",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8384,7 +8496,13 @@
     {
       "id": "srd51:item/ring-of-resistance-acid",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "acid"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8399,7 +8517,13 @@
     {
       "id": "srd51:item/ring-of-resistance-cold",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8414,7 +8538,13 @@
     {
       "id": "srd51:item/ring-of-resistance-fire",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8429,7 +8559,13 @@
     {
       "id": "srd51:item/ring-of-resistance-force",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "force"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8444,7 +8580,13 @@
     {
       "id": "srd51:item/ring-of-resistance-lightning",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "lightning"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8459,7 +8601,13 @@
     {
       "id": "srd51:item/ring-of-resistance-necrotic",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "necrotic"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8474,7 +8622,13 @@
     {
       "id": "srd51:item/ring-of-resistance-poison",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "poison"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8489,7 +8643,13 @@
     {
       "id": "srd51:item/ring-of-resistance-psychic",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "psychic"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8504,7 +8664,13 @@
     {
       "id": "srd51:item/ring-of-resistance-radiant",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "radiant"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8519,7 +8685,13 @@
     {
       "id": "srd51:item/ring-of-resistance-thunder",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "thunder"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -8639,7 +8811,13 @@
     {
       "id": "srd51:item/ring-of-warmth",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -9120,7 +9298,13 @@
     {
       "id": "srd51:item/staff-of-fire",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "fire"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {
@@ -9135,7 +9319,13 @@
     {
       "id": "srd51:item/staff-of-frost",
       "kind": "item",
-      "effects": [],
+      "effects": [
+        {
+          "type": "defense",
+          "kind": "resistance",
+          "damage": "cold"
+        }
+      ],
       "data": {
         "category": "magic-items",
         "cost": {

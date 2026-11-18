@@ -416,6 +416,78 @@ export const PRICES: Record<string, { amount: number; unit: "cp" | "sp" | "gp" }
  * 10d4 + 20. The database only has the numbers inside each potion's text; a test compares the two.
  * Left out on purpose: the restorative ointment (2d8 + 2, but a jar has several doses).
  */
+const DRAGON_RESISTANCE: Record<string, string> = {
+  black: "acid",
+  blue: "lightning",
+  brass: "fire",
+  bronze: "lightning",
+  copper: "acid",
+  gold: "fire",
+  green: "poison",
+  red: "fire",
+  silver: "cold",
+  white: "cold",
+};
+
+/**
+ * The resistances and immunities a magic item gives while it is worn or held, written by hand from its
+ * text (the source has only the text). Only what is always so and names its kind of damage: a ring of
+ * resistance for each of the ten kinds, the dragon scale mails, the staffs and the like. Left out on
+ * purpose: the potions (an hour), the armor of resistance and of vulnerability (the person picks the kind),
+ * the armor of invulnerability and the shield of missile attraction ("nonmagical", "ranged weapon attacks":
+ * not kinds of damage), the helm of brilliance (it depends on its rubies) and what the ring of elemental
+ * command gives only after the owner has helped to slay an elemental.
+ */
+export const ITEM_EFFECTS: Record<string, Effect[]> = {
+  ...Object.fromEntries(
+    [
+      "acid",
+      "cold",
+      "fire",
+      "force",
+      "lightning",
+      "necrotic",
+      "poison",
+      "psychic",
+      "radiant",
+      "thunder",
+    ].map((kind) => [`ring-of-resistance-${kind}`, [resists(kind)]]),
+  ),
+  ...Object.fromEntries(
+    Object.entries(DRAGON_RESISTANCE).map(([dragon, kind]) => [
+      `dragon-scale-mail-${dragon}`,
+      [resists(kind)],
+    ]),
+  ),
+  "ring-of-warmth": [resists("cold")],
+  "boots-of-the-winterlands": [resists("cold")],
+  "cloak-of-arachnida": [resists("poison")],
+  "brooch-of-shielding": [resists("force")],
+  "ring-of-elemental-command-air": [resists("lightning")],
+  "ring-of-elemental-command-earth": [resists("acid")],
+  "ring-of-elemental-command-fire": [resists("fire")],
+  "frost-brand": [resists("fire")],
+  "staff-of-fire": [resists("fire")],
+  "staff-of-frost": [resists("cold")],
+  "periapt-of-proof-against-poison": [
+    { type: "defense", kind: "immunity", damage: "poison" },
+    { type: "conditionImmunity", condition: "poisoned" },
+  ],
+};
+
+/** The same for the 2024 SRD, whose items are not split by kind of damage: only the ones with a single kind. */
+export const ITEM_EFFECTS_2024: Record<string, Effect[]> = Object.fromEntries(
+  [
+    "boots-of-the-winterlands",
+    "cloak-of-arachnida",
+    "brooch-of-shielding",
+    "periapt-of-proof-against-poison",
+    "frost-brand",
+    "staff-of-fire",
+    "staff-of-frost",
+  ].flatMap((index) => (ITEM_EFFECTS[index] ? [[index, ITEM_EFFECTS[index]]] : [])),
+);
+
 export const ITEM_HEALING: Record<string, string> = {
   "potion-of-healing-common": "2d4+2",
   "potion-of-healing-greater": "4d4+4",

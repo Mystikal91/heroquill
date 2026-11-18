@@ -8,7 +8,7 @@
  */
 import type { Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import { cleanData, convertMonsters } from "../srd51/convert";
-import { magicItemSlot } from "../srd51/effects";
+import { ITEM_EFFECTS_2024, magicItemSlot } from "../srd51/effects";
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
@@ -1370,7 +1370,7 @@ function convertMagicItems(raw: RawSource): Converted {
     entries.push({
       id: id("item", m.index),
       kind: "item",
-      effects: [],
+      effects: ITEM_EFFECTS_2024[m.index] ?? [],
       data: {
         category: "magic-items",
         cost: { amount: 0, unit: "gp" },
