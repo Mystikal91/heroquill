@@ -17,6 +17,7 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { Roll } from "../Roll";
 import { Panel } from "../sheet/parts";
 import { DamageButtons } from "./DamageButtons";
+import { DamageEffectsList, damageEffectRows } from "./DamageEffects";
 import { HealIcon } from "./icons";
 
 export function HitPoints() {
@@ -26,6 +27,7 @@ export function HitPoints() {
   if (!v) return null;
   const hp = currentHp(play, v.max);
   const n = Math.max(0, Number.parseInt(amount, 10) || 0);
+  const effects = damageEffectRows();
   const apply = (change: (amount: number) => void) => {
     if (n === 0) return;
     change(n);
@@ -121,6 +123,12 @@ export function HitPoints() {
             {ui("play.tempHp")}
           </button>
         </div>
+        {effects.length > 0 && (
+          <details class="hp-effects">
+            <summary>{ui("play.damageEffects")}</summary>
+            <DamageEffectsList rows={effects} />
+          </details>
+        )}
       </div>
     </Panel>
   );

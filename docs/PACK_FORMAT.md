@@ -1447,7 +1447,7 @@ No fields: the entry is its name and its text.
 
 ### Effects
 
-33 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
+34 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
 
 #### `flag`
 
@@ -1570,7 +1570,7 @@ A flat bonus to a number of the sheet. `target` is `ac`, `speed`, `initiative`, 
 | `value` | number | **yes** |  |
 | `plus` | `str` or `dex` or `con` or `int` or `wis` or `cha` or `"proficiency"` | no |  |
 | `skill` | slug of a skill | no |  |
-| `when` | `wearingArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
+| `when` | `wearingArmor` or `heavyArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
 | `minLevel` | number | no |  |
 | `min` | number | no |  |
 
@@ -1582,7 +1582,7 @@ A climbing, swimming, flying or burrowing speed in feet, or `"walk"` for one equ
 | --- | --- | --- | --- |
 | `mode` | `climb` or `swim` or `fly` or `burrow` | **yes** |  |
 | `feet` | number (min 0) or `"walk"` | **yes** |  |
-| `when` | `wearingArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
+| `when` | `wearingArmor` or `heavyArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
 
 #### `sense`
 
@@ -1592,7 +1592,7 @@ A sense with a range in feet. The longest one counts.
 | --- | --- | --- | --- |
 | `sense` | `darkvision` or `blindsight` or `tremorsense` or `truesight` | **yes** |  |
 | `range` | number (min 0, feet) | **yes** |  |
-| `when` | `wearingArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
+| `when` | `wearingArmor` or `heavyArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
 
 #### `attunementMax`
 
@@ -1645,6 +1645,18 @@ A resistance, an immunity or a vulnerability to a kind of damage. `damage` is on
 | --- | --- | --- | --- |
 | `kind` | `resistance` or `immunity` or `vulnerability` | **yes** |  |
 | `damage` | text (picked: damage) | **yes** |  |
+
+#### `damageReduction`
+
+A flat amount taken off a hit (Heavy Armor Master: 3, or the proficiency bonus). `value` is the amount and `plus: "proficiency"` adds the proficiency bonus; `damage` lists the kinds it covers (every kind when absent); `when` is what the character must wear (`heavyArmor`, `wearingArmor`...); `note` is a condition in words, such as "nonmagical attacks". The sheet and the Play screen list it with the resistances, immunities and vulnerabilities; the person does the sum, nothing is taken off by itself.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `value` | number (integer, min 0) | **yes** |  |
+| `plus` | `proficiency` | no |  |
+| `damage` | list of text (picked: damage) | no |  |
+| `when` | `wearingArmor` or `heavyArmor` or `unarmored` or `noHeavyArmor` or `unarmoredNoShield` or `wearingShield` or `ranged` or `melee` or `dueling` | no |  |
+| `note` | text | no |  |
 
 #### `halfProficiency`
 

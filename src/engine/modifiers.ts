@@ -46,6 +46,8 @@ export function holds(
       return true;
     case "wearingArmor":
       return armor.wearing;
+    case "heavyArmor":
+      return armor.heavy;
     case "unarmored":
       return !armor.wearing;
     case "noHeavyArmor":

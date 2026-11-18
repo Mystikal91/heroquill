@@ -50,13 +50,14 @@ export type ModifierTarget = (typeof MODIFIER_TARGETS)[number];
 
 /**
  * When a `modifier` applies, for what the character wears or wields:
- * `wearingArmor` (body armor, not a shield), `unarmored` (no body armor), `noHeavyArmor`,
+ * `wearingArmor` (body armor, not a shield), `heavyArmor`, `unarmored` (no body armor), `noHeavyArmor`,
  * `unarmoredNoShield` (neither armor nor a shield),
  * `wearingShield`, `ranged` and `melee` (the weapon of an attack), and `dueling` (a melee weapon that is not
  * two-handed, with no other weapon).
  */
 export const MODIFIER_CONDITIONS = [
   "wearingArmor",
+  "heavyArmor",
   "unarmored",
   "noHeavyArmor",
   "unarmoredNoShield",
@@ -293,6 +294,21 @@ export const PlainEffectSchema = v.variant("type", [
     type: v.literal("defense"),
     kind: v.picklist(["resistance", "immunity", "vulnerability"]),
     damage: v.string(),
+  }),
+  /**
+   * A flat amount taken off a hit (Heavy Armor Master: 3, or the proficiency bonus). `value` is the amount
+   * and `plus` adds the proficiency bonus to it; `damage` lists the kinds it covers (`slashing`...), every
+   * kind when it is absent; `when` is what the character must wear; `note` is a condition in words
+   * ("nonmagical attacks"). The damage is typed by the person, so nothing is taken off by itself: the sheet
+   * and the Play screen list the reduction, and the person does the sum.
+   */
+  v.object({
+    type: v.literal("damageReduction"),
+    value: v.pipe(v.number(), v.integer(), v.minValue(0)),
+    plus: v.optional(v.picklist(["proficiency"])),
+    damage: v.optional(v.array(v.string())),
+    when: v.optional(v.picklist(MODIFIER_CONDITIONS)),
+    note: v.optional(v.string()),
   }),
   /**
    * Half the proficiency bonus on ability checks that do not use it (Jack of All Trades,

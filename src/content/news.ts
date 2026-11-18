@@ -18,6 +18,26 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.32",
+    date: "2026-11-18",
+    notes: [
+      {
+        en: 'Damage reduction: a flat amount taken off a hit. Heavy Armor Master (the 2014 and the 2024 feat, from Aurora) now lists its reduction in the Defenses of the Sheet. In Play, under the buttons of the hit points, a closed list "Effects on damage" shows it together with the resistances, immunities and vulnerabilities, and the "more numbers" window of the phone bar shows it too; the sum is yours. Packs imported from Aurora before show "Needs updating": one click and they are redone.',
+        it: 'Riduzione del danno: un valore fisso tolto da un colpo. Heavy Armor Master (il talento del 2014 e quello del 2024, da Aurora) ora mostra la sua riduzione tra le Difese della Scheda. In Gioca, sotto i bottoni dei punti ferita, un elenco chiuso "Effetti sui danni" la mostra insieme a resistenze, immunità e vulnerabilità, e la finestra dei "più numeri" della barra da telefono la mostra anche lì; il conto lo fai tu. I pacchetti importati prima da Aurora mostrano "Da aggiornare": con un clic si rifanno.',
+        fr: "Réduction des dégâts : un montant fixe retiré d'un coup. Heavy Armor Master (le don de 2014 et celui de 2024, depuis Aurora) affiche maintenant sa réduction dans les Défenses de la Fiche. Dans Jouer, sous les boutons des points de vie, une liste fermée « Effets sur les dégâts » la montre avec les résistances, immunités et vulnérabilités, et la fenêtre « plus de chiffres » de la barre du téléphone la montre aussi ; le calcul est à toi. Les paquets importés d'Aurora avant affichent « À mettre à jour » : un clic et ils sont refaits.",
+        de: "Schadensreduzierung: ein fester Betrag, der von einem Treffer abgezogen wird. Heavy Armor Master (das Talent von 2014 und das von 2024, aus Aurora) zeigt seine Reduzierung jetzt unter Abwehr auf dem Bogen. Im Spielmodus zeigt eine eingeklappte Liste „Wirkung auf Schaden“ unter den Knöpfen der Trefferpunkte sie zusammen mit Resistenzen, Immunitäten und Verwundbarkeiten, und auch das Fenster „mehr Zahlen“ der Handyleiste zeigt sie; gerechnet wird von dir. Früher aus Aurora importierte Pakete zeigen „Aktualisierung nötig“: Mit einem Klick werden sie neu erstellt.",
+        es: "Reducción de daño: una cantidad fija que se resta de un golpe. Heavy Armor Master (la dote de 2014 y la de 2024, desde Aurora) ahora muestra su reducción en las Defensas de la Hoja. En Jugar, bajo los botones de los puntos de golpe, una lista cerrada «Efectos sobre el daño» la muestra junto con resistencias, inmunidades y vulnerabilidades, y la ventana de «más números» de la barra del móvil también la muestra; la cuenta la haces tú. Los paquetes importados de Aurora antes muestran «Por actualizar»: con un clic se rehacen.",
+      },
+      {
+        en: 'In the Homebrew studio the new effect Damage reduction lets you write your own: an amount (plus the proficiency bonus if you want), the kinds of damage it covers, whether it asks for heavy armor, and a note such as "nonmagical attacks".',
+        it: 'Nello Studio homebrew il nuovo effetto Riduzione del danno permette di scrivere la tua: un valore (più il bonus di competenza, se vuoi), i tipi di danno che copre, se richiede l\'armatura pesante e una nota come "attacchi non magici".',
+        fr: "Dans l'Atelier homebrew, le nouvel effet Réduction des dégâts permet d'écrire la tienne : un montant (plus le bonus de maîtrise si tu veux), les types de dégâts couverts, si elle demande une armure lourde, et une note comme « attaques non magiques ».",
+        de: "In der Homebrew-Werkstatt kannst du mit dem neuen Effekt Schadensreduzierung deine eigene schreiben: ein Betrag (auf Wunsch plus Übungsbonus), die Schadensarten, die sie abdeckt, ob sie schwere Rüstung verlangt, und eine Notiz wie „nichtmagische Angriffe“.",
+        es: "En el Taller homebrew, el nuevo efecto Reducción de daño te permite escribir la tuya: una cantidad (más el bono de competencia si quieres), los tipos de daño que cubre, si pide armadura pesada y una nota como «ataques no mágicos».",
+      },
+    ],
+  },
+  {
     version: "1.31.3",
     date: "2026-11-18",
     notes: [

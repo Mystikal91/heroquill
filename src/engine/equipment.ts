@@ -3,6 +3,7 @@ import type { Ability, ProficiencyCategory } from "../data/schema";
 import type { Character } from "./character";
 import type { SourcedEffect } from "./choices";
 import { coinWeight } from "./coins";
+import { type DamageReduction, deriveDamageReductions } from "./damageReduction";
 import type { AbilityResult, PackIndex } from "./derive";
 import { type AppliedModifier, type ArmorState, appliedModifiers, total } from "./modifiers";
 import { placeEquipment } from "./slots";
@@ -98,6 +99,8 @@ export interface EquipmentResult {
    */
   unarmed: AttackResult | undefined;
   load: LoadResult;
+  /** The flat amounts the character can take off a hit (Heavy Armor Master). */
+  damageReductions: DamageReduction[];
 }
 
 interface Context {
@@ -537,5 +540,9 @@ export function deriveEquipment(ctx: Context): EquipmentResult {
     attacks,
     unarmed: free ? unarmed : undefined,
     load: deriveLoad(ctx),
+    damageReductions: deriveDamageReductions(ctx.sourced, {
+      armor,
+      proficiencyBonus: ctx.proficiencyBonus,
+    }),
   };
 }

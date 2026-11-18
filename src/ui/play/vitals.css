@@ -377,3 +377,32 @@ output.death-status {
   font-size: 1.1rem;
   font-weight: 600;
 }
+
+/* What the character does to damage: a plain list under the buttons, closed until it is wanted. */
+.hp-effects {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.hp-effects summary {
+  cursor: pointer;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.damage-effects {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0;
+}
+
+.damage-effects dt {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.damage-effects dd {
+  margin: 0;
+}

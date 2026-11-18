@@ -111,6 +111,8 @@ const NOTES: Record<EffectType, string> = {
     "Attacks with weapons may use `ability` instead of Strength or Dexterity; the best ability that applies wins. `when` narrows the weapons to one-handed ones (`oneHanded`) or magic ones (`magic`); `proficient` asks for a weapon the character is proficient with.",
   defense:
     "A resistance, an immunity or a vulnerability to a kind of damage. `damage` is one of the thirteen of the rules or a kind the pack adds as an entry of kind `damage` (the end of its id).",
+  damageReduction:
+    'A flat amount taken off a hit (Heavy Armor Master: 3, or the proficiency bonus). `value` is the amount and `plus: "proficiency"` adds the proficiency bonus; `damage` lists the kinds it covers (every kind when absent); `when` is what the character must wear (`heavyArmor`, `wearingArmor`...); `note` is a condition in words, such as "nonmagical attacks". The sheet and the Play screen list it with the resistances, immunities and vulnerabilities; the person does the sum, nothing is taken off by itself.',
   halfProficiency:
     "Half the proficiency bonus on ability checks that do not use it (Jack of All Trades): every ability, or only those in `abilities`. `round` is `down` or `up`.",
   unarmoredDefense:

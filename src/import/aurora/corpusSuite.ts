@@ -5,6 +5,7 @@ import { type Entry, type Pack, findBrokenReferences, parsePack } from "../../da
 import { createCharacter } from "../../engine/character";
 import { deriveSheet, indexPacks } from "../../engine/derive";
 import { SRD51_FILES, loadSrd51Strings, srd51Index, srd51Packs } from "../../test/srd51";
+import { DAMAGE_REDUCTIONS } from "./damageReductions";
 import { type AuroraResult, parseAurora } from "./index";
 import { NATURAL_WEAPONS } from "./naturalWeapons";
 import { type Outcomes, measure, ruleReport, toFile, worse } from "./ratchet";
@@ -203,6 +204,14 @@ export function corpusSuite(reverse: boolean) {
         const missing = Object.keys(NATURAL_WEAPONS).filter((aid) => {
           const entry = result.entries.find((e) => e.id === result.aids[aid]);
           return !entry?.effects.some((e) => e.type === "unarmedStrike");
+        });
+        expect(missing).toEqual([]);
+      });
+
+      it("finds every feat of the damage reductions table in the books, with its reduction", () => {
+        const missing = Object.keys(DAMAGE_REDUCTIONS).filter((aid) => {
+          const entry = result.entries.find((e) => e.id === result.aids[aid]);
+          return !entry?.effects.some((e) => e.type === "damageReduction");
         });
         expect(missing).toEqual([]);
       });

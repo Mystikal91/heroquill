@@ -7,6 +7,7 @@ import { signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { ExplainButton } from "../Explain";
 import { movementLines } from "../movementLines";
+import { DamageEffectsList, damageEffectRows } from "./DamageEffects";
 import { beastArmorClass } from "./beastArmorClass";
 import { MoreIcon } from "./icons";
 
@@ -88,6 +89,7 @@ export function MoreStatsDialog() {
   const investigation = passive("investigation");
   const insight = passive("insight");
   const senses = s ? movementLines(s.movement, s.senses) : [];
+  const effects = damageEffectRows();
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: clicking the backdrop is a mouse shortcut; Escape and the Close button are the keyboard ways out
@@ -124,6 +126,13 @@ export function MoreStatsDialog() {
               <Row key={label} name={label} value={value} />
             ))}
           </ul>
+
+          {effects.length > 0 && (
+            <>
+              <h4>{ui("play.damageEffects")}</h4>
+              <DamageEffectsList rows={effects} />
+            </>
+          )}
 
           <h4>{ui("more.senses")}</h4>
           <ul class="explain-lines more-lines">

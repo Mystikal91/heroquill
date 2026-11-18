@@ -44,6 +44,7 @@ export const EFFECT_META: Record<EffectType, EffectMeta> = {
   d20Floor: meta("proficiency", "advanced", "A low die counts as a higher one on checks."),
   modifier: meta("body", "guided", "A flat bonus to a number of the sheet."),
   defense: meta("body", "guided", "Resistance, immunity or vulnerability to a damage type."),
+  damageReduction: meta("body", "guided", "A flat amount taken off a hit."),
   conditionImmunity: meta("body", "guided", "Cannot be affected by a condition."),
   movement: meta("body", "guided", "Climb, swim, fly or burrow speed."),
   sense: meta("body", "guided", "A sense with a range."),
@@ -102,6 +103,8 @@ function refined(type: string, specs: FieldSpec[]): FieldSpec[] {
       (spec.key === "damageType" || (type === "defense" && spec.key === "damage"))
     )
       return { ...spec, type: { type: "text", pick: "damage" } };
+    if (type === "damageReduction" && spec.key === "damage" && spec.type.type === "list")
+      return { ...spec, type: { type: "list", of: { type: "text", pick: "damage" } } };
     if ((type === "uses" || type === "spends") && spec.key === "reserve")
       return { ...spec, type: { type: "text", pick: "reserve" } };
     if (type === "choice" && spec.key === "chooseBy" && spec.type.type === "text")

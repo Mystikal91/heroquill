@@ -4,6 +4,7 @@ import type { Warning } from "../../engine/warnings";
 import { type UiKey, ui } from "../../i18n/ui";
 import { Coins } from "../Coins";
 import { damageTitle } from "../damageName";
+import { reductionLabel } from "../damageReduction";
 import { EquipmentBoard } from "../equipment/EquipmentBoard";
 import { Panel, RulesText } from "./parts";
 
@@ -59,7 +60,7 @@ export function Defenses() {
     (kind) =>
       s.defenses[kind].length > 0 || (kind === "immunity" && s.conditionImmunities.length > 0),
   );
-  if (kinds.length === 0) return null;
+  if (kinds.length === 0 && s.damageReductions.length === 0) return null;
   const damage = damageTitle;
   return (
     <Panel title={ui("sheet.defenses")}>
@@ -77,6 +78,12 @@ export function Defenses() {
             </dd>
           </Fragment>
         ))}
+        {s.damageReductions.length > 0 && (
+          <>
+            <dt>{ui("sheet.damageReduction")}</dt>
+            <dd>{s.damageReductions.map(reductionLabel).join("; ")}</dd>
+          </>
+        )}
       </dl>
     </Panel>
   );
