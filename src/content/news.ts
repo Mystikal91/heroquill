@@ -18,6 +18,33 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.33",
+    date: "2026-11-20",
+    notes: [
+      {
+        en: 'The Print tab can make a fillable PDF: the numbers, names and lines you can type in become form fields, and every tick circle a checkbox. There is a blank sheet too, with every page empty, for the table. Each printed page has a footer with the SRD credit and the edition, and "Made with Heroquill".',
+        it: "La scheda Stampa può fare un PDF compilabile: i numeri, i nomi e le righe in cui si può scrivere diventano campi di un modulo, e ogni cerchio da spuntare una casella. C'è anche una scheda vuota, con tutte le pagine in bianco, per il tavolo. Ogni pagina stampata ha un piè di pagina con il credito dell'SRD e l'edizione, e \"Fatto con Heroquill\".",
+        fr: "L'onglet Imprimer peut produire un PDF remplissable : les nombres, les noms et les lignes où l'on peut écrire deviennent des champs de formulaire, et chaque rond à cocher une case. Il y a aussi une fiche vierge, avec toutes les pages vides, pour la table. Chaque page imprimée a un pied de page avec le crédit du SRD et l'édition, et « Fait avec Heroquill ».",
+        de: "Der Tab Drucken kann ein ausfüllbares PDF erzeugen: Zahlen, Namen und beschreibbare Zeilen werden zu Formularfeldern, jeder Haken-Kreis zu einem Kontrollkästchen. Dazu gibt es einen leeren Bogen mit allen Seiten ohne Inhalt, für den Spieltisch. Jede gedruckte Seite hat eine Fußzeile mit dem SRD-Hinweis und der Edition sowie „Erstellt mit Heroquill“.",
+        es: "La pestaña Imprimir puede hacer un PDF rellenable: los números, nombres y líneas donde se puede escribir pasan a ser campos de formulario, y cada círculo para marcar una casilla. También hay una hoja en blanco, con todas las páginas vacías, para la mesa. Cada página impresa tiene un pie con el crédito del SRD y la edición, y «Hecho con Heroquill».",
+      },
+      {
+        en: "The site has a new guide to the D&D 5e character sheet, with blank fillable PDFs to download in each language and edition.",
+        it: "Il sito ha una nuova guida alla scheda del personaggio di D&D 5e, con PDF compilabili vuoti da scaricare in ogni lingua ed edizione.",
+        fr: "Le site a un nouveau guide de la fiche de personnage de D&D 5e, avec des PDF remplissables vierges à télécharger dans chaque langue et édition.",
+        de: "Die Website hat eine neue Anleitung zum D&D-5e-Charakterbogen, mit leeren ausfüllbaren PDFs zum Herunterladen in jeder Sprache und Edition.",
+        es: "El sitio tiene una nueva guía de la hoja de personaje de D&D 5e, con PDF rellenables en blanco para descargar en cada idioma y edición.",
+      },
+      {
+        en: 'In Active effects, an effect you wrote yourself has an "Active" box: turn it off and it stays on the list without counting on the sheet, turn it on when it applies. A long rest turns these effects off instead of deleting them, and a die that is spent (Guidance) turns its effect off too. The cross still removes one for good.',
+        it: 'In Effetti attivi, un effetto scritto da te ha una casella "Attivo": spegnilo e resta nell\'elenco senza contare sulla scheda, accendilo quando serve. Un riposo lungo spegne questi effetti invece di cancellarli, e un dado speso (Guida) spegne il suo effetto. La croce lo toglie ancora per sempre.',
+        fr: "Dans Effets actifs, un effet que tu as écrit a une case « Actif » : décoche-la et il reste dans la liste sans compter sur la fiche, coche-la quand il s'applique. Un repos long éteint ces effets au lieu de les supprimer, et un dé dépensé (Assistance) éteint aussi son effet. La croix l'enlève toujours pour de bon.",
+        de: "In Aktive Effekte hat ein selbst geschriebener Effekt ein Kästchen „Aktiv“: Schaltest du ihn aus, bleibt er in der Liste, zählt aber nicht auf dem Bogen; schalte ihn ein, wenn er gilt. Eine lange Rast schaltet diese Effekte aus, statt sie zu löschen, und ein verbrauchter Würfel (Göttliche Führung) schaltet seinen Effekt ebenfalls aus. Das Kreuz entfernt einen weiterhin endgültig.",
+        es: "En Efectos activos, un efecto que escribiste tiene una casilla «Activo»: apágalo y queda en la lista sin contar en la hoja, enciéndelo cuando se aplique. Un descanso largo apaga estos efectos en lugar de borrarlos, y un dado gastado (Guía) también apaga su efecto. La cruz lo quita para siempre.",
+      },
+    ],
+  },
+  {
     version: "1.32",
     date: "2026-11-18",
     notes: [
