@@ -13,7 +13,14 @@
 //   ACCEPT=1 npm run test:print     # write the baseline
 //   KEEP=out npm run test:print     # also keep each PDF in the folder `out`
 import { type ChildProcess, spawn } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import { type Server, createServer } from "node:http";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
@@ -28,6 +35,8 @@ const WebSocket = require("ws");
 const here = fileURLToPath(new URL(".", import.meta.url));
 const root = join(here, "..", "..");
 const BASELINE = join(here, "pages.baseline.json");
+/** The footer of every page, as `pagesText` writes it (the test runs in English). */
+const FOOTER = "heroquill.app";
 
 // ---- A small static server for dist/ ----
 
@@ -39,6 +48,7 @@ const TYPES: Record<string, string> = {
   ".svg": "image/svg+xml",
   ".png": "image/png",
   ".woff2": "font/woff2",
+  ".woff": "font/woff",
   ".webmanifest": "application/manifest+json",
 };
 
@@ -216,6 +226,23 @@ async function main() {
   await send("Page.enable");
   await send("Runtime.enable");
 
+  /** Presses "Download a fillable PDF" and waits for the file. */
+  const downloadPdf = async (key: string): Promise<Buffer | undefined> => {
+    const dir = mkdtempSync(join(tmpdir(), "hq-pdf-"));
+    await send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: dir });
+    await evaluate(`document.querySelectorAll(".print-actions button")[1]?.click()`);
+    for (let i = 0; i < 120; i++) {
+      await sleep(250);
+      const done = readdirSync(dir).find((f) => f.endsWith(".pdf"));
+      if (done) {
+        const data = readFileSync(join(dir, done));
+        if (data.length > 0) return data;
+      }
+    }
+    if (process.env.VERBOSE) console.log(`  ${key}: no download (${errors.splice(0).join(" / ")})`);
+    return undefined;
+  };
+
   // A problem is an id (stable: who and what) and a text (with the numbers).
   const problems: { id: string; text: string }[] = [];
   const problem = (id: string, text = id) => problems.push({ id, text });
@@ -339,6 +366,33 @@ async function main() {
           `${key}: cut: ${b.label}`,
           `${key}: cut across pages ${from[0]} and ${to[to.length - 1]}: ${b.label}`,
         );
+    }
+    // Every sheet is one page of paper, with its footer.
+    pages.forEach((page, i) => {
+      if (!page.includes(FOOTER)) problem(`${key}: page ${i + 1} has no footer`);
+    });
+
+    // The fillable PDF of the same pages ("Download a fillable PDF"): as many pages as the printed one,
+    // each with its footer, and fields to fill.
+    const fillable = await downloadPdf(key);
+    if (!fillable) problem(`${key}: no fillable PDF`);
+    else {
+      if (keep)
+        writeFileSync(join(keep, `${key.replace(/[^\w.-]+/g, "_")}.fillable.pdf`), fillable);
+      const fillablePages = await pagesText(new Uint8Array(fillable));
+      if (fillablePages.length !== pages.length)
+        problem(
+          `${key}: fillable pages`,
+          `${key}: the fillable PDF has ${fillablePages.length} pages, the printed one ${pages.length}`,
+        );
+      fillablePages.forEach((page, i) => {
+        if (!page.includes(FOOTER))
+          problem(`${key}: page ${i + 1} of the fillable PDF has no footer`);
+      });
+      const doc = await pdfjs.getDocument({ data: new Uint8Array(fillable), verbosity: 0 }).promise;
+      const fields = Object.keys((await doc.getFieldObjects()) ?? {}).length;
+      if (fields < 100)
+        problem(`${key}: fillable fields`, `${key}: only ${fields} fields in the fillable PDF`);
     }
     console.log(`${pages.length} pages, ${found.sections} sections  ${key}`);
   }

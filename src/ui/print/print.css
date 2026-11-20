@@ -18,6 +18,10 @@
   /* Printable height: A4 minus the 12 mm margins is 273 mm; 2 mm less, so a page that rounds up
      a little (as the phone print dialogs do) never spills a sliver onto the next sheet. */
   --p-page-h: 271mm;
+  /* The footer of every page and the room above it; what is left is the body of a sheet. */
+  --p-foot-h: 3.2mm;
+  --p-foot-gap: 2.5mm;
+  --p-body-h: calc(var(--p-page-h) - var(--p-foot-h) - var(--p-foot-gap));
   --p-front-cols: 0.95fr 1.1fr 0.95fr; /* header and columns share these */
   --p-story-cols: 0.9fr 1fr 1fr;
 }
@@ -184,6 +188,89 @@
 
 .p-page:last-child {
   break-after: auto;
+}
+
+/* One sheet of paper (PageFoot.tsx): a fixed height, the body, and the footer at the bottom. */
+.p-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-foot-gap);
+  height: var(--p-page-h);
+  overflow: hidden;
+  break-inside: avoid;
+}
+
+.p-sheet-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.p-foot {
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  gap: 4mm;
+  align-items: end;
+  height: var(--p-foot-h);
+  padding-top: 0.6mm;
+  border-top: 0.2mm solid var(--p-line);
+  color: var(--p-muted);
+  font-size: 5.2pt;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.p-foot > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p-foot-app {
+  flex: none;
+  font-family: var(--p-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* A long text in columns, laid out on its pages by FlowPages.tsx. */
+.p-flow-cols {
+  display: grid;
+  grid-template-columns: repeat(var(--flow-cols, 2), minmax(0, 1fr));
+  gap: 0 6mm;
+  align-items: start;
+  min-height: 0;
+}
+
+.p-flow-item {
+  display: flow-root;
+}
+
+/* Out of sight, where the blocks are measured before they are put on pages. */
+.paper {
+  position: relative;
+}
+
+.p-measure {
+  position: absolute;
+  top: 0;
+  right: 12mm;
+  left: 12mm;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.p-measure-body {
+  position: absolute;
+  height: var(--p-body-h);
+}
+
+.p-measure-head {
+  display: flow-root;
 }
 
 .p-muted {
@@ -417,10 +504,15 @@
 
 .p-front {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 3mm;
   height: var(--p-page-h);
   break-inside: avoid;
+}
+
+.p-front > .p-foot,
+.p-story > .p-foot {
+  margin-top: calc(var(--p-foot-gap) - 3mm);
 }
 
 .p-head {
@@ -867,9 +959,10 @@
 
 .p-story {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1.2fr) auto;
   gap: 3mm;
-  min-height: var(--p-page-h);
+  height: var(--p-page-h);
+  break-inside: avoid;
 }
 
 .p-story-top {
@@ -1003,31 +1096,33 @@
   text-transform: uppercase;
 }
 
-.p-flow {
-  columns: 2;
-  column-gap: 6mm;
-  padding-top: 3mm;
-}
-
 .p-source {
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
 }
 
-.p-flow article {
-  break-inside: avoid;
+.p-flow-cols article {
   margin-bottom: 3mm;
 }
 
-.p-flow h3,
+/* A piece of a feature cut by paragraph runs on with the next one. */
+.p-flow-cols article.p-part {
+  margin-bottom: 0;
+}
+
+.p-flow-cols article h3,
 .p-spell h3 {
   font-size: 9pt;
 }
 
-.p-flow p,
+.p-flow-cols article p,
 .p-spell p {
   margin: 0.6mm 0;
+}
+
+.p-sheet-body > .p-more-grid {
+  margin-bottom: 3mm;
 }
 
 .p-casting {
@@ -1042,14 +1137,8 @@
   grid-template-columns: 1fr;
 }
 
-.p-level-group {
-  margin-bottom: 3mm;
-}
-
-/* The title of a level stays with the first spell under it, never alone at the foot of a page. */
+/* The title of a level stays with the first spell under it (FlowPages keeps them together). */
 .p-level-title {
-  break-after: avoid;
-  break-inside: avoid;
   margin: 2mm 0 1.5mm;
   padding: 0.6mm 2mm;
   background: var(--p-tint);
@@ -1060,30 +1149,53 @@
   text-transform: uppercase;
 }
 
-.p-spell-columns {
-  columns: 2;
-  column-gap: 6mm;
-}
-
 .p-spell {
-  break-inside: avoid;
   margin-bottom: 3mm;
   padding-bottom: 2mm;
   border-bottom: 0.2mm solid var(--p-line);
   font-size: 8.5pt;
 }
 
+/* A piece of a spell cut by paragraph runs on with the next one. */
+.p-spell.p-part {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .p-spell-meta {
   color: var(--p-muted);
 }
 
-.p-spell-table {
-  width: 100%;
-  border-collapse: collapse;
+/* The compact table: a row of cells in the same columns, so that it can go on as many pages as it needs. */
+.p-spell-row {
+  display: grid;
+  grid-template-columns: 9mm 1.7fr 7mm 1fr 1fr 1fr 1.1fr 0.8fr;
+  gap: 0 1.5mm;
+  align-items: center;
+  padding: 1.1mm 1mm;
+  border-bottom: 0.2mm solid var(--p-line);
   font-size: 8pt;
 }
 
-.p-spell-table th,
+.p-spell-row > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.p-spell-row > span:first-child,
+.p-spell-row > span:nth-child(3) {
+  text-align: center;
+}
+
+.p-spell-row.head {
+  padding: 0.6mm 1mm;
+  border-bottom-width: 0.3mm;
+  color: var(--p-muted);
+  font-size: 6.5pt;
+  text-transform: uppercase;
+}
+
 .p-slot-table th {
   padding: 0.6mm 1.5mm;
   border-bottom: 0.3mm solid var(--p-line);
@@ -1093,7 +1205,6 @@
   text-transform: uppercase;
 }
 
-.p-spell-table td,
 .p-slot-table td {
   padding: 1.2mm 1.5mm;
   border-bottom: 0.2mm solid var(--p-line);
@@ -1104,16 +1215,25 @@
   border-collapse: collapse;
 }
 
-.p-spell-names {
-  columns: 3;
-  column-gap: 5mm;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.p-slot-pips {
+  display: flex;
+  gap: 1.6mm;
+  align-items: center;
 }
 
-.p-spell-names li {
-  break-inside: avoid;
+/* The spells a class can pick from, three columns to a page. */
+.p-names-level {
+  margin: 2mm 0 1mm;
+  color: var(--p-accent) !important;
+  font-size: 8pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.p-spell-name {
+  display: flex;
+  gap: 1.5mm;
+  align-items: center;
   padding: 0.4mm 0;
 }
 
@@ -1131,11 +1251,11 @@
 }
 
 .p-cards.spells {
-  grid-auto-rows: calc((var(--p-page-h) - 3 * var(--gap)) / 4);
+  grid-auto-rows: calc((var(--p-body-h) - 3 * var(--gap)) / 4);
 }
 
 .p-cards.features {
-  grid-auto-rows: calc((var(--p-page-h) - 4 * var(--gap)) / 5);
+  grid-auto-rows: calc((var(--p-body-h) - 4 * var(--gap)) / 5);
 }
 
 .p-card {
@@ -1275,7 +1395,8 @@
     padding: 0 !important;
   }
 
-  .no-print {
+  .no-print,
+  .p-measure {
     display: none !important;
   }
 
@@ -1401,4 +1522,144 @@
 .p-front[data-spill="3"] [data-panel="uses"],
 .p-front[data-spill="3"] [data-panel="traits"] {
   display: none;
+}
+
+/* ---- The blank sheet (BlankPages.tsx and the blank parts of the front) ---- */
+
+.p-blank-two {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  min-height: 0;
+}
+
+.p-blank-features {
+  flex-grow: 2;
+}
+
+.p-use-write {
+  flex: 1 1 auto;
+}
+
+.p-slot-write {
+  flex: 1 1 auto;
+  min-height: 4mm;
+  margin: 0;
+}
+
+.p-blank-casting {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  margin-bottom: 3mm;
+}
+
+.p-spell-list-cols {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3mm;
+  min-height: 0;
+}
+
+.p-spell-list-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5mm;
+  min-height: 0;
+}
+
+.p-spell-level {
+  padding: 1.8mm 2.6mm 2.2mm;
+}
+
+.p-spell-level-head {
+  display: flex;
+  gap: 1.5mm;
+  align-items: center;
+  margin-bottom: 0.6mm;
+  padding-bottom: 1mm;
+  border-bottom: 0.3mm solid var(--p-accent);
+}
+
+.p-spell-level-head .p-level {
+  width: 6mm;
+  height: 6mm;
+  font-size: 8pt;
+}
+
+.p-spell-level-head b {
+  flex: 1;
+  color: var(--p-accent);
+  font-family: var(--p-display);
+  font-size: 7pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.p-spell-level-slots {
+  display: grid;
+  grid-template-columns: 7mm 7mm;
+  gap: 0 1.5mm;
+  text-align: center;
+}
+
+.p-spell-level-slots .p-write {
+  grid-row: 1;
+  min-height: 3.6mm;
+  margin: 0;
+}
+
+.p-spell-level-slots small {
+  grid-row: 2;
+  color: var(--p-muted);
+  font-size: 4.6pt;
+  text-transform: uppercase;
+}
+
+.p-spell-line {
+  display: flex;
+  gap: 1.5mm;
+  align-items: end;
+}
+
+.p-spell-line .p-pip {
+  align-self: center;
+  margin-top: 1mm;
+}
+
+.p-spell-line .p-write {
+  flex: 1 1 auto;
+  min-height: 5.1mm;
+  margin: 0;
+  border-bottom-style: solid;
+}
+
+.p-spell-boxes {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 3mm;
+  min-height: 0;
+}
+
+.p-spell-box-head {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 1.5mm;
+}
+
+.p-spell-box-head .wide {
+  grid-column: span 2;
+}
+
+.print-group-hint {
+  margin: 0.4rem 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.print-group input[type="radio"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--accent);
 }

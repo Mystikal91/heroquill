@@ -37,7 +37,9 @@ export default defineConfig(() => {
           ],
         },
         workbox: {
-          globPatterns: ["**/*.{js,css,html,svg,json,woff2}"],
+          // The WOFF files are the fonts the fillable PDF embeds (a PDF cannot hold WOFF2), so that
+          // it can be made offline too.
+          globPatterns: ["**/*.{js,css,html,svg,json,woff2,woff}"],
         },
       }),
     ],

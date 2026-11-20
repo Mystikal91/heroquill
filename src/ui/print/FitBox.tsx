@@ -60,5 +60,6 @@ export function FitBox({ text }: { text: string }) {
     return () => observer.disconnect();
   }, [text, paper]);
 
-  return <div class="p-fit" ref={box} />;
+  // The whole text, for the field of the PDF, even when the frame shows only its start.
+  return <div class="p-fit" ref={box} data-value={text} />;
 }

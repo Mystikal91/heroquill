@@ -1,15 +1,20 @@
+import type { VNode } from "preact";
 import { printSettings } from "../../app/printSettings";
-import { character, content, printSheet } from "../../app/store";
+import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
 import type { DerivedSheet, SpellcastingResult } from "../../engine/derive";
 import { signed, ui } from "../../i18n/ui";
 import { type SpellRow, collectSpellRows } from "../spellRows";
 import { spellFacts } from "../spells/spellFacts";
+import { BlankSpells } from "./BlankPages";
+import { type FlowBlock, FlowPages } from "./FlowPages";
+import { blank, printedCharacter, printedSheet } from "./printSource";
 
 const levelTitle = (level: number) =>
   level === 0 ? ui("spells.cantrips") : ui("spells.level", { level });
 
-function SpellBlock({ c, ruleset, row }: { c: Content; ruleset: string; row: SpellRow }) {
+/** A spell as a block of the flow: whole, and cut by paragraph when it is taller than a column. */
+function spellBlock(c: Content, ruleset: string, row: SpellRow): FlowBlock {
   const data = c.index.get(row.id)?.data ?? {};
   const school = c.name(`${ruleset}:school/${data.school}`);
   const components = (data.components as string[] | undefined)?.join(", ");
@@ -27,8 +32,8 @@ function SpellBlock({ c, ruleset, row }: { c: Content; ruleset: string; row: Spe
     row.alwaysPrepared ? ui("spells.alwaysPrepared") : undefined,
   ].filter(Boolean);
 
-  return (
-    <article class="p-spell">
+  const head = (
+    <>
       <h3>{c.name(row.id)}</h3>
       <p class="p-muted">
         {row.level === 0
@@ -54,56 +59,89 @@ function SpellBlock({ c, ruleset, row }: { c: Content; ruleset: string; row: Spe
           ))}
         </p>
       )}
-      {c
-        .text(row.id, "desc")
-        ?.split("\n\n")
-        .map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      {c.text(row.id, "higherLevel") && (
-        <p>
-          <strong>{ui("spells.higherLevel")}.</strong> {c.text(row.id, "higherLevel")}
-        </p>
-      )}
-    </article>
+    </>
+  );
+  const higher = c.text(row.id, "higherLevel");
+  const paragraphs: VNode[] = [
+    ...(c.text(row.id, "desc")?.split("\n\n") ?? []).map((p, i) => (
+      <p key={`${i}-${p.slice(0, 12)}`}>{p}</p>
+    )),
+    ...(higher
+      ? [
+          <p key="higher">
+            <strong>{ui("spells.higherLevel")}.</strong> {higher}
+          </p>,
+        ]
+      : []),
+  ];
+  return {
+    key: row.id,
+    node: (
+      <article class="p-spell">
+        {head}
+        {paragraphs}
+      </article>
+    ),
+    parts: [
+      { key: `${row.id}#head`, node: <article class="p-spell p-part">{head}</article> },
+      ...paragraphs.map((p, i) => ({
+        key: `${row.id}#${i + 1}`,
+        node: <article class={`p-spell${i < paragraphs.length - 1 ? " p-part" : ""}`}>{p}</article>,
+      })),
+    ],
+  };
+}
+
+/** The columns of the compact table, shared by its head and its rows. */
+function CompactRow({ cells, head = false }: { cells: (string | VNode)[]; head?: boolean }) {
+  return (
+    <div class={`p-spell-row${head ? " head" : ""}`}>
+      {cells.map((cell, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: the cells are the fixed columns of the table
+        <span key={i}>{cell}</span>
+      ))}
+    </div>
   );
 }
 
-function CompactTable({ c, ruleset, rows }: { c: Content; ruleset: string; rows: SpellRow[] }) {
-  return (
-    <table class="p-spell-table">
-      <thead>
-        <tr>
-          <th>{ui("print.prepared")}</th>
-          <th>{ui("print.name")}</th>
-          <th>{ui("print.level")}</th>
-          <th>{ui("print.school")}</th>
-          <th>{ui("print.time")}</th>
-          <th>{ui("print.range")}</th>
-          <th>{ui("print.duration")}</th>
-          <th>{ui("print.components")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => {
-          const data = c.index.get(row.id)?.data ?? {};
-          return (
-            <tr key={row.id}>
-              <td class="p-center">{row.alwaysPrepared ? "●" : "○"}</td>
-              <td>{c.name(row.id)}</td>
-              <td class="p-center">{row.level === 0 ? "0" : row.level}</td>
-              <td>{c.name(`${ruleset}:school/${data.school}`)}</td>
-              <td>{c.text(row.id, "castingTime")}</td>
-              <td>{c.text(row.id, "range")}</td>
-              <td>{c.text(row.id, "duration")}</td>
-              <td>{(data.components as string[] | undefined)?.join(", ")}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
+function compactBlocks(c: Content, ruleset: string, rows: SpellRow[]): FlowBlock[] {
+  return rows.map((row) => {
+    const data = c.index.get(row.id)?.data ?? {};
+    return {
+      key: row.id,
+      node: (
+        <CompactRow
+          cells={[
+            <span class={`p-pip${row.alwaysPrepared ? " on" : ""}`} key="pip" />,
+            c.name(row.id),
+            row.level === 0 ? "0" : String(row.level),
+            c.name(`${ruleset}:school/${data.school}`),
+            c.text(row.id, "castingTime") ?? "",
+            c.text(row.id, "range") ?? "",
+            c.text(row.id, "duration") ?? "",
+            (data.components as string[] | undefined)?.join(", ") ?? "",
+          ]}
+        />
+      ),
+    };
+  });
 }
+
+const compactHead = () => (
+  <CompactRow
+    head
+    cells={[
+      ui("print.prepared"),
+      ui("print.name"),
+      ui("print.level"),
+      ui("print.school"),
+      ui("print.time"),
+      ui("print.range"),
+      ui("print.duration"),
+      ui("print.components"),
+    ]}
+  />
+);
 
 /** Slots as a row of boxes per spell level, to tick off during play. */
 function SlotBoxes({ slots }: { slots: number[] }) {
@@ -123,7 +161,11 @@ function SlotBoxes({ slots }: { slots: number[] }) {
           <tr key={level}>
             <td class="p-center">{level}</td>
             <td class="p-center">{n}</td>
-            <td>{"□ ".repeat(n).trim()}</td>
+            <td class="p-slot-pips">
+              {Array.from({ length: n }, (_, i) => (
+                <span class="p-pip" key={`used-${level}-${i + 1}`} />
+              ))}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -131,22 +173,7 @@ function SlotBoxes({ slots }: { slots: number[] }) {
   );
 }
 
-/** Every spell the class could pick from, with the character's choices marked. */
-function AvailableList({ c, s }: { c: Content; s: DerivedSheet }) {
-  return (
-    <>
-      {s.spellcasters.map((caster) => (
-        <CasterAvailable
-          key={caster.classId}
-          c={c}
-          caster={caster}
-          heading={s.spellcasters.length > 1 ? c.name(caster.classId) : undefined}
-        />
-      ))}
-    </>
-  );
-}
-
+/** Every spell the class could pick from, with the character's choices marked, three columns to a page. */
 function CasterAvailable({
   c,
   caster,
@@ -154,7 +181,7 @@ function CasterAvailable({
 }: {
   c: Content;
   caster: SpellcastingResult;
-  heading?: string;
+  heading?: string | undefined;
 }) {
   const lists = caster.lists;
   const pools = [
@@ -166,36 +193,42 @@ function CasterAvailable({
     ...(lists.known?.chosen ?? lists.prepared?.chosen ?? []),
   ]);
   const prepared = new Set(lists.preparation === "spellbook" ? (lists.prepared?.chosen ?? []) : []);
-  const levels = [...new Set(pools.map((id) => (c.index.get(id)?.data.level as number) ?? 0))].sort(
-    (a, b) => a - b,
-  );
-
+  const levelOf = (id: string) => (c.index.get(id)?.data.level as number) ?? 0;
+  const levels = [...new Set(pools.map(levelOf))].sort((a, b) => a - b);
+  const blocks: FlowBlock[] = levels.flatMap((level) => [
+    {
+      key: `level-${level}`,
+      keep: true,
+      node: <h3 class="p-names-level">{levelTitle(level)}</h3>,
+    },
+    ...pools
+      .filter((id) => levelOf(id) === level)
+      .map((id) => ({
+        key: id,
+        node: (
+          <div class={`p-spell-name${prepared.has(id) ? " p-prepared" : ""}`}>
+            <span class={`p-pip${marked.has(id) ? " on" : ""}`} />
+            {c.name(id)}
+          </div>
+        ),
+      })),
+  ]);
   return (
-    <section class="p-available">
-      <h2 class="p-title">{heading ?? ui("print.availableTitle")}</h2>
-      {levels.map((level) => (
-        <div key={level} class="p-level-group">
-          <h3>{levelTitle(level)}</h3>
-          <ul class="p-spell-names">
-            {pools
-              .filter((id) => ((c.index.get(id)?.data.level as number) ?? 0) === level)
-              .map((id) => (
-                <li key={id} class={prepared.has(id) ? "p-prepared" : ""}>
-                  {marked.has(id) ? "■" : "□"} {c.name(id)}
-                </li>
-              ))}
-          </ul>
-        </div>
-      ))}
-    </section>
+    <FlowPages
+      class="p-available"
+      columns={3}
+      head={<h2 class="p-title">{heading ?? ui("print.availableTitle")}</h2>}
+      blocks={blocks}
+    />
   );
 }
 
 export function SpellPages() {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   const settings = printSettings.value;
+  if (blank.value) return settings.blankSpells ? <BlankSpells /> : null;
   if (!c || !s) return null;
   const rows = collectSpellRows(c, s);
   const caster = s.spellcasting;
@@ -204,68 +237,86 @@ export function SpellPages() {
   if (!showChosen && !showAvailable) return null;
   const levels = [...new Set(rows.map((r) => r.level))];
 
+  const head = (
+    <>
+      <h2 class="p-title">{ui("print.page.spells")}</h2>
+      {caster && (
+        <div class="p-casting">
+          {s.spellcasters.map((each) => (
+            <dl class="p-fields" key={each.classId}>
+              {s.spellcasters.length > 1 && (
+                <div>
+                  <dd>{c.name(each.classId)}</dd>
+                  <dt>{ui("form.class")}</dt>
+                </div>
+              )}
+              <div>
+                <dd>{c.name(`${ch.ruleset}:ability/${each.ability}`)}</dd>
+                <dt>{ui("sheet.spellAbility")}</dt>
+              </div>
+              <div>
+                <dd>{each.saveDc}</dd>
+                <dt>{ui("sheet.spellSaveDc")}</dt>
+              </div>
+              <div>
+                <dd>{signed(each.attackBonus)}</dd>
+                <dt>{ui("sheet.spellAttack")}</dt>
+              </div>
+            </dl>
+          ))}
+          <SlotBoxes slots={s.spellSlots} />
+          {s.pactSlots && (
+            <p class="p-muted">
+              {ui("sheet.pact", { count: s.pactSlots.count, level: s.pactSlots.level })}
+            </p>
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  const compact = settings.spellMode === "compact";
+  const blocks: FlowBlock[] = compact
+    ? compactBlocks(c, ch.ruleset, rows)
+    : levels.flatMap((level) => [
+        {
+          key: `level-${level}`,
+          keep: true,
+          node: <h3 class="p-level-title">{levelTitle(level)}</h3>,
+        },
+        ...rows.filter((r) => r.level === level).map((row) => spellBlock(c, ch.ruleset, row)),
+      ]);
+
   return (
     <>
-      {showChosen && (
-        <section class="p-page p-spells">
-          <h2 class="p-title">{ui("print.page.spells")}</h2>
-          {caster && (
-            <div class="p-casting">
-              {s.spellcasters.map((each) => (
-                <dl class="p-fields" key={each.classId}>
-                  {s.spellcasters.length > 1 && (
-                    <div>
-                      <dd>{c.name(each.classId)}</dd>
-                      <dt>{ui("form.class")}</dt>
-                    </div>
-                  )}
-                  <div>
-                    <dd>{c.name(`${ch.ruleset}:ability/${each.ability}`)}</dd>
-                    <dt>{ui("sheet.spellAbility")}</dt>
-                  </div>
-                  <div>
-                    <dd>{each.saveDc}</dd>
-                    <dt>{ui("sheet.spellSaveDc")}</dt>
-                  </div>
-                  <div>
-                    <dd>{signed(each.attackBonus)}</dd>
-                    <dt>{ui("sheet.spellAttack")}</dt>
-                  </div>
-                </dl>
-              ))}
-              <SlotBoxes slots={s.spellSlots} />
-              {s.pactSlots && (
-                <p class="p-muted">
-                  {ui("sheet.pact", { count: s.pactSlots.count, level: s.pactSlots.level })}
-                </p>
-              )}
-            </div>
-          )}
+      {showChosen &&
+        (compact ? (
+          <FlowPages
+            class="p-spells"
+            columns={1}
+            head={head}
+            columnHead={compactHead()}
+            blocks={blocks}
+          />
+        ) : (
+          <FlowPages class="p-spells" head={head} blocks={blocks} />
+        ))}
+      {showAvailable && <AvailableList c={c} s={s} />}
+    </>
+  );
+}
 
-          {showChosen && settings.spellMode === "compact" && (
-            <CompactTable c={c} ruleset={ch.ruleset} rows={rows} />
-          )}
-          {showChosen &&
-            settings.spellMode === "details" &&
-            levels.map((level) => (
-              <div key={level} class="p-level-group">
-                <h3 class="p-level-title">{levelTitle(level)}</h3>
-                <div class="p-spell-columns">
-                  {rows
-                    .filter((r) => r.level === level)
-                    .map((row) => (
-                      <SpellBlock key={row.id} c={c} ruleset={ch.ruleset} row={row} />
-                    ))}
-                </div>
-              </div>
-            ))}
-        </section>
-      )}
-      {showAvailable && (
-        <section class="p-page">
-          <AvailableList c={c} s={s} />
-        </section>
-      )}
+function AvailableList({ c, s }: { c: Content; s: DerivedSheet }) {
+  return (
+    <>
+      {s.spellcasters.map((caster) => (
+        <CasterAvailable
+          key={caster.classId}
+          c={c}
+          caster={caster}
+          heading={s.spellcasters.length > 1 ? c.name(caster.classId) : undefined}
+        />
+      ))}
     </>
   );
 }

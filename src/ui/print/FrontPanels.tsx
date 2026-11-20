@@ -1,9 +1,10 @@
-import { character, content, printSheet } from "../../app/store";
+import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
 import { classData, subclassData } from "../../data/progression";
 import type { ClassLevel } from "../../engine/character";
 import { ui } from "../../i18n/ui";
 import { recoveryLabel, resourceLabel } from "../play/ResourceControl";
+import { printedCharacter, printedSheet } from "./printSource";
 
 /** Up to this many uses are boxes to tick; more (ki points, hit points to heal) is a number to write. */
 const MAX_BOXES = 8;
@@ -29,7 +30,7 @@ function featureRows(c: Content, cl: ClassLevel): [number, string[]][] {
  */
 export function TraitsPanels({ featsFirst = false }: { featsFirst?: boolean }) {
   const c = content.value;
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!c || !s) return null;
   const name = c.name;
   const feats = s.feats.filter((id) => !s.hiddenFeatures.includes(id));
@@ -69,7 +70,7 @@ export function TraitsPanels({ featsFirst = false }: { featsFirst?: boolean }) {
 
 export function ClassFeaturesPanels() {
   const c = content.value;
-  const ch = character.value;
+  const ch = printedCharacter.value;
   if (!c) return null;
   const name = c.name;
   return (
@@ -90,7 +91,7 @@ export function ClassFeaturesPanels() {
 }
 
 export function UsesPanel() {
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!s) return null;
   const uses = s.resources.filter((r) => !r.unlimited);
   if (uses.length === 0) return null;

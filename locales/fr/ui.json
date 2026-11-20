@@ -2469,5 +2469,16 @@
   "studio.need.ability": "Une caractéristique",
   "about.home.version.title": "Cette version",
   "about.home.version.body": "Version {version}. Si quelque chose semble faux, qu'un chiffre ne colle pas ou qu'un texte manque, dis-le-nous.",
-  "about.home.version.report": "Signaler un problème sur GitHub"
+  "about.home.version.report": "Signaler un problème sur GitHub",
+  "print.credit": "Contient des éléments du System Reference Document {version} de Wizards of the Coast LLC, sous licence CC-BY-4.0.",
+  "print.madeWith": "Créée avec Heroquill · heroquill.app",
+  "print.group.what": "Quoi imprimer",
+  "print.thisCharacter": "Ce personnage",
+  "print.blankSheet": "Une fiche vierge",
+  "print.blankHint": "Toutes les pages, sans rien d'écrit, pour l'édition de ce personnage. Imprimez-la pour la remplir à la main, ou téléchargez le PDF et remplissez-le sur l'ordinateur.",
+  "print.blankSpells": "Pages des sorts",
+  "print.pdf": "Télécharger un PDF modifiable",
+  "print.pdfBusy": "Création du PDF…",
+  "print.pdfFailed": "Le PDF n'a pas pu être créé. Vous pouvez toujours imprimer ou enregistrer en PDF depuis le navigateur.",
+  "print.pdfHint": "Le PDF téléchargé a des champs modifiables dans n'importe quel lecteur PDF (Acrobat, votre navigateur) : les nombres, les noms, les cases à cocher et les notes."
 }

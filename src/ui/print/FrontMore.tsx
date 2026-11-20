@@ -1,6 +1,7 @@
 import { printSettings } from "../../app/printSettings";
 import { ui } from "../../i18n/ui";
 import { ClassFeaturesPanels, TraitsPanels, UsesPanel } from "./FrontPanels";
+import { Sheet } from "./PageFoot";
 import { frontSpill } from "./frontSpill";
 
 /** The panels that did not fit on the front page, in the order they left it. Nothing when it fits. */
@@ -23,9 +24,9 @@ export function SpilledPanels() {
 export function FrontMore() {
   if (frontSpill.value === 0 || printSettings.value.includeFeatureText) return null;
   return (
-    <section class="p-page p-more">
+    <Sheet class="p-more">
       <h2 class="p-title">{ui("print.more")}</h2>
       <SpilledPanels />
-    </section>
+    </Sheet>
   );
 }

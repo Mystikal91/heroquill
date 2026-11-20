@@ -2469,5 +2469,16 @@
   "studio.need.ability": "Einen Attributswert",
   "about.home.version.title": "Diese Version",
   "about.home.version.body": "Version {version}. Wenn etwas falsch aussieht, eine Zahl nicht stimmt oder ein Text fehlt, sag uns Bescheid.",
-  "about.home.version.report": "Problem auf GitHub melden"
+  "about.home.version.report": "Problem auf GitHub melden",
+  "print.credit": "Enthält Material aus dem System Reference Document {version} von Wizards of the Coast LLC, lizenziert unter CC-BY-4.0.",
+  "print.madeWith": "Erstellt mit Heroquill · heroquill.app",
+  "print.group.what": "Was gedruckt wird",
+  "print.thisCharacter": "Dieser Charakter",
+  "print.blankSheet": "Ein leerer Bogen",
+  "print.blankHint": "Alle Seiten ohne Einträge, für die Edition dieses Charakters. Drucke ihn aus, um ihn von Hand auszufüllen, oder lade das PDF herunter und fülle es am Computer aus.",
+  "print.blankSpells": "Zauberseiten",
+  "print.pdf": "Ausfüllbares PDF herunterladen",
+  "print.pdfBusy": "PDF wird erstellt…",
+  "print.pdfFailed": "Das PDF konnte nicht erstellt werden. Du kannst trotzdem aus dem Browser drucken oder als PDF speichern.",
+  "print.pdfHint": "Das heruntergeladene PDF hat Felder, die du in jedem PDF-Leser (Acrobat, dein Browser) ändern kannst: die Zahlen, die Namen, die Kästchen zum Ankreuzen und die Notizen."
 }

@@ -1,9 +1,10 @@
-import { printSheet } from "../../app/store";
 import { ClassFeaturesPanels, TraitsPanels, UsesPanel } from "./FrontPanels";
+import { PageFoot } from "./PageFoot";
 import {
   AbilityBlocks,
   AttacksPanel,
   Badges,
+  BlankFeaturesPanels,
   CombatStats,
   CustomAndNotes,
   FrontHead,
@@ -14,6 +15,8 @@ import {
   spellListOnFront,
   useFitFront,
 } from "./frontParts";
+import { blank } from "./printSource";
+import { printedSheet } from "./printSource";
 
 /**
  * The front page of a character of the 2014 rules: the abilities down the left, what happens in a
@@ -22,11 +25,11 @@ import {
  */
 export function FrontPage() {
   const page = useFitFront();
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!s) return null;
   // With nothing to list, the weapons take the room that is left; a caster's numbers take it when the
   // spells are on their pages.
-  const caster = Boolean(s.spellcasting);
+  const caster = Boolean(s.spellcasting) || blank.value;
 
   return (
     <section class="p-page p-front" data-edition="2014" ref={page}>
@@ -51,9 +54,11 @@ export function FrontPage() {
           <TraitsPanels />
           <ClassFeaturesPanels />
           <UsesPanel />
+          <BlankFeaturesPanels />
           <CustomAndNotes />
         </div>
       </div>
+      <PageFoot />
     </section>
   );
 }

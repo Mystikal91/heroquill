@@ -2,7 +2,7 @@
   "pages": {
     "2014 wizard 20 with everything [all]": 14,
     "2014 cleric 20 with everything [all]": 16,
-    "2014 bard 20 with everything [all]": 15,
+    "2014 bard 20 with everything [all]": 14,
     "2014 fighter 20 with everything [all]": 5,
     "2024 wizard 20 with everything [all]": 15,
     "2014 barbarian 1 dwarf": 3,
@@ -18,7 +18,7 @@
     "2014 druid 20 dwarf": 8,
     "2014 fighter 1 dragonborn": 3,
     "2014 fighter 9 half-orc": 3,
-    "2014 fighter 20 elf": 3,
+    "2014 fighter 20 elf": 4,
     "2014 monk 1 gnome": 3,
     "2014 monk 9 tiefling": 5,
     "2014 monk 20 halfling": 4,
@@ -38,7 +38,7 @@
     "2014 warlock 9 dragonborn": 6,
     "2014 warlock 20 half-orc": 10,
     "2014 wizard 1 halfling": 4,
-    "2014 wizard 9 gnome": 6,
+    "2014 wizard 9 gnome": 5,
     "2014 wizard 20 tiefling": 8,
     "2024 fighter 1": 3,
     "2024 fighter 20": 5,
@@ -47,9 +47,9 @@
     "2024 cleric 1": 4,
     "2024 cleric 20": 8,
     "2024 bard 1": 4,
-    "2024 bard 20": 7,
+    "2024 bard 20": 8,
     "2024 druid 1": 4,
-    "2024 druid 20": 8,
+    "2024 druid 20": 9,
     "2014 bard 9 dragonborn": 6
   },
   "known": []

@@ -2469,5 +2469,16 @@
   "studio.need.ability": "Un punteggio di caratteristica",
   "about.home.version.title": "Questa versione",
   "about.home.version.body": "Versione {version}. Se qualcosa sembra sbagliato, un numero non torna o manca un testo, faccelo sapere.",
-  "about.home.version.report": "Segnala un problema su GitHub"
+  "about.home.version.report": "Segnala un problema su GitHub",
+  "print.credit": "Contiene materiale del System Reference Document {version} di Wizards of the Coast LLC, con licenza CC-BY-4.0.",
+  "print.madeWith": "Creata con Heroquill · heroquill.app",
+  "print.group.what": "Cosa stampare",
+  "print.thisCharacter": "Questo personaggio",
+  "print.blankSheet": "Una scheda in bianco",
+  "print.blankHint": "Tutte le pagine senza nulla di scritto, per l'edizione di questo personaggio. Stampala per compilarla a mano, o scarica il PDF e compilalo al computer.",
+  "print.blankSpells": "Pagine degli incantesimi",
+  "print.pdf": "Scarica un PDF compilabile",
+  "print.pdfBusy": "Preparo il PDF…",
+  "print.pdfFailed": "Non è stato possibile creare il PDF. Puoi sempre stampare o salvare in PDF dal browser.",
+  "print.pdfHint": "Il PDF scaricato ha campi che puoi modificare in qualsiasi lettore PDF (Acrobat, il browser): i numeri, i nomi, le caselle da spuntare e le note."
 }

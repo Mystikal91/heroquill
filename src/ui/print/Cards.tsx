@@ -1,9 +1,11 @@
-import { character, content, printSheet } from "../../app/store";
+import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
 import { classData, subclassData } from "../../data/progression";
 import { ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { FitText } from "./FitText";
+import { Sheet } from "./PageFoot";
+import { printedCharacter, printedSheet } from "./printSource";
 
 const SPELL_CARDS_PER_PAGE = 12;
 const FEATURE_CARDS_PER_PAGE = 15;
@@ -26,8 +28,8 @@ function Mark({ on, label }: { on: boolean; label: string }) {
 /** Spell cards, twelve to a page: the spell's numbers on top and its text below. */
 export function SpellCards() {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   if (!c || !s) return null;
   const rows = collectSpellRows(c, s);
   if (rows.length === 0) return null;
@@ -39,7 +41,7 @@ export function SpellCards() {
   return (
     <>
       {chunk(rows, SPELL_CARDS_PER_PAGE).map((page) => (
-        <section class="p-page" key={page[0]?.id}>
+        <Sheet key={page[0]?.id}>
           <div class="p-cards spells">
             {page.map((row) => {
               const data = c.index.get(row.id)?.data ?? {};
@@ -96,7 +98,7 @@ export function SpellCards() {
               );
             })}
           </div>
-        </section>
+        </Sheet>
       ))}
     </>
   );
@@ -109,8 +111,8 @@ interface FeatureCard {
   source: string;
 }
 
-function featureCards(c: Content, s: NonNullable<typeof printSheet.value>): FeatureCard[] {
-  const ch = character.value;
+function featureCards(c: Content, s: NonNullable<typeof printedSheet.value>): FeatureCard[] {
+  const ch = printedCharacter.value;
   const cards: FeatureCard[] = s.traits.map((id) => ({ id, source: ui("print.cardSpecies") }));
   for (const id of s.feats)
     if (!s.hiddenFeatures.includes(id)) cards.push({ id, source: ui("print.cardFeat") });
@@ -133,7 +135,7 @@ function featureCards(c: Content, s: NonNullable<typeof printSheet.value>): Feat
 /** Feature cards, fifteen to a page, for class features and species traits. */
 export function FeatureCards() {
   const c = content.value;
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!c || !s) return null;
   const cards = featureCards(c, s);
   if (cards.length === 0) return null;
@@ -141,7 +143,7 @@ export function FeatureCards() {
   return (
     <>
       {chunk(cards, FEATURE_CARDS_PER_PAGE).map((page) => (
-        <section class="p-page" key={page[0]?.id}>
+        <Sheet key={page[0]?.id}>
           <div class="p-cards features">
             {page.map((card) => (
               <article class="p-frame p-card" key={`${card.source}-${card.id}`}>
@@ -156,7 +158,7 @@ export function FeatureCards() {
               </article>
             ))}
           </div>
-        </section>
+        </Sheet>
       ))}
     </>
   );

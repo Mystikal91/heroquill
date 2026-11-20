@@ -41,6 +41,16 @@ describe("printsNothing", () => {
     expect(printsNothing({ ...none, featureCards: true }, false)).toBe(false);
   });
 
+  it("counts only the pages a blank sheet has", () => {
+    const blank = { ...none, blank: true, blankSpells: false };
+    expect(printsNothing({ ...blank, spellCards: true }, true)).toBe(true);
+    expect(printsNothing({ ...blank, blankSpells: true }, false)).toBe(false);
+  });
+
+  it("never remembers a blank sheet", () => {
+    expect(parsePrintSettings(JSON.stringify({ blank: true })).blank).toBe(false);
+  });
+
   it("ignores the available-spells option for characters who cannot cast", () => {
     expect(printsNothing({ ...none, includeAvailable: true }, false)).toBe(true);
     expect(printsNothing({ ...none, includeAvailable: true }, true)).toBe(false);

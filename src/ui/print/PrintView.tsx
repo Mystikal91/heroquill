@@ -6,7 +6,7 @@ import {
   updatePrintSettings,
 } from "../../app/printSettings";
 import { printsNothing } from "../../app/printSettings.logic";
-import { character, content, printSheet } from "../../app/store";
+import { content, printSheet } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { Cards } from "./CardsGroup";
@@ -14,8 +14,10 @@ import { FeatureText } from "./FeatureText";
 import { FrontMore } from "./FrontMore";
 import { FrontPage } from "./FrontPage";
 import { FrontPage2024 } from "./FrontPage2024";
+import { PdfButton } from "./PdfButton";
 import { SpellPages } from "./SpellPages";
 import { StoryPage } from "./StoryPage";
+import { printedCharacter } from "./printSource";
 
 const PAGE_SIZE: Record<Paper, string> = { a4: "A4", letter: "letter" };
 
@@ -57,7 +59,7 @@ export function PrintView() {
     { key: "includeSheet", label: "print.sheet" },
     { key: "includeStory", label: "print.story" },
     { key: "includeFeatureText", label: "print.featureText" },
-    { key: "featureCards", label: "print.featureCards" },
+    ...(settings.blank ? [] : [{ key: "featureCards", label: "print.featureCards" } as Toggle]),
   ];
   const spellToggles: Toggle[] = [
     { key: "includeAvailable", label: "print.available", disabled: !isCaster },
@@ -76,11 +78,39 @@ export function PrintView() {
             <button type="button" class="primary" onClick={() => window.print()} disabled={nothing}>
               {ui("print.print")}
             </button>
+            <PdfButton disabled={nothing} />
           </div>
         </div>
-        <p class="print-hint">{ui("print.hint")}</p>
+        <p class="print-hint">
+          {ui("print.hint")} {ui("print.pdfHint")}
+        </p>
 
         <div class="print-groups">
+          <fieldset class="print-group">
+            <legend>{ui("print.group.what")}</legend>
+            <div class="checks">
+              <label>
+                <input
+                  type="radio"
+                  name="print-what"
+                  checked={!settings.blank}
+                  onChange={() => updatePrintSettings({ blank: false })}
+                />
+                {ui("print.thisCharacter")}
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="print-what"
+                  checked={settings.blank}
+                  onChange={() => updatePrintSettings({ blank: true })}
+                />
+                {ui("print.blankSheet")}
+              </label>
+            </div>
+            {settings.blank && <p class="print-group-hint">{ui("print.blankHint")}</p>}
+          </fieldset>
+
           <fieldset class="print-group">
             <legend>{ui("print.group.paper")}</legend>
             <label class="field">
@@ -107,35 +137,47 @@ export function PrintView() {
             </div>
           </fieldset>
 
-          <fieldset class="print-group">
-            <legend>{ui("print.group.spells")}</legend>
-            <label class="field">
-              <span>{ui("print.spells")}</span>
-              <select
-                value={settings.spellMode}
-                onChange={(e) =>
-                  updatePrintSettings({ spellMode: e.currentTarget.value as SpellMode })
-                }
-              >
-                <option value="details">{ui("print.spellsDetails")}</option>
-                <option value="compact">{ui("print.spellsCompact")}</option>
-                <option value="none">{ui("print.spellsNone")}</option>
-              </select>
-            </label>
-            <div class="checks">
-              {spellToggles.map((t) => (
-                <Check key={t.key} toggle={t} settings={settings} />
-              ))}
-            </div>
-          </fieldset>
+          {settings.blank ? (
+            <fieldset class="print-group">
+              <legend>{ui("print.group.spells")}</legend>
+              <div class="checks">
+                <Check
+                  toggle={{ key: "blankSpells", label: "print.blankSpells" }}
+                  settings={settings}
+                />
+              </div>
+            </fieldset>
+          ) : (
+            <fieldset class="print-group">
+              <legend>{ui("print.group.spells")}</legend>
+              <label class="field">
+                <span>{ui("print.spells")}</span>
+                <select
+                  value={settings.spellMode}
+                  onChange={(e) =>
+                    updatePrintSettings({ spellMode: e.currentTarget.value as SpellMode })
+                  }
+                >
+                  <option value="details">{ui("print.spellsDetails")}</option>
+                  <option value="compact">{ui("print.spellsCompact")}</option>
+                  <option value="none">{ui("print.spellsNone")}</option>
+                </select>
+              </label>
+              <div class="checks">
+                {spellToggles.map((t) => (
+                  <Check key={t.key} toggle={t} settings={settings} />
+                ))}
+              </div>
+            </fieldset>
+          )}
         </div>
       </div>
 
       <div class="paper-scroll">
-        <div class="paper">
+        <div class="paper" id="print-paper">
           {nothing && <p class="no-print">{ui("print.nothing")}</p>}
           {settings.includeSheet &&
-            (character.value.ruleset === "srd52" ? <FrontPage2024 /> : <FrontPage />)}
+            (printedCharacter.value.ruleset === "srd52" ? <FrontPage2024 /> : <FrontPage />)}
           {settings.includeSheet && <FrontMore />}
           {settings.includeStory && <StoryPage />}
           {settings.includeFeatureText && <FeatureText />}

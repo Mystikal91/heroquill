@@ -1,4 +1,4 @@
-import { character, content } from "../../app/store";
+import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
 import { itemData } from "../../data/items";
 import type { Character } from "../../engine/character";
@@ -6,7 +6,9 @@ import { COINS } from "../../engine/coins";
 import { type UiKey, ui } from "../../i18n/ui";
 import { backgroundFeature, originFeat } from "../backgroundFeature";
 import { FitBox } from "./FitBox";
+import { PageFoot } from "./PageFoot";
 import { RuledArea } from "./RuledArea";
+import { printedCharacter, shown } from "./printSource";
 
 const FIELDS = ["age", "height", "weight", "eyes", "skin", "hair"] as const;
 const SLOTS = [
@@ -73,7 +75,7 @@ function Block({
 /** A page of frames to handwrite in, with what the app knows already filled in. */
 export function StoryPage() {
   const c = content.value;
-  const ch = character.value;
+  const ch = printedCharacter.value;
   if (!c) return null;
   const background = ch.choices.background;
   const { name: featureName, text: featureDesc } = backgroundFeature(ch, c);
@@ -96,7 +98,7 @@ export function StoryPage() {
     <section class="p-page p-story">
       <div class="p-story-top">
         <div class="p-banner">
-          <h1>{ch.name || ui("sheet.unnamed")}</h1>
+          <h1>{shown(ch.name || ui("sheet.unnamed"))}</h1>
           <small>{ui("sheet.name")}</small>
         </div>
         <div class="p-frame p-block">
@@ -201,6 +203,7 @@ export function StoryPage() {
           <RuledArea />
         </section>
       </div>
+      <PageFoot />
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { printSettings } from "../../app/printSettings";
-import { character, content, printSheet } from "../../app/store";
+import { content } from "../../app/store";
 import { ABILITIES } from "../../data/schema";
 import type { DamageResult } from "../../engine/equipment";
 import { type UiKey, signed, ui } from "../../i18n/ui";
@@ -12,6 +12,7 @@ import { collectSpellRows } from "../spellRows";
 import { RuledArea } from "./RuledArea";
 import { fitFront } from "./fitFront";
 import { frontSpill } from "./frontSpill";
+import { blank, printedCharacter, printedSheet, shown } from "./printSource";
 
 /**
  * The parts the two models of the front page are made of (the 2014 one in `FrontPage`, the 2024
@@ -20,6 +21,12 @@ import { frontSpill } from "./frontSpill";
  */
 
 const BLANK_ATTACK_ROWS = 4;
+/** The rows of weapons of a blank sheet. */
+const BLANK_SHEET_ATTACK_ROWS = 6;
+/** The lines for each kind of proficiency on a blank sheet. */
+const BLANK_PROFICIENCY_LINES = 2;
+/** The lines of limited uses on a blank sheet. */
+const BLANK_USES = 4;
 /** Facts that the attacks panel already says as damage (sneak attack, rage, martial arts). */
 const FACTS_AS_DAMAGE = new Set(["rageDamage", "sneakAttack", "martialArts"]);
 const PROFICIENCY_CATEGORIES = ["armor", "weapon", "tool", "language"] as const;
@@ -28,7 +35,7 @@ const formatDamage = (d: DamageResult) =>
   `${d.dice}${d.bonus === 0 ? "" : signed(d.bonus)} ${damageName(d.type)}`;
 
 /** True for a character of the 2024 rules. */
-export const is2024 = () => character.value.ruleset === "srd52";
+export const is2024 = () => printedCharacter.value.ruleset === "srd52";
 
 /**
  * Makes the front fit its page (see `fitFront`) when it is drawn, when the fonts arrive and before
@@ -54,8 +61,8 @@ export function useFitFront() {
 /** The name, who the character is, and the class. */
 export function FrontHead() {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   if (!c || !s) return null;
   const name = c.name;
   const totalLevel = ch.classes.reduce((sum, cl) => sum + cl.level, 0);
@@ -68,7 +75,7 @@ export function FrontHead() {
   return (
     <header class="p-head">
       <div class="p-banner">
-        <h1>{ch.name || ui("sheet.unnamed")}</h1>
+        <h1>{shown(ch.name || ui("sheet.unnamed"))}</h1>
         <small>{ui("sheet.name")}</small>
       </div>
       <div class="p-frame p-info">
@@ -82,7 +89,7 @@ export function FrontHead() {
             <dt>{ui("print.background")}</dt>
           </div>
           <div>
-            <dd>{ui("sheet.levelLabel", { level: totalLevel })}</dd>
+            <dd>{shown(ui("sheet.levelLabel", { level: totalLevel }))}</dd>
             <dt>{ui("form.level")}</dt>
           </div>
           <div>
@@ -92,11 +99,13 @@ export function FrontHead() {
         </dl>
       </div>
       <div class="p-banner">
-        <h2>{classTitle}</h2>
+        <h2>{shown(classTitle)}</h2>
         <small>
-          {first?.subclassId
-            ? name(first.subclassId)
-            : ui("sheet.levelLabel", { level: totalLevel })}
+          {blank.value
+            ? ui("form.class")
+            : first?.subclassId
+              ? name(first.subclassId)
+              : ui("sheet.levelLabel", { level: totalLevel })}
         </small>
       </div>
     </header>
@@ -105,34 +114,34 @@ export function FrontHead() {
 
 /** Four round numbers: the proficiency bonus and the passive senses (the 2014 sheet adds the martial save DC). */
 export function Badges() {
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   if (!s) return null;
   const passive = (skill: string, fallback: number) =>
     10 + (s.skills.find((sk) => sk.id === `${ch.ruleset}:skill/${skill}`)?.bonus ?? fallback);
   return (
     <div class="p-badges">
       <div class="p-badge">
-        <b>{signed(s.proficiencyBonus)}</b>
+        <b>{shown(signed(s.proficiencyBonus))}</b>
         <span>{ui("quick.proficiency")}</span>
       </div>
       <div class="p-badge">
-        <b>{s.passivePerception}</b>
+        <b>{shown(s.passivePerception)}</b>
         <span>{ui("quick.perception")}</span>
       </div>
       <div class="p-badge">
-        <b>{passive("insight", s.abilities.wis.modifier)}</b>
+        <b>{shown(passive("insight", s.abilities.wis.modifier))}</b>
         <span>{ui("quick.insight")}</span>
       </div>
       <div class="p-badge">
         {is2024() ? (
           <>
-            <b>{passive("investigation", s.abilities.int.modifier)}</b>
+            <b>{shown(passive("investigation", s.abilities.int.modifier))}</b>
             <span>{ui("print.investigation")}</span>
           </>
         ) : (
           <>
-            <b>{s.martialSaveDc}</b>
+            <b>{shown(s.martialSaveDc)}</b>
             <span>{ui("quick.martialDc")}</span>
           </>
         )}
@@ -144,8 +153,8 @@ export function Badges() {
 /** The six abilities, each with its saving throw and its skills. */
 export function AbilityBlocks() {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   if (!c || !s) return null;
   const name = c.name;
   return (
@@ -154,13 +163,13 @@ export function AbilityBlocks() {
         <section class="p-frame p-ability" key={a}>
           <div class="p-ability-core">
             <div class="p-ability-name">{name(`${ch.ruleset}:ability/${a}`)}</div>
-            <div class="p-oval">{s.abilities[a].score}</div>
-            <div class="p-ability-mod">{signed(s.abilities[a].modifier)}</div>
+            <div class="p-oval">{shown(s.abilities[a].score)}</div>
+            <div class="p-ability-mod">{shown(signed(s.abilities[a].modifier))}</div>
           </div>
           <ul class="p-checks">
             <li class={s.saves[a].proficient ? "on" : ""}>
               <span class={`p-pip${s.saves[a].proficient ? " on" : ""}`} />
-              <b>{signed(s.saves[a].bonus)}</b>
+              <b>{shown(signed(s.saves[a].bonus))}</b>
               {ui("sheet.savingThrow")}
             </li>
             {s.skills
@@ -169,7 +178,7 @@ export function AbilityBlocks() {
               .map((sk) => (
                 <li key={sk.id} class={sk.proficient ? "on" : ""}>
                   <span class={`p-pip${sk.proficient ? " on" : ""}`} />
-                  <b>{signed(sk.bonus)}</b>
+                  <b>{shown(signed(sk.bonus))}</b>
                   {name(sk.id)}
                 </li>
               ))}
@@ -182,7 +191,7 @@ export function AbilityBlocks() {
 
 /** Armor class, initiative, speed, hit points, hit dice and death saves. */
 export function CombatStats() {
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!s) return null;
   const hitDice = Object.entries(s.hitPoints.hitDice)
     .map(([die, n]) => `${n}${die}`)
@@ -193,15 +202,15 @@ export function CombatStats() {
     <>
       <div class="p-stat-row">
         <div class="p-frame p-box">
-          <b>{s.armorClass.value}</b>
+          <b>{shown(s.armorClass.value)}</b>
           <span>{ui("sheet.armorClass")}</span>
         </div>
         <div class="p-frame p-box">
-          <b>{signed(s.initiative)}</b>
+          <b>{shown(signed(s.initiative))}</b>
           <span>{ui("sheet.initiative")}</span>
         </div>
         <div class="p-frame p-box">
-          <b>{s.speed === undefined ? "" : distance(s.speed)}</b>
+          <b>{s.speed === undefined ? "" : shown(distance(s.speed))}</b>
           <span>{ui("sheet.speed")}</span>
         </div>
       </div>
@@ -214,7 +223,7 @@ export function CombatStats() {
       <div class="p-frame p-hp">
         <div class="p-hp-max">
           <span class="p-caption">{ui("print.maxHp")}</span>
-          <b>{s.hitPoints.max}</b>
+          <b>{shown(s.hitPoints.max)}</b>
         </div>
         <div class="p-write" />
         <div class="p-caption">{ui("print.currentHp")}</div>
@@ -225,7 +234,7 @@ export function CombatStats() {
           <span>{ui("print.tempHp")}</span>
         </div>
         <div class="p-frame p-box">
-          <b>{hitDice || " "}</b>
+          <b>{shown(hitDice) || " "}</b>
           <span>{ui("print.hitDiceTotal")}</span>
         </div>
       </div>
@@ -254,7 +263,7 @@ export function CombatStats() {
 
 /** A box to mark the inspiration (the 2024 rules call it Heroic Inspiration), with the bardic die. */
 export function InspirationBox() {
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!s) return null;
   const bardic = s.facts.find((f) => f.kind === "bardicDie");
   return (
@@ -276,13 +285,16 @@ export function InspirationBox() {
 /** The weapons and their attack and damage; the 2024 sheet adds the weapon mastery of each one. */
 export function AttacksPanel({ grow = false }: { grow?: boolean }) {
   const c = content.value;
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!c || !s) return null;
   const name = c.name;
   const mastery = is2024();
   // The unarmed strike is the last row, since everyone has it.
-  const allAttacks = [...s.attacks, ...(s.unarmed ? [s.unarmed] : [])];
-  const attackRows = Math.max(BLANK_ATTACK_ROWS, allAttacks.length);
+  const allAttacks = blank.value ? [] : [...s.attacks, ...(s.unarmed ? [s.unarmed] : [])];
+  const attackRows = Math.max(
+    blank.value ? BLANK_SHEET_ATTACK_ROWS : BLANK_ATTACK_ROWS,
+    allAttacks.length,
+  );
   const facts = s.facts.filter((f) => !FACTS_AS_DAMAGE.has(f.kind));
   const mastered = s.weaponMasteries.map((id) => name(id));
   return (
@@ -334,9 +346,10 @@ export function AttacksPanel({ grow = false }: { grow?: boolean }) {
 /** What spellcasting gives at a glance: the numbers and the slots (the spells themselves are on their pages). */
 export function SpellcastingPanel({ grow = false }: { grow?: boolean }) {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   const caster = s?.spellcasting;
+  if (blank.value) return <BlankSpellcasting grow={grow} />;
   if (!c || !s || !caster) return null;
   const slots = caster.spellSlots.map((n, i) => ({ level: i + 1, n })).filter((x) => x.n > 0);
   return (
@@ -384,8 +397,8 @@ export const spellListOnFront = () => printSettings.value.spellMode === "none";
 /** The names of the spells, by level, when there are no spell pages. */
 export function FrontSpellList() {
   const c = content.value;
-  const s = printSheet.value;
-  if (!c || !s || !spellListOnFront()) return null;
+  const s = printedSheet.value;
+  if (!c || !s || !spellListOnFront() || blank.value) return null;
   const spellRows = collectSpellRows(c, s);
   if (spellRows.length === 0) return null;
   const spellLevels = [...new Set(spellRows.map((r) => r.level))];
@@ -416,8 +429,8 @@ export function FrontSpellList() {
 /** Armor, weapons, tools and languages (the 2024 rules say armor training). */
 export function ProficienciesPanel() {
   const c = content.value;
-  const s = printSheet.value;
-  const ch = character.value;
+  const s = printedSheet.value;
+  const ch = printedCharacter.value;
   if (!c || !s) return null;
   const labels = {
     armor: is2024() ? "print.armorTraining" : "sheet.armor",
@@ -440,7 +453,13 @@ export function ProficienciesPanel() {
         {PROFICIENCY_CATEGORIES.map((cat) => (
           <div key={cat}>
             <dt>{ui(labels[cat])}</dt>
-            <dd>{list(cat) || "—"}</dd>
+            <dd>
+              {blank.value
+                ? Array.from({ length: BLANK_PROFICIENCY_LINES }, (_, i) => (
+                    <div class="p-write small" key={`${cat}-${i + 1}`} />
+                  ))
+                : list(cat) || "—"}
+            </dd>
           </div>
         ))}
       </dl>
@@ -450,7 +469,7 @@ export function ProficienciesPanel() {
 
 /** The features the person wrote, and a box for notes that takes the room that is left. */
 export function CustomAndNotes() {
-  const ch = character.value;
+  const ch = printedCharacter.value;
   const custom = (ch.custom ?? []).filter((f) => f.name.trim() !== "");
   return (
     <>
@@ -471,6 +490,64 @@ export function CustomAndNotes() {
       <section class="p-frame p-panel grow p-notes">
         <h3 class="p-h">{ui("print.notes")}</h3>
         <RuledArea />
+      </section>
+    </>
+  );
+}
+
+/** The numbers of spellcasting with nothing written in: the three boxes and a line for the slots of each level. */
+function BlankSpellcasting({ grow }: { grow: boolean }) {
+  return (
+    <section class={`p-frame p-panel${grow ? " grow" : ""}`}>
+      <h3 class="p-h">{ui("sheet.spellcasting")}</h3>
+      <div class="p-stat-row">
+        <div class="p-box">
+          <b />
+          <span>{ui("sheet.spellAttack")}</span>
+        </div>
+        <div class="p-box">
+          <b />
+          <span>{ui("sheet.spellSaveDc")}</span>
+        </div>
+        <div class="p-box">
+          <b />
+          <span>{ui("sheet.spellAbility")}</span>
+        </div>
+      </div>
+      <div class="p-slots">
+        {Array.from({ length: 9 }, (_, i) => (
+          <div class="p-slotrow" key={`slots-${i + 1}`}>
+            <span class="lvl">{ui("sheet.slotLevel", { level: i + 1 })}</span>
+            <span class="p-write small p-slot-write" />
+          </div>
+        ))}
+      </div>
+      {grow && <RuledArea />}
+    </section>
+  );
+}
+
+/** On a blank sheet: room to write the features and traits, and the limited uses. */
+export function BlankFeaturesPanels() {
+  if (!blank.value) return null;
+  return (
+    <>
+      <section class="p-frame p-panel grow p-blank-features">
+        <h3 class="p-h">{ui("print.page.features")}</h3>
+        <RuledArea />
+      </section>
+      <section class="p-frame p-panel">
+        <h3 class="p-h">{ui("print.resources")}</h3>
+        <ul class="p-uses">
+          {Array.from({ length: BLANK_USES }, (_, i) => (
+            <li key={`use-${i + 1}`}>
+              <span class="p-write small p-use-write" />
+              <span class="p-use-count">
+                <span class="p-write small" />
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
     </>
   );

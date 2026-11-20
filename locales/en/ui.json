@@ -2469,5 +2469,16 @@
   "studio.need.ability": "An ability score",
   "about.home.version.title": "This version",
   "about.home.version.body": "Version {version}. If something looks wrong, a number does not add up or a text is missing, tell us.",
-  "about.home.version.report": "Report a problem on GitHub"
+  "about.home.version.report": "Report a problem on GitHub",
+  "print.credit": "Includes material from the System Reference Document {version} by Wizards of the Coast LLC, licensed under CC-BY-4.0.",
+  "print.madeWith": "Made with Heroquill · heroquill.app",
+  "print.group.what": "What to print",
+  "print.thisCharacter": "This character",
+  "print.blankSheet": "A blank sheet",
+  "print.blankHint": "Every page with nothing written in it, for the edition of this character. Print it to fill by hand, or download the PDF and fill it on a computer.",
+  "print.blankSpells": "Spell pages",
+  "print.pdf": "Download a fillable PDF",
+  "print.pdfBusy": "Making the PDF…",
+  "print.pdfFailed": "The PDF could not be made. You can still print or save as PDF from the browser.",
+  "print.pdfHint": "The downloaded PDF has fields you can change in any PDF reader (Acrobat, your browser): the numbers, the names, the boxes to tick and the notes."
 }

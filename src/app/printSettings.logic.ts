@@ -18,6 +18,10 @@ export interface PrintSettings {
   spellCards: boolean;
   /** Feature cards for class features and species traits. */
   featureCards: boolean;
+  /** Every page with nothing written in it, to fill by hand or in the PDF. */
+  blank: boolean;
+  /** The pages for spells of the blank sheet. */
+  blankSpells: boolean;
 }
 
 export const DEFAULT_PRINT_SETTINGS: PrintSettings = {
@@ -30,9 +34,14 @@ export const DEFAULT_PRINT_SETTINGS: PrintSettings = {
   includeAvailable: false,
   spellCards: false,
   featureCards: false,
+  blank: false,
+  blankSpells: true,
 };
 
+// `blank` is left out on purpose: a blank sheet chosen once must not come back the next time the
+// person prints their character.
 const FLAGS = [
+  "blankSpells",
   "lowInk",
   "includeSheet",
   "includeStory",
@@ -67,6 +76,8 @@ export function parsePrintSettings(raw: string | null): PrintSettings {
 
 /** True when the current choices would print no pages at all. */
 export function printsNothing(s: PrintSettings, isCaster: boolean): boolean {
+  // A blank sheet has no cards and no list of spells to pick from: its spell pages are their own option.
+  if (s.blank) return !(s.includeSheet || s.includeStory || s.includeFeatureText || s.blankSpells);
   return !(
     s.includeSheet ||
     s.includeStory ||

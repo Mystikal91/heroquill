@@ -1,9 +1,10 @@
-import { printSheet } from "../../app/store";
 import { ClassFeaturesPanels, TraitsPanels, UsesPanel } from "./FrontPanels";
+import { PageFoot } from "./PageFoot";
 import {
   AbilityBlocks,
   AttacksPanel,
   Badges,
+  BlankFeaturesPanels,
   CombatStats,
   CustomAndNotes,
   FrontHead,
@@ -14,6 +15,8 @@ import {
   spellListOnFront,
   useFitFront,
 } from "./frontParts";
+import { blank } from "./printSource";
+import { printedSheet } from "./printSource";
 
 /**
  * The front page of a character of the 2024 rules. The same three columns as the 2014 one, with what
@@ -23,9 +26,9 @@ import {
  */
 export function FrontPage2024() {
   const page = useFitFront();
-  const s = printSheet.value;
+  const s = printedSheet.value;
   if (!s) return null;
-  const caster = Boolean(s.spellcasting);
+  const caster = Boolean(s.spellcasting) || blank.value;
 
   return (
     <section class="p-page p-front" data-edition="2024" ref={page}>
@@ -50,9 +53,11 @@ export function FrontPage2024() {
           <TraitsPanels featsFirst />
           <ClassFeaturesPanels />
           <UsesPanel />
+          <BlankFeaturesPanels />
           <CustomAndNotes />
         </div>
       </div>
+      <PageFoot />
     </section>
   );
 }

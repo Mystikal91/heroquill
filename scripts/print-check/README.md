@@ -21,7 +21,11 @@ Windows; change them at the top of the scripts.
 Prints the Print tab of about fifty characters (every 2014 class at levels 1, 9 and 20, some 2024 ones, and a
 few with every option ticked: cards, all the spells) with a real Chrome and checks, for each one:
 
-1. the **number of pages** against `pages.baseline.json` (`pages`);
+1. the **number of pages** against `pages.baseline.json` (`pages`), and the footer on every page (each sheet
+   of the app is one page of paper);
+1. the **fillable PDF** (the button "Download a fillable PDF", saved through Chrome's downloads): as many
+   pages as the printed PDF, the footer on each, and at least a hundred form fields (`KEEP` keeps it too, as
+   `<name>.fillable.pdf`);
 2. that no block the print CSS wants whole (`break-inside: avoid`: a feature, a spell, a card) has its first
    words on one page and its last on another;
 3. that the **front page and the story page** are each on one page: every line of them is on the same page of

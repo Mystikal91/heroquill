@@ -74,6 +74,9 @@ and Aurora Legacy that you already own.
 **Print and share**
 
 - A character sheet, spell sheets and spell cards, for paper or PDF.
+- A **fillable PDF**: the same pages with the numbers, names, boxes to tick and notes as form
+  fields that any PDF reader can change; and a **blank sheet** with every page (spell pages
+  included) to fill by hand or on a computer.
 - Share a character as a **link, a QR code or a file**; a shared link opens the character on
   another device.
 
