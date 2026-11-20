@@ -369,7 +369,17 @@ function fieldOp(el: HTMLElement, cs: CSSStyleDeclaration, ctx: Context): Op {
   const full = el.dataset.value ?? el.textContent ?? "";
   const value = transformText(full.replace(/\s+$/g, "").replace(/^\s+/g, ""), cs, ctx.lang);
   const lineHeight = cs.lineHeight === "normal" ? px(cs.fontSize) * 1.25 : px(cs.lineHeight);
-  const multiline = el.matches(MULTILINE) || box.h > lineHeight * 1.7;
+  // A banner (the name, the class) is one line that a reader centres and fits to its width, so a long
+  // name typed in it stays whole; it is two lines tall for that.
+  const fit = el.matches(".p-banner h1, .p-banner h2");
+  const multiline = !fit && (el.matches(MULTILINE) || box.h > lineHeight * 1.7);
+  const align = alignOf(cs);
+  // A centred number is as wide as its text: it gets room for three digits on each side of it.
+  const least = px(cs.fontSize) * 2.4;
+  if (!multiline && align === "center" && box.w < least) {
+    box.x -= (least - box.w) / 2;
+    box.w = least;
+  }
   // The words as the browser placed them: the field shows its value that way until it is changed.
   const words: Op[] = [];
   const texts = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -385,8 +395,9 @@ function fieldOp(el: HTMLElement, cs: CSSStyleDeclaration, ctx: Context): Op {
     face: faceOf(cs),
     size: px(cs.fontSize),
     color: parseColor(cs.color) ?? NONE,
-    align: alignOf(cs),
+    align,
     multiline,
+    fit,
     words: words.filter((w): w is TextOp => w.t === "text"),
   };
 }

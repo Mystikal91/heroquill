@@ -161,10 +161,12 @@ function SlotBoxes({ slots }: { slots: number[] }) {
           <tr key={level}>
             <td class="p-center">{level}</td>
             <td class="p-center">{n}</td>
-            <td class="p-slot-pips">
-              {Array.from({ length: n }, (_, i) => (
-                <span class="p-pip" key={`used-${level}-${i + 1}`} />
-              ))}
+            <td>
+              <span class="p-slot-pips">
+                {Array.from({ length: n }, (_, i) => (
+                  <span class="p-pip" key={`used-${level}-${i + 1}`} />
+                ))}
+              </span>
             </td>
           </tr>
         ))}

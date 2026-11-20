@@ -393,6 +393,12 @@
 
 .p-banner h1,
 .p-banner h2 {
+  /* Always two lines tall, the words in the middle: a short name looks balanced and a long one fits
+     (and the field of the fillable PDF has room to write). */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2em;
   font-size: 13pt;
   line-height: 1.1;
   letter-spacing: 0.06em;
@@ -659,7 +665,10 @@
   align-items: baseline;
 }
 
+/* Room for three digits, written over. */
 .p-hp-max b {
+  min-width: 15mm;
+  text-align: right;
   font-family: var(--p-display);
   font-size: 15pt;
 }
@@ -719,7 +728,9 @@
   text-transform: uppercase;
 }
 
+/* A row is as tall empty as written in (an empty cell has no line), so the empty rows are as easy to fill. */
 .p-table td {
+  height: 6.3mm;
   padding: 1.1mm 1.2mm;
   border-bottom: 0.2mm solid var(--p-line);
 }
@@ -901,6 +912,7 @@
 }
 
 .p-front[data-density="1"] .p-table td {
+  height: 5.4mm;
   padding: 0.7mm 1.2mm;
 }
 

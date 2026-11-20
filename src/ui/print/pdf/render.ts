@@ -291,7 +291,10 @@ function textField(p: Place, op: Extract<Op, { t: "field"; kind: "text" }>, f: F
     font,
   });
   // The size a reader writes a changed value in; a long note in a big frame stays at the size of the text.
-  field.setFontSize(Math.max(4, op.multiline ? Math.min(op.size * PT, 9) : op.size * PT));
+  // 0 is "fit to the box" for a reader.
+  field.setFontSize(
+    op.fit ? 0 : Math.max(4, op.multiline ? Math.min(op.size * PT, 9) : op.size * PT),
+  );
   field.updateAppearances(font, () => wordsAppearance(op, part, top, height));
 }
 

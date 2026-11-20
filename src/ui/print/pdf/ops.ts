@@ -55,6 +55,8 @@ export type Op =
       color: Rgb;
       align: "left" | "center" | "right";
       multiline: boolean;
+      /** One line that a reader shrinks to fit (the banners). */
+      fit: boolean;
       /** The words of the value where the browser drew them, which the field shows until it is changed. */
       words: TextOp[];
     }
