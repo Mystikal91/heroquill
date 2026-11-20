@@ -31,7 +31,11 @@ export const printedSheet = computed<DerivedSheet | undefined>(() => {
   return c ? deriveSheet(emptyCharacter.value, c.index) : undefined;
 });
 
-/** A value as the page writes it: nothing on a blank sheet. */
-export function shown<T extends string | number>(value: T): T | "" {
-  return blank.value ? "" : value;
+/**
+ * A value as the page writes it: nothing on a blank sheet. Nothing is a non-breaking space, so that
+ * the empty value keeps the line it takes when written and the words around it stay where they are
+ * on a filled sheet (an empty number shrank to nothing and its caption moved up).
+ */
+export function shown<T extends string | number>(value: T): T | " " {
+  return blank.value ? " " : value;
 }
