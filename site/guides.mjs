@@ -2,6 +2,8 @@
 // automatic translation with a DeepL key, and translating Heroquill itself. Their addresses are in
 // src/content/news.ts. Like the main guide (guide.mjs), a section is a heading and a list of blocks:
 // a string is a paragraph, an array is a list of items.
+import { SHEET_GUIDE } from "./sheet-guide.mjs";
+
 export const MORE = {
   en: "More guides",
   it: "Altre guide",
@@ -11,6 +13,7 @@ export const MORE = {
 };
 
 export const GUIDES = {
+  sheet: SHEET_GUIDE,
   aurora: {
     en: {
       label: "Add content from Aurora",

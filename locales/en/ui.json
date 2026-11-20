@@ -2480,5 +2480,6 @@
   "print.pdf": "Download a fillable PDF",
   "print.pdfBusy": "Making the PDF…",
   "print.pdfFailed": "The PDF could not be made. You can still print or save as PDF from the browser.",
-  "print.pdfHint": "The downloaded PDF has fields you can change in any PDF reader (Acrobat, your browser): the numbers, the names, the boxes to tick and the notes."
+  "print.pdfHint": "The downloaded PDF has fields you can change in any PDF reader (Acrobat, your browser): the numbers, the names, the boxes to tick and the notes.",
+  "print.sheetGuide": "How to fill in a character sheet, and the blank PDFs ready to download"
 }

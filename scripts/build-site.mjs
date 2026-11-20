@@ -10,6 +10,7 @@ import { renderMarkdown } from "../site/docs-page.mjs";
 import { GUIDE } from "../site/guide.mjs";
 import { GUIDES, MORE } from "../site/guides.mjs";
 import { NEWS } from "../site/news.mjs";
+import { EDITIONS, SHEETS, sheetUrl } from "../site/sheets.mjs";
 import { TEXTS } from "../site/texts.mjs";
 import {
   CHANGELOG,
@@ -324,6 +325,34 @@ ${items}
         </section>`;
 }
 
+// The blank sheets to download, at the top of the guide that offers them: a card for each edition
+// with its files (site/sheets.mjs). The heading is not a step of the guide, so it has no number.
+function downloadsBlock(lang, d) {
+  const cards = EDITIONS.map((edition) => {
+    const e = d.editions[edition];
+    const links = SHEETS.filter((s) => s.lang === lang && s.edition === edition)
+      .map(
+        (s) =>
+          `              <a class="button${s.paper === "a4" ? "" : " ghost"}" href="${sheetUrl(s)}" download>${escapeHtml(d.papers[s.paper])}</a>`,
+      )
+      .join("\n");
+    return `          <div class="sheet-card">
+            <h3>${escapeHtml(e.name)}</h3>
+            <p>${escapeHtml(e.note)}</p>
+            <p class="sheet-links">
+${links}
+            </p>
+          </div>`;
+  }).join("\n");
+  return `        <section class="sheet-downloads">
+          <h2 class="no-step">${escapeHtml(d.heading)}</h2>
+          ${d.text.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n          ")}
+          <div class="sheet-cards">
+${cards}
+          </div>
+        </section>`;
+}
+
 // The guide to creating a character (no topic) and the guides on one part of the app.
 function guidePage(lang, topic) {
   const g = topic ? GUIDES[topic][lang] : GUIDE[lang];
@@ -335,7 +364,7 @@ function guidePage(lang, topic) {
     crumb: topic ? g.label : TEXTS[lang]["nav.guide"],
     cta: g.cta,
     ogType: "article",
-    body: `${guideBlocks(g.sections)}\n${moreGuides(lang, topic)}`,
+    body: `${g.downloads ? `${downloadsBlock(lang, g.downloads)}\n` : ""}${guideBlocks(g.sections)}\n${moreGuides(lang, topic)}`,
     main: (url) => ({
       "@type": "Article",
       headline: g.h1,
@@ -569,6 +598,8 @@ for (const file of [
 ]) {
   cpSync(`site/${file}`, `dist/${file}`);
 }
+// The blank fillable sheets the guide offers (made by `npm run site:sheets`).
+cpSync("site/sheets", "dist/sheets", { recursive: true });
 cpSync("src/ui/theme/palettes.css", "dist/palettes.css");
 
 mkdirSync("dist/fonts", { recursive: true });

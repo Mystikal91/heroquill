@@ -1977,3 +1977,67 @@ h3 {
     border-radius: 8px;
   }
 }
+
+/* ---- The blank sheets to download, at the top of the guide that offers them ---- */
+
+.prose h2.no-step::before {
+  content: none;
+  counter-increment: none;
+}
+
+.sheet-downloads {
+  margin-bottom: 2.6rem;
+}
+
+.sheet-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 40rem) {
+  .sheet-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* A panel with cut corners, as the frames of the sheet itself. */
+.sheet-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.3rem 1.3rem;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+  clip-path: polygon(
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px),
+    0 12px
+  );
+}
+
+.prose .sheet-card h3 {
+  margin: 0 0 0.4rem;
+  color: var(--accent);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prose .sheet-card p {
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.prose .sheet-card p.sheet-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: auto 0 0;
+  padding-top: 0.4rem;
+}

@@ -1683,10 +1683,17 @@ export const GUIDE_SLUGS: Record<LanguageCode, string> = {
 };
 
 /** The guides that go deeper into one part of the app, each under the guide. */
-export const GUIDE_TOPICS = ["aurora", "autotranslate", "weblate"] as const;
+export const GUIDE_TOPICS = ["sheet", "aurora", "autotranslate", "weblate"] as const;
 export type GuideTopic = (typeof GUIDE_TOPICS)[number];
 
 const TOPIC_SLUGS: Record<GuideTopic, Record<LanguageCode, string>> = {
+  sheet: {
+    en: "dnd-character-sheet",
+    it: "scheda-personaggio-dnd",
+    fr: "fiche-personnage-dnd",
+    de: "dnd-charakterbogen",
+    es: "hoja-personaje-dnd",
+  },
   aurora: {
     en: "import-aurora",
     it: "importare-aurora",

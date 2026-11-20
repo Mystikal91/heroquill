@@ -1,3 +1,4 @@
+import { language } from "../../app/language";
 import {
   type Paper,
   type PrintSettings,
@@ -7,6 +8,7 @@ import {
 } from "../../app/printSettings";
 import { printsNothing } from "../../app/printSettings.logic";
 import { content, printSheet } from "../../app/store";
+import { guidePath } from "../../content/news";
 import { type UiKey, ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { Cards } from "./CardsGroup";
@@ -108,7 +110,18 @@ export function PrintView() {
                 {ui("print.blankSheet")}
               </label>
             </div>
-            {settings.blank && <p class="print-group-hint">{ui("print.blankHint")}</p>}
+            {settings.blank && (
+              <p class="print-group-hint">
+                {ui("print.blankHint")}{" "}
+                <a
+                  href={guidePath(language.value, "sheet")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {ui("print.sheetGuide")}
+                </a>
+              </p>
+            )}
           </fieldset>
 
           <fieldset class="print-group">

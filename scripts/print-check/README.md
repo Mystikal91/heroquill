@@ -16,6 +16,15 @@ python scripts/print-check/render.py out        # out/<name>-<page>.png
 times to see how the front page copes with a long list. The browser paths are the usual ones on
 Windows; change them at the top of the scripts.
 
+## The blank sheets of the website (`blankSheets.ts`, `npm run site:sheets`)
+
+The guide "Fillable D&D 5e character sheet" of the website offers blank fillable PDFs, one for each language and
+edition (A4, and US Letter for English too; the list is `SHEETS` in `site/sheets.mjs`). They are made by the app
+itself: the script opens the Print tab in a real Chrome for an empty character of each edition, chooses "A blank
+sheet" and presses "Download a fillable PDF", then writes `site/sheets/`. The build copies them to `/sheets/`.
+Run it again (`npm run build` first, or `PRINT_URL`) whenever the print pages change, and commit the files.
+`ONLY=it` makes only the files whose name has the words. `cdp.ts` is the Chrome and the small server both scripts use.
+
 ## The pages of the test characters (`pages.ts`, `npm run test:print`)
 
 Prints the Print tab of about fifty characters (every 2014 class at levels 1, 9 and 20, some 2024 ones, and a

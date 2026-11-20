@@ -2480,5 +2480,6 @@
   "print.pdf": "Scarica un PDF compilabile",
   "print.pdfBusy": "Preparo il PDF…",
   "print.pdfFailed": "Non è stato possibile creare il PDF. Puoi sempre stampare o salvare in PDF dal browser.",
-  "print.pdfHint": "Il PDF scaricato ha campi che puoi modificare in qualsiasi lettore PDF (Acrobat, il browser): i numeri, i nomi, le caselle da spuntare e le note."
+  "print.pdfHint": "Il PDF scaricato ha campi che puoi modificare in qualsiasi lettore PDF (Acrobat, il browser): i numeri, i nomi, le caselle da spuntare e le note.",
+  "print.sheetGuide": "Come si compila una scheda del personaggio, e i PDF in bianco pronti da scaricare"
 }

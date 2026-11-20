@@ -2480,5 +2480,6 @@
   "print.pdf": "Descargar un PDF rellenable",
   "print.pdfBusy": "Creando el PDF…",
   "print.pdfFailed": "No se pudo crear el PDF. Aún puedes imprimir o guardar como PDF desde el navegador.",
-  "print.pdfHint": "El PDF descargado tiene campos que puedes cambiar en cualquier lector de PDF (Acrobat, tu navegador): los números, los nombres, las casillas que marcar y las notas."
+  "print.pdfHint": "El PDF descargado tiene campos que puedes cambiar en cualquier lector de PDF (Acrobat, tu navegador): los números, los nombres, las casillas que marcar y las notas.",
+  "print.sheetGuide": "Cómo se rellena una hoja de personaje, y los PDF en blanco listos para descargar"
 }

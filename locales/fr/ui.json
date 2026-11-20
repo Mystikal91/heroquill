@@ -2480,5 +2480,6 @@
   "print.pdf": "Télécharger un PDF modifiable",
   "print.pdfBusy": "Création du PDF…",
   "print.pdfFailed": "Le PDF n'a pas pu être créé. Vous pouvez toujours imprimer ou enregistrer en PDF depuis le navigateur.",
-  "print.pdfHint": "Le PDF téléchargé a des champs modifiables dans n'importe quel lecteur PDF (Acrobat, votre navigateur) : les nombres, les noms, les cases à cocher et les notes."
+  "print.pdfHint": "Le PDF téléchargé a des champs modifiables dans n'importe quel lecteur PDF (Acrobat, votre navigateur) : les nombres, les noms, les cases à cocher et les notes.",
+  "print.sheetGuide": "Comment remplir une fiche de personnage, et les PDF vierges prêts à télécharger"
 }

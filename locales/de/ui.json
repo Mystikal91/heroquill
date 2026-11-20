@@ -2480,5 +2480,6 @@
   "print.pdf": "Ausfüllbares PDF herunterladen",
   "print.pdfBusy": "PDF wird erstellt…",
   "print.pdfFailed": "Das PDF konnte nicht erstellt werden. Du kannst trotzdem aus dem Browser drucken oder als PDF speichern.",
-  "print.pdfHint": "Das heruntergeladene PDF hat Felder, die du in jedem PDF-Leser (Acrobat, dein Browser) ändern kannst: die Zahlen, die Namen, die Kästchen zum Ankreuzen und die Notizen."
+  "print.pdfHint": "Das heruntergeladene PDF hat Felder, die du in jedem PDF-Leser (Acrobat, dein Browser) ändern kannst: die Zahlen, die Namen, die Kästchen zum Ankreuzen und die Notizen.",
+  "print.sheetGuide": "Wie man einen Charakterbogen ausfüllt, und die leeren PDFs zum Herunterladen"
 }
