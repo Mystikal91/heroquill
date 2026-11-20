@@ -312,6 +312,19 @@ export function removeCustomEffect(play: PlayState, id: string): PlayState {
   return next.length > 0 ? { ...rest, customEffects: next } : rest;
 }
 
+/** Turns an effect written by hand on or off; it stays on the list either way. */
+export function setCustomEffectOn(play: PlayState, id: string, on: boolean): PlayState {
+  if (!(play.customEffects ?? []).some((e) => e.id === id)) return play;
+  return {
+    ...play,
+    customEffects: (play.customEffects ?? []).map((e) => {
+      if (e.id !== id) return e;
+      const { off: _off, ...rest } = e;
+      return on ? rest : { ...rest, off: true };
+    }),
+  };
+}
+
 /** Turns the effect of a spell on or off on the sheet (Mage Armor...): a long rest turns them all off. */
 export function setSpellActive(play: PlayState, id: string, on: boolean): PlayState {
   const others = (play.activeSpells ?? []).filter((s) => s !== id);
@@ -365,6 +378,10 @@ export function longRest(
     ...createPlayState(),
     inspiration: play.inspiration || grantsInspiration,
     conditions: play.conditions,
+    // The effects written by hand stay on the list, turned off: the person turns them on again when they apply.
+    ...(play.customEffects?.length && {
+      customEffects: play.customEffects.map((e) => ({ ...e, off: true })),
+    }),
     // The rounds of the conditions stay with them; a rest ended the rest (a concentration, a rage).
     ...keptRounds(play),
     hitDiceUsed: Object.fromEntries(Object.entries(hitDiceUsed).filter(([, n]) => n > 0)),

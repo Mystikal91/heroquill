@@ -175,7 +175,14 @@ const CharacterSchema = v.object({
     ),
     activeSpells: v.optional(v.array(v.string())),
     customEffects: v.optional(
-      v.array(v.object({ id: v.string(), name: v.string(), effects: v.array(EffectSchema) })),
+      v.array(
+        v.object({
+          id: v.string(),
+          name: v.string(),
+          effects: v.array(EffectSchema),
+          off: v.optional(v.boolean()),
+        }),
+      ),
     ),
   }),
   asi: v.array(v.pipe(v.array(AbilitySchema), v.minLength(1), v.maxLength(2))),

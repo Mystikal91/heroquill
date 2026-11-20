@@ -3,7 +3,7 @@ import type { Effect } from "../data/schema";
 import { srd51Index } from "../test/srd51";
 import { createCharacter } from "./character";
 import { deriveSheet } from "./derive";
-import { addCustomEffect, longRest, removeCustomEffect } from "./play";
+import { addCustomEffect, longRest, removeCustomEffect, setCustomEffectOn } from "./play";
 
 const ac2: Effect = { type: "modifier", target: "ac", value: 2 };
 const fire: Effect = { type: "defense", kind: "resistance", damage: "fire" };
@@ -53,9 +53,21 @@ describe("an effect the person adds by hand", () => {
     expect(removeCustomEffect(play, "ward").customEffects).toBeUndefined();
   });
 
-  it("ends with a long rest", () => {
+  it("can be turned off and on, staying on the list", () => {
+    const base = sheetWith((p) => p);
+    const added = addCustomEffect(createCharacter("srd51").play, "Aid", [ac2]);
+    const off = setCustomEffectOn(added, "aid", false);
+    expect(off.customEffects?.map((e) => e.name)).toEqual(["Aid"]);
+    expect(sheetWith(() => off).armorClass.value).toBe(base.armorClass.value);
+    const on = setCustomEffectOn(off, "aid", true);
+    expect(on.customEffects?.[0]?.off).toBeUndefined();
+    expect(sheetWith(() => on).armorClass.value).toBe(base.armorClass.value + 2);
+  });
+
+  it("is turned off, not lost, by a long rest", () => {
     const play = addCustomEffect(createCharacter("srd51").play, "Aid", [ac2]);
-    expect(longRest(play, {}).customEffects).toBeUndefined();
+    const rested = longRest(play, {});
+    expect(rested.customEffects?.map((e) => [e.name, e.off])).toEqual([["Aid", true]]);
   });
 
   it("works for a spell the character does not know: another player put it on", () => {

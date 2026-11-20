@@ -739,6 +739,7 @@
   "play.effectName": "Name of the effect",
   "play.effectAdd": "Add the effect",
   "play.effectRemove": "Remove the effect",
+  "play.effectOn": "Active",
   "play.conditionActive": "In force",
   "play.conditionRules": "Rules",
   "play.conditionRemove": "Remove",

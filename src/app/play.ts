@@ -30,9 +30,9 @@ import {
   endRage,
   endRageIfDown,
   enterRage,
-  removeCustomEffect,
   resourceLeft,
   setBardicDie,
+  setCustomEffectOn,
   setInspiration,
   setResourceUsed,
   setSpellActive,
@@ -183,7 +183,7 @@ export function rollCheck(
         spent.reduce(
           (play, source) =>
             source.startsWith("custom:effect/")
-              ? removeCustomEffect(play, source.slice("custom:effect/".length))
+              ? setCustomEffectOn(play, source.slice("custom:effect/".length), false)
               : setSpellActive(play, source, false),
           p,
         ),

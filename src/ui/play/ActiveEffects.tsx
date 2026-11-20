@@ -9,6 +9,7 @@ import {
   addCustomEffect,
   removeCustomEffect,
   setBardicDie,
+  setCustomEffectOn,
   setInspiration,
   setSpellActive,
 } from "../../engine/play";
@@ -182,13 +183,28 @@ export function ActiveEffectsList() {
         </li>
       ))}
       {custom.map((e) => (
-        <li class="play-card cond-card effect-card" data-kind="custom" key={e.id}>
+        <li
+          class="play-card cond-card effect-card"
+          data-kind="custom"
+          data-off={e.off ? "true" : undefined}
+          key={e.id}
+        >
           <span class="card-badge" aria-hidden="true">
             <ConditionIcon />
           </span>
           <div class="card-head">
             <b class="feat-name">{e.name}</b>
             <span class="card-meta">{e.effects.map(effectLine).join(" · ")}</span>
+            <label class="effect-toggle">
+              <input
+                type="checkbox"
+                checked={!e.off}
+                onChange={(ev) =>
+                  changePlay((p) => setCustomEffectOn(p, e.id, ev.currentTarget.checked))
+                }
+              />{" "}
+              {ui("play.effectOn")}
+            </label>
           </div>
           <button
             type="button"

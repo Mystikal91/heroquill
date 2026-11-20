@@ -285,3 +285,16 @@
   width: 100%;
   margin: 0.25rem 0 0.5rem;
 }
+
+/* An effect written by hand that is turned off stays on the list, dimmed. */
+.effect-card[data-off="true"] .feat-name,
+.effect-card[data-off="true"] .card-meta {
+  opacity: 0.55;
+}
+.effect-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  cursor: pointer;
+}

@@ -148,6 +148,8 @@ export interface CustomEffect {
   id: string;
   name: string;
   effects: Effect[];
+  /** Kept on the list but not counted on the sheet (a long rest, or a spent die, turns it off; the person turns it on). */
+  off?: boolean;
 }
 
 export function createPlayState(): PlayState {
