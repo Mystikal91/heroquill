@@ -146,6 +146,10 @@
   font-size: 1.2rem;
 }
 
+.dm-turn-buttons > button {
+  min-height: 2.6rem;
+}
+
 .dm-next {
   min-height: 2.6rem;
   padding: 0 1.4rem;

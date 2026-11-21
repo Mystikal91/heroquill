@@ -176,6 +176,7 @@ export function TopBar({ e }: { e: Encounter }) {
                 <button
                   type="button"
                   disabled={waiting === 0}
+                  title={ui("dm.rollInitiativeHint")}
                   onClick={() => updateEncounter((x) => rollAllInitiative(x))}
                 >
                   {ui("dm.rollInitiative")}

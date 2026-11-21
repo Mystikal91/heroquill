@@ -2527,7 +2527,7 @@
   "dm.next": "Turno successivo",
   "dm.end": "Termina lo scontro",
   "dm.start": "Inizia lo scontro",
-  "dm.rollInitiative": "Tira l'iniziativa delle creature",
+  "dm.rollInitiative": "Tira iniziativa",
   "dm.initiative": "Iniziativa",
   "dm.tempHp": "PF temp.",
   "dm.down": "A 0 punti ferita",
@@ -2606,5 +2606,6 @@
   "dm.effect.onlyNumbers": "Solo incantesimi che cambiano i numeri",
   "dm.now": "Ora:",
   "dm.effect.numbersTitle": "Cosa cambia",
-  "dm.effect.numbersHint": "Facoltativo: classe armatura, velocità, iniziativa, punti ferita o una difesa. L'effetto conta nella tabella finché non termina."
+  "dm.effect.numbersHint": "Facoltativo: classe armatura, velocità, iniziativa, punti ferita o una difesa. L'effetto conta nella tabella finché non termina.",
+  "dm.rollInitiativeHint": "Tira l'iniziativa delle creature che non ne hanno; i personaggi tengono quella dei giocatori."
 }

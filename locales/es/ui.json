@@ -2527,7 +2527,7 @@
   "dm.next": "Turno siguiente",
   "dm.end": "Terminar el combate",
   "dm.start": "Empezar el combate",
-  "dm.rollInitiative": "Tirar la iniciativa de las criaturas",
+  "dm.rollInitiative": "Tirar iniciativa",
   "dm.initiative": "Iniciativa",
   "dm.tempHp": "PG temp.",
   "dm.down": "A 0 puntos de golpe",
@@ -2606,5 +2606,6 @@
   "dm.effect.onlyNumbers": "Solo conjuros que cambian números",
   "dm.now": "Ahora:",
   "dm.effect.numbersTitle": "Qué cambia",
-  "dm.effect.numbersHint": "Opcional: clase de armadura, velocidad, iniciativa, puntos de golpe o una defensa. El efecto cuenta en la tabla hasta que termina."
+  "dm.effect.numbersHint": "Opcional: clase de armadura, velocidad, iniciativa, puntos de golpe o una defensa. El efecto cuenta en la tabla hasta que termina.",
+  "dm.rollInitiativeHint": "Tira la iniciativa de las criaturas que no la tienen; los personajes conservan la de sus jugadores."
 }

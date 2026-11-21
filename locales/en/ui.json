@@ -2527,7 +2527,7 @@
   "dm.next": "Next turn",
   "dm.end": "End the fight",
   "dm.start": "Start the fight",
-  "dm.rollInitiative": "Roll initiative for the creatures",
+  "dm.rollInitiative": "Roll initiative",
   "dm.initiative": "Initiative",
   "dm.tempHp": "Temp. HP",
   "dm.down": "At 0 hit points",
@@ -2606,5 +2606,6 @@
   "dm.effect.onlyNumbers": "Only spells that change numbers",
   "dm.now": "Now:",
   "dm.effect.numbersTitle": "What it changes",
-  "dm.effect.numbersHint": "Optional: armor class, speed, initiative, hit points or a defense. The effect counts in the table until it ends."
+  "dm.effect.numbersHint": "Optional: armor class, speed, initiative, hit points or a defense. The effect counts in the table until it ends.",
+  "dm.rollInitiativeHint": "Rolls the initiative of the creatures that have none; characters keep what their players say."
 }

@@ -2527,7 +2527,7 @@
   "dm.next": "Nächster Zug",
   "dm.end": "Kampf beenden",
   "dm.start": "Kampf beginnen",
-  "dm.rollInitiative": "Initiative der Kreaturen würfeln",
+  "dm.rollInitiative": "Initiative würfeln",
   "dm.initiative": "Initiative",
   "dm.tempHp": "Temp. TP",
   "dm.down": "Bei 0 Trefferpunkten",
@@ -2606,5 +2606,6 @@
   "dm.effect.onlyNumbers": "Nur Zauber, die Werte ändern",
   "dm.now": "Jetzt:",
   "dm.effect.numbersTitle": "Was es ändert",
-  "dm.effect.numbersHint": "Optional: Rüstungsklasse, Bewegungsrate, Initiative, Trefferpunkte oder eine Verteidigung. Der Effekt zählt in der Tabelle, bis er endet."
+  "dm.effect.numbersHint": "Optional: Rüstungsklasse, Bewegungsrate, Initiative, Trefferpunkte oder eine Verteidigung. Der Effekt zählt in der Tabelle, bis er endet.",
+  "dm.rollInitiativeHint": "Würfelt die Initiative der Kreaturen, die noch keine haben; Charaktere behalten, was ihre Spieler sagen."
 }

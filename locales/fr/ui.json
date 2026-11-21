@@ -2527,7 +2527,7 @@
   "dm.next": "Tour suivant",
   "dm.end": "Terminer le combat",
   "dm.start": "Commencer le combat",
-  "dm.rollInitiative": "Lancer l'initiative des créatures",
+  "dm.rollInitiative": "Lancer l'initiative",
   "dm.initiative": "Initiative",
   "dm.tempHp": "PV temp.",
   "dm.down": "À 0 point de vie",
@@ -2606,5 +2606,6 @@
   "dm.effect.onlyNumbers": "Seulement les sorts qui changent des valeurs",
   "dm.now": "Maintenant :",
   "dm.effect.numbersTitle": "Ce qu'il change",
-  "dm.effect.numbersHint": "Facultatif : classe d'armure, vitesse, initiative, points de vie ou une défense. L'effet compte dans le tableau jusqu'à sa fin."
+  "dm.effect.numbersHint": "Facultatif : classe d'armure, vitesse, initiative, points de vie ou une défense. L'effet compte dans le tableau jusqu'à sa fin.",
+  "dm.rollInitiativeHint": "Lance l'initiative des créatures qui n'en ont pas ; les personnages gardent celle de leurs joueurs."
 }
