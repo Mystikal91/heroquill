@@ -4,20 +4,12 @@ import { signal } from "@preact/signals";
  * The columns of the initiative table, which of them show and in what order. The choice is kept on
  * the device (not in an encounter): it is how this person likes to read the table.
  */
-export type DmColumn = "live" | "init" | "name" | "hp" | "ac" | "speed" | "cond";
+export type DmColumn = "init" | "name" | "hp" | "ac" | "speed" | "cond";
 
 /** The columns, in the order they have until the person changes it. */
-export const DM_COLUMNS: readonly DmColumn[] = [
-  "live",
-  "init",
-  "name",
-  "hp",
-  "ac",
-  "speed",
-  "cond",
-];
+export const DM_COLUMNS: readonly DmColumn[] = ["init", "name", "hp", "ac", "speed", "cond"];
 
-/** The name cannot be hidden: a row without it says nothing. The info button is not a column: it is always last. */
+/** The name cannot be hidden: a row without it says nothing, and it is what opens the details. */
 export const REQUIRED_COLUMNS: readonly DmColumn[] = ["name"];
 
 export interface ColumnSettings {
@@ -75,7 +67,6 @@ export function toggleColumn(settings: ColumnSettings, column: DmColumn): Column
 
 /** How wide each column is; the name takes what is left. */
 const WIDTHS: Record<DmColumn, string> = {
-  live: "1.4rem",
   init: "4.8rem",
   name: "minmax(0, 1fr)",
   hp: "7.5rem",
@@ -89,16 +80,15 @@ export const FOLDED_WHEN_NARROW: readonly DmColumn[] = ["ac", "speed", "cond"];
 
 /** Tighter widths for a narrow table. */
 const NARROW_WIDTHS: Partial<Record<DmColumn, string>> = {
-  live: "1rem",
   init: "3.2rem",
   hp: "6rem",
 };
 
-/** The `grid-template-columns` of a row: the chosen columns, then the info button. */
+/** The `grid-template-columns` of a row: the chosen columns. */
 export function gridTemplate(columns: readonly DmColumn[], narrow = false): string {
   const shown = narrow ? columns.filter((c) => !FOLDED_WHEN_NARROW.includes(c)) : columns;
   const width = (c: DmColumn) => (narrow ? NARROW_WIDTHS[c] : undefined) ?? WIDTHS[c];
-  return [...shown.map(width), narrow ? "2.4rem" : "2.2rem"].join(" ");
+  return shown.map(width).join(" ");
 }
 
 // ---- Kept on the device ----

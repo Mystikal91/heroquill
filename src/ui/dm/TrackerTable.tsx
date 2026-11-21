@@ -102,24 +102,18 @@ function InitCell({ c }: { c: Combatant }) {
   );
 }
 
-function Cell({ col, c, columns }: { col: DmColumn; c: Combatant; columns: readonly DmColumn[] }) {
+function Cell({
+  col,
+  c,
+  columns,
+  hasCharacters,
+}: {
+  col: DmColumn;
+  c: Combatant;
+  columns: readonly DmColumn[];
+  hasCharacters: boolean;
+}) {
   switch (col) {
-    case "live": {
-      if (c.kind !== "character") return <td data-col="live" />;
-      const live = liveIds.value.has(c.id);
-      const label = live ? ui("dm.live") : ui("dm.manual");
-      return (
-        <td data-col="live">
-          <span
-            class="dm-dot"
-            data-live={live || undefined}
-            role="img"
-            aria-label={label}
-            title={label}
-          />
-        </td>
-      );
-    }
     case "init":
       return (
         <td data-col="init">
@@ -128,23 +122,48 @@ function Cell({ col, c, columns }: { col: DmColumn; c: Combatant; columns: reado
       );
     case "name": {
       const sub = [kindLine(c), isDown(c) ? ui("dm.down") : ""].filter(Boolean).join(" · ");
+      const live = liveIds.value.has(c.id);
+      const label = live ? ui("dm.live") : ui("dm.manual");
       return (
         <td data-col="name" class="dm-name">
-          <span class="dm-name-text">{c.name}</span>
-          <span class="dm-sub">
-            {sub}
-            {/* On a narrow table speed and conditions come here instead of columns of their own. */}
-            <span class="dm-extra">
-              {columns.includes("ac") && (
-                <span>
-                  {ui("dm.col.ac")} {c.ac}
-                </span>
+          {/* The whole name opens the details of the creature. */}
+          <button
+            type="button"
+            class="dm-name-button"
+            title={ui("dm.info", { name: c.name })}
+            aria-label={ui("dm.info", { name: c.name })}
+            onClick={() => {
+              infoFor.value = c.id;
+            }}
+          >
+            <span class="dm-name-line">
+              {c.kind === "character" ? (
+                <span
+                  class="dm-dot"
+                  data-live={live || undefined}
+                  role="img"
+                  aria-label={label}
+                  title={label}
+                />
+              ) : (
+                hasCharacters && <span class="dm-dot-space" aria-hidden="true" />
               )}
-              {columns.includes("speed") && c.speed !== undefined && (
-                <span>{distance(c.speed)}</span>
-              )}
-              {columns.includes("cond") && <ConditionsCell c={c} />}
+              <span class="dm-name-text">{c.name}</span>
+              <span class="dm-name-info" aria-hidden="true">
+                <InfoIcon />
+              </span>
             </span>
+            <span class="dm-sub">{sub}</span>
+          </button>
+          {/* On a narrow table armor class, speed and conditions come here instead of columns of their own. */}
+          <span class="dm-extra">
+            {columns.includes("ac") && (
+              <span>
+                {ui("dm.col.ac")} {c.ac}
+              </span>
+            )}
+            {columns.includes("speed") && c.speed !== undefined && <span>{distance(c.speed)}</span>}
+            {columns.includes("cond") && <ConditionsCell c={c} />}
           </span>
         </td>
       );
@@ -181,6 +200,8 @@ export function TrackerTable({ e }: { e: Encounter }) {
   const columns = visibleColumns(dmColumns.value);
   const style = `--cols:${gridTemplate(columns)};--cols-narrow:${gridTemplate(columns, true)}`;
   const turn = encounter.value?.turn;
+  // With a character in the fight every name leaves room for the live dot, so the names line up.
+  const hasCharacters = e.combatants.some((c) => c.kind === "character");
   return (
     <div class="dm-table-wrap">
       <table class="dm-table" style={style}>
@@ -188,16 +209,9 @@ export function TrackerTable({ e }: { e: Encounter }) {
           <tr>
             {columns.map((col) => (
               <th key={col} data-col={col} scope="col">
-                {col === "live" ? (
-                  <span class="sr-only">{ui("dm.live")}</span>
-                ) : (
-                  ui(`dm.col.${col}` as UiKey)
-                )}
+                {ui(`dm.col.${col}` as UiKey)}
               </th>
             ))}
-            <th data-col="info" scope="col">
-              <span class="sr-only">{ui("dm.infoHeader")}</span>
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -210,21 +224,8 @@ export function TrackerTable({ e }: { e: Encounter }) {
               aria-current={c.id === turn ? "step" : undefined}
             >
               {columns.map((col) => (
-                <Cell key={col} col={col} c={c} columns={columns} />
+                <Cell key={col} col={col} c={c} columns={columns} hasCharacters={hasCharacters} />
               ))}
-              <td data-col="info">
-                <button
-                  type="button"
-                  class="dm-info"
-                  title={ui("dm.info", { name: c.name })}
-                  aria-label={ui("dm.info", { name: c.name })}
-                  onClick={() => {
-                    infoFor.value = c.id;
-                  }}
-                >
-                  <InfoIcon />
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>

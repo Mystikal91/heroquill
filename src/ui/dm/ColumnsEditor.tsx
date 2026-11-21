@@ -68,7 +68,6 @@ export function ColumnsEditor() {
                 );
               })}
             </ol>
-            <p class="muted dm-columns-hint">{ui("dm.columns.info")}</p>
             <button type="button" class="secondary" onClick={() => setDmColumns(defaultColumns())}>
               {ui("dm.columns.reset")}
             </button>

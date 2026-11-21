@@ -23,8 +23,8 @@ describe("the columns of the initiative table", () => {
 
   it("moves a column one place and stops at the ends", () => {
     const down = moveColumn(defaultColumns(), "init", 1);
-    expect(down.order.slice(0, 3)).toEqual(["live", "name", "init"]);
-    expect(moveColumn(defaultColumns(), "live", -1)).toEqual(defaultColumns());
+    expect(down.order.slice(0, 2)).toEqual(["name", "init"]);
+    expect(moveColumn(defaultColumns(), "init", -1)).toEqual(defaultColumns());
     const last = DM_COLUMNS[DM_COLUMNS.length - 1];
     expect(moveColumn(defaultColumns(), last ?? "cond", 1)).toEqual(defaultColumns());
   });
@@ -44,11 +44,13 @@ describe("the columns of the initiative table", () => {
     expect(readColumns("nonsense")).toEqual(defaultColumns());
   });
 
-  it("makes a grid with the info button last, and folds speed and conditions when narrow", () => {
-    expect(gridTemplate(["init", "name", "hp"])).toBe("4.8rem minmax(0, 1fr) 7.5rem 2.2rem");
-    expect(gridTemplate(["init", "name", "speed", "cond"]).endsWith("2.2rem")).toBe(true);
+  it("makes a grid, and folds speed and conditions when narrow", () => {
+    expect(gridTemplate(["init", "name", "hp"])).toBe("4.8rem minmax(0, 1fr) 7.5rem");
+    expect(gridTemplate(["init", "name", "speed", "cond"])).toBe(
+      "4.8rem minmax(0, 1fr) 4rem 3.4rem",
+    );
     expect(gridTemplate(["init", "name", "ac", "speed", "cond"], true)).toBe(
-      "3.2rem minmax(0, 1fr) 2.4rem",
+      "3.2rem minmax(0, 1fr)",
     );
   });
 });
