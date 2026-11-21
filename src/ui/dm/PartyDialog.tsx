@@ -66,7 +66,7 @@ export function PartyDialog() {
   return (
     <Modal
       open={partyPrompt.value && campaign.value !== undefined}
-      variant="center"
+      variant="compact"
       title={ui("dm.partyDialog.title")}
       onClose={closePartyPrompt}
     >

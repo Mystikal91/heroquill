@@ -17,7 +17,7 @@ export function Modal({
   open: boolean;
   onClose: () => void;
   title: string;
-  variant: "side" | "center";
+  variant: "side" | "center" | "compact";
   children: ComponentChildren;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
