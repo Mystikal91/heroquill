@@ -1870,3 +1870,57 @@ button:not(:disabled):not(.roll-toast):active {
     transition: none;
   }
 }
+
+/* ---- The rules page: entries that share a name ---- */
+
+.search-results .search-variants {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.rule-variant {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.rule-applies {
+  margin: 0 0 0.4rem;
+}
+
+/* A variant of a rule: its owner is the line, with the same arrow as the other openers. */
+details.rule-variant > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  margin: 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+details.rule-variant > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.rule-variant > summary::after {
+  content: "";
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.15s;
+}
+
+details.rule-variant[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  details.rule-variant > summary::after {
+    transition: none;
+  }
+}

@@ -8,9 +8,11 @@ import {
   showRulesKind,
 } from "../../app/rulesView";
 import { type SearchHit, browse, kindsOf, search } from "../../app/search";
+import { GROUP_PREFIX, groupHits } from "../../app/searchGroups";
 import { character, content, editionsAvailable } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { EntryDetail } from "./EntryDetail";
+import { VariantsDetail } from "./Variants";
 
 const STEP = 150;
 
@@ -45,10 +47,17 @@ export function RulesPage() {
   const kinds = present.includes("monster") ? present : [...present, "monster" as const];
   const loading = rulesKind.value === "monster" && !c.monsters;
   const { hits, searching } = listed(query, ruleset);
-  const visible = hits.slice(0, shown);
+  const groups = groupHits(hits);
+  const visible = groups.slice(0, shown);
+  const pickedGroup = picked?.startsWith(GROUP_PREFIX)
+    ? groups.find((g) => g.key === picked)
+    : undefined;
+  const showing = picked?.startsWith(GROUP_PREFIX)
+    ? pickedGroup !== undefined
+    : picked !== undefined;
 
   return (
-    <div class={`rules-page${picked ? " has-detail" : ""}`}>
+    <div class={`rules-page${showing ? " has-detail" : ""}`}>
       <div class="rules-top">
         <input
           ref={field}
@@ -124,26 +133,38 @@ export function RulesPage() {
           ) : (
             <>
               <ul class="search-results">
-                {visible.map((hit) => (
-                  <li key={hit.id}>
-                    <button
-                      type="button"
-                      class={picked === hit.id ? "on" : ""}
-                      aria-current={picked === hit.id ? "true" : undefined}
-                      onClick={() => setPicked(hit.id)}
-                    >
-                      <span class="search-name">{hit.name}</span>
-                      {isHomebrewId(hit.id) && <small class="card-tag">{ui("tag.homebrew")}</small>}
-                      {!rulesKind.value && (
-                        <small class="muted">{ui(`search.kind.${hit.kind}` as UiKey)}</small>
-                      )}
-                    </button>
-                  </li>
-                ))}
+                {visible.map((group) => {
+                  const hit = group.hits[0] as SearchHit;
+                  const several = group.hits.length > 1;
+                  const key = several ? group.key : hit.id;
+                  return (
+                    <li key={key}>
+                      <button
+                        type="button"
+                        class={picked === key ? "on" : ""}
+                        aria-current={picked === key ? "true" : undefined}
+                        onClick={() => setPicked(key)}
+                      >
+                        <span class="search-name">{group.name}</span>
+                        {!several && isHomebrewId(hit.id) && (
+                          <small class="card-tag">{ui("tag.homebrew")}</small>
+                        )}
+                        {!rulesKind.value && (
+                          <small class="muted">{ui(`search.kind.${hit.kind}` as UiKey)}</small>
+                        )}
+                        {several && (
+                          <small class="muted search-variants">
+                            {ui("rules.variants", { n: group.hits.length })}
+                          </small>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
-              {hits.length > visible.length && (
+              {groups.length > visible.length && (
                 <button type="button" class="secondary" onClick={() => setShown(shown + STEP)}>
-                  {ui("rules.more", { n: hits.length - visible.length })}
+                  {ui("rules.more", { n: groups.length - visible.length })}
                 </button>
               )}
             </>
@@ -151,13 +172,13 @@ export function RulesPage() {
         </div>
 
         <div class="rules-detail" aria-live="polite">
-          {picked ? (
+          {showing && picked ? (
             <>
               <button type="button" class="link rules-back" onClick={() => setPicked(undefined)}>
                 {"← "}
                 {ui("search.back")}
               </button>
-              <EntryDetail id={picked} />
+              {pickedGroup ? <VariantsDetail group={pickedGroup} /> : <EntryDetail id={picked} />}
             </>
           ) : (
             <p class="muted rules-pick">{ui("rules.pick")}</p>
