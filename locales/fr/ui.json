@@ -2601,5 +2601,10 @@
   "dm.initSet": "Valider",
   "dm.initRoll": "Lancer d20 {bonus}",
   "dm.initClear": "Effacer",
-  "dm.kind.creature": "Créature"
+  "dm.kind.creature": "Créature",
+  "dm.effect.changes": "Change les valeurs",
+  "dm.effect.onlyNumbers": "Seulement les sorts qui changent des valeurs",
+  "dm.now": "Maintenant :",
+  "dm.effect.numbersTitle": "Ce qu'il change",
+  "dm.effect.numbersHint": "Facultatif : classe d'armure, vitesse, initiative, points de vie ou une défense. L'effet compte dans le tableau jusqu'à sa fin."
 }

@@ -1,4 +1,6 @@
-import type { Entry } from "../data/schema";
+import * as v from "valibot";
+import { type Effect, EffectSchema, type Entry } from "../data/schema";
+import { effectiveInitiativeBonus, effectiveMaxHp } from "./combatantNumbers";
 import { type RandomInt, cryptoRandomInt, parseDice, rollD20, rollExpression } from "./dice";
 import { uuid } from "./uuid";
 
@@ -20,9 +22,12 @@ export interface TrackedEffect {
   rounds?: number;
   /** The creature is concentrating on it: it holds only one such effect at a time. */
   concentration?: boolean;
+  /** What it changes, as the rules of the app say it (a bonus to armor class, a multiplier of the speed...). */
+  effects?: Effect[];
 }
 
 export const MAX_EFFECTS = 20;
+export const MAX_EFFECT_RULES = 8;
 
 export interface Combatant {
   id: string;
@@ -89,7 +94,9 @@ export function initiativeOrder(combatants: readonly Combatant[]): Combatant[] {
   const rolled = combatants.filter((c) => c.initiative !== undefined);
   const waiting = combatants.filter((c) => c.initiative === undefined);
   const byOrder = [...rolled].sort(
-    (a, b) => (b.initiative ?? 0) - (a.initiative ?? 0) || b.initiativeBonus - a.initiativeBonus,
+    (a, b) =>
+      (b.initiative ?? 0) - (a.initiative ?? 0) ||
+      effectiveInitiativeBonus(b) - effectiveInitiativeBonus(a),
   );
   return [...byOrder, ...waiting];
 }
@@ -258,7 +265,7 @@ export function rollInitiative(
   c: Combatant,
   random: RandomInt = cryptoRandomInt,
 ): { total: number; die: number } {
-  const roll = rollD20(c.initiativeBonus, "normal", random);
+  const roll = rollD20(effectiveInitiativeBonus(c), "normal", random);
   return { total: roll.total, die: roll.used };
 }
 
@@ -367,7 +374,12 @@ export function nextTurn(encounter: Encounter): TurnReport {
       endedEffects.push(effect.name);
       return [];
     });
-    return { ...c, conditions: c.conditions.filter((x) => !ended.includes(x)), rounds, effects };
+    return settle({
+      ...c,
+      conditions: c.conditions.filter((x) => !ended.includes(x)),
+      rounds,
+      effects,
+    });
   });
   const base = { ...encounter, combatants: ticked };
   const order = initiativeOrder(ticked);
@@ -400,7 +412,7 @@ export function hurt(c: Combatant, amount: number): Combatant {
 export function heal(c: Combatant, amount: number): Combatant {
   const healed = Math.max(0, Math.floor(amount));
   if (healed === 0) return c;
-  return { ...c, hp: Math.min(c.maxHp, c.hp + healed) };
+  return { ...c, hp: Math.min(effectiveMaxHp(c), c.hp + healed) };
 }
 
 /** Temporary hit points do not stack: a new amount only replaces a smaller one. */
@@ -415,7 +427,7 @@ export function setMaxHp(c: Combatant, maxHp: number): Combatant {
 }
 
 export function setHp(c: Combatant, hp: number): Combatant {
-  return { ...c, hp: clamp(whole(hp, c.hp), 0, c.maxHp) };
+  return { ...c, hp: clamp(whole(hp, c.hp), 0, effectiveMaxHp(c)) };
 }
 
 // ---- Conditions ----
@@ -440,6 +452,12 @@ export function setConditionRounds(
 
 // ---- Effects ----
 
+/** Hit points never stay above a maximum that an effect raised and that has ended. */
+export function settle(c: Combatant): Combatant {
+  const max = effectiveMaxHp(c);
+  return c.hp > max ? { ...c, hp: max } : c;
+}
+
 /** How many conditions and effects are in force: the number the table shows. */
 export const effectCount = (c: Combatant): number => c.conditions.length + c.effects.length;
 
@@ -456,6 +474,7 @@ export function addEffect(c: Combatant, effect: Omit<TrackedEffect, "id">): Comb
       ? Math.min(MAX_ROUNDS, Math.trunc(effect.rounds))
       : undefined;
   const note = effect.note?.trim().slice(0, 200);
+  const rules = (effect.effects ?? []).slice(0, MAX_EFFECT_RULES);
   const added: TrackedEffect = {
     id: uuid(),
     name,
@@ -463,15 +482,14 @@ export function addEffect(c: Combatant, effect: Omit<TrackedEffect, "id">): Comb
     ...(effect.spell && { spell: effect.spell }),
     ...(rounds !== undefined && { rounds }),
     ...(effect.concentration && { concentration: true }),
+    ...(rules.length > 0 && { effects: rules }),
   };
   const kept = added.concentration ? c.effects.filter((x) => !x.concentration) : c.effects;
-  return { ...c, effects: [...kept, added] };
+  return settle({ ...c, effects: [...kept, added] });
 }
 
-export const removeEffect = (c: Combatant, id: string): Combatant => ({
-  ...c,
-  effects: c.effects.filter((x) => x.id !== id),
-});
+export const removeEffect = (c: Combatant, id: string): Combatant =>
+  settle({ ...c, effects: c.effects.filter((x) => x.id !== id) });
 
 /** Sets the rounds left of an effect; 0 or nothing takes the limit off. */
 export function setEffectRounds(c: Combatant, id: string, rounds: number | undefined): Combatant {
@@ -523,6 +541,12 @@ function readCombatant(raw: unknown): Combatant | undefined {
       const left = clamp(whole(x.rounds), 0, MAX_ROUNDS);
       const note = text(x.note, "", 200).trim();
       const spell = typeof x.spell === "string" ? x.spell : undefined;
+      const rules = (Array.isArray(x.effects) ? x.effects : [])
+        .slice(0, MAX_EFFECT_RULES)
+        .flatMap((rule) => {
+          const parsed = v.safeParse(EffectSchema, rule);
+          return parsed.success ? [parsed.output] : [];
+        });
       return [
         {
           id: text(x.id) || uuid(),
@@ -531,6 +555,7 @@ function readCombatant(raw: unknown): Combatant | undefined {
           ...(spell && { spell }),
           ...(left >= 1 && { rounds: left }),
           ...(x.concentration === true && { concentration: true }),
+          ...(rules.length > 0 && { effects: rules }),
         },
       ];
     });

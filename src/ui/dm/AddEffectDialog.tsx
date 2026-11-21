@@ -2,10 +2,13 @@ import { useMemo, useState } from "preact/hooks";
 import { dmRuleset, effectFor, encounter, giveEffect } from "../../app/dm";
 import { fold } from "../../app/search";
 import { content } from "../../app/store";
+import type { Effect } from "../../data/schema";
 import { durationRounds } from "../../engine/durations";
 import { MAX_ROUNDS } from "../../engine/encounter";
 import { inRuleset } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
+import { NOT_FREE } from "../play/ActiveEffects";
+import { EffectList } from "../studio/Effects";
 import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
 
@@ -15,6 +18,7 @@ function Spells({ target, done }: { target: string; done: () => void }) {
   const c = content.value;
   const ruleset = dmRuleset.value;
   const [query, setQuery] = useState("");
+  const [onlyNumbers, setOnlyNumbers] = useState(false);
   const all = useMemo(
     () =>
       c
@@ -26,7 +30,10 @@ function Spells({ target, done }: { target: string; done: () => void }) {
     [c, ruleset],
   );
   const wanted = fold(query.trim());
-  const found = wanted ? all.filter((s) => fold(s.name).includes(wanted)) : all;
+  const found = all.filter(
+    (s) =>
+      (!wanted || fold(s.name).includes(wanted)) && (!onlyNumbers || s.entry.effects.length > 0),
+  );
   const shown = found.slice(0, 60);
   return (
     <div class="dm-add-body">
@@ -39,6 +46,14 @@ function Spells({ target, done }: { target: string; done: () => void }) {
           placeholder={ui("dm.effect.searchPlaceholder")}
           onInput={(e) => setQuery(e.currentTarget.value)}
         />
+      </label>
+      <label class="dm-check">
+        <input
+          type="checkbox"
+          checked={onlyNumbers}
+          onChange={(e) => setOnlyNumbers(e.currentTarget.checked)}
+        />
+        <span>{ui("dm.effect.onlyNumbers")}</span>
       </label>
       {shown.length === 0 ? (
         <p class="muted">{ui("dm.effect.noSpells")}</p>
@@ -58,6 +73,9 @@ function Spells({ target, done }: { target: string; done: () => void }) {
                     {data.concentration && (
                       <span class="dm-tag">{ui("dm.effect.concentration")}</span>
                     )}
+                    {entry.effects.length > 0 && (
+                      <span class="dm-tag dm-tag-numbers">{ui("dm.effect.changes")}</span>
+                    )}
                   </b>
                   <small>{[level, duration].filter(Boolean).join(" · ")}</small>
                 </span>
@@ -71,6 +89,7 @@ function Spells({ target, done }: { target: string; done: () => void }) {
                       spell: entry.id,
                       ...(rounds !== undefined && { rounds }),
                       ...(data.concentration && { concentration: true }),
+                      ...(entry.effects.length > 0 && { effects: entry.effects }),
                     });
                     done();
                   }}
@@ -92,6 +111,7 @@ function ByHand({ target, done }: { target: string; done: () => void }) {
   const [note, setNote] = useState("");
   const [rounds, setRounds] = useState<number | undefined>(undefined);
   const [concentration, setConcentration] = useState(false);
+  const [rules, setRules] = useState<Effect[]>([]);
   return (
     <form
       class="dm-add-body dm-manual"
@@ -103,6 +123,7 @@ function ByHand({ target, done }: { target: string; done: () => void }) {
           ...(note.trim() && { note }),
           ...(rounds !== undefined && { rounds }),
           ...(concentration && { concentration: true }),
+          ...(rules.length > 0 && { effects: rules }),
         });
         done();
       }}
@@ -145,6 +166,11 @@ function ByHand({ target, done }: { target: string; done: () => void }) {
         />
         <span>{ui("dm.effect.concentration")}</span>
       </label>
+      <div class="dm-manual-name dm-effect-rules">
+        <h4>{ui("dm.effect.numbersTitle")}</h4>
+        <p class="muted">{ui("dm.effect.numbersHint")}</p>
+        <EffectList effects={rules} onChange={setRules} hidden={NOT_FREE} />
+      </div>
       <button type="submit" class="dm-manual-add" disabled={!name.trim()}>
         {ui("dm.addButton")}
       </button>

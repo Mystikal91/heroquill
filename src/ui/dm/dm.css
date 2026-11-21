@@ -1345,3 +1345,40 @@
     transition: none;
   }
 }
+
+/* A number that an effect has changed: the accent says so, and the title says how. */
+.dm [data-changed] {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.dm-now {
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  font-size: 0.9rem;
+}
+
+.dm-fx-lines {
+  color: var(--accent);
+}
+
+.dm-tag-numbers {
+  background: rgb(63 138 70 / 0.25);
+  color: #8fd19a;
+}
+
+.dm-effect-rules h4 {
+  margin: 0.4rem 0 0.1rem;
+}
+
+.dm-effect-rules p {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+}
+
+.dm-fx-name .dm-tag {
+  justify-self: start;
+  margin-left: 0;
+}

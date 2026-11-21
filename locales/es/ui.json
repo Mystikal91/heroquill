@@ -2601,5 +2601,10 @@
   "dm.initSet": "Fijar",
   "dm.initRoll": "Tirar d20 {bonus}",
   "dm.initClear": "Borrar",
-  "dm.kind.creature": "Criatura"
+  "dm.kind.creature": "Criatura",
+  "dm.effect.changes": "Cambia números",
+  "dm.effect.onlyNumbers": "Solo conjuros que cambian números",
+  "dm.now": "Ahora:",
+  "dm.effect.numbersTitle": "Qué cambia",
+  "dm.effect.numbersHint": "Opcional: clase de armadura, velocidad, iniciativa, puntos de golpe o una defensa. El efecto cuenta en la tabla hasta que termina."
 }

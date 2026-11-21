@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { dmRuleset, editCombatant, effectFor, updateEncounter } from "../../app/dm";
 import { content } from "../../app/store";
+import { effectiveMaxHp } from "../../engine/combatantNumbers";
 import {
   type Combatant,
   MAX_HP,
@@ -16,6 +17,7 @@ import {
 } from "../../engine/encounter";
 import { inRuleset } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
+import { effectLine } from "../play/ActiveEffects";
 import { DamageButtons } from "../play/DamageButtons";
 import { NumberField } from "./NumberField";
 
@@ -39,7 +41,8 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => input.current?.focus(), []);
   const n = Math.max(0, Number.parseInt(amount, 10) || 0);
-  const percent = c.maxHp > 0 ? Math.round((c.hp / c.maxHp) * 100) : 0;
+  const maxHp = effectiveMaxHp(c);
+  const percent = maxHp > 0 ? Math.round((c.hp / maxHp) * 100) : 0;
   const state = c.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
   const apply = (change: (x: Combatant) => Combatant) => {
     editCombatant(c.id, change);
@@ -50,14 +53,14 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
       <div class="dm-hp-top">
         <output class="dm-hp-readout">
           <b class={c.hp === 0 ? "zero" : ""}>{c.hp}</b>
-          <span>{ui("play.of", { max: c.maxHp })}</span>
+          <span>{ui("play.of", { max: maxHp })}</span>
           {c.tempHp > 0 && <em>+{c.tempHp}</em>}
         </output>
         <div
           class="dm-hp-bar"
           data-state={state}
           role="img"
-          aria-label={`${c.hp} ${ui("play.of", { max: c.maxHp })}`}
+          aria-label={`${c.hp} ${ui("play.of", { max: maxHp })}`}
         >
           <span style={{ width: `${percent}%` }} />
         </div>
@@ -181,6 +184,11 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
                   {x.name}
                   {x.concentration && <span class="dm-tag">{ui("dm.effect.concentration")}</span>}
                   {x.note && <small>{x.note}</small>}
+                  {(x.effects ?? []).length > 0 && (
+                    <small class="dm-fx-lines">
+                      {(x.effects ?? []).map(effectLine).join(" · ")}
+                    </small>
+                  )}
                 </span>
                 <RoundsField
                   label={`${ui("play.conditionRounds")}: ${x.name}`}

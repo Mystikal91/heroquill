@@ -2601,5 +2601,10 @@
   "dm.initSet": "Setzen",
   "dm.initRoll": "W20 würfeln {bonus}",
   "dm.initClear": "Löschen",
-  "dm.kind.creature": "Kreatur"
+  "dm.kind.creature": "Kreatur",
+  "dm.effect.changes": "Ändert Werte",
+  "dm.effect.onlyNumbers": "Nur Zauber, die Werte ändern",
+  "dm.now": "Jetzt:",
+  "dm.effect.numbersTitle": "Was es ändert",
+  "dm.effect.numbersHint": "Optional: Rüstungsklasse, Bewegungsrate, Initiative, Trefferpunkte oder eine Verteidigung. Der Effekt zählt in der Tabelle, bis er endet."
 }

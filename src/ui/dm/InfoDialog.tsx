@@ -1,7 +1,8 @@
 import { editCombatant, encounter, infoFor, removeFromFight } from "../../app/dm";
+import { combatantNumbers } from "../../engine/combatantNumbers";
 import { type Combatant, MAX_HP, MAX_SPEED, setHp, setMaxHp } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
-import { feetFrom, feetTo, metricUnits } from "../../i18n/units";
+import { distance, feetFrom, feetTo, metricUnits } from "../../i18n/units";
 import { MonsterBlock } from "../rules/MonsterBlock";
 import { EffectsEditor } from "./Editors";
 import { Modal } from "./Modal";
@@ -9,6 +10,14 @@ import { NumberField } from "./NumberField";
 
 function Details({ c }: { c: Combatant }) {
   const metric = metricUnits.value;
+  const now = combatantNumbers(c);
+  const changed = [
+    now.ac !== c.ac && `${ui("dm.col.ac")} ${now.ac}`,
+    now.speed !== c.speed && now.speed !== undefined && distance(now.speed),
+    now.maxHp !== c.maxHp && `${ui("dm.field.maxHp")} ${now.maxHp}`,
+    now.initiativeBonus !== c.initiativeBonus &&
+      `${ui("dm.field.bonus")} ${now.initiativeBonus >= 0 ? "+" : ""}${now.initiativeBonus}`,
+  ].filter(Boolean);
   return (
     <div class="dm-info-body">
       <label class="field">
@@ -29,7 +38,7 @@ function Details({ c }: { c: Combatant }) {
           <NumberField
             label={ui("dm.field.hp")}
             min={0}
-            max={c.maxHp}
+            max={now.maxHp}
             value={c.hp}
             onChange={(n) => n !== undefined && editCombatant(c.id, (x) => setHp(x, n))}
           />
@@ -84,6 +93,11 @@ function Details({ c }: { c: Combatant }) {
           />
         </div>
       </div>
+      {changed.length > 0 && (
+        <p class="dm-now">
+          {ui("dm.now")} {changed.join(" · ")}
+        </p>
+      )}
       <section>
         <h4>{ui("play.activeEffects")}</h4>
         <EffectsEditor c={c} />

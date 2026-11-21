@@ -2601,5 +2601,10 @@
   "dm.initSet": "Set",
   "dm.initRoll": "Roll d20 {bonus}",
   "dm.initClear": "Clear",
-  "dm.kind.creature": "Creature"
+  "dm.kind.creature": "Creature",
+  "dm.effect.changes": "Changes numbers",
+  "dm.effect.onlyNumbers": "Only spells that change numbers",
+  "dm.now": "Now:",
+  "dm.effect.numbersTitle": "What it changes",
+  "dm.effect.numbersHint": "Optional: armor class, speed, initiative, hit points or a defense. The effect counts in the table until it ends."
 }

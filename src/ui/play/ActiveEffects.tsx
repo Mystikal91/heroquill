@@ -37,7 +37,7 @@ const FREE_TYPES = new Set([
   "conditionImmunity",
   "unarmoredDefense",
 ]);
-const NOT_FREE = EFFECT_TYPES.filter((t) => !FREE_TYPES.has(t));
+export const NOT_FREE = EFFECT_TYPES.filter((t) => !FREE_TYPES.has(t));
 
 /** What an effect does, in a few words: "Armor class +2", "Resistances: fire". The rest is as the studio says it. */
 export function effectLine(effect: Effect): string {

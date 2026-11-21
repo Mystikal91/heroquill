@@ -2,6 +2,7 @@ import { encounter, infoFor, liveIds } from "../../app/dm";
 import { type DmColumn, dmColumns, gridTemplate, visibleColumns } from "../../app/dmColumns";
 import { typeText } from "../../app/monsterView";
 import { content } from "../../app/store";
+import { combatantNumbers, explainNumber } from "../../engine/combatantNumbers";
 import {
   type Combatant,
   type Encounter,
@@ -57,7 +58,8 @@ function EffectsCell({ c }: { c: Combatant }) {
 }
 
 function HpCell({ c }: { c: Combatant }) {
-  const percent = c.maxHp > 0 ? Math.round((c.hp / c.maxHp) * 100) : 0;
+  const { maxHp, parts } = combatantNumbers(c);
+  const percent = maxHp > 0 ? Math.round((c.hp / maxHp) * 100) : 0;
   const state = c.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
   return (
     <CellPopover
@@ -67,7 +69,12 @@ function HpCell({ c }: { c: Combatant }) {
         <>
           <span class="dm-hp-num">
             <b>{c.hp}</b>
-            <span>/ {c.maxHp}</span>
+            <span
+              data-changed={parts.hp.length > 0 || undefined}
+              title={explainNumber(c.maxHp, parts.hp)}
+            >
+              / {maxHp}
+            </span>
             {c.tempHp > 0 && <em>+{c.tempHp}</em>}
           </span>
           <span class="dm-hp-bar" data-state={state} aria-hidden="true">
@@ -83,7 +90,8 @@ function HpCell({ c }: { c: Combatant }) {
 
 /** Initiative: a circle with the number, or a dashed circle with a die while it is not known. It opens the editor. */
 function InitCell({ c }: { c: Combatant }) {
-  const bonus = c.initiativeBonus >= 0 ? `+${c.initiativeBonus}` : String(c.initiativeBonus);
+  const total = combatantNumbers(c).initiativeBonus;
+  const bonus = total >= 0 ? `+${total}` : String(total);
   return (
     <CellPopover
       title={ui("dm.initEdit", { name: c.name })}
@@ -111,6 +119,14 @@ function Cell({
   c: Combatant;
   columns: readonly DmColumn[];
 }) {
+  const numbers = combatantNumbers(c);
+  const acChanged = numbers.ac !== c.ac;
+  const acTitle = explainNumber(c.ac, numbers.parts.ac, { floor: numbers.floor });
+  const speedChanged = numbers.speed !== c.speed;
+  const speedTitle =
+    c.speed === undefined
+      ? ""
+      : explainNumber(c.speed, numbers.parts.speed, { multiplier: numbers.multiplier });
   switch (col) {
     case "init":
       return (
@@ -163,11 +179,15 @@ function Cell({
           {/* On a narrow table armor class, speed and effects come here instead of columns of their own. */}
           <span class="dm-extra">
             {columns.includes("ac") && (
-              <span>
-                {ui("dm.col.ac")} {c.ac}
+              <span data-changed={acChanged || undefined} title={acTitle}>
+                {ui("dm.col.ac")} {numbers.ac}
               </span>
             )}
-            {columns.includes("speed") && c.speed !== undefined && <span>{distance(c.speed)}</span>}
+            {columns.includes("speed") && numbers.speed !== undefined && (
+              <span data-changed={speedChanged || undefined} title={speedTitle}>
+                {distance(numbers.speed)}
+              </span>
+            )}
             {columns.includes("cond") && <EffectsCell c={c} />}
           </span>
         </td>
@@ -181,14 +201,19 @@ function Cell({
       );
     case "ac":
       return (
-        <td data-col="ac" class="dm-num">
-          {c.ac}
+        <td data-col="ac" class="dm-num" data-changed={acChanged || undefined} title={acTitle}>
+          {numbers.ac}
         </td>
       );
     case "speed":
       return (
-        <td data-col="speed" class="dm-num">
-          {c.speed !== undefined ? distance(c.speed) : "—"}
+        <td
+          data-col="speed"
+          class="dm-num"
+          data-changed={speedChanged || undefined}
+          title={speedTitle}
+        >
+          {numbers.speed !== undefined ? distance(numbers.speed) : "—"}
         </td>
       );
     case "cond":
