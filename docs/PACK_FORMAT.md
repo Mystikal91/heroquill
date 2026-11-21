@@ -910,7 +910,9 @@ and the words:
 - `saves` and `skills` are the **total bonuses** (`{ "con": 7 }`), not the proficiency; `senses` is in
   feet; `conditionImmunities` is a list of condition slugs. Damage resistances, vulnerabilities and
   immunities are **texts** (`resistances`, `vulnerabilities`, `immunities`), written as in a stat
-  block.
+  block, and, for the kinds that are plain (`fire`, `poison`...), also lists of the kind of damage
+  (`damageResistances`, `damageVulnerabilities`, `damageImmunities`) that the DM mode uses to take a
+  resistance off a hit by itself. A defense with a condition ("from nonmagical weapons") is only text.
 - A creature that grows with its owner (a companion, a summoned spirit) can scale: `armorClass[0]`
   may carry `plus: "proficiency"` or an ability, `data.scaling` holds formulas for hit points
   (`{ base, perLevel, owner, own, class }`), saves, skills and passive Perception
@@ -1347,6 +1349,9 @@ No fields: the entry is its name and its text.
 | `saves` | record of number by str, dex, con, int, wis, cha | no |  |
 | `skills` | record of number by key | no |  |
 | `conditionImmunities` | list of text | no |  |
+| `damageVulnerabilities` | list of text | no |  |
+| `damageResistances` | list of text | no |  |
+| `damageImmunities` | list of text | no |  |
 | `senses` | record of number (min 0, feet) by key | no |  |
 | `blindBeyond` | list of text | no |  |
 | `passivePerception` | number | no |  |

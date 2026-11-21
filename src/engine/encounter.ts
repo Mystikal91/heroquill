@@ -51,6 +51,8 @@ export interface Combatant {
   rounds: Record<string, number>;
   /** What else is in force on it: a spell, an effect written by hand, a concentration. */
   effects: TrackedEffect[];
+  /** Damage it resists, is immune to or is vulnerable to, when it has them of its own (a character's, from its sheet). */
+  defenses?: Partial<Record<"resistance" | "immunity" | "vulnerability", string[]>>;
   notes: string;
 }
 
@@ -201,6 +203,7 @@ export function characterCombatant(fields: {
   ac: number;
   speed?: number;
   initiativeBonus: number;
+  defenses?: Combatant["defenses"];
 }): Combatant {
   const maxHp = clamp(whole(fields.maxHp, 1), 1, MAX_HP);
   return {
@@ -217,9 +220,13 @@ export function characterCombatant(fields: {
     conditions: [],
     rounds: {},
     effects: [],
+    ...(hasDefenses(fields.defenses) && { defenses: fields.defenses }),
     notes: "",
   };
 }
+
+const hasDefenses = (d: Combatant["defenses"]): d is NonNullable<Combatant["defenses"]> =>
+  d !== undefined && Object.values(d).some((list) => (list?.length ?? 0) > 0);
 
 /**
  * The names for `count` new creatures of a kind: a lone one keeps the plain name, several are
@@ -282,21 +289,45 @@ export function setInitiative(
   });
 }
 
+/** One roll for a group: every creature of the same kind that has no initiative takes the same total. */
+export function rollGroupInitiative(
+  encounter: Encounter,
+  id: string,
+  random: RandomInt = cryptoRandomInt,
+): Encounter {
+  const group = groupOf(encounter, id);
+  const lead = group.find((c) => c.id === id) ?? group[0];
+  if (!lead) return encounter;
+  const total = rollInitiative(lead, random).total;
+  const ids = new Set(group.map((c) => c.id));
+  return touch({
+    ...encounter,
+    combatants: encounter.combatants.map((c) => (ids.has(c.id) ? { ...c, initiative: total } : c)),
+  });
+}
+
 /**
  * Rolls the initiative of the creatures the DM rolls for. Characters keep what their players say
  * (typed in), unless `characters` is set. A combatant that already has a value keeps it unless `again` is set.
  */
 export function rollAllInitiative(
   encounter: Encounter,
-  options: { characters?: boolean; again?: boolean } = {},
+  options: { characters?: boolean; again?: boolean; grouped?: boolean } = {},
   random: RandomInt = cryptoRandomInt,
 ): Encounter {
+  // With groups, the creatures of one kind take one roll between them (the first of them rolls it).
+  const rolled = new Map<string, number>();
   return touch({
     ...encounter,
     combatants: encounter.combatants.map((c) => {
       if (c.kind === "character" && !options.characters) return c;
       if (c.initiative !== undefined && !options.again) return c;
-      return { ...c, initiative: rollInitiative(c, random).total };
+      const group = options.grouped && c.kind === "monster" ? c.source : undefined;
+      const shared = group === undefined ? undefined : rolled.get(group);
+      if (shared !== undefined) return { ...c, initiative: shared };
+      const total = rollInitiative(c, random).total;
+      if (group !== undefined) rolled.set(group, total);
+      return { ...c, initiative: total };
     }),
   });
 }
@@ -582,6 +613,16 @@ function readCombatant(raw: unknown): Combatant | undefined {
         },
       ];
     });
+  const defenses: NonNullable<Combatant["defenses"]> = {};
+  if (r.defenses && typeof r.defenses === "object") {
+    for (const kind of ["resistance", "immunity", "vulnerability"] as const) {
+      const list = (r.defenses as Record<string, unknown>)[kind];
+      if (Array.isArray(list)) {
+        const kinds = list.filter((x): x is string => typeof x === "string").slice(0, 13);
+        if (kinds.length > 0) defenses[kind] = kinds;
+      }
+    }
+  }
   const source = typeof r.source === "string" ? r.source : undefined;
   return {
     id: text(r.id) || uuid(),
@@ -600,6 +641,7 @@ function readCombatant(raw: unknown): Combatant | undefined {
     conditions,
     rounds,
     effects,
+    ...(hasDefenses(defenses) && { defenses }),
     notes: text(r.notes, "", 2000),
   };
 }

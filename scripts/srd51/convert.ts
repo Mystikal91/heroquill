@@ -4,6 +4,7 @@
  */
 import type { Ability, Effect, Entry, ProficiencyCategory } from "../../src/data/schema";
 import type { StartingChoice, StartingPart } from "../../src/data/startingEquipment";
+import { damageDefenses } from "./defenses";
 import {
   ACTIVATION,
   FEATURE_EFFECTS,
@@ -1042,6 +1043,7 @@ export function convertMonsters(raw: { monsters: Raw[] }, pack: string = PACK): 
       ...(Object.keys(saves).length && { saves }),
       ...(Object.keys(skills).length && { skills }),
       conditionImmunities: (m.condition_immunities as Raw[]).map((c) => c.index),
+      ...damageDefenses(m as Parameters<typeof damageDefenses>[0]),
       senses,
       ...(blindBeyond.length && { blindBeyond }),
       passivePerception,

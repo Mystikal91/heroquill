@@ -215,6 +215,16 @@
               "minValue": 4
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "lightning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "poison",
+          "thunder"
         ]
       }
     },
@@ -278,6 +288,10 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -338,6 +352,10 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -402,6 +420,10 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -562,6 +584,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "poison"
         ]
       }
     },
@@ -601,6 +626,12 @@
           {
             "attackBonus": 1
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageResistances": [
+          "piercing"
         ]
       }
     },
@@ -646,6 +677,13 @@
               }
             ]
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing"
         ]
       }
     },
@@ -756,6 +794,10 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -881,6 +923,14 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -1105,6 +1155,13 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -1254,6 +1311,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -1368,6 +1432,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -1510,6 +1577,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -1601,6 +1671,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -1766,6 +1839,9 @@
           },
           {},
           {}
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -1939,6 +2015,9 @@
           },
           {},
           {}
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -2010,6 +2089,12 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageImmunities": [
+          "acid",
+          "cold",
+          "lightning",
+          "slashing"
         ]
       }
     },
@@ -2158,6 +2243,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -2246,6 +2334,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -2404,6 +2495,9 @@
           {},
           {},
           {}
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -2562,6 +2656,9 @@
           {},
           {},
           {}
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -2651,6 +2748,13 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -2734,6 +2838,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -2826,6 +2933,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -3012,6 +3122,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -3198,6 +3311,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -3292,6 +3408,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -3387,6 +3506,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -3574,6 +3696,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -3777,6 +3902,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -4182,6 +4310,16 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "cold",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -4366,6 +4504,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -4440,6 +4581,16 @@
               "minValue": 5
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "acid",
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -4881,6 +5032,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -4973,6 +5127,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -5151,6 +5308,9 @@
           },
           {},
           {}
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -5338,6 +5498,9 @@
           {},
           {},
           {}
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -5510,6 +5673,15 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "psychic",
+          "radiant"
         ]
       }
     },
@@ -5578,6 +5750,15 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -6044,6 +6225,9 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "radiant"
         ]
       }
     },
@@ -6219,6 +6403,10 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "lightning",
+          "thunder"
         ]
       }
     },
@@ -6406,6 +6594,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageResistances": [
+          "fire"
         ]
       }
     },
@@ -6466,6 +6657,14 @@
               "times": 1
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -6884,6 +7083,12 @@
               }
             ]
           }
+        ],
+        "damageVulnerabilities": [
+          "thunder"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -7030,6 +7235,9 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -7126,6 +7334,13 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -7392,6 +7607,15 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -7464,6 +7688,9 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -7543,6 +7770,10 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "lightning",
+          "poison"
         ]
       }
     },
@@ -7624,6 +7855,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -7794,6 +8028,9 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -7887,6 +8124,9 @@
               "onSave": "half"
             }
           }
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -7968,6 +8208,12 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -8083,6 +8329,20 @@
               "minValue": 6
             }
           }
+        ],
+        "damageResistances": [
+          "acid",
+          "bludgeoning",
+          "cold",
+          "fire",
+          "lightning",
+          "piercing",
+          "slashing",
+          "thunder"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -8160,6 +8420,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -8384,6 +8647,14 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -8830,6 +9101,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -8926,6 +9200,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -9100,6 +9377,9 @@
           },
           {},
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -9282,6 +9562,9 @@
           },
           {},
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -9426,6 +9709,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "acid",
+          "cold",
+          "fire"
         ]
       }
     },
@@ -9519,6 +9807,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -9613,6 +9904,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -9766,6 +10060,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -9927,6 +10224,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -10430,6 +10730,9 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -10764,6 +11067,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -10844,6 +11150,14 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -11157,6 +11471,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -11244,6 +11561,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -11422,6 +11746,11 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "cold",
+          "fire",
+          "poison"
         ]
       }
     },
@@ -11497,6 +11826,13 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -11625,6 +11961,12 @@
               "minValue": 6
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -11716,6 +12058,14 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -11807,6 +12157,11 @@
               "minValue": 6
             }
           }
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -12073,6 +12428,10 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "cold",
+          "lightning"
         ]
       }
     },
@@ -12257,6 +12616,13 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -12530,6 +12896,14 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -12956,6 +13330,9 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "psychic"
         ]
       }
     },
@@ -13021,6 +13398,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -13184,6 +13564,14 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -13375,6 +13763,12 @@
               ]
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -13483,6 +13877,13 @@
               "minValue": 6
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageImmunities": [
+          "cold",
+          "poison"
         ]
       }
     },
@@ -13574,6 +13975,13 @@
               "minValue": 6
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -13666,6 +14074,10 @@
               "minValue": 6
             }
           }
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -13879,6 +14291,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageImmunities": [
+          "acid"
         ]
       }
     },
@@ -14031,6 +14446,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -14214,6 +14636,13 @@
           },
           {},
           {}
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -14311,6 +14740,14 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -14487,6 +14924,10 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire"
         ]
       }
     },
@@ -14543,6 +14984,9 @@
             ]
           },
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -14662,6 +15106,13 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageResistances": [
+          "acid"
+        ],
+        "damageImmunities": [
+          "lightning",
+          "slashing"
         ]
       }
     },
@@ -14855,6 +15306,9 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "cold"
         ]
       }
     },
@@ -15424,6 +15878,13 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -15595,6 +16056,9 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "radiant"
         ]
       }
     },
@@ -16110,6 +16574,14 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -16366,6 +16838,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -16454,6 +16929,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -16598,6 +17076,9 @@
           {},
           {},
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -16750,6 +17231,9 @@
           {},
           {},
           {}
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -16837,6 +17321,10 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "cold",
+          "fire"
         ]
       }
     },
@@ -17141,6 +17629,10 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "acid",
+          "cold"
         ]
       }
     },
@@ -17228,6 +17720,12 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "fire"
         ]
       }
     },
@@ -17554,6 +18052,20 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageVulnerabilities": [
+          "radiant"
+        ],
+        "damageResistances": [
+          "acid",
+          "cold",
+          "fire",
+          "lightning",
+          "thunder"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -17636,6 +18148,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "fire"
+        ],
+        "damageImmunities": [
+          "lightning"
         ]
       }
     },
@@ -17711,6 +18230,9 @@
         ],
         "reactions": [
           {}
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -17801,6 +18323,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -17892,6 +18417,9 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -18070,6 +18598,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -18264,6 +18795,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -18323,6 +18857,12 @@
               }
             ]
           }
+        ],
+        "damageVulnerabilities": [
+          "bludgeoning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -18373,6 +18913,12 @@
               }
             ]
           }
+        ],
+        "damageVulnerabilities": [
+          "bludgeoning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -18436,6 +18982,12 @@
               }
             ]
           }
+        ],
+        "damageVulnerabilities": [
+          "bludgeoning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -18637,6 +19189,10 @@
               "onSave": "half"
             }
           }
+        ],
+        "damageImmunities": [
+          "poison",
+          "radiant"
         ]
       }
     },
@@ -18707,6 +19263,20 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "acid",
+          "bludgeoning",
+          "cold",
+          "fire",
+          "lightning",
+          "piercing",
+          "slashing",
+          "thunder"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -18775,6 +19345,11 @@
               "times": 2
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "psychic",
+          "radiant"
         ]
       }
     },
@@ -18973,6 +19548,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "radiant"
+        ],
+        "damageImmunities": [
+          "psychic"
         ]
       }
     },
@@ -19166,6 +19748,13 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "radiant"
+        ],
+        "damageImmunities": [
+          "psychic"
         ]
       }
     },
@@ -19310,6 +19899,9 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -19687,6 +20279,10 @@
               ]
             }
           }
+        ],
+        "damageImmunities": [
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -19819,6 +20415,13 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "cold"
+        ],
+        "damageImmunities": [
+          "lightning",
+          "thunder"
         ]
       }
     },
@@ -19914,6 +20517,12 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "poison",
+          "psychic"
         ]
       }
     },
@@ -20057,6 +20666,15 @@
         "legendary": [
           {},
           {}
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "fire",
+          "poison"
         ]
       }
     },
@@ -20254,6 +20872,13 @@
               "times": 1
             }
           }
+        ],
+        "damageVulnerabilities": [
+          "fire"
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing"
         ]
       }
     },
@@ -20523,6 +21148,9 @@
         "legendary": [
           {},
           {}
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -20600,6 +21228,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -20700,6 +21331,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -20853,6 +21487,9 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -20976,6 +21613,9 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -21081,6 +21721,9 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -21187,6 +21830,14 @@
               "times": 1
             }
           }
+        ],
+        "damageResistances": [
+          "cold",
+          "fire",
+          "lightning"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -21394,6 +22045,13 @@
               "minValue": 4
             }
           }
+        ],
+        "damageResistances": [
+          "acid",
+          "fire"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -22594,6 +23252,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -22687,6 +23348,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -22818,6 +23482,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -22949,6 +23616,9 @@
             }
           },
           {}
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -23040,6 +23710,12 @@
               "onSave": "none"
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic"
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -23120,6 +23796,19 @@
             }
           },
           {}
+        ],
+        "damageResistances": [
+          "acid",
+          "bludgeoning",
+          "cold",
+          "fire",
+          "necrotic",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "lightning",
+          "poison"
         ]
       }
     },
@@ -23190,6 +23879,9 @@
               "minValue": 5
             }
           }
+        ],
+        "damageImmunities": [
+          "cold"
         ]
       }
     },
@@ -23311,6 +24003,18 @@
             ]
           },
           {}
+        ],
+        "damageResistances": [
+          "acid",
+          "bludgeoning",
+          "cold",
+          "fire",
+          "piercing",
+          "slashing"
+        ],
+        "damageImmunities": [
+          "necrotic",
+          "poison"
         ]
       }
     },
@@ -23472,6 +24176,9 @@
         ],
         "bonusActions": [
           {}
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -23533,6 +24240,9 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -23594,6 +24304,9 @@
               }
             ]
           }
+        ],
+        "damageImmunities": [
+          "poison"
         ]
       }
     },
@@ -23933,6 +24646,9 @@
           {
             "attackBonus": 2
           }
+        ],
+        "damageResistances": [
+          "poison"
         ]
       }
     },
@@ -25046,6 +25762,9 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "poison"
         ]
       }
     },
@@ -25471,6 +26190,10 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "radiant"
         ]
       }
     },
@@ -25533,6 +26256,10 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "radiant"
         ]
       }
     },
@@ -25578,6 +26305,9 @@
           {
             "attackBonus": 1
           }
+        ],
+        "damageResistances": [
+          "fire"
         ]
       }
     },
@@ -25973,6 +26703,10 @@
               ]
             }
           }
+        ],
+        "damageResistances": [
+          "necrotic",
+          "radiant"
         ]
       }
     },
@@ -26475,6 +27209,9 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "necrotic"
         ]
       }
     },
@@ -27631,6 +28368,9 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "cold"
         ]
       }
     },
@@ -28261,6 +29001,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
@@ -28326,6 +29071,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
@@ -28392,6 +29142,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
@@ -28460,6 +29215,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
@@ -28538,6 +29298,11 @@
               "minValue": 6
             }
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
@@ -28607,6 +29372,11 @@
               }
             ]
           }
+        ],
+        "damageResistances": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
         ]
       }
     },
