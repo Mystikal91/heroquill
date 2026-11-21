@@ -550,6 +550,29 @@ export function spendsOf(el: Element): Effect[] {
   return pool ? [{ type: "spends", pool }] : [];
 }
 
+/**
+ * A trait that gives a spell to cast once between rests often says it in a `usage` too (`1/Long Rest`).
+ * The spell already has its own counter (`deriveFreeSpells`), so the feature's would count the same use
+ * twice. When the usage is one use and the element has a free spell or a free spell choice, the counter of
+ * the spell stays, with the rest the usage names, and the feature's own is dropped. Any other count (two
+ * uses, the proficiency bonus) is not about the spell alone and is kept.
+ */
+function withoutDoubledUses(effects: Effect[], uses: Effect[]): Effect[] {
+  const [only] = uses;
+  if (uses.length !== 1 || only?.type !== "uses" || only.term !== 1) return uses;
+  const free: ({ rest?: "short" | "long" | undefined } & Effect)[] = [];
+  const collect = (list: Effect[]) => {
+    for (const e of list) {
+      if (e.type === "when") collect(e.effects);
+      else if ((e.type === "grantSpell" || e.type === "choice") && e.free === true) free.push(e);
+    }
+  };
+  collect(effects);
+  if (free.length === 0) return uses;
+  for (const e of free) if (only.recharge === "short") e.rest = "short";
+  return [];
+}
+
 export interface MappedRules {
   effects: Effect[];
   /** Granted elements, with the class level they come at (undefined: right away). */
@@ -1160,7 +1183,11 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
   else
     for (const [skill, value] of skillBonuses)
       mapped.effects.push({ type: "modifier", target: "skill", value, skill });
-  if (!options.item) mapped.effects.push(...usesOf(source.el), ...spendsOf(source.el));
+  if (!options.item)
+    mapped.effects.push(
+      ...withoutDoubledUses(mapped.effects, usesOf(source.el)),
+      ...spendsOf(source.el),
+    );
   ctx.result.unsupportedRules += mapped.unsupported;
   if (mapped.unsupported > 0)
     ctx.result.unsupportedBy[source.aid] =

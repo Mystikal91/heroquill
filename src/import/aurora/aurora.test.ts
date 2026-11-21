@@ -856,6 +856,50 @@ describe("classes and archetypes", () => {
     for (const slug of ["pooled", "turny", "stepped", "unknown"]) expect(uses(slug)).toEqual([]);
   });
 
+  it("counts a spell cast once between rests one time, not twice, when the usage says it too", () => {
+    const spell = (name: string, level: number) => `
+      <element name="${name}" type="Spell" source="Test Book" id="ID_T_SPELL_${name.toUpperCase()}">
+        <description><p>Text.</p></description>
+        <setters><set name="level">${level}</set><set name="school">Conjuration</set></setters>
+      </element>`;
+    const trait = (id: string, usage: string, rules: string) => `
+      <element name="${id}" type="Racial Trait" source="Test Book" id="ID_T_${id.toUpperCase()}">
+        <description><p>Text.</p></description>
+        <sheet usage="${usage}" />
+        <rules>${rules}</rules>
+      </element>`;
+    const grant = (spell: string) => `<grant type="Spell" id="ID_T_SPELL_${spell}" />`;
+    const set = wrap(`
+      ${spell("Hop", 2)}${spell("Skip", 2)}
+      ${trait("Stone", "1/Long Rest", grant("HOP"))}
+      ${trait("Step", "1/Short Rest", grant("HOP"))}
+      ${trait("Twice", "1/Long Rest", grant("HOP") + grant("SKIP"))}
+      ${trait("Often", "{{proficiency}}/Long Rest", grant("HOP"))}
+      ${trait("Plain", "1/Long Rest", "")}
+      <element name="Folk" type="Race" source="Test Book" id="ID_T_FOLK">
+        <description><p>Folk.</p></description>
+        <rules>
+          <grant type="Racial Trait" id="ID_T_STONE" /><grant type="Racial Trait" id="ID_T_STEP" />
+          <grant type="Racial Trait" id="ID_T_TWICE" /><grant type="Racial Trait" id="ID_T_OFTEN" />
+          <grant type="Racial Trait" id="ID_T_PLAIN" />
+        </rules>
+      </element>`);
+    const made = parseAurora([set], options);
+    const effects = (slug: string) => byId(made, `imp1:trait/${slug}`).effects;
+    // The counter of the spell is the one that stays, with the rest the usage names.
+    expect(effects("stone")).toEqual([{ type: "grantSpell", spell: "imp1:spell/hop", free: true }]);
+    expect(effects("step")).toEqual([
+      { type: "grantSpell", spell: "imp1:spell/hop", free: true, rest: "short" },
+    ]);
+    expect(effects("twice")).toEqual([
+      { type: "grantSpell", spell: "imp1:spell/hop", free: true },
+      { type: "grantSpell", spell: "imp1:spell/skip", free: true },
+    ]);
+    // A count that is not one use is about more than the spell: both stay. With no spell the usage is the counter.
+    expect(effects("often").map((e) => e.type)).toEqual(["grantSpell", "uses"]);
+    expect(effects("plain")).toEqual([{ type: "uses", term: 1, recharge: "long" }]);
+  });
+
   it("reads the pool a feature spends from its usage", () => {
     const trait = (id: string, usage: string) => `
       <element name="${id}" type="Racial Trait" source="Test Book" id="ID_T_${id.toUpperCase()}">
