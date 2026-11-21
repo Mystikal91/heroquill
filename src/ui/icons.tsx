@@ -112,3 +112,11 @@ export const HeartIcon = () => (
     <path d="M12 20s-7-4.400-7-10a4 4 0 017-2.500A4 4 0 0119 10c0 5.600-7 10-7 10z" />
   </Icon>
 );
+
+/** Two crossed swords: running a game (the Dungeon Master mode). */
+export const SwordsIcon = () => (
+  <Icon>
+    <path d="M5 4l9 9M4 5l2-2 9 9-2 2zM19 4l-9 9M20 5l-2-2-9 9 2 2z" />
+    <path d="M6 17l-2 2M18 17l2 2M8.500 15.500l-2.500 2.500M15.500 15.500l2.500 2.500" />
+  </Icon>
+);

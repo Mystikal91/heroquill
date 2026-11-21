@@ -1,9 +1,9 @@
 /** Minimal promise wrapper over IndexedDB: a few object stores, no dependencies. */
 
 const DB_NAME = "dnd-character-maker";
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
-export type StoreName = "characters" | "meta" | "packs" | "translations";
+export type StoreName = "characters" | "meta" | "packs" | "translations" | "encounters";
 
 let connection: Promise<IDBDatabase> | undefined;
 
@@ -21,8 +21,19 @@ function open(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains("meta")) db.createObjectStore("meta");
       if (!db.objectStoreNames.contains("packs")) db.createObjectStore("packs", { keyPath: "id" });
       if (!db.objectStoreNames.contains("translations")) db.createObjectStore("translations");
+      // The fights of the Dungeon Master mode (version 4).
+      if (!db.objectStoreNames.contains("encounters"))
+        db.createObjectStore("encounters", { keyPath: "id" });
     };
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      const db = request.result;
+      // A newer version of the app in another tab wants to upgrade the database: let go, or it would wait for this tab to close.
+      db.onversionchange = () => {
+        db.close();
+        connection = undefined;
+      };
+      resolve(db);
+    };
     request.onerror = () => reject(request.error ?? new Error("Could not open the database"));
     request.onblocked = () => reject(new Error("The database is blocked by another tab"));
   });

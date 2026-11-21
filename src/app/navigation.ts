@@ -12,6 +12,7 @@ export type View =
   | "homebrew"
   | "homebrewPrint"
   | "translate"
+  | "dm"
   | "about";
 export type Tab = "build" | "sheet" | "play" | "rules" | "print";
 
@@ -35,6 +36,7 @@ export const isPage = (v: View) =>
   v === "homebrew" ||
   v === "homebrewPrint" ||
   v === "translate" ||
+  v === "dm" ||
   v === "about";
 
 /** The tab to go back to when leaving a page. */

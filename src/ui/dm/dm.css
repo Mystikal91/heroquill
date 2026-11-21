@@ -1,0 +1,601 @@
+/* ---- Dungeon Master mode ---- */
+
+.dm {
+  padding: 1.25rem;
+}
+
+.dm-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dm-top h2 {
+  margin: 0;
+}
+
+.dm-top p {
+  margin: 0.15rem 0 0;
+}
+
+.dm-top > button {
+  flex: none;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* The bar of the encounter: which one, its name, and what can be done with it. */
+.dm-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-pick {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.dm-title-field {
+  flex: 2 1 14rem;
+  min-width: 0;
+}
+
+.dm-bar-buttons {
+  flex: 0 0 auto;
+}
+
+.dm-bar select,
+.dm-bar input[type="text"] {
+  width: 100%;
+}
+
+/* Tracker on the left, where creatures come in on the right; one column on a phone. */
+.dm-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.dm-tracker,
+.dm-side {
+  min-width: 0;
+}
+
+.dm-side {
+  position: sticky;
+  top: calc(var(--tabs-height, 0px) + 0.5rem);
+}
+
+@media (max-width: 760px) {
+  .dm {
+    padding: 0.9rem;
+  }
+
+  .dm-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .dm-top > button {
+    align-self: flex-start;
+  }
+
+  .dm-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dm-side {
+    position: static;
+  }
+
+  /* With nobody in the fight yet, adding creatures comes first. */
+  .dm-body[data-empty] .dm-side {
+    order: -1;
+  }
+}
+
+/* Round, whose turn, and the buttons that move the fight on. */
+.dm-controls {
+  position: sticky;
+  top: calc(var(--tabs-height, 0px) + 0.25rem);
+  z-index: 5;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.dm-round {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.dm-ended {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+.dm-controls .btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dm-next {
+  flex: 1 1 9rem;
+  min-height: 2.6rem;
+  font-weight: 600;
+}
+
+.dm-empty {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.dm-order {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* One creature. The one whose turn it is has the accent; one at 0 hit points is dimmed. */
+.dm-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  list-style: none;
+}
+
+.dm-card[data-kind="character"] {
+  border-left-color: #4a6fa5;
+}
+
+.dm-card[data-active] {
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.dm-card[data-down] .dm-name-input {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.dm-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dm-init {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dm-init-input {
+  width: 3.6rem;
+  padding-inline: 0.25rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dm-roll {
+  min-height: 2rem;
+  padding: 0 0.45rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.dm-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dm-name-input {
+  width: 100%;
+  min-width: 0;
+  font-weight: 600;
+  background: transparent;
+  border-color: transparent;
+}
+
+.dm-name-input:hover,
+.dm-name-input:focus {
+  border-color: var(--border);
+  background: var(--surface-2);
+}
+
+.dm-kind {
+  display: block;
+  min-height: 1em;
+  padding-left: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.dm-ac {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dm-ac span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.dm-ac input {
+  width: 3.6rem;
+  padding-inline: 0.25rem;
+  text-align: center;
+}
+
+.dm-remove {
+  flex: none;
+  min-height: 2rem;
+  padding: 0 0.5rem;
+  cursor: pointer;
+}
+
+/* Hit points */
+.dm-hp {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.dm-hp-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dm-hp-readout {
+  flex: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.dm-hp-readout b {
+  font-size: 1.4rem;
+  font-family: var(--font-display);
+}
+
+.dm-hp-readout b.zero {
+  color: var(--accent);
+}
+
+.dm-hp-readout span,
+.dm-hp-readout em {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.dm-hp-readout em {
+  font-style: normal;
+  color: #4a6fa5;
+}
+
+.dm-hp-bar {
+  flex: 1 1 auto;
+  height: 0.6rem;
+  border: 1px solid var(--ink);
+  background: var(--surface-2);
+}
+
+.dm-hp-bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s;
+}
+
+.dm-hp-bar[data-state="well"] span {
+  background: #3f7a46;
+}
+
+.dm-hp-bar[data-state="hurt"] span {
+  background: #b7791f;
+}
+
+.dm-hp-quick {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.dm-hp-quick button {
+  min-height: 2.1rem;
+  padding: 0 0.25rem;
+  cursor: pointer;
+}
+
+.dm-hp-amount {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.dm-hp-amount input {
+  flex: 0 1 6.5rem;
+  min-width: 5.5rem;
+}
+
+.dm-hp-amount button {
+  min-height: 2.1rem;
+  padding: 0 0.6rem;
+  cursor: pointer;
+}
+
+.dm-hp-amount .damage-kind small {
+  display: block;
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+/* Conditions */
+.dm-conditions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+}
+
+.dm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.25rem 0.1rem 0.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  font-size: 0.85rem;
+}
+
+.dm-rounds {
+  width: 2.6rem;
+  min-height: 1.6rem;
+  padding: 0 0.2rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.dm-chip-x {
+  min-height: 1.6rem;
+  padding: 0 0.4rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dm-conditions select {
+  max-width: 100%;
+  min-height: 2rem;
+}
+
+/* Details, notes and the stat block */
+.dm-more > summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.dm-details {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.dm-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.dm-fields input {
+  width: 100%;
+}
+
+.dm-details textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+/* The panel that adds creatures */
+.dm-add {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-add h3 {
+  margin: 0 0 0.5rem;
+}
+
+.dm-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-tab {
+  min-height: 2.1rem;
+  padding: 0 0.6rem;
+  white-space: nowrap;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dm-tab[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.dm-add-body {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dm-add-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.dm-add-tools .dm-search {
+  grid-column: 1 / -1;
+}
+
+.dm-add-tools input[type="search"],
+.dm-add-tools select,
+.dm-add-tools .dm-count input,
+.dm-manual input {
+  width: 100%;
+}
+
+.dm-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.dm-results {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.dm-results li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-result-name {
+  min-width: 0;
+}
+
+.dm-result-name b,
+.dm-result-name small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-result-name small {
+  color: var(--muted);
+}
+
+.dm-results button {
+  flex: none;
+  min-height: 2rem;
+  padding: 0 0.7rem;
+  cursor: pointer;
+}
+
+/* On a phone the name has a row of its own, and the buttons of the turn share one row. */
+@media (max-width: 560px) {
+  .dm-card-head {
+    flex-wrap: wrap;
+  }
+
+  .dm-init {
+    order: 1;
+  }
+
+  .dm-ac {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .dm-remove {
+    order: 3;
+  }
+
+  .dm-name {
+    order: 4;
+    flex: 1 1 100%;
+  }
+
+  .dm-controls {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .dm-status {
+    margin-bottom: 0.35rem;
+  }
+
+  .dm-controls .btn-row {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+
+  .dm-controls .btn-row button {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0 0.3rem;
+    font-size: 0.8rem;
+    line-height: 1.1;
+    white-space: normal;
+  }
+
+  .dm-controls .btn-row .dm-next {
+    flex: 1.6 1 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-hp-bar span {
+    transition: none;
+  }
+}

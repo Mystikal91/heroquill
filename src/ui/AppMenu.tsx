@@ -14,12 +14,14 @@ import {
   GlobeIcon,
   HeartIcon,
   InfoIcon,
+  SwordsIcon,
 } from "./icons";
 
 const PAGES: { view: View; label: UiKey; icon: () => JSX.Element }[] = [
   { view: "about", label: "footer.about", icon: InfoIcon },
   { view: "packs", label: "footer.packs", icon: BoxIcon },
   { view: "homebrew", label: "hb.title", icon: FlaskIcon },
+  { view: "dm", label: "dm.title", icon: SwordsIcon },
   { view: "translate", label: "footer.translate", icon: GlobeIcon },
   { view: "credits", label: "footer.credits", icon: HeartIcon },
 ];

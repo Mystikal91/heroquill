@@ -41,6 +41,7 @@ import { TransferDialog } from "./TransferDialog";
 import { UpdateNotice } from "./UpdateNotice";
 import { BuildTab } from "./build/BuildTab";
 import { LevelUp } from "./build/LevelUp";
+import { DmLoader } from "./dm/DmLoader";
 import { QuillIcon } from "./icons";
 import { PlayTab } from "./play/PlayTab";
 import { RollToast } from "./play/RollToast";
@@ -64,6 +65,8 @@ function Screen() {
       return <PaperView />;
     case "translate":
       return <AutoTranslatePage />;
+    case "dm":
+      return <DmLoader />;
     case "about":
       return <AboutPage />;
     case "print":
