@@ -18,6 +18,47 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.34",
+    date: "2026-11-21",
+    notes: [
+      {
+        en: 'Point buy has its own rules: a closed section "Custom rules" under the method lets you change the points to spend, the minimum and maximum score and the cost of every score, to min-max beyond the 27 points of the book. The changes wait for Apply, which starts the points again at the minimum; Reset brings back the rules of the book.',
+        it: 'L\'acquisto a punti ha regole proprie: una sezione chiusa "Regole personalizzate" sotto il metodo permette di cambiare i punti da spendere, il punteggio minimo e massimo e il costo di ogni punteggio, per spingersi oltre i 27 punti del manuale. Le modifiche aspettano Applica, che riparte dal minimo; Reimposta riporta le regole del manuale.',
+        fr: "L'achat de points a ses propres règles : une section fermée « Règles personnalisées » sous la méthode permet de changer les points à dépenser, la valeur minimale et maximale et le coût de chaque valeur, pour aller au-delà des 27 points du livre. Les changements attendent Appliquer, qui repart du minimum ; Réinitialiser rétablit les règles du livre.",
+        de: "Der Punktekauf hat eigene Regeln: Ein eingeklappter Abschnitt „Eigene Regeln“ unter der Methode erlaubt, die Punkte, den Mindest- und Höchstwert und die Kosten jedes Werts zu ändern, um über die 27 Punkte des Buchs hinauszugehen. Die Änderungen warten auf Anwenden, das beim Minimum neu beginnt; Zurücksetzen bringt die Regeln des Buchs zurück.",
+        es: "La compra de puntos tiene reglas propias: una sección cerrada «Reglas personalizadas» bajo el método permite cambiar los puntos a gastar, la puntuación mínima y máxima y el coste de cada puntuación, para ir más allá de los 27 puntos del manual. Los cambios esperan a Aplicar, que vuelve a empezar desde el mínimo; Restablecer devuelve las reglas del manual.",
+      },
+      {
+        en: 'In the Rules tab, entries that share a name are one row with the number of variants beside it ("Ability Score Improvement", 63 variants). Opening it shows each variant with "Applies to": the class and level, the subclass, or the species or feat that gives it. A long list is closed, one line each.',
+        it: 'Nella scheda Regole, le voci con lo stesso nome sono una riga sola con il numero di varianti accanto ("Aumento dei punteggi di caratteristica", 63 varianti). Aprendola si vede ogni variante con "Si applica a": la classe e il livello, la sottoclasse, oppure la specie o il talento che la dà. Un elenco lungo è chiuso, una riga per ciascuna.',
+        fr: "Dans l'onglet Règles, les entrées qui portent le même nom forment une seule ligne avec le nombre de variantes à côté (« Amélioration de caractéristiques », 63 variantes). En l'ouvrant, on voit chaque variante avec « S'applique à » : la classe et le niveau, la sous-classe, ou l'espèce ou le don qui la donne. Une longue liste est fermée, une ligne chacune.",
+        de: "Im Tab Regeln bilden Einträge mit demselben Namen eine Zeile mit der Zahl der Varianten daneben („Attributswerterhöhung“, 63 Varianten). Öffnet man sie, sieht man jede Variante mit „Gilt für“: die Klasse und Stufe, die Unterklasse oder die Art oder das Talent, das sie gibt. Eine lange Liste ist eingeklappt, eine Zeile pro Variante.",
+        es: "En la pestaña Reglas, las entradas que comparten nombre son una sola fila con el número de variantes al lado («Mejora de puntuación de característica», 63 variantes). Al abrirla se ve cada variante con «Se aplica a»: la clase y el nivel, la subclase, o la especie o la dote que la da. Una lista larga está cerrada, una línea cada una.",
+      },
+      {
+        en: "A number field selects its text when you tap it, so a new value replaces the old one instead of adding to it. The manual ability scores and the level of a class no longer jump back to a value while you are typing, and return to the previous one if you leave them empty.",
+        it: "Un campo numerico seleziona il suo testo quando lo tocchi, così un valore nuovo sostituisce il vecchio invece di aggiungersi. I punteggi manuali delle caratteristiche e il livello di una classe non tornano più a un valore mentre scrivi, e tornano al precedente se li lasci vuoti.",
+        fr: "Un champ numérique sélectionne son texte quand on le touche, de sorte qu'une nouvelle valeur remplace l'ancienne au lieu de s'y ajouter. Les valeurs de caractéristiques manuelles et le niveau d'une classe ne reviennent plus à une valeur pendant la saisie, et reprennent la précédente si on les laisse vides.",
+        de: "Ein Zahlenfeld markiert seinen Text, wenn man es antippt, sodass ein neuer Wert den alten ersetzt, statt sich anzuhängen. Die manuellen Attributswerte und die Stufe einer Klasse springen beim Tippen nicht mehr auf einen Wert zurück und kehren zum vorherigen zurück, wenn man sie leer lässt.",
+        es: "Un campo numérico selecciona su texto al tocarlo, así un valor nuevo sustituye al anterior en lugar de añadirse. Las puntuaciones de característica manuales y el nivel de una clase ya no saltan a un valor mientras escribes, y vuelven al anterior si los dejas vacíos.",
+      },
+      {
+        en: 'When there is only one choice (the SRD has only the Acolyte as a background), the "Change" button is gone and a line says there are no other options in your content.',
+        it: "Quando c'è una sola scelta (l'SRD ha solo l'Accolito come background), il tasto \"Cambia\" non c'è più e una riga dice che nei tuoi contenuti non ci sono altre opzioni.",
+        fr: "Quand il n'y a qu'un seul choix (le SRD n'a que l'Acolyte comme historique), le bouton « Changer » disparaît et une ligne dit qu'il n'y a pas d'autre option dans ton contenu.",
+        de: "Gibt es nur eine Wahl (das SRD hat als Hintergrund nur den Akolythen), entfällt der Knopf „Ändern“, und eine Zeile sagt, dass deine Inhalte keine weiteren Optionen haben.",
+        es: "Cuando solo hay una opción (el SRD tiene solo al Acólito como trasfondo), el botón «Cambiar» desaparece y una línea dice que no hay otras opciones en tu contenido.",
+      },
+      {
+        en: 'Aurora import: a trait that gives a spell to cast once between rests no longer has two counters for the same use (for example Merge with Stone of the earth genasi of Princes of the Apocalypse showed "Merge with Stone" and "Uses of Pass Without Trace"); eleven traits and feats of Core and Supplements changed. Packs already imported ask to be updated with one click.',
+        it: 'Importazione di Aurora: un tratto che dà un incantesimo da lanciare una volta tra i riposi non ha più due contatori per lo stesso uso (per esempio Fondersi con la pietra del genasi della terra di Princes of the Apocalypse mostrava "Merge with Stone" e "Usi di Pass Without Trace"); cambiano undici tratti e talenti di Core e Supplements. I pacchetti già importati chiedono di essere aggiornati con un clic.',
+        fr: "Import d'Aurora : un trait qui donne un sort à lancer une fois entre les repos n'a plus deux compteurs pour le même usage (par exemple Merge with Stone du génasi de la terre de Princes of the Apocalypse montrait « Merge with Stone » et « Utilisations de Pass Without Trace ») ; onze traits et dons de Core et Supplements changent. Les paquets déjà importés demandent à être mis à jour en un clic.",
+        de: "Aurora-Import: Ein Merkmal, das einen Zauber gibt, der einmal zwischen Rasten gewirkt werden kann, hat nicht mehr zwei Zähler für dieselbe Nutzung (etwa zeigte Merge with Stone des Erd-Genasi aus Princes of the Apocalypse „Merge with Stone“ und „Nutzungen von Pass Without Trace“); elf Merkmale und Talente aus Core und Supplements ändern sich. Bereits importierte Pakete lassen sich mit einem Klick aktualisieren.",
+        es: "Importación de Aurora: un rasgo que da un conjuro para lanzar una vez entre descansos ya no tiene dos contadores para el mismo uso (por ejemplo Merge with Stone del genasi de tierra de Princes of the Apocalypse mostraba «Merge with Stone» y «Usos de Pass Without Trace»); cambian once rasgos y dotes de Core y Supplements. Los paquetes ya importados piden actualizarse con un clic.",
+      },
+    ],
+  },
+  {
     version: "1.33",
     date: "2026-11-20",
     notes: [
