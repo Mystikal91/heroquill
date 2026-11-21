@@ -1,6 +1,8 @@
+import { type Campaign, readCampaign } from "../engine/campaign";
 import { type Encounter, readEncounter } from "../engine/encounter";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
+import { listCampaigns, saveCampaign } from "../storage/campaigns";
 import { listEncounters, saveEncounter } from "../storage/encounters";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import type { ConflictPolicy } from "./store";
@@ -51,4 +53,27 @@ export async function restoreEncounters(
   await refreshEncounterCount();
   encountersChanged.value += 1;
   return { added, skipped, replaced, unreadable };
+}
+
+const sameCampaign = (a: Campaign, b: Campaign) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * Puts the campaigns of a file next to the ones here: a new one is added; one that is here keeps its id
+ * and the newest wins unless the policy is to keep the one here (copies do not make a second campaign:
+ * the fights point to the id).
+ */
+export async function restoreCampaigns(
+  raw: readonly unknown[],
+  policy: ConflictPolicy = "copy",
+): Promise<void> {
+  const here = new Map((await listCampaigns()).map((c) => [c.id, c]));
+  for (const item of raw) {
+    const incoming = readCampaign(item);
+    if (!incoming) continue;
+    const mine = here.get(incoming.id);
+    if (!mine) await saveCampaign(incoming);
+    else if (!sameCampaign(mine, incoming) && policy !== "keep" && incoming.updated > mine.updated)
+      await saveCampaign(incoming);
+  }
+  encountersChanged.value += 1;
 }

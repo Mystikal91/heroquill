@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { createCampaign } from "../engine/campaign";
 import { createCharacter } from "../engine/character";
-import { createEncounter } from "../engine/encounter";
+import { createEncounter, readEncounter } from "../engine/encounter";
 import {
   DEFAULT_SECTIONS,
   type Section,
@@ -176,5 +177,29 @@ describe("the fights of the DM mode in a transfer file", () => {
 
   it("are an empty list, not nothing, when there are none", () => {
     expect(buildBundle(sources, new Set<Section>(["encounters"])).encounters).toEqual([]);
+  });
+});
+
+describe("the campaigns of the DM mode in a transfer file", () => {
+  const camp = createCampaign("Lost Mine");
+  const withCamp: Sources = {
+    ...sources,
+    encounters: [createEncounter("One", camp.id)],
+    campaigns: [camp],
+  };
+
+  it("travel with the fights, and are left out with them", () => {
+    const bundle = buildBundle(withCamp, new Set<Section>(["encounters"]));
+    expect(bundle.campaigns).toHaveLength(1);
+    expect(buildBundle(withCamp, new Set<Section>(["characters"])).campaigns).toBeUndefined();
+    expect(onlySections(bundle, new Set<Section>(["characters"])).campaigns).toBeUndefined();
+  });
+
+  it("are pointed to by the fights, which keep the link when read", () => {
+    const fight = createEncounter("One", camp.id);
+    expect(readEncounter(JSON.parse(JSON.stringify(fight)))?.campaignId).toBe(camp.id);
+    expect(
+      readEncounter(JSON.parse(JSON.stringify(createEncounter("Old"))))?.campaignId,
+    ).toBeUndefined();
   });
 });

@@ -1,13 +1,15 @@
 import {
   abilityName,
   advanceTurn,
+  campaign,
+  campaignEncounters,
   canGoBack,
   delayActive,
   duplicateEncounter,
-  encounters,
   groupInitiative,
   lastTurn,
   newEncounter,
+  offerParty,
   openAdd,
   previousTurn,
   rechargeNote,
@@ -55,7 +57,7 @@ function EncounterMenu({ e }: { e: Encounter }) {
       <div class="dm-menu">
         <h4 class="popover-heading">{ui("dm.encounters")}</h4>
         <ul class="plain dm-menu-list">
-          {encounters.value.map((x) => (
+          {campaignEncounters.value.map((x) => (
             <li key={x.id}>
               <button
                 type="button"
@@ -102,6 +104,11 @@ function EncounterMenu({ e }: { e: Encounter }) {
             {ui("dm.remove")}
           </button>
         </div>
+        {(campaign.value?.party.length ?? 0) > 0 && (
+          <button type="button" class="secondary dm-menu-end" onClick={offerParty}>
+            {ui("dm.addParty")}
+          </button>
+        )}
         <button
           type="button"
           class="secondary dm-menu-end"

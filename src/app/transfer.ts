@@ -10,6 +10,7 @@ import {
   serializeBundle,
   transferFileName,
 } from "../storage/bundle";
+import { listCampaigns } from "../storage/campaigns";
 import { dbEntries, dbPut } from "../storage/db";
 import { listEncounters } from "../storage/encounters";
 import { type UserPackRecord, parseUserPack } from "../storage/packs";
@@ -25,7 +26,7 @@ import { LANGUAGES } from "./language";
 import { language } from "./language";
 import { printSettings } from "./printSettings";
 import { parsePrintSettings } from "./printSettings.logic";
-import { restoreEncounters } from "./restoreEncounters";
+import { restoreCampaigns, restoreEncounters } from "./restoreEncounters";
 import { type ConflictPolicy, allCharacters, characters, restoreCharacters } from "./store";
 import { theme } from "./theme";
 import { parseTheme } from "./theme.logic";
@@ -50,6 +51,7 @@ export async function currentSources(): Promise<Sources> {
         .map((s) => [s.id, s.updatedAt]),
     ),
     encounters: await listEncounters(),
+    campaigns: await listCampaigns(),
     packs: userPacks.value,
     settings: {
       language: language.value,
@@ -142,6 +144,7 @@ export async function applyTransfer(
   }
 
   if (chosen.encounters) {
+    await restoreCampaigns(chosen.campaigns ?? [], conflicts);
     const done = await restoreEncounters(chosen.encounters, conflicts);
     report.unreadable += done.unreadable;
     report.encounters = { added: done.added, skipped: done.skipped, replaced: done.replaced };

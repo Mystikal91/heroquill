@@ -1,9 +1,15 @@
 /** Minimal promise wrapper over IndexedDB: a few object stores, no dependencies. */
 
 const DB_NAME = "dnd-character-maker";
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
-export type StoreName = "characters" | "meta" | "packs" | "translations" | "encounters";
+export type StoreName =
+  | "characters"
+  | "meta"
+  | "packs"
+  | "translations"
+  | "encounters"
+  | "campaigns";
 
 let connection: Promise<IDBDatabase> | undefined;
 
@@ -24,6 +30,9 @@ function open(): Promise<IDBDatabase> {
       // The fights of the Dungeon Master mode (version 4).
       if (!db.objectStoreNames.contains("encounters"))
         db.createObjectStore("encounters", { keyPath: "id" });
+      // The campaigns of the Dungeon Master mode, with their parties (version 5).
+      if (!db.objectStoreNames.contains("campaigns"))
+        db.createObjectStore("campaigns", { keyPath: "id" });
     };
     request.onsuccess = () => {
       const db = request.result;

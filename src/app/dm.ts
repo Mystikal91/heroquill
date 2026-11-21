@@ -1,4 +1,14 @@
-import { effect, signal } from "@preact/signals";
+import { computed, effect, signal } from "@preact/signals";
+import {
+  type Campaign,
+  type PartyMember,
+  addMember,
+  changeMember,
+  createCampaign,
+  newMember,
+  removeMember,
+  renameCampaign,
+} from "../engine/campaign";
 import { combatantNumbers } from "../engine/combatantNumbers";
 import {
   type AreaPick,
@@ -34,6 +44,13 @@ import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
+import {
+  deleteCampaign,
+  getCurrentCampaignId,
+  listCampaigns,
+  saveCampaign,
+  setCurrentCampaignId,
+} from "../storage/campaigns";
 import { loadCharacter } from "../storage/characters";
 import {
   deleteEncounter,
@@ -51,6 +68,19 @@ export const encounters = signal<Encounter[]>([]);
 /** The encounter on screen. */
 export const encounter = signal<Encounter | undefined>(undefined);
 export const dmReady = signal(false);
+
+/** All the campaigns, and the one open: its party and its encounters are what the page shows. */
+export const campaigns = signal<Campaign[]>([]);
+export const campaign = signal<Campaign | undefined>(undefined);
+/** The part of the page on screen: the campaign and its party, or the fights. */
+export type DmSection = "campaign" | "encounter";
+export const dmSection = signal<DmSection>("encounter");
+/** The window that offers to put the party in the open encounter. */
+export const partyPrompt = signal(false);
+/** The encounters of the open campaign, the one changed last first. */
+export const campaignEncounters = computed(() =>
+  encounters.value.filter((e) => e.campaignId === campaign.value?.id),
+);
 /** The combatant whose details are open. */
 export const infoFor = signal<string | undefined>(undefined);
 /** The creature the window that adds a spell or an effect is open for. */
@@ -125,21 +155,54 @@ function show(next: Encounter) {
 
 const defaultName = (list: readonly Encounter[]) => ui("dm.encounterName", { n: list.length + 1 });
 
-/** Reads what is saved and opens the encounter that was open, or the newest, or a first empty one. */
-export async function loadDm() {
-  if (dmReady.value) return;
-  const list = await listEncounters();
-  encounters.value = list;
+/**
+ * Opens a campaign: the encounter that was open in it, or its newest, or a first empty one.
+ * The campaign and the encounter are remembered.
+ */
+async function openCampaign(next: Campaign) {
+  campaign.value = next;
+  const mine = encounters.value.filter((e) => e.campaignId === next.id);
   const wanted = await getCurrentEncounterId();
-  const open = list.find((e) => e.id === wanted) ?? list[0];
+  const open = mine.find((e) => e.id === wanted) ?? mine[0];
   if (open) encounter.value = open;
   else {
-    const first = createEncounter(defaultName(list));
-    encounter.value = first;
-    encounters.value = [first];
+    const first = createEncounter(defaultName(mine), next.id);
+    show(first);
     await saveEncounter(first);
-    await setCurrentEncounterId(first.id);
   }
+  const shown = encounter.value;
+  if (shown) await setCurrentEncounterId(shown.id);
+  await setCurrentCampaignId(next.id);
+}
+
+/**
+ * Reads what is saved and opens the campaign that was open (the newest if none was, a first one if there
+ * are none). Fights with no campaign, or with one that is not here (a file brought them), join the first.
+ */
+export async function loadDm() {
+  if (dmReady.value) return;
+  let camps = await listCampaigns();
+  let list = await listEncounters();
+  if (camps.length === 0) {
+    const first = createCampaign(ui("dm.campaign.default"));
+    await saveCampaign(first);
+    camps = [first];
+  }
+  const home = camps[0];
+  if (home) {
+    const strays = new Set(
+      list.filter((e) => !camps.some((c) => c.id === e.campaignId)).map((e) => e.id),
+    );
+    if (strays.size > 0) {
+      list = list.map((e) => (strays.has(e.id) ? { ...e, campaignId: home.id } : e));
+      for (const e of list) if (strays.has(e.id)) await saveEncounter(e);
+    }
+  }
+  campaigns.value = camps;
+  encounters.value = list;
+  const wanted = await getCurrentCampaignId();
+  const current = camps.find((c) => c.id === wanted) ?? home;
+  if (current) await openCampaign(current);
   dmReady.value = true;
 }
 
@@ -205,13 +268,15 @@ export async function selectEncounter(id: string) {
 
 export async function newEncounter() {
   await flush();
-  const fresh = createEncounter(defaultName(encounters.value));
+  const fresh = createEncounter(defaultName(campaignEncounters.value), campaign.value?.id);
   show(fresh);
   infoFor.value = undefined;
   turnHistory.length = 0;
   await saveEncounter(fresh);
   await setCurrentEncounterId(fresh.id);
   void refreshEncounterCount();
+  // The party joins a new fight: the window asks who.
+  if ((campaign.value?.party.length ?? 0) > 0) partyPrompt.value = true;
 }
 
 /** A copy of the open encounter with the fight reset (no round, full hit points, no conditions): to use a prepared fight again. */
@@ -256,12 +321,12 @@ export async function removeEncounter() {
   await deleteEncounter(current.id);
   const rest = encounters.value.filter((e) => e.id !== current.id);
   encounters.value = rest;
-  const next = rest[0];
+  const next = rest.find((e) => e.campaignId === current.campaignId);
   if (next) {
     encounter.value = next;
     await setCurrentEncounterId(next.id);
   } else {
-    const fresh = createEncounter(defaultName([]));
+    const fresh = createEncounter(defaultName([]), current.campaignId);
     show(fresh);
     await saveEncounter(fresh);
     await setCurrentEncounterId(fresh.id);
@@ -334,30 +399,32 @@ export function addManual(fields: {
   logAdded(name, 1);
 }
 
-/** A character saved on this device, with the numbers of its sheet now. */
-export async function addCharacter(characterId: string): Promise<boolean> {
+/** The numbers of the sheet of a character saved on this device, now. */
+async function characterStats(characterId: string) {
   const c = content.value;
-  if (!c) return false;
+  if (!c) return undefined;
   const character = await loadCharacter(characterId);
-  if (!character) return false;
+  if (!character) return undefined;
   const sheet = deriveSheet(character, c.index);
   const max = sheet.hitPoints.max;
-  updateEncounter((e) =>
-    addCombatants(e, [
-      characterCombatant({
-        characterId,
-        name: character.name.trim() || ui("dm.unnamed"),
-        hp: currentHp(character.play, max),
-        maxHp: max,
-        tempHp: character.play.tempHp,
-        ac: sheet.armorClass.value,
-        ...(sheet.speed !== undefined && { speed: sheet.speed }),
-        defenses: sheet.defenses,
-        initiativeBonus: sheet.initiative,
-      }),
-    ]),
-  );
-  logAdded(character.name.trim() || ui("dm.unnamed"), 1);
+  return {
+    name: character.name.trim() || ui("dm.unnamed"),
+    hp: currentHp(character.play, max),
+    maxHp: max,
+    tempHp: character.play.tempHp,
+    ac: sheet.armorClass.value,
+    ...(sheet.speed !== undefined && { speed: sheet.speed }),
+    defenses: sheet.defenses,
+    initiativeBonus: sheet.initiative,
+  };
+}
+
+/** A character saved on this device, with the numbers of its sheet now. */
+export async function addCharacter(characterId: string): Promise<boolean> {
+  const stats = await characterStats(characterId);
+  if (!stats) return false;
+  updateEncounter((e) => addCombatants(e, [characterCombatant({ characterId, ...stats })]));
+  logAdded(stats.name, 1);
   return true;
 }
 
@@ -736,4 +803,146 @@ export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string
     : "";
   const line = `${shown(dice)}${faces} = ${total}${taken.map((t) => ` · ${names.get(t.id) ?? ""} ${t.dealt}`).join("")}`;
   rollFlow.value = { ...flow, lines: [...flow.lines, line], rolls: flow.rolls + 1, last: total };
+}
+
+// ---- Campaigns and their parties ----
+
+/** Changes the open campaign and keeps it. */
+function updateCampaign(edit: (c: Campaign) => Campaign) {
+  const current = campaign.value;
+  if (!current) return;
+  const next = edit(current);
+  campaign.value = next;
+  campaigns.value = campaigns.value.map((c) => (c.id === next.id ? next : c));
+  void saveCampaign(next);
+}
+
+/** Opens another campaign: its own encounters are the ones shown. */
+export async function selectCampaign(id: string) {
+  await flush();
+  const next = campaigns.value.find((c) => c.id === id);
+  if (!next) return;
+  infoFor.value = undefined;
+  turnHistory.length = 0;
+  await openCampaign(next);
+}
+
+export async function newCampaign(name: string) {
+  const fresh = createCampaign(name.trim() || ui("dm.campaign.default"));
+  await saveCampaign(fresh);
+  campaigns.value = [fresh, ...campaigns.value];
+  await selectCampaign(fresh.id);
+}
+
+export const renameOpenCampaign = (name: string) => updateCampaign((c) => renameCampaign(c, name));
+
+/** Removes the open campaign with its encounters; they can all be brought back for a few seconds. */
+export async function removeCampaign() {
+  const gone = campaign.value;
+  if (!gone) return;
+  clearTimeout(saveTimer);
+  saveTimer = undefined;
+  const fights = encounters.value.filter((e) => e.campaignId === gone.id);
+  for (const f of fights) await deleteEncounter(f.id);
+  await deleteCampaign(gone.id);
+  encounters.value = encounters.value.filter((e) => e.campaignId !== gone.id);
+  let rest = campaigns.value.filter((c) => c.id !== gone.id);
+  if (rest.length === 0) {
+    const fresh = createCampaign(ui("dm.campaign.default"));
+    await saveCampaign(fresh);
+    rest = [fresh];
+  }
+  campaigns.value = rest;
+  encounter.value = undefined;
+  infoFor.value = undefined;
+  turnHistory.length = 0;
+  const next = rest[0];
+  if (next) await openCampaign(next);
+  void refreshEncounterCount();
+  offerUndo(ui("dm.campaign.removed", { name: gone.name }), async () => {
+    await saveCampaign(gone);
+    for (const f of fights) await saveEncounter(f);
+    campaigns.value = [gone, ...campaigns.value];
+    encounters.value = [...fights, ...encounters.value];
+    await openCampaign(gone);
+    void refreshEncounterCount();
+  });
+}
+
+export const addPlayer = () =>
+  updateCampaign((c) =>
+    addMember(c, newMember({ name: ui("dm.party.newName", { n: c.party.length + 1 }), speed: 30 })),
+  );
+
+/** A player taken from a character of this device: their numbers now, and a link to the sheet. */
+export async function addPlayerFromCharacter(characterId: string) {
+  const stats = await characterStats(characterId);
+  if (!stats) return;
+  updateCampaign((c) =>
+    addMember(
+      c,
+      newMember({
+        name: stats.name,
+        maxHp: stats.maxHp,
+        ac: stats.ac,
+        ...(stats.speed !== undefined && { speed: stats.speed }),
+        initiativeBonus: stats.initiativeBonus,
+        characterId,
+      }),
+    ),
+  );
+}
+
+export const changePlayer = (id: string, change: (m: PartyMember) => PartyMember) =>
+  updateCampaign((c) => changeMember(c, id, change));
+
+export const removePlayer = (id: string) => updateCampaign((c) => removeMember(c, id));
+
+/** What stands for a player in the table: the character they were taken from, or their own id. */
+const sourceOf = (m: PartyMember) => m.characterId ?? m.id;
+
+/** The players of the open campaign that are not in the open encounter yet. */
+export function missingPlayers(): PartyMember[] {
+  const inside = new Set(
+    (encounter.value?.combatants ?? []).flatMap((c) =>
+      c.kind === "character" && c.source ? [c.source] : [],
+    ),
+  );
+  return (campaign.value?.party ?? []).filter((m) => !inside.has(sourceOf(m)));
+}
+
+/** Puts players of the party in the open encounter, at the numbers the party gives (a linked sheet adds its defenses). */
+export async function addPlayersToFight(ids: readonly string[]) {
+  const party = (campaign.value?.party ?? []).filter((m) => ids.includes(m.id));
+  const made: Combatant[] = [];
+  for (const m of party) {
+    const live = m.characterId ? await characterStats(m.characterId) : undefined;
+    made.push(
+      characterCombatant({
+        characterId: sourceOf(m),
+        name: m.name,
+        hp: m.maxHp,
+        maxHp: m.maxHp,
+        tempHp: 0,
+        ac: m.ac,
+        ...(m.speed !== undefined && { speed: m.speed }),
+        ...(live?.defenses && { defenses: live.defenses }),
+        initiativeBonus: m.initiativeBonus,
+      }),
+    );
+  }
+  updateEncounter((e) => {
+    const inside = new Set(e.combatants.flatMap((c) => (c.source ? [c.source] : [])));
+    return addCombatants(
+      e,
+      made.filter((c) => !c.source || !inside.has(c.source)),
+    );
+  });
+  for (const m of party) logAdded(m.name, 1);
+  partyPrompt.value = false;
+}
+
+/** Asks which players of the party join this encounter, if some are missing. */
+export function offerParty() {
+  if (missingPlayers().length > 0) partyPrompt.value = true;
 }

@@ -1761,3 +1761,215 @@
   box-shadow: inset 0 0 0 1px rgb(201 164 87 / 0.6);
   color: #e0c27a;
 }
+
+/* ---- Campaigns: the two parts of the page, and the party ---- */
+
+.dm-sections {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-section {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.8rem;
+  margin: 0 0 -1px;
+  padding: 0 1.2rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.dm-section svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.dm-section[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.dm-campaign-line {
+  margin: 0 0 0.5rem;
+}
+
+.dm-campaigns {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dm-campaigns h3 {
+  margin: 0 0 0.6rem;
+}
+
+.dm-campaign-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
+}
+
+.dm-campaign-card {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dm-campaign-card small {
+  color: var(--muted);
+}
+
+.dm-campaign-card[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.dm-campaign-new {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.dm-campaign-new .field {
+  flex: 1;
+}
+
+.dm-campaign-new input {
+  width: 100%;
+}
+
+.dm-campaign-new button {
+  margin: 0;
+  min-height: 2.6rem;
+}
+
+.dm-campaign-open {
+  display: grid;
+  gap: 0.9rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.dm-campaign-open > header {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.dm-campaign-open > header .field {
+  flex: 1;
+}
+
+.dm-campaign-open > header input {
+  width: 100%;
+}
+
+.dm-campaign-open > header button {
+  margin: 0;
+  min-height: 2.6rem;
+}
+
+.dm-campaign-open h3 {
+  margin: 0;
+}
+
+.dm-party {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.dm-player {
+  display: grid;
+  grid-template-columns: minmax(8rem, 2fr) repeat(4, minmax(4.2rem, 1fr)) auto;
+  gap: 0.5rem;
+  align-items: end;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.dm-player input {
+  width: 100%;
+}
+
+.dm-player-remove {
+  margin: 0;
+  min-height: 2.6rem;
+}
+
+.dm-party-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dm-party-actions button {
+  margin: 0;
+  min-height: 2.6rem;
+}
+
+.dm-campaign-danger {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.dm-party-body {
+  padding: 1rem;
+}
+
+.dm-party-prompt {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dm-party-choice {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.dm-add-party {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dm-add-party h4 {
+  margin: 0;
+}
+
+@media (max-width: 40rem) {
+  .dm-player {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .dm-player-name {
+    grid-column: 1 / -1;
+  }
+
+  .dm-player-remove {
+    grid-column: 1 / -1;
+  }
+
+  .dm-campaign-open > header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

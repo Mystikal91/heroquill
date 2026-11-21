@@ -4,11 +4,14 @@ import {
   addLair,
   addManual,
   addMonsters,
+  addPlayersToFight,
   addedLog,
   adding,
+  campaign,
   closeAdd,
   dmRuleset,
   encounter,
+  missingPlayers,
   setDmRuleset,
 } from "../../app/dm";
 import { challengeText, typeText } from "../../app/monsterView";
@@ -233,11 +236,46 @@ function Characters() {
   const inFight = new Set(
     (encounter.value?.combatants ?? []).flatMap((x) => (x.source ? [x.source] : [])),
   );
+  const party = campaign.value?.party ?? [];
+  const waiting = new Set(missingPlayers().map((m) => m.id));
+  const partyBlock = party.length > 0 && (
+    <section class="dm-add-party">
+      <h4>{ui("dm.party")}</h4>
+      <ul class="plain dm-results">
+        {party.map((m) => (
+          <li key={m.id} data-in={!waiting.has(m.id) || undefined}>
+            <span class="dm-result-name">
+              <b>{m.name || ui("dm.unnamed")}</b>
+              <small>{`${ui("dm.col.ac")} ${m.ac} · ${ui("dm.col.hp")} ${m.maxHp}`}</small>
+            </span>
+            <button
+              type="button"
+              class="dm-add-button"
+              disabled={!waiting.has(m.id)}
+              onClick={() => void addPlayersToFight([m.id])}
+            >
+              {waiting.has(m.id) ? ui("dm.addButton") : ui("dm.alreadyIn")}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {waiting.size > 1 && (
+        <button
+          type="button"
+          class="secondary"
+          onClick={() => void addPlayersToFight([...waiting])}
+        >
+          {ui("dm.addParty")}
+        </button>
+      )}
+    </section>
+  );
   if (!list) return <p class="muted">{ui("app.loading")}</p>;
-  if (list.length === 0) return <p class="muted">{ui("dm.noCharacters")}</p>;
+  if (list.length === 0 && party.length === 0) return <p class="muted">{ui("dm.noCharacters")}</p>;
   return (
     <div class="dm-add-body">
-      <p class="muted">{ui("dm.characterHint")}</p>
+      {partyBlock}
+      {list.length > 0 && <p class="muted">{ui("dm.characterHint")}</p>}
       <ul class="plain dm-results">
         {list.map((ch) => (
           <li key={ch.id} data-in={inFight.has(ch.id) || undefined}>

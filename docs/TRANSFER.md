@@ -9,7 +9,7 @@ transfer file). Everything stays on the person's devices; the app uploads nothin
 | Part | In the file | Default |
 | --- | --- | --- |
 | `characters` | every saved character, with its play state | on |
-| `encounters` | the fights of the DM mode (creatures, initiative, hit points, conditions and effects, notes), whole | on |
+| `encounters` | the fights of the DM mode (creatures, initiative, hit points, conditions and effects, notes), whole, and the campaigns they belong to (name and party) in `campaigns` | on |
 | `homebrew` | the homebrew packs, whole | on |
 | `edits` | the quick edits of each language, whole (merged on import: the file wins per text) | on |
 | `links` | the **addresses** of the packs imported from Aurora, with whether the 2024 versions were kept | on |
@@ -32,7 +32,7 @@ here is kept. A homebrew pack with the same id is replaced.
 
 ```
 { "format": "dnd-character-maker-transfer", "version": 1, "exportedAt": "...",
-  "characters": [...], "encounters": [...], "homebrew": [...], "edits": [...],
+  "characters": [...], "encounters": [...], "campaigns": [...], "homebrew": [...], "edits": [...],
   "links": [{ "id", "name", "url", "keepEditions" }], "files": ["name"],
   "settings": {...}, "deeplKey": "...", "translations": [["key", "text"]] }
 ```

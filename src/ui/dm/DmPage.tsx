@@ -1,14 +1,27 @@
 import { useEffect } from "preact/hooks";
-import { advanceTurn, areaMode, dmReady, encounter, loadDm, openAdd } from "../../app/dm";
+import {
+  advanceTurn,
+  areaMode,
+  campaign,
+  campaigns,
+  dmReady,
+  dmSection,
+  encounter,
+  loadDm,
+  openAdd,
+} from "../../app/dm";
 import { leavePage } from "../../app/navigation";
 import { monstersWanted } from "../../app/rulesView";
-import { isStarted } from "../../engine/encounter";
+import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
+import { BookIcon, SwordsIcon } from "../icons";
 import { AddDialog } from "./AddDialog";
 import { AddEffectDialog } from "./AddEffectDialog";
 import { AreaPanel } from "./AreaPanel";
+import { CampaignSection } from "./CampaignSection";
 import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
+import { PartyDialog } from "./PartyDialog";
 import { RollPanel } from "./RollPanel";
 import { TopBar } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
@@ -19,6 +32,7 @@ function useShortcuts() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey || event.repeat) return;
+      if (dmSection.value !== "encounter") return;
       const target = event.target;
       if (
         target instanceof Element &&
@@ -43,12 +57,47 @@ function useShortcuts() {
   }, []);
 }
 
-/** The Dungeon Master mode: an initiative table to prepare fights and run them. */
+/** The fights of the open campaign: the bar, the table and the notes. */
+function EncounterSection({ e }: { e: Encounter }) {
+  return (
+    <>
+      <p class="muted dm-campaign-line">
+        <button
+          type="button"
+          class="link"
+          onClick={() => {
+            dmSection.value = "campaign";
+          }}
+        >
+          {campaign.value?.name.trim() || ui("dm.unnamed")}
+        </button>
+      </p>
+      <TopBar e={e} />
+      {areaMode.value && <AreaPanel />}
+      {e.combatants.length === 0 ? (
+        <div class="dm-empty">
+          <p>{ui("dm.empty")}</p>
+          <button type="button" class="primary" onClick={openAdd}>
+            {ui("dm.add")}
+          </button>
+        </div>
+      ) : (
+        <TrackerTable e={e} />
+      )}
+      <EncounterNotes e={e} />
+    </>
+  );
+}
+
+/** The Dungeon Master mode: campaigns with their parties, and an initiative table to prepare fights and run them. */
 export function DmPage() {
   useEffect(() => {
     // The monsters are a large pack: they come when this page is opened.
     monstersWanted.value = true;
-    void loadDm();
+    // The first thing to do on arriving is to choose the campaign: with more than one, that is the part shown.
+    void loadDm().then(() => {
+      dmSection.value = campaigns.value.length > 1 ? "campaign" : "encounter";
+    });
   }, []);
   useShortcuts();
   const e = encounter.value;
@@ -67,24 +116,35 @@ export function DmPage() {
         <p>{ui("app.loading")}</p>
       ) : (
         <>
-          <TopBar e={e} />
-          {areaMode.value && <AreaPanel />}
-          {e.combatants.length === 0 ? (
-            <div class="dm-empty">
-              <p>{ui("dm.empty")}</p>
-              <button type="button" class="primary" onClick={openAdd}>
-                {ui("dm.add")}
+          <div class="dm-sections" role="tablist" aria-label={ui("dm.title")}>
+            {(
+              [
+                ["campaign", ui("dm.section.campaign"), BookIcon],
+                ["encounter", ui("dm.section.encounter"), SwordsIcon],
+              ] as const
+            ).map(([id, label, Icon]) => (
+              <button
+                type="button"
+                key={id}
+                role="tab"
+                class="dm-section"
+                aria-selected={dmSection.value === id}
+                onClick={() => {
+                  dmSection.value = id;
+                }}
+              >
+                <Icon />
+                <span>{label}</span>
               </button>
-            </div>
-          ) : (
-            <TrackerTable e={e} />
-          )}
-          <EncounterNotes e={e} />
+            ))}
+          </div>
+          {dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}
         </>
       )}
       <InfoDialog />
       <AddDialog />
       <AddEffectDialog />
+      <PartyDialog />
       <RollPanel />
     </article>
   );

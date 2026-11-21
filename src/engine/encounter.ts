@@ -71,6 +71,8 @@ export interface Combatant {
 export interface Encounter {
   id: string;
   name: string;
+  /** The campaign this fight belongs to. */
+  campaignId?: string;
   combatants: Combatant[];
   /** The round of a fight in progress; 0 before it starts. */
   round: number;
@@ -90,8 +92,17 @@ const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(mi
 const whole = (n: unknown, fallback = 0) =>
   typeof n === "number" && Number.isFinite(n) ? Math.trunc(n) : fallback;
 
-export function createEncounter(name: string, now = Date.now()): Encounter {
-  return { id: uuid(), name, combatants: [], round: 0, notes: "", created: now, updated: now };
+export function createEncounter(name: string, campaignId?: string, now = Date.now()): Encounter {
+  return {
+    id: uuid(),
+    name,
+    ...(campaignId && { campaignId }),
+    combatants: [],
+    round: 0,
+    notes: "",
+    created: now,
+    updated: now,
+  };
 }
 
 /** A fight is on while it has a round: the first turn starts round 1. */
@@ -771,6 +782,7 @@ export function readEncounter(raw: unknown): Encounter | undefined {
   return {
     id: r.id,
     name: text(r.name),
+    ...(typeof r.campaignId === "string" && r.campaignId !== "" && { campaignId: r.campaignId }),
     combatants,
     round: turn ? round : 0,
     ...(turn && { turn }),

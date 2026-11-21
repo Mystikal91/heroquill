@@ -1,3 +1,4 @@
+import type { Campaign } from "../engine/campaign";
 import type { Character } from "../engine/character";
 import type { Encounter } from "../engine/encounter";
 import { type Sealed, isSealed, seal, unseal } from "./crypto";
@@ -57,6 +58,8 @@ export interface Bundle {
   characterTimes?: Record<string, number>;
   /** The fights of the Dungeon Master mode, whole. */
   encounters?: unknown[];
+  /** The campaigns the fights belong to, with their parties. They travel with the fights. */
+  campaigns?: unknown[];
   /** Homebrew packs, whole. */
   homebrew?: unknown[];
   /** The quick edits of each language, whole. */
@@ -76,6 +79,7 @@ export interface Sources {
   characterTimes?: Record<string, number>;
   /** The fights of the Dungeon Master mode. */
   encounters?: Encounter[];
+  campaigns?: Campaign[];
   packs: UserPackRecord[];
   settings: TransferSettings;
   deeplKey: string;
@@ -115,6 +119,7 @@ export function buildBundle(
     ...(has("characters") && { characters: sources.characters }),
     ...(has("characters") && sources.characterTimes && { characterTimes: sources.characterTimes }),
     ...(has("encounters") && { encounters: sources.encounters ?? [] }),
+    ...(has("encounters") && { campaigns: sources.campaigns ?? [] }),
     ...(has("homebrew") && { homebrew: sources.packs.filter((p) => p.origin === "homebrew") }),
     ...(has("edits") && { edits: sources.packs.filter((p) => p.origin === "edits") }),
     ...(has("links") && { links, files }),
@@ -145,7 +150,10 @@ export function onlySections(bundle: Bundle, include: ReadonlySet<Section>): Bun
     out.characters = undefined;
     out.characterTimes = undefined;
   }
-  if (!include.has("encounters")) out.encounters = undefined;
+  if (!include.has("encounters")) {
+    out.encounters = undefined;
+    out.campaigns = undefined;
+  }
   if (!include.has("homebrew")) out.homebrew = undefined;
   if (!include.has("edits")) out.edits = undefined;
   if (!include.has("links")) {
