@@ -1,5 +1,12 @@
 import { useState } from "preact/hooks";
-import { addPlayersToFight, campaign, encounter, missingPlayers, partyPrompt } from "../../app/dm";
+import {
+  addPlayersToFight,
+  campaign,
+  closePartyPrompt,
+  encounter,
+  missingPlayers,
+  partyPrompt,
+} from "../../app/dm";
 import { ui } from "../../i18n/ui";
 import { Modal } from "./Modal";
 
@@ -61,16 +68,10 @@ export function PartyDialog() {
       open={partyPrompt.value && campaign.value !== undefined}
       variant="center"
       title={ui("dm.partyDialog.title")}
-      onClose={() => {
-        partyPrompt.value = false;
-      }}
+      onClose={closePartyPrompt}
     >
       <div class="dm-party-body">
-        <Choice
-          close={() => {
-            partyPrompt.value = false;
-          }}
-        />
+        <Choice close={closePartyPrompt} />
       </div>
     </Modal>
   );

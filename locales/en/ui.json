@@ -2689,5 +2689,6 @@
   "dm.partyDialog.hint": "Who joins “{name}”?",
   "dm.partyDialog.add": "Add ({n})",
   "dm.partyDialog.skip": "Not now",
-  "dm.addParty": "Add the party"
+  "dm.addParty": "Add the party",
+  "dm.endDone": "Fight ended"
 }

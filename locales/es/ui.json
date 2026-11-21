@@ -2689,5 +2689,6 @@
   "dm.partyDialog.hint": "¿Quién se une a «{name}»?",
   "dm.partyDialog.add": "Añadir ({n})",
   "dm.partyDialog.skip": "Ahora no",
-  "dm.addParty": "Añadir el grupo"
+  "dm.addParty": "Añadir el grupo",
+  "dm.endDone": "Combate terminado"
 }

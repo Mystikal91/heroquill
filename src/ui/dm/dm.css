@@ -1954,3 +1954,11 @@
     align-items: stretch;
   }
 }
+
+/* Ends the fight: the whole width, under the notes. */
+.dm-end-fight {
+  display: block;
+  width: 100%;
+  min-height: 2.8rem;
+  margin: 0.75rem 0 0;
+}

@@ -7,6 +7,7 @@ import {
   dmReady,
   dmSection,
   encounter,
+  endFight,
   loadDm,
   openAdd,
 } from "../../app/dm";
@@ -88,6 +89,11 @@ function EncounterSection({ e }: { e: Encounter }) {
         <TrackerTable e={e} />
       )}
       <EncounterNotes e={e} />
+      {isStarted(e) && (
+        <button type="button" class="danger-btn dm-end-fight" onClick={endFight}>
+          {ui("dm.end")}
+        </button>
+      )}
     </>
   );
 }

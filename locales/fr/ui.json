@@ -2689,5 +2689,6 @@
   "dm.partyDialog.hint": "Qui rejoint « {name} » ?",
   "dm.partyDialog.add": "Ajouter ({n})",
   "dm.partyDialog.skip": "Pas maintenant",
-  "dm.addParty": "Ajouter le groupe"
+  "dm.addParty": "Ajouter le groupe",
+  "dm.endDone": "Combat terminé"
 }

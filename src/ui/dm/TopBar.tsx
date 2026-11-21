@@ -6,8 +6,10 @@ import {
   canGoBack,
   delayActive,
   duplicateEncounter,
+  endFight,
   groupInitiative,
   lastTurn,
+  missingPlayers,
   newEncounter,
   offerParty,
   openAdd,
@@ -15,22 +17,20 @@ import {
   rechargeNote,
   removeEncounter,
   resetCurrentFight,
-  resetTurnHistory,
   rollRechargeFor,
   selectEncounter,
   setGroupInitiative,
   startArea,
+  startFight,
   updateEncounter,
 } from "../../app/dm";
 import { content } from "../../app/store";
 import {
   type Encounter,
   activeCombatant,
-  endCombat,
   isStarted,
   laterCombatants,
   rollAllInitiative,
-  startCombat,
 } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
@@ -118,14 +118,7 @@ function EncounterMenu({ e }: { e: Encounter }) {
           {ui("dm.reset")}
         </button>
         {started && (
-          <button
-            type="button"
-            class="secondary dm-menu-end"
-            onClick={() => {
-              resetTurnHistory();
-              updateEncounter(endCombat);
-            }}
-          >
+          <button type="button" class="secondary dm-menu-end" onClick={endFight}>
             {ui("dm.end")}
           </button>
         )}
@@ -269,11 +262,8 @@ export function TopBar({ e }: { e: Encounter }) {
                 <button
                   type="button"
                   class="primary dm-next"
-                  disabled={e.combatants.length === 0}
-                  onClick={() => {
-                    resetTurnHistory();
-                    updateEncounter(startCombat);
-                  }}
+                  disabled={e.combatants.length === 0 && missingPlayers().length === 0}
+                  onClick={startFight}
                 >
                   {ui("dm.start")}
                 </button>

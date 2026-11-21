@@ -30,6 +30,7 @@ import {
   characterCombatant,
   createEncounter,
   delayTurn,
+  endCombat,
   isStarted,
   lairCombatant,
   manualCombatant,
@@ -38,6 +39,7 @@ import {
   nextTurn,
   removeCombatant,
   resetFight,
+  startCombat,
 } from "../engine/encounter";
 import { type ActionRolls, type DamagePart, attackHits, doubleDice } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
@@ -77,6 +79,8 @@ export type DmSection = "campaign" | "encounter";
 export const dmSection = signal<DmSection>("encounter");
 /** The window that offers to put the party in the open encounter. */
 export const partyPrompt = signal(false);
+/** The window was opened by pressing Start: the fight begins when it is answered. */
+const startAfterParty = signal(false);
 /** The encounters of the open campaign, the one changed last first. */
 export const campaignEncounters = computed(() =>
   encounters.value.filter((e) => e.campaignId === campaign.value?.id),
@@ -276,7 +280,10 @@ export async function newEncounter() {
   await setCurrentEncounterId(fresh.id);
   void refreshEncounterCount();
   // The party joins a new fight: the window asks who.
-  if ((campaign.value?.party.length ?? 0) > 0) partyPrompt.value = true;
+  if ((campaign.value?.party.length ?? 0) > 0) {
+    startAfterParty.value = false;
+    partyPrompt.value = true;
+  }
 }
 
 /** A copy of the open encounter with the fight reset (no round, full hit points, no conditions): to use a prepared fight again. */
@@ -940,9 +947,45 @@ export async function addPlayersToFight(ids: readonly string[]) {
   });
   for (const m of party) logAdded(m.name, 1);
   partyPrompt.value = false;
+  if (startAfterParty.value) beginFight();
 }
 
-/** Asks which players of the party join this encounter, if some are missing. */
+/** Closes the window that asks who joins; a fight that was being started goes on without the ones left out. */
+export function closePartyPrompt() {
+  if (!partyPrompt.value) return;
+  partyPrompt.value = false;
+  if (startAfterParty.value) beginFight();
+}
+
+/** Asks which players of the party join the open encounter, if some are missing. */
 export function offerParty() {
-  if (missingPlayers().length > 0) partyPrompt.value = true;
+  if (missingPlayers().length > 0) {
+    startAfterParty.value = false;
+    partyPrompt.value = true;
+  }
+}
+
+function beginFight() {
+  startAfterParty.value = false;
+  resetTurnHistory();
+  updateEncounter(startCombat);
+}
+
+/** Starts the fight; players of the party that are not in it yet are asked about first. */
+export function startFight() {
+  if (missingPlayers().length > 0) {
+    startAfterParty.value = true;
+    partyPrompt.value = true;
+    return;
+  }
+  beginFight();
+}
+
+/** Ends the fight (no round, no turn); it can be taken back for a few seconds. */
+export function endFight() {
+  const before = encounter.value;
+  if (!before) return;
+  resetTurnHistory();
+  updateEncounter(endCombat);
+  offerUndo(ui("dm.endDone"), () => updateEncounter(() => before));
 }
