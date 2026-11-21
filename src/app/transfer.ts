@@ -11,6 +11,7 @@ import {
   transferFileName,
 } from "../storage/bundle";
 import { dbEntries, dbPut } from "../storage/db";
+import { listEncounters } from "../storage/encounters";
 import { type UserPackRecord, parseUserPack } from "../storage/packs";
 import {
   autoSettings,
@@ -19,10 +20,12 @@ import {
   loadTranslationCache,
   saveAutoSettings,
 } from "../translate/auto";
+import { encounterCount } from "./encounterCount";
 import { LANGUAGES } from "./language";
 import { language } from "./language";
 import { printSettings } from "./printSettings";
 import { parsePrintSettings } from "./printSettings.logic";
+import { restoreEncounters } from "./restoreEncounters";
 import { type ConflictPolicy, allCharacters, characters, restoreCharacters } from "./store";
 import { theme } from "./theme";
 import { parseTheme } from "./theme.logic";
@@ -46,6 +49,7 @@ export async function currentSources(): Promise<Sources> {
         .filter((s) => all.some((c) => c.id === s.id))
         .map((s) => [s.id, s.updatedAt]),
     ),
+    encounters: await listEncounters(),
     packs: userPacks.value,
     settings: {
       language: language.value,
@@ -69,6 +73,7 @@ export function currentCounts(): { counts: Record<Section, number>; files: strin
   return {
     counts: {
       characters: characters.value.length,
+      encounters: encounterCount.value,
       homebrew: userPacks.value.filter((p) => p.origin === "homebrew").length,
       edits: userPacks.value.filter((p) => p.origin === "edits").length,
       links: links.length,
@@ -91,6 +96,7 @@ export async function exportTransfer(
 
 export interface TransferReport {
   characters?: { added: number; skipped: number; replaced: number };
+  encounters?: { added: number; skipped: number; replaced: number };
   packs?: number;
   edits?: number;
   settings?: boolean;
@@ -133,6 +139,12 @@ export async function applyTransfer(
       }
     });
     report.characters = await restoreCharacters(list, conflicts, chosen.characterTimes);
+  }
+
+  if (chosen.encounters) {
+    const done = await restoreEncounters(chosen.encounters, conflicts);
+    report.unreadable += done.unreadable;
+    report.encounters = { added: done.added, skipped: done.skipped, replaced: done.replaced };
   }
 
   if (chosen.homebrew) {

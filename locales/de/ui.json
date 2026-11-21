@@ -2607,5 +2607,13 @@
   "dm.now": "Jetzt:",
   "dm.effect.numbersTitle": "Was es ändert",
   "dm.effect.numbersHint": "Optional: Rüstungsklasse, Bewegungsrate, Initiative, Trefferpunkte oder eine Verteidigung. Der Effekt zählt in der Tabelle, bis er endet.",
-  "dm.rollInitiativeHint": "Würfelt die Initiative der Kreaturen, die noch keine haben; Charaktere behalten, was ihre Spieler sagen."
+  "dm.rollInitiativeHint": "Würfelt die Initiative der Kreaturen, die noch keine haben; Charaktere behalten, was ihre Spieler sagen.",
+  "transfer.sec.encounters": "Kämpfe des SL-Modus ({n})",
+  "transfer.report.encounters": "Kämpfe: {added} hinzugefügt, {skipped} unverändert gelassen.",
+  "dm.hpChanged": "{name}: {from} → {to} Trefferpunkte.",
+  "dm.encounterNotes": "Notizen zur Begegnung",
+  "dm.encounterNotesPlaceholder": "Taktik, Schätze, Dinge, an die man denken muss…",
+  "dm.reset": "Kampf zurücksetzen",
+  "dm.resetHint": "Alle auf vollen Trefferpunkten, ohne Zustände, Effekte oder Initiative. Charaktere behalten ihre Trefferpunkte.",
+  "dm.resetDone": "Der Kampf wurde zurückgesetzt."
 }

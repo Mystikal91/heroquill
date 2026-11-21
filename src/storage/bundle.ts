@@ -1,4 +1,5 @@
 import type { Character } from "../engine/character";
+import type { Encounter } from "../engine/encounter";
 import { type Sealed, isSealed, seal, unseal } from "./crypto";
 import { type UserPackRecord, addressesOf } from "./packs";
 
@@ -7,6 +8,7 @@ export const TRANSFER_FORMAT = "dnd-character-maker-transfer";
 /** The parts of a transfer file the person can leave in or out. */
 export const SECTIONS = [
   "characters",
+  "encounters",
   "homebrew",
   "edits",
   "links",
@@ -17,7 +19,14 @@ export const SECTIONS = [
 export type Section = (typeof SECTIONS)[number];
 
 /** What is on by default when exporting: everything except the key and the saved translations. */
-export const DEFAULT_SECTIONS: Section[] = ["characters", "homebrew", "edits", "links", "settings"];
+export const DEFAULT_SECTIONS: Section[] = [
+  "characters",
+  "encounters",
+  "homebrew",
+  "edits",
+  "links",
+  "settings",
+];
 
 /** The look and behaviour settings of the app, as the other device will apply them. */
 export interface TransferSettings {
@@ -46,6 +55,8 @@ export interface Bundle {
   characters?: unknown[];
   /** When each character last changed (by id, in milliseconds), to tell which copy is newer. */
   characterTimes?: Record<string, number>;
+  /** The fights of the Dungeon Master mode, whole. */
+  encounters?: unknown[];
   /** Homebrew packs, whole. */
   homebrew?: unknown[];
   /** The quick edits of each language, whole. */
@@ -63,6 +74,8 @@ export interface Bundle {
 export interface Sources {
   characters: Character[];
   characterTimes?: Record<string, number>;
+  /** The fights of the Dungeon Master mode. */
+  encounters?: Encounter[];
   packs: UserPackRecord[];
   settings: TransferSettings;
   deeplKey: string;
@@ -101,6 +114,7 @@ export function buildBundle(
     exportedAt: now.toISOString(),
     ...(has("characters") && { characters: sources.characters }),
     ...(has("characters") && sources.characterTimes && { characterTimes: sources.characterTimes }),
+    ...(has("encounters") && { encounters: sources.encounters ?? [] }),
     ...(has("homebrew") && { homebrew: sources.packs.filter((p) => p.origin === "homebrew") }),
     ...(has("edits") && { edits: sources.packs.filter((p) => p.origin === "edits") }),
     ...(has("links") && { links, files }),
@@ -114,6 +128,7 @@ export function buildBundle(
 export function describeBundle(bundle: Bundle): Record<Section, number> {
   return {
     characters: bundle.characters?.length ?? 0,
+    encounters: bundle.encounters?.length ?? 0,
     homebrew: bundle.homebrew?.length ?? 0,
     edits: bundle.edits?.length ?? 0,
     links: bundle.links?.length ?? 0,
@@ -130,6 +145,7 @@ export function onlySections(bundle: Bundle, include: ReadonlySet<Section>): Bun
     out.characters = undefined;
     out.characterTimes = undefined;
   }
+  if (!include.has("encounters")) out.encounters = undefined;
   if (!include.has("homebrew")) out.homebrew = undefined;
   if (!include.has("edits")) out.edits = undefined;
   if (!include.has("links")) {

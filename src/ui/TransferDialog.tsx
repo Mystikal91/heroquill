@@ -485,6 +485,16 @@ function Report({ report }: { report: TransferReport }) {
               ` ${ui("transfer.report.replaced", { n: report.characters.replaced })}`}
           </li>
         )}
+        {report.encounters && (
+          <li>
+            {ui("transfer.report.encounters", {
+              added: report.encounters.added,
+              skipped: report.encounters.skipped,
+            })}
+            {report.encounters.replaced > 0 &&
+              ` ${ui("transfer.report.replaced", { n: report.encounters.replaced })}`}
+          </li>
+        )}
         {report.packs !== undefined && <li>{ui("transfer.report.packs", { n: report.packs })}</li>}
         {report.edits !== undefined && <li>{ui("transfer.report.edits", { n: report.edits })}</li>}
         {report.settings && <li>{ui("transfer.report.settings")}</li>}

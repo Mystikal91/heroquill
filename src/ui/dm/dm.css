@@ -1386,3 +1386,37 @@
   justify-self: start;
   margin-left: 0;
 }
+
+/* Notes on the encounter */
+.dm-notes {
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-notes > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.dm-notes[open] > summary {
+  margin-bottom: 0.4rem;
+}
+
+.dm-notes-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.dm-notes textarea {
+  width: 100%;
+  resize: vertical;
+}

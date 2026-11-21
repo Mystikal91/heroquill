@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createCharacter } from "../engine/character";
+import { createEncounter } from "../engine/encounter";
 import {
   DEFAULT_SECTIONS,
   type Section,
@@ -98,6 +99,7 @@ describe("a transfer file", () => {
     const bundle = buildBundle(sources, all);
     expect(describeBundle(bundle)).toEqual({
       characters: 2,
+      encounters: 0,
       homebrew: 1,
       edits: 1,
       links: 1,
@@ -150,5 +152,29 @@ describe("encrypting a text", () => {
   it("copes with a large text", async () => {
     const big = "x".repeat(300_000);
     expect(await unseal(await seal(big, "p"), "p")).toBe(big);
+  });
+});
+
+describe("the fights of the DM mode in a transfer file", () => {
+  const fights = [createEncounter("One"), createEncounter("Two")];
+  const withFights: Sources = { ...sources, encounters: fights };
+
+  it("travel when asked for and are on by default", () => {
+    expect(DEFAULT_SECTIONS).toContain("encounters");
+    const bundle = buildBundle(withFights, new Set<Section>(["encounters"]));
+    expect(bundle.encounters).toHaveLength(2);
+    expect(bundle.characters).toBeUndefined();
+    expect(describeBundle(bundle).encounters).toBe(2);
+    expect(buildBundle(withFights, new Set<Section>(["characters"])).encounters).toBeUndefined();
+  });
+
+  it("can be left out of a file that has them", () => {
+    const bundle = buildBundle(withFights, new Set<Section>(["encounters", "characters"]));
+    expect(onlySections(bundle, new Set<Section>(["characters"])).encounters).toBeUndefined();
+    expect(onlySections(bundle, new Set<Section>(["encounters"])).encounters).toHaveLength(2);
+  });
+
+  it("are an empty list, not nothing, when there are none", () => {
+    expect(buildBundle(sources, new Set<Section>(["encounters"])).encounters).toEqual([]);
   });
 });

@@ -21,6 +21,7 @@ import {
 import { decodeShare, isShareHash } from "../storage/share";
 import { parseBackup, parseImportFile } from "../storage/transfer";
 import { askEdition, editionsIn } from "./edition";
+import { refreshEncounterCount } from "./encounterCount";
 import { EXAMPLE_ID, buildExample } from "./example";
 import { showView, view } from "./navigation";
 import { transferDialog, transferInbox } from "./transferState";
@@ -160,6 +161,7 @@ effect(() => {
 export async function initStorage(): Promise<void> {
   try {
     void requestPersistence();
+    void refreshEncounterCount();
     await refreshList();
     const currentId = await getCurrentId();
     const wanted = currentId ?? characters.value[0]?.id;

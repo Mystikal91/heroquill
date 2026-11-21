@@ -21,6 +21,7 @@ import {
   readEncounter,
   removeCombatant,
   removeEffect,
+  resetFight,
   rollAllInitiative,
   setConditionRounds,
   setEffectRounds,
@@ -343,5 +344,37 @@ describe("effects", () => {
       ["Mark", undefined, undefined],
     ]);
     expect(read?.combatants[1]?.effects).toEqual([]);
+  });
+});
+
+describe("resetting a fight", () => {
+  it("puts the creatures back to full health with nothing in force and no initiative", () => {
+    const orc = addEffect(
+      toggleCondition({ ...make("orc", 12, 0, 20), hp: 3, tempHp: 4 }, "x:condition/stunned"),
+      { name: "Bless", rounds: 3 },
+    );
+    const e = nextTurn(startCombat(fight(orc, make("b", 5)))).encounter;
+    const reset = resetFight(e);
+    expect(reset.round).toBe(0);
+    expect(reset.turn).toBeUndefined();
+    const first = reset.combatants[0];
+    expect(first).toMatchObject({ hp: 20, tempHp: 0, conditions: [], rounds: {}, effects: [] });
+    expect(first?.initiative).toBeUndefined();
+    expect(reset.combatants[1]?.initiative).toBeUndefined();
+  });
+
+  it("lets a character keep the hit points of its sheet", () => {
+    const pc = characterCombatant({
+      characterId: "c1",
+      name: "Hero",
+      hp: 4,
+      maxHp: 10,
+      tempHp: 2,
+      ac: 15,
+      initiativeBonus: 1,
+    });
+    const reset = resetFight(fight({ ...pc, initiative: 9 }));
+    expect(reset.combatants[0]).toMatchObject({ hp: 4, tempHp: 2 });
+    expect(reset.combatants[0]?.initiative).toBeUndefined();
   });
 });

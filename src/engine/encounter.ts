@@ -334,6 +334,29 @@ export function startCombat(encounter: Encounter): Encounter {
   return touch({ ...encounter, round: 1, turn: first.id });
 }
 
+/**
+ * The same fight again from the start: no round, no turn, nobody has an initiative, nothing is in force
+ * (conditions, effects), and every creature is back to its full hit points. A character keeps the hit
+ * points it has: they come from a sheet and go on from one fight to the next.
+ */
+export function resetFight(encounter: Encounter): Encounter {
+  const { turn: _turn, ...rest } = encounter;
+  return touch({
+    ...rest,
+    round: 0,
+    combatants: encounter.combatants.map((c) => {
+      const { initiative: _initiative, ...kept } = c;
+      return {
+        ...kept,
+        ...(c.kind !== "character" && { hp: c.maxHp, tempHp: 0 }),
+        conditions: [],
+        rounds: {},
+        effects: [],
+      };
+    }),
+  });
+}
+
 /** Back to before the fight: no round, no turn. Initiatives and hit points stay as they are. */
 export function endCombat(encounter: Encounter): Encounter {
   const { turn: _turn, ...rest } = encounter;

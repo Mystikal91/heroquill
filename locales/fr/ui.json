@@ -2607,5 +2607,13 @@
   "dm.now": "Maintenant :",
   "dm.effect.numbersTitle": "Ce qu'il change",
   "dm.effect.numbersHint": "Facultatif : classe d'armure, vitesse, initiative, points de vie ou une défense. L'effet compte dans le tableau jusqu'à sa fin.",
-  "dm.rollInitiativeHint": "Lance l'initiative des créatures qui n'en ont pas ; les personnages gardent celle de leurs joueurs."
+  "dm.rollInitiativeHint": "Lance l'initiative des créatures qui n'en ont pas ; les personnages gardent celle de leurs joueurs.",
+  "transfer.sec.encounters": "Combats du mode MJ ({n})",
+  "transfer.report.encounters": "Combats : {added} ajoutés, {skipped} laissés tels quels.",
+  "dm.hpChanged": "{name} : {from} → {to} points de vie.",
+  "dm.encounterNotes": "Notes sur la rencontre",
+  "dm.encounterNotesPlaceholder": "Tactique, trésor, choses à retenir…",
+  "dm.reset": "Remettre le combat à zéro",
+  "dm.resetHint": "Tout le monde à pleins points de vie, sans états, effets ni initiative. Les personnages gardent leurs points de vie.",
+  "dm.resetDone": "Le combat a été remis à zéro."
 }

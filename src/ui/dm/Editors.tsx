@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { dmRuleset, editCombatant, effectFor, updateEncounter } from "../../app/dm";
+import { changeHp, dmRuleset, editCombatant, effectFor, updateEncounter } from "../../app/dm";
 import { content } from "../../app/store";
 import { effectiveMaxHp } from "../../engine/combatantNumbers";
 import {
@@ -45,7 +45,7 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
   const percent = maxHp > 0 ? Math.round((c.hp / maxHp) * 100) : 0;
   const state = c.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
   const apply = (change: (x: Combatant) => Combatant) => {
-    editCombatant(c.id, change);
+    changeHp(c.id, change);
     close();
   };
   return (
@@ -109,7 +109,7 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
             aria-label={
               step < 0 ? ui("play.damageBy", { n: -step }) : ui("play.healBy", { n: step })
             }
-            onClick={() => editCombatant(c.id, (x) => (step < 0 ? hurt(x, -step) : heal(x, step)))}
+            onClick={() => changeHp(c.id, (x) => (step < 0 ? hurt(x, -step) : heal(x, step)))}
           >
             {step < 0 ? `−${-step}` : `+${step}`}
           </button>

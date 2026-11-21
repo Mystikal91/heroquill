@@ -4,9 +4,17 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadContent } from "../content/browser";
 import { createCharacter } from "../engine/character";
 import { parseCharacter } from "../engine/characterSchema";
+import {
+  type Encounter,
+  addCombatants,
+  createEncounter,
+  manualCombatant,
+} from "../engine/encounter";
 import { type Bundle, type Section, TRANSFER_FORMAT } from "../storage/bundle";
+import { deleteEncounter, listEncounters, saveEncounter } from "../storage/encounters";
 import type { UserPackRecord } from "../storage/packs";
 import { autoSettings, saveAutoSettings } from "../translate/auto";
+import { encounterCount, refreshEncounterCount } from "./encounterCount";
 import { language } from "./language";
 import { character, characters, content, countConflicts, restoreCharacters } from "./store";
 import { applyTransfer, currentCounts, exportTransfer } from "./transfer";
@@ -143,5 +151,84 @@ describe("moving data between devices", () => {
     expect(JSON.parse(file.text).format).toBe(TRANSFER_FORMAT);
     const sealed = await exportTransfer(new Set<Section>(["settings"]), "pw");
     expect(JSON.parse(sealed.text).format).toBe("dnd-character-maker-sealed");
+  });
+});
+
+describe("moving the fights of the DM mode", () => {
+  const fight = (name: string, updated = 10): Encounter => ({
+    ...addCombatants(createEncounter(name), [manualCombatant({ name: "Orc", maxHp: 9, ac: 12 })]),
+    updated,
+  });
+
+  const clear = async () => {
+    for (const e of await listEncounters()) await deleteEncounter(e.id);
+    await refreshEncounterCount();
+  };
+
+  it("counts what is saved for the export window", async () => {
+    await clear();
+    await saveEncounter(fight("a"));
+    await saveEncounter(fight("b"));
+    await refreshEncounterCount();
+    expect(encounterCount.value).toBe(2);
+    expect(currentCounts().counts.encounters).toBe(2);
+  });
+
+  it("carries them in a file and brings them back where they are missing", async () => {
+    await clear();
+    const mine = fight("Ambush");
+    await saveEncounter(mine);
+    const file = await exportTransfer(new Set<Section>(["encounters"]), "");
+    await clear();
+    const bundle = JSON.parse(file.text) as Bundle;
+    expect(bundle.encounters).toHaveLength(1);
+    const report = await applyTransfer(bundle, new Set<Section>(["encounters"]));
+    expect(report.encounters).toEqual({ added: 1, skipped: 0, replaced: 0 });
+    const back = await listEncounters();
+    expect(back).toHaveLength(1);
+    expect(back[0]?.id).toBe(mine.id);
+    expect(back[0]?.combatants[0]?.name).toBe("Orc");
+  });
+
+  it("leaves a fight that is the same, and follows the policy for one that differs", async () => {
+    await clear();
+    const here = fight("Ambush", 10);
+    await saveEncounter(here);
+    const newer: Encounter = { ...here, name: "Ambush (changed)", updated: 20 };
+    const older: Encounter = { ...here, name: "Ambush (old)", updated: 5 };
+    const bundle = (list: Encounter[]): Bundle => ({
+      format: TRANSFER_FORMAT,
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      encounters: list,
+    });
+    const only = new Set<Section>(["encounters"]);
+
+    expect((await applyTransfer(bundle([here]), only)).encounters).toEqual({
+      added: 0,
+      skipped: 1,
+      replaced: 0,
+    });
+    expect((await applyTransfer(bundle([newer]), only, "keep")).encounters?.skipped).toBe(1);
+    expect((await applyTransfer(bundle([older]), only, "newest")).encounters?.skipped).toBe(1);
+    expect((await listEncounters())[0]?.name).toBe("Ambush");
+    expect((await applyTransfer(bundle([newer]), only, "newest")).encounters?.replaced).toBe(1);
+    expect((await listEncounters())[0]?.name).toBe("Ambush (changed)");
+    const copied = await applyTransfer(bundle([older]), only, "copy");
+    expect(copied.encounters?.added).toBe(1);
+    expect(await listEncounters()).toHaveLength(2);
+  });
+
+  it("skips what is not a fight and counts it", async () => {
+    await clear();
+    const bundle: Bundle = {
+      format: TRANSFER_FORMAT,
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      encounters: [{ nonsense: true }, "text", fight("ok")],
+    };
+    const report = await applyTransfer(bundle, new Set<Section>(["encounters"]));
+    expect(report.encounters?.added).toBe(1);
+    expect(report.unreadable).toBe(2);
   });
 });

@@ -6,6 +6,7 @@ import { isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { AddDialog } from "./AddDialog";
 import { AddEffectDialog } from "./AddEffectDialog";
+import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
 import { TopBar } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
@@ -65,6 +66,7 @@ export function DmPage() {
       ) : (
         <>
           <TopBar e={e} />
+          <EncounterNotes e={e} />
           {e.combatants.length === 0 ? (
             <div class="dm-empty">
               <p>{ui("dm.empty")}</p>

@@ -8,6 +8,7 @@ import {
   openAdd,
   previousTurn,
   removeEncounter,
+  resetCurrentFight,
   resetTurnHistory,
   selectEncounter,
   updateEncounter,
@@ -83,6 +84,14 @@ function EncounterMenu({ e }: { e: Encounter }) {
             {ui("dm.remove")}
           </button>
         </div>
+        <button
+          type="button"
+          class="secondary dm-menu-end"
+          title={ui("dm.resetHint")}
+          onClick={resetCurrentFight}
+        >
+          {ui("dm.reset")}
+        </button>
         {started && (
           <button
             type="button"

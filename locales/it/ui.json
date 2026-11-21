@@ -2607,5 +2607,13 @@
   "dm.now": "Ora:",
   "dm.effect.numbersTitle": "Cosa cambia",
   "dm.effect.numbersHint": "Facoltativo: classe armatura, velocità, iniziativa, punti ferita o una difesa. L'effetto conta nella tabella finché non termina.",
-  "dm.rollInitiativeHint": "Tira l'iniziativa delle creature che non ne hanno; i personaggi tengono quella dei giocatori."
+  "dm.rollInitiativeHint": "Tira l'iniziativa delle creature che non ne hanno; i personaggi tengono quella dei giocatori.",
+  "transfer.sec.encounters": "Scontri della modalità DM ({n})",
+  "transfer.report.encounters": "Scontri: {added} aggiunti, {skipped} lasciati com'erano.",
+  "dm.hpChanged": "{name}: {from} → {to} punti ferita.",
+  "dm.encounterNotes": "Note sull'incontro",
+  "dm.encounterNotesPlaceholder": "Tattiche, tesoro, cose da ricordare…",
+  "dm.reset": "Azzera lo scontro",
+  "dm.resetHint": "Tutti a punti ferita pieni, senza condizioni, effetti o iniziativa. I personaggi tengono i loro punti ferita.",
+  "dm.resetDone": "Lo scontro è stato azzerato."
 }

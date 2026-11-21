@@ -9,6 +9,7 @@ transfer file). Everything stays on the person's devices; the app uploads nothin
 | Part | In the file | Default |
 | --- | --- | --- |
 | `characters` | every saved character, with its play state | on |
+| `encounters` | the fights of the DM mode (creatures, initiative, hit points, conditions and effects, notes), whole | on |
 | `homebrew` | the homebrew packs, whole | on |
 | `edits` | the quick edits of each language, whole (merged on import: the file wins per text) | on |
 | `links` | the **addresses** of the packs imported from Aurora, with whether the 2024 versions were kept | on |
@@ -23,13 +24,15 @@ travel; the file only names it, so the person knows what to select again.
 
 On import the person chooses again which parts to bring in. Characters follow the rule of the
 backup: one that is already here and the same is left alone, one with the same id that differs
-becomes a copy. A homebrew pack with the same id is replaced.
+becomes a copy. A fight of the DM mode follows the same choice: the same fight is left alone, and one with the
+same id and other content is kept in both versions (the incoming one as a copy), or the newest wins, or the one
+here is kept. A homebrew pack with the same id is replaced.
 
 ## The file
 
 ```
 { "format": "dnd-character-maker-transfer", "version": 1, "exportedAt": "...",
-  "characters": [...], "homebrew": [...], "edits": [...],
+  "characters": [...], "encounters": [...], "homebrew": [...], "edits": [...],
   "links": [{ "id", "name", "url", "keepEditions" }], "files": ["name"],
   "settings": {...}, "deeplKey": "...", "translations": [["key", "text"]] }
 ```

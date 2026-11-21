@@ -2607,5 +2607,13 @@
   "dm.now": "Now:",
   "dm.effect.numbersTitle": "What it changes",
   "dm.effect.numbersHint": "Optional: armor class, speed, initiative, hit points or a defense. The effect counts in the table until it ends.",
-  "dm.rollInitiativeHint": "Rolls the initiative of the creatures that have none; characters keep what their players say."
+  "dm.rollInitiativeHint": "Rolls the initiative of the creatures that have none; characters keep what their players say.",
+  "transfer.sec.encounters": "Fights of the DM mode ({n})",
+  "transfer.report.encounters": "Fights: {added} added, {skipped} left as they were.",
+  "dm.hpChanged": "{name}: {from} → {to} hit points.",
+  "dm.encounterNotes": "Notes on the encounter",
+  "dm.encounterNotesPlaceholder": "Tactics, treasure, things to remember…",
+  "dm.reset": "Reset the fight",
+  "dm.resetHint": "Everyone back to full hit points, with no conditions, effects or initiative. Characters keep their hit points.",
+  "dm.resetDone": "The fight was reset."
 }

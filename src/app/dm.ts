@@ -1,4 +1,4 @@
-import { signal } from "@preact/signals";
+import { effect, signal } from "@preact/signals";
 import { deriveSheet } from "../engine/derive";
 import {
   type Combatant,
@@ -16,6 +16,7 @@ import {
   newNames,
   nextTurn,
   removeCombatant,
+  resetFight,
 } from "../engine/encounter";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
@@ -28,8 +29,9 @@ import {
   saveEncounter,
   setCurrentEncounterId,
 } from "../storage/encounters";
+import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { content } from "./store";
-import { offerUndo } from "./undo";
+import { type UndoOffer, offerUndo, undoOffer } from "./undo";
 
 /** All the encounters, the one changed last first (the open one is `encounter`). */
 export const encounters = signal<Encounter[]>([]);
@@ -46,6 +48,15 @@ export const adding = signal(false);
 export const addedLog = signal<{ name: string; count: number }[]>([]);
 /** The characters connected from another device (a red dot in the table). Nobody is yet: the online part comes later. */
 export const liveIds = signal<ReadonlySet<string>>(new Set());
+
+// A transfer file brought fights in while this page was open: read them again.
+effect(() => {
+  void encountersChanged.value;
+  if (dmReady.peek()) {
+    dmReady.value = false;
+    void loadDm();
+  }
+});
 
 const RULESET_KEY = "dmRuleset";
 export type DmRuleset = "srd51" | "srd52";
@@ -131,6 +142,44 @@ export function updateEncounter(edit: (e: Encounter) => Encounter) {
 export const editCombatant = (id: string, change: (c: Combatant) => Combatant) =>
   updateEncounter((e) => changeCombatant(e, id, change));
 
+/** Where a run of changes to the hit points of one creature started, so one undo takes them all back. */
+let hpAnchor: { offer: UndoOffer | undefined; id: string; hp: number; tempHp: number } | undefined;
+
+/**
+ * Changes the hit points of a creature and offers to take the change back. Changes made one after the
+ * other while the offer is still showing (the quick steps) are taken back together.
+ */
+export function changeHp(id: string, change: (c: Combatant) => Combatant) {
+  const before = encounter.value?.combatants.find((c) => c.id === id);
+  if (!before) return;
+  const running =
+    hpAnchor?.id === id && hpAnchor.offer !== undefined && undoOffer.value === hpAnchor.offer;
+  const start = running && hpAnchor ? hpAnchor : { hp: before.hp, tempHp: before.tempHp };
+  editCombatant(id, change);
+  const after = encounter.value?.combatants.find((c) => c.id === id);
+  if (!after || (after.hp === before.hp && after.tempHp === before.tempHp)) return;
+  const shown = (hp: number, temp: number) => (temp > 0 ? `${hp}+${temp}` : String(hp));
+  offerUndo(
+    ui("dm.hpChanged", {
+      name: after.name,
+      from: shown(start.hp, start.tempHp),
+      to: shown(after.hp, after.tempHp),
+    }),
+    () => editCombatant(id, (c) => ({ ...c, hp: start.hp, tempHp: start.tempHp })),
+  );
+  hpAnchor = { offer: undoOffer.value, id, hp: start.hp, tempHp: start.tempHp };
+}
+
+/** The same fight from the start (see `resetFight`); it can be taken back for a few seconds. */
+export function resetCurrentFight() {
+  const before = encounter.value;
+  if (!before) return;
+  resetTurnHistory();
+  infoFor.value = undefined;
+  updateEncounter(resetFight);
+  offerUndo(ui("dm.resetDone"), () => updateEncounter(() => before));
+}
+
 export async function selectEncounter(id: string) {
   await flush();
   const next = encounters.value.find((e) => e.id === id);
@@ -149,6 +198,7 @@ export async function newEncounter() {
   turnHistory.length = 0;
   await saveEncounter(fresh);
   await setCurrentEncounterId(fresh.id);
+  void refreshEncounterCount();
 }
 
 /** A copy of the open encounter with the fight reset (no round, full hit points, no conditions): to use a prepared fight again. */
@@ -182,6 +232,7 @@ export async function duplicateEncounter() {
   turnHistory.length = 0;
   await saveEncounter(fresh);
   await setCurrentEncounterId(fresh.id);
+  void refreshEncounterCount();
 }
 
 /** Removes the open encounter; it can be brought back for a few seconds. */
@@ -204,8 +255,10 @@ export async function removeEncounter() {
   }
   infoFor.value = undefined;
   turnHistory.length = 0;
+  void refreshEncounterCount();
   offerUndo(ui("dm.removedEncounter", { name: current.name }), async () => {
     await saveEncounter(current);
+    void refreshEncounterCount();
     encounters.value = [current, ...encounters.value.filter((e) => e.id !== current.id)];
     encounter.value = current;
     await setCurrentEncounterId(current.id);

@@ -2607,5 +2607,13 @@
   "dm.now": "Ahora:",
   "dm.effect.numbersTitle": "Qué cambia",
   "dm.effect.numbersHint": "Opcional: clase de armadura, velocidad, iniciativa, puntos de golpe o una defensa. El efecto cuenta en la tabla hasta que termina.",
-  "dm.rollInitiativeHint": "Tira la iniciativa de las criaturas que no la tienen; los personajes conservan la de sus jugadores."
+  "dm.rollInitiativeHint": "Tira la iniciativa de las criaturas que no la tienen; los personajes conservan la de sus jugadores.",
+  "transfer.sec.encounters": "Combates del modo DM ({n})",
+  "transfer.report.encounters": "Combates: {added} añadidos, {skipped} dejados como estaban.",
+  "dm.hpChanged": "{name}: {from} → {to} puntos de golpe.",
+  "dm.encounterNotes": "Notas del encuentro",
+  "dm.encounterNotesPlaceholder": "Tácticas, tesoro, cosas que recordar…",
+  "dm.reset": "Reiniciar el combate",
+  "dm.resetHint": "Todos con los puntos de golpe completos, sin condiciones, efectos ni iniciativa. Los personajes conservan los suyos.",
+  "dm.resetDone": "El combate se ha reiniciado."
 }
