@@ -1167,6 +1167,12 @@
   background: transparent;
 }
 
+.dm-roll-panel .toast-act.quiet:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  color: var(--fg);
+}
+
 .dm-info-actions {
   padding-top: 0.5rem;
   border-top: 1px solid var(--border);
