@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The preview of a branch: its own Worker and its own address, so that what testers keep in the
+  // browser (characters, homebrew) is apart from heroquill.app. See .github/workflows/deploy-develop.yml.
+  "name": "heroquill-develop",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist" },
+  "routes": [{ "pattern": "develop.heroquill.app", "custom_domain": true }]
+}
