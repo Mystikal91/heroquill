@@ -641,6 +641,9 @@ export interface RollFlow {
   attack?: AttackOutcome;
   /** What each damage roll came to, in the order they were rolled. */
   lines: string[];
+  /** How many rolls were made, so the box can play the die again, and the total of the last one. */
+  rolls: number;
+  last?: number;
 }
 
 export const rollFlow = signal<RollFlow | undefined>(undefined);
@@ -658,6 +661,7 @@ export function startRoll(attacker: Combatant, action: string, rolls: ActionRoll
     step: rolls.attackBonus === undefined ? "damage" : "attack",
     targets: [],
     lines: [],
+    rolls: 0,
   };
 }
 
@@ -691,6 +695,8 @@ export function rollFlowAttack() {
   rollFlow.value = {
     ...flow,
     lines: [],
+    rolls: flow.rolls + 1,
+    last: roll.total,
     attack: {
       natural: roll.natural,
       bonus: flow.bonus,
@@ -729,5 +735,5 @@ export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string
     ? ` [${rolled.rolls.map((g) => g.join(", ")).join(" + ")}]${signedText(rolled.modifier)}`
     : "";
   const line = `${shown(dice)}${faces} = ${total}${taken.map((t) => ` · ${names.get(t.id) ?? ""} ${t.dealt}`).join("")}`;
-  rollFlow.value = { ...flow, lines: [...flow.lines, line] };
+  rollFlow.value = { ...flow, lines: [...flow.lines, line], rolls: flow.rolls + 1, last: total };
 }

@@ -1148,13 +1148,17 @@
 }
 
 .dm-roll-panel .toast-actions {
-  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
 }
 
 .dm-roll-panel .toast-act {
+  min-width: 0;
   margin: 0;
-  padding: 0.4rem 0.6rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
   line-height: 1.2;
+  overflow-wrap: anywhere;
   text-align: center;
 }
 
