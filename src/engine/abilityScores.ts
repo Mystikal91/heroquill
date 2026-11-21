@@ -6,39 +6,95 @@ export const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
 export const POINT_BUY_BUDGET = 27;
 export const POINT_BUY_MIN = 8;
 export const POINT_BUY_MAX = 15;
-const POINT_BUY_COST: Record<number, number> = {
-  8: 0,
-  9: 1,
-  10: 2,
-  11: 3,
-  12: 4,
-  13: 5,
-  14: 7,
-  15: 9,
-};
 
-/** Points a single score costs in the point buy (8 to 15). */
-export const pointBuyCost = (score: number) => POINT_BUY_COST[score] ?? 0;
+/** What the point buy allows: the points to spend, the lowest and highest score, and the price of each score. */
+export interface PointBuyRules {
+  budget: number;
+  min: number;
+  max: number;
+  /** Points a score costs, by score. */
+  costs: Record<string, number>;
+}
 
-/** Points spent by a set of scores; Infinity if any score is outside the 8-15 range. */
-export function pointBuySpent(base: Record<Ability, number>): number {
-  return ABILITIES.reduce(
-    (sum, a) => sum + (POINT_BUY_COST[base[a]] ?? Number.POSITIVE_INFINITY),
-    0,
+/** The price of a score the SRD table does not list: 2 points a step up to 17, 3 above, and a refund below 8. */
+export function defaultPointCost(score: number): number {
+  const table: Record<number, number> = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
+  const known = table[score];
+  if (known !== undefined) return known;
+  if (score < 8) return score - 8;
+  let cost = 9;
+  for (let n = 16; n <= score; n++) cost += n <= 17 ? 2 : 3;
+  return cost;
+}
+
+/** The rules of the book: 27 points, scores 8 to 15. */
+export const standardPointBuy = (): PointBuyRules => ({
+  budget: POINT_BUY_BUDGET,
+  min: POINT_BUY_MIN,
+  max: POINT_BUY_MAX,
+  costs: Object.fromEntries(
+    Array.from({ length: POINT_BUY_MAX - POINT_BUY_MIN + 1 }, (_, i) => [
+      POINT_BUY_MIN + i,
+      defaultPointCost(POINT_BUY_MIN + i),
+    ]),
+  ),
+});
+
+const STANDARD_POINT_BUY = standardPointBuy();
+
+/** Why a set of point buy rules cannot be used, or undefined when they can. */
+export function pointBuyProblem(rules: PointBuyRules): "range" | "budget" | undefined {
+  const { min, max, budget, costs } = rules;
+  const whole = (n: number) => Number.isInteger(n);
+  if (![min, max, budget].every(whole) || min < 1 || max > 30 || min > max) return "range";
+  for (let n = min; n <= max; n++) if (!whole(costs[n] ?? Number.NaN)) return "range";
+  if (budget < 0 || 6 * (costs[min] ?? 0) > budget) return "budget";
+  return undefined;
+}
+
+/** Points a single score costs in the point buy (0 for a score the rules do not list). */
+export const pointBuyCost = (score: number, rules: PointBuyRules = STANDARD_POINT_BUY) =>
+  rules.costs[score] ?? 0;
+
+/** Points spent by a set of scores; Infinity if any score is outside the rules' range. */
+export function pointBuySpent(
+  base: Record<Ability, number>,
+  rules: PointBuyRules = STANDARD_POINT_BUY,
+): number {
+  return ABILITIES.reduce((sum, a) => sum + (rules.costs[base[a]] ?? Number.POSITIVE_INFINITY), 0);
+}
+
+export const pointBuyRemaining = (
+  base: Record<Ability, number>,
+  rules: PointBuyRules = STANDARD_POINT_BUY,
+) => rules.budget - pointBuySpent(base, rules);
+
+export function canRaise(
+  base: Record<Ability, number>,
+  ability: Ability,
+  rules: PointBuyRules = STANDARD_POINT_BUY,
+): boolean {
+  const current = rules.costs[base[ability]];
+  const next = rules.costs[base[ability] + 1];
+  return (
+    current !== undefined &&
+    next !== undefined &&
+    base[ability] < rules.max &&
+    next - current <= pointBuyRemaining(base, rules)
   );
 }
 
-export const pointBuyRemaining = (base: Record<Ability, number>) =>
-  POINT_BUY_BUDGET - pointBuySpent(base);
+export const canLower = (
+  base: Record<Ability, number>,
+  ability: Ability,
+  rules: PointBuyRules = STANDARD_POINT_BUY,
+) => base[ability] > rules.min;
 
-export function canRaise(base: Record<Ability, number>, ability: Ability): boolean {
-  const current = POINT_BUY_COST[base[ability]];
-  const next = POINT_BUY_COST[base[ability] + 1];
-  return current !== undefined && next !== undefined && next - current <= pointBuyRemaining(base);
+/** Sets every score to the lowest the rules allow: the point buy starts again. */
+export function restartPointBuy(draft: Character, rules?: PointBuyRules): void {
+  draft.pointBuyRules = rules;
+  for (const ability of ABILITIES) draft.abilityBase[ability] = (rules ?? STANDARD_POINT_BUY).min;
 }
-
-export const canLower = (base: Record<Ability, number>, ability: Ability) =>
-  base[ability] > POINT_BUY_MIN;
 
 /** One ability score by the usual method: roll four d6, drop the lowest, add the rest. */
 export function rollOneScore(random: () => number = Math.random): number {
@@ -85,7 +141,7 @@ export function applyAbilityMethod(
     values = rollAbilityScores(random);
     draft.abilityRolls = values;
   } else {
-    values = ABILITIES.map(() => POINT_BUY_MIN);
+    values = ABILITIES.map(() => (draft.pointBuyRules ?? STANDARD_POINT_BUY).min);
   }
   ABILITIES.forEach((ability, i) => {
     draft.abilityBase[ability] = values[i] ?? POINT_BUY_MIN;

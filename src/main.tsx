@@ -9,6 +9,7 @@ import "@fontsource/eb-garamond/latin-ext-400-italic.css";
 import "@fontsource/eb-garamond/latin-ext-400.css";
 import "@fontsource/eb-garamond/latin-ext-600.css";
 import { render } from "preact";
+import { selectNumberOnFocus } from "./app/selectOnFocus";
 import { matchThemeColor } from "./app/theme";
 import { applyUpdate, loadUpdateNews } from "./app/updates";
 import { App } from "./ui/App";
@@ -52,6 +53,8 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
     });
   });
 }
+
+selectNumberOnFocus();
 
 const root = document.getElementById("app");
 if (root) render(<App />, root);

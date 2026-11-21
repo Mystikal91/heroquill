@@ -105,6 +105,14 @@ const CharacterSchema = v.object({
   }),
   abilityMethod: v.picklist(["manual", "standard", "pointbuy", "roll"]),
   abilityRolls: v.optional(v.array(v.number())),
+  pointBuyRules: v.optional(
+    v.object({
+      budget: v.pipe(v.number(), v.integer(), v.minValue(0)),
+      min: v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(30)),
+      max: v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(30)),
+      costs: v.record(v.string(), v.pipe(v.number(), v.integer())),
+    }),
+  ),
   selections: v.record(v.string(), v.array(v.string())),
   spells: v.record(
     v.string(),

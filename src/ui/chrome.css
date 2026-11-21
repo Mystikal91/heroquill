@@ -1780,3 +1780,93 @@ button:not(:disabled):not(.roll-toast):active {
   font-style: normal;
   font-weight: 700;
 }
+
+/* ---- Point buy: custom rules ---- */
+
+.pb-rules {
+  margin: 0 0 0.9rem;
+}
+
+.pb-rules summary {
+  cursor: pointer;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.pb-fields {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.pb-costs {
+  margin: 0.6rem 0;
+  border-collapse: collapse;
+}
+
+.pb-costs th,
+.pb-costs td {
+  padding: 0.15rem 0.6rem 0.15rem 0;
+  text-align: left;
+  font-weight: normal;
+}
+
+.pb-costs input {
+  width: 5rem;
+}
+
+.pb-note {
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+}
+
+.pb-problem {
+  margin: 0.4rem 0;
+  color: var(--danger, #b3261e);
+}
+
+.pb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pb-actions button,
+.pb-actions button.secondary {
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0 1rem;
+}
+
+/* The title of the custom rules opens and closes them, with the same arrow as the steps. */
+.pb-rules > summary {
+  list-style: none;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.pb-rules > summary::-webkit-details-marker {
+  display: none;
+}
+
+.pb-rules > summary::after {
+  content: "";
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.15s;
+}
+
+.pb-rules[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb-rules > summary::after {
+    transition: none;
+  }
+}

@@ -1,8 +1,6 @@
 import { character, content, sheet, updateCharacter } from "../app/store";
 import { ABILITIES, type Ability } from "../data/schema";
 import {
-  POINT_BUY_BUDGET,
-  POINT_BUY_MAX,
   applyAbilityMethod,
   assignValue,
   assignableValues,
@@ -11,10 +9,12 @@ import {
   pointBuyCost,
   pointBuyRemaining,
   reroll,
+  standardPointBuy,
 } from "../engine/abilityScores";
 import type { AbilityMethod } from "../engine/character";
 import { checkNeeds, needsOf } from "../engine/optionNeeds";
 import { type UiKey, signed, ui } from "../i18n/ui";
+import { PointBuyRulesEditor } from "./PointBuyRules";
 import { entriesOfKind } from "./build/fields";
 import { needLabel } from "./needLabel";
 
@@ -31,6 +31,7 @@ export function AbilityScores() {
   const ruleset = c.ruleset;
   const abbreviation = (a: Ability) => ct?.text(`${ruleset}:ability/${a}`, "abbreviation") ?? a;
   const fullName = (a: Ability) => ct?.name(`${ruleset}:ability/${a}`) ?? a;
+  const rules = c.pointBuyRules ?? standardPointBuy();
   const values = [...new Set(assignableValues(c))].sort((a, b) => b - a);
 
   return (
@@ -55,6 +56,7 @@ export function AbilityScores() {
       </label>
 
       {c.abilityMethod === "pointbuy" && <PointsBar />}
+      {c.abilityMethod === "pointbuy" && <PointBuyRulesEditor key={c.id} />}
       {c.abilityMethod === "roll" && (
         <button type="button" class="secondary" onClick={() => updateCharacter((d) => reroll(d))}>
           {ui("abilities.roll")}
@@ -80,10 +82,15 @@ export function AbilityScores() {
                     aria-label={fullName(ability)}
                     value={c.abilityBase[ability]}
                     onInput={(e) => {
+                      // An emptied field stays empty while the person types the new number.
+                      if (e.currentTarget.value === "") return;
                       const n = asNumber(e.currentTarget.value, 10);
                       updateCharacter((d) => {
                         d.abilityBase[ability] = n;
                       });
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.value = String(c.abilityBase[ability]);
                     }}
                   />
                 )}
@@ -110,7 +117,7 @@ export function AbilityScores() {
                     <button
                       type="button"
                       aria-label={ui("abilities.lower", { ability: fullName(ability) })}
-                      disabled={!canLower(c.abilityBase, ability)}
+                      disabled={!canLower(c.abilityBase, ability, rules)}
                       onClick={() =>
                         updateCharacter((d) => {
                           d.abilityBase[ability] -= 1;
@@ -123,9 +130,7 @@ export function AbilityScores() {
                     <button
                       type="button"
                       aria-label={ui("abilities.raise", { ability: fullName(ability) })}
-                      disabled={
-                        !canRaise(c.abilityBase, ability) || c.abilityBase[ability] >= POINT_BUY_MAX
-                      }
+                      disabled={!canRaise(c.abilityBase, ability, rules)}
                       onClick={() =>
                         updateCharacter((d) => {
                           d.abilityBase[ability] += 1;
@@ -149,7 +154,7 @@ export function AbilityScores() {
               )}
               {c.abilityMethod === "pointbuy" && (
                 <p class="ac-cost">
-                  {ui("abilities.cost", { points: pointBuyCost(c.abilityBase[ability]) })}
+                  {ui("abilities.cost", { points: pointBuyCost(c.abilityBase[ability], rules) })}
                 </p>
               )}
             </div>
@@ -165,16 +170,17 @@ export function AbilityScores() {
 /** Points left in the point buy, as words and as a bar that fills while they are spent. */
 function PointsBar() {
   const base = character.value.abilityBase;
-  const left = pointBuyRemaining(base);
-  const spent = POINT_BUY_BUDGET - left;
+  const rules = character.value.pointBuyRules ?? standardPointBuy();
+  const left = pointBuyRemaining(base, rules);
+  const spent = rules.budget - left;
   return (
     <div class="points-bar">
       <p>
         <b>{ui("abilities.pointsLeft", { points: left })}</b>
-        <span class="muted"> / {POINT_BUY_BUDGET}</span>
+        <span class="muted"> / {rules.budget}</span>
       </p>
       <div class="points-track" aria-hidden="true">
-        <span style={{ width: `${Math.min(100, (spent / POINT_BUY_BUDGET) * 100)}%` }} />
+        <span style={{ width: `${Math.min(100, (spent / Math.max(1, rules.budget)) * 100)}%` }} />
       </div>
     </div>
   );

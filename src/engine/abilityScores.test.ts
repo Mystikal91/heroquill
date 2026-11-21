@@ -8,10 +8,14 @@ import {
   assignableValues,
   canLower,
   canRaise,
+  defaultPointCost,
+  pointBuyProblem,
   pointBuyRemaining,
   pointBuySpent,
+  restartPointBuy,
   rollAbilityScores,
   rollOneScore,
+  standardPointBuy,
 } from "./abilityScores";
 import { createCharacter } from "./character";
 
@@ -44,6 +48,53 @@ describe("point buy", () => {
     expect(pointBuySpent({ str: 16, dex: 8, con: 8, int: 8, wis: 8, cha: 8 })).toBe(
       Number.POSITIVE_INFINITY,
     );
+  });
+});
+
+describe("point buy with custom rules", () => {
+  const rules = () => {
+    const r = standardPointBuy();
+    r.budget = 40;
+    r.min = 6;
+    r.max = 18;
+    for (let n = 6; n <= 18; n++) r.costs[n] = r.costs[n] ?? defaultPointCost(n);
+    return r;
+  };
+
+  it("the book's rules have the table of the SRD", () => {
+    const r = standardPointBuy();
+    expect(r.costs).toEqual({ 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 });
+    expect(pointBuyProblem(r)).toBeUndefined();
+  });
+
+  it("allows scores beyond 15 when the rules do, and stops at their maximum and budget", () => {
+    const r = rules();
+    expect(r.costs[16]).toBe(11);
+    expect(canRaise({ str: 15, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }, "str", r)).toBe(true);
+    expect(canRaise({ str: 18, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }, "str", r)).toBe(false);
+    expect(canLower({ str: 6, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }, "str", r)).toBe(false);
+    expect(pointBuySpent({ str: 16, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }, r)).toBe(11);
+    expect(pointBuyRemaining({ str: 16, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }, r)).toBe(29);
+  });
+
+  it("starting again puts every score at the minimum, and the book's rules bring 8 back", () => {
+    const c = createCharacter("srd51");
+    applyAbilityMethod(c, "pointbuy");
+    c.abilityBase.str = 14;
+    restartPointBuy(c, rules());
+    expect(Object.values(c.abilityBase)).toEqual([6, 6, 6, 6, 6, 6]);
+    expect(pointBuyRemaining(c.abilityBase, c.pointBuyRules)).toBe(40 - 6 * -2);
+    restartPointBuy(c, undefined);
+    expect(Object.values(c.abilityBase)).toEqual([8, 8, 8, 8, 8, 8]);
+    expect(c.pointBuyRules).toBeUndefined();
+  });
+
+  it("refuses rules that cannot work", () => {
+    const r = standardPointBuy();
+    expect(pointBuyProblem({ ...r, min: 16 })).toBe("range");
+    expect(pointBuyProblem({ ...r, max: 31 })).toBe("range");
+    expect(pointBuyProblem({ ...r, costs: { ...r.costs, 10: 1.5 } })).toBe("range");
+    expect(pointBuyProblem({ ...r, costs: { ...r.costs, 8: 10 }, budget: 20 })).toBe("budget");
   });
 });
 

@@ -1,4 +1,5 @@
 import { ABILITIES, type Ability, type Effect } from "../data/schema";
+import type { PointBuyRules } from "./abilityScores";
 import type { Coins } from "./coins";
 import type { CustomFeature } from "./custom";
 import type { BoardSlot } from "./slots";
@@ -235,6 +236,8 @@ export interface Character {
   abilityMethod: AbilityMethod;
   /** The six rolled values, when `abilityMethod` is `roll`. */
   abilityRolls?: number[];
+  /** Custom rules of the point buy (points, lowest and highest score, prices); absent means the book's. */
+  pointBuyRules?: PointBuyRules | undefined;
   /**
    * Picks for the choices that species, class, background and traits offer, keyed by
    * `<entry id>/<choice id>`. Each value is the list of selected options.

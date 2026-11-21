@@ -63,7 +63,10 @@ export function CardSelect({ label, value, options, onChange, fact }: CardSelect
           );
         })}
       </ul>
-      {value && (
+      {value && options.length <= 1 && (
+        <p class="muted card-select-change">{ui("pick.noOthers")}</p>
+      )}
+      {value && options.length > 1 && (
         <button type="button" class="link card-select-change" onClick={() => setOpen(!open)}>
           {open ? ui("pick.close") : ui("pick.change")}
         </button>
