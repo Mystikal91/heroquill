@@ -41,7 +41,7 @@
 /* The turn buttons stay in view while the table scrolls. */
 .dm-turnbar {
   position: sticky;
-  top: 0;
+  top: var(--tabs-height, 0px);
   z-index: 6;
   box-shadow: 0 6px 10px -8px rgb(0 0 0 / 0.5);
 }
@@ -1764,39 +1764,6 @@
 
 /* ---- Campaigns: the two parts of the page, and the party ---- */
 
-.dm-sections {
-  display: flex;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.dm-section {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 2.8rem;
-  margin: 0 0 -1px;
-  padding: 0 1.2rem;
-  border: 0;
-  border-bottom: 3px solid transparent;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.dm-section svg {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-.dm-section[aria-selected="true"] {
-  border-bottom-color: var(--accent);
-  color: var(--fg);
-  font-weight: 600;
-}
-
 .dm-campaign-line {
   margin: 0 0 0.5rem;
 }
@@ -1844,6 +1811,20 @@
   display: flex;
   align-items: flex-end;
   gap: 0.6rem;
+}
+
+/* The theme gives a field a margin under it: in a row that lines up with the bottom, it must not count. */
+.dm-campaign-new .field,
+.dm-campaign-open > header .field,
+.dm-player .field {
+  margin-bottom: 0;
+}
+
+/* Nor does the margin the theme gives a secondary button. */
+.dm-campaigns button,
+.dm-campaigns button.secondary,
+.dm-party-body button.secondary {
+  margin: 0;
 }
 
 .dm-campaign-new .field {

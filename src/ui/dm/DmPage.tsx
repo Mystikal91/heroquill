@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import {
   advanceTurn,
   areaMode,
@@ -10,11 +10,14 @@ import {
   loadDm,
   openAdd,
 } from "../../app/dm";
+import type { DmSection } from "../../app/dm";
 import { leavePage } from "../../app/navigation";
 import { monstersWanted } from "../../app/rulesView";
 import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { BookIcon, SwordsIcon } from "../icons";
+import { neighbour, useSwipe } from "../useSwipe";
+import { useTabsBar } from "../useTabsBar";
 import { AddDialog } from "./AddDialog";
 import { AddEffectDialog } from "./AddEffectDialog";
 import { AreaPanel } from "./AreaPanel";
@@ -89,6 +92,39 @@ function EncounterSection({ e }: { e: Encounter }) {
   );
 }
 
+const SECTIONS: {
+  id: DmSection;
+  label: "dm.section.campaign" | "dm.section.encounter";
+  icon: typeof BookIcon;
+}[] = [
+  { id: "campaign", label: "dm.section.campaign", icon: BookIcon },
+  { id: "encounter", label: "dm.section.encounter", icon: SwordsIcon },
+];
+
+/** The two parts of the page, as the tabs of the app are: a bar at the bottom of a phone, sticky at the top elsewhere. */
+function SectionTabs() {
+  const nav = useRef<HTMLElement>(null);
+  useTabsBar(nav);
+  return (
+    <nav class="tabs main-tabs no-print" aria-label={ui("dm.title")} ref={nav}>
+      {SECTIONS.map((section) => (
+        <button
+          type="button"
+          key={section.id}
+          class={`tab${dmSection.value === section.id ? " active" : ""}`}
+          aria-current={dmSection.value === section.id ? "page" : undefined}
+          onClick={() => {
+            dmSection.value = section.id;
+          }}
+        >
+          <section.icon />
+          <span class="tab-label">{ui(section.label)}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 /** The Dungeon Master mode: campaigns with their parties, and an initiative table to prepare fights and run them. */
 export function DmPage() {
   useEffect(() => {
@@ -101,51 +137,46 @@ export function DmPage() {
   }, []);
   useShortcuts();
   const e = encounter.value;
+  // On a phone a swipe sideways moves between the parts, as it does on the sheet.
+  const root = useRef<HTMLElement>(null);
+  useSwipe(
+    root,
+    () => matchMedia("(max-width: 42rem)").matches,
+    (delta) => {
+      const next = neighbour(
+        SECTIONS.map((s) => s.id),
+        dmSection.value,
+        delta,
+      );
+      if (!next) return false;
+      dmSection.value = next;
+      return true;
+    },
+  );
   return (
-    <article class="card dm">
-      <header class="dm-top">
-        <button type="button" class="secondary" onClick={leavePage}>
-          {ui("credits.back")}
-        </button>
-        <div>
-          <h2>{ui("dm.title")}</h2>
-          <p class="muted">{ui("dm.subtitle")}</p>
-        </div>
-      </header>
-      {!dmReady.value || !e ? (
-        <p>{ui("app.loading")}</p>
-      ) : (
-        <>
-          <div class="dm-sections" role="tablist" aria-label={ui("dm.title")}>
-            {(
-              [
-                ["campaign", ui("dm.section.campaign"), BookIcon],
-                ["encounter", ui("dm.section.encounter"), SwordsIcon],
-              ] as const
-            ).map(([id, label, Icon]) => (
-              <button
-                type="button"
-                key={id}
-                role="tab"
-                class="dm-section"
-                aria-selected={dmSection.value === id}
-                onClick={() => {
-                  dmSection.value = id;
-                }}
-              >
-                <Icon />
-                <span>{label}</span>
-              </button>
-            ))}
+    <>
+      {dmReady.value && e && <SectionTabs />}
+      <article class="card dm" ref={root}>
+        <header class="dm-top">
+          <button type="button" class="secondary" onClick={leavePage}>
+            {ui("credits.back")}
+          </button>
+          <div>
+            <h2>{ui("dm.title")}</h2>
+            <p class="muted">{ui("dm.subtitle")}</p>
           </div>
-          {dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}
-        </>
-      )}
-      <InfoDialog />
-      <AddDialog />
-      <AddEffectDialog />
-      <PartyDialog />
-      <RollPanel />
-    </article>
+        </header>
+        {!dmReady.value || !e ? (
+          <p>{ui("app.loading")}</p>
+        ) : (
+          <>{dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}</>
+        )}
+        <InfoDialog />
+        <AddDialog />
+        <AddEffectDialog />
+        <PartyDialog />
+        <RollPanel />
+      </article>
+    </>
   );
 }
