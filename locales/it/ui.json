@@ -2659,8 +2659,12 @@
   "dm.lairAdd": "Aggiungi la tana (iniziativa 20)",
   "dm.lairName": "Azioni di tana",
   "dm.lairKind": "Agisce a iniziativa 20",
-  "dm.rollTarget": "Tira contro",
-  "dm.rollNoTarget": "Nessuno: solo tiro",
+  "dm.rollTarget": "Chi viene attaccato",
+  "dm.rollNoTarget": "Nessuno",
   "dm.roll.hit": "colpito",
-  "dm.roll.miss": "mancato"
+  "dm.roll.miss": "mancato",
+  "dm.roll.again": "Attacca di nuovo",
+  "dm.roll.damageTo": "Il danno va a",
+  "dm.roll.vs": "contro CA {ac}",
+  "dm.roll.damage": "Danno"
 }

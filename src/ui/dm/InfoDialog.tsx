@@ -1,11 +1,4 @@
-import {
-  dmRoller,
-  editCombatant,
-  encounter,
-  infoFor,
-  removeFromFight,
-  rollTarget,
-} from "../../app/dm";
+import { editCombatant, encounter, infoFor, removeFromFight, startRoll } from "../../app/dm";
 import { combatantNumbers } from "../../engine/combatantNumbers";
 import {
   type Combatant,
@@ -22,30 +15,6 @@ import { AbilitiesEditor, abilitiesOf } from "./Abilities";
 import { EffectsEditor } from "./Editors";
 import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
-
-/** Who the rolls of the stat block are made against: the attack meets their armor class and the damage lands on them. */
-function RollTarget({ c }: { c: Combatant }) {
-  const others = encounter.value?.combatants.filter((x) => x.id !== c.id) ?? [];
-  const chosen = others.some((x) => x.id === rollTarget.value) ? rollTarget.value : "";
-  return (
-    <label class="field dm-roll-target">
-      <span>{ui("dm.rollTarget")}</span>
-      <select
-        value={chosen}
-        onChange={(e) => {
-          rollTarget.value = e.currentTarget.value || undefined;
-        }}
-      >
-        <option value="">{ui("dm.rollNoTarget")}</option>
-        {others.map((x) => (
-          <option key={x.id} value={x.id}>
-            {`${x.name} (${ui("dm.col.ac")} ${combatantNumbers(x).ac})`}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
 
 function Details({ c }: { c: Combatant }) {
   const metric = metricUnits.value;
@@ -172,8 +141,7 @@ function Details({ c }: { c: Combatant }) {
       </label>
       {c.kind === "monster" && c.source && (
         <section class="dm-statblock">
-          <RollTarget c={c} />
-          <MonsterBlock id={c.source} roller={dmRoller(c)} />
+          <MonsterBlock id={c.source} choose={(action, rolls) => startRoll(c, action, rolls)} />
         </section>
       )}
       <div class="dm-info-actions">

@@ -11,7 +11,7 @@ import {
 import type { Usage } from "../../app/monsterView";
 import { content } from "../../app/store";
 import { ABILITIES } from "../../data/schema";
-import type { MonsterRoller } from "../../engine/monsterRolls";
+import type { ActionRolls } from "../../engine/monsterRolls";
 import {
   type Owner,
   scaledArmorClass,
@@ -79,12 +79,12 @@ const SECTIONS = [
 export function MonsterBlock({
   id,
   owner,
-  roller,
+  choose,
 }: {
   id: string;
   owner?: Owner;
-  /** Where the rolls go; the play history when there is none. */
-  roller?: MonsterRoller;
+  /** The Dungeon Master's table rolls an action in a window of its own: what to roll comes here instead of the history. */
+  choose?: (action: string, rolls: ActionRolls) => void;
 }) {
   // Which actions hit with a critical hit last, so that their damage is rolled doubled.
   const [crits, setCrits] = useState<Record<string, boolean>>({});
@@ -250,35 +250,38 @@ export function MonsterBlock({
                     name={n ?? ""}
                     action={action}
                     owner={owner}
-                    roller={roller}
+                    choose={choose}
                     critical={crits[`${key}.${i}`] ?? false}
                     onAttack={(hit) => setCrits((before) => ({ ...before, [`${key}.${i}`]: hit }))}
                   />
-                  {key === "actions" && action.multiattack && action.multiattack.length > 0 && (
-                    <div class="monster-rolls">
-                      <button
-                        type="button"
-                        class="secondary"
-                        onClick={() => {
-                          const next = { ...crits };
-                          for (const part of action.multiattack ?? []) {
-                            const target = part.action ? m.actions?.[part.action - 1] : undefined;
-                            if (!part.action || !target) continue;
-                            next[`actions.${part.action - 1}`] = rollAttacks(
-                              roller ?? playRoller(c.name(id)),
-                              c.text(`${id}.actions.${part.action}`, "name") ?? "",
-                              target,
-                              owner,
-                              part.count,
-                            );
-                          }
-                          setCrits(next);
-                        }}
-                      >
-                        {ui("monster.rollAll")}
-                      </button>
-                    </div>
-                  )}
+                  {key === "actions" &&
+                    !choose &&
+                    action.multiattack &&
+                    action.multiattack.length > 0 && (
+                      <div class="monster-rolls">
+                        <button
+                          type="button"
+                          class="secondary"
+                          onClick={() => {
+                            const next = { ...crits };
+                            for (const part of action.multiattack ?? []) {
+                              const target = part.action ? m.actions?.[part.action - 1] : undefined;
+                              if (!part.action || !target) continue;
+                              next[`actions.${part.action - 1}`] = rollAttacks(
+                                playRoller(c.name(id)),
+                                c.text(`${id}.actions.${part.action}`, "name") ?? "",
+                                target,
+                                owner,
+                                part.count,
+                              );
+                            }
+                            setCrits(next);
+                          }}
+                        >
+                          {ui("monster.rollAll")}
+                        </button>
+                      </div>
+                    )}
                 </div>
               );
             })}

@@ -9,6 +9,7 @@ import { AddEffectDialog } from "./AddEffectDialog";
 import { AreaPanel } from "./AreaPanel";
 import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
+import { RollDialog } from "./RollDialog";
 import { TopBar } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
 import "./dm.css";
@@ -84,6 +85,7 @@ export function DmPage() {
       <InfoDialog />
       <AddDialog />
       <AddEffectDialog />
+      <RollDialog />
     </article>
   );
 }

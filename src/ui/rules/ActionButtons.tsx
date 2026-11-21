@@ -1,5 +1,6 @@
 import { addLog, rollCheck, rollDiceText } from "../../app/play";
 import {
+  type ActionRolls,
   type DamagePart,
   type MonsterRoller,
   actionRolls,
@@ -70,7 +71,7 @@ export function ActionButtons({
   owner,
   critical,
   onAttack,
-  roller,
+  choose,
 }: {
   /** Whose action it is, for the history of rolls. */
   who: string;
@@ -81,17 +82,18 @@ export function ActionButtons({
   /** The last attack of this action was a critical hit. */
   critical: boolean;
   onAttack: (critical: boolean) => void;
-  /** Where the rolls go; the play history when there is none. */
-  roller?: MonsterRoller;
+  /** Hands what to roll to a window that asks who is attacked, instead of rolling into the history. */
+  choose?: (action: string, rolls: ActionRolls) => void;
 }) {
   const rolls = resolveRolls(actionRolls(action), owner);
   if (!rolls || (rolls.attackBonus === undefined && rolls.damage.length === 0)) return null;
-  const rolling = roller ?? playRoller(who);
+  const rolling = playRoller(who);
   const { attackBonus } = rolls;
 
   const hurt = (part: DamagePart) => {
     const dice = critical ? doubleDice(part.dice) : part.dice;
-    rolling.damage(name, part.type, dice, damageLabel(part, dice));
+    if (choose) choose(name, { ...rolls, attackBonus: undefined, damage: [part] });
+    else rolling.damage(name, part.type, dice, damageLabel(part, dice));
   };
 
   return (
@@ -100,7 +102,9 @@ export function ActionButtons({
         <button
           type="button"
           class="secondary"
-          onClick={() => onAttack(rollAttacks(rolling, name, action, owner))}
+          onClick={() =>
+            choose ? choose(name, rolls) : onAttack(rollAttacks(rolling, name, action, owner))
+          }
         >
           {ui("monster.rollAttack", { bonus: signed(attackBonus) })}
         </button>

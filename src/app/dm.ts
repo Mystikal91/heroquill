@@ -31,7 +31,7 @@ import {
   removeCombatant,
   resetFight,
 } from "../engine/encounter";
-import { type MonsterRoller, attackHits } from "../engine/monsterRolls";
+import { type ActionRolls, type DamagePart, attackHits, doubleDice } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
@@ -45,7 +45,6 @@ import {
   setCurrentEncounterId,
 } from "../storage/encounters";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
-import { addLog } from "./play";
 import { content } from "./store";
 import { type UndoOffer, offerUndo, undoOffer } from "./undo";
 
@@ -607,57 +606,100 @@ export function delayActive(after: string) {
   offerUndo(ui("dm.delayed", { name: active.name }), () => updateEncounter(() => before));
 }
 
-// ---- Rolling a creature's actions against another ----
+// ---- Rolling an action of a creature against another ----
 
-/** The creature the actions of the stat block are rolled against, if the Dungeon Master picked one. */
-export const rollTarget = signal<string | undefined>(undefined);
+/** What an attack roll came to. */
+export interface AttackOutcome {
+  natural: number;
+  bonus: number;
+  total: number;
+  critical: boolean;
+  fumble: boolean;
+  /** The armor class it was compared with and whether it hit; both missing when nobody was picked. */
+  ac?: number;
+  hit?: boolean;
+}
+
+/** The window that rolls an action: who is attacked, the attack, then the damage. */
+export interface RollFlow {
+  attackerId: string;
+  attackerName: string;
+  action: string;
+  /** The bonus of the attack; none when the action starts at its damage. */
+  bonus?: number;
+  damage: DamagePart[];
+  /** The creature that is attacked, and that the damage lands on. */
+  target?: string;
+  attack?: AttackOutcome;
+  /** What each damage roll came to, in the order they were rolled. */
+  lines: string[];
+}
+
+export const rollFlow = signal<RollFlow | undefined>(undefined);
+
+/** Opens the window for an action of a creature, at its attack or (without a bonus) at its damage. */
+export function startRoll(attacker: Combatant, action: string, rolls: ActionRolls) {
+  rollFlow.value = {
+    attackerId: attacker.id,
+    attackerName: attacker.name,
+    action,
+    ...(rolls.attackBonus !== undefined && { bonus: rolls.attackBonus }),
+    damage: rolls.damage,
+    lines: [],
+  };
+}
+
+export function closeRoll() {
+  rollFlow.value = undefined;
+}
+
+export function pickRollTarget(id: string | undefined) {
+  const flow = rollFlow.value;
+  if (!flow) return;
+  const { target: _old, ...rest } = flow;
+  rollFlow.value = id ? { ...rest, target: id } : rest;
+}
+
+const targetOf = (flow: RollFlow) =>
+  encounter.value?.combatants.find((c) => c.id === flow.target && c.id !== flow.attackerId);
 
 const signedText = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
 
-/**
- * The rolls of a creature's stat block: the attack is rolled against the armor class of the target and
- * says whether it hits, the damage is rolled and taken off the target (its resistances and
- * immunities counted), and the change can be taken back like any change of hit points.
- */
-export function dmRoller(attacker: Combatant): MonsterRoller {
-  const target = () => {
-    const found = encounter.value?.combatants.find((c) => c.id === rollTarget.value);
-    return found && found.id !== attacker.id ? found : undefined;
-  };
-  return {
-    attack: (action, bonus, n, of) => {
-      const roll = rollD20(bonus);
-      const who = target();
-      const ac = who ? combatantNumbers(who).ac : undefined;
-      const hit = ac === undefined ? undefined : attackHits(roll, ac);
-      const numbered = of && of > 1 ? ` (${n})` : "";
-      const against = who && ac !== undefined ? ` → ${who.name} (${ui("dm.col.ac")} ${ac})` : "";
-      const verdict = hit === undefined ? "" : ` · ${ui(hit ? "dm.roll.hit" : "dm.roll.miss")}`;
-      addLog({
-        label: `${attacker.name}: ${action}${numbered}${against}`,
-        detail: `d20 ${roll.used}${signedText(bonus)}${verdict}`,
-        total: roll.total,
-        ...(roll.critical && { tone: "critical" as const }),
-        ...(roll.fumble && { tone: "fumble" as const }),
-      });
-      return roll.critical;
-    },
-    damage: (action, kind, dice, shown) => {
-      const parsed = parseDice(dice);
-      const rolled = parsed ? rollExpression(parsed) : undefined;
-      const total = rolled?.total ?? 0;
-      const who = target();
-      const dealt = who ? damageDealt(total, kind, defensesFor(who)).dealt : total;
-      if (who) changeHp(who.id, (c) => hurt(c, dealt));
-      const faces = rolled
-        ? `${rolled.rolls.map((g) => `[${g.join(", ")}]`).join(" + ")}${signedText(rolled.modifier)}`
-        : "";
-      addLog({
-        label: `${attacker.name}: ${action} (${shown})${who ? ` → ${who.name}` : ""}`,
-        detail: [faces, who && dealt !== total ? String(dealt) : ""].filter(Boolean).join(" → "),
-        total: who ? dealt : total,
-        ...(rolled && { dice: rolled }),
-      });
+/** Rolls the attack against the armor class of the target, if there is one. Rolling again replaces it. */
+export function rollFlowAttack() {
+  const flow = rollFlow.value;
+  if (!flow || flow.bonus === undefined) return;
+  const roll = rollD20(flow.bonus);
+  const who = targetOf(flow);
+  const ac = who ? combatantNumbers(who).ac : undefined;
+  rollFlow.value = {
+    ...flow,
+    lines: [],
+    attack: {
+      natural: roll.natural,
+      bonus: flow.bonus,
+      total: roll.total,
+      critical: roll.critical,
+      fumble: roll.fumble,
+      ...(ac !== undefined && { ac, hit: attackHits(roll, ac) }),
     },
   };
+}
+
+/** Rolls the damage of one kind (doubled dice after a critical hit) and takes it off the target, defenses counted. */
+export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string) {
+  const flow = rollFlow.value;
+  if (!flow) return;
+  const dice = flow.attack?.critical ? doubleDice(part.dice) : part.dice;
+  const parsed = parseDice(dice);
+  const rolled = parsed ? rollExpression(parsed) : undefined;
+  const total = rolled?.total ?? 0;
+  const who = targetOf(flow);
+  const dealt = who ? damageDealt(total, part.type, defensesFor(who)).dealt : total;
+  if (who) changeHp(who.id, (c) => hurt(c, dealt));
+  const faces = rolled
+    ? ` [${rolled.rolls.map((g) => g.join(", ")).join(" + ")}]${signedText(rolled.modifier)}`
+    : "";
+  const line = `${shown(dice)}${faces} = ${total}${who ? ` → ${who.name}: ${dealt}` : ""}`;
+  rollFlow.value = { ...flow, lines: [...flow.lines, line] };
 }

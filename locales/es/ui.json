@@ -2659,8 +2659,12 @@
   "dm.lairAdd": "Añadir la guarida (iniciativa 20)",
   "dm.lairName": "Acciones de guarida",
   "dm.lairKind": "Actúa con iniciativa 20",
-  "dm.rollTarget": "Tirar contra",
-  "dm.rollNoTarget": "Nadie: solo tirar",
+  "dm.rollTarget": "A quién se ataca",
+  "dm.rollNoTarget": "Nadie",
   "dm.roll.hit": "impacto",
-  "dm.roll.miss": "fallo"
+  "dm.roll.miss": "fallo",
+  "dm.roll.again": "Atacar otra vez",
+  "dm.roll.damageTo": "El daño va a",
+  "dm.roll.vs": "contra CA {ac}",
+  "dm.roll.damage": "Daño"
 }

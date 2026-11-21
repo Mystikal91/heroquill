@@ -2659,8 +2659,12 @@
   "dm.lairAdd": "Add the lair (initiative 20)",
   "dm.lairName": "Lair actions",
   "dm.lairKind": "Acts at initiative 20",
-  "dm.rollTarget": "Roll against",
-  "dm.rollNoTarget": "Nobody: only roll",
+  "dm.rollTarget": "Who is attacked",
+  "dm.rollNoTarget": "Nobody",
   "dm.roll.hit": "hit",
-  "dm.roll.miss": "miss"
+  "dm.roll.miss": "miss",
+  "dm.roll.again": "Attack again",
+  "dm.roll.damageTo": "Damage goes to",
+  "dm.roll.vs": "against AC {ac}",
+  "dm.roll.damage": "Damage"
 }

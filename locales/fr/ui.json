@@ -2659,8 +2659,12 @@
   "dm.lairAdd": "Ajouter le repaire (initiative 20)",
   "dm.lairName": "Actions de repaire",
   "dm.lairKind": "Agit à l'initiative 20",
-  "dm.rollTarget": "Jeter contre",
-  "dm.rollNoTarget": "Personne : juste lancer",
+  "dm.rollTarget": "Qui est attaqué",
+  "dm.rollNoTarget": "Personne",
   "dm.roll.hit": "touché",
-  "dm.roll.miss": "raté"
+  "dm.roll.miss": "raté",
+  "dm.roll.again": "Attaquer de nouveau",
+  "dm.roll.damageTo": "Les dégâts vont à",
+  "dm.roll.vs": "contre CA {ac}",
+  "dm.roll.damage": "Dégâts"
 }
