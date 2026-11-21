@@ -19,6 +19,8 @@ export interface Combatant {
   maxHp: number;
   tempHp: number;
   ac: number;
+  /** The walking speed in feet; undefined when it is not known. */
+  speed?: number;
   /** What was rolled or typed for the order; undefined until then. */
   initiative?: number;
   /** Added to the d20 when the initiative is rolled (the Dexterity modifier of a monster). */
@@ -46,6 +48,7 @@ export interface Encounter {
 export const MAX_COMBATANTS = 60;
 export const MAX_HP = 99999;
 export const MAX_ROUNDS = 999;
+export const MAX_SPEED = 999;
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 const whole = (n: unknown, fallback = 0) =>
@@ -103,6 +106,7 @@ interface MonsterNumbers {
   hitPoints?: number;
   hitPointsRoll?: string;
   abilities?: Record<string, number>;
+  speed?: Record<string, number | true>;
 }
 
 export const abilityModifier = (score: number) => Math.floor((score - 10) / 2);
@@ -128,6 +132,7 @@ export function monsterCombatant(
     maxHp,
     tempHp: 0,
     ac: whole(data.armorClass?.[0]?.value, 10),
+    ...(typeof data.speed?.walk === "number" && { speed: data.speed.walk }),
     initiativeBonus: abilityModifier(whole(data.abilities?.dex, 10)),
     conditions: [],
     rounds: {},
@@ -140,6 +145,7 @@ export function manualCombatant(fields: {
   name: string;
   maxHp: number;
   ac: number;
+  speed?: number;
   initiativeBonus?: number;
 }): Combatant {
   const maxHp = clamp(whole(fields.maxHp, 1), 1, MAX_HP);
@@ -151,6 +157,7 @@ export function manualCombatant(fields: {
     maxHp,
     tempHp: 0,
     ac: clamp(whole(fields.ac, 10), 0, 99),
+    ...(fields.speed !== undefined && { speed: clamp(whole(fields.speed), 0, MAX_SPEED) }),
     initiativeBonus: clamp(whole(fields.initiativeBonus, 0), -20, 30),
     conditions: [],
     rounds: {},
@@ -166,6 +173,7 @@ export function characterCombatant(fields: {
   maxHp: number;
   tempHp: number;
   ac: number;
+  speed?: number;
   initiativeBonus: number;
 }): Combatant {
   const maxHp = clamp(whole(fields.maxHp, 1), 1, MAX_HP);
@@ -178,6 +186,7 @@ export function characterCombatant(fields: {
     maxHp,
     tempHp: Math.max(0, whole(fields.tempHp)),
     ac: clamp(whole(fields.ac, 10), 0, 99),
+    ...(fields.speed !== undefined && { speed: clamp(whole(fields.speed), 0, MAX_SPEED) }),
     initiativeBonus: clamp(whole(fields.initiativeBonus, 0), -20, 30),
     conditions: [],
     rounds: {},
@@ -431,6 +440,8 @@ function readCombatant(raw: unknown): Combatant | undefined {
     maxHp,
     tempHp: Math.max(0, whole(r.tempHp)),
     ac: clamp(whole(r.ac, 10), 0, 99),
+    ...(typeof r.speed === "number" &&
+      Number.isFinite(r.speed) && { speed: clamp(Math.trunc(r.speed), 0, MAX_SPEED) }),
     ...(typeof r.initiative === "number" &&
       Number.isFinite(r.initiative) && { initiative: Math.trunc(r.initiative) }),
     initiativeBonus: clamp(whole(r.initiativeBonus), -20, 30),

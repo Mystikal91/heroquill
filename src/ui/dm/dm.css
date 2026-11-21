@@ -25,88 +25,12 @@
   white-space: nowrap;
 }
 
-/* The bar of the encounter: which one, its name, and what can be done with it. */
-.dm-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
+/* ---- The bar above the table ---- */
 
-.dm-pick {
-  flex: 1 1 12rem;
-  min-width: 0;
-}
-
-.dm-title-field {
-  flex: 2 1 14rem;
-  min-width: 0;
-}
-
-.dm-bar-buttons {
-  flex: 0 0 auto;
-}
-
-.dm-bar select,
-.dm-bar input[type="text"] {
-  width: 100%;
-}
-
-/* Tracker on the left, where creatures come in on the right; one column on a phone. */
-.dm-body {
+.dm-bar,
+.dm-turnbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
-  gap: 1.25rem;
-  align-items: start;
-}
-
-.dm-tracker,
-.dm-side {
-  min-width: 0;
-}
-
-.dm-side {
-  position: sticky;
-  top: calc(var(--tabs-height, 0px) + 0.5rem);
-}
-
-@media (max-width: 760px) {
-  .dm {
-    padding: 0.9rem;
-  }
-
-  .dm-top {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.6rem;
-  }
-
-  .dm-top > button {
-    align-self: flex-start;
-  }
-
-  .dm-body {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .dm-side {
-    position: static;
-  }
-
-  /* With nobody in the fight yet, adding creatures comes first. */
-  .dm-body[data-empty] .dm-side {
-    order: -1;
-  }
-}
-
-/* Round, whose turn, and the buttons that move the fight on. */
-.dm-controls {
-  position: sticky;
-  top: calc(var(--tabs-height, 0px) + 0.25rem);
-  z-index: 5;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
   padding: 0.6rem 0.75rem;
   border: 1px solid var(--border);
@@ -114,201 +38,378 @@
   background: var(--surface);
 }
 
+/* The turn buttons stay in view while the table scrolls. */
+.dm-turnbar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  box-shadow: 0 6px 10px -8px rgb(0 0 0 / 0.5);
+}
+
+.dm-bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+}
+
+.dm-bar-tools,
+.dm-turn-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dm-encounter {
+  min-width: 0;
+}
+
+.dm-encounter > .popover-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: min(100%, 22rem);
+  min-height: 2.4rem;
+  padding: 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.dm-encounter-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-menu {
+  display: grid;
+  gap: 0.6rem;
+  min-width: min(18rem, 80vw);
+}
+
+.dm-menu-list {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.dm-menu-list button {
+  width: 100%;
+  min-height: 2.2rem;
+  text-align: left;
+  border-color: transparent;
+}
+
+.dm-menu-list button[aria-current="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.dm-menu .field input {
+  width: 100%;
+}
+
+.dm-menu-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.dm-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.4rem;
+  padding: 0 0.75rem;
+  cursor: pointer;
+}
+
+.dm-turn-row {
+  min-height: 2.6rem;
+}
+
 .dm-status {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.25rem 0.9rem;
-  margin-bottom: 0.5rem;
+  gap: 0.1rem 0.9rem;
+  min-width: 0;
 }
 
 .dm-round {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+}
+
+.dm-next {
+  min-height: 2.6rem;
+  padding: 0 1.4rem;
+  font-weight: 600;
+}
+
+.dm-prev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: 0;
 }
 
 .dm-ended {
-  margin: 0 0 0.5rem;
   font-size: 0.9rem;
   color: var(--accent);
 }
 
-.dm-controls .btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.dm-next {
-  flex: 1 1 9rem;
-  min-height: 2.6rem;
-  font-weight: 600;
-}
-
 .dm-empty {
-  padding: 1.5rem 1rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1rem;
   text-align: center;
   border: 1px dashed var(--border);
   border-radius: var(--radius);
 }
 
-.dm-order {
+.dm-empty p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---- The table ---- */
+
+.dm-table-wrap {
+  container: dmtable / inline-size;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-table thead,
+.dm-table tbody {
+  display: block;
+}
+
+.dm-table tr {
   display: grid;
-  gap: 0.6rem;
+  grid-template-columns: var(--cols);
+  align-items: center;
+  gap: 0 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.dm-table th,
+.dm-table td {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  font-weight: 400;
+}
+
+.dm-table th {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dm-table thead tr {
+  padding-block: 0.4rem;
+  background: var(--surface-2);
+}
+
+.dm-table td[data-col="name"],
+.dm-table th[data-col="name"] {
+  text-align: left;
+}
+
+.dm-table tbody tr {
+  min-height: 3.2rem;
+  transition: background-color 0.2s;
+}
+
+.dm-table tbody tr[data-active] {
+  background: var(--accent-soft);
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.dm-table tbody tr[data-down] {
+  color: var(--muted);
+}
+
+.dm-table tbody tr[data-down] .dm-name-text {
+  text-decoration: line-through;
+}
+
+.dm-name-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.dm-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5rem;
+  min-height: 1.1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Speed and conditions are columns; on a narrow table they come under the name instead. */
+.dm-extra {
+  display: none;
+  flex-basis: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+}
+
+.dm-extra > span {
+  white-space: nowrap;
+}
+
+.dm-extra .dm-pill-button {
+  width: auto;
+  min-width: 2.2rem;
+  min-height: 1.9rem;
   margin: 0;
   padding: 0;
 }
 
-/* One creature. The one whose turn it is has the accent; one at 0 hit points is dimmed. */
-.dm-card {
-  display: grid;
-  gap: 0.55rem;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  list-style: none;
+.dm-num {
+  font-size: 1.05rem;
 }
 
-.dm-card[data-kind="character"] {
-  border-left-color: #4a6fa5;
+/* The round light of a character: grey when the sheet is kept by hand, red and pulsing while it is connected. */
+.dm-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--border);
+  box-shadow: inset 0 0 0 1px var(--muted);
 }
 
-.dm-card[data-active] {
-  border-color: var(--accent);
-  border-left-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-soft);
+.dm-dot[data-live] {
+  background: #e5484d;
+  box-shadow: none;
+  animation: dm-live 1.6s ease-out infinite;
 }
 
-.dm-card[data-down] .dm-name-input {
-  text-decoration: line-through;
-  opacity: 0.7;
+@keyframes dm-live {
+  0% {
+    box-shadow: 0 0 0 0 rgb(229 72 77 / 0.7);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 0.5rem rgb(229 72 77 / 0);
+  }
 }
 
-.dm-card-head {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
+/* Initiative: a number to type, and a die to roll it while it is empty. */
 .dm-init {
   display: flex;
-  flex: none;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
 }
 
 .dm-init-input {
-  width: 3.6rem;
-  padding-inline: 0.25rem;
+  border-color: var(--border);
+  width: 2.8rem;
+  min-height: 2.2rem;
+  padding-inline: 0.2rem;
   text-align: center;
+  font-size: 1.05rem;
   font-weight: 600;
+}
+
+.dm-init-input:focus {
+  border-color: var(--accent);
 }
 
 .dm-roll {
-  min-height: 2rem;
-  padding: 0 0.45rem;
-  font-size: 0.8rem;
+  min-height: 2.2rem;
+  padding: 0 0.35rem;
+  font-size: 0.75rem;
   cursor: pointer;
 }
 
-.dm-name {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.dm-name-input {
+/* What a cell opens when touched: the hit points, the conditions. */
+.dm-cell-button {
+  display: grid;
+  gap: 0.2rem;
   width: 100%;
-  min-width: 0;
-  font-weight: 600;
+  min-height: 2.2rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid transparent;
   background: transparent;
-  border-color: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
 }
 
-.dm-name-input:hover,
-.dm-name-input:focus {
-  border-color: var(--border);
+.dm-cell-button:hover,
+.dm-cell-button:focus-visible,
+.dm-cell-button:has(+ .dm-pop:popover-open) {
+  border-color: var(--accent);
   background: var(--surface-2);
 }
 
-.dm-kind {
-  display: block;
-  min-height: 1em;
-  padding-left: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.dm-ac {
+.dm-hp-num {
   display: flex;
-  flex: none;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.dm-ac span {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.dm-ac input {
-  width: 3.6rem;
-  padding-inline: 0.25rem;
-  text-align: center;
-}
-
-.dm-remove {
-  flex: none;
-  min-height: 2rem;
-  padding: 0 0.5rem;
-  cursor: pointer;
-}
-
-/* Hit points */
-.dm-hp {
-  display: grid;
-  gap: 0.4rem;
-}
-
-.dm-hp-line {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.dm-hp-readout {
-  flex: none;
-  display: inline-flex;
   align-items: baseline;
-  gap: 0.3rem;
+  justify-content: center;
+  gap: 0.25rem;
 }
 
-.dm-hp-readout b {
-  font-size: 1.4rem;
-  font-family: var(--font-display);
+.dm-hp-num b {
+  font-size: 1.1rem;
 }
 
-.dm-hp-readout b.zero {
-  color: var(--accent);
-}
-
-.dm-hp-readout span,
-.dm-hp-readout em {
-  font-size: 0.85rem;
+.dm-hp-num span,
+.dm-hp-num em {
+  font-size: 0.8rem;
   color: var(--muted);
+  font-style: normal;
 }
 
-.dm-hp-readout em {
-  font-style: normal;
+.dm-hp-num em {
   color: #4a6fa5;
 }
 
 .dm-hp-bar {
-  flex: 1 1 auto;
-  height: 0.6rem;
-  border: 1px solid var(--ink);
+  display: block;
+  height: 0.35rem;
+  border-radius: 2px;
   background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
 }
 
 .dm-hp-bar span {
@@ -326,143 +427,424 @@
   background: #b7791f;
 }
 
-.dm-hp-quick {
+.dm-pill-button {
+  width: auto;
+  min-width: 2.2rem;
+  margin-inline: auto;
+}
+
+.dm-pill {
+  display: inline-block;
+  min-width: 1.6rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.dm-pill[data-on] {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.dm-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* On a narrow table: the columns that fold under the name go, and the grid is the narrow one. */
+@container dmtable (max-width: 34rem) {
+  .dm-table tr {
+    grid-template-columns: var(--cols-narrow);
+    gap: 0 0.35rem;
+    padding-inline: 0.5rem;
+  }
+
+  .dm-table th[data-col="ac"],
+  .dm-table td[data-col="ac"],
+  .dm-table th[data-col="speed"],
+  .dm-table td[data-col="speed"],
+  .dm-table th[data-col="cond"],
+  .dm-table td[data-col="cond"] {
+    display: none;
+  }
+
+  .dm-extra {
+    display: inline-flex;
+  }
+
+  .dm-table tbody tr {
+    min-height: 3.6rem;
+  }
+
+  .dm-info {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .dm-cell-button {
+    min-height: 2.75rem;
+  }
+
+  .dm-init {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .dm-init-input {
+    width: 2.8rem;
+    min-height: 2.5rem;
+  }
+
+  .dm-roll {
+    min-height: 1.5rem;
+    padding: 0 0.3rem;
+    line-height: 1;
+  }
+
+  .dm-hp-num b {
+    font-size: 1rem;
+  }
+}
+
+.dm-cell-button.dm-tool {
+  display: inline-flex;
+  width: auto;
+  padding: 0 0.75rem;
+  border-color: var(--border);
+  background: var(--surface);
+  text-align: left;
+}
+
+/* ---- Editors that open under a cell ---- */
+
+.dm-pop {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  width: min(20rem, calc(100vw - 1rem));
+  overflow-y: auto;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+}
+
+.dm-pop:not(:popover-open):not([data-open]) {
+  display: none;
+}
+
+.dm-pop::backdrop {
+  background: rgb(0 0 0 / 0.35);
+}
+
+.dm-pop-title {
+  margin: 0 0 0.5rem;
+}
+
+.dm-hp-editor {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.dm-hp-top {
+  display: grid;
   gap: 0.3rem;
 }
 
-.dm-hp-quick button {
-  min-height: 2.1rem;
-  padding: 0 0.25rem;
-  cursor: pointer;
-}
-
-.dm-hp-amount {
-  display: flex;
-  flex-wrap: wrap;
+.dm-hp-readout {
+  display: inline-flex;
+  align-items: baseline;
   gap: 0.35rem;
 }
 
-.dm-hp-amount input {
-  flex: 0 1 6.5rem;
-  min-width: 5.5rem;
+.dm-hp-readout b {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
 }
 
-.dm-hp-amount button {
-  min-height: 2.1rem;
-  padding: 0 0.6rem;
+.dm-hp-readout b.zero {
+  color: var(--accent);
+}
+
+.dm-hp-readout span,
+.dm-hp-readout em {
+  color: var(--muted);
+  font-style: normal;
+}
+
+.dm-hp-readout em {
+  color: #4a6fa5;
+}
+
+.dm-amount {
+  width: 100%;
+  min-height: 2.8rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.dm-hp-main,
+.dm-hp-second {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.dm-hp-main button {
+  min-height: 2.8rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 
-.dm-hp-amount .damage-kind small {
+.dm-hp-second button {
+  min-height: 2.4rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.dm-hp-editor .damage-kind small {
   display: block;
   font-size: 0.65rem;
   line-height: 1;
 }
 
-/* Conditions */
-.dm-conditions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
+.dm-hp-chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
 }
 
-.dm-chips {
+.dm-hp-chips button {
+  min-height: 2.4rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dm-cond-editor {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dm-cond-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
+}
+
+.dm-cond-chip {
+  min-height: 2.2rem;
+  padding: 0 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.dm-cond-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.dm-cond-rounds {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.dm-cond-rounds li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dm-rounds-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dm-rounds-field input {
+  width: 3.4rem;
+  min-height: 2rem;
+  text-align: center;
+}
+
+.dm-rounds-field small {
+  color: var(--muted);
+}
+
+/* The columns editor */
+.dm-columns {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dm-columns-hint {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.dm-columns-list {
+  display: grid;
+  gap: 0.15rem;
   margin: 0;
   padding: 0;
 }
 
-.dm-chip {
-  display: inline-flex;
+.dm-columns-list li {
+  display: flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.1rem 0.25rem 0.1rem 0.6rem;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  background: var(--accent-soft);
-  font-size: 0.85rem;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.4rem;
 }
 
-.dm-rounds {
-  width: 2.6rem;
-  min-height: 1.6rem;
-  padding: 0 0.2rem;
-  text-align: center;
-  font-size: 0.8rem;
+.dm-columns-check {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.dm-chip-x {
-  min-height: 1.6rem;
-  padding: 0 0.4rem;
-  border: 0;
-  background: transparent;
+.dm-columns-move {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.dm-columns-move button {
+  width: 2.2rem;
+  min-height: 2.2rem;
+  padding: 0;
   cursor: pointer;
 }
 
-.dm-conditions select {
-  max-width: 100%;
-  min-height: 2rem;
+/* ---- Windows: the details of a creature (side panel) and adding creatures (centered) ---- */
+
+.dm-dialog {
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+  color: var(--fg);
 }
 
-/* Details, notes and the stat block */
-.dm-more > summary {
+.dm-dialog::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+.dm-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-dialog[data-variant="side"] {
+  width: min(34rem, 100vw);
+  height: 100dvh;
+  margin: 0 0 0 auto;
+}
+
+.dm-dialog[data-variant="center"] {
+  width: min(46rem, calc(100vw - 2rem));
+  height: min(44rem, calc(100dvh - 2rem));
+  margin: auto;
+}
+
+.dm-dialog-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.dm-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-dialog-head h3 {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-dialog-close {
+  flex: none;
+  min-height: 2.4rem;
+  padding: 0 1rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--muted);
 }
 
-.dm-details {
+.dm-info-body {
   display: grid;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
+  gap: 0.9rem;
+  align-content: start;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.dm-info-body h4 {
+  margin: 0 0 0.4rem;
 }
 
 .dm-fields {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.6rem;
 }
 
-.dm-fields input {
+.dm-info-body .field input,
+.dm-info-body .field textarea {
   width: 100%;
 }
 
-.dm-details textarea {
-  width: 100%;
-  resize: vertical;
+.dm-statblock {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
-/* The panel that adds creatures */
-.dm-add {
-  padding: 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+.dm-info-actions {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
 }
 
-.dm-add h3 {
-  margin: 0 0 0.5rem;
-}
-
+/* Adding creatures */
 .dm-tabs {
   display: flex;
   gap: 0.25rem;
-  margin-bottom: 0.6rem;
+  padding: 0 1rem;
   border-bottom: 1px solid var(--border);
 }
 
 .dm-tab {
-  min-height: 2.1rem;
-  padding: 0 0.6rem;
-  white-space: nowrap;
+  min-height: 2.6rem;
+  padding: 0 0.9rem;
   border: 0;
   border-bottom: 2px solid transparent;
   background: transparent;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -471,55 +853,59 @@
   font-weight: 600;
 }
 
+.dm-add-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 0.9rem 1rem;
+  overflow-y: auto;
+}
+
 .dm-add-body {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .dm-add-tools {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 0.6rem;
   align-items: end;
 }
 
-.dm-add-tools .dm-search {
-  grid-column: 1 / -1;
-}
-
-.dm-add-tools input[type="search"],
-.dm-add-tools select,
-.dm-add-tools .dm-count input,
-.dm-manual input {
+.dm-add-tools .field input,
+.dm-add-tools .field select {
   width: 100%;
 }
 
 .dm-check {
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   font-size: 0.9rem;
 }
 
 .dm-results {
   display: grid;
-  gap: 0.25rem;
   margin: 0;
   padding: 0;
-  max-height: 24rem;
-  overflow-y: auto;
 }
 
 .dm-results li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.3rem 0.4rem;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.25rem 0.1rem;
   border-bottom: 1px solid var(--border);
 }
 
+.dm-results li[data-in] {
+  color: var(--muted);
+}
+
 .dm-result-name {
+  flex: 1;
   min-width: 0;
 }
 
@@ -535,67 +921,152 @@
   color: var(--muted);
 }
 
-.dm-results button {
+.dm-stepper,
+.dm-hp-chips {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dm-stepper {
+  display: inline-flex;
   flex: none;
-  min-height: 2rem;
-  padding: 0 0.7rem;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.dm-stepper button {
+  width: 2.2rem;
+  min-height: 2.2rem;
+  padding: 0;
   cursor: pointer;
 }
 
-/* On a phone the name has a row of its own, and the buttons of the turn share one row. */
-@media (max-width: 560px) {
-  .dm-card-head {
+.dm-stepper output {
+  min-width: 1.8rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dm-add-button {
+  flex: none;
+  min-width: 5.5rem;
+  min-height: 2.4rem;
+  cursor: pointer;
+}
+
+.dm-manual {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dm-manual-name,
+.dm-manual-add {
+  grid-column: 1 / -1;
+}
+
+.dm-manual input {
+  width: 100%;
+}
+
+.dm-add-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.dm-added {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.dm-add-foot .primary {
+  flex: none;
+  min-height: 2.6rem;
+  padding: 0 1.5rem;
+}
+
+/* ---- A phone ---- */
+
+@media (max-width: 640px) {
+  .dm {
+    padding: 0.9rem;
+  }
+
+  .dm-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .dm-top > button {
+    align-self: flex-start;
+  }
+
+  .dm-tool-quiet .dm-tool-label {
+    display: none;
+  }
+
+  .dm-turn-row {
+    flex-wrap: nowrap;
+  }
+
+  .dm-turn-buttons {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+  }
+
+  .dm-next {
+    flex: 1 1 auto;
+    padding: 0 0.75rem;
+  }
+
+  /* The editors are sheets from the bottom of the screen. */
+  .dm-pop {
+    top: auto !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    max-height: 80dvh !important;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .dm-dialog {
+    width: 100vw !important;
+    height: 100dvh !important;
+    border: 0;
+  }
+
+  .dm-add-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dm-results li {
     flex-wrap: wrap;
   }
 
-  .dm-init {
-    order: 1;
-  }
-
-  .dm-ac {
-    order: 2;
-    margin-left: auto;
-  }
-
-  .dm-remove {
-    order: 3;
-  }
-
-  .dm-name {
-    order: 4;
-    flex: 1 1 100%;
-  }
-
-  .dm-controls {
-    padding: 0.45rem 0.5rem;
-  }
-
-  .dm-status {
-    margin-bottom: 0.35rem;
-  }
-
-  .dm-controls .btn-row {
-    flex-wrap: nowrap;
-    gap: 0.35rem;
-  }
-
-  .dm-controls .btn-row button {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 2.5rem;
-    padding: 0 0.3rem;
-    font-size: 0.8rem;
-    line-height: 1.1;
-    white-space: normal;
-  }
-
-  .dm-controls .btn-row .dm-next {
-    flex: 1.6 1 0;
+  .dm-add-button {
+    min-width: 4.5rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dm-hp-bar span {
+  .dm-dot[data-live] {
+    animation: none;
+  }
+
+  .dm-hp-bar span,
+  .dm-table tbody tr {
     transition: none;
   }
 }

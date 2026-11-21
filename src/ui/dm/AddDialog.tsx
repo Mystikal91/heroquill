@@ -3,6 +3,9 @@ import {
   addCharacter,
   addManual,
   addMonsters,
+  addedLog,
+  adding,
+  closeAdd,
   dmRuleset,
   encounter,
   setDmRuleset,
@@ -13,18 +16,49 @@ import { monstersOf } from "../../engine/companions";
 import { MAX_COMBATANTS } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { type CharacterSummary, listCharacters } from "../../storage/characters";
+import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
 
 type Tab = "monsters" | "manual" | "characters";
 
 const plain = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
+/** A number with a minus and a plus: how many of a monster to add. */
+function Stepper({
+  value,
+  onChange,
+  label,
+}: { value: number; onChange: (n: number) => void; label: string }) {
+  return (
+    <fieldset class="dm-stepper">
+      <legend class="sr-only">{label}</legend>
+      <button
+        type="button"
+        aria-label={ui("dm.fewer")}
+        disabled={value <= 1}
+        onClick={() => onChange(value - 1)}
+      >
+        −
+      </button>
+      <output>{value}</output>
+      <button
+        type="button"
+        aria-label={ui("dm.more")}
+        disabled={value >= 30}
+        onClick={() => onChange(value + 1)}
+      >
+        +
+      </button>
+    </fieldset>
+  );
+}
+
 function Monsters() {
   const c = content.value;
   const ruleset = dmRuleset.value;
   const [query, setQuery] = useState("");
-  const [count, setCount] = useState<number | undefined>(1);
   const [rollHp, setRollHp] = useState(false);
+  const [counts, setCounts] = useState<Record<string, number>>({});
   const all = useMemo(
     () =>
       c
@@ -35,7 +69,8 @@ function Monsters() {
     [c, ruleset],
   );
   const wanted = plain(query.trim());
-  const shown = (wanted ? all.filter((m) => plain(m.name).includes(wanted)) : all).slice(0, 40);
+  const found = wanted ? all.filter((m) => plain(m.name).includes(wanted)) : all;
+  const shown = found.slice(0, 60);
   const room = MAX_COMBATANTS - (encounter.value?.combatants.length ?? 0);
   return (
     <div class="dm-add-body">
@@ -44,6 +79,7 @@ function Monsters() {
           <span>{ui("dm.search")}</span>
           <input
             type="search"
+            autofocus
             value={query}
             onInput={(e) => setQuery(e.currentTarget.value)}
             placeholder={ui("dm.searchPlaceholder")}
@@ -59,10 +95,6 @@ function Monsters() {
             <option value="srd52">{ui("edition.srd52.name")}</option>
           </select>
         </label>
-        <div class="field dm-count">
-          <span>{ui("dm.count")}</span>
-          <NumberField label={ui("dm.count")} min={1} max={30} value={count} onChange={setCount} />
-        </div>
         <label class="dm-check">
           <input
             type="checkbox"
@@ -80,32 +112,41 @@ function Monsters() {
         <ul class="plain dm-results">
           {shown.map(({ entry, name }) => {
             const data = entry.data as { challenge?: number; type?: string };
+            const count = counts[entry.id] ?? 1;
             return (
               <li key={entry.id}>
                 <span class="dm-result-name">
                   <b>{name}</b>
                   <small>
                     {typeof data.challenge === "number"
-                      ? `${ui("dm.cr", { n: challengeText(data.challenge) })}`
+                      ? ui("dm.cr", { n: challengeText(data.challenge) })
                       : ""}
                     {data.type ? ` · ${typeText(data.type)}` : ""}
                   </small>
                 </span>
+                <Stepper
+                  value={count}
+                  label={`${ui("dm.count")}: ${name}`}
+                  onChange={(n) => setCounts((x) => ({ ...x, [entry.id]: n }))}
+                />
                 <button
                   type="button"
+                  class="dm-add-button"
                   disabled={room <= 0}
                   aria-label={`${ui("dm.addButton")}: ${name}`}
-                  onClick={() => addMonsters(entry.id, count ?? 1, rollHp)}
+                  onClick={() => {
+                    addMonsters(entry.id, count, rollHp);
+                    setCounts((x) => ({ ...x, [entry.id]: 1 }));
+                  }}
                 >
                   {ui("dm.addButton")}
-                  {(count ?? 1) > 1 ? ` ×${count}` : ""}
                 </button>
               </li>
             );
           })}
         </ul>
       )}
-      {all.length > shown.length && wanted === "" && <p class="muted">{ui("dm.searchMore")}</p>}
+      {found.length > shown.length && <p class="muted">{ui("dm.searchMore")}</p>}
     </div>
   );
 }
@@ -114,17 +155,24 @@ function ByHand() {
   const [name, setName] = useState("");
   const [maxHp, setMaxHp] = useState<number | undefined>(10);
   const [ac, setAc] = useState<number | undefined>(12);
+  const [speed, setSpeed] = useState<number | undefined>(30);
   const [bonus, setBonus] = useState<number | undefined>(0);
   return (
     <form
       class="dm-add-body dm-manual"
       onSubmit={(e) => {
         e.preventDefault();
-        addManual({ name, maxHp: maxHp ?? 1, ac: ac ?? 10, initiativeBonus: bonus ?? 0 });
+        addManual({
+          name,
+          maxHp: maxHp ?? 1,
+          ac: ac ?? 10,
+          initiativeBonus: bonus ?? 0,
+          ...(speed !== undefined && { speed }),
+        });
         setName("");
       }}
     >
-      <label class="field">
+      <label class="field dm-manual-name">
         <span>{ui("dm.field.name")}</span>
         <input type="text" value={name} onInput={(e) => setName(e.currentTarget.value)} />
       </label>
@@ -143,6 +191,16 @@ function ByHand() {
         <NumberField label={ui("sheet.armorClass")} min={0} max={99} value={ac} onChange={setAc} />
       </div>
       <div class="field">
+        <span>{`${ui("dm.field.speed")} (ft)`}</span>
+        <NumberField
+          label={ui("dm.field.speed")}
+          min={0}
+          max={999}
+          value={speed}
+          onChange={setSpeed}
+        />
+      </div>
+      <div class="field">
         <span>{ui("dm.field.bonus")}</span>
         <NumberField
           label={ui("dm.field.bonus")}
@@ -152,7 +210,9 @@ function ByHand() {
           onChange={setBonus}
         />
       </div>
-      <button type="submit">{ui("dm.addButton")}</button>
+      <button type="submit" class="dm-manual-add">
+        {ui("dm.addButton")}
+      </button>
     </form>
   );
 }
@@ -176,7 +236,7 @@ function Characters() {
       <p class="muted">{ui("dm.characterHint")}</p>
       <ul class="plain dm-results">
         {list.map((ch) => (
-          <li key={ch.id}>
+          <li key={ch.id} data-in={inFight.has(ch.id) || undefined}>
             <span class="dm-result-name">
               <b>{ch.name.trim() || ui("dm.unnamed")}</b>
               <small>
@@ -187,6 +247,7 @@ function Characters() {
             </span>
             <button
               type="button"
+              class="dm-add-button"
               disabled={inFight.has(ch.id)}
               onClick={() => void addCharacter(ch.id)}
             >
@@ -199,17 +260,17 @@ function Characters() {
   );
 }
 
-/** Where creatures come in: the monsters of the rules, a creature made up by hand, or a character of this device. */
-export function AddCreatures() {
+/** Where creatures come in: monsters of the rules, a creature by hand, or a character of this device. It stays open to add several. */
+export function AddDialog() {
   const [tab, setTab] = useState<Tab>("monsters");
+  const log = addedLog.value;
   const tabs: [Tab, string][] = [
     ["monsters", ui("dm.add.monsters")],
     ["manual", ui("dm.add.manual")],
     ["characters", ui("dm.add.characters")],
   ];
   return (
-    <section class="dm-add" aria-labelledby="dm-add-title">
-      <h3 id="dm-add-title">{ui("dm.add")}</h3>
+    <Modal open={adding.value} variant="center" title={ui("dm.add")} onClose={closeAdd}>
       <div class="dm-tabs" role="tablist">
         {tabs.map(([id, label]) => (
           <button
@@ -224,7 +285,19 @@ export function AddCreatures() {
           </button>
         ))}
       </div>
-      {tab === "monsters" ? <Monsters /> : tab === "manual" ? <ByHand /> : <Characters />}
-    </section>
+      <div class="dm-add-scroll">
+        {tab === "monsters" ? <Monsters /> : tab === "manual" ? <ByHand /> : <Characters />}
+      </div>
+      <footer class="dm-add-foot">
+        <output class="dm-added">
+          {log.length === 0
+            ? ui("dm.addedNone")
+            : `${ui("dm.added")} ${log.map((x) => (x.count > 1 ? `${x.count} ${x.name}` : x.name)).join(", ")}`}
+        </output>
+        <button type="button" class="primary" onClick={closeAdd}>
+          {ui("dm.done")}
+        </button>
+      </footer>
+    </Modal>
   );
 }

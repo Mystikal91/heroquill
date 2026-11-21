@@ -120,3 +120,34 @@ export const SwordsIcon = () => (
     <path d="M6 17l-2 2M18 17l2 2M8.500 15.500l-2.500 2.500M15.500 15.500l2.500 2.500" />
   </Icon>
 );
+
+/** Three columns: choosing the columns of a table. */
+export const ColumnsIcon = () => (
+  <Icon>
+    <rect x="3.500" y="4.500" width="17" height="15" rx="1.500" />
+    <path d="M9.500 4.500v15M15 4.500v15" />
+  </Icon>
+);
+
+/** A plus: add. */
+export const PlusIcon = () => (
+  <Icon>
+    <path d="M12 5v14M5 12h14" />
+  </Icon>
+);
+
+/** A bar and a triangle to the left: the previous turn. */
+export const StepBackIcon = () => (
+  <Icon>
+    <path d="M6 5v14M18 6v12l-9-6z" />
+  </Icon>
+);
+
+/** Three dots: more. */
+export const DotsIcon = () => (
+  <Icon>
+    <circle cx="5.500" cy="12" r="1.100" />
+    <circle cx="12" cy="12" r="1.100" />
+    <circle cx="18.500" cy="12" r="1.100" />
+  </Icon>
+);

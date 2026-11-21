@@ -5,6 +5,7 @@ import {
   type Encounter,
   type TurnReport,
   addCombatants,
+  changeCombatant,
   characterCombatant,
   createEncounter,
   isStarted,
@@ -33,8 +34,14 @@ export const encounters = signal<Encounter[]>([]);
 /** The encounter on screen. */
 export const encounter = signal<Encounter | undefined>(undefined);
 export const dmReady = signal(false);
-/** The combatant whose card is open to the stat block or the notes. */
-export const openCombatant = signal<string | undefined>(undefined);
+/** The combatant whose details are open. */
+export const infoFor = signal<string | undefined>(undefined);
+/** The window that adds creatures is open. */
+export const adding = signal(false);
+/** What the window added since it was opened, to show a running line ("3 Goblin"). */
+export const addedLog = signal<{ name: string; count: number }[]>([]);
+/** The characters connected from another device (a red dot in the table). Nobody is yet: the online part comes later. */
+export const liveIds = signal<ReadonlySet<string>>(new Set());
 
 const RULESET_KEY = "dmRuleset";
 export type DmRuleset = "srd51" | "srd52";
@@ -116,12 +123,16 @@ export function updateEncounter(edit: (e: Encounter) => Encounter) {
   scheduleSave();
 }
 
+/** Changes one creature of the open encounter. */
+export const editCombatant = (id: string, change: (c: Combatant) => Combatant) =>
+  updateEncounter((e) => changeCombatant(e, id, change));
+
 export async function selectEncounter(id: string) {
   await flush();
   const next = encounters.value.find((e) => e.id === id);
   if (!next) return;
   encounter.value = next;
-  openCombatant.value = undefined;
+  infoFor.value = undefined;
   turnHistory.length = 0;
   await setCurrentEncounterId(id);
 }
@@ -130,7 +141,7 @@ export async function newEncounter() {
   await flush();
   const fresh = createEncounter(defaultName(encounters.value));
   show(fresh);
-  openCombatant.value = undefined;
+  infoFor.value = undefined;
   turnHistory.length = 0;
   await saveEncounter(fresh);
   await setCurrentEncounterId(fresh.id);
@@ -179,7 +190,7 @@ export async function removeEncounter() {
     await saveEncounter(fresh);
     await setCurrentEncounterId(fresh.id);
   }
-  openCombatant.value = undefined;
+  infoFor.value = undefined;
   turnHistory.length = 0;
   offerUndo(ui("dm.removedEncounter", { name: current.name }), async () => {
     await saveEncounter(current);
@@ -207,19 +218,38 @@ export function addMonsters(entryId: string, count: number, rollHp: boolean) {
       names.map((name) => monsterCombatant(entry, name, { rollHp })),
     );
   });
+  logAdded(c.name(entryId), Math.max(1, Math.min(count, 30)));
+}
+
+/** Opens the window that adds creatures, with a fresh running line. */
+export function openAdd() {
+  addedLog.value = [];
+  adding.value = true;
+}
+
+export function closeAdd() {
+  adding.value = false;
+}
+
+/** Adds to the running line of what the window added. */
+function logAdded(name: string, count: number) {
+  const log = addedLog.value;
+  const last = log.find((x) => x.name === name);
+  addedLog.value = last
+    ? log.map((x) => (x === last ? { ...x, count: x.count + count } : x))
+    : [...log, { name, count }];
 }
 
 export function addManual(fields: {
   name: string;
   maxHp: number;
   ac: number;
+  speed?: number;
   initiativeBonus: number;
 }) {
-  updateEncounter((e) =>
-    addCombatants(e, [
-      manualCombatant({ ...fields, name: fields.name.trim() || ui("dm.unnamed") }),
-    ]),
-  );
+  const name = fields.name.trim() || ui("dm.unnamed");
+  updateEncounter((e) => addCombatants(e, [manualCombatant({ ...fields, name })]));
+  logAdded(name, 1);
 }
 
 /** A character saved on this device, with the numbers of its sheet now. */
@@ -239,10 +269,12 @@ export async function addCharacter(characterId: string): Promise<boolean> {
         maxHp: max,
         tempHp: character.play.tempHp,
         ac: sheet.armorClass.value,
+        ...(sheet.speed !== undefined && { speed: sheet.speed }),
         initiativeBonus: sheet.initiative,
       }),
     ]),
   );
+  logAdded(character.name.trim() || ui("dm.unnamed"), 1);
   return true;
 }
 
@@ -253,7 +285,7 @@ export function removeFromFight(id: string) {
   if (!before || !gone) return;
   const index = before.combatants.indexOf(gone);
   updateEncounter((e) => removeCombatant(e, id));
-  if (openCombatant.value === id) openCombatant.value = undefined;
+  if (infoFor.value === id) infoFor.value = undefined;
   offerUndo(ui("dm.removedCombatant", { name: gone.name }), () => putBack(gone, index));
 }
 

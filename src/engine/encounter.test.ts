@@ -216,6 +216,7 @@ describe("making combatants", () => {
       hitPoints: 7,
       hitPointsRoll: "2d6",
       abilities: { dex: 14 },
+      speed: { walk: 30 },
     },
   } as unknown as Entry;
 
@@ -225,6 +226,7 @@ describe("making combatants", () => {
       hp: 7,
       maxHp: 7,
       initiativeBonus: 2,
+      speed: 30,
       source: "srd51:monster/goblin",
     });
   });
