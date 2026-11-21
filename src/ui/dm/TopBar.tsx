@@ -3,6 +3,7 @@ import {
   canGoBack,
   duplicateEncounter,
   encounters,
+  groupInitiative,
   lastTurn,
   newEncounter,
   openAdd,
@@ -11,6 +12,8 @@ import {
   resetCurrentFight,
   resetTurnHistory,
   selectEncounter,
+  setGroupInitiative,
+  startArea,
   updateEncounter,
 } from "../../app/dm";
 import { content } from "../../app/store";
@@ -24,7 +27,7 @@ import {
 } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
-import { PlusIcon, StepBackIcon } from "../icons";
+import { PlusIcon, StepBackIcon, SwordsIcon } from "../icons";
 import { ColumnsEditor } from "./ColumnsEditor";
 
 /** The encounter: which one, its name, and what can be done with it or with the fight. */
@@ -68,6 +71,14 @@ function EncounterMenu({ e }: { e: Encounter }) {
               updateEncounter((x) => ({ ...x, name }));
             }}
           />
+        </label>
+        <label class="dm-check">
+          <input
+            type="checkbox"
+            checked={groupInitiative.value}
+            onChange={(ev) => setGroupInitiative(ev.currentTarget.checked)}
+          />
+          <span>{ui("dm.groupInit")}</span>
         </label>
         <div class="dm-menu-actions">
           <button type="button" onClick={() => void newEncounter()}>
@@ -135,6 +146,16 @@ export function TopBar({ e }: { e: Encounter }) {
               <PlusIcon />
               <span class="dm-tool-label">{ui("dm.addShort")}</span>
             </button>
+            <button
+              type="button"
+              class="dm-tool"
+              title={ui("dm.area.hint")}
+              disabled={e.combatants.length === 0}
+              onClick={startArea}
+            >
+              <SwordsIcon />
+              <span class="dm-tool-label">{ui("dm.area")}</span>
+            </button>
             <ColumnsEditor />
           </div>
         </div>
@@ -186,7 +207,9 @@ export function TopBar({ e }: { e: Encounter }) {
                   type="button"
                   disabled={waiting === 0}
                   title={ui("dm.rollInitiativeHint")}
-                  onClick={() => updateEncounter((x) => rollAllInitiative(x))}
+                  onClick={() =>
+                    updateEncounter((x) => rollAllInitiative(x, { grouped: groupInitiative.value }))
+                  }
                 >
                   {ui("dm.rollInitiative")}
                 </button>

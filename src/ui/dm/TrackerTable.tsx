@@ -1,4 +1,4 @@
-import { encounter, infoFor, liveIds } from "../../app/dm";
+import { areaMode, areaPicks, cyclePick, encounter, infoFor, liveIds } from "../../app/dm";
 import { type DmColumn, dmColumns, gridTemplate, visibleColumns } from "../../app/dmColumns";
 import { typeText } from "../../app/monsterView";
 import { content } from "../../app/store";
@@ -7,6 +7,7 @@ import {
   type Combatant,
   type Encounter,
   effectCount,
+  groupOf,
   initiativeOrder,
   isDown,
   rollInitiative,
@@ -104,7 +105,13 @@ function InitCell({ c }: { c: Combatant }) {
       }
     >
       {(close) => (
-        <InitEditor c={c} bonus={bonus} close={close} roll={() => rollInitiative(c).total} />
+        <InitEditor
+          c={c}
+          bonus={bonus}
+          close={close}
+          roll={() => rollInitiative(c).total}
+          groupSize={encounter.value ? groupOf(encounter.value, c.id).length : 1}
+        />
       )}
     </CellPopover>
   );
@@ -225,16 +232,44 @@ function Cell({
   }
 }
 
+/** In the area mode: not hit, hit in full, or hit by half because it saved. One tap goes on to the next. */
+function PickButton({ id, name }: { id: string; name: string }) {
+  const pick = areaPicks.value[id];
+  const label = ui(
+    pick === "fail" ? "dm.area.fail" : pick === "save" ? "dm.area.save" : "dm.area.none",
+  );
+  return (
+    <button
+      type="button"
+      class="dm-pick"
+      data-pick={pick}
+      aria-label={`${name}: ${label}`}
+      title={label}
+      onClick={() => cyclePick(id)}
+    >
+      {pick === "fail" ? "×" : pick === "save" ? "½" : ""}
+    </button>
+  );
+}
+
 /** The initiative table: one row for each creature, in turn order, with what is read at a glance. */
 export function TrackerTable({ e }: { e: Encounter }) {
   const columns = visibleColumns(dmColumns.value);
-  const style = `--cols:${gridTemplate(columns)};--cols-narrow:${gridTemplate(columns, true)}`;
+  const area = areaMode.value;
+  // In the area mode a first column marks who is hit.
+  const lead = area ? "2.8rem " : "";
+  const style = `--cols:${lead}${gridTemplate(columns)};--cols-narrow:${lead}${gridTemplate(columns, true)}`;
   const turn = encounter.value?.turn;
   return (
     <div class="dm-table-wrap">
       <table class="dm-table" style={style}>
         <thead>
           <tr>
+            {area && (
+              <th data-col="pick" scope="col">
+                <span class="sr-only">{ui("dm.area")}</span>
+              </th>
+            )}
             {columns.map((col) => (
               <th key={col} data-col={col} scope="col">
                 {ui(`dm.col.${col}` as UiKey)}
@@ -253,6 +288,11 @@ export function TrackerTable({ e }: { e: Encounter }) {
               data-focus={c.effects.some((x) => x.concentration) || undefined}
               aria-current={c.id === turn ? "step" : undefined}
             >
+              {area && (
+                <td data-col="pick">
+                  <PickButton id={c.id} name={c.name} />
+                </td>
+              )}
               {columns.map((col) => (
                 <Cell key={col} col={col} c={c} columns={columns} />
               ))}

@@ -1,4 +1,11 @@
 import { effect, signal } from "@preact/signals";
+import {
+  type AreaPick,
+  type DefenseLine,
+  areaDamage,
+  defensesOf,
+  innateDefenses,
+} from "../engine/defenses";
 import { deriveSheet } from "../engine/derive";
 import {
   type Combatant,
@@ -339,6 +346,7 @@ export async function addCharacter(characterId: string): Promise<boolean> {
         tempHp: character.play.tempHp,
         ac: sheet.armorClass.value,
         ...(sheet.speed !== undefined && { speed: sheet.speed }),
+        defenses: sheet.defenses,
         initiativeBonus: sheet.initiative,
       }),
     ]),
@@ -438,4 +446,104 @@ export function previousTurn() {
 export function resetTurnHistory() {
   turnHistory.length = 0;
   lastTurn.value = undefined;
+}
+
+// ---- Rolling initiative for a group of the same kind ----
+
+const GROUP_KEY = "dmGroupInit";
+
+function savedGroup(): boolean {
+  try {
+    return localStorage.getItem(GROUP_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** Roll once for the creatures of one kind (the goblins act together) instead of one die each. */
+export const groupInitiative = signal(savedGroup());
+
+export function setGroupInitiative(on: boolean) {
+  groupInitiative.value = on;
+  try {
+    localStorage.setItem(GROUP_KEY, on ? "1" : "0");
+  } catch {
+    // Not remembered: it still holds for this visit.
+  }
+}
+
+// ---- Damage by kind, and to several creatures at once ----
+
+/** What a creature defends against: its entry's lists (a monster), its sheet's (a character) and its effects. */
+export function defensesFor(c: Combatant): DefenseLine[] {
+  const entry = c.kind === "monster" && c.source ? content.value?.index.get(c.source) : undefined;
+  return defensesOf(c, entry ? innateDefenses(entry.data) : []);
+}
+
+/** The conditions a monster is immune to, by slug (`poisoned`). */
+export function conditionImmunities(c: Combatant): string[] {
+  const entry = c.kind === "monster" && c.source ? content.value?.index.get(c.source) : undefined;
+  const list = (entry?.data as { conditionImmunities?: unknown } | undefined)?.conditionImmunities;
+  return Array.isArray(list) ? list.filter((x): x is string => typeof x === "string") : [];
+}
+
+/** The area-damage mode: who is hit and how, the amount and the kind. */
+export const areaMode = signal(false);
+export const areaPicks = signal<Record<string, AreaPick>>({});
+export const areaAmount = signal(0);
+export const areaType = signal<string | undefined>(undefined);
+
+export function startArea() {
+  areaPicks.value = {};
+  areaAmount.value = 0;
+  areaType.value = undefined;
+  areaMode.value = true;
+}
+
+export function leaveArea() {
+  areaMode.value = false;
+  areaPicks.value = {};
+}
+
+/** One tap on a creature: not hit, then hit in full, then half (it saved), then not hit again. */
+export function cyclePick(id: string) {
+  const { [id]: now, ...rest } = areaPicks.value;
+  areaPicks.value =
+    now === undefined
+      ? { ...rest, [id]: "fail" }
+      : now === "fail"
+        ? { ...rest, [id]: "save" }
+        : rest;
+}
+
+/** Marks every creature that is not a character as hit in full. */
+export function pickCreatures() {
+  const e = encounter.value;
+  if (!e) return;
+  areaPicks.value = Object.fromEntries(
+    e.combatants.filter((c) => c.kind !== "character").map((c) => [c.id, "fail" as const]),
+  );
+}
+
+/** Deals the damage to everybody marked, each through its own defenses, and offers to take it back. */
+export function applyArea() {
+  const e = encounter.value;
+  const picks = areaPicks.value;
+  const amount = areaAmount.value;
+  if (!e || amount <= 0 || Object.keys(picks).length === 0) return;
+  const before = new Map(
+    e.combatants.filter((c) => picks[c.id]).map((c) => [c.id, { hp: c.hp, tempHp: c.tempHp }]),
+  );
+  const out = areaDamage(e, picks, amount, areaType.value, defensesFor);
+  updateEncounter(() => out.encounter);
+  offerUndo(ui("dm.area.done", { n: out.taken.length }), () =>
+    updateEncounter((x) => ({
+      ...x,
+      combatants: x.combatants.map((c) => {
+        const was = before.get(c.id);
+        return was ? { ...c, ...was } : c;
+      }),
+    })),
+  );
+  leaveArea();
 }

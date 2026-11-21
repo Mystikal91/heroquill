@@ -1,11 +1,12 @@
 import { useEffect } from "preact/hooks";
-import { advanceTurn, dmReady, encounter, loadDm, openAdd } from "../../app/dm";
+import { advanceTurn, areaMode, dmReady, encounter, loadDm, openAdd } from "../../app/dm";
 import { leavePage } from "../../app/navigation";
 import { monstersWanted } from "../../app/rulesView";
 import { isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { AddDialog } from "./AddDialog";
 import { AddEffectDialog } from "./AddEffectDialog";
+import { AreaPanel } from "./AreaPanel";
 import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
 import { TopBar } from "./TopBar";
@@ -67,6 +68,7 @@ export function DmPage() {
         <>
           <TopBar e={e} />
           <EncounterNotes e={e} />
+          {areaMode.value && <AreaPanel />}
           {e.combatants.length === 0 ? (
             <div class="dm-empty">
               <p>{ui("dm.empty")}</p>

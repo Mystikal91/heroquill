@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { changeHp, dmRuleset, editCombatant, effectFor, updateEncounter } from "../../app/dm";
+import {
+  changeHp,
+  conditionImmunities,
+  defensesFor,
+  dmRuleset,
+  editCombatant,
+  effectFor,
+  updateEncounter,
+} from "../../app/dm";
 import { content } from "../../app/store";
 import { effectiveMaxHp } from "../../engine/combatantNumbers";
+import { DAMAGE_KINDS, damageDealt } from "../../engine/defenses";
 import {
   type Combatant,
   MAX_HP,
@@ -10,13 +19,15 @@ import {
   heal,
   hurt,
   removeEffect,
+  rollGroupInitiative,
   setConditionRounds,
   setEffectRounds,
   setInitiative,
   toggleCondition,
 } from "../../engine/encounter";
 import { inRuleset } from "../../engine/rulesets";
-import { ui } from "../../i18n/ui";
+import { type UiKey, ui } from "../../i18n/ui";
+import { damageName } from "../damageName";
 import { effectLine } from "../play/ActiveEffects";
 import { DamageButtons } from "../play/DamageButtons";
 import { NumberField } from "./NumberField";
@@ -35,13 +46,41 @@ export function conditionOptions(ruleset: string): { id: string; name: string }[
 
 export const conditionName = (id: string) => content.value?.name(id) ?? id.split("/")[1] ?? id;
 
+/** The kinds of damage as chips, one at a time (or none): what the amount is, so a resistance can be taken off. */
+export function DamageTypeChips({
+  value,
+  onChange,
+}: {
+  value: string | undefined;
+  onChange: (kind: string | undefined) => void;
+}) {
+  return (
+    <fieldset class="dm-types">
+      <legend class="sr-only">{ui("dm.damageType")}</legend>
+      {DAMAGE_KINDS.map((kind) => (
+        <button
+          type="button"
+          key={kind}
+          class="dm-type-chip"
+          aria-pressed={value === kind}
+          onClick={() => onChange(value === kind ? undefined : kind)}
+        >
+          {damageName(kind)}
+        </button>
+      ))}
+    </fieldset>
+  );
+}
+
 /** Hit points: the amount to type with Damage and Heal side by side, and the quick steps. */
 export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
   const [amount, setAmount] = useState("");
+  const [kind, setKind] = useState<string | undefined>(undefined);
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => input.current?.focus(), []);
   const n = Math.max(0, Number.parseInt(amount, 10) || 0);
   const maxHp = effectiveMaxHp(c);
+  const result = damageDealt(Math.max(0, Number.parseInt(amount, 10) || 0), kind, defensesFor(c));
   const percent = maxHp > 0 ? Math.round((c.hp / maxHp) * 100) : 0;
   const state = c.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
   const apply = (change: (x: Combatant) => Combatant) => {
@@ -80,12 +119,24 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
           if (e.key === "Enter" && n > 0) apply((x) => hurt(x, n));
         }}
       />
+      <DamageTypeChips value={kind} onChange={setKind} />
+      {result.applied.length > 0 && kind && (
+        <p class="dm-defense-note">
+          {result.applied
+            .map((k) => ui(`dm.defense.${k}` as UiKey, { damage: damageName(kind) }))
+            .join(" · ")}
+        </p>
+      )}
       <div class="dm-hp-main">
-        <DamageButtons
-          amount={n}
-          kinds={["normal"]}
-          apply={(dealt) => apply((x) => hurt(x, dealt))}
-        />
+        <button
+          type="button"
+          class="danger-btn damage-kind"
+          disabled={n === 0}
+          onClick={() => apply((x) => hurt(x, result.dealt))}
+        >
+          {ui("play.damage")}
+          {kind && result.dealt !== n && <small>→ {result.dealt}</small>}
+        </button>
         <button type="button" disabled={n === 0} onClick={() => apply((x) => heal(x, n))}>
           {ui("play.heal")}
         </button>
@@ -151,6 +202,7 @@ function RoundsField({
  */
 export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }) {
   const list = conditionOptions(dmRuleset.value);
+  const immune = conditionImmunities(c);
   const inForce = c.conditions.length + c.effects.length;
   return (
     <div class="dm-fx">
@@ -217,10 +269,17 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
               key={x.id}
               class="dm-cond-chip"
               data-condition={x.id.split("/")[1]}
+              data-immune={immune.includes(x.id.split("/")[1] ?? "") || undefined}
+              title={
+                immune.includes(x.id.split("/")[1] ?? "")
+                  ? ui("dm.immuneHint", { name: c.name })
+                  : undefined
+              }
               aria-pressed={c.conditions.includes(x.id)}
               onClick={() => editCombatant(c.id, (y) => toggleCondition(y, x.id))}
             >
               {x.name}
+              {immune.includes(x.id.split("/")[1] ?? "") && <small> · {ui("dm.immuneTag")}</small>}
             </button>
           ))}
         </div>
@@ -245,11 +304,13 @@ export function InitEditor({
   bonus,
   close,
   roll,
+  groupSize,
 }: {
   c: Combatant;
   bonus: string;
   close: () => void;
   roll: () => number;
+  groupSize: number;
 }) {
   const [text, setText] = useState(c.initiative === undefined ? "" : String(c.initiative));
   const input = useRef<HTMLInputElement>(null);
@@ -292,6 +353,17 @@ export function InitEditor({
       <button type="button" onClick={() => apply(roll())}>
         {ui("dm.initRoll", { bonus })}
       </button>
+      {groupSize > 1 && (
+        <button
+          type="button"
+          onClick={() => {
+            updateEncounter((e) => rollGroupInitiative(e, c.id));
+            close();
+          }}
+        >
+          {ui("dm.initRollGroup", { n: groupSize, bonus })}
+        </button>
+      )}
       {c.initiative !== undefined && (
         <button type="button" class="secondary" onClick={() => apply(undefined)}>
           {ui("dm.initClear")}

@@ -553,6 +553,7 @@
 .dm-cell-button.dm-tool {
   display: inline-flex;
   width: auto;
+  min-height: 2.4rem;
   padding: 0 0.75rem;
   border-color: var(--border);
   background: var(--surface);
@@ -1419,4 +1420,116 @@
 .dm-notes textarea {
   width: 100%;
   resize: vertical;
+}
+
+/* The kind of damage, as chips */
+.dm-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dm-type-chip {
+  min-height: 2rem;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.dm-type-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.dm-defense-note {
+  margin: 0;
+  padding: 0.3rem 0.5rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  font-size: 0.85rem;
+}
+
+.dm-cond-chip[data-immune] small {
+  font-size: 0.7em;
+  color: var(--muted);
+}
+
+/* The area mode */
+.dm-area {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-area h4,
+.dm-area p {
+  margin: 0;
+}
+
+.dm-area-amount {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dm-area-amount .field input {
+  width: 8rem;
+}
+
+.dm-area-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+}
+
+.dm-area-actions button {
+  min-height: 2.4rem;
+  cursor: pointer;
+}
+
+.dm-area-count {
+  flex: 1 1 auto;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.dm-pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  min-height: 0;
+  padding: 0;
+  border: 1px dashed var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dm-pick[data-pick="fail"] {
+  border-style: solid;
+  border-color: #c0443c;
+  background: rgb(192 68 60 / 0.25);
+  color: #f0a39d;
+}
+
+.dm-pick[data-pick="save"] {
+  border-style: solid;
+  border-color: #3f8a46;
+  background: rgb(63 138 70 / 0.25);
+  color: #9bd7a2;
 }
