@@ -1528,8 +1528,15 @@
 }
 
 .dm-area-actions button {
-  min-height: 2.4rem;
+  margin: 0;
+  min-height: 2.5rem;
   cursor: pointer;
+}
+
+/* The theme gives a secondary button a margin under it: inside the editors and windows it would push it out of line. */
+.dm-pop button.secondary,
+.dm-dialog button.secondary {
+  margin: 0;
 }
 
 .dm-area-count {
@@ -1539,7 +1546,8 @@
 }
 
 .dm-pick {
-  display: inline-flex;
+  display: flex;
+  margin: 0 auto;
   align-items: center;
   justify-content: center;
   width: 2.2rem;
