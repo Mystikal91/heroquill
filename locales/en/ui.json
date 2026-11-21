@@ -2658,5 +2658,9 @@
   "dm.surprisedField": "Surprised: no turn in the first round",
   "dm.lairAdd": "Add the lair (initiative 20)",
   "dm.lairName": "Lair actions",
-  "dm.lairKind": "Acts at initiative 20"
+  "dm.lairKind": "Acts at initiative 20",
+  "dm.rollTarget": "Roll against",
+  "dm.rollNoTarget": "Nobody: only roll",
+  "dm.roll.hit": "hit",
+  "dm.roll.miss": "miss"
 }

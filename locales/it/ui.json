@@ -2658,5 +2658,9 @@
   "dm.surprisedField": "Sorpresa: nessun turno nel primo round",
   "dm.lairAdd": "Aggiungi la tana (iniziativa 20)",
   "dm.lairName": "Azioni di tana",
-  "dm.lairKind": "Agisce a iniziativa 20"
+  "dm.lairKind": "Agisce a iniziativa 20",
+  "dm.rollTarget": "Tira contro",
+  "dm.rollNoTarget": "Nessuno: solo tiro",
+  "dm.roll.hit": "colpito",
+  "dm.roll.miss": "mancato"
 }

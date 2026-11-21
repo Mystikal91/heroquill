@@ -2658,5 +2658,9 @@
   "dm.surprisedField": "Überrascht: kein Zug in der ersten Runde",
   "dm.lairAdd": "Hort hinzufügen (Initiative 20)",
   "dm.lairName": "Hortaktionen",
-  "dm.lairKind": "Handelt bei Initiative 20"
+  "dm.lairKind": "Handelt bei Initiative 20",
+  "dm.rollTarget": "Würfeln gegen",
+  "dm.rollNoTarget": "Niemand: nur würfeln",
+  "dm.roll.hit": "Treffer",
+  "dm.roll.miss": "daneben"
 }

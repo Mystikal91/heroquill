@@ -2658,5 +2658,9 @@
   "dm.surprisedField": "Sorprendida: sin turno en el primer asalto",
   "dm.lairAdd": "Añadir la guarida (iniciativa 20)",
   "dm.lairName": "Acciones de guarida",
-  "dm.lairKind": "Actúa con iniciativa 20"
+  "dm.lairKind": "Actúa con iniciativa 20",
+  "dm.rollTarget": "Tirar contra",
+  "dm.rollNoTarget": "Nadie: solo tirar",
+  "dm.roll.hit": "impacto",
+  "dm.roll.miss": "fallo"
 }

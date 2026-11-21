@@ -81,3 +81,20 @@ export const doubleDice = (dice: string): string =>
     /(\d+)d(\d+)/gi,
     (_, count: string, sides: string) => `${Number(count) * 2}d${sides}`,
   );
+
+/**
+ * Who rolls an action and where it goes: the play screen logs the rolls of the person's creatures, the
+ * Dungeon Master's table rolls against a target and takes the damage off it.
+ */
+export interface MonsterRoller {
+  /** Rolls one attack of an action; true for a critical hit. `n` of `of` numbers the attacks of a multiattack. */
+  attack(action: string, bonus: number, n?: number, of?: number): boolean;
+  /** Rolls the damage of one kind; `shown` is the button's text (`2d6 piercing`). */
+  damage(action: string, kind: string, dice: string, shown: string): void;
+}
+
+/** Whether an attack roll hits: a natural 20 always does, a natural 1 never does, the rest must reach the armor class. */
+export const attackHits = (
+  roll: { total: number; critical: boolean; fumble: boolean },
+  ac: number,
+) => roll.critical || (!roll.fumble && roll.total >= ac);

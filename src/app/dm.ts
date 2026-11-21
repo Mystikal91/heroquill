@@ -1,12 +1,15 @@
 import { effect, signal } from "@preact/signals";
+import { combatantNumbers } from "../engine/combatantNumbers";
 import {
   type AreaPick,
   type DefenseLine,
   areaDamage,
+  damageDealt,
   defensesOf,
   innateDefenses,
 } from "../engine/defenses";
 import { deriveSheet } from "../engine/derive";
+import { parseDice, rollD20, rollExpression } from "../engine/dice";
 import {
   type Combatant,
   type Encounter,
@@ -18,6 +21,7 @@ import {
   characterCombatant,
   createEncounter,
   delayTurn,
+  hurt,
   isStarted,
   lairCombatant,
   manualCombatant,
@@ -27,6 +31,7 @@ import {
   removeCombatant,
   resetFight,
 } from "../engine/encounter";
+import { type MonsterRoller, attackHits } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
@@ -40,6 +45,7 @@ import {
   setCurrentEncounterId,
 } from "../storage/encounters";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
+import { addLog } from "./play";
 import { content } from "./store";
 import { type UndoOffer, offerUndo, undoOffer } from "./undo";
 
@@ -599,4 +605,59 @@ export function delayActive(after: string) {
   resetTurnHistory();
   updateEncounter((e) => delayTurn(e, after));
   offerUndo(ui("dm.delayed", { name: active.name }), () => updateEncounter(() => before));
+}
+
+// ---- Rolling a creature's actions against another ----
+
+/** The creature the actions of the stat block are rolled against, if the Dungeon Master picked one. */
+export const rollTarget = signal<string | undefined>(undefined);
+
+const signedText = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
+
+/**
+ * The rolls of a creature's stat block: the attack is rolled against the armor class of the target and
+ * says whether it hits, the damage is rolled and taken off the target (its resistances and
+ * immunities counted), and the change can be taken back like any change of hit points.
+ */
+export function dmRoller(attacker: Combatant): MonsterRoller {
+  const target = () => {
+    const found = encounter.value?.combatants.find((c) => c.id === rollTarget.value);
+    return found && found.id !== attacker.id ? found : undefined;
+  };
+  return {
+    attack: (action, bonus, n, of) => {
+      const roll = rollD20(bonus);
+      const who = target();
+      const ac = who ? combatantNumbers(who).ac : undefined;
+      const hit = ac === undefined ? undefined : attackHits(roll, ac);
+      const numbered = of && of > 1 ? ` (${n})` : "";
+      const against = who && ac !== undefined ? ` → ${who.name} (${ui("dm.col.ac")} ${ac})` : "";
+      const verdict = hit === undefined ? "" : ` · ${ui(hit ? "dm.roll.hit" : "dm.roll.miss")}`;
+      addLog({
+        label: `${attacker.name}: ${action}${numbered}${against}`,
+        detail: `d20 ${roll.used}${signedText(bonus)}${verdict}`,
+        total: roll.total,
+        ...(roll.critical && { tone: "critical" as const }),
+        ...(roll.fumble && { tone: "fumble" as const }),
+      });
+      return roll.critical;
+    },
+    damage: (action, kind, dice, shown) => {
+      const parsed = parseDice(dice);
+      const rolled = parsed ? rollExpression(parsed) : undefined;
+      const total = rolled?.total ?? 0;
+      const who = target();
+      const dealt = who ? damageDealt(total, kind, defensesFor(who)).dealt : total;
+      if (who) changeHp(who.id, (c) => hurt(c, dealt));
+      const faces = rolled
+        ? `${rolled.rolls.map((g) => `[${g.join(", ")}]`).join(" + ")}${signedText(rolled.modifier)}`
+        : "";
+      addLog({
+        label: `${attacker.name}: ${action} (${shown})${who ? ` → ${who.name}` : ""}`,
+        detail: [faces, who && dealt !== total ? String(dealt) : ""].filter(Boolean).join(" → "),
+        total: who ? dealt : total,
+        ...(rolled && { dice: rolled }),
+      });
+    },
+  };
 }

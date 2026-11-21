@@ -2658,5 +2658,9 @@
   "dm.surprisedField": "Surprise : pas de tour au premier round",
   "dm.lairAdd": "Ajouter le repaire (initiative 20)",
   "dm.lairName": "Actions de repaire",
-  "dm.lairKind": "Agit à l'initiative 20"
+  "dm.lairKind": "Agit à l'initiative 20",
+  "dm.rollTarget": "Jeter contre",
+  "dm.rollNoTarget": "Personne : juste lancer",
+  "dm.roll.hit": "touché",
+  "dm.roll.miss": "raté"
 }

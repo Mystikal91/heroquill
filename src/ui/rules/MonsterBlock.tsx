@@ -11,6 +11,7 @@ import {
 import type { Usage } from "../../app/monsterView";
 import { content } from "../../app/store";
 import { ABILITIES } from "../../data/schema";
+import type { MonsterRoller } from "../../engine/monsterRolls";
 import {
   type Owner,
   scaledArmorClass,
@@ -21,7 +22,7 @@ import {
 } from "../../engine/scaling";
 import { signed, ui } from "../../i18n/ui";
 import { Paragraphs } from "../sheet/parts";
-import { ActionButtons, rollAttacks } from "./ActionButtons";
+import { ActionButtons, playRoller, rollAttacks } from "./ActionButtons";
 
 interface ArmorClass {
   type?: string;
@@ -75,7 +76,16 @@ const SECTIONS = [
 ] as const;
 
 /** A creature the way a stat block prints it: facts first, then what it can do. */
-export function MonsterBlock({ id, owner }: { id: string; owner?: Owner }) {
+export function MonsterBlock({
+  id,
+  owner,
+  roller,
+}: {
+  id: string;
+  owner?: Owner;
+  /** Where the rolls go; the play history when there is none. */
+  roller?: MonsterRoller;
+}) {
   // Which actions hit with a critical hit last, so that their damage is rolled doubled.
   const [crits, setCrits] = useState<Record<string, boolean>>({});
   const c = content.value;
@@ -240,6 +250,7 @@ export function MonsterBlock({ id, owner }: { id: string; owner?: Owner }) {
                     name={n ?? ""}
                     action={action}
                     owner={owner}
+                    roller={roller}
                     critical={crits[`${key}.${i}`] ?? false}
                     onAttack={(hit) => setCrits((before) => ({ ...before, [`${key}.${i}`]: hit }))}
                   />
@@ -254,7 +265,7 @@ export function MonsterBlock({ id, owner }: { id: string; owner?: Owner }) {
                             const target = part.action ? m.actions?.[part.action - 1] : undefined;
                             if (!part.action || !target) continue;
                             next[`actions.${part.action - 1}`] = rollAttacks(
-                              c.name(id),
+                              roller ?? playRoller(c.name(id)),
                               c.text(`${id}.actions.${part.action}`, "name") ?? "",
                               target,
                               owner,

@@ -1,5 +1,11 @@
 import { addLog, rollCheck, rollDiceText } from "../../app/play";
-import { type DamagePart, actionRolls, doubleDice, resolveRolls } from "../../engine/monsterRolls";
+import {
+  type DamagePart,
+  type MonsterRoller,
+  actionRolls,
+  doubleDice,
+  resolveRolls,
+} from "../../engine/monsterRolls";
 import type { Owner } from "../../engine/scaling";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 
@@ -25,9 +31,21 @@ export const damageLabel = (part: DamagePart, dice: string) =>
     ? ui(`monster.damage.${part.type}` as UiKey, { dice })
     : `${dice} ${part.type}`;
 
+/** The rolls of the play screen: into the history, with the person's own way of rolling. */
+export const playRoller = (who: string): MonsterRoller => ({
+  attack: (action, bonus, n, of) =>
+    rollCheck(of && of > 1 ? `${who}: ${action} (${n})` : `${who}: ${action}`, bonus).critical,
+  damage: (action, _kind, dice, shown) => {
+    const what = `${who}: ${action} (${shown})`;
+    // A flat number has nothing to roll: it goes to the history as it is.
+    if (/^\d+$/.test(dice)) addLog({ label: what, detail: "", total: Number(dice) });
+    else rollDiceText(what, dice);
+  },
+});
+
 /** Rolls the attack of an action as many times as asked, and says if any of them was a critical hit. */
 export function rollAttacks(
-  who: string,
+  roller: MonsterRoller,
   name: string,
   action: object,
   owner: Owner | undefined,
@@ -36,9 +54,7 @@ export function rollAttacks(
   const bonus = resolveRolls(actionRolls(action), owner)?.attackBonus;
   if (bonus === undefined) return false;
   let critical = false;
-  for (let n = 0; n < count; n++)
-    if (rollCheck(count > 1 ? `${who}: ${name} (${n + 1})` : `${who}: ${name}`, bonus).critical)
-      critical = true;
+  for (let n = 1; n <= count; n++) if (roller.attack(name, bonus, n, count)) critical = true;
   return critical;
 }
 
@@ -54,6 +70,7 @@ export function ActionButtons({
   owner,
   critical,
   onAttack,
+  roller,
 }: {
   /** Whose action it is, for the history of rolls. */
   who: string;
@@ -64,18 +81,17 @@ export function ActionButtons({
   /** The last attack of this action was a critical hit. */
   critical: boolean;
   onAttack: (critical: boolean) => void;
+  /** Where the rolls go; the play history when there is none. */
+  roller?: MonsterRoller;
 }) {
   const rolls = resolveRolls(actionRolls(action), owner);
   if (!rolls || (rolls.attackBonus === undefined && rolls.damage.length === 0)) return null;
-  const label = `${who}: ${name}`;
+  const rolling = roller ?? playRoller(who);
   const { attackBonus } = rolls;
 
   const hurt = (part: DamagePart) => {
     const dice = critical ? doubleDice(part.dice) : part.dice;
-    const what = `${label} (${damageLabel(part, dice)})`;
-    // A flat number has nothing to roll: it goes to the history as it is.
-    if (/^\d+$/.test(dice)) addLog({ label: what, detail: "", total: Number(dice) });
-    else rollDiceText(what, dice);
+    rolling.damage(name, part.type, dice, damageLabel(part, dice));
   };
 
   return (
@@ -84,7 +100,7 @@ export function ActionButtons({
         <button
           type="button"
           class="secondary"
-          onClick={() => onAttack(rollAttacks(who, name, action, owner))}
+          onClick={() => onAttack(rollAttacks(rolling, name, action, owner))}
         >
           {ui("monster.rollAttack", { bonus: signed(attackBonus) })}
         </button>
