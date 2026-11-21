@@ -1107,6 +1107,7 @@
   "rules.appliesTo": "Applies to:",
   "rules.level": "level {n}",
   "rules.levels": "levels {n}",
+  "rules.variantN": "Variant {n}",
   "rules.pick": "Pick something from the list to read it.",
   "play.features": "Features and traits",
   "play.actions": "Actions",

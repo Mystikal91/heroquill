@@ -1107,6 +1107,7 @@
   "rules.appliesTo": "Gilt für:",
   "rules.level": "Stufe {n}",
   "rules.levels": "Stufen {n}",
+  "rules.variantN": "Variante {n}",
   "rules.pick": "Wähle etwas aus der Liste, um es zu lesen.",
   "play.features": "Merkmale und Eigenschaften",
   "play.actions": "Aktionen",

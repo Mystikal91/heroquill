@@ -74,7 +74,12 @@ export function ClassStep() {
                   min={1}
                   max={MAX_LEVEL - (total - cl.level)}
                   value={cl.level}
+                  onBlur={(e) => {
+                    e.currentTarget.value = String(cl.level);
+                  }}
                   onInput={(e) => {
+                    // An emptied field stays empty while the person types the new level.
+                    if (e.currentTarget.value === "") return;
                     const others = total - cl.level;
                     const level = Math.min(
                       MAX_LEVEL - others,

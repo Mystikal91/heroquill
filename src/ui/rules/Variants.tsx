@@ -2,6 +2,8 @@ import type { SearchKind } from "../../app/search";
 import type { HitGroup, Origin } from "../../app/searchGroups";
 import { describeOrigins } from "../../app/searchGroups";
 import { content } from "../../app/store";
+import type { Content } from "../../content/browser";
+import type { Effect } from "../../data/schema";
 import { type UiKey, ui } from "../../i18n/ui";
 import { Paragraphs } from "../sheet/parts";
 import { EntryDetail } from "./EntryDetail";
@@ -14,20 +16,56 @@ const levelsText = (levels: number[]) =>
     ? ui("rules.level", { n: levels[0] ?? 0 })
     : ui("rules.levels", { n: levels.join(", ") });
 
-/** The class (and subclass) an entry belongs to and the level it comes at; with none, where it comes from. */
-function originOf(id: string): Origin {
+/** The kinds of entry that hand out traits and features: what a trait with no class of its own belongs to. */
+const GIVERS = new Set(["species", "subspecies", "background", "feat", "class", "subclass"]);
+
+const giversOfTrait = new WeakMap<object, Map<string, string[]>>();
+
+/** For each trait or feature, the ids of the entries whose effects give it (a species, a feat...). */
+function giversOf(c: Content, id: string): string[] {
+  let map = giversOfTrait.get(c.index);
+  if (!map) {
+    map = new Map();
+    const walk = (owner: string, effects: Effect[]) => {
+      for (const effect of effects) {
+        if (effect.type === "when") walk(owner, effect.effects);
+        else if (effect.type === "trait")
+          map?.set(effect.id, [...(map.get(effect.id) ?? []), owner]);
+      }
+    };
+    for (const entry of c.index.values()) if (GIVERS.has(entry.kind)) walk(entry.id, entry.effects);
+    giversOfTrait.set(c.index, map);
+  }
+  return map.get(id) ?? [];
+}
+
+/**
+ * What an entry belongs to: the class (and subclass) and the level it comes at; a trait, the species or
+ * feat that gives it; the SRD's, its edition. Content that says none of this has no owner to name.
+ */
+export function originsOf(id: string): Origin[] {
   const c = content.value;
-  const data = c?.index.get(id)?.data ?? {};
+  if (!c) return [];
+  const data = c.index.get(id)?.data ?? {};
   const owner = typeof data.class === "string" ? data.class : undefined;
   const sub = typeof data.subclass === "string" ? data.subclass : undefined;
   const level = typeof data.level === "number" ? data.level : undefined;
-  if (c && owner) {
-    const who = sub ? `${c.name(owner)} · ${c.name(sub)}` : c.name(owner);
-    return { who, level };
-  }
-  const pack = id.split(":")[0] ?? id;
-  const edition = pack === "srd51" || pack === "srd52" ? ui(`edition.${pack}.name`) : pack;
-  return { who: edition };
+  if (owner) return [{ who: sub ? `${c.name(owner)} · ${c.name(sub)}` : c.name(owner), level }];
+  const givers = giversOf(c, id);
+  if (givers.length > 0) return givers.map((giver) => ({ who: c.name(giver) }));
+  const pack = id.split(":")[0];
+  return pack === "srd51" || pack === "srd52" ? [{ who: ui(`edition.${pack}.name`) }] : [];
+}
+
+/** "Applies to: ..." for the entries of a variant, or its number when nothing says what it applies to. */
+function appliesTo(ids: string[], number: number) {
+  const lines = describeOrigins(ids.flatMap(originsOf), levelsText);
+  if (lines.length === 0) return <b>{ui("rules.variantN", { n: number })}</b>;
+  return (
+    <>
+      <b>{ui("rules.appliesTo")}</b> {lines.join("; ")}
+    </>
+  );
 }
 
 /** Everything the rules say under one name: the same text once, with all that it applies to. */
@@ -49,12 +87,9 @@ export function VariantsDetail({ group }: { group: HitGroup }) {
     return (
       <div class="rule-detail">
         {heading}
-        {group.hits.map((hit) => (
+        {group.hits.map((hit, i) => (
           <section class="rule-variant" key={hit.id}>
-            <p class="rule-applies">
-              <b>{ui("rules.appliesTo")}</b>{" "}
-              {describeOrigins([originOf(hit.id)], levelsText).join("; ")}
-            </p>
+            <p class="rule-applies">{appliesTo([hit.id], i + 1)}</p>
             <EntryDetail id={hit.id} />
           </section>
         ))}
@@ -74,13 +109,10 @@ export function VariantsDetail({ group }: { group: HitGroup }) {
     <div class="rule-detail">
       {heading}
       {/* A long list is closed, one line each; a short one is open to read. */}
-      {[...blocks.values()].map((block) => (
+      {[...blocks.values()].map((block, i) => (
         <details class="rule-variant" key={block.ids[0]} open={blocks.size <= 3}>
           <summary class="rule-applies">
-            <span>
-              <b>{ui("rules.appliesTo")}</b>{" "}
-              {describeOrigins(block.ids.map(originOf), levelsText).join("; ")}
-            </span>
+            <span>{appliesTo(block.ids, i + 1)}</span>
           </summary>
           <Paragraphs text={block.text} />
         </details>
