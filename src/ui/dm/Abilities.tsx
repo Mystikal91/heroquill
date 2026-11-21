@@ -99,7 +99,6 @@ export function AbilitiesEditor({ c }: { c: Combatant }) {
               </button>
             </span>
           </div>
-          <p class="muted dm-ab-hint">{ui("dm.legendaryHint")}</p>
         </section>
       )}
       {defs.length > 0 && (

@@ -165,3 +165,10 @@ export const PawIcon = () => (
     <path d="M7 4c1.500 4 1.500 9 0 16M12 3.500c1.500 4.500 1.500 12 0 17M17 4c1.500 4 1.500 9 0 16" />
   </Icon>
 );
+
+/** A triangle and a bar to the right: the next turn. */
+export const StepForwardIcon = () => (
+  <Icon>
+    <path d="M18 5v14M6 6v12l9-6z" />
+  </Icon>
+);

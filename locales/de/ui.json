@@ -2638,7 +2638,6 @@
   "dm.abilitiesOf": "Fähigkeiten von {name}",
   "dm.noAbilities": "Keine begrenzte Fähigkeit.",
   "dm.legendary": "Legendäre Aktionen",
-  "dm.legendaryHint": "Gefüllte Kreise sind übrig, leere sind ausgegeben. Sie kommen zu Beginn seines Zuges zurück.",
   "dm.legendaryFewer": "Eine legendäre Aktion weniger",
   "dm.legendaryMore": "Eine legendäre Aktion mehr",
   "dm.perDay": "{n} pro Tag",

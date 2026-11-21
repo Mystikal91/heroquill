@@ -2638,7 +2638,6 @@
   "dm.abilitiesOf": "Abilities of {name}",
   "dm.noAbilities": "No ability with a limit.",
   "dm.legendary": "Legendary actions",
-  "dm.legendaryHint": "Filled circles are left, empty ones are spent. They come back when its turn begins.",
   "dm.legendaryFewer": "One fewer legendary action",
   "dm.legendaryMore": "One more legendary action",
   "dm.perDay": "{n} a day",

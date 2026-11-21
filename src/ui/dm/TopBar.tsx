@@ -32,7 +32,7 @@ import {
 } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
-import { PlusIcon, StepBackIcon, SwordsIcon } from "../icons";
+import { PlusIcon, StepBackIcon, StepForwardIcon, SwordsIcon } from "../icons";
 import { abilitiesOf } from "./Abilities";
 import { CellPopover } from "./CellPopover";
 import { ColumnsEditor } from "./ColumnsEditor";
@@ -237,12 +237,14 @@ export function TopBar({ e }: { e: Encounter }) {
                 </button>
                 <button
                   type="button"
-                  class="primary dm-next"
+                  class="primary dm-next dm-advance"
                   aria-keyshortcuts="N"
+                  aria-label={ui("dm.next")}
                   title={`${ui("dm.next")} (N)`}
                   onClick={advanceTurn}
                 >
-                  {ui("dm.next")}
+                  <StepForwardIcon />
+                  <span class="dm-advance-label">{ui("dm.next")}</span>
                 </button>
               </>
             ) : (

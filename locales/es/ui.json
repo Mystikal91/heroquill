@@ -2638,7 +2638,6 @@
   "dm.abilitiesOf": "Habilidades de {name}",
   "dm.noAbilities": "Ninguna habilidad con límite.",
   "dm.legendary": "Acciones legendarias",
-  "dm.legendaryHint": "Los círculos llenos quedan, los vacíos están gastados. Vuelven al empezar su turno.",
   "dm.legendaryFewer": "Una acción legendaria menos",
   "dm.legendaryMore": "Una acción legendaria más",
   "dm.perDay": "{n} al día",

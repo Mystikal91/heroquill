@@ -2638,7 +2638,6 @@
   "dm.abilitiesOf": "Capacités de {name}",
   "dm.noAbilities": "Aucune capacité limitée.",
   "dm.legendary": "Actions légendaires",
-  "dm.legendaryHint": "Les cercles pleins restent, les vides sont dépensés. Elles reviennent au début de son tour.",
   "dm.legendaryFewer": "Une action légendaire de moins",
   "dm.legendaryMore": "Une action légendaire de plus",
   "dm.perDay": "{n} par jour",

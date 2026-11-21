@@ -2638,7 +2638,6 @@
   "dm.abilitiesOf": "Abilità di {name}",
   "dm.noAbilities": "Nessuna abilità con un limite.",
   "dm.legendary": "Azioni leggendarie",
-  "dm.legendaryHint": "I cerchi pieni sono quelli che restano, i vuoti sono spesi. Tornano all'inizio del suo turno.",
   "dm.legendaryFewer": "Un'azione leggendaria in meno",
   "dm.legendaryMore": "Un'azione leggendaria in più",
   "dm.perDay": "{n} al giorno",

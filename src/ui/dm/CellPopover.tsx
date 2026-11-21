@@ -55,13 +55,11 @@ export function CellPopover({
         box.style.top = `${at.bottom + 6}px`;
         box.style.maxHeight = `${room}px`;
       }
-      if (align === "end") {
-        box.style.right = `${Math.max(8, window.innerWidth - at.right)}px`;
-        box.style.left = "auto";
-      } else {
-        box.style.left = `${Math.max(8, Math.min(at.left, window.innerWidth - box.offsetWidth - 8))}px`;
-        box.style.right = "auto";
-      }
+      // Lined up with the chosen edge of the button, and kept inside the screen.
+      const width = box.offsetWidth;
+      const wanted = align === "end" ? at.right - width : at.left;
+      box.style.left = `${Math.max(8, Math.min(wanted, window.innerWidth - width - 8))}px`;
+      box.style.right = "auto";
     };
     const toggled = (e: Event) => {
       if ((e as ToggleEvent).newState === "open") {
