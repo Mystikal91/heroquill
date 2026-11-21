@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { dmRuleset, editCombatant } from "../../app/dm";
+import { dmRuleset, editCombatant, effectFor, updateEncounter } from "../../app/dm";
 import { content } from "../../app/store";
 import {
   type Combatant,
@@ -8,7 +8,10 @@ import {
   giveTempHp,
   heal,
   hurt,
+  removeEffect,
   setConditionRounds,
+  setEffectRounds,
+  setInitiative,
   toggleCondition,
 } from "../../engine/encounter";
 import { inRuleset } from "../../engine/rulesets";
@@ -113,43 +116,178 @@ export function HpEditor({ c, close }: { c: Combatant; close: () => void }) {
   );
 }
 
-/** Conditions: every one of the rules as a chip to turn on, and the rounds of those in force. */
-export function ConditionsEditor({ c }: { c: Combatant }) {
-  const list = conditionOptions(dmRuleset.value);
+/** A small field for the rounds left of something in force; empty is no limit. */
+function RoundsField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number | undefined;
+  onChange: (n: number | undefined) => void;
+}) {
   return (
-    <div class="dm-cond-editor">
-      <div class="dm-cond-chips">
-        {list.map((x) => (
-          <button
-            type="button"
-            key={x.id}
-            class="dm-cond-chip"
-            aria-pressed={c.conditions.includes(x.id)}
-            onClick={() => editCombatant(c.id, (y) => toggleCondition(y, x.id))}
-          >
-            {x.name}
-          </button>
-        ))}
-      </div>
-      {c.conditions.length > 0 && (
-        <ul class="plain dm-cond-rounds">
-          {c.conditions.map((id) => (
-            <li key={id}>
-              <span>{conditionName(id)}</span>
-              <span class="dm-rounds-field">
-                <NumberField
+    <span class="dm-rounds-field">
+      <NumberField
+        label={label}
+        placeholder="—"
+        min={0}
+        max={MAX_ROUNDS}
+        value={value}
+        onChange={onChange}
+      />
+      <small>{ui("dm.rounds")}</small>
+    </span>
+  );
+}
+
+/**
+ * What is in force on a creature, as the Active effects panel of the play screen has it: the conditions
+ * and the effects with their rounds, the conditions of the rules to turn on, and the window that adds a
+ * spell or an effect (a concentration, a note). `close` shuts the editor that holds this one, if any.
+ */
+export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }) {
+  const list = conditionOptions(dmRuleset.value);
+  const inForce = c.conditions.length + c.effects.length;
+  return (
+    <div class="dm-fx">
+      <section>
+        <h5 class="dm-fx-title">{ui("dm.inForce")}</h5>
+        {inForce === 0 ? (
+          <p class="muted dm-fx-none">{ui("dm.noEffects")}</p>
+        ) : (
+          <ul class="plain dm-fx-list">
+            {c.conditions.map((id) => (
+              <li key={id} class="dm-fx-item" data-condition={id.split("/")[1]}>
+                <span class="dm-fx-name">{conditionName(id)}</span>
+                <RoundsField
                   label={`${ui("play.conditionRounds")}: ${conditionName(id)}`}
-                  placeholder="—"
-                  min={0}
-                  max={MAX_ROUNDS}
                   value={c.rounds[id]}
                   onChange={(n) => editCombatant(c.id, (y) => setConditionRounds(y, id, n))}
                 />
-                <small>{ui("play.conditionRounds")}</small>
-              </span>
-            </li>
+                <button
+                  type="button"
+                  class="dm-fx-x"
+                  aria-label={ui("dm.endEffect", { name: conditionName(id) })}
+                  onClick={() => editCombatant(c.id, (y) => toggleCondition(y, id))}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+            {c.effects.map((x) => (
+              <li key={x.id} class="dm-fx-item" data-focus={x.concentration || undefined}>
+                <span class="dm-fx-name">
+                  {x.name}
+                  {x.concentration && <span class="dm-tag">{ui("dm.effect.concentration")}</span>}
+                  {x.note && <small>{x.note}</small>}
+                </span>
+                <RoundsField
+                  label={`${ui("play.conditionRounds")}: ${x.name}`}
+                  value={x.rounds}
+                  onChange={(n) => editCombatant(c.id, (y) => setEffectRounds(y, x.id, n))}
+                />
+                <button
+                  type="button"
+                  class="dm-fx-x"
+                  aria-label={ui("dm.endEffect", { name: x.name })}
+                  onClick={() => editCombatant(c.id, (y) => removeEffect(y, x.id))}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <section>
+        <h5 class="dm-fx-title">{ui("play.conditions")}</h5>
+        <div class="dm-cond-chips">
+          {list.map((x) => (
+            <button
+              type="button"
+              key={x.id}
+              class="dm-cond-chip"
+              data-condition={x.id.split("/")[1]}
+              aria-pressed={c.conditions.includes(x.id)}
+              onClick={() => editCombatant(c.id, (y) => toggleCondition(y, x.id))}
+            >
+              {x.name}
+            </button>
           ))}
-        </ul>
+        </div>
+      </section>
+      <button
+        type="button"
+        class="dm-add-effect"
+        onClick={() => {
+          effectFor.value = c.id;
+          close?.();
+        }}
+      >
+        {ui("dm.addEffect")}
+      </button>
+    </div>
+  );
+}
+
+/** Initiative: the number to type (Enter sets it) and the die to roll it; a value already set can be cleared. */
+export function InitEditor({
+  c,
+  bonus,
+  close,
+  roll,
+}: {
+  c: Combatant;
+  bonus: string;
+  close: () => void;
+  roll: () => number;
+}) {
+  const [text, setText] = useState(c.initiative === undefined ? "" : String(c.initiative));
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    input.current?.focus();
+    input.current?.select();
+  }, []);
+  const apply = (value: number | undefined) => {
+    updateEncounter((e) => setInitiative(e, c.id, value));
+    close();
+  };
+  const typed = Number.parseInt(text, 10);
+  return (
+    <div class="dm-init-editor">
+      <div class="dm-init-row">
+        <input
+          ref={input}
+          type="number"
+          class="dm-amount"
+          inputMode="numeric"
+          min={-99}
+          max={999}
+          aria-label={ui("dm.initiative")}
+          placeholder={ui("dm.initiative")}
+          value={text}
+          onInput={(e) => setText(e.currentTarget.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && Number.isFinite(typed)) apply(typed);
+          }}
+        />
+        <button
+          type="button"
+          class="primary"
+          disabled={!Number.isFinite(typed)}
+          onClick={() => apply(typed)}
+        >
+          {ui("dm.initSet")}
+        </button>
+      </div>
+      <button type="button" onClick={() => apply(roll())}>
+        {ui("dm.initRoll", { bonus })}
+      </button>
+      {c.initiative !== undefined && (
+        <button type="button" class="secondary" onClick={() => apply(undefined)}>
+          {ui("dm.initClear")}
+        </button>
       )}
     </div>
   );

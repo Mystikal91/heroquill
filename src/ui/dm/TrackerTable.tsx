@@ -1,21 +1,20 @@
-import { encounter, infoFor, liveIds, updateEncounter } from "../../app/dm";
+import { encounter, infoFor, liveIds } from "../../app/dm";
 import { type DmColumn, dmColumns, gridTemplate, visibleColumns } from "../../app/dmColumns";
 import { typeText } from "../../app/monsterView";
 import { content } from "../../app/store";
 import {
   type Combatant,
   type Encounter,
+  effectCount,
   initiativeOrder,
   isDown,
   rollInitiative,
-  setInitiative,
 } from "../../engine/encounter";
 import { type UiKey, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
-import { InfoIcon } from "../icons";
+import { DieIcon, InfoIcon, PawIcon, ShieldIcon } from "../icons";
 import { CellPopover } from "./CellPopover";
-import { ConditionsEditor, HpEditor } from "./Editors";
-import { NumberField } from "./NumberField";
+import { EffectsEditor, HpEditor, InitEditor } from "./Editors";
 
 /** The second line under a name: what the creature is. */
 function kindLine(c: Combatant): string {
@@ -27,8 +26,16 @@ function kindLine(c: Combatant): string {
   return "";
 }
 
-function ConditionsCell({ c }: { c: Combatant }) {
-  const n = c.conditions.length;
+/** The slugs of the conditions in force, separated by spaces: what the row's colours key on. */
+function conditionSlugs(c: Combatant): string {
+  return c.conditions
+    .map((id) => id.split("/")[1])
+    .filter(Boolean)
+    .join(" ");
+}
+
+function EffectsCell({ c }: { c: Combatant }) {
+  const n = effectCount(c);
   return (
     <CellPopover
       title={ui("dm.editConditions", { name: c.name })}
@@ -39,10 +46,10 @@ function ConditionsCell({ c }: { c: Combatant }) {
         </span>
       }
     >
-      {() => (
+      {(close) => (
         <>
-          <h4 class="dm-pop-title">{ui("play.conditions")}</h4>
-          <ConditionsEditor c={c} />
+          <h4 class="dm-pop-title">{ui("play.activeEffects")}</h4>
+          <EffectsEditor c={c} close={close} />
         </>
       )}
     </CellPopover>
@@ -74,31 +81,24 @@ function HpCell({ c }: { c: Combatant }) {
   );
 }
 
+/** Initiative: a circle with the number, or a dashed circle with a die while it is not known. It opens the editor. */
 function InitCell({ c }: { c: Combatant }) {
   const bonus = c.initiativeBonus >= 0 ? `+${c.initiativeBonus}` : String(c.initiativeBonus);
   return (
-    <div class="dm-init">
-      <NumberField
-        class="dm-init-input"
-        label={ui("dm.initiative")}
-        placeholder="—"
-        min={-99}
-        max={999}
-        value={c.initiative}
-        onChange={(n) => updateEncounter((e) => setInitiative(e, c.id, n))}
-      />
-      {c.initiative === undefined && (
-        <button
-          type="button"
-          class="dm-roll"
-          title={ui("dm.rollOne", { bonus })}
-          aria-label={ui("dm.rollOne", { bonus })}
-          onClick={() => updateEncounter((e) => setInitiative(e, c.id, rollInitiative(c).total))}
-        >
-          d20
-        </button>
+    <CellPopover
+      title={ui("dm.initEdit", { name: c.name })}
+      class="dm-init-button"
+      align="start"
+      trigger={
+        <span class="dm-init-circle" data-empty={c.initiative === undefined || undefined}>
+          {c.initiative === undefined ? <DieIcon /> : c.initiative}
+        </span>
+      }
+    >
+      {(close) => (
+        <InitEditor c={c} bonus={bonus} close={close} roll={() => rollInitiative(c).total} />
       )}
-    </div>
+    </CellPopover>
   );
 }
 
@@ -106,12 +106,10 @@ function Cell({
   col,
   c,
   columns,
-  hasCharacters,
 }: {
   col: DmColumn;
   c: Combatant;
   columns: readonly DmColumn[];
-  hasCharacters: boolean;
 }) {
   switch (col) {
     case "init":
@@ -124,6 +122,7 @@ function Cell({
       const sub = [kindLine(c), isDown(c) ? ui("dm.down") : ""].filter(Boolean).join(" · ");
       const live = liveIds.value.has(c.id);
       const label = live ? ui("dm.live") : ui("dm.manual");
+      const player = c.kind === "character";
       return (
         <td data-col="name" class="dm-name">
           {/* The whole name opens the details of the creature. */}
@@ -136,8 +135,20 @@ function Cell({
               infoFor.value = c.id;
             }}
           >
+            <span
+              class="dm-token"
+              data-kind={player ? "player" : "creature"}
+              title={player ? ui("dm.kind.character") : ui("dm.kind.creature")}
+              aria-hidden="true"
+            >
+              {player ? <ShieldIcon /> : <PawIcon />}
+            </span>
             <span class="dm-name-line">
-              {c.kind === "character" ? (
+              <span class="dm-name-text">{c.name}</span>
+              <span class="dm-name-info" aria-hidden="true">
+                <InfoIcon />
+              </span>
+              {player && (
                 <span
                   class="dm-dot"
                   data-live={live || undefined}
@@ -145,17 +156,11 @@ function Cell({
                   aria-label={label}
                   title={label}
                 />
-              ) : (
-                hasCharacters && <span class="dm-dot-space" aria-hidden="true" />
               )}
-              <span class="dm-name-text">{c.name}</span>
-              <span class="dm-name-info" aria-hidden="true">
-                <InfoIcon />
-              </span>
             </span>
             <span class="dm-sub">{sub}</span>
           </button>
-          {/* On a narrow table armor class, speed and conditions come here instead of columns of their own. */}
+          {/* On a narrow table armor class, speed and effects come here instead of columns of their own. */}
           <span class="dm-extra">
             {columns.includes("ac") && (
               <span>
@@ -163,7 +168,7 @@ function Cell({
               </span>
             )}
             {columns.includes("speed") && c.speed !== undefined && <span>{distance(c.speed)}</span>}
-            {columns.includes("cond") && <ConditionsCell c={c} />}
+            {columns.includes("cond") && <EffectsCell c={c} />}
           </span>
         </td>
       );
@@ -189,7 +194,7 @@ function Cell({
     case "cond":
       return (
         <td data-col="cond">
-          <ConditionsCell c={c} />
+          <EffectsCell c={c} />
         </td>
       );
   }
@@ -200,8 +205,6 @@ export function TrackerTable({ e }: { e: Encounter }) {
   const columns = visibleColumns(dmColumns.value);
   const style = `--cols:${gridTemplate(columns)};--cols-narrow:${gridTemplate(columns, true)}`;
   const turn = encounter.value?.turn;
-  // With a character in the fight every name leaves room for the live dot, so the names line up.
-  const hasCharacters = e.combatants.some((c) => c.kind === "character");
   return (
     <div class="dm-table-wrap">
       <table class="dm-table" style={style}>
@@ -221,10 +224,12 @@ export function TrackerTable({ e }: { e: Encounter }) {
               data-active={c.id === turn || undefined}
               data-down={isDown(c) || undefined}
               data-kind={c.kind}
+              data-conditions={conditionSlugs(c) || undefined}
+              data-focus={c.effects.some((x) => x.concentration) || undefined}
               aria-current={c.id === turn ? "step" : undefined}
             >
               {columns.map((col) => (
-                <Cell key={col} col={col} c={c} columns={columns} hasCharacters={hasCharacters} />
+                <Cell key={col} col={col} c={c} columns={columns} />
               ))}
             </tr>
           ))}

@@ -5,8 +5,10 @@ import {
   type Encounter,
   activeCombatant,
   addCombatants,
+  addEffect,
   characterCombatant,
   createEncounter,
+  effectCount,
   endCombat,
   giveTempHp,
   heal,
@@ -18,8 +20,10 @@ import {
   nextTurn,
   readEncounter,
   removeCombatant,
+  removeEffect,
   rollAllInitiative,
   setConditionRounds,
+  setEffectRounds,
   setInitiative,
   setMaxHp,
   startCombat,
@@ -273,5 +277,71 @@ describe("reading what was saved", () => {
   it("round-trips an encounter", () => {
     const e = startCombat(fight(make("a", 12), make("b", 3)));
     expect(readEncounter(JSON.parse(JSON.stringify(e)))).toEqual(e);
+  });
+});
+
+describe("effects", () => {
+  it("counts conditions and effects together", () => {
+    const c = addEffect(toggleCondition(make("a"), "x:condition/poisoned"), { name: "Bless" });
+    expect(effectCount(c)).toBe(2);
+  });
+
+  it("holds one concentration at a time: a new one ends the old", () => {
+    const one = addEffect(make("a"), { name: "Hold Person", concentration: true, rounds: 10 });
+    const two = addEffect(one, { name: "Bless" });
+    const three = addEffect(two, { name: "Haste", concentration: true });
+    expect(three.effects.map((x) => x.name)).toEqual(["Bless", "Haste"]);
+  });
+
+  it("ignores an effect with no name and limits their number", () => {
+    expect(addEffect(make("a"), { name: "   " }).effects).toHaveLength(0);
+    let c = make("a");
+    for (let i = 0; i < 30; i++) c = addEffect(c, { name: `e${i}` });
+    expect(c.effects).toHaveLength(20);
+  });
+
+  it("sets and clears the rounds of an effect", () => {
+    const c = addEffect(make("a"), { name: "Bless", rounds: 5 });
+    const id = c.effects[0]?.id ?? "";
+    expect(setEffectRounds(c, id, 3).effects[0]?.rounds).toBe(3);
+    expect(setEffectRounds(c, id, undefined).effects[0]?.rounds).toBeUndefined();
+    expect(removeEffect(c, id).effects).toHaveLength(0);
+  });
+
+  it("counts the rounds of an effect down at the end of its owner's turn", () => {
+    const owner = addEffect(addEffect(make("a", 20), { name: "Bless", rounds: 2 }), {
+      name: "Mark",
+    });
+    let e = startCombat(fight(owner, make("b", 10)));
+    let report = nextTurn(e);
+    expect(report.encounter.combatants[0]?.effects.map((x) => x.rounds)).toEqual([1, undefined]);
+    e = nextTurn(report.encounter).encounter; // b ends: back to a
+    report = nextTurn(e); // a ends: Bless runs out
+    expect(report.ended.effects).toEqual(["Bless"]);
+    expect(report.encounter.combatants[0]?.effects.map((x) => x.name)).toEqual(["Mark"]);
+  });
+
+  it("reads effects from storage and repairs them", () => {
+    const read = readEncounter({
+      id: "e1",
+      combatants: [
+        {
+          id: "a",
+          name: "A",
+          effects: [
+            { name: "Bless", rounds: 4, concentration: true },
+            { name: "" },
+            5,
+            { name: "Mark", rounds: -2 },
+          ],
+        },
+        { id: "b", name: "B" },
+      ],
+    });
+    expect(read?.combatants[0]?.effects.map((x) => [x.name, x.rounds, x.concentration])).toEqual([
+      ["Bless", 4, true],
+      ["Mark", undefined, undefined],
+    ]);
+    expect(read?.combatants[1]?.effects).toEqual([]);
   });
 });

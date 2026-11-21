@@ -3,8 +3,10 @@ import { deriveSheet } from "../engine/derive";
 import {
   type Combatant,
   type Encounter,
+  type TrackedEffect,
   type TurnReport,
   addCombatants,
+  addEffect,
   changeCombatant,
   characterCombatant,
   createEncounter,
@@ -36,6 +38,8 @@ export const encounter = signal<Encounter | undefined>(undefined);
 export const dmReady = signal(false);
 /** The combatant whose details are open. */
 export const infoFor = signal<string | undefined>(undefined);
+/** The creature the window that adds a spell or an effect is open for. */
+export const effectFor = signal<string | undefined>(undefined);
 /** The window that adds creatures is open. */
 export const adding = signal(false);
 /** What the window added since it was opened, to show a running line ("3 Goblin"). */
@@ -160,7 +164,15 @@ export async function duplicateEncounter() {
     round: 0,
     combatants: current.combatants.map((c) => {
       const { initiative: _gone, ...rest } = c;
-      return { ...rest, id: uuid(), hp: c.maxHp, tempHp: 0, conditions: [], rounds: {} };
+      return {
+        ...rest,
+        id: uuid(),
+        hp: c.maxHp,
+        tempHp: 0,
+        conditions: [],
+        rounds: {},
+        effects: [],
+      };
     }),
     created: now,
     updated: now,
@@ -220,6 +232,10 @@ export function addMonsters(entryId: string, count: number, rollHp: boolean) {
   });
   logAdded(c.name(entryId), Math.max(1, Math.min(count, 30)));
 }
+
+/** Puts an effect (a spell, a note, a concentration) on a creature. */
+export const giveEffect = (id: string, effect: Omit<TrackedEffect, "id">) =>
+  editCombatant(id, (c) => addEffect(c, effect));
 
 /** Opens the window that adds creatures, with a fresh running line. */
 export function openAdd() {
@@ -303,8 +319,15 @@ function putBack(gone: Combatant, index: number) {
 interface TurnStep {
   turn: string | undefined;
   round: number;
-  /** The creature whose turn ended, as it was: its conditions and their rounds come back too. */
-  who: { id: string; conditions: string[]; rounds: Record<string, number> } | undefined;
+  /** The creature whose turn ended, as it was: its conditions, effects and their rounds come back too. */
+  who:
+    | {
+        id: string;
+        conditions: string[];
+        rounds: Record<string, number>;
+        effects: TrackedEffect[];
+      }
+    | undefined;
 }
 
 const turnHistory: TurnStep[] = [];
@@ -320,11 +343,17 @@ export function advanceTurn() {
   turnHistory.push({
     turn: before.turn,
     round: before.round,
-    who: who && { id: who.id, conditions: [...who.conditions], rounds: { ...who.rounds } },
+    who: who && {
+      id: who.id,
+      conditions: [...who.conditions],
+      rounds: { ...who.rounds },
+      effects: who.effects.map((x) => ({ ...x })),
+    },
   });
   if (turnHistory.length > MAX_HISTORY) turnHistory.shift();
   const report = nextTurn(before);
-  lastTurn.value = report.ended.conditions.length > 0 ? report.ended : undefined;
+  lastTurn.value =
+    report.ended.conditions.length + report.ended.effects.length > 0 ? report.ended : undefined;
   show(report.encounter);
   scheduleSave();
 }
@@ -342,7 +371,12 @@ export function previousTurn() {
     round: step.round,
     combatants: e.combatants.map((c) =>
       step.who && c.id === step.who.id
-        ? { ...c, conditions: step.who.conditions, rounds: step.who.rounds }
+        ? {
+            ...c,
+            conditions: step.who.conditions,
+            rounds: step.who.rounds,
+            effects: step.who.effects,
+          }
         : c,
     ),
   }));

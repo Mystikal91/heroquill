@@ -107,8 +107,8 @@ export function TopBar({ e }: { e: Encounter }) {
   const waiting = e.combatants.filter((c) => c.initiative === undefined).length;
   const ended = lastTurn.value;
   const endedName = ended ? e.combatants.find((c) => c.id === ended.combatant)?.name : undefined;
-  const conditionNames = ended
-    ? ended.conditions.map((id) => content.value?.name(id) ?? id).join(", ")
+  const endedNames = ended
+    ? [...ended.conditions.map((id) => content.value?.name(id) ?? id), ...ended.effects].join(", ")
     : "";
   return (
     <>
@@ -197,7 +197,7 @@ export function TopBar({ e }: { e: Encounter }) {
         </div>
         {ended && endedName && (
           <output class="dm-ended">
-            {ui("dm.endedOn", { name: endedName, list: conditionNames })}
+            {ui("dm.endedOn", { name: endedName, list: endedNames })}
           </output>
         )}
       </div>

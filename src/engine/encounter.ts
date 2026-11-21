@@ -9,6 +9,21 @@ import { uuid } from "./uuid";
 
 export type CombatantKind = "monster" | "character" | "manual";
 
+/** A spell or an effect in force on a creature: not one of the conditions of the rules. */
+export interface TrackedEffect {
+  id: string;
+  name: string;
+  note?: string;
+  /** The spell it was picked from, if it was. */
+  spell?: string;
+  /** Rounds left; none means it has no limit. */
+  rounds?: number;
+  /** The creature is concentrating on it: it holds only one such effect at a time. */
+  concentration?: boolean;
+}
+
+export const MAX_EFFECTS = 20;
+
 export interface Combatant {
   id: string;
   kind: CombatantKind;
@@ -29,6 +44,8 @@ export interface Combatant {
   conditions: string[];
   /** Rounds left of a condition that has a limit, by its id. */
   rounds: Record<string, number>;
+  /** What else is in force on it: a spell, an effect written by hand, a concentration. */
+  effects: TrackedEffect[];
   notes: string;
 }
 
@@ -136,6 +153,7 @@ export function monsterCombatant(
     initiativeBonus: abilityModifier(whole(data.abilities?.dex, 10)),
     conditions: [],
     rounds: {},
+    effects: [],
     notes: "",
   };
 }
@@ -161,6 +179,7 @@ export function manualCombatant(fields: {
     initiativeBonus: clamp(whole(fields.initiativeBonus, 0), -20, 30),
     conditions: [],
     rounds: {},
+    effects: [],
     notes: "",
   };
 }
@@ -190,6 +209,7 @@ export function characterCombatant(fields: {
     initiativeBonus: clamp(whole(fields.initiativeBonus, 0), -20, 30),
     conditions: [],
     rounds: {},
+    effects: [],
     notes: "",
   };
 }
@@ -313,11 +333,11 @@ export function endCombat(encounter: Encounter): Encounter {
   return touch({ ...rest, round: 0 });
 }
 
-/** What passed when a turn ended: conditions whose rounds ran out. */
+/** What passed when a turn ended: conditions and effects whose rounds ran out. */
 export interface TurnReport {
   encounter: Encounter;
-  /** The combatant whose turn ended, and the ids of the conditions that ended with it. */
-  ended: { combatant: string; conditions: string[] };
+  /** The combatant whose turn ended, the ids of the conditions and the names of the effects that ended with it. */
+  ended: { combatant: string; conditions: string[]; effects: string[] };
 }
 
 /**
@@ -329,9 +349,10 @@ export interface TurnReport {
 export function nextTurn(encounter: Encounter): TurnReport {
   const current = activeCombatant(encounter);
   if (!isStarted(encounter) || !current) {
-    return { encounter, ended: { combatant: "", conditions: [] } };
+    return { encounter, ended: { combatant: "", conditions: [], effects: [] } };
   }
   const ended: string[] = [];
+  const endedEffects: string[] = [];
   const ticked = encounter.combatants.map((c) => {
     if (c.id !== current.id) return c;
     const rounds: Record<string, number> = {};
@@ -340,7 +361,13 @@ export function nextTurn(encounter: Encounter): TurnReport {
       if (left - 1 >= 1) rounds[condition] = left - 1;
       else ended.push(condition);
     }
-    return { ...c, conditions: c.conditions.filter((x) => !ended.includes(x)), rounds };
+    const effects = c.effects.flatMap((effect) => {
+      if (effect.rounds === undefined) return [effect];
+      if (effect.rounds - 1 >= 1) return [{ ...effect, rounds: effect.rounds - 1 }];
+      endedEffects.push(effect.name);
+      return [];
+    });
+    return { ...c, conditions: c.conditions.filter((x) => !ended.includes(x)), rounds, effects };
   });
   const base = { ...encounter, combatants: ticked };
   const order = initiativeOrder(ticked);
@@ -355,7 +382,7 @@ export function nextTurn(encounter: Encounter): TurnReport {
       turn: next?.id ?? encounter.turn,
       round: wrapped ? Math.min(MAX_ROUNDS, encounter.round + 1) : encounter.round,
     }),
-    ended: { combatant: current.id, conditions: ended },
+    ended: { combatant: current.id, conditions: ended, effects: endedEffects },
   };
 }
 
@@ -411,6 +438,62 @@ export function setConditionRounds(
   return { ...c, rounds: n >= 1 ? { ...rest, [id]: n } : rest };
 }
 
+// ---- Effects ----
+
+/** How many conditions and effects are in force: the number the table shows. */
+export const effectCount = (c: Combatant): number => c.conditions.length + c.effects.length;
+
+/**
+ * Puts an effect on a creature. A creature concentrates on one thing at a time: a new concentration
+ * ends the old one. The rounds are kept between 1 and the most there is; none is no limit.
+ */
+export function addEffect(c: Combatant, effect: Omit<TrackedEffect, "id">): Combatant {
+  if (c.effects.length >= MAX_EFFECTS) return c;
+  const name = effect.name.trim().slice(0, 80);
+  if (!name) return c;
+  const rounds =
+    effect.rounds !== undefined && effect.rounds >= 1
+      ? Math.min(MAX_ROUNDS, Math.trunc(effect.rounds))
+      : undefined;
+  const note = effect.note?.trim().slice(0, 200);
+  const added: TrackedEffect = {
+    id: uuid(),
+    name,
+    ...(note && { note }),
+    ...(effect.spell && { spell: effect.spell }),
+    ...(rounds !== undefined && { rounds }),
+    ...(effect.concentration && { concentration: true }),
+  };
+  const kept = added.concentration ? c.effects.filter((x) => !x.concentration) : c.effects;
+  return { ...c, effects: [...kept, added] };
+}
+
+export const removeEffect = (c: Combatant, id: string): Combatant => ({
+  ...c,
+  effects: c.effects.filter((x) => x.id !== id),
+});
+
+/** Sets the rounds left of an effect; 0 or nothing takes the limit off. */
+export function setEffectRounds(c: Combatant, id: string, rounds: number | undefined): Combatant {
+  const n = clamp(whole(rounds), 0, MAX_ROUNDS);
+  return {
+    ...c,
+    effects: c.effects.map((x) => {
+      if (x.id !== id) return x;
+      const { rounds: _old, ...rest } = x;
+      return n >= 1 ? { ...rest, rounds: n } : rest;
+    }),
+  };
+}
+
+/** What is in force again after a combatant is reset for a new fight: nothing. */
+export const withoutEffects = (c: Combatant): Combatant => ({
+  ...c,
+  conditions: [],
+  rounds: {},
+  effects: [],
+});
+
 // ---- Reading what was saved ----
 
 const text = (value: unknown, fallback = "", max = 200): string =>
@@ -430,6 +513,27 @@ function readCombatant(raw: unknown): Combatant | undefined {
       const left = clamp(whole(n), 0, MAX_ROUNDS);
       if (left >= 1 && conditions.includes(id)) rounds[id] = left;
     }
+  const effects = (Array.isArray(r.effects) ? r.effects : [])
+    .slice(0, MAX_EFFECTS)
+    .flatMap((e): TrackedEffect[] => {
+      if (!e || typeof e !== "object") return [];
+      const x = e as Record<string, unknown>;
+      const name = text(x.name, "", 80).trim();
+      if (!name) return [];
+      const left = clamp(whole(x.rounds), 0, MAX_ROUNDS);
+      const note = text(x.note, "", 200).trim();
+      const spell = typeof x.spell === "string" ? x.spell : undefined;
+      return [
+        {
+          id: text(x.id) || uuid(),
+          name,
+          ...(note && { note }),
+          ...(spell && { spell }),
+          ...(left >= 1 && { rounds: left }),
+          ...(x.concentration === true && { concentration: true }),
+        },
+      ];
+    });
   const source = typeof r.source === "string" ? r.source : undefined;
   return {
     id: text(r.id) || uuid(),
@@ -447,6 +551,7 @@ function readCombatant(raw: unknown): Combatant | undefined {
     initiativeBonus: clamp(whole(r.initiativeBonus), -20, 30),
     conditions,
     rounds,
+    effects,
     notes: text(r.notes, "", 2000),
   };
 }

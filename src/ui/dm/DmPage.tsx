@@ -5,6 +5,7 @@ import { monstersWanted } from "../../app/rulesView";
 import { isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { AddDialog } from "./AddDialog";
+import { AddEffectDialog } from "./AddEffectDialog";
 import { InfoDialog } from "./InfoDialog";
 import { TopBar } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
@@ -78,6 +79,7 @@ export function DmPage() {
       )}
       <InfoDialog />
       <AddDialog />
+      <AddEffectDialog />
     </article>
   );
 }

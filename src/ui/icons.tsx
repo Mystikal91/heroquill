@@ -151,3 +151,17 @@ export const DotsIcon = () => (
     <circle cx="18.500" cy="12" r="1.100" />
   </Icon>
 );
+
+/** A shield: a player character. */
+export const ShieldIcon = () => (
+  <Icon>
+    <path d="M12 3.500l7 2.500v5.500c0 4.200-2.800 7.600-7 9-4.200-1.400-7-4.800-7-9V6z" />
+  </Icon>
+);
+
+/** Three claw marks: a creature of the DM. */
+export const PawIcon = () => (
+  <Icon>
+    <path d="M7 4c1.500 4 1.500 9 0 16M12 3.500c1.500 4.500 1.500 12 0 17M17 4c1.500 4 1.500 9 0 16" />
+  </Icon>
+);

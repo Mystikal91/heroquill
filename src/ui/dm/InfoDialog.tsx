@@ -3,7 +3,7 @@ import { type Combatant, MAX_HP, MAX_SPEED, setHp, setMaxHp } from "../../engine
 import { ui } from "../../i18n/ui";
 import { feetFrom, feetTo, metricUnits } from "../../i18n/units";
 import { MonsterBlock } from "../rules/MonsterBlock";
-import { ConditionsEditor } from "./Editors";
+import { EffectsEditor } from "./Editors";
 import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
 
@@ -85,8 +85,8 @@ function Details({ c }: { c: Combatant }) {
         </div>
       </div>
       <section>
-        <h4>{ui("play.conditions")}</h4>
-        <ConditionsEditor c={c} />
+        <h4>{ui("play.activeEffects")}</h4>
+        <EffectsEditor c={c} />
       </section>
       <label class="field">
         <span>{ui("dm.notes")}</span>
