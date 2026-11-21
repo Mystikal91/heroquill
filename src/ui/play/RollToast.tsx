@@ -26,7 +26,7 @@ const SPARKS = Array.from({ length: 22 }, (_, i) => ({
 const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** A twenty-sided die, drawn in the colour of the text around it. */
-const Die = () => (
+export const Die = () => (
   <svg viewBox="0 0 24 24" class="toast-die" aria-hidden="true" focusable="false">
     <path
       d="M12 2.500l8 4.500v10l-8 4.500-8-4.500V7z M12 8l4 7H8z"
@@ -39,7 +39,7 @@ const Die = () => (
 );
 
 /** Moves the roll into the browser's top layer, above a dialog that is open (a popover that stays put). */
-function putOnTop(element: HTMLElement | null) {
+export function putOnTop(element: HTMLElement | null) {
   if (!element || typeof element.showPopover !== "function") return;
   element.setAttribute("popover", "manual");
   try {

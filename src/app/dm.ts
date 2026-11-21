@@ -4,7 +4,6 @@ import {
   type AreaPick,
   type DefenseLine,
   areaDamage,
-  damageDealt,
   defensesOf,
   innateDefenses,
 } from "../engine/defenses";
@@ -21,7 +20,6 @@ import {
   characterCombatant,
   createEncounter,
   delayTurn,
-  hurt,
   isStarted,
   lairCombatant,
   manualCombatant,
@@ -537,16 +535,21 @@ export function pickCreatures() {
   );
 }
 
-/** Deals the damage to everybody marked, each through its own defenses, and offers to take it back. */
-export function applyArea() {
+/**
+ * Deals damage to everybody marked, each through its own defenses, and offers to take it back.
+ * Gives what each creature took.
+ */
+function dealDamage(
+  picks: Record<string, AreaPick>,
+  amount: number,
+  kind: string | undefined,
+): { id: string; dealt: number }[] {
   const e = encounter.value;
-  const picks = areaPicks.value;
-  const amount = areaAmount.value;
-  if (!e || amount <= 0 || Object.keys(picks).length === 0) return;
+  if (!e || amount <= 0 || Object.keys(picks).length === 0) return [];
   const before = new Map(
     e.combatants.filter((c) => picks[c.id]).map((c) => [c.id, { hp: c.hp, tempHp: c.tempHp }]),
   );
-  const out = areaDamage(e, picks, amount, areaType.value, defensesFor);
+  const out = areaDamage(e, picks, amount, kind, defensesFor);
   updateEncounter(() => out.encounter);
   offerUndo(ui("dm.area.done", { n: out.taken.length }), () =>
     updateEncounter((x) => ({
@@ -557,6 +560,12 @@ export function applyArea() {
       }),
     })),
   );
+  return out.taken;
+}
+
+/** Deals the area's damage to everybody marked. */
+export function applyArea() {
+  dealDamage(areaPicks.value, areaAmount.value, areaType.value);
   leaveArea();
 }
 
@@ -606,30 +615,29 @@ export function delayActive(after: string) {
   offerUndo(ui("dm.delayed", { name: active.name }), () => updateEncounter(() => before));
 }
 
-// ---- Rolling an action of a creature against another ----
+// ---- Rolling an action of a creature against others ----
 
-/** What an attack roll came to. */
+/** What an attack roll came to, for each creature it was made against. */
 export interface AttackOutcome {
   natural: number;
   bonus: number;
   total: number;
   critical: boolean;
   fumble: boolean;
-  /** The armor class it was compared with and whether it hit; both missing when nobody was picked. */
-  ac?: number;
-  hit?: boolean;
+  results: { id: string; name: string; ac: number; hit: boolean }[];
 }
 
-/** The window that rolls an action: who is attacked, the attack, then the damage. */
+/** The action being rolled: who is picked in the table, the attack and the damage. */
 export interface RollFlow {
   attackerId: string;
   attackerName: string;
   action: string;
-  /** The bonus of the attack; none when the action starts at its damage. */
+  /** The bonus of the attack; none when the action has only its damage. */
   bonus?: number;
   damage: DamagePart[];
-  /** The creature that is attacked, and that the damage lands on. */
-  target?: string;
+  step: "attack" | "damage";
+  /** The creatures picked in the table: attacked, then the ones the damage goes to. */
+  targets: string[];
   attack?: AttackOutcome;
   /** What each damage roll came to, in the order they were rolled. */
   lines: string[];
@@ -637,14 +645,18 @@ export interface RollFlow {
 
 export const rollFlow = signal<RollFlow | undefined>(undefined);
 
-/** Opens the window for an action of a creature, at its attack or (without a bonus) at its damage. */
+/** Starts rolling an action of a creature: the table is shown to pick who is attacked. */
 export function startRoll(attacker: Combatant, action: string, rolls: ActionRolls) {
+  infoFor.value = undefined;
+  leaveArea();
   rollFlow.value = {
     attackerId: attacker.id,
     attackerName: attacker.name,
     action,
     ...(rolls.attackBonus !== undefined && { bonus: rolls.attackBonus }),
     damage: rolls.damage,
+    step: rolls.attackBonus === undefined ? "damage" : "attack",
+    targets: [],
     lines: [],
   };
 }
@@ -653,25 +665,29 @@ export function closeRoll() {
   rollFlow.value = undefined;
 }
 
-export function pickRollTarget(id: string | undefined) {
+export function toggleRollTarget(id: string) {
   const flow = rollFlow.value;
-  if (!flow) return;
-  const { target: _old, ...rest } = flow;
-  rollFlow.value = id ? { ...rest, target: id } : rest;
+  if (!flow || id === flow.attackerId) return;
+  rollFlow.value = {
+    ...flow,
+    targets: flow.targets.includes(id)
+      ? flow.targets.filter((x) => x !== id)
+      : [...flow.targets, id],
+  };
 }
 
-const targetOf = (flow: RollFlow) =>
-  encounter.value?.combatants.find((c) => c.id === flow.target && c.id !== flow.attackerId);
-
-const signedText = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
-
-/** Rolls the attack against the armor class of the target, if there is one. Rolling again replaces it. */
+/** One d20 for the attack, compared with the armor class of each creature picked; the ones it misses are let go. */
 export function rollFlowAttack() {
   const flow = rollFlow.value;
-  if (!flow || flow.bonus === undefined) return;
+  const e = encounter.value;
+  if (!flow || !e || flow.bonus === undefined) return;
   const roll = rollD20(flow.bonus);
-  const who = targetOf(flow);
-  const ac = who ? combatantNumbers(who).ac : undefined;
+  const results = e.combatants
+    .filter((c) => flow.targets.includes(c.id))
+    .map((c) => {
+      const ac = combatantNumbers(c).ac;
+      return { id: c.id, name: c.name, ac, hit: attackHits(roll, ac) };
+    });
   rollFlow.value = {
     ...flow,
     lines: [],
@@ -681,25 +697,37 @@ export function rollFlowAttack() {
       total: roll.total,
       critical: roll.critical,
       fumble: roll.fumble,
-      ...(ac !== undefined && { ac, hit: attackHits(roll, ac) }),
+      results,
     },
+    targets: results.length > 0 ? results.filter((r) => r.hit).map((r) => r.id) : [],
   };
 }
 
-/** Rolls the damage of one kind (doubled dice after a critical hit) and takes it off the target, defenses counted. */
+export function rollFlowToDamage() {
+  const flow = rollFlow.value;
+  if (flow) rollFlow.value = { ...flow, step: "damage" };
+}
+
+const signedText = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
+
+/**
+ * Rolls the damage of one kind once (the dice doubled after a critical hit) and deals it to everybody picked,
+ * each through its own defenses. Rolling it is what confirms who was picked.
+ */
 export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string) {
   const flow = rollFlow.value;
-  if (!flow) return;
+  const e = encounter.value;
+  if (!flow || !e) return;
   const dice = flow.attack?.critical ? doubleDice(part.dice) : part.dice;
   const parsed = parseDice(dice);
   const rolled = parsed ? rollExpression(parsed) : undefined;
   const total = rolled?.total ?? 0;
-  const who = targetOf(flow);
-  const dealt = who ? damageDealt(total, part.type, defensesFor(who)).dealt : total;
-  if (who) changeHp(who.id, (c) => hurt(c, dealt));
+  const picks = Object.fromEntries(flow.targets.map((id) => [id, "fail" as const]));
+  const taken = dealDamage(picks, total, part.type);
+  const names = new Map(e.combatants.map((c) => [c.id, c.name]));
   const faces = rolled
     ? ` [${rolled.rolls.map((g) => g.join(", ")).join(" + ")}]${signedText(rolled.modifier)}`
     : "";
-  const line = `${shown(dice)}${faces} = ${total}${who ? ` → ${who.name}: ${dealt}` : ""}`;
+  const line = `${shown(dice)}${faces} = ${total}${taken.map((t) => ` · ${names.get(t.id) ?? ""} ${t.dealt}`).join("")}`;
   rollFlow.value = { ...flow, lines: [...flow.lines, line] };
 }

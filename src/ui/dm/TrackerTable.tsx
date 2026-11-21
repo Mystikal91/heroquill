@@ -1,4 +1,13 @@
-import { areaMode, areaPicks, cyclePick, encounter, infoFor, liveIds } from "../../app/dm";
+import {
+  areaMode,
+  areaPicks,
+  cyclePick,
+  encounter,
+  infoFor,
+  liveIds,
+  rollFlow,
+  toggleRollTarget,
+} from "../../app/dm";
 import { type DmColumn, dmColumns, gridTemplate, visibleColumns } from "../../app/dmColumns";
 import { typeText } from "../../app/monsterView";
 import { content } from "../../app/store";
@@ -257,7 +266,9 @@ function Cell({
 
 /** In the area mode: not hit, hit in full, or hit by half because it saved. One tap goes on to the next. */
 function PickButton({ id, name }: { id: string; name: string }) {
-  const pick = areaPicks.value[id];
+  // Rolling an action picks who it is against: one tap marks, the next lets go.
+  const flow = rollFlow.value;
+  const pick = flow ? (flow.targets.includes(id) ? "fail" : undefined) : areaPicks.value[id];
   const label = ui(
     pick === "fail" ? "dm.area.fail" : pick === "save" ? "dm.area.save" : "dm.area.none",
   );
@@ -268,7 +279,7 @@ function PickButton({ id, name }: { id: string; name: string }) {
       data-pick={pick}
       aria-label={`${name}: ${label}`}
       title={label}
-      onClick={() => cyclePick(id)}
+      onClick={() => (flow ? toggleRollTarget(id) : cyclePick(id))}
     >
       {pick === "fail" ? "×" : pick === "save" ? "½" : ""}
     </button>
@@ -278,7 +289,8 @@ function PickButton({ id, name }: { id: string; name: string }) {
 /** The initiative table: one row for each creature, in turn order, with what is read at a glance. */
 export function TrackerTable({ e }: { e: Encounter }) {
   const columns = visibleColumns(dmColumns.value);
-  const area = areaMode.value;
+  const flow = rollFlow.value;
+  const area = areaMode.value || flow !== undefined;
   // In the area mode a first column marks who is hit.
   const lead = area ? "2.8rem " : "";
   const style = `--cols:${lead}${gridTemplate(columns)};--cols-narrow:${lead}${gridTemplate(columns, true)}`;
@@ -311,7 +323,11 @@ export function TrackerTable({ e }: { e: Encounter }) {
               data-focus={c.effects.some((x) => x.concentration) || undefined}
               aria-current={c.id === turn ? "step" : undefined}
             >
-              {area && <td data-col="pick">{!c.lair && <PickButton id={c.id} name={c.name} />}</td>}
+              {area && (
+                <td data-col="pick">
+                  {!c.lair && c.id !== flow?.attackerId && <PickButton id={c.id} name={c.name} />}
+                </td>
+              )}
               {columns.map((col) => (
                 <Cell key={col} col={col} c={c} columns={columns} />
               ))}

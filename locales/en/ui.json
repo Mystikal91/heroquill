@@ -2659,12 +2659,11 @@
   "dm.lairAdd": "Add the lair (initiative 20)",
   "dm.lairName": "Lair actions",
   "dm.lairKind": "Acts at initiative 20",
-  "dm.rollTarget": "Who is attacked",
-  "dm.rollNoTarget": "Nobody",
+  "dm.rollTarget": "Pick who is attacked in the table",
   "dm.roll.hit": "hit",
   "dm.roll.miss": "miss",
   "dm.roll.again": "Attack again",
-  "dm.roll.damageTo": "Damage goes to",
-  "dm.roll.vs": "against AC {ac}",
-  "dm.roll.damage": "Damage"
+  "dm.roll.damageTo": "Pick who takes the damage in the table",
+  "dm.roll.damage": "Damage",
+  "dm.roll.count": "{n} selected"
 }

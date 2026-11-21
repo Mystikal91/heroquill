@@ -1120,86 +1120,47 @@
   border-top: 1px solid var(--border);
 }
 
-.dm-roll {
-  display: grid;
-  gap: 0.9rem;
+/* The roll of an action: the box of a roll over the table, which stays in reach to pick who is attacked. */
+.dm-roll-panel {
+  width: min(24rem, calc(100vw - 1.5rem));
 }
 
-.dm-roll section {
-  display: grid;
-  gap: 0.8rem;
+.dm-roll-panel .toast-main {
+  cursor: default;
 }
 
-.dm-roll-targets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.dm-roll-targets legend {
-  padding: 0;
-  margin-bottom: 0.4rem;
-  font-weight: 600;
-}
-
-.dm-roll-targets button {
-  margin: 0;
-  min-height: 2.4rem;
-}
-
-.dm-roll-targets button[aria-pressed="true"] {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.dm-roll-result {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 0.6rem 0.8rem;
-  border-left: 3px solid var(--border);
-  background: var(--surface);
-}
-
-.dm-roll-result[data-verdict="hit"] {
-  border-left-color: var(--accent);
-}
-
-.dm-roll-result[data-verdict="miss"] {
-  border-left-color: var(--danger, #b3402a);
-}
-
-.dm-roll-total {
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.dm-roll-result small {
-  display: block;
-  color: var(--muted);
-}
-
-.dm-roll-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.dm-roll-actions button {
-  margin: 0;
-  min-height: 2.6rem;
+.dm-roll-panel .toast-text small.wrap {
+  white-space: normal;
 }
 
 .dm-roll-lines {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.2rem;
   margin: 0;
-  padding: 0;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border);
   list-style: none;
+  font-size: 0.9rem;
+}
+
+.dm-roll-lines [data-hit="false"] {
+  color: var(--muted);
+}
+
+.dm-roll-panel .toast-actions {
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+}
+
+.dm-roll-panel .toast-act {
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.dm-roll-panel .toast-act.quiet {
+  border-color: var(--border);
+  background: transparent;
 }
 
 .dm-info-actions {

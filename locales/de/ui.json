@@ -2659,12 +2659,11 @@
   "dm.lairAdd": "Hort hinzufügen (Initiative 20)",
   "dm.lairName": "Hortaktionen",
   "dm.lairKind": "Handelt bei Initiative 20",
-  "dm.rollTarget": "Wer wird angegriffen",
-  "dm.rollNoTarget": "Niemand",
+  "dm.rollTarget": "Wähle in der Tabelle, wer angegriffen wird",
   "dm.roll.hit": "Treffer",
   "dm.roll.miss": "daneben",
   "dm.roll.again": "Noch einmal angreifen",
-  "dm.roll.damageTo": "Der Schaden geht an",
-  "dm.roll.vs": "gegen RK {ac}",
-  "dm.roll.damage": "Schaden"
+  "dm.roll.damageTo": "Wähle in der Tabelle, wer den Schaden nimmt",
+  "dm.roll.damage": "Schaden",
+  "dm.roll.count": "{n} gewählt"
 }
