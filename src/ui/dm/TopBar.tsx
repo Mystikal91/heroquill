@@ -1,6 +1,8 @@
 import {
+  abilityName,
   advanceTurn,
   canGoBack,
+  delayActive,
   duplicateEncounter,
   encounters,
   groupInitiative,
@@ -8,9 +10,11 @@ import {
   newEncounter,
   openAdd,
   previousTurn,
+  rechargeNote,
   removeEncounter,
   resetCurrentFight,
   resetTurnHistory,
+  rollRechargeFor,
   selectEncounter,
   setGroupInitiative,
   startArea,
@@ -22,12 +26,15 @@ import {
   activeCombatant,
   endCombat,
   isStarted,
+  laterCombatants,
   rollAllInitiative,
   startCombat,
 } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
 import { PlusIcon, StepBackIcon, SwordsIcon } from "../icons";
+import { abilitiesOf } from "./Abilities";
+import { CellPopover } from "./CellPopover";
 import { ColumnsEditor } from "./ColumnsEditor";
 
 /** The encounter: which one, its name, and what can be done with it or with the fight. */
@@ -127,6 +134,13 @@ export function TopBar({ e }: { e: Encounter }) {
   const waiting = e.combatants.filter((c) => c.initiative === undefined).length;
   const ended = lastTurn.value;
   const endedName = ended ? e.combatants.find((c) => c.id === ended.combatant)?.name : undefined;
+  const due =
+    started && active
+      ? abilitiesOf(active).defs.filter(
+          (d) => d.kind === "recharge" && (active.uses?.[d.key] ?? 0) > 0,
+        )
+      : [];
+  const later = started ? laterCombatants(e) : [];
   const endedNames = ended
     ? [...ended.conditions.map((id) => content.value?.name(id) ?? id), ...ended.effects].join(", ")
     : "";
@@ -181,6 +195,36 @@ export function TopBar({ e }: { e: Encounter }) {
           <div class="dm-turn-buttons">
             {started ? (
               <>
+                {later.length > 0 && (
+                  <CellPopover
+                    title={ui("dm.delayHint")}
+                    class="dm-delay"
+                    align="end"
+                    trigger={<span>{ui("dm.delay")}</span>}
+                  >
+                    {(close) => (
+                      <div class="dm-menu">
+                        <h4 class="dm-pop-title">{ui("dm.delay")}</h4>
+                        <p class="muted">{ui("dm.delayHint")}</p>
+                        <ul class="plain dm-menu-list">
+                          {later.map((x) => (
+                            <li key={x.id}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  delayActive(x.id);
+                                  close();
+                                }}
+                              >
+                                {ui("dm.delayAfter", { name: x.name, n: x.initiative ?? 0 })}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </CellPopover>
+                )}
                 <button
                   type="button"
                   class="dm-prev"
@@ -228,6 +272,16 @@ export function TopBar({ e }: { e: Encounter }) {
             )}
           </div>
         </div>
+        {due.length > 0 && active && (
+          <div class="dm-recharge">
+            {due.map((d) => (
+              <button type="button" key={d.key} onClick={() => rollRechargeFor(active.id, d)}>
+                {ui("dm.rollRecharge", { name: abilityName(active, d), min: d.minValue ?? 6 })}
+              </button>
+            ))}
+          </div>
+        )}
+        {rechargeNote.value && <output class="dm-ended">{rechargeNote.value}</output>}
         {ended && endedName && (
           <output class="dm-ended">
             {ui("dm.endedOn", { name: endedName, list: endedNames })}

@@ -27,6 +27,8 @@ export interface TrackedEffect {
 }
 
 export const MAX_EFFECTS = 20;
+export const DEFAULT_LEGENDARY = 3;
+export const MAX_LEGENDARY = 9;
 export const MAX_EFFECT_RULES = 8;
 
 export interface Combatant {
@@ -51,6 +53,16 @@ export interface Combatant {
   rounds: Record<string, number>;
   /** What else is in force on it: a spell, an effect written by hand, a concentration. */
   effects: TrackedEffect[];
+  /** Uses spent of the abilities that have a limit, by their key in the entry (`actions.6`): per day and per rest count uses, a recharge is 1 while spent. */
+  uses?: Record<string, number>;
+  /** Legendary actions: how many it has and how many it has spent since its last turn. */
+  legendary?: { max: number; used: number };
+  /** Surprised: it takes no turn in the first round. */
+  surprised?: boolean;
+  /** Delayed: it acts after those at the same initiative that have a lower rank (0 when absent). */
+  rank?: number;
+  /** The lair acting at its own place in the order (initiative 20): no hit points, no armor class. */
+  lair?: boolean;
   /** Damage it resists, is immune to or is vulnerable to, when it has them of its own (a character's, from its sheet). */
   defenses?: Partial<Record<"resistance" | "immunity" | "vulnerability", string[]>>;
   notes: string;
@@ -98,6 +110,7 @@ export function initiativeOrder(combatants: readonly Combatant[]): Combatant[] {
   const byOrder = [...rolled].sort(
     (a, b) =>
       (b.initiative ?? 0) - (a.initiative ?? 0) ||
+      (a.rank ?? 0) - (b.rank ?? 0) ||
       effectiveInitiativeBonus(b) - effectiveInitiativeBonus(a),
   );
   return [...byOrder, ...waiting];
@@ -132,6 +145,7 @@ interface MonsterNumbers {
   hitPoints?: number;
   hitPointsRoll?: string;
   abilities?: Record<string, number>;
+  legendary?: unknown[];
   speed?: Record<string, number | true>;
 }
 
@@ -163,6 +177,8 @@ export function monsterCombatant(
     conditions: [],
     rounds: {},
     effects: [],
+    ...(Array.isArray(data.legendary) &&
+      data.legendary.length > 0 && { legendary: { max: DEFAULT_LEGENDARY, used: 0 } }),
     notes: "",
   };
 }
@@ -251,7 +267,7 @@ export function addCombatants(encounter: Encounter, added: readonly Combatant[])
 
 /** Takes a combatant out; if it had the turn, the turn passes to the next one. */
 export function removeCombatant(encounter: Encounter, id: string): Encounter {
-  const next = encounter.turn === id ? turnAfter(encounter, id) : undefined;
+  const next = encounter.turn === id ? turnAfter(encounter, id, encounter.round).next : undefined;
   const combatants = encounter.combatants.filter((c) => c.id !== id);
   const stillOn = isStarted(encounter) && combatants.length > 0;
   return touch({
@@ -276,13 +292,19 @@ export function rollInitiative(
   return { total: roll.total, die: roll.used };
 }
 
+/** A creature with its initiative set: a new value starts a new place in the order, so a delay is forgotten. */
+const withInitiative = (c: Combatant, value: number): Combatant => {
+  const { rank: _rank, ...rest } = c;
+  return { ...rest, initiative: value };
+};
+
 export function setInitiative(
   encounter: Encounter,
   id: string,
   value: number | undefined,
 ): Encounter {
   return changeCombatant(encounter, id, (c) => {
-    const { initiative: _old, ...rest } = c;
+    const { initiative: _old, rank: _rank, ...rest } = c;
     return value === undefined || !Number.isFinite(value)
       ? rest
       : { ...rest, initiative: clamp(Math.trunc(value), -99, 999) };
@@ -302,7 +324,7 @@ export function rollGroupInitiative(
   const ids = new Set(group.map((c) => c.id));
   return touch({
     ...encounter,
-    combatants: encounter.combatants.map((c) => (ids.has(c.id) ? { ...c, initiative: total } : c)),
+    combatants: encounter.combatants.map((c) => (ids.has(c.id) ? withInitiative(c, total) : c)),
   });
 }
 
@@ -320,14 +342,14 @@ export function rollAllInitiative(
   return touch({
     ...encounter,
     combatants: encounter.combatants.map((c) => {
-      if (c.kind === "character" && !options.characters) return c;
+      if (c.lair || (c.kind === "character" && !options.characters)) return c;
       if (c.initiative !== undefined && !options.again) return c;
       const group = options.grouped && c.kind === "monster" ? c.source : undefined;
       const shared = group === undefined ? undefined : rolled.get(group);
-      if (shared !== undefined) return { ...c, initiative: shared };
+      if (shared !== undefined) return withInitiative(c, shared);
       const total = rollInitiative(c, random).total;
       if (group !== undefined) rolled.set(group, total);
-      return { ...c, initiative: total };
+      return withInitiative(c, total);
     }),
   });
 }
@@ -342,27 +364,98 @@ export function groupOf(encounter: Encounter, id: string): Combatant[] {
 // ---- Turns ----
 
 /** The one after `id` in the turn order that can act (not down), wrapping round; undefined if none. */
-function turnAfter(encounter: Encounter, id: string | undefined): Combatant | undefined {
+/** Whether a creature takes its turn in a round: not down (a character is still asked for its death saves) and not surprised in the first. */
+export const canAct = (c: Combatant, round: number): boolean =>
+  (c.kind === "character" || !isDown(c)) && !(c.surprised && round <= 1);
+
+/**
+ * The one after `id` in the turn order that can act, wrapping round, and whether it came after the end of
+ * the round (so the next round has begun for it). `round` is the round `id` is in.
+ */
+function turnAfter(
+  encounter: Encounter,
+  id: string | undefined,
+  round: number,
+): { next: Combatant | undefined; wrapped: boolean } {
   const order = initiativeOrder(encounter.combatants);
   const start = order.findIndex((c) => c.id === id);
   for (let step = 1; step <= order.length; step++) {
-    const candidate = order[(start + step + order.length) % order.length];
-    if (candidate && (candidate.kind === "character" || !isDown(candidate))) return candidate;
+    const at = start + step;
+    const candidate = order[((at % order.length) + order.length) % order.length];
+    const wrapped = start >= 0 && at >= order.length;
+    if (candidate && canAct(candidate, wrapped ? round + 1 : round))
+      return { next: candidate, wrapped };
   }
-  return undefined;
+  return { next: undefined, wrapped: false };
 }
 
-/** The first one in the order that can act. */
+/** The first one in the order that can act in the first round. */
 function firstToAct(encounter: Encounter): Combatant | undefined {
   const order = initiativeOrder(encounter.combatants);
-  return order.find((c) => c.kind === "character" || !isDown(c)) ?? order[0];
+  return order.find((c) => canAct(c, 1)) ?? order[0];
+}
+
+/** What a creature gets back when its turn begins: its legendary actions. */
+const beginTurn = (c: Combatant): Combatant =>
+  c.legendary && c.legendary.used > 0 ? { ...c, legendary: { ...c.legendary, used: 0 } } : c;
+
+/** Surprised or not: a surprised creature takes no turn in the first round. */
+export const setSurprised = (c: Combatant, on: boolean): Combatant => {
+  const { surprised: _old, ...rest } = c;
+  return on ? { ...rest, surprised: true } : rest;
+};
+
+/** The lair as a combatant of its own: it acts at initiative 20, and has nothing else to track. */
+export function lairCombatant(name: string): Combatant {
+  return {
+    ...manualCombatant({ name, maxHp: 1, ac: 0 }),
+    kind: "manual",
+    lair: true,
+    initiative: 20,
+  };
+}
+
+/** The ones after the active creature in the turn order: the places it can delay itself to. */
+export function laterCombatants(encounter: Encounter): Combatant[] {
+  const order = initiativeOrder(encounter.combatants);
+  const at = order.findIndex((c) => c.id === encounter.turn);
+  return at < 0 ? [] : order.slice(at + 1).filter((c) => c.initiative !== undefined);
+}
+
+/**
+ * The active creature delays its turn: it will act right after `after`, and the turn passes to the
+ * next creature. Nothing ends for it (no rounds count down): it has not taken its turn yet.
+ */
+export function delayTurn(encounter: Encounter, after: string): Encounter {
+  const active = activeCombatant(encounter);
+  const target = encounter.combatants.find((c) => c.id === after);
+  if (!isStarted(encounter) || !active || !target || target.initiative === undefined)
+    return encounter;
+  if (!laterCombatants(encounter).some((c) => c.id === after)) return encounter;
+  const { next } = turnAfter(encounter, active.id, encounter.round);
+  const sameSpot = encounter.combatants.filter(
+    (c) => c.initiative === target.initiative && c.id !== active.id,
+  );
+  const rank = Math.max(0, ...sameSpot.map((c) => c.rank ?? 0)) + 1;
+  return touch({
+    ...encounter,
+    turn: next?.id ?? encounter.turn,
+    combatants: encounter.combatants.map((c) =>
+      c.id === active.id ? { ...c, initiative: target.initiative, rank } : c,
+    ),
+  });
 }
 
 /** Starts the fight: round 1, the turn to the top of the order. Nothing to do with nobody in it. */
 export function startCombat(encounter: Encounter): Encounter {
   const first = firstToAct(encounter);
   if (!first) return encounter;
-  return touch({ ...encounter, round: 1, turn: first.id });
+  return touch({
+    ...encounter,
+    round: 1,
+    turn: first.id,
+    combatants: encounter.combatants.map((c) => (c.id === first.id ? beginTurn(c) : c)),
+  });
 }
 
 /**
@@ -376,9 +469,11 @@ export function resetFight(encounter: Encounter): Encounter {
     ...rest,
     round: 0,
     combatants: encounter.combatants.map((c) => {
-      const { initiative: _initiative, ...kept } = c;
+      const { initiative: _initiative, rank: _rank, uses: _uses, legendary, ...kept } = c;
       return {
         ...kept,
+        ...(legendary && { legendary: { ...legendary, used: 0 } }),
+        ...(c.lair && { initiative: 20 }),
         ...(c.kind !== "character" && { hp: c.maxHp, tempHp: 0 }),
         conditions: [],
         rounds: {},
@@ -436,15 +531,11 @@ export function nextTurn(encounter: Encounter): TurnReport {
     });
   });
   const base = { ...encounter, combatants: ticked };
-  const order = initiativeOrder(ticked);
-  const position = order.findIndex((c) => c.id === current.id);
-  const next = turnAfter(base, current.id);
-  // The round turns when the next one is at or before this one in the order (it wrapped).
-  const nextPosition = order.findIndex((c) => c.id === next?.id);
-  const wrapped = next !== undefined && nextPosition <= position;
+  const { next, wrapped } = turnAfter(base, current.id, encounter.round);
   return {
     encounter: touch({
       ...base,
+      combatants: ticked.map((c) => (c.id === next?.id ? beginTurn(c) : c)),
       turn: next?.id ?? encounter.turn,
       round: wrapped ? Math.min(MAX_ROUNDS, encounter.round + 1) : encounter.round,
     }),
@@ -623,6 +714,17 @@ function readCombatant(raw: unknown): Combatant | undefined {
       }
     }
   }
+  const uses: Record<string, number> = {};
+  if (r.uses && typeof r.uses === "object")
+    for (const [key, n] of Object.entries(r.uses)) {
+      const count = clamp(whole(n), 0, 99);
+      if (count >= 1 && key.length >= 1 && key.length <= 40) uses[key] = count;
+    }
+  const lg =
+    r.legendary && typeof r.legendary === "object"
+      ? (r.legendary as Record<string, unknown>)
+      : undefined;
+  const legendaryMax = lg ? clamp(whole(lg.max, DEFAULT_LEGENDARY), 1, MAX_LEGENDARY) : 0;
   const source = typeof r.source === "string" ? r.source : undefined;
   return {
     id: text(r.id) || uuid(),
@@ -642,6 +744,13 @@ function readCombatant(raw: unknown): Combatant | undefined {
     rounds,
     effects,
     ...(hasDefenses(defenses) && { defenses }),
+    ...(Object.keys(uses).length > 0 && { uses }),
+    ...(lg && { legendary: { max: legendaryMax, used: clamp(whole(lg.used), 0, legendaryMax) } }),
+    ...(r.surprised === true && { surprised: true }),
+    ...(typeof r.rank === "number" &&
+      Number.isFinite(r.rank) &&
+      r.rank !== 0 && { rank: clamp(Math.trunc(r.rank), -99, 99) }),
+    ...(r.lair === true && { lair: true }),
     notes: text(r.notes, "", 2000),
   };
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 import {
   addCharacter,
+  addLair,
   addManual,
   addMonsters,
   addedLog,
@@ -172,6 +173,9 @@ function ByHand() {
         setName("");
       }}
     >
+      <button type="button" class="secondary dm-manual-name" onClick={addLair}>
+        {ui("dm.lairAdd")}
+      </button>
       <label class="field dm-manual-name">
         <span>{ui("dm.field.name")}</span>
         <input type="text" value={name} onInput={(e) => setName(e.currentTarget.value)} />

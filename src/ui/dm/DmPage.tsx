@@ -67,7 +67,6 @@ export function DmPage() {
       ) : (
         <>
           <TopBar e={e} />
-          <EncounterNotes e={e} />
           {areaMode.value && <AreaPanel />}
           {e.combatants.length === 0 ? (
             <div class="dm-empty">
@@ -79,6 +78,7 @@ export function DmPage() {
           ) : (
             <TrackerTable e={e} />
           )}
+          <EncounterNotes e={e} />
         </>
       )}
       <InfoDialog />

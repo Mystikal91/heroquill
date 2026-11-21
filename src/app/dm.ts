@@ -17,7 +17,9 @@ import {
   changeCombatant,
   characterCombatant,
   createEncounter,
+  delayTurn,
   isStarted,
+  lairCombatant,
   manualCombatant,
   monsterCombatant,
   newNames,
@@ -25,6 +27,7 @@ import {
   removeCombatant,
   resetFight,
 } from "../engine/encounter";
+import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
@@ -412,6 +415,7 @@ export function advanceTurn() {
     },
   });
   if (turnHistory.length > MAX_HISTORY) turnHistory.shift();
+  rechargeNote.value = undefined;
   const report = nextTurn(before);
   lastTurn.value =
     report.ended.conditions.length + report.ended.effects.length > 0 ? report.ended : undefined;
@@ -426,6 +430,7 @@ export function previousTurn() {
   const step = turnHistory.pop();
   if (!step) return;
   lastTurn.value = undefined;
+  rechargeNote.value = undefined;
   updateEncounter((e) => ({
     ...e,
     turn: e.combatants.some((c) => c.id === step.turn) ? step.turn : e.turn,
@@ -521,7 +526,9 @@ export function pickCreatures() {
   const e = encounter.value;
   if (!e) return;
   areaPicks.value = Object.fromEntries(
-    e.combatants.filter((c) => c.kind !== "character").map((c) => [c.id, "fail" as const]),
+    e.combatants
+      .filter((c) => c.kind !== "character" && !c.lair)
+      .map((c) => [c.id, "fail" as const]),
   );
 }
 
@@ -546,4 +553,50 @@ export function applyArea() {
     })),
   );
   leaveArea();
+}
+
+// ---- Limited abilities, legendary actions, the lair ----
+
+/** What the last roll for a recharge said, under the turn buttons. */
+export const rechargeNote = signal<string | undefined>(undefined);
+
+/** The entry of the monster a creature was made from. */
+export const monsterEntry = (c: Combatant) =>
+  c.kind === "monster" && c.source ? content.value?.index.get(c.source) : undefined;
+
+/** The name of a limited ability of a monster, as its stat block writes it in the language. */
+export function abilityName(c: Combatant, def: UseDef): string {
+  const text = c.source
+    ? content.value?.text(c.source, `${def.list}.${def.number}.name`)
+    : undefined;
+  return text ?? def.key;
+}
+
+/** Rolls the die for a recharge and says what came of it. */
+export function rollRechargeFor(id: string, def: UseDef) {
+  const c = encounter.value?.combatants.find((x) => x.id === id);
+  if (!c) return;
+  const out = rollRecharge(c, def);
+  editCombatant(id, () => out.creature);
+  rechargeNote.value = ui(out.recharged ? "dm.recharged" : "dm.notRecharged", {
+    name: abilityName(c, def),
+    total: out.total,
+  });
+}
+
+/** Adds the lair as a creature of its own at initiative 20. */
+export function addLair() {
+  const name = ui("dm.lairName");
+  updateEncounter((e) => addCombatants(e, [lairCombatant(name)]));
+  logAdded(name, 1);
+}
+
+/** The active creature delays its turn until after another; it can be taken back. */
+export function delayActive(after: string) {
+  const before = encounter.value;
+  const active = before?.combatants.find((c) => c.id === before.turn);
+  if (!before || !active) return;
+  resetTurnHistory();
+  updateEncounter((e) => delayTurn(e, after));
+  offerUndo(ui("dm.delayed", { name: active.name }), () => updateEncounter(() => before));
 }

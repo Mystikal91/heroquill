@@ -15,11 +15,14 @@ import {
 import { type UiKey, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { DieIcon, InfoIcon, PawIcon, ShieldIcon } from "../icons";
+import { StarIcon } from "../play/icons";
+import { AbilitiesCell } from "./Abilities";
 import { CellPopover } from "./CellPopover";
 import { EffectsEditor, HpEditor, InitEditor } from "./Editors";
 
 /** The second line under a name: what the creature is. */
 function kindLine(c: Combatant): string {
+  if (c.lair) return ui("dm.lairKind");
   if (c.kind === "character") return ui("dm.kind.character");
   if (c.kind === "monster" && c.source) {
     const type = (content.value?.index.get(c.source)?.data as { type?: string } | undefined)?.type;
@@ -134,6 +137,12 @@ function Cell({
     c.speed === undefined
       ? ""
       : explainNumber(c.speed, numbers.parts.speed, { multiplier: numbers.multiplier });
+  if (c.lair && col !== "init" && col !== "name")
+    return (
+      <td data-col={col} class="dm-num">
+        —
+      </td>
+    );
   switch (col) {
     case "init":
       return (
@@ -142,7 +151,14 @@ function Cell({
         </td>
       );
     case "name": {
-      const sub = [kindLine(c), isDown(c) ? ui("dm.down") : ""].filter(Boolean).join(" · ");
+      const surprised = c.surprised && (encounter.value?.round ?? 0) <= 1;
+      const sub = [
+        kindLine(c),
+        surprised ? ui("dm.surprised") : "",
+        isDown(c) && !c.lair ? ui("dm.down") : "",
+      ]
+        .filter(Boolean)
+        .join(" · ");
       const live = liveIds.value.has(c.id);
       const label = live ? ui("dm.live") : ui("dm.manual");
       const player = c.kind === "character";
@@ -160,11 +176,17 @@ function Cell({
           >
             <span
               class="dm-token"
-              data-kind={player ? "player" : "creature"}
-              title={player ? ui("dm.kind.character") : ui("dm.kind.creature")}
+              data-kind={c.lair ? "lair" : player ? "player" : "creature"}
+              title={
+                c.lair
+                  ? ui("dm.lairName")
+                  : player
+                    ? ui("dm.kind.character")
+                    : ui("dm.kind.creature")
+              }
               aria-hidden="true"
             >
-              {player ? <ShieldIcon /> : <PawIcon />}
+              {c.lair ? <StarIcon /> : player ? <ShieldIcon /> : <PawIcon />}
             </span>
             <span class="dm-name-line">
               <span class="dm-name-text">{c.name}</span>
@@ -183,6 +205,7 @@ function Cell({
             </span>
             <span class="dm-sub">{sub}</span>
           </button>
+          <AbilitiesCell c={c} />
           {/* On a narrow table armor class, speed and effects come here instead of columns of their own. */}
           <span class="dm-extra">
             {columns.includes("ac") && (
@@ -288,11 +311,7 @@ export function TrackerTable({ e }: { e: Encounter }) {
               data-focus={c.effects.some((x) => x.concentration) || undefined}
               aria-current={c.id === turn ? "step" : undefined}
             >
-              {area && (
-                <td data-col="pick">
-                  <PickButton id={c.id} name={c.name} />
-                </td>
-              )}
+              {area && <td data-col="pick">{!c.lair && <PickButton id={c.id} name={c.name} />}</td>}
               {columns.map((col) => (
                 <Cell key={col} col={col} c={c} columns={columns} />
               ))}

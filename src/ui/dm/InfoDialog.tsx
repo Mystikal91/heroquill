@@ -1,9 +1,17 @@
 import { editCombatant, encounter, infoFor, removeFromFight } from "../../app/dm";
 import { combatantNumbers } from "../../engine/combatantNumbers";
-import { type Combatant, MAX_HP, MAX_SPEED, setHp, setMaxHp } from "../../engine/encounter";
+import {
+  type Combatant,
+  MAX_HP,
+  MAX_SPEED,
+  setHp,
+  setMaxHp,
+  setSurprised,
+} from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { distance, feetFrom, feetTo, metricUnits } from "../../i18n/units";
 import { MonsterBlock } from "../rules/MonsterBlock";
+import { AbilitiesEditor, abilitiesOf } from "./Abilities";
 import { EffectsEditor } from "./Editors";
 import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
@@ -93,6 +101,23 @@ function Details({ c }: { c: Combatant }) {
           />
         </div>
       </div>
+      <label class="dm-check">
+        <input
+          type="checkbox"
+          checked={c.surprised === true}
+          onChange={(e) => {
+            const on = e.currentTarget.checked;
+            editCombatant(c.id, (x) => setSurprised(x, on));
+          }}
+        />
+        <span>{ui("dm.surprisedField")}</span>
+      </label>
+      {(abilitiesOf(c).defs.length > 0 || abilitiesOf(c).legendary) && (
+        <section>
+          <h4>{ui("dm.abilities")}</h4>
+          <AbilitiesEditor c={c} />
+        </section>
+      )}
       {changed.length > 0 && (
         <p class="dm-now">
           {ui("dm.now")} {changed.join(" · ")}
