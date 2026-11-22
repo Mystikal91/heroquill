@@ -22,8 +22,11 @@ and Aurora Legacy that you already own.
 
 **Build**
 
-- A guided flow: species and subspecies, class and subclass, background, ability scores (standard
-  array, point buy, rolled or manual), skills and other choices, spells, equipment and story.
+- A guided flow in four steps: species, class, ability scores (standard array, point buy, rolled or
+  manual) and background, each with a short hint, while a card of the character fills in beside them.
+  Then the sheet is ready to play; choices, spells, equipment, story and features are optional cards
+  to refine whenever you like. *Assign for me* places the scores where the class needs them, and
+  *Choose for me* fills the open picks and the spells with the ones that suit the character.
 - *Free edit*: override any number the rules would work out, and see what the automatic value
   would be.
 - **Multiclassing** with the shared spell slots table, separate Pact Magic slots and the ability
