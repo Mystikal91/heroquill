@@ -47,6 +47,7 @@ import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
+import type { PlayerCard } from "../relay/protocol";
 import { matchSeats, trackerViewOf } from "../relay/trackerView";
 import {
   deleteCampaign,
@@ -998,6 +999,7 @@ export async function addPlayersToFight(ids: readonly string[]) {
     );
   });
   for (const m of party) logAdded(m.name, 1);
+  applyAllCards();
   partyPrompt.value = false;
   if (startAfterParty.value) beginFight();
 }
@@ -1076,8 +1078,32 @@ onInitiative((seat, value) => {
   else initiativeWait.value = rest;
 });
 
+/**
+ * A player who comes to the table and is not in the party yet takes a place there, made from their own card (the
+ * same name means the same player). The fight that starts afterwards asks about the party as usual and finds them.
+ */
+function ensureInParty(seat: string, card: PlayerCard) {
+  const camp = campaign.value;
+  const key = card.name.trim().toLocaleLowerCase();
+  // Only someone who is here: a seat left behind by a player who went away makes nobody.
+  if (!camp || !key || !tableView.value.players.some((p) => p.seat === seat && p.online)) return;
+  if (camp.party.some((m) => m.name.trim().toLocaleLowerCase() === key)) return;
+  updateCampaign((c) =>
+    addMember(
+      c,
+      newMember({
+        name: card.name.trim(),
+        maxHp: card.maxHp,
+        ac: card.ac,
+        ...(card.speed !== undefined && { speed: card.speed }),
+        initiativeBonus: card.initiativeBonus ?? 0,
+      }),
+    ),
+  );
+}
+
 // What a player's card says of their character's numbers goes into the order, so the DM sees them as they are.
-onCard((seat, card) => {
+function applyCard(seat: string, card: PlayerCard) {
   const e = encounter.value;
   if (!e) return;
   const id = [...matchSeats(e.combatants, tableView.value.players)].find(
@@ -1100,7 +1126,17 @@ onCard((seat, card) => {
     ac: card.ac,
     ...(card.speed !== undefined && { speed: card.speed }),
   }));
+}
+
+onCard((seat, card) => {
+  ensureInParty(seat, card);
+  applyCard(seat, card);
 });
+
+/** The numbers every player at the table last sent, put on their characters (when they have just joined the fight). */
+function applyAllCards() {
+  for (const p of tableView.value.players) if (p.card) applyCard(p.seat, p.card);
+}
 
 /**
  * Puts a condition on a creature, or takes it off. On a player at the table the condition is a proposal: it
