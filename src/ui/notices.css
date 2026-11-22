@@ -104,9 +104,19 @@
   gap: 0.6rem;
 }
 
-.confirm-actions button {
+.confirm-actions {
+  align-items: stretch;
+}
+
+.confirm-actions button,
+:root[data-style] .confirm-actions button {
+  box-sizing: border-box;
+  height: 2.75rem;
   min-height: 2.75rem;
+  margin: 0;
   padding: 0 1.1rem;
+  border-width: 1px;
+  line-height: 1;
 }
 
 .confirm-actions .danger-btn {
