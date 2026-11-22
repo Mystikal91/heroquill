@@ -2788,5 +2788,20 @@
   "dm.set.hideNamesHint": "Nur die Charaktere der Spieler zeigen ihren Namen; alle anderen sind „Unbekannte Kreatur“.",
   "dm.set.askInitiative": "Beim Kampfbeginn die Initiative der Spieler abfragen",
   "dm.set.askInitiativeHint": "Der Kampf wartet einige Sekunden auf die Antworten. Ausschalten, um die Initiativen selbst einzutragen.",
-  "table.unknownCreature": "Unbekannte Kreatur"
+  "table.unknownCreature": "Unbekannte Kreatur",
+  "table.proposal.dm": "Der SL",
+  "table.proposal.damage": "{from} trifft dich für {amount} Schaden. Annehmen?",
+  "table.proposal.damageTyped": "{from} trifft dich für {amount} Schaden ({type}). Annehmen?",
+  "table.proposal.condition": "{from} legt dir den Zustand {condition} auf. Annehmen?",
+  "table.proposal.say": "Der SL sagt: {text}",
+  "table.proposal.accept": "Annehmen",
+  "table.proposal.decline": "Ablehnen",
+  "table.proposal.ok": "OK",
+  "dm.prop.damage": "{name}: {amount} Schaden",
+  "dm.prop.condition": "{name}: {condition}",
+  "dm.prop.title": "Vorschläge",
+  "dm.prop.waiting": "wartet",
+  "dm.prop.accepted": "angenommen",
+  "dm.prop.declined": "abgelehnt",
+  "dm.prop.undelivered": "nicht zugestellt"
 }

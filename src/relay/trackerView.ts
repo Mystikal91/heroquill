@@ -22,13 +22,15 @@ const key = (name: string) => name.trim().toLocaleLowerCase();
  */
 export function matchSeats(
   combatants: readonly Combatant[],
-  players: readonly { seat: string; name: string }[],
+  players: readonly { seat: string; name: string; online?: boolean }[],
 ): Map<string, string> {
   const taken = new Set<string>();
   const found = new Map<string, string>();
   for (const c of combatants) {
     if (c.kind !== "character") continue;
-    const player = players.find((p) => !taken.has(p.seat) && key(p.name) === key(c.name));
+    // A player who is here wins over an old seat of the same name that is not.
+    const same = players.filter((p) => !taken.has(p.seat) && key(p.name) === key(c.name));
+    const player = same.find((p) => p.online) ?? same[0];
     if (!player) continue;
     taken.add(player.seat);
     found.set(c.id, player.seat);

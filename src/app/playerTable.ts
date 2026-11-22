@@ -1,5 +1,6 @@
 import { effect, signal } from "@preact/signals";
 import { currentHp } from "../engine/play";
+import { toggleCondition } from "../engine/play";
 import { beastPool } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
 import { roomUrl } from "../relay/address";
@@ -9,12 +10,15 @@ import {
   type ByeReason,
   CODE_LENGTH,
   type PlayerCard,
+  type Proposal,
   type ServerMessage,
   type TrackerView,
   normaliseCode,
 } from "../relay/protocol";
+import { damageName } from "../ui/damageName";
 import { beastArmorClass } from "../ui/play/beastArmorClass";
-import { rollCheck, rollLog } from "./play";
+import { askConfirm } from "./confirm";
+import { changePlay, damageCharacter, rollCheck, rollLog } from "./play";
 import { character, content, sheet } from "./store";
 
 /**
@@ -147,6 +151,10 @@ function onMessage(saved: Saved, msg: ServerMessage) {
     case "askInitiative":
       initiativeAsked.value = true;
       break;
+    case "proposal":
+      if (queue.length < MAX_QUEUE) queue.push({ id: msg.id, proposal: msg.proposal });
+      void drain();
+      break;
     default:
       break;
   }
@@ -223,4 +231,60 @@ export function answerInitiative() {
   const roll = rollCheck(ui("play.initiative"), s.initiative, undefined, undefined, "check", "dex");
   link?.send({ t: "initiative", value: roll.total });
   initiativeAsked.value = false;
+}
+
+// ---- What the DM proposes ----
+
+const queue: { id: string; proposal: Proposal }[] = [];
+let asking = false;
+/** More than this at once is a flood, not a game: the rest are dropped. */
+const MAX_QUEUE = 20;
+
+function describe(p: Proposal): string {
+  const from = ("from" in p && p.from) || ui("table.proposal.dm");
+  switch (p.kind) {
+    case "damage":
+      return p.type
+        ? ui("table.proposal.damageTyped", { from, amount: p.amount, type: damageName(p.type) })
+        : ui("table.proposal.damage", { from, amount: p.amount });
+    case "condition":
+      return ui("table.proposal.condition", {
+        from,
+        condition: content.value?.name(p.condition) ?? p.condition,
+      });
+    case "say":
+      return ui("table.proposal.say", { text: p.text });
+  }
+}
+
+/** Does what the player accepted, on their own sheet. */
+function apply(p: Proposal) {
+  if (p.kind === "damage") damageCharacter(p.amount);
+  else if (p.kind === "condition")
+    changePlay((play) =>
+      play.conditions.includes(p.condition) ? play : toggleCondition(play, p.condition),
+    );
+}
+
+/** Asks about the proposals one at a time (a second question would cancel the first); nothing happens without a yes. */
+async function drain() {
+  if (asking) return;
+  asking = true;
+  try {
+    for (let next = queue.shift(); next; next = queue.shift()) {
+      const { id, proposal } = next;
+      const say = proposal.kind === "say";
+      const yes = await askConfirm({
+        title: describe(proposal),
+        confirm: ui(say ? "table.proposal.ok" : "table.proposal.accept"),
+        cancel: ui(say ? "table.proposal.ok" : "table.proposal.decline"),
+      });
+      // A line of text only needs reading; the rest need a yes.
+      const accepted = say || yes;
+      if (accepted) apply(proposal);
+      link?.send({ t: "answer", id, accepted });
+    }
+  } finally {
+    asking = false;
+  }
 }

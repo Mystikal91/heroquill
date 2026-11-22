@@ -29,12 +29,17 @@ export function UndoNotice() {
 export function ConfirmDialog() {
   const dialog = useRef<HTMLDialogElement>(null);
   const request = confirmRequest.value;
+  /** The app itself closed the dialog (a question was answered): the closing event that follows is not a refusal. */
+  const closedByApp = useRef(false);
 
   useEffect(() => {
     const el = dialog.current;
     if (!el) return;
     if (request && !el.open) el.showModal();
-    if (!request && el.open) el.close();
+    if (!request && el.open) {
+      closedByApp.current = true;
+      el.close();
+    }
   }, [request]);
 
   return (
@@ -43,7 +48,11 @@ export function ConfirmDialog() {
       ref={dialog}
       class="spell-dialog confirm-dialog"
       aria-labelledby="confirm-title"
-      onClose={() => confirmRequest.value?.answer(false)}
+      onClose={() => {
+        // The event comes after the closing, when the next question may already be up: only Escape is a refusal.
+        if (closedByApp.current) closedByApp.current = false;
+        else confirmRequest.value?.answer(false);
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) confirmRequest.value?.answer(false);
       }}

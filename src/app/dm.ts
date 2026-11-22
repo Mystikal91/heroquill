@@ -40,6 +40,7 @@ import {
   removeCombatant,
   resetFight,
   startCombat,
+  toggleCondition,
 } from "../engine/encounter";
 import { type ActionRolls, type DamagePart, attackHits, doubleDice } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
@@ -62,14 +63,18 @@ import {
   saveEncounter,
   setCurrentEncounterId,
 } from "../storage/encounters";
+import { damageName } from "../ui/damageName";
 import { onlineSettings } from "./dmSettings";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { addLog, rollMode } from "./play";
 import { content } from "./store";
 import {
   askInitiative,
+  onCard,
   onInitiative,
+  propose,
   publishTracker,
+  seatOnline,
   switchTable,
   tableOnline,
   tableView,
@@ -625,10 +630,17 @@ export function pickCreatures() {
  * Deals damage to everybody marked, each through its own defenses, and offers to take it back.
  * Gives what each creature took.
  */
+/** The seat of the player whose character this is, when they are at the table now. */
+function onlineSeatOf(e: Encounter, c: Combatant): string | undefined {
+  const seat = matchSeats(e.combatants, tableView.value.players).get(c.id);
+  return seat && seatOnline(seat) ? seat : undefined;
+}
+
 function dealDamage(
   picks: Record<string, AreaPick>,
   amount: number,
   kind: string | undefined,
+  from?: string,
 ): { id: string; dealt: number }[] {
   const e = encounter.value;
   if (!e || amount <= 0 || Object.keys(picks).length === 0) return [];
@@ -636,7 +648,35 @@ function dealDamage(
     e.combatants.filter((c) => picks[c.id]).map((c) => [c.id, { hp: c.hp, tempHp: c.tempHp }]),
   );
   const out = areaDamage(e, picks, amount, kind, defensesFor);
-  updateEncounter(() => out.encounter);
+  // A player who is at the table takes damage on their own sheet, and only if they accept: the character keeps
+  // the hit points it had here, and the card the player sends brings the new ones.
+  const asked = new Map(
+    out.taken.flatMap((t) => {
+      const c = e.combatants.find((x) => x.id === t.id);
+      const seat = c && onlineSeatOf(e, c);
+      return seat ? [[t.id, seat] as const] : [];
+    }),
+  );
+  updateEncounter(() =>
+    asked.size === 0
+      ? out.encounter
+      : {
+          ...out.encounter,
+          combatants: out.encounter.combatants.map((c) =>
+            asked.has(c.id) ? (e.combatants.find((x) => x.id === c.id) ?? c) : c,
+          ),
+        },
+  );
+  for (const [id, seat] of asked) {
+    const dealt = out.taken.find((t) => t.id === id)?.dealt ?? 0;
+    const name = e.combatants.find((x) => x.id === id)?.name ?? "";
+    if (dealt > 0)
+      propose(
+        seat,
+        { kind: "damage", amount: dealt, ...(kind && { type: kind }), ...(from && { from }) },
+        ui("dm.prop.damage", { name, amount: dealt }) + (kind ? ` (${damageName(kind)})` : ""),
+      );
+  }
   offerUndo(ui("dm.area.done", { n: out.taken.length }), () =>
     updateEncounter((x) => ({
       ...x,
@@ -815,7 +855,7 @@ export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string
   const rolled = parsed ? rollExpression(parsed) : undefined;
   const total = rolled?.total ?? 0;
   const picks = Object.fromEntries(flow.targets.map((id) => [id, "fail" as const]));
-  const taken = dealDamage(picks, total, part.type);
+  const taken = dealDamage(picks, total, part.type, flow.attackerName);
   const names = new Map(e.combatants.map((c) => [c.id, c.name]));
   const faces = rolled
     ? ` [${rolled.rolls.map((g) => g.join(", ")).join(" + ")}]${signedText(rolled.modifier)}`
@@ -1035,6 +1075,54 @@ onInitiative((seat, value) => {
   if (rest.length === 0) startNow();
   else initiativeWait.value = rest;
 });
+
+// What a player's card says of their character's numbers goes into the order, so the DM sees them as they are.
+onCard((seat, card) => {
+  const e = encounter.value;
+  if (!e) return;
+  const id = [...matchSeats(e.combatants, tableView.value.players)].find(
+    ([, s]) => s === seat,
+  )?.[0];
+  const c = e.combatants.find((x) => x.id === id);
+  if (!c) return;
+  const same =
+    c.hp === card.hp &&
+    c.maxHp === card.maxHp &&
+    c.tempHp === card.tempHp &&
+    c.ac === card.ac &&
+    (card.speed === undefined || c.speed === card.speed);
+  if (same) return;
+  editCombatant(c.id, (x) => ({
+    ...x,
+    hp: card.hp,
+    maxHp: card.maxHp,
+    tempHp: card.tempHp,
+    ac: card.ac,
+    ...(card.speed !== undefined && { speed: card.speed }),
+  }));
+});
+
+/**
+ * Puts a condition on a creature, or takes it off. On a player at the table the condition is a proposal: it
+ * goes on the character when they accept (taking it off is the DM's own note: the player's sheet is theirs).
+ */
+export function toggleConditionOf(c: Combatant, conditionId: string) {
+  const e = encounter.value;
+  const seat = e && !c.conditions.includes(conditionId) ? onlineSeatOf(e, c) : undefined;
+  if (!seat) return editCombatant(c.id, (y) => toggleCondition(y, conditionId));
+  const name = content.value?.name(conditionId) ?? conditionId;
+  propose(
+    seat,
+    { kind: "condition", condition: conditionId },
+    ui("dm.prop.condition", { name: c.name, condition: name }),
+    (accepted) => {
+      if (accepted)
+        editCombatant(c.id, (y) =>
+          y.conditions.includes(conditionId) ? y : toggleCondition(y, conditionId),
+        );
+    },
+  );
+}
 
 // The players see the fight as it is: the order, whose turn, how hurt the creatures look.
 effect(() => {

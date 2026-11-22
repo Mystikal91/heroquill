@@ -61,6 +61,18 @@ export interface TrackerView {
   order: { id: string; name: string; seat?: string; initiative?: number; band?: Band }[];
 }
 
+/**
+ * What the DM asks a player to do on their own sheet. The player's device decides: nothing changes until they
+ * accept, and the DM learns the answer. The player's sheet is theirs; the DM never writes to it.
+ */
+export type Proposal =
+  /** Take this much damage (after the defenses the DM knows of). */
+  | { kind: "damage"; amount: number; type?: string; from?: string }
+  /** A condition, by the id of its entry in the rules. */
+  | { kind: "condition"; condition: string; from?: string }
+  /** A line of text to the player, shown to them alone. */
+  | { kind: "say"; text: string };
+
 export type ByeReason =
   | "no-room"
   | "bad-secret"
@@ -81,6 +93,8 @@ export type ClientMessage =
   | { t: "tracker"; view: TrackerView }
   | { t: "askInitiative"; seats?: string[] }
   | { t: "kick"; seat: string }
+  | { t: "propose"; seat: string; id: string; proposal: Proposal }
+  | { t: "answer"; id: string; accepted: boolean }
   | { t: "close" }
   | { t: "ping" };
 
@@ -111,6 +125,10 @@ export type ServerMessage =
   | { t: "initiative"; seat: string; value: number }
   | { t: "tracker"; view: TrackerView }
   | { t: "askInitiative"; seats?: string[] }
+  | { t: "proposal"; id: string; proposal: Proposal }
+  | { t: "answer"; seat: string; id: string; accepted: boolean }
+  /** The proposal did not reach a player: nobody is on that seat now. */
+  | { t: "undelivered"; id: string }
   | { t: "pong" }
   | { t: "bye"; reason: ByeReason };
 
@@ -198,6 +216,30 @@ export function readTracker(raw: unknown): TrackerView | undefined {
   return { round: int(raw.round, 0, 999) ?? 0, ...(turn && { turn }), order };
 }
 
+export function readProposal(raw: unknown): Proposal | undefined {
+  if (!isObject(raw)) return undefined;
+  const from = str(raw.from, LIMITS.text);
+  switch (raw.kind) {
+    case "damage": {
+      const amount = int(raw.amount, 0, 9999);
+      const type = str(raw.type, 40);
+      return amount === undefined
+        ? undefined
+        : { kind: "damage", amount, ...(type && { type }), ...(from && { from }) };
+    }
+    case "condition": {
+      const condition = str(raw.condition, 120);
+      return condition ? { kind: "condition", condition, ...(from && { from }) } : undefined;
+    }
+    case "say": {
+      const text = str(raw.text, 400)?.trim();
+      return text ? { kind: "say", text } : undefined;
+    }
+    default:
+      return undefined;
+  }
+}
+
 /** A message from a socket, or undefined when it is not one of ours (wrong shape, too big, not JSON). */
 export function parseClientMessage(text: string): ClientMessage | undefined {
   if (text.length > LIMITS.messageBytes) return undefined;
@@ -256,6 +298,18 @@ export function parseClientMessage(text: string): ClientMessage | undefined {
     case "kick": {
       const seat = str(raw.seat, 16);
       return seat ? { t: "kick", seat } : undefined;
+    }
+    case "propose": {
+      const seat = str(raw.seat, 16);
+      const id = str(raw.id, 40);
+      const proposal = readProposal(raw.proposal);
+      return seat && id && proposal ? { t: "propose", seat, id, proposal } : undefined;
+    }
+    case "answer": {
+      const id = str(raw.id, 40);
+      return id && typeof raw.accepted === "boolean"
+        ? { t: "answer", id, accepted: raw.accepted }
+        : undefined;
     }
     case "close":
       return { t: "close" };

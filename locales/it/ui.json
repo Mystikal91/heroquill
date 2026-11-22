@@ -2788,5 +2788,20 @@
   "dm.set.hideNamesHint": "Solo i personaggi dei giocatori mostrano il nome; le altre sono «Creatura sconosciuta».",
   "dm.set.askInitiative": "Chiedi l'iniziativa ai giocatori quando lo scontro inizia",
   "dm.set.askInitiativeHint": "Lo scontro attende qualche secondo le risposte. Disattiva per scrivere tu le iniziative.",
-  "table.unknownCreature": "Creatura sconosciuta"
+  "table.unknownCreature": "Creatura sconosciuta",
+  "table.proposal.dm": "Il master",
+  "table.proposal.damage": "{from} ti colpisce per {amount} danni. Li subisci?",
+  "table.proposal.damageTyped": "{from} ti colpisce per {amount} danni da {type}. Li subisci?",
+  "table.proposal.condition": "{from} ti mette la condizione {condition}. La accetti?",
+  "table.proposal.say": "Il master dice: {text}",
+  "table.proposal.accept": "Accetta",
+  "table.proposal.decline": "Rifiuta",
+  "table.proposal.ok": "OK",
+  "dm.prop.damage": "{name}: {amount} danni",
+  "dm.prop.condition": "{name}: {condition}",
+  "dm.prop.title": "Proposte",
+  "dm.prop.waiting": "in attesa",
+  "dm.prop.accepted": "accettata",
+  "dm.prop.declined": "rifiutata",
+  "dm.prop.undelivered": "non consegnata"
 }

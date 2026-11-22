@@ -225,6 +225,23 @@ export function step(
           dirty: false,
         };
       }
+      case "propose": {
+        // Only to a player who is here: a proposal is not kept for later.
+        const here = Boolean(room.seats[msg.seat]) && env.online.seats.has(msg.seat);
+        return {
+          state: room,
+          who,
+          out: here
+            ? [
+                {
+                  to: { seat: msg.seat },
+                  msg: { t: "proposal", id: msg.id, proposal: msg.proposal },
+                },
+              ]
+            : [{ to: "self", msg: { t: "undelivered", id: msg.id } }],
+          dirty: false,
+        };
+      }
       case "kick": {
         const seat = room.seats[msg.seat];
         if (!seat) return { state: room, who, out: [], dirty: false };
@@ -283,6 +300,15 @@ export function step(
         state: room,
         who,
         out: [{ to: "dm", msg: { t: "initiative", seat: who.seat, value: msg.value } }],
+        dirty: false,
+      };
+    case "answer":
+      return {
+        state: room,
+        who,
+        out: [
+          { to: "dm", msg: { t: "answer", seat: who.seat, id: msg.id, accepted: msg.accepted } },
+        ],
         dirty: false,
       };
     default:

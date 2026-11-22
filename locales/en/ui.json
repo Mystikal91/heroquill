@@ -2788,5 +2788,20 @@
   "dm.set.hideNamesHint": "Only the players' characters show their names; the rest are \"Unknown creature\".",
   "dm.set.askInitiative": "Ask the players for their initiative when the fight starts",
   "dm.set.askInitiativeHint": "The fight waits a few seconds for their answers. Switch it off to type the initiatives yourself.",
-  "table.unknownCreature": "Unknown creature"
+  "table.unknownCreature": "Unknown creature",
+  "table.proposal.dm": "The DM",
+  "table.proposal.damage": "{from} hits you for {amount} damage. Take it?",
+  "table.proposal.damageTyped": "{from} hits you for {amount} {type} damage. Take it?",
+  "table.proposal.condition": "{from} puts the condition {condition} on you. Accept it?",
+  "table.proposal.say": "The DM says: {text}",
+  "table.proposal.accept": "Accept",
+  "table.proposal.decline": "Decline",
+  "table.proposal.ok": "OK",
+  "dm.prop.damage": "{name}: {amount} damage",
+  "dm.prop.condition": "{name}: {condition}",
+  "dm.prop.title": "Proposals",
+  "dm.prop.waiting": "waiting",
+  "dm.prop.accepted": "accepted",
+  "dm.prop.declined": "declined",
+  "dm.prop.undelivered": "not delivered"
 }

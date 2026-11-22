@@ -2788,5 +2788,20 @@
   "dm.set.hideNamesHint": "Solo los personajes de los jugadores muestran su nombre; el resto son «Criatura desconocida».",
   "dm.set.askInitiative": "Pedir la iniciativa a los jugadores al empezar el combate",
   "dm.set.askInitiativeHint": "El combate espera unos segundos sus respuestas. Desactívalo para escribir tú las iniciativas.",
-  "table.unknownCreature": "Criatura desconocida"
+  "table.unknownCreature": "Criatura desconocida",
+  "table.proposal.dm": "El DM",
+  "table.proposal.damage": "{from} te golpea por {amount} de daño. ¿Lo recibes?",
+  "table.proposal.damageTyped": "{from} te golpea por {amount} de daño de tipo {type}. ¿Lo recibes?",
+  "table.proposal.condition": "{from} te impone la condición {condition}. ¿La aceptas?",
+  "table.proposal.say": "El DM dice: {text}",
+  "table.proposal.accept": "Aceptar",
+  "table.proposal.decline": "Rechazar",
+  "table.proposal.ok": "OK",
+  "dm.prop.damage": "{name}: {amount} de daño",
+  "dm.prop.condition": "{name}: {condition}",
+  "dm.prop.title": "Propuestas",
+  "dm.prop.waiting": "esperando",
+  "dm.prop.accepted": "aceptada",
+  "dm.prop.declined": "rechazada",
+  "dm.prop.undelivered": "no entregada"
 }

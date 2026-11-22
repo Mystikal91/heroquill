@@ -231,3 +231,38 @@ describe("kicking, closing and leaving", () => {
     expect(isExpired(room, room.lastActive + 12 * 3_600_000)).toBe(true);
   });
 });
+
+describe("proposals", () => {
+  const dm = { role: "dm" } as Who;
+  const damage = { kind: "damage", amount: 7, type: "fire", from: "Goblin" } as const;
+
+  it("goes from the DM to the seat that is here, and to nobody else", () => {
+    const { state, seat } = join(opened());
+    const here = env({ online: { dm: true, seats: new Set([seat]) } });
+    const s = step(state, dm, { t: "propose", seat, id: "a1", proposal: damage }, here);
+    expect(s.out).toEqual([{ to: { seat }, msg: { t: "proposal", id: "a1", proposal: damage } }]);
+    expect(s.dirty).toBe(false);
+  });
+
+  it("tells the DM when the player is not here, and keeps nothing", () => {
+    const { state, seat } = join(opened());
+    const s = step(state, dm, { t: "propose", seat, id: "a2", proposal: damage }, env());
+    expect(s.out).toEqual([{ to: "self", msg: { t: "undelivered", id: "a2" } }]);
+    const unknown = step(
+      state,
+      dm,
+      { t: "propose", seat: "p9", id: "a3", proposal: damage },
+      env(),
+    );
+    expect(unknown.out).toEqual([{ to: "self", msg: { t: "undelivered", id: "a3" } }]);
+  });
+
+  it("brings the answer to the DM, and a player cannot propose", () => {
+    const { state, seat } = join(opened());
+    const player = { role: "player", seat } as Who;
+    const a = step(state, player, { t: "answer", id: "a1", accepted: true }, env());
+    expect(a.out).toEqual([{ to: "dm", msg: { t: "answer", seat, id: "a1", accepted: true } }]);
+    const forged = step(state, player, { t: "propose", seat, id: "x", proposal: damage }, env());
+    expect(forged.out).toEqual([]);
+  });
+});

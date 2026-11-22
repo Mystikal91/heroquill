@@ -17,14 +17,37 @@ export interface TableRoll {
   at: number;
 }
 
+/** What the DM asked of a player, and what came of it. */
+export interface ProposalRecord {
+  id: string;
+  seat: string;
+  /** The line the DM reads ("Aria: 7 fire damage"). */
+  label: string;
+  status: "waiting" | "accepted" | "declined" | "undelivered";
+}
+
 export interface DmTable {
   players: TablePlayer[];
   rolls: TableRoll[];
+  proposals: ProposalRecord[];
 }
+
+export const MAX_PROPOSALS = 12;
 
 export const MAX_SHARED_ROLLS = 30;
 
-export const emptyTable = (): DmTable => ({ players: [], rolls: [] });
+export const emptyTable = (): DmTable => ({ players: [], rolls: [], proposals: [] });
+
+/** A proposal just sent: newest first, the oldest dropped. */
+export const withProposal = (table: DmTable, record: ProposalRecord): DmTable => ({
+  ...table,
+  proposals: [record, ...table.proposals].slice(0, MAX_PROPOSALS),
+});
+
+const settle = (table: DmTable, id: string, status: ProposalRecord["status"]): DmTable => ({
+  ...table,
+  proposals: table.proposals.map((p) => (p.id === id ? { ...p, status } : p)),
+});
 
 const upsert = (players: TablePlayer[], seat: string, change: (p: TablePlayer) => TablePlayer) =>
   players.some((p) => p.seat === seat)
@@ -47,6 +70,7 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
           }),
         })),
         rolls: table.rolls,
+        proposals: table.proposals,
       };
     case "presence":
       return {
@@ -77,6 +101,10 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
         ),
       };
     }
+    case "answer":
+      return settle(table, msg.id, msg.accepted ? "accepted" : "declined");
+    case "undelivered":
+      return settle(table, msg.id, "undelivered");
     default:
       return table;
   }

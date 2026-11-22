@@ -2788,5 +2788,20 @@
   "dm.set.hideNamesHint": "Seuls les personnages des joueurs montrent leur nom ; les autres sont « Créature inconnue ».",
   "dm.set.askInitiative": "Demander l'initiative aux joueurs au début du combat",
   "dm.set.askInitiativeHint": "Le combat attend quelques secondes leurs réponses. Désactivez pour saisir vous-même les initiatives.",
-  "table.unknownCreature": "Créature inconnue"
+  "table.unknownCreature": "Créature inconnue",
+  "table.proposal.dm": "Le MJ",
+  "table.proposal.damage": "{from} vous inflige {amount} dégâts. Les subir ?",
+  "table.proposal.damageTyped": "{from} vous inflige {amount} dégâts de type {type}. Les subir ?",
+  "table.proposal.condition": "{from} vous impose l'état {condition}. L'accepter ?",
+  "table.proposal.say": "Le MJ dit : {text}",
+  "table.proposal.accept": "Accepter",
+  "table.proposal.decline": "Refuser",
+  "table.proposal.ok": "OK",
+  "dm.prop.damage": "{name} : {amount} dégâts",
+  "dm.prop.condition": "{name} : {condition}",
+  "dm.prop.title": "Propositions",
+  "dm.prop.waiting": "en attente",
+  "dm.prop.accepted": "acceptée",
+  "dm.prop.declined": "refusée",
+  "dm.prop.undelivered": "non remise"
 }

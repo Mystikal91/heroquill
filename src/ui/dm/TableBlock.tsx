@@ -141,6 +141,19 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
               </ul>
             </>
           )}
+          {view.proposals.length > 0 && (
+            <>
+              <h4>{ui("dm.prop.title")}</h4>
+              <ul class="plain dm-proposals">
+                {view.proposals.slice(0, 6).map((p) => (
+                  <li key={p.id} data-status={p.status}>
+                    <span>{p.label}</span>
+                    <small>{ui(`dm.prop.${p.status}`)}</small>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
           <div class="dm-online-danger">
             <button
               type="button"

@@ -39,6 +39,17 @@ describe("matchSeats", () => {
   });
 });
 
+describe("matchSeats with an old seat", () => {
+  it("prefers the player who is here to an old seat of the same name", () => {
+    const list = [c({ id: "a", kind: "character", name: "Thalia" })];
+    const found = matchSeats(list, [
+      { seat: "p1", name: "Thalia", online: false },
+      { seat: "p2", name: "Thalia", online: true },
+    ]);
+    expect([...found]).toEqual([["a", "p2"]]);
+  });
+});
+
 describe("trackerViewOf", () => {
   it("shows nothing before the fight starts", () => {
     const e = { ...createEncounter("f"), combatants: [c({ id: "g", initiative: 10 })] };

@@ -3308,3 +3308,23 @@
 .dm-set-list small {
   padding-left: 1.9rem;
 }
+
+.dm-proposals {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.dm-proposals li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dm-proposals li[data-status="declined"] small,
+.dm-proposals li[data-status="undelivered"] small {
+  color: var(--danger, #c0392b);
+}
+
+.dm-proposals li[data-status="accepted"] small {
+  color: #3fa34d;
+}

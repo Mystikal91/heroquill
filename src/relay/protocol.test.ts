@@ -103,3 +103,56 @@ describe("join codes", () => {
     expect(normaliseCode("ABC23O")).toBeUndefined();
   });
 });
+
+describe("reading a proposal", () => {
+  it("reads the three kinds and cuts what is too long", () => {
+    const damage = parseClientMessage(
+      JSON.stringify({
+        t: "propose",
+        seat: "p1",
+        id: "a",
+        proposal: { kind: "damage", amount: 7, type: "fire" },
+      }),
+    );
+    expect(damage).toMatchObject({
+      t: "propose",
+      proposal: { kind: "damage", amount: 7, type: "fire" },
+    });
+    const condition = parseClientMessage(
+      JSON.stringify({
+        t: "propose",
+        seat: "p1",
+        id: "a",
+        proposal: { kind: "condition", condition: "srd51:condition/prone" },
+      }),
+    );
+    expect(condition).toMatchObject({
+      proposal: { kind: "condition", condition: "srd51:condition/prone" },
+    });
+    const say = parseClientMessage(
+      JSON.stringify({
+        t: "propose",
+        seat: "p1",
+        id: "a",
+        proposal: { kind: "say", text: "x".repeat(900) },
+      }),
+    );
+    expect(say?.t === "propose" && say.proposal.kind === "say" && say.proposal.text.length).toBe(
+      400,
+    );
+  });
+
+  it("refuses an empty or unknown proposal and an answer without a verdict", () => {
+    const bad = (proposal: unknown) =>
+      parseClientMessage(JSON.stringify({ t: "propose", seat: "p1", id: "a", proposal }));
+    expect(bad({ kind: "say", text: "  " })).toBeUndefined();
+    expect(bad({ kind: "damage" })).toBeUndefined();
+    expect(bad({ kind: "teleport" })).toBeUndefined();
+    expect(parseClientMessage(JSON.stringify({ t: "answer", id: "a" }))).toBeUndefined();
+    expect(parseClientMessage(JSON.stringify({ t: "answer", id: "a", accepted: false }))).toEqual({
+      t: "answer",
+      id: "a",
+      accepted: false,
+    });
+  });
+});

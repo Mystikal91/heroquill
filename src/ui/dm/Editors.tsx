@@ -6,6 +6,7 @@ import {
   dmRuleset,
   editCombatant,
   effectFor,
+  toggleConditionOf,
   updateEncounter,
 } from "../../app/dm";
 import { content } from "../../app/store";
@@ -276,7 +277,7 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
                   : undefined
               }
               aria-pressed={c.conditions.includes(x.id)}
-              onClick={() => editCombatant(c.id, (y) => toggleCondition(y, x.id))}
+              onClick={() => toggleConditionOf(c, x.id)}
             >
               {x.name}
               {immune.includes(x.id.split("/")[1] ?? "") && <small> · {ui("dm.immuneTag")}</small>}

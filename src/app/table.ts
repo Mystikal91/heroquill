@@ -1,8 +1,15 @@
 import { signal } from "@preact/signals";
+import { uuid } from "../engine/uuid";
 import { newCode, newSecret, roomUrl } from "../relay/address";
 import { type LinkState, type RelayLink, connectRelay } from "../relay/client";
-import { type DmTable, emptyTable, reduceTable, withoutSeat } from "../relay/dmTable";
-import { type ByeReason, LIMITS, type TrackerView } from "../relay/protocol";
+import { type DmTable, emptyTable, reduceTable, withProposal, withoutSeat } from "../relay/dmTable";
+import {
+  type ByeReason,
+  LIMITS,
+  type PlayerCard,
+  type Proposal,
+  type TrackerView,
+} from "../relay/protocol";
 import { dbDelete, dbGet, dbPut } from "../storage/db";
 
 /**
@@ -32,6 +39,9 @@ let link: RelayLink | undefined;
 let wanted: TrackerView | undefined;
 let sentView = "";
 let initiativeHandler: ((seat: string, value: number) => void) | undefined;
+let cardHandler: ((seat: string, card: PlayerCard) => void) | undefined;
+/** What to do when a player answers a proposal, by its id. */
+const answers = new Map<string, (accepted: boolean) => void>();
 let owner: string | undefined;
 let lastSaved = 0;
 
@@ -83,6 +93,11 @@ function connect(campaignId: string, saved: SavedTable) {
         if (wanted) publishTracker(wanted);
       }
       if (msg.t === "initiative") initiativeHandler?.(msg.seat, msg.value);
+      if (msg.t === "card") cardHandler?.(msg.seat, msg.card);
+      if (msg.t === "welcome")
+        for (const p of msg.players) if (p.card) cardHandler?.(p.seat, p.card);
+      if (msg.t === "answer") answers.get(msg.id)?.(msg.accepted);
+      if (msg.t === "answer" || msg.t === "undelivered") answers.delete(msg.id);
       touch(campaignId, saved);
     },
   });
@@ -146,4 +161,30 @@ export function publishTracker(view: TrackerView) {
   const text = JSON.stringify(view);
   if (text === sentView || !link) return;
   if (link.send({ t: "tracker", view })) sentView = text;
+}
+
+/** What to do with a player's card: the DM page keeps its numbers for that character in step. */
+export function onCard(handler: (seat: string, card: PlayerCard) => void) {
+  cardHandler = handler;
+}
+
+/** Whether a player is here now: a proposal only goes to someone who is. */
+export const seatOnline = (seat: string) =>
+  tableOnline() && tableView.value.players.some((p) => p.seat === seat && p.online);
+
+/**
+ * Asks a player to do something on their own sheet. Nothing changes until they accept; `done` hears the answer
+ * (false when it did not reach them). The list of the table shows what is waiting and what came of it.
+ */
+export function propose(
+  seat: string,
+  proposal: Proposal,
+  label: string,
+  done?: (accepted: boolean) => void,
+): boolean {
+  const id = uuid().slice(0, 12);
+  if (!link?.send({ t: "propose", seat, id, proposal })) return false;
+  if (done) answers.set(id, done);
+  tableView.value = withProposal(tableView.value, { id, seat, label, status: "waiting" });
+  return true;
 }

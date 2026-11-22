@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { MAX_SHARED_ROLLS, emptyTable, reduceTable, withoutSeat } from "./dmTable";
+import {
+  MAX_PROPOSALS,
+  MAX_SHARED_ROLLS,
+  emptyTable,
+  reduceTable,
+  withProposal,
+  withoutSeat,
+} from "./dmTable";
 import type { PlayerCard } from "./protocol";
 
 const card: PlayerCard = { name: "Aria", hp: 9, maxHp: 12, tempHp: 0, ac: 15, conditions: [] };
@@ -44,5 +51,36 @@ describe("reduceTable", () => {
   it("removes a seat", () => {
     const t = reduceTable(emptyTable(), { t: "presence", seat: "p1", name: "A", online: true }, 0);
     expect(withoutSeat(t, "p1").players).toEqual([]);
+  });
+});
+
+describe("proposals on the table", () => {
+  it("lists them newest first and settles them by what the player answers", () => {
+    let t = withProposal(emptyTable(), {
+      id: "a",
+      seat: "p1",
+      label: "Aria: 7 damage",
+      status: "waiting",
+    });
+    t = withProposal(t, { id: "b", seat: "p1", label: "Aria: prone", status: "waiting" });
+    expect(t.proposals.map((p) => p.id)).toEqual(["b", "a"]);
+    t = reduceTable(t, { t: "answer", seat: "p1", id: "a", accepted: true }, 0);
+    t = reduceTable(t, { t: "answer", seat: "p1", id: "b", accepted: false }, 0);
+    expect(t.proposals.map((p) => p.status)).toEqual(["declined", "accepted"]);
+    t = reduceTable(
+      withProposal(t, { id: "c", seat: "p2", label: "x", status: "waiting" }),
+      { t: "undelivered", id: "c" },
+      0,
+    );
+    expect(t.proposals[0]?.status).toBe("undelivered");
+  });
+
+  it("keeps only the latest few and survives a welcome", () => {
+    let t = emptyTable();
+    for (let i = 0; i < MAX_PROPOSALS + 4; i++)
+      t = withProposal(t, { id: `i${i}`, seat: "p1", label: "x", status: "waiting" });
+    expect(t.proposals).toHaveLength(MAX_PROPOSALS);
+    t = reduceTable(t, { t: "welcome", v: 1, role: "dm", players: [], dmOnline: true }, 0);
+    expect(t.proposals).toHaveLength(MAX_PROPOSALS);
   });
 });
