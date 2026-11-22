@@ -18,7 +18,8 @@ export interface ColumnSettings {
   hidden: DmColumn[];
 }
 
-export const defaultColumns = (): ColumnSettings => ({ order: [...DM_COLUMNS], hidden: [] });
+/** The effects show as chips beside the name, so their column starts hidden; it can be shown again. */
+export const defaultColumns = (): ColumnSettings => ({ order: [...DM_COLUMNS], hidden: ["cond"] });
 
 /** Settings read from storage: unknown columns go, repeats go, missing ones are added in their usual place. */
 export function readColumns(raw: unknown): ColumnSettings {
@@ -75,13 +76,14 @@ const WIDTHS: Record<DmColumn, string> = {
   cond: "3.4rem",
 };
 
-/** On a narrow table (a phone) these go into the second line of the name instead of a column of their own. */
-export const FOLDED_WHEN_NARROW: readonly DmColumn[] = ["ac", "speed", "cond"];
+/** On a narrow table (a phone) these columns are left out: the speed is in the details, the effects beside the name. */
+export const FOLDED_WHEN_NARROW: readonly DmColumn[] = ["speed", "cond"];
 
 /** Tighter widths for a narrow table. */
 const NARROW_WIDTHS: Partial<Record<DmColumn, string>> = {
-  init: "3.2rem",
-  hp: "6rem",
+  init: "2.8rem",
+  hp: "5.6rem",
+  ac: "2.2rem",
 };
 
 /** The `grid-template-columns` of a row: the chosen columns. */

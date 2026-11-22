@@ -2739,5 +2739,6 @@
   "dm.state.empty": "Leer",
   "dm.resume": "Fortsetzen",
   "dm.openEncounter": "Öffnen",
-  "dm.nextShort": "Weiter"
+  "dm.nextShort": "Weiter",
+  "dm.activeTag": "am Zug"
 }

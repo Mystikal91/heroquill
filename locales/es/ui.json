@@ -2739,5 +2739,6 @@
   "dm.state.empty": "Vacío",
   "dm.resume": "Reanudar",
   "dm.openEncounter": "Abrir",
-  "dm.nextShort": "Siguiente"
+  "dm.nextShort": "Siguiente",
+  "dm.activeTag": "su turno"
 }

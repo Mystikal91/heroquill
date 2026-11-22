@@ -24,19 +24,22 @@ import {
   setGroupInitiative,
   startArea,
   startFight,
+  startRoll,
   updateEncounter,
 } from "../../app/dm";
 import { content } from "../../app/store";
 import { tableCode, tableState, tableView } from "../../app/table";
 import { combatantNumbers } from "../../engine/combatantNumbers";
 import {
+  type Combatant,
   type Encounter,
   activeCombatant,
   isStarted,
   laterCombatants,
   rollAllInitiative,
 } from "../../engine/encounter";
-import { ui } from "../../i18n/ui";
+import { actionRolls, resolveRolls } from "../../engine/monsterRolls";
+import { signed, ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
 import { PlusIcon, StepBackIcon, StepForwardIcon, SwordsIcon } from "../icons";
 import { abilitiesOf } from "./Abilities";
@@ -132,7 +135,7 @@ function EncounterMenu({ e }: { e: Encounter }) {
 }
 
 /** The online table, while it is open: a dot, the code and who is there. It leads to the campaign, where the table is. */
-function OnlineChip() {
+export function OnlineChip() {
   const code = tableCode.value;
   const state = tableState.value;
   if (!code || state === "ended") return null;
@@ -150,15 +153,20 @@ function OnlineChip() {
       <span class="dm-live" data-state={state} aria-hidden="true" />
       <span class="dm-online-code">{code}</span>
       <span class="dm-online-count">{ui("dm.online.here", { n: here, max: seats })}</span>
+      <span class="dm-online-short" aria-hidden="true">
+        {here}
+      </span>
     </button>
   );
 }
 
 /**
- * The line at the top of the encounter: the campaign it belongs to and the encounter (its menu),
- * the online table, and the tools that change who is in the table.
+ * The line at the top of the DM page: the campaign and the encounter (its menu), the two parts as
+ * tabs on a wide screen (a phone has them at the bottom), the online table and, in the fight, the
+ * tools that change who is in the table.
  */
 export function ContextBar({ e }: { e: Encounter }) {
+  const fight = dmSection.value === "encounter";
   return (
     <div class="dm-context">
       <nav class="dm-crumbs" aria-label={ui("dm.where")}>
@@ -176,32 +184,49 @@ export function ContextBar({ e }: { e: Encounter }) {
         </span>
         <EncounterMenu e={e} />
       </nav>
-      <OnlineChip />
-      <div class="dm-bar-tools">
-        <button
-          type="button"
-          class="dm-tool"
-          aria-keyshortcuts="A"
-          aria-label={ui("dm.add")}
-          title={`${ui("dm.add")} (A)`}
-          onClick={openAdd}
-        >
-          <PlusIcon />
-          <span class="dm-tool-label">{ui("dm.addShort")}</span>
-        </button>
-        <button
-          type="button"
-          class="dm-tool"
-          aria-label={ui("dm.area")}
-          title={ui("dm.area.hint")}
-          disabled={e.combatants.length === 0}
-          onClick={startArea}
-        >
-          <SwordsIcon />
-          <span class="dm-tool-label">{ui("dm.area")}</span>
-        </button>
-        <ColumnsEditor />
-      </div>
+      <nav class="dm-inline-tabs" aria-label={ui("dm.title")}>
+        {(["campaign", "encounter"] as const).map((id) => (
+          <button
+            type="button"
+            key={id}
+            aria-current={dmSection.value === id ? "page" : undefined}
+            onClick={() => {
+              dmSection.value = id;
+            }}
+          >
+            {ui(id === "campaign" ? "dm.section.campaign" : "dm.section.encounter")}
+          </button>
+        ))}
+      </nav>
+      <span class="dm-context-gap" />
+      {fight && (
+        <div class="dm-bar-tools">
+          <button
+            type="button"
+            class="dm-tool"
+            aria-keyshortcuts="A"
+            aria-label={ui("dm.add")}
+            title={`${ui("dm.add")} (A)`}
+            onClick={openAdd}
+          >
+            <PlusIcon />
+            <span class="dm-tool-label">{ui("dm.addShort")}</span>
+            <kbd class="dm-kbd">A</kbd>
+          </button>
+          <button
+            type="button"
+            class="dm-tool"
+            aria-label={ui("dm.area")}
+            title={ui("dm.area.hint")}
+            disabled={e.combatants.length === 0}
+            onClick={startArea}
+          >
+            <SwordsIcon />
+            <span class="dm-tool-label">{ui("dm.area")}</span>
+          </button>
+          <ColumnsEditor />
+        </div>
+      )}
     </div>
   );
 }
@@ -288,6 +313,44 @@ export function TurnButtons({ e }: { e: Encounter }) {
       >
         <span class="dm-advance-label">{ui("dm.nextShort")}</span>
         <StepForwardIcon />
+        <kbd class="dm-kbd">N</kbd>
+      </button>
+    </div>
+  );
+}
+
+/**
+ * The attacks of the monster whose turn it is, as buttons in the card of the turn on a narrow screen
+ * (a wide one has the whole stat block beside the table). One opens the roll window, as in the stat block.
+ */
+function TurnAttacks({ c }: { c: Combatant }) {
+  const source = c.kind === "monster" ? c.source : undefined;
+  const all = content.value;
+  const actions =
+    source && all
+      ? ((all.index.get(source)?.data as { actions?: object[] } | undefined)?.actions ?? [])
+      : [];
+  const attacks = actions.flatMap((action, i) => {
+    const rolls = resolveRolls(actionRolls(action), undefined);
+    if (!rolls || rolls.attackBonus === undefined) return [];
+    const name = all?.text(`${source}.actions.${i + 1}`, "name") ?? "";
+    return [{ key: i, name, rolls }];
+  });
+  return (
+    <div class="dm-turn-attacks">
+      {attacks.map((a) => (
+        <button type="button" key={a.key} onClick={() => startRoll(c, a.name, a.rolls)}>
+          {a.name} {signed(a.rolls.attackBonus ?? 0)}
+        </button>
+      ))}
+      <button
+        type="button"
+        class="dm-turn-details"
+        onClick={() => {
+          infoFor.value = c.id;
+        }}
+      >
+        {ui("dm.panel.details")}
       </button>
     </div>
   );
@@ -328,21 +391,14 @@ export function TurnCard({ e }: { e: Encounter }) {
               {active && <b class="dm-turn-of">{active.name}</b>}
             </output>
             {active && numbers && (
-              <button
-                type="button"
-                class="dm-turn-mini"
-                title={ui("dm.info", { name: active.name })}
-                onClick={() => {
-                  infoFor.value = active.id;
-                }}
-              >
-                <span>
-                  <b>{active.hp}</b>/{numbers.maxHp}
+              <span class="dm-turn-mini">
+                <span class="dm-turn-hp">
+                  <b>{active.hp}</b> / {numbers.maxHp}
                 </span>
-                <span>
+                <span class="dm-turn-ac">
                   {ui("dm.col.ac")} {numbers.ac}
                 </span>
-              </button>
+              </span>
             )}
           </>
         ) : (
@@ -360,6 +416,7 @@ export function TurnCard({ e }: { e: Encounter }) {
           <TurnButtons e={e} />
         </div>
       </div>
+      {started && active && <TurnAttacks c={active} />}
       {due.length > 0 && active && (
         <div class="dm-recharge">
           {due.map((d) => (

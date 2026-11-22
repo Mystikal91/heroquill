@@ -1,3 +1,4 @@
+import { render } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import {
   advanceTurn,
@@ -24,7 +25,7 @@ import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
 import { PartyDialog } from "./PartyDialog";
 import { RollPanel } from "./RollPanel";
-import { ContextBar, TurnButtons, TurnCard } from "./TopBar";
+import { ContextBar, OnlineChip, TurnButtons, TurnCard } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
 import { TurnPanel } from "./TurnPanel";
 import "./dm.css";
@@ -66,7 +67,6 @@ function useShortcuts() {
 function EncounterSection({ e }: { e: Encounter }) {
   return (
     <>
-      <ContextBar e={e} />
       {areaMode.value && <AreaPanel />}
       <div class="dm-fight">
         <div class="dm-fight-main">
@@ -103,7 +103,7 @@ function SectionTabs() {
   const nav = useRef<HTMLElement>(null);
   useTabsBar(nav);
   return (
-    <nav class="tabs main-tabs no-print" aria-label={ui("dm.title")} ref={nav}>
+    <nav class="tabs main-tabs dm-section-tabs no-print" aria-label={ui("dm.title")} ref={nav}>
       {SECTIONS.map((section) => (
         <button
           type="button"
@@ -122,6 +122,16 @@ function SectionTabs() {
   );
 }
 
+/** The online table in the header of the app, beside the menu, while this page is open. */
+function useHeaderChip() {
+  useEffect(() => {
+    const slot = document.getElementById("header-extra");
+    if (!slot) return;
+    render(<OnlineChip />, slot);
+    return () => render(null, slot);
+  }, []);
+}
+
 /** The Dungeon Master mode: campaigns with their parties, and an initiative table to prepare fights and run them. */
 export function DmPage() {
   useEffect(() => {
@@ -133,6 +143,7 @@ export function DmPage() {
     });
   }, []);
   useShortcuts();
+  useHeaderChip();
   const e = encounter.value;
   // On a phone a swipe sideways moves between the parts, as it does on the sheet.
   const root = useRef<HTMLElement>(null);
@@ -154,12 +165,15 @@ export function DmPage() {
   return (
     <>
       {dmReady.value && e && <SectionTabs />}
-      <article class="card dm" ref={root} data-dock={fight ? "" : undefined}>
+      <article class="dm" ref={root} data-dock={fight ? "" : undefined}>
         <h2 class="sr-only">{ui("dm.title")}</h2>
         {!dmReady.value || !e ? (
           <p>{ui("app.loading")}</p>
         ) : (
-          <>{dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}</>
+          <>
+            <ContextBar e={e} />
+            {dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}
+          </>
         )}
         <InfoDialog />
         <AddDialog />
@@ -167,8 +181,7 @@ export function DmPage() {
         <PartyDialog />
         <RollPanel />
       </article>
-      {/* On a phone the turn buttons sit under the thumb, above the tabs; outside the card, whose cut
-          corners would clip what is fixed inside it. */}
+      {/* On a phone the turn buttons sit under the thumb, above the tabs. */}
       {fight && (
         <div class="dm-dock no-print">
           <TurnButtons e={fight} />

@@ -2739,5 +2739,6 @@
   "dm.state.empty": "Empty",
   "dm.resume": "Resume",
   "dm.openEncounter": "Open",
-  "dm.nextShort": "Next"
+  "dm.nextShort": "Next",
+  "dm.activeTag": "now"
 }

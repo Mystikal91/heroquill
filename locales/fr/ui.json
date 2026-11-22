@@ -2739,5 +2739,6 @@
   "dm.state.empty": "Vide",
   "dm.resume": "Reprendre",
   "dm.openEncounter": "Ouvrir",
-  "dm.nextShort": "Suivant"
+  "dm.nextShort": "Suivant",
+  "dm.activeTag": "son tour"
 }

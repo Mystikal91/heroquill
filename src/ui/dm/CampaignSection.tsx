@@ -218,7 +218,6 @@ function SavedCharacters({ taken, done }: { taken: Set<string>; done: () => void
 /** The campaigns, and the open one with its name and its party. */
 export function CampaignSection() {
   const open = campaign.value;
-  const [name, setName] = useState("");
   const [picking, setPicking] = useState(false);
   if (!open) return null;
   const fights = (id: string) => encounters.value.filter((e) => e.campaignId === id).length;
@@ -244,24 +243,9 @@ export function CampaignSection() {
             </li>
           ))}
         </ul>
-        <form
-          class="dm-campaign-new"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void newCampaign(name);
-            setName("");
-          }}
-        >
-          <input
-            type="text"
-            value={name}
-            maxLength={80}
-            aria-label={ui("dm.campaign.new")}
-            placeholder={ui("dm.campaign.new")}
-            onInput={(e) => setName(e.currentTarget.value)}
-          />
-          <button type="submit">{ui("dm.campaign.create")}</button>
-        </form>
+        <button type="button" class="dm-campaign-add" onClick={() => void newCampaign("")}>
+          + {ui("dm.campaign.new")}
+        </button>
       </aside>
       <div class="dm-campaign-open">
         <input

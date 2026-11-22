@@ -11,7 +11,7 @@ import {
 
 describe("the columns of the initiative table", () => {
   it("starts with all of them in the usual order", () => {
-    expect(visibleColumns(defaultColumns())).toEqual([...DM_COLUMNS]);
+    expect(visibleColumns(defaultColumns())).toEqual(DM_COLUMNS.filter((c) => c !== "cond"));
   });
 
   it("hides and shows a column, but never the name", () => {
@@ -50,7 +50,7 @@ describe("the columns of the initiative table", () => {
       "4.8rem minmax(0, 1fr) 4rem 3.4rem",
     );
     expect(gridTemplate(["init", "name", "ac", "speed", "cond"], true)).toBe(
-      "3.2rem minmax(0, 1fr)",
+      "2.8rem minmax(0, 1fr) 2.2rem",
     );
   });
 });

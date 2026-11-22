@@ -518,8 +518,6 @@
     padding-inline: 0.5rem;
   }
 
-  .dm-table th[data-col="ac"],
-  .dm-table td[data-col="ac"],
   .dm-table th[data-col="speed"],
   .dm-table td[data-col="speed"],
   .dm-table th[data-col="cond"],
@@ -1968,6 +1966,10 @@
   :root[data-style][data-style] .dm .dm-turn-mini {
     display: none;
   }
+
+  .dm .dm-turn-attacks {
+    display: none;
+  }
 }
 
 /* ---- The card of the turn ---- */
@@ -2316,7 +2318,7 @@
   }
 
   .dm-crumbs {
-    flex-basis: 100%;
+    flex: 1 1 0;
   }
 
   /* The Campaign tab is at the bottom: the line names only the encounter. */
@@ -2327,6 +2329,16 @@
 
   .dm-context .dm-bar-tools {
     margin-left: 0;
+  }
+
+  .dm-context .dm-tool-label,
+  .dm-online-code,
+  .dm-online-count {
+    display: none;
+  }
+
+  .dm-online-short {
+    display: inline;
   }
 }
 
@@ -2683,6 +2695,442 @@
 /* A very narrow page: Area keeps only its icon, so the three tools stay on one line. */
 @container dm (max-width: 22rem) {
   .dm-context .dm-tool:not([aria-keyshortcuts]) .dm-tool-label {
+    display: none;
+  }
+}
+
+/* The attacks of the monster in turn, on a narrow screen: what the DM rolls most, under the thumb. */
+.dm-turn-attacks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+:root[data-style][data-style] .dm-turn-attacks button {
+  flex: 1 1 8rem;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0 0.7rem;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  color: var(--accent);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* ==== As the design drew it: no card around the page, one bar with the tabs, rows that read at a glance ==== */
+
+.dm {
+  padding: 0;
+  background: none;
+}
+
+.dm-context {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-crumbs {
+  flex: 0 1 auto;
+}
+
+.dm-context-gap {
+  flex: 1 1 0;
+}
+
+.dm-inline-tabs {
+  display: flex;
+  gap: 0.15rem;
+}
+
+:root[data-style][data-style] .dm-inline-tabs button {
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+:root[data-style][data-style] .dm-inline-tabs button[aria-current="page"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.dm-online-short {
+  display: none;
+}
+
+/* The two parts are tabs in the bar on a wide screen, the bar of the app at the bottom of a phone. */
+@media (min-width: 42.01rem) {
+  .dm-section-tabs {
+    display: none !important;
+  }
+}
+
+@media (max-width: 42rem) {
+  .dm-inline-tabs {
+    display: none;
+  }
+
+  .dm-context-gap {
+    display: none;
+  }
+
+  .dm-kbd {
+    display: none;
+  }
+}
+
+.dm-kbd {
+  padding: 0 0.3rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  line-height: 1.3;
+  opacity: 0.65;
+}
+
+.dm-dock .dm-kbd {
+  display: none;
+}
+
+.dm-turn-card-buttons .dm-next {
+  min-height: 2.9rem;
+  padding: 0 1.3rem;
+}
+
+/* ---- The rows ---- */
+
+.dm-table th[data-col="hp"] {
+  text-align: left;
+}
+
+.dm-table td[data-col="hp"] .dm-hp-num {
+  justify-content: flex-start;
+}
+
+.dm-table td[data-col="hp"] .dm-cell-button {
+  text-align: left;
+}
+
+/* A character: its initial in a blue circle. */
+.dm-token[data-kind="player"] {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--friend);
+}
+
+.dm-table tbody tr[data-kind="character"] .dm-init-circle {
+  border-color: color-mix(in srgb, #5d86c7 70%, var(--border));
+  color: var(--friend);
+}
+
+.dm-table tbody tr[data-active] .dm-init-circle {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.dm-now-tag {
+  flex: none;
+  padding: 0 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--accent);
+}
+
+.dm-table tbody tr[data-down] {
+  opacity: 0.55;
+}
+
+.dm-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.4rem;
+}
+
+.dm-name > .dm-name-button {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.dm-name > .dm-abilities {
+  flex-basis: 100%;
+}
+
+:root[data-style][data-style] .dm-table .dm-inline-fx {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  width: auto;
+  min-height: 0;
+  padding: 0.1rem;
+}
+
+.dm-fx-chip {
+  padding: 0 0.55rem;
+  border: 1px solid color-mix(in srgb, #9b6fb0 70%, var(--border));
+  border-radius: 999px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, #c89bdc 75%, var(--fg));
+  white-space: nowrap;
+}
+
+/* ---- The card of the turn on a narrow screen: the numbers, the attacks, the details ---- */
+
+.dm-turn-mini {
+  cursor: default;
+}
+
+.dm-turn-ac {
+  padding: 0 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.dm-turnbar .dm-turn-attacks {
+  margin-top: 0.15rem;
+}
+
+:root[data-style][data-style] .dm-turn-attacks .dm-turn-details {
+  flex: 0 0 auto;
+  border-color: var(--border);
+  background: transparent;
+  color: var(--fg);
+}
+
+/* ---- What the monster in turn can do, as cards ---- */
+
+.dm-panel-actions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dm-panel-actions h4 {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dm-action-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
+}
+
+.dm-action-card small {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.dm-action-card p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.9rem;
+  color: var(--muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.dm-action-rolls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+:root[data-style][data-style] .dm-action-rolls button {
+  min-height: 2.2rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+:root[data-style][data-style] .dm-action-rolls .dm-action-damage {
+  border-color: color-mix(in srgb, #b4544b 60%, var(--border));
+  background: color-mix(in srgb, #b4544b 12%, var(--surface));
+  color: var(--foe);
+}
+
+/* ---- The campaign, as the design drew it ---- */
+
+:root[data-style][data-style] .dm-campaign-add {
+  width: 100%;
+  min-height: 2.6rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+.dm-encounter-list {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dm-encounter-list .dm-section-head {
+  margin: 0;
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dm-encounter-list ul {
+  border: 0;
+  border-radius: 0;
+}
+
+.dm-player-numbers .field {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 0;
+  padding: 0.2rem 0 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+:root[data-style] .dm-player-numbers input {
+  min-height: 2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dm-player-numbers .field > span {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dm-code {
+  font-size: 2rem;
+}
+
+@media (max-width: 42rem) {
+  .dm-context {
+    flex-wrap: nowrap;
+  }
+
+  .dm-crumbs {
+    flex: 1 1 0;
+  }
+
+  .dm-online-short {
+    display: inline;
+  }
+
+  :root[data-style][data-style] .dm-online-chip {
+    padding: 0 0.6rem;
+  }
+}
+
+:root[data-style][data-style] .dm-turn-attacks button {
+  flex: 1 1 auto;
+  padding: 0 0.55rem;
+  font-size: 0.8rem;
+}
+
+/* On a phone the bar keeps the name of the encounter readable: the columns are chosen on a wide screen. */
+@media (max-width: 42rem) {
+  .dm-context .dm-tool-quiet {
+    display: none;
+  }
+
+  .dm-crumbs .dm-encounter > .popover-button {
+    padding: 0 0.35rem;
+    font-size: 1rem;
+  }
+}
+
+/* The online table sits in the header, beside the menu; this file comes with the DM page. */
+.header-extra {
+  display: flex;
+  align-items: center;
+}
+
+/* The hit points and armor class of the one in turn, on one line beside the name: no box, the armor class a pill. */
+:root[data-style][data-style] .dm-turn-mini {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.dm-turn-hp b {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--fg);
+}
+
+.dm-turn-mini .dm-turn-ac {
+  padding: 0.05rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+}
+
+.dm-turnbar .dm-status {
+  align-self: stretch;
+  align-content: center;
+}
+
+/* The chips of the effects line up with the name, and a row with nothing under the name stays one line. */
+.dm-name-button:not(:has(.dm-sub)) .dm-token {
+  grid-row: auto;
+}
+
+:root[data-style][data-style] .dm-table .dm-inline-fx {
+  align-self: center;
+  line-height: 1;
+}
+
+/* On a narrow table the row in turn is marked by its colour and its gold circle: the tag would only push the row taller. */
+@container dmtable (max-width: 34rem) {
+  .dm-now-tag {
     display: none;
   }
 }

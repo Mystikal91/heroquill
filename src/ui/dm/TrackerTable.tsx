@@ -23,11 +23,11 @@ import {
 } from "../../engine/encounter";
 import { type UiKey, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
-import { DieIcon, InfoIcon, PawIcon, ShieldIcon } from "../icons";
+import { DieIcon, ShieldIcon } from "../icons";
 import { StarIcon } from "../play/icons";
 import { AbilitiesCell } from "./Abilities";
 import { CellPopover } from "./CellPopover";
-import { EffectsEditor, HpEditor, InitEditor } from "./Editors";
+import { EffectsEditor, HpEditor, InitEditor, conditionName } from "./Editors";
 
 /** The second line under a name: what the creature is. */
 export function kindLine(c: Combatant): string {
@@ -46,6 +46,30 @@ function conditionSlugs(c: Combatant): string {
     .map((id) => id.split("/")[1])
     .filter(Boolean)
     .join(" ");
+}
+
+/** The conditions and effects in force, as chips beside the name; touching them opens the editor. */
+function InlineEffects({ c }: { c: Combatant }) {
+  const names = [...c.conditions.map(conditionName), ...c.effects.map((x) => x.name)];
+  if (names.length === 0) return null;
+  return (
+    <CellPopover
+      title={ui("dm.editConditions", { name: c.name })}
+      class="dm-inline-fx"
+      trigger={names.map((name) => (
+        <span key={name} class="dm-fx-chip">
+          {name}
+        </span>
+      ))}
+    >
+      {(close) => (
+        <>
+          <h4 class="dm-pop-title">{ui("play.activeEffects")}</h4>
+          <EffectsEditor c={c} close={close} />
+        </>
+      )}
+    </CellPopover>
+  );
 }
 
 function EffectsCell({ c }: { c: Combatant }) {
@@ -129,15 +153,7 @@ function InitCell({ c }: { c: Combatant }) {
   );
 }
 
-function Cell({
-  col,
-  c,
-  columns,
-}: {
-  col: DmColumn;
-  c: Combatant;
-  columns: readonly DmColumn[];
-}) {
+function Cell({ col, c, grouped }: { col: DmColumn; c: Combatant; grouped?: boolean }) {
   const numbers = combatantNumbers(c);
   const acChanged = numbers.ac !== c.ac;
   const acTitle = explainNumber(c.ac, numbers.parts.ac, { floor: numbers.floor });
@@ -162,7 +178,8 @@ function Cell({
     case "name": {
       const surprised = c.surprised && (encounter.value?.round ?? 0) <= 1;
       const sub = [
-        kindLine(c),
+        // In a group the title line already says what the creature is.
+        grouped ? "" : kindLine(c),
         surprised ? ui("dm.surprised") : "",
         isDown(c) && !c.lair ? ui("dm.down") : "",
       ]
@@ -171,6 +188,7 @@ function Cell({
       const live = liveIds.value.has(c.id);
       const label = live ? ui("dm.live") : ui("dm.manual");
       const player = c.kind === "character";
+      const active = encounter.value?.turn === c.id && (encounter.value?.round ?? 0) > 0;
       return (
         <td data-col="name" class="dm-name">
           {/* The whole name opens the details of the creature. */}
@@ -183,25 +201,19 @@ function Cell({
               infoFor.value = c.id;
             }}
           >
-            <span
-              class="dm-token"
-              data-kind={c.lair ? "lair" : player ? "player" : "creature"}
-              title={
-                c.lair
-                  ? ui("dm.lairName")
-                  : player
-                    ? ui("dm.kind.character")
-                    : ui("dm.kind.creature")
-              }
-              aria-hidden="true"
-            >
-              {c.lair ? <StarIcon /> : player ? <ShieldIcon /> : <PawIcon />}
-            </span>
+            {/* A character has a shield in a blue circle, the lair a star; a monster needs no mark. */}
+            {(c.lair || player) && (
+              <span
+                class="dm-token"
+                data-kind={c.lair ? "lair" : "player"}
+                title={c.lair ? ui("dm.lairName") : ui("dm.kind.character")}
+                aria-hidden="true"
+              >
+                {c.lair ? <StarIcon /> : <ShieldIcon />}
+              </span>
+            )}
             <span class="dm-name-line">
               <span class="dm-name-text">{c.name}</span>
-              <span class="dm-name-info" aria-hidden="true">
-                <InfoIcon />
-              </span>
               {player && (
                 <span
                   class="dm-dot"
@@ -211,24 +223,12 @@ function Cell({
                   title={label}
                 />
               )}
+              {active && <span class="dm-now-tag">{ui("dm.activeTag")}</span>}
             </span>
-            <span class="dm-sub">{sub}</span>
+            {sub && <span class="dm-sub">{sub}</span>}
           </button>
+          <InlineEffects c={c} />
           <AbilitiesCell c={c} />
-          {/* On a narrow table armor class, speed and effects come here instead of columns of their own. */}
-          <span class="dm-extra">
-            {columns.includes("ac") && (
-              <span data-changed={acChanged || undefined} title={acTitle}>
-                {ui("dm.col.ac")} {numbers.ac}
-              </span>
-            )}
-            {columns.includes("speed") && numbers.speed !== undefined && (
-              <span data-changed={speedChanged || undefined} title={speedTitle}>
-                {distance(numbers.speed)}
-              </span>
-            )}
-            {columns.includes("cond") && <EffectsCell c={c} />}
-          </span>
         </td>
       );
     }
@@ -358,7 +358,7 @@ export function TrackerTable({ e }: { e: Encounter }) {
                 </td>
               )}
               {columns.map((col) => (
-                <Cell key={col} col={col} c={c} columns={columns} />
+                <Cell key={col} col={col} c={c} grouped={run} />
               ))}
             </tr>,
           ])}

@@ -167,6 +167,8 @@ export function App() {
         </div>
         {withBar && <CharacterBar />}
         <div class="app-actions">
+          {/* The DM page puts the state of its online table here (it is loaded only with that page). */}
+          <div id="header-extra" class="header-extra" />
           <AppMenu />
         </div>
       </header>
