@@ -106,7 +106,7 @@ export function SheetHeader() {
         </div>
         <div>
           <dd>
-            <Change step="origin" what={ui("print.background")}>
+            <Change step="background" what={ui("print.background")}>
               {ch.choices.background ? name(ch.choices.background) : "—"}
             </Change>
           </dd>

@@ -11,8 +11,8 @@ import { OptionalRules } from "./OptionalRules";
 import { StartingEquipment } from "./StartingEquipment";
 import { Select, entriesOfKind } from "./fields";
 
-/** Name, species, subspecies and background. */
-export function OriginStep() {
+/** Name, species and subspecies, with what the species asks to choose. */
+export function SpeciesStep() {
   const c = character.value;
   return (
     <div class="step-split">
@@ -61,7 +61,20 @@ export function OriginStep() {
         )}
         {/* What the species asks to choose (a lineage, a skill), asked here and not three steps on. */}
         <Choices only="species" />
+      </div>
+      <div class="step-info">
+        <SpeciesInfo />
+      </div>
+    </div>
+  );
+}
 
+/** The background, with what it asks to choose and the optional rules of origin. */
+export function BackgroundStep() {
+  const c = character.value;
+  return (
+    <div class="step-split">
+      <div class="step-fields">
         <CardSelect
           label={ui("form.background")}
           fact={backgroundFact}
@@ -77,7 +90,6 @@ export function OriginStep() {
         <OptionalRules />
       </div>
       <div class="step-info">
-        <SpeciesInfo />
         <BackgroundInfo />
       </div>
     </div>

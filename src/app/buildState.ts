@@ -3,6 +3,7 @@ import type { LevelUpSummary } from "../engine/levelUp";
 
 export type StepId =
   | "origin"
+  | "background"
   | "class"
   | "abilities"
   | "choices"
@@ -13,10 +14,10 @@ export type StepId =
   | "freeEdit";
 
 /**
- * The build step that is open, or none. Only one is open at a time, so the page stays short;
- * tapping the title of the open one closes it, to see all the steps at once.
+ * What the build screen shows: one step, or "ready" (the sheet can be played, and what is left to
+ * refine). Undefined lets the screen choose: the first of the basics not done, or "ready" when they all are.
  */
-export const openStep = signal<StepId | undefined>("origin");
+export const openStep = signal<StepId | "ready" | undefined>(undefined);
 
 /** Where the level up flow is: closed, choosing the class, or showing what is left to do. */
 export const levelUpPhase = signal<"closed" | "choose" | "done">("closed");

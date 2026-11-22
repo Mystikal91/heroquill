@@ -837,3 +837,645 @@ p.edition-current {
   flex: 1 1 8rem;
   min-width: 0;
 }
+
+/* ==== Build, as a path: the four basics one at a time, then a sheet ready to play and what can be refined ==== */
+
+.bld {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr) 19rem;
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.bld-group-title {
+  margin: 0.4rem 0 0.4rem 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bld-group-title small {
+  margin-left: 0.4rem;
+  font-family: var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.bld-nav {
+  position: sticky;
+  top: calc(var(--tabs-height, 0px) + 0.75rem);
+  display: grid;
+  gap: 0.2rem;
+}
+
+.bld-nav ol,
+.bld-nav ul {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0 0 0.6rem;
+}
+
+:root[data-style][data-style] .bld-nav-item {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 2.9rem;
+  margin: 0;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-body);
+  letter-spacing: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+:root[data-style][data-style] .bld-nav-item:hover {
+  border-color: var(--border);
+}
+
+:root[data-style][data-style] .bld-nav-item[aria-current="step"] {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.bld-nav-mark {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1.5px dashed var(--border);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.bld-nav-item[data-numbered] .bld-nav-mark {
+  border-style: solid;
+}
+
+.bld-nav-item[data-done][data-numbered] .bld-nav-mark,
+.bld-nav-ready .bld-nav-mark {
+  border-color: #2f6b45;
+  background: #2f6b45;
+  color: #fff;
+}
+
+.bld-nav-item[aria-current="step"] .bld-nav-mark {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.bld-nav-text {
+  display: grid;
+  min-width: 0;
+}
+
+.bld-nav-text b {
+  font-weight: 600;
+}
+
+.bld-nav-text small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- The step ---- */
+
+.bld-main {
+  min-width: 0;
+}
+
+.bld-step {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.bld-step-head h2 {
+  margin: 0.3rem 0 0.2rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+
+.bld-hint {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.bld-stepbar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.bld-stepbar small {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bld-stepbar-track {
+  display: flex;
+  flex: 1;
+  gap: 0.3rem;
+}
+
+.bld-stepbar-track span {
+  flex: 1;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.bld-stepbar-track span[data-done] {
+  background: #2f6b45;
+  box-shadow: none;
+}
+
+.bld-stepbar-track span[data-current] {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.bld-step-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.bld-foot-gap {
+  flex: 1;
+}
+
+.bld-step-foot button {
+  min-height: 2.8rem;
+  margin: 0;
+}
+
+:root[data-style] .bld-step-foot .primary,
+:root[data-style] .bld-ready-actions .primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+/* "Assign for me", "Choose for me". */
+.bld-assist {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  margin: 0.2rem 0 0.8rem;
+}
+
+:root[data-style][data-style] .bld-assist-btn {
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0 1rem;
+  border: 1px solid #3d6fa8;
+  border-radius: 999px;
+  background: color-mix(in srgb, #3d6fa8 14%, var(--surface));
+  color: color-mix(in srgb, #3d6fa8 70%, var(--fg));
+  font-weight: 700;
+}
+
+.bld-assist .muted {
+  font-size: 0.92rem;
+}
+
+/* The ability cards in the colour of each ability, as Play has them. */
+.bld .ability-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.bld .ability-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--ab, var(--accent));
+}
+
+/* ---- The character as it grows ---- */
+
+.bld-preview {
+  position: sticky;
+  top: calc(var(--tabs-height, 0px) + 0.75rem);
+  display: grid;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.bld-band {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--cls, var(--accent)),
+    color-mix(in srgb, var(--cls, var(--accent)) 70%, #fff)
+  );
+  color: #fff;
+}
+
+.bld-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1.5px solid rgb(255 255 255 / 0.65);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.15);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.bld-who {
+  display: grid;
+  min-width: 0;
+}
+
+.bld-who b {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bld-who span {
+  font-size: 0.92rem;
+  opacity: 0.92;
+}
+
+.bld-preview-body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.bld-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.bld-tiles div {
+  display: grid;
+  padding: 0.35rem 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.bld-tiles small {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.bld-tiles b {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.bld-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.3rem;
+  margin: 0;
+}
+
+.bld-abilities li {
+  display: grid;
+  justify-items: center;
+  padding: 0.25rem 0;
+  border-top: 3px solid var(--ab, var(--accent));
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+
+.bld-abilities b {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.bld-abilities span {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.bld-preview .secondary,
+.bld-preview .level-up-button {
+  margin: 0;
+}
+
+.bld-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.bld-ring {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) var(--p), var(--surface-2) 0);
+  -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%);
+  mask: radial-gradient(circle, transparent 54%, #000 56%);
+}
+
+/* ---- Ready to play ---- */
+
+.bld-ready {
+  display: grid;
+  gap: 1rem;
+}
+
+.bld-ready-hero {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.bld-ready-badge {
+  justify-self: start;
+  padding: 0.1rem 0.7rem;
+  border: 1px solid #6aa07a;
+  border-radius: 999px;
+  background: color-mix(in srgb, #2f6b45 14%, var(--surface));
+  color: color-mix(in srgb, #2f6b45 75%, var(--fg));
+  font-size: 0.9rem;
+}
+
+.bld-ready-hero h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+}
+
+.bld-ready-hero p {
+  margin: 0;
+  max-width: 38rem;
+  font-size: 1.08rem;
+}
+
+.bld-ready-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.bld-ready-actions button {
+  min-height: 3rem;
+  margin: 0;
+  padding: 0 1.4rem;
+}
+
+.bld-refine {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.bld-refine-card {
+  --tint: #3d6fa8;
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--tint);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.bld-refine-card[data-step="equipment"] {
+  --tint: #c0702a;
+}
+
+.bld-refine-card[data-step="story"] {
+  --tint: #7a5ab0;
+}
+
+.bld-refine-card[data-step="features"] {
+  --tint: #4f8a3d;
+}
+
+.bld-refine-card[data-step="freeEdit"] {
+  --tint: #5b6472;
+}
+
+.bld-refine-card[data-step="choices"] {
+  --tint: #b0467f;
+}
+
+.bld-refine-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bld-refine-head > div {
+  display: grid;
+}
+
+.bld-refine-icon {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tint) 16%, var(--surface));
+  color: var(--tint);
+  font-size: 1rem;
+}
+
+.bld-refine-card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.bld-refine-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.bld-refine-actions button {
+  min-height: 2.3rem;
+  margin: 0;
+}
+
+/* ---- Narrower: the steps as a row of chips above, the character beside or above ---- */
+
+@media (max-width: 64rem) {
+  .bld {
+    grid-template-columns: minmax(0, 1fr) 17rem;
+  }
+
+  .bld-nav {
+    position: static;
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .bld-nav ol,
+  .bld-nav ul {
+    display: flex;
+    gap: 0.3rem;
+    margin: 0;
+  }
+
+  .bld-nav ol,
+  .bld-nav ul,
+  .bld-nav li {
+    flex: none;
+  }
+
+  .bld-nav .bld-group-title {
+    display: none;
+  }
+
+  :root[data-style][data-style] .bld-nav-item {
+    grid-template-columns: auto auto;
+    width: auto;
+    min-height: 2.5rem;
+    padding: 0.2rem 0.7rem 0.2rem 0.3rem;
+    border-color: var(--border);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .bld-nav-text small {
+    display: none;
+  }
+
+  .bld-nav-mark {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .bld {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* On a phone the character is a short line at the top: the band, the tiles and the progress. */
+  .bld-preview {
+    position: static;
+    order: -1;
+  }
+
+  .bld-preview-body {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .bld-abilities,
+  .bld-preview .secondary,
+  .bld-preview .level-up-button {
+    display: none;
+  }
+
+  .bld-progress {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .bld-progress span:last-child {
+    display: none;
+  }
+
+  .bld-band {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .bld-step-head h2 {
+    font-size: 1.35rem;
+  }
+
+  /* The way on: under the thumb, above the tabs. */
+  .bld-step-foot {
+    position: sticky;
+    bottom: calc(var(--tabs-bottom, 0px) + 0.4rem);
+    z-index: 5;
+    margin: 0 -0.4rem;
+    padding: 0.6rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: 0 -4px 12px -6px rgb(0 0 0 / 0.3);
+  }
+
+  .bld-foot-note {
+    display: none;
+  }
+
+  .bld-step-foot {
+    flex-wrap: nowrap;
+  }
+
+  .bld-foot-gap {
+    display: none;
+  }
+
+  .bld-step-foot .primary {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Only the arrow back on a phone: the room goes to "Continue". */
+  .bld-back-label {
+    display: none;
+  }
+
+  .bld-step-foot .bld-back {
+    flex: none;
+    min-width: 2.8rem;
+  }
+}

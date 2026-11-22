@@ -68,7 +68,7 @@ export function AbilityScores() {
           const derived = s?.abilities[ability];
           const bonus = derived?.bonus ?? 0;
           return (
-            <div class="ability-card" key={ability}>
+            <div class="ability-card" key={ability} data-ability={ability}>
               <div class="ac-head">
                 <b>{abbreviation(ability)}</b>
                 <span class="ac-name">{fullName(ability)}</span>
