@@ -34,6 +34,8 @@ export const tableState = signal<LinkState>("connecting");
 /** Why the room ended the table, when it did. */
 export const tableBye = signal<ByeReason | undefined>(undefined);
 export const tableView = signal<DmTable>(emptyTable());
+/** The seat whose numbers the DM is looking at in a dialog. */
+export const seatOpen = signal<string | undefined>(undefined);
 
 let link: RelayLink | undefined;
 let wanted: TrackerView | undefined;

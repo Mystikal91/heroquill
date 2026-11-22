@@ -27,6 +27,7 @@ import { CampaignSection } from "./CampaignSection";
 import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
 import { PartyDialog } from "./PartyDialog";
+import { PlayerInfoDialog } from "./PlayerInfoDialog";
 import { RollPanel } from "./RollPanel";
 import { SettingsSection } from "./SettingsSection";
 import { ContextBar, OnlineChip, TurnButtons, TurnCard } from "./TopBar";
@@ -188,6 +189,7 @@ export function DmPage() {
         <AddDialog />
         <AddEffectDialog />
         <PartyDialog />
+        <PlayerInfoDialog />
         <RollPanel />
         <DiceDrawer>
           <ModePicker />

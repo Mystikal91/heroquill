@@ -16,6 +16,8 @@ import {
   normaliseCode,
 } from "../relay/protocol";
 import { damageName } from "../ui/damageName";
+import { movementLines } from "../ui/movementLines";
+import { damageEffectRows } from "../ui/play/DamageEffects";
 import { beastArmorClass } from "../ui/play/beastArmorClass";
 import { askConfirm } from "./confirm";
 import { changePlay, damageCharacter, rollCheck, rollLog } from "./play";
@@ -75,13 +77,33 @@ export function currentCard(): PlayerCard | undefined {
   const play = character.value.play;
   const shape = beastPool(play);
   const beastAc = beastArmorClass(c, play);
+  const caster = s.spellcasters[0];
+  const passive = (slug: string) => {
+    const skill = s.skills.find((k) => k.id === `${character.value.ruleset}:skill/${slug}`);
+    return skill ? 10 + skill.bonus : undefined;
+  };
+  const investigation = passive("investigation");
+  const insight = passive("insight");
   return makeCard({
     name: character.value.name.trim() || ui("table.defaultName"),
+    cls: character.value.classes.map((k) => `${c.name(k.classId)} ${k.level}`).join(" / "),
     hp: shape ? shape.hp : currentHp(play, s.hitPoints.max),
     maxHp: shape ? shape.max : s.hitPoints.max,
     tempHp: shape ? 0 : play.tempHp,
     ac: beastAc ?? s.armorClass.value,
     ...(s.speed !== undefined && { speed: s.speed }),
+    initiativeBonus: s.initiative,
+    passivePerception: s.passivePerception,
+    ...(investigation !== undefined && { passiveInvestigation: investigation }),
+    ...(insight !== undefined && { passiveInsight: insight }),
+    proficiency: s.proficiencyBonus,
+    martialDc: s.martialSaveDc,
+    ...(caster && { spellDc: caster.saveDc, spellAttack: caster.attackBonus }),
+    critRange: s.critRange,
+    attunedUsed: s.attunement.used,
+    attunedMax: s.attunement.max,
+    senses: movementLines(s.movement, s.senses),
+    defenses: damageEffectRows(),
     conditions: [
       ...play.conditions.map((id) => c.name(id)),
       ...(play.concentration

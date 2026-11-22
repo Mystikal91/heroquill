@@ -3347,3 +3347,43 @@
 .dm-ask-form button {
   justify-self: start;
 }
+
+/* A player in the list of the table is a button that opens what they share. */
+:root[data-style] .dm-seat .dm-seat-body {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+:root[data-style] .dm-seat .dm-seat-body:hover b {
+  text-decoration: underline;
+}
+
+.dm-seat-info {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem 1rem;
+  overflow-y: auto;
+}
+
+.dm-seat-info h4 {
+  margin: 0.6rem 0 0;
+}
+
+.dm-seat-info p {
+  margin: 0;
+}
+
+.dm-seat-note {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+}

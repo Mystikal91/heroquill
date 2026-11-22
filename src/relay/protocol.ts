@@ -41,6 +41,20 @@ export interface PlayerCard {
   initiativeBonus?: number;
   passivePerception?: number;
   spellDc?: number;
+  spellAttack?: number;
+  passiveInvestigation?: number;
+  passiveInsight?: number;
+  proficiency?: number;
+  /** The save DC of martial features. */
+  martialDc?: number;
+  /** The lowest die that is a critical hit, when it is under 20. */
+  critRange?: number;
+  attunedUsed?: number;
+  attunedMax?: number;
+  /** Other speeds and senses, as the player's language says them: name and value. */
+  senses?: [string, string][];
+  /** What the character does to damage (resistances, reductions...): name and text. */
+  defenses?: [string, string][];
   conditions: string[];
   concentration?: string;
 }
@@ -157,6 +171,19 @@ const int = (x: unknown, min: number, max: number): number | undefined =>
     ? Math.min(max, Math.max(min, Math.trunc(x)))
     : undefined;
 
+/** A list of name and text pairs, cut to a few short ones. */
+function pairs(raw: unknown, count: number, length: number): [string, string][] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: [string, string][] = [];
+  for (const item of raw.slice(0, count)) {
+    if (!Array.isArray(item)) continue;
+    const name = str(item[0], length);
+    const value = str(item[1], length);
+    if (name !== undefined && value !== undefined) out.push([name, value]);
+  }
+  return out.length > 0 ? out : undefined;
+}
+
 export function readCard(raw: unknown): PlayerCard | undefined {
   if (!isObject(raw)) return undefined;
   const name = str(raw.name, LIMITS.text);
@@ -171,6 +198,16 @@ export function readCard(raw: unknown): PlayerCard | undefined {
   const passive = int(raw.passivePerception, 0, 99);
   const dc = int(raw.spellDc, 0, 99);
   const concentration = str(raw.concentration, LIMITS.text);
+  const attack = int(raw.spellAttack, -20, 40);
+  const investigation = int(raw.passiveInvestigation, 0, 99);
+  const insight = int(raw.passiveInsight, 0, 99);
+  const proficiency = int(raw.proficiency, 0, 20);
+  const martial = int(raw.martialDc, 0, 99);
+  const crit = int(raw.critRange, 2, 20);
+  const attunedUsed = int(raw.attunedUsed, 0, 9);
+  const attunedMax = int(raw.attunedMax, 0, 9);
+  const senses = pairs(raw.senses, 10, 80);
+  const defenses = pairs(raw.defenses, 10, 200);
   return {
     name,
     ...(cls && { cls }),
@@ -182,6 +219,16 @@ export function readCard(raw: unknown): PlayerCard | undefined {
     ...(bonus !== undefined && { initiativeBonus: bonus }),
     ...(passive !== undefined && { passivePerception: passive }),
     ...(dc !== undefined && { spellDc: dc }),
+    ...(attack !== undefined && { spellAttack: attack }),
+    ...(investigation !== undefined && { passiveInvestigation: investigation }),
+    ...(insight !== undefined && { passiveInsight: insight }),
+    ...(proficiency !== undefined && { proficiency }),
+    ...(martial !== undefined && { martialDc: martial }),
+    ...(crit !== undefined && crit < 20 && { critRange: crit }),
+    ...(attunedUsed !== undefined && { attunedUsed }),
+    ...(attunedMax !== undefined && { attunedMax }),
+    ...(senses && { senses }),
+    ...(defenses && { defenses }),
     conditions: (Array.isArray(raw.conditions) ? raw.conditions : [])
       .map((c) => str(c, LIMITS.text))
       .filter((c): c is string => c !== undefined && c !== "")

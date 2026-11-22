@@ -8,6 +8,7 @@ import {
   kickPlayer,
   openTable,
   propose,
+  seatOpen,
   tableBye,
   tableCode,
   tableState,
@@ -36,7 +37,14 @@ function Seat({ p }: { p: TablePlayer }) {
         role="img"
         aria-label={p.online ? ui("dm.table.here") : ui("dm.table.away")}
       />
-      <div class="dm-seat-body">
+      <button
+        type="button"
+        class="dm-seat-body"
+        aria-haspopup="dialog"
+        onClick={() => {
+          seatOpen.value = p.seat;
+        }}
+      >
         <b>{p.name || ui("dm.unnamed")}</b>
         {card ? (
           <small>
@@ -46,7 +54,7 @@ function Seat({ p }: { p: TablePlayer }) {
         ) : (
           <small class="muted">{ui("dm.table.noCard")}</small>
         )}
-      </div>
+      </button>
       <button
         type="button"
         class="secondary dm-seat-kick"

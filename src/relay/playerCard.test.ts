@@ -43,3 +43,39 @@ describe("makeCard", () => {
     expect(sameCard(undefined, card)).toBe(false);
   });
 });
+
+describe("the numbers at a glance", () => {
+  const full = {
+    ...input,
+    initiativeBonus: 2,
+    passivePerception: 12,
+    passiveInvestigation: 11,
+    passiveInsight: 10,
+    proficiency: 2,
+    martialDc: 12,
+    spellDc: 13,
+    spellAttack: 5,
+    critRange: 19,
+    attunedUsed: 1,
+    attunedMax: 3,
+    senses: [["Darkvision", "60 ft"]] as [string, string][],
+    defenses: [["Resistances", "Fire"]] as [string, string][],
+  };
+
+  it("carries them, and the room reads them back as they are", () => {
+    const card = makeCard(full);
+    expect(readCard(card)).toEqual(card);
+    expect(card).toMatchObject({ martialDc: 12, spellAttack: 5, critRange: 19, attunedMax: 3 });
+  });
+
+  it("leaves out a normal critical range and attunement nobody uses", () => {
+    const card = makeCard({ ...full, critRange: 20, attunedUsed: 0 });
+    expect(card).not.toHaveProperty("critRange");
+    expect(card).not.toHaveProperty("attunedMax");
+  });
+
+  it("cuts a list that is too long", () => {
+    const many = Array.from({ length: 30 }, (_, i) => [`Sense ${i}`, "30 ft"] as [string, string]);
+    expect(readCard({ ...makeCard(full), senses: many })?.senses).toHaveLength(10);
+  });
+});
