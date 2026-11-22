@@ -77,7 +77,7 @@ export const dmReady = signal(false);
 export const campaigns = signal<Campaign[]>([]);
 export const campaign = signal<Campaign | undefined>(undefined);
 /** The part of the page on screen: the campaign and its party, or the fights. */
-export type DmSection = "campaign" | "encounter";
+export type DmSection = "campaign" | "encounter" | "rules";
 export const dmSection = signal<DmSection>("encounter");
 /** The window that offers to put the party in the open encounter. */
 export const partyPrompt = signal(false);

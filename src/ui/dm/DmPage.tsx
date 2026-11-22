@@ -14,9 +14,10 @@ import type { DmSection } from "../../app/dm";
 import { monstersWanted } from "../../app/rulesView";
 import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
-import { BookIcon, SwordsIcon } from "../icons";
+import { BookIcon, FlagIcon, SwordsIcon } from "../icons";
 import { DiceDrawer } from "../play/DiceDrawer";
 import { ModePicker } from "../play/Rolls";
+import { RulesPage } from "../rules/RulesPage";
 import { neighbour, useSwipe } from "../useSwipe";
 import { useTabsBar } from "../useTabsBar";
 import { AddDialog } from "./AddDialog";
@@ -93,11 +94,12 @@ function EncounterSection({ e }: { e: Encounter }) {
 
 const SECTIONS: {
   id: DmSection;
-  label: "dm.section.campaign" | "dm.section.encounter";
+  label: "dm.section.campaign" | "dm.section.encounter" | "tab.rules";
   icon: typeof BookIcon;
 }[] = [
-  { id: "campaign", label: "dm.section.campaign", icon: BookIcon },
+  { id: "campaign", label: "dm.section.campaign", icon: FlagIcon },
   { id: "encounter", label: "dm.section.encounter", icon: SwordsIcon },
+  { id: "rules", label: "tab.rules", icon: BookIcon },
 ];
 
 /** The two parts of the page, as the tabs of the app are: a bar at the bottom of a phone, sticky at the top elsewhere. */
@@ -173,8 +175,10 @@ export function DmPage() {
           <p>{ui("app.loading")}</p>
         ) : (
           <>
-            <ContextBar e={e} />
-            {dmSection.value === "campaign" ? <CampaignSection /> : <EncounterSection e={e} />}
+            {dmSection.value !== "rules" && <ContextBar e={e} />}
+            {dmSection.value === "campaign" && <CampaignSection />}
+            {dmSection.value === "encounter" && <EncounterSection e={e} />}
+            {dmSection.value === "rules" && <RulesPage />}
           </>
         )}
         <InfoDialog />
