@@ -277,3 +277,19 @@ describe("an answer with a total", () => {
     ]);
   });
 });
+
+describe("a line from a player", () => {
+  it("goes to the DM alone and keeps nothing in the room", () => {
+    const { state, seat } = join(opened());
+    const player = { role: "player", seat } as Who;
+    const s = step(state, player, { t: "say", text: "I search the door" }, env());
+    expect(s.out).toEqual([{ to: "dm", msg: { t: "say", seat, text: "I search the door" } }]);
+    expect(s.dirty).toBe(false);
+  });
+
+  it("is not something the DM can send", () => {
+    const { state } = join(opened());
+    const s = step(state, { role: "dm" } as Who, { t: "say", text: "hello" }, env());
+    expect(s.out).toEqual([]);
+  });
+});

@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { askConfirm } from "../../app/confirm";
 import { dmRuleset } from "../../app/dm";
 import { browse } from "../../app/search";
@@ -8,11 +8,13 @@ import {
   kickPlayer,
   openTable,
   propose,
+  readMessages,
   seatOpen,
   tableBye,
   tableCode,
   tableState,
   tableView,
+  tellPlayers,
 } from "../../app/table";
 import { ui } from "../../i18n/ui";
 import type { ProposalRecord, TablePlayer } from "../../relay/dmTable";
@@ -184,8 +186,70 @@ function AskRoll() {
   );
 }
 
+/** A line of text to one player or to all those here, and what the players wrote. */
+function Messages() {
+  const players = tableView.value.players.filter((p) => p.online);
+  const written = tableView.value.messages;
+  const [who, setWho] = useState("all");
+  const [text, setText] = useState("");
+  const send = () => {
+    const seats = who === "all" ? players.map((p) => p.seat) : [who];
+    tellPlayers(seats, text, new Map(players.map((p) => [p.seat, p.name])));
+    setText("");
+  };
+  return (
+    <>
+      <details class="dm-ask">
+        <summary>{ui("dm.msg.send")}</summary>
+        {players.length === 0 ? (
+          <p class="muted">{ui("dm.ask.nobody")}</p>
+        ) : (
+          <div class="dm-ask-form">
+            <label class="field">
+              <span>{ui("dm.ask.who")}</span>
+              <select value={who} onChange={(e) => setWho(e.currentTarget.value)}>
+                <option value="all">{ui("dm.ask.all")}</option>
+                {players.map((p) => (
+                  <option key={p.seat} value={p.seat}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label class="field">
+              <span>{ui("dm.msg.field")}</span>
+              <textarea
+                rows={3}
+                maxLength={400}
+                value={text}
+                onInput={(e) => setText(e.currentTarget.value)}
+              />
+            </label>
+            <button type="button" class="primary" disabled={text.trim() === ""} onClick={send}>
+              {ui("dm.msg.button")}
+            </button>
+          </div>
+        )}
+      </details>
+      {written.length > 0 && (
+        <>
+          <h4>{ui("dm.msg.fromPlayers")}</h4>
+          <ul class="plain dm-messages">
+            {written.slice(0, 6).map((m) => (
+              <li key={`${m.seat}-${m.at}`}>
+                <b>{m.name}</b> {m.text}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </>
+  );
+}
+
 /** What came of a proposal, in words: waiting, declined, or for a roll the total and whether it beat the difficulty. */
 function outcome(p: ProposalRecord): string {
+  if (p.kind === "say" && p.status === "accepted") return ui("dm.prop.read");
   if (p.status !== "accepted" || p.result === undefined) return ui(`dm.prop.${p.status}`);
   const rolled = ui("dm.prop.rolled", { n: p.result });
   if (p.dc === undefined) return rolled;
@@ -205,6 +269,9 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
   const state = tableState.value;
   const [copied, setCopied] = useState(false);
   const view = tableView.value;
+  // The panel is open: what the players wrote is being seen.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new line while the panel is open is seen at once
+  useEffect(() => readMessages(), [view.messages.length]);
 
   if (!code)
     return (
@@ -279,6 +346,7 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
             </>
           )}
           <AskRoll />
+          <Messages />
           {view.proposals.length > 0 && (
             <>
               <h4>{ui("dm.prop.title")}</h4>

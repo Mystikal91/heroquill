@@ -302,6 +302,14 @@ export function step(
         out: [{ to: "dm", msg: { t: "initiative", seat: who.seat, value: msg.value } }],
         dirty: false,
       };
+    case "say":
+      // A line for the DM alone; nothing is kept in the room.
+      return {
+        state: room,
+        who,
+        out: [{ to: "dm", msg: { t: "say", seat: who.seat, text: msg.text } }],
+        dirty: false,
+      };
     case "answer":
       return {
         state: room,

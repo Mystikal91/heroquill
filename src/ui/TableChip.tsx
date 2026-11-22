@@ -1,6 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import {
   answerInitiative,
+  dmMessages,
   dmOnline,
   initiativeAsked,
   joinTable,
@@ -9,6 +10,7 @@ import {
   playerBye,
   playerState,
   resumeTable,
+  tellDm,
   trackerView,
 } from "../app/playerTable";
 import { ui } from "../i18n/ui";
@@ -29,6 +31,7 @@ export function TableChipFace({
   count,
   short,
   label,
+  badge,
 }: {
   state: TableLinkState;
   code?: string;
@@ -38,6 +41,8 @@ export function TableChipFace({
   short?: string;
   /** With no table, the word beside the crossed sign on a wide screen. */
   label?: string;
+  /** Lines waiting to be read. */
+  badge?: number;
 }) {
   return (
     <span class="table-chip-face" data-state={state}>
@@ -48,6 +53,11 @@ export function TableChipFace({
       )}
       {code && <span class="table-chip-code">{code}</span>}
       {(count ?? label) && <span class="table-chip-count">{count ?? label}</span>}
+      {badge !== undefined && badge > 0 && (
+        <span class="table-chip-badge" role="img" aria-label={ui("dm.msg.unread", { n: badge })}>
+          ✉ {badge}
+        </span>
+      )}
       {short !== undefined && (
         <span class="table-chip-short" aria-hidden="true">
           {short}
@@ -102,6 +112,54 @@ function Tracker({ view }: { view: TrackerView }) {
           </li>
         ))}
       </ol>
+    </section>
+  );
+}
+
+/** What the DM wrote, and a line to the DM. */
+function Talk() {
+  const [text, setText] = useState("");
+  const [failed, setFailed] = useState(false);
+  const heard = dmMessages.value;
+  return (
+    <section class="table-talk">
+      <h3 class="popover-heading">{ui("table.msg.title")}</h3>
+      {heard.length > 0 && (
+        <ul class="plain table-heard">
+          {heard.slice(0, 4).map((m) => (
+            <li key={m.at}>
+              <small>{ui("table.msg.fromDm")}</small> {m.text}
+            </li>
+          ))}
+        </ul>
+      )}
+      <form
+        class="table-join-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const ok = tellDm(text);
+          setFailed(!ok);
+          if (ok) setText("");
+        }}
+      >
+        <label class="field">
+          <span>{ui("table.msg.toDm")}</span>
+          <input
+            type="text"
+            value={text}
+            maxLength={400}
+            autoComplete="off"
+            onInput={(e) => {
+              setFailed(false);
+              setText(e.currentTarget.value);
+            }}
+          />
+        </label>
+        <button type="submit" class="primary" disabled={text.trim() === ""}>
+          {ui("table.msg.send")}
+        </button>
+      </form>
+      {failed && <p class="table-join-soon">{ui("table.msg.notSent")}</p>}
     </section>
   );
 }
@@ -182,6 +240,7 @@ export function PlayerTableChip() {
             {trackerView.value && trackerView.value.round > 0 && (
               <Tracker view={trackerView.value} />
             )}
+            <Talk />
             <p class="muted">{ui("table.join.preview")}</p>
             <button type="button" class="secondary" onClick={leaveTable}>
               {ui("table.leave")}

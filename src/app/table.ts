@@ -34,6 +34,8 @@ export const tableState = signal<LinkState>("connecting");
 /** Why the room ended the table, when it did. */
 export const tableBye = signal<ByeReason | undefined>(undefined);
 export const tableView = signal<DmTable>(emptyTable());
+/** Lines from players the DM has not seen yet: the pill in the header shows how many. */
+export const tableUnread = signal(0);
 /** The seat whose numbers the DM is looking at in a dialog. */
 export const seatOpen = signal<string | undefined>(undefined);
 
@@ -98,6 +100,7 @@ function connect(campaignId: string, saved: SavedTable) {
       if (msg.t === "card") cardHandler?.(msg.seat, msg.card);
       if (msg.t === "welcome")
         for (const p of msg.players) if (p.card) cardHandler?.(p.seat, p.card);
+      if (msg.t === "say") tableUnread.value += 1;
       if (msg.t === "answer") answers.get(msg.id)?.(msg.accepted, msg.result);
       if (msg.t === "answer" || msg.t === "undelivered") answers.delete(msg.id);
       touch(campaignId, saved);
@@ -192,7 +195,21 @@ export function propose(
     seat,
     label,
     status: "waiting",
+    kind: proposal.kind,
     ...(proposal.kind === "roll" && proposal.dc !== undefined && { dc: proposal.dc }),
   });
   return true;
+}
+
+/** The DM has looked at what the players wrote. */
+export const readMessages = () => {
+  tableUnread.value = 0;
+};
+
+/** A line of text to one player, or to every one who is here. */
+export function tellPlayers(seats: readonly string[], text: string, names: Map<string, string>) {
+  const line = text.trim();
+  if (!line) return;
+  for (const seat of seats)
+    propose(seat, { kind: "say", text: line }, `${names.get(seat) ?? ""}: ${line}`);
 }

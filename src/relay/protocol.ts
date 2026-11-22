@@ -121,6 +121,8 @@ export type ClientMessage =
   | { t: "kick"; seat: string }
   | { t: "propose"; seat: string; id: string; proposal: Proposal }
   | { t: "answer"; id: string; accepted: boolean; result?: number }
+  /** A line from a player to the DM, and to nobody else. */
+  | { t: "say"; text: string }
   | { t: "close" }
   | { t: "ping" };
 
@@ -155,6 +157,7 @@ export type ServerMessage =
   | { t: "answer"; seat: string; id: string; accepted: boolean; result?: number }
   /** The proposal did not reach a player: nobody is on that seat now. */
   | { t: "undelivered"; id: string }
+  | { t: "say"; seat: string; text: string }
   | { t: "pong" }
   | { t: "bye"; reason: ByeReason };
 
@@ -384,6 +387,10 @@ export function parseClientMessage(text: string): ClientMessage | undefined {
       return id && typeof raw.accepted === "boolean"
         ? { t: "answer", id, accepted: raw.accepted, ...(result !== undefined && { result }) }
         : undefined;
+    }
+    case "say": {
+      const text = str(raw.text, 400)?.trim();
+      return text ? { t: "say", text } : undefined;
     }
     case "close":
       return { t: "close" };

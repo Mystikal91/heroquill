@@ -2831,5 +2831,18 @@
   "dm.prop.failure": "misslungen",
   "dm.seat.away": "Gerade nicht verbunden. Das sind die Werte vom letzten Mal.",
   "dm.seat.noCard": "Dieser Spieler hat seine Werte noch nicht geteilt.",
-  "dm.seat.language": "Die Namen von Bewegungen, Sinnen und Abwehr stehen in der Sprache des Spielers."
+  "dm.seat.language": "Die Namen von Bewegungen, Sinnen und Abwehr stehen in der Sprache des Spielers.",
+  "dm.msg.title": "Nachrichten",
+  "dm.msg.send": "Spielern schreiben",
+  "dm.msg.field": "Nachricht",
+  "dm.msg.button": "Senden",
+  "dm.msg.fromPlayers": "Von den Spielern",
+  "dm.msg.unread": "{n} neue Nachrichten",
+  "dm.prop.read": "gelesen",
+  "table.msg.title": "Nachrichten",
+  "table.msg.fromDm": "Vom SL",
+  "table.msg.toDm": "An den SL schreiben",
+  "table.msg.send": "Senden",
+  "table.msg.sent": "An den SL gesendet.",
+  "table.msg.notSent": "Nicht gesendet: die Verbindung steht nicht. Versuche es gleich noch einmal."
 }

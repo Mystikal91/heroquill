@@ -2831,5 +2831,18 @@
   "dm.prop.failure": "raté",
   "dm.seat.away": "Non connecté pour l'instant. Ce sont les valeurs de la dernière fois.",
   "dm.seat.noCard": "Ce joueur n'a pas encore partagé ses valeurs.",
-  "dm.seat.language": "Les noms des vitesses, sens et défenses sont dans la langue du joueur."
+  "dm.seat.language": "Les noms des vitesses, sens et défenses sont dans la langue du joueur.",
+  "dm.msg.title": "Messages",
+  "dm.msg.send": "Écrire aux joueurs",
+  "dm.msg.field": "Message",
+  "dm.msg.button": "Envoyer",
+  "dm.msg.fromPlayers": "Des joueurs",
+  "dm.msg.unread": "{n} nouveaux messages",
+  "dm.prop.read": "lu",
+  "table.msg.title": "Messages",
+  "table.msg.fromDm": "Du MJ",
+  "table.msg.toDm": "Écrire au MJ",
+  "table.msg.send": "Envoyer",
+  "table.msg.sent": "Envoyé au MJ.",
+  "table.msg.notSent": "Non envoyé : la connexion n'est pas active. Réessayez dans un instant."
 }

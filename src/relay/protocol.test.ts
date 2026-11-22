@@ -204,3 +204,19 @@ describe("reading a roll asked of a player", () => {
     });
   });
 });
+
+describe("a line from a player to the DM", () => {
+  it("is read, trimmed and cut", () => {
+    expect(parseClientMessage(JSON.stringify({ t: "say", text: "  hello  " }))).toEqual({
+      t: "say",
+      text: "hello",
+    });
+    const long = parseClientMessage(JSON.stringify({ t: "say", text: "x".repeat(900) }));
+    expect(long?.t === "say" && long.text.length).toBe(400);
+  });
+
+  it("is refused when empty", () => {
+    expect(parseClientMessage(JSON.stringify({ t: "say", text: "   " }))).toBeUndefined();
+    expect(parseClientMessage(JSON.stringify({ t: "say" }))).toBeUndefined();
+  });
+});

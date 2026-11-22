@@ -2831,5 +2831,18 @@
   "dm.prop.failure": "fallo",
   "dm.seat.away": "No conectado ahora. Son los números de la última vez.",
   "dm.seat.noCard": "Este jugador aún no ha compartido sus números.",
-  "dm.seat.language": "Los nombres de velocidades, sentidos y defensas están en el idioma del jugador."
+  "dm.seat.language": "Los nombres de velocidades, sentidos y defensas están en el idioma del jugador.",
+  "dm.msg.title": "Mensajes",
+  "dm.msg.send": "Escribir a los jugadores",
+  "dm.msg.field": "Mensaje",
+  "dm.msg.button": "Enviar",
+  "dm.msg.fromPlayers": "De los jugadores",
+  "dm.msg.unread": "{n} mensajes nuevos",
+  "dm.prop.read": "leído",
+  "table.msg.title": "Mensajes",
+  "table.msg.fromDm": "Del DM",
+  "table.msg.toDm": "Escribir al DM",
+  "table.msg.send": "Enviar",
+  "table.msg.sent": "Enviado al DM.",
+  "table.msg.notSent": "No enviado: la conexión no está activa. Inténtalo de nuevo en un momento."
 }

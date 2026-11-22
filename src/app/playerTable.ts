@@ -64,6 +64,10 @@ export const dmOnline = signal(false);
 export const trackerView = signal<TrackerView | undefined>(undefined);
 export const initiativeAsked = signal(false);
 
+/** The lines the DM sent, newest first, to read again (the dialog that showed one is gone once it is closed). */
+export const dmMessages = signal<{ text: string; at: number }[]>([]);
+const MAX_DM_MESSAGES = 10;
+
 let link: RelayLink | undefined;
 let stopWatching: (() => void) | undefined;
 let lastCard: PlayerCard | undefined;
@@ -338,6 +342,11 @@ async function drain() {
     for (let next = queue.shift(); next; next = queue.shift()) {
       const { id, proposal } = next;
       const say = proposal.kind === "say";
+      if (proposal.kind === "say")
+        dmMessages.value = [{ text: proposal.text, at: Date.now() }, ...dmMessages.value].slice(
+          0,
+          MAX_DM_MESSAGES,
+        );
       const yes = await askConfirm({
         title: describe(proposal),
         confirm: ui(
@@ -347,7 +356,7 @@ async function drain() {
               ? "table.proposal.roll"
               : "table.proposal.accept",
         ),
-        cancel: ui(say ? "table.proposal.ok" : "table.proposal.decline"),
+        ...(!say && { cancel: ui("table.proposal.decline") }),
       });
       // A line of text only needs reading; the rest need a yes.
       const accepted = say || yes;
@@ -359,4 +368,10 @@ async function drain() {
   } finally {
     asking = false;
   }
+}
+
+/** A line from the player to the DM alone; false when the line is not up. */
+export function tellDm(text: string): boolean {
+  const line = text.trim().slice(0, 400);
+  return line.length > 0 && Boolean(link?.send({ t: "say", text: line }));
 }

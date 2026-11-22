@@ -6,7 +6,8 @@ export interface ConfirmRequest {
   /** The button that goes ahead. */
   confirm: string;
   /** The button that does not. */
-  cancel: string;
+  /** The button that does not; a question that only needs reading has none. */
+  cancel?: string;
 }
 
 /** The question being asked, and how to answer it. */

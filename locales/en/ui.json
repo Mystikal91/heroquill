@@ -2831,5 +2831,18 @@
   "dm.prop.failure": "failure",
   "dm.seat.away": "Not connected now. These are the numbers from the last time.",
   "dm.seat.noCard": "This player has not shared their numbers yet.",
-  "dm.seat.language": "Names of speeds, senses and defenses are in the player's language."
+  "dm.seat.language": "Names of speeds, senses and defenses are in the player's language.",
+  "dm.msg.title": "Messages",
+  "dm.msg.send": "Message the players",
+  "dm.msg.field": "Message",
+  "dm.msg.button": "Send",
+  "dm.msg.fromPlayers": "From the players",
+  "dm.msg.unread": "{n} new messages",
+  "dm.prop.read": "read",
+  "table.msg.title": "Messages",
+  "table.msg.fromDm": "From the DM",
+  "table.msg.toDm": "Write to the DM",
+  "table.msg.send": "Send",
+  "table.msg.sent": "Sent to the DM.",
+  "table.msg.notSent": "Not sent: the line is not up. Try again in a moment."
 }

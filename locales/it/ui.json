@@ -2831,5 +2831,18 @@
   "dm.prop.failure": "fallito",
   "dm.seat.away": "Non collegato ora. Sono i numeri dell'ultima volta.",
   "dm.seat.noCard": "Questo giocatore non ha ancora condiviso i suoi numeri.",
-  "dm.seat.language": "I nomi di velocità, sensi e difese sono nella lingua del giocatore."
+  "dm.seat.language": "I nomi di velocità, sensi e difese sono nella lingua del giocatore.",
+  "dm.msg.title": "Messaggi",
+  "dm.msg.send": "Scrivi ai giocatori",
+  "dm.msg.field": "Messaggio",
+  "dm.msg.button": "Invia",
+  "dm.msg.fromPlayers": "Dai giocatori",
+  "dm.msg.unread": "{n} messaggi nuovi",
+  "dm.prop.read": "letto",
+  "table.msg.title": "Messaggi",
+  "table.msg.fromDm": "Dal master",
+  "table.msg.toDm": "Scrivi al master",
+  "table.msg.send": "Invia",
+  "table.msg.sent": "Inviato al master.",
+  "table.msg.notSent": "Non inviato: la connessione non è attiva. Riprova tra poco."
 }

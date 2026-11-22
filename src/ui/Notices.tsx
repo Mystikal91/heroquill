@@ -61,9 +61,11 @@ export function ConfirmDialog() {
         <div class="spell-dialog-body">
           <h3 id="confirm-title">{request.title}</h3>
           <div class="confirm-actions">
-            <button type="button" class="secondary" onClick={() => request.answer(false)}>
-              {request.cancel}
-            </button>
+            {request.cancel !== undefined && (
+              <button type="button" class="secondary" onClick={() => request.answer(false)}>
+                {request.cancel}
+              </button>
+            )}
             <button type="button" class="danger-btn" onClick={() => request.answer(true)}>
               {request.confirm}
             </button>

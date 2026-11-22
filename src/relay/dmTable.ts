@@ -24,22 +24,35 @@ export interface ProposalRecord {
   /** The line the DM reads ("Aria: 7 fire damage"). */
   label: string;
   status: "waiting" | "accepted" | "declined" | "undelivered";
+  /** What was asked: a line of text is "read", not "accepted". */
+  kind?: "damage" | "condition" | "say" | "roll";
   /** The difficulty of a roll that was asked for, and the total the player rolled. */
   dc?: number;
   result?: number;
+}
+
+/** A line a player wrote to the DM. */
+export interface TableMessage {
+  seat: string;
+  name: string;
+  text: string;
+  at: number;
 }
 
 export interface DmTable {
   players: TablePlayer[];
   rolls: TableRoll[];
   proposals: ProposalRecord[];
+  messages: TableMessage[];
 }
+
+export const MAX_MESSAGES = 30;
 
 export const MAX_PROPOSALS = 12;
 
 export const MAX_SHARED_ROLLS = 30;
 
-export const emptyTable = (): DmTable => ({ players: [], rolls: [], proposals: [] });
+export const emptyTable = (): DmTable => ({ players: [], rolls: [], proposals: [], messages: [] });
 
 /** A proposal just sent: newest first, the oldest dropped. */
 export const withProposal = (table: DmTable, record: ProposalRecord): DmTable => ({
@@ -81,6 +94,7 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
         })),
         rolls: table.rolls,
         proposals: table.proposals,
+        messages: table.messages,
       };
     case "presence":
       return {
@@ -115,6 +129,16 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
       return settle(table, msg.id, msg.accepted ? "accepted" : "declined", msg.result);
     case "undelivered":
       return settle(table, msg.id, "undelivered");
+    case "say": {
+      const name = table.players.find((p) => p.seat === msg.seat)?.name ?? "";
+      return {
+        ...table,
+        messages: [{ seat: msg.seat, name, text: msg.text, at: now }, ...table.messages].slice(
+          0,
+          MAX_MESSAGES,
+        ),
+      };
+    }
     default:
       return table;
   }

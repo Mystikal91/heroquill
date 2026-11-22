@@ -31,7 +31,7 @@ import {
 } from "../../app/dm";
 import { diceOpen } from "../../app/playView";
 import { content } from "../../app/store";
-import { tableCode, tableState, tableView } from "../../app/table";
+import { tableCode, tableState, tableUnread, tableView } from "../../app/table";
 import { combatantNumbers } from "../../engine/combatantNumbers";
 import {
   type Combatant,
@@ -163,6 +163,7 @@ export function OnlineChip() {
             code={code}
             count={ui("dm.online.here", { n: here, max: seats })}
             short={String(here)}
+            badge={tableUnread.value}
           />
         ) : (
           <TableChipFace state="offline" label={ui("table.closed")} />

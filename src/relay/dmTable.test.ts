@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  MAX_MESSAGES,
   MAX_PROPOSALS,
   MAX_SHARED_ROLLS,
   emptyTable,
@@ -96,5 +97,15 @@ describe("the result of a roll asked", () => {
     });
     t = reduceTable(t, { t: "answer", seat: "p1", id: "r", accepted: true, result: 17 }, 0);
     expect(t.proposals[0]).toMatchObject({ status: "accepted", result: 17, dc: 14 });
+  });
+});
+
+describe("lines the players wrote", () => {
+  it("are kept newest first with the player's name, up to a limit", () => {
+    let t = reduceTable(emptyTable(), { t: "presence", seat: "p1", name: "Aria", online: true }, 0);
+    for (let i = 0; i < MAX_MESSAGES + 3; i++)
+      t = reduceTable(t, { t: "say", seat: "p1", text: `line ${i}` }, i);
+    expect(t.messages).toHaveLength(MAX_MESSAGES);
+    expect(t.messages[0]).toMatchObject({ name: "Aria", text: `line ${MAX_MESSAGES + 2}` });
   });
 });
