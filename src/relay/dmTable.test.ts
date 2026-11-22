@@ -5,6 +5,7 @@ import {
   MAX_SHARED_ROLLS,
   emptyTable,
   reduceTable,
+  tableActivity,
   withProposal,
   withoutSeat,
 } from "./dmTable";
@@ -107,5 +108,34 @@ describe("lines the players wrote", () => {
       t = reduceTable(t, { t: "say", seat: "p1", text: `line ${i}` }, i);
     expect(t.messages).toHaveLength(MAX_MESSAGES);
     expect(t.messages[0]).toMatchObject({ name: "Aria", text: `line ${MAX_MESSAGES + 2}` });
+  });
+});
+
+describe("the activity of the table", () => {
+  it("lists rolls, lines and proposals newest first, and drops the shared copy of an asked roll", () => {
+    let t = withProposal(emptyTable(), {
+      id: "r",
+      seat: "p1",
+      label: "Aria: Wisdom save",
+      status: "waiting",
+      kind: "roll",
+      dc: 14,
+      at: 1000,
+    });
+    t = reduceTable(t, { t: "presence", seat: "p1", name: "Aria", online: true }, 1000);
+    t = reduceTable(t, { t: "say", seat: "p1", text: "Hello" }, 2000);
+    t = reduceTable(
+      t,
+      { t: "roll", seat: "p1", roll: { label: "Save", detail: "d20", total: 17 } },
+      3000,
+    );
+    t = reduceTable(t, { t: "answer", seat: "p1", id: "r", accepted: true, result: 17 }, 3100);
+    t = reduceTable(
+      t,
+      { t: "roll", seat: "p1", roll: { label: "Stealth", detail: "d20", total: 9 } },
+      9000,
+    );
+    const kinds = tableActivity(t).map((a) => a.kind);
+    expect(kinds).toEqual(["roll", "proposal", "message"]);
   });
 });

@@ -1,4 +1,4 @@
-import { effect, signal } from "@preact/signals";
+import { computed, effect, signal } from "@preact/signals";
 import { currentHp } from "../engine/play";
 import { toggleCondition } from "../engine/play";
 import { beastPool } from "../engine/wildShape";
@@ -19,7 +19,6 @@ import { damageName } from "../ui/damageName";
 import { movementLines } from "../ui/movementLines";
 import { damageEffectRows } from "../ui/play/DamageEffects";
 import { beastArmorClass } from "../ui/play/beastArmorClass";
-import { askConfirm } from "./confirm";
 import { changePlay, damageCharacter, rollCheck, rollLog } from "./play";
 import { character, content, sheet } from "./store";
 
@@ -64,9 +63,24 @@ export const dmOnline = signal(false);
 export const trackerView = signal<TrackerView | undefined>(undefined);
 export const initiativeAsked = signal(false);
 
-/** The lines the DM sent, newest first, to read again (the dialog that showed one is gone once it is closed). */
-export const dmMessages = signal<{ text: string; at: number }[]>([]);
+/** The lines the DM sent, newest first; `read` once the player has seen them (the DM learns it then). */
+export const dmMessages = signal<{ id: string; text: string; at: number; read: boolean }[]>([]);
 const MAX_DM_MESSAGES = 10;
+/** The lines this player sent to the DM, newest first, so the panel reads as a conversation. */
+export const sentMessages = signal<{ text: string; at: number }[]>([]);
+/** The seat this device holds at the table: the order of the fight marks it as "you". */
+export const mySeat = signal<string | undefined>(read()?.seat);
+
+/** Lines of the DM not read yet. */
+export const unreadFromDm = computed(() => dmMessages.value.filter((m) => !m.read).length);
+
+/** It is this player's turn in the DM's fight. */
+export const myTurn = computed(() => {
+  const view = trackerView.value;
+  const seat = mySeat.value;
+  if (!view || !seat || view.round === 0) return false;
+  return view.order.some((c) => c.id === view.turn && c.seat === seat);
+});
 
 let link: RelayLink | undefined;
 let stopWatching: (() => void) | undefined;
@@ -162,6 +176,7 @@ function onMessage(saved: Saved, msg: ServerMessage) {
       });
       saved.seat = msg.seat;
       saved.token = msg.token;
+      mySeat.value = msg.seat;
       dmOnline.value = msg.dmOnline;
       trackerView.value = msg.tracker;
       lastCard = undefined;
@@ -248,6 +263,10 @@ export function leaveTable() {
   initiativeAsked.value = false;
   playerBye.value = undefined;
   dmOnline.value = false;
+  mySeat.value = undefined;
+  sentMessages.value = [];
+  dmMessages.value = [];
+  tableRequest.value = undefined;
 }
 
 /** The DM asked for the initiative: roll it as the quick strip does and send the total. */
@@ -261,37 +280,55 @@ export function answerInitiative() {
 
 // ---- What the DM proposes ----
 
+/** What the DM asks of the player now, shown in a card of its own: a roll, damage or a condition. */
+export interface TableRequest {
+  proposal: Exclude<Proposal, { kind: "say" }>;
+  /** Who asks: the DM, or a creature of the DM ("The goblin"). */
+  from: string;
+  /** What is asked, in a few words ("A Wisdom saving throw", "7 fire damage"). */
+  what: string;
+  /** For a roll: the player's own bonus, and once rolled the total and whether it beat the difficulty. */
+  bonus?: number;
+  outcome?: { total: number; success?: boolean };
+}
+
+export const tableRequest = signal<TableRequest | undefined>(undefined);
+
 const queue: { id: string; proposal: Proposal }[] = [];
 let asking = false;
 /** More than this at once is a flood, not a game: the rest are dropped. */
 const MAX_QUEUE = 20;
+/** The answer the card of the request waits for. */
+let settle: ((yes: boolean) => void) | undefined;
 
-function describe(p: Proposal): string {
-  const from = ("from" in p && p.from) || ui("table.proposal.dm");
+const abilityName = (ability: string) => content.value?.name(`srd51:ability/${ability}`) ?? ability;
+
+/** What a request asks, in a few words, for the title of its card. */
+function whatOf(p: Exclude<Proposal, { kind: "say" }>): string {
   switch (p.kind) {
     case "damage":
       return p.type
-        ? ui("table.proposal.damageTyped", { from, amount: p.amount, type: damageName(p.type) })
-        : ui("table.proposal.damage", { from, amount: p.amount });
+        ? ui("table.req.damageTyped", { amount: p.amount, type: damageName(p.type) })
+        : ui("table.req.damage", { amount: p.amount });
     case "condition":
-      return ui("table.proposal.condition", {
-        from,
+      return ui("table.req.condition", {
         condition: content.value?.name(p.condition) ?? p.condition,
       });
-    case "say":
-      return ui("table.proposal.say", { text: p.text });
-    case "roll": {
-      const c = content.value;
-      const ability = c?.name(`srd51:ability/${p.ability}`) ?? p.ability;
-      const what = p.skill
-        ? ui("table.proposal.rollSkill", { skill: c?.name(p.skill) ?? p.skill })
-        : ui(p.test === "save" ? "table.proposal.rollSave" : "table.proposal.rollCheck", {
-            ability,
+    case "roll":
+      return p.skill
+        ? ui("table.req.rollSkill", { skill: content.value?.name(p.skill) ?? p.skill })
+        : ui(p.test === "save" ? "table.req.rollSave" : "table.req.rollCheck", {
+            ability: abilityName(p.ability),
           });
-      const dc = p.dc !== undefined ? ui("table.proposal.dc", { dc: p.dc }) : "";
-      return ui("table.proposal.rollAsk", { from, what, dc });
-    }
   }
+}
+
+/** The bonus the player rolls with for what the DM asked, on their own numbers. */
+function askedBonus(p: Extract<Proposal, { kind: "roll" }>): number | undefined {
+  const s = sheet.value;
+  if (!s) return undefined;
+  if (p.skill) return s.skills.find((k) => k.id === p.skill)?.bonus;
+  return p.test === "save" ? s.saves[p.ability].bonus : s.abilities[p.ability].modifier;
 }
 
 /** Rolls what the DM asked for, on the player's own numbers, and gives the total. */
@@ -334,36 +371,70 @@ function apply(p: Proposal) {
     );
 }
 
-/** Asks about the proposals one at a time (a second question would cancel the first); nothing happens without a yes. */
+/** The player answered the card of a request: yes (accept, or roll) or no (ignore). */
+export function answerRequest(yes: boolean) {
+  const done = settle;
+  settle = undefined;
+  done?.(yes);
+}
+
+/** A line of the DM is not a question: it waits in the list and the DM learns it was read when it is seen. */
+function heard(id: string, text: string) {
+  dmMessages.value = [{ id, text, at: Date.now(), read: false }, ...dmMessages.value].slice(
+    0,
+    MAX_DM_MESSAGES,
+  );
+}
+
+/** The player has seen the lines of the DM (the notice was closed, or the panel opened): the DM sees "read". */
+export function readDmMessages() {
+  const unread = dmMessages.value.filter((m) => !m.read);
+  if (unread.length === 0) return;
+  for (const m of unread) link?.send({ t: "answer", id: m.id, accepted: true });
+  dmMessages.value = dmMessages.value.map((m) => (m.read ? m : { ...m, read: true }));
+}
+
+/**
+ * Shows the requests one at a time in their card; nothing happens without a yes. A roll stays on the card with its
+ * total and whether it beat the difficulty, until the player closes it.
+ */
 async function drain() {
   if (asking) return;
   asking = true;
   try {
     for (let next = queue.shift(); next; next = queue.shift()) {
       const { id, proposal } = next;
-      const say = proposal.kind === "say";
-      if (proposal.kind === "say")
-        dmMessages.value = [{ text: proposal.text, at: Date.now() }, ...dmMessages.value].slice(
-          0,
-          MAX_DM_MESSAGES,
-        );
-      const yes = await askConfirm({
-        title: describe(proposal),
-        confirm: ui(
-          say
-            ? "table.proposal.ok"
-            : proposal.kind === "roll"
-              ? "table.proposal.roll"
-              : "table.proposal.accept",
-        ),
-        ...(!say && { cancel: ui("table.proposal.decline") }),
+      if (proposal.kind === "say") {
+        heard(id, proposal.text);
+        continue;
+      }
+      const from = ("from" in proposal && proposal.from) || ui("table.proposal.dm");
+      const bonus = proposal.kind === "roll" ? askedBonus(proposal) : undefined;
+      const request: TableRequest = {
+        proposal,
+        from,
+        what: whatOf(proposal),
+        ...(bonus !== undefined && { bonus }),
+      };
+      const yes = await new Promise<boolean>((resolve) => {
+        settle = resolve;
+        tableRequest.value = request;
       });
-      // A line of text only needs reading; the rest need a yes.
-      const accepted = say || yes;
       let result: number | undefined;
-      if (accepted && proposal.kind === "roll") result = rollAsked(proposal);
-      else if (accepted) apply(proposal);
-      link?.send({ t: "answer", id, accepted, ...(result !== undefined && { result }) });
+      if (yes && proposal.kind === "roll") result = rollAsked(proposal);
+      else if (yes) apply(proposal);
+      link?.send({ t: "answer", id, accepted: yes, ...(result !== undefined && { result }) });
+      if (yes && proposal.kind === "roll" && result !== undefined) {
+        const success = proposal.dc === undefined ? undefined : result >= proposal.dc;
+        await new Promise<boolean>((resolve) => {
+          settle = resolve;
+          tableRequest.value = {
+            ...request,
+            outcome: { total: result, ...(success !== undefined && { success }) },
+          };
+        });
+      }
+      tableRequest.value = undefined;
     }
   } finally {
     asking = false;
@@ -373,5 +444,13 @@ async function drain() {
 /** A line from the player to the DM alone; false when the line is not up. */
 export function tellDm(text: string): boolean {
   const line = text.trim().slice(0, 400);
-  return line.length > 0 && Boolean(link?.send({ t: "say", text: line }));
+  const sent = line.length > 0 && Boolean(link?.send({ t: "say", text: line }));
+  if (sent)
+    sentMessages.value = [{ text: line, at: Date.now() }, ...sentMessages.value].slice(0, 10);
+  return sent;
 }
+
+/** Something waits for the player at the table: their turn, the initiative asked, a request. */
+export const tableAttention = computed(
+  () => initiativeAsked.value || myTurn.value || tableRequest.value !== undefined,
+);

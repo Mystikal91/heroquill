@@ -9,6 +9,10 @@ interface PopoverProps {
   /** Which edge of the button the panel lines up with. */
   align?: "start" | "end";
   class?: string;
+  /** A panel to work in (a form, a list with buttons): a button inside does not close it. */
+  keepOpen?: boolean;
+  /** Called when the panel opens. */
+  onOpen?: () => void;
   children: ComponentChildren;
 }
 
@@ -19,7 +23,15 @@ const supported = typeof HTMLElement !== "undefined" && "popover" in HTMLElement
  * when something inside it is chosen (a button or a link). It uses the browser's popover layer,
  * so a frame with a clipped edge (the fantasy cards) or a sticky bar cannot cut or cover it.
  */
-export function Popover({ label, title, align = "end", class: extra, children }: PopoverProps) {
+export function Popover({
+  label,
+  title,
+  align = "end",
+  class: extra,
+  keepOpen,
+  onOpen,
+  children,
+}: PopoverProps) {
   const id = useId();
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -47,10 +59,13 @@ export function Popover({ label, title, align = "end", class: extra, children }:
       else delete box.dataset.open;
     };
     const chosen = (e: Event) => {
-      if ((e.target as HTMLElement).closest("button, a")) close();
+      if (!keepOpen && (e.target as HTMLElement).closest("button, a")) close();
     };
     const toggled = (e: Event) => {
-      if ((e as ToggleEvent).newState === "open") place();
+      if ((e as ToggleEvent).newState === "open") {
+        place();
+        onOpen?.();
+      }
     };
     // Without the popover layer the button opens and closes the panel itself.
     const fallback = () => {
@@ -74,7 +89,7 @@ export function Popover({ label, title, align = "end", class: extra, children }:
       opener.removeEventListener("click", fallback);
       document.removeEventListener("pointerdown", dismiss);
     };
-  }, [align]);
+  }, [align, keepOpen, onOpen]);
 
   return (
     <div class={`popover${extra ? ` ${extra}` : ""}`}>

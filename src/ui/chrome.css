@@ -2198,12 +2198,6 @@ details.rule-variant[open] > summary::after {
   margin: 0;
 }
 
-.table-join-form input {
-  font-family: var(--font-display);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .table-join-form button {
   min-height: 2.5rem;
   margin: 0;
@@ -2253,4 +2247,492 @@ details.rule-variant[open] > summary::after {
 
 .table-talk h3 {
   margin: 0;
+}
+
+/* ---- The pill of the table asks for attention: the player's turn, the initiative, a request ---- */
+
+.table-chip-alert {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  animation: table-call 1.6s ease-in-out infinite;
+}
+
+:root[data-style][data-style]
+  :is(.table-chip, .table-chip-pop > .popover-button):has(.table-chip-alert) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+@keyframes table-call {
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table-chip-alert {
+    animation: none;
+  }
+}
+
+/* ---- The player's panel of the table ---- */
+
+.table-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.table-status > div {
+  display: grid;
+}
+
+.table-sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.table-tracker ol {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0.3rem 0 0;
+}
+
+.table-tracker li {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.2rem;
+  padding: 0 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+}
+
+.table-tracker li[aria-current="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.table-init {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.table-tracker li[data-player] .table-init {
+  border-color: color-mix(in srgb, #5d86c7 70%, var(--border));
+}
+
+.table-tracker li[data-mine] .table-init {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.table-who {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-tracker li[data-mine] .table-who {
+  font-weight: 600;
+}
+
+.table-you {
+  margin-left: 0.35rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+
+.table-tracker li small {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.table-tracker li[aria-current="true"][data-mine] small {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+}
+
+.table-heard {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.4rem 0 0.5rem;
+}
+
+.table-heard li {
+  justify-self: start;
+  max-width: 88%;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem 0.8rem 0.8rem 0.8rem;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+.table-heard li small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.table-heard li[data-mine] {
+  justify-self: end;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 0.8rem 0.25rem 0.8rem 0.8rem;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.table-join-form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.table-code-field {
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.table-privacy summary {
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.table-privacy p {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+.table-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+:root[data-style][data-style] .table-leave {
+  flex: none;
+  min-height: 2.1rem;
+  margin: 0;
+  padding: 0 0.7rem;
+  border-color: #7a3b37;
+  background: transparent;
+  color: #d9776d;
+  font-size: 0.75rem;
+}
+
+/* ---- What the DM asks: a card of its own, from the bottom on a phone ---- */
+
+.table-request {
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.table-request::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+@media (max-width: 42rem) {
+  .table-request {
+    width: 100vw;
+    max-width: 100vw;
+    margin: auto 0 0;
+    border-width: 2px 0 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+}
+
+.treq {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.1rem 1.1rem 1.3rem;
+}
+
+.treq-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.treq-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.treq-mark[data-kind="damage"] {
+  border-color: #7a3b37;
+  color: #d9776d;
+}
+
+.treq-head small {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+:root[data-style][data-style] .treq-head h3 {
+  margin: 0.1rem 0 0;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.treq-numbers {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 0.6rem;
+}
+
+.treq-numbers div {
+  display: grid;
+  justify-items: center;
+  padding: 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.treq-numbers small {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.treq-numbers b {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+}
+
+.treq-result {
+  margin: 0;
+  padding: 0.4rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  text-align: center;
+}
+
+.treq-result[data-success="true"] {
+  background: color-mix(in srgb, #3fa34d 18%, transparent);
+  color: color-mix(in srgb, #3fa34d 70%, var(--fg));
+}
+
+.treq-result[data-success="false"] {
+  background: color-mix(in srgb, #c0574f 18%, transparent);
+  color: color-mix(in srgb, #c0574f 75%, var(--fg));
+}
+
+.treq-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.treq-actions button {
+  flex: 1;
+  min-height: 3rem;
+  margin: 0;
+}
+
+.treq-actions .primary {
+  flex: 2;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+.treq-note {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ---- A line of the DM: a notice that does not stop the game ---- */
+
+.dm-message-notice {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  width: min(30rem, calc(100vw - 1.5rem));
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid #5d86c7;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.4);
+  transform: translateX(-50%);
+}
+
+.dm-message-notice small {
+  padding-top: 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #5d86c7 75%, var(--fg));
+}
+
+.dm-message-notice p {
+  flex: 1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+:root[data-style][data-style] .dm-message-close {
+  min-width: 2rem;
+  min-height: 2rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* ---- The turn at the online table, at the top of the Play screen ---- */
+
+.table-strip {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.table-strip[data-mine] {
+  border-color: var(--accent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 16%, var(--surface)),
+    var(--surface)
+  );
+}
+
+.table-strip-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.table-strip-round {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.table-strip-head b {
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.table-strip[data-mine] .table-strip-head b {
+  color: var(--accent);
+}
+
+.table-strip-ask {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+:root[data-style][data-style] .table-strip-roll {
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0 1rem;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+.table-strip-order {
+  display: flex;
+  gap: 0.3rem;
+  margin: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.table-strip-order li {
+  flex: none;
+  padding: 0.05rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.table-strip-order li:first-child {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.table-strip-order li[data-player] {
+  border-color: color-mix(in srgb, #5d86c7 70%, var(--border));
+}
+
+.table-strip-order li[data-mine] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+/* The card of a request shows the total itself: the roll's own notice would cover its answer. */
+body:has(.table-request[open]) .roll-toast {
+  display: none;
 }

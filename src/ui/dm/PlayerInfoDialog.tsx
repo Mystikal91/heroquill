@@ -1,4 +1,4 @@
-import { seatOpen, tableView } from "../../app/table";
+import { seatOpen, tablePanel, tableView } from "../../app/table";
 import { signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import type { PlayerCard } from "../../relay/protocol";
@@ -13,46 +13,78 @@ function Row({ name, value }: { name: string; value: string | number }) {
   );
 }
 
-/** The numbers a player shares, in the sections of the player's own "numbers at a glance" window. */
-function Numbers({ card }: { card: PlayerCard }) {
+/** A tile of the sheet: a short name above, the number below (as the sheet of a creature has them). */
+function Tile({ name, title, value }: { name: string; title?: string; value: string | number }) {
+  return (
+    <div class="dm-panel-stat">
+      <small title={title}>{name}</small>
+      <b>{value}</b>
+    </div>
+  );
+}
+
+/** The numbers a player shares: the tiles read in play first, then the rest in short lists. */
+function Numbers({ card, initiative }: { card: PlayerCard; initiative?: number }) {
   const speed = card.speed === undefined ? "—" : distance(card.speed);
+  const percent = card.maxHp > 0 ? Math.round((card.hp / card.maxHp) * 100) : 0;
+  const state = card.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
+  const facts: [string, string | number | undefined][] = [
+    [ui("sheet.passivePerception"), card.passivePerception],
+    [ui("sheet.spellSaveDc"), card.spellDc],
+    [
+      ui("sheet.spellAttack"),
+      card.spellAttack === undefined ? undefined : signed(card.spellAttack),
+    ],
+  ];
   return (
     <>
-      <h4>{ui("more.defense")}</h4>
-      <ul class="explain-lines more-lines">
-        <Row
-          name={ui("sheet.hitPoints")}
-          value={`${card.hp}/${card.maxHp}${card.tempHp > 0 ? ` +${card.tempHp}` : ""}`}
+      <div class="dm-panel-stats dm-info-stats">
+        <div class="dm-panel-stat dm-panel-stat-hp">
+          <small title={ui("sheet.hitPoints")}>{ui("dm.col.hp")}</small>
+          <span class="dm-hp-num">
+            <b>{card.hp}</b>
+            <span> / {card.maxHp}</span>
+            {card.tempHp > 0 && <em>+{card.tempHp}</em>}
+          </span>
+          <span class="dm-hp-bar" data-state={state} aria-hidden="true">
+            <span style={{ width: `${percent}%` }} />
+          </span>
+        </div>
+        <Tile name={ui("dm.col.ac")} title={ui("sheet.armorClass")} value={card.ac} />
+        <Tile name={ui("dm.col.speed")} title={ui("sheet.speed")} value={speed} />
+        <Tile
+          name={ui("dm.col.init")}
+          title={ui("sheet.initiative")}
+          value={
+            initiative ?? (card.initiativeBonus === undefined ? "—" : signed(card.initiativeBonus))
+          }
         />
-        {card.conditions.length > 0 && (
-          <Row name={ui("play.conditions")} value={card.conditions.join(", ")} />
-        )}
-        <Row name={ui("sheet.armorClass")} value={card.ac} />
-        {card.initiativeBonus !== undefined && (
-          <Row name={ui("sheet.initiative")} value={signed(card.initiativeBonus)} />
-        )}
-        <Row name={ui("sheet.speed")} value={speed} />
-        {(card.senses ?? []).map(([name, value]) => (
-          <Row key={name} name={name} value={value} />
-        ))}
-      </ul>
-
-      {(card.defenses ?? []).length > 0 && (
-        <>
-          <h4>{ui("play.damageEffects")}</h4>
-          <ul class="explain-lines damage-effects">
-            {(card.defenses ?? []).map(([name, value]) => (
+      </div>
+      {card.conditions.length > 0 && (
+        <div class="tbl-conditions">
+          {card.conditions.map((name) => (
+            <span key={name} class="dm-fx-chip">
+              {name}
+            </span>
+          ))}
+        </div>
+      )}
+      {facts.some(([, v]) => v !== undefined) && (
+        <div class="dm-seat-facts">
+          {facts
+            .filter(([, v]) => v !== undefined)
+            .map(([name, value]) => (
+              <Tile key={name} name={name} value={value ?? ""} />
+            ))}
+        </div>
+      )}
+      {(card.senses ?? []).length + (card.passiveInvestigation !== undefined ? 1 : 0) > 0 && (
+        <section class="dm-seat-section">
+          <h4>{ui("more.senses")}</h4>
+          <ul class="plain dm-seat-lines">
+            {(card.senses ?? []).map(([name, value]) => (
               <Row key={name} name={name} value={value} />
             ))}
-          </ul>
-        </>
-      )}
-
-      {card.passivePerception !== undefined && (
-        <>
-          <h4>{ui("more.senses")}</h4>
-          <ul class="explain-lines more-lines">
-            <Row name={ui("sheet.passivePerception")} value={card.passivePerception} />
             {card.passiveInvestigation !== undefined && (
               <Row name={ui("more.passiveInvestigation")} value={card.passiveInvestigation} />
             )}
@@ -60,22 +92,25 @@ function Numbers({ card }: { card: PlayerCard }) {
               <Row name={ui("more.passiveInsight")} value={card.passiveInsight} />
             )}
           </ul>
-        </>
+        </section>
       )}
-
+      {(card.defenses ?? []).length > 0 && (
+        <section class="dm-seat-section">
+          <h4>{ui("play.damageEffects")}</h4>
+          <ul class="plain dm-seat-lines">
+            {(card.defenses ?? []).map(([name, value]) => (
+              <Row key={name} name={name} value={value} />
+            ))}
+          </ul>
+        </section>
+      )}
       {card.proficiency !== undefined && (
-        <>
+        <section class="dm-seat-section">
           <h4>{ui("more.attacks")}</h4>
-          <ul class="explain-lines more-lines">
+          <ul class="plain dm-seat-lines">
             <Row name={ui("sheet.proficiencyBonus")} value={signed(card.proficiency)} />
             {card.martialDc !== undefined && (
               <Row name={ui("play.martialDc")} value={card.martialDc} />
-            )}
-            {card.spellDc !== undefined && (
-              <Row name={ui("sheet.spellSaveDc")} value={card.spellDc} />
-            )}
-            {card.spellAttack !== undefined && (
-              <Row name={ui("sheet.spellAttack")} value={signed(card.spellAttack)} />
             )}
             {card.critRange !== undefined && (
               <Row
@@ -90,7 +125,7 @@ function Numbers({ card }: { card: PlayerCard }) {
               />
             )}
           </ul>
-        </>
+        </section>
       )}
     </>
   );
@@ -106,16 +141,42 @@ export function PlayerInfoDialog() {
   return (
     <Modal
       open={player !== undefined}
-      variant="compact"
+      variant="side"
       title={player?.name || ui("dm.unnamed")}
       onClose={close}
     >
-      <div class="dm-seat-info">
-        {player && !player.online && <p class="muted">{ui("dm.seat.away")}</p>}
+      <div class="dm-info-body dm-seat-info">
+        <p class="muted dm-info-kind">
+          {[player?.card?.cls, player ? ui(player.online ? "dm.table.here" : "dm.table.away") : ""]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
         {player?.card ? (
           <>
-            {player.card.cls && <p class="muted">{player.card.cls}</p>}
-            <Numbers card={player.card} />
+            <Numbers card={player.card} initiative={player.initiative} />
+            <div class="dm-seat-actions">
+              <button
+                type="button"
+                class="primary"
+                disabled={!player.online}
+                onClick={() => {
+                  close();
+                  tablePanel.value = { tab: "players", who: player.seat };
+                }}
+              >
+                {ui("dm.ask.title")}
+              </button>
+              <button
+                type="button"
+                disabled={!player.online}
+                onClick={() => {
+                  close();
+                  tablePanel.value = { tab: "activity", who: player.seat };
+                }}
+              >
+                {ui("dm.msg.write")}
+              </button>
+            </div>
             <p class="muted dm-seat-note">{ui("dm.seat.language")}</p>
           </>
         ) : (

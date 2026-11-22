@@ -39,6 +39,15 @@ export const tableUnread = signal(0);
 /** The seat whose numbers the DM is looking at in a dialog. */
 export const seatOpen = signal<string | undefined>(undefined);
 
+/** The panel of the table, when it is open: which of its two lists, and the player a roll or a line is for. */
+export const tablePanel = signal<{ tab: "players" | "activity"; who?: string } | undefined>(
+  undefined,
+);
+
+export function openTablePanel(tab: "players" | "activity" = "players", who?: string) {
+  tablePanel.value = { tab, ...(who && { who }) };
+}
+
 let link: RelayLink | undefined;
 let wanted: TrackerView | undefined;
 let sentView = "";
@@ -196,6 +205,8 @@ export function propose(
     label,
     status: "waiting",
     kind: proposal.kind,
+    at: Date.now(),
+    ...(proposal.kind === "say" && { text: proposal.text }),
     ...(proposal.kind === "roll" && proposal.dc !== undefined && { dc: proposal.dc }),
   });
   return true;

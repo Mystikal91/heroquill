@@ -29,6 +29,11 @@ export interface ProposalRecord {
   /** The difficulty of a roll that was asked for, and the total the player rolled. */
   dc?: number;
   result?: number;
+  /** A line of text sent: the words alone, without the name in front. */
+  text?: string;
+  /** When it was sent and when the answer came (the clock of the DM's device). */
+  at?: number;
+  answeredAt?: number;
 }
 
 /** A line a player wrote to the DM. */
@@ -64,11 +69,12 @@ const settle = (
   table: DmTable,
   id: string,
   status: ProposalRecord["status"],
+  now: number,
   result?: number,
 ): DmTable => ({
   ...table,
   proposals: table.proposals.map((p) =>
-    p.id === id ? { ...p, status, ...(result !== undefined && { result }) } : p,
+    p.id === id ? { ...p, status, answeredAt: now, ...(result !== undefined && { result }) } : p,
   ),
 });
 
@@ -126,9 +132,9 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
       };
     }
     case "answer":
-      return settle(table, msg.id, msg.accepted ? "accepted" : "declined", msg.result);
+      return settle(table, msg.id, msg.accepted ? "accepted" : "declined", now, msg.result);
     case "undelivered":
-      return settle(table, msg.id, "undelivered");
+      return settle(table, msg.id, "undelivered", now);
     case "say": {
       const name = table.players.find((p) => p.seat === msg.seat)?.name ?? "";
       return {
@@ -149,3 +155,41 @@ export const withoutSeat = (table: DmTable, seat: string): DmTable => ({
   ...table,
   players: table.players.filter((p) => p.seat !== seat),
 });
+
+/** One line of what happened at the table, for the DM's list: a roll, a line from a player, or what the DM asked. */
+export type TableActivity =
+  | { kind: "roll"; at: number; roll: TableRoll }
+  | { kind: "message"; at: number; message: TableMessage }
+  | { kind: "proposal"; at: number; proposal: ProposalRecord };
+
+/** How far apart the answer to a roll that was asked for and the same roll shared by the player can be. */
+const SAME_ROLL_MS = 5000;
+
+/**
+ * Everything that happened at the table in one list, newest first. A roll the DM asked for comes twice (as the
+ * answer, with its difficulty, and as a roll the player shares): only the answer stays.
+ */
+export function tableActivity(table: DmTable): TableActivity[] {
+  const answered = table.proposals.filter(
+    (p) => p.kind === "roll" && p.result !== undefined && p.answeredAt !== undefined,
+  );
+  const echo = (r: TableRoll) =>
+    answered.some(
+      (p) =>
+        p.seat === r.seat &&
+        p.result === r.roll.total &&
+        Math.abs((p.answeredAt ?? 0) - r.at) <= SAME_ROLL_MS,
+    );
+  const items: TableActivity[] = [
+    ...table.rolls
+      .filter((r) => !echo(r))
+      .map((roll) => ({ kind: "roll" as const, at: roll.at, roll })),
+    ...table.messages.map((message) => ({ kind: "message" as const, at: message.at, message })),
+    ...table.proposals.map((proposal) => ({
+      kind: "proposal" as const,
+      at: proposal.answeredAt ?? proposal.at ?? 0,
+      proposal,
+    })),
+  ];
+  return items.sort((a, b) => b.at - a.at);
+}

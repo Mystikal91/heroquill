@@ -10,11 +10,9 @@ import {
   loadDm,
   openAdd,
 } from "../../app/dm";
-import type { DmSection } from "../../app/dm";
 import { monstersWanted } from "../../app/rulesView";
 import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
-import { BookIcon, FlagIcon, SlidersIcon, SwordsIcon } from "../icons";
 import { DiceDrawer } from "../play/DiceDrawer";
 import { ModePicker } from "../play/Rolls";
 import { RulesPage } from "../rules/RulesPage";
@@ -30,9 +28,11 @@ import { PartyDialog } from "./PartyDialog";
 import { PlayerInfoDialog } from "./PlayerInfoDialog";
 import { RollPanel } from "./RollPanel";
 import { SettingsSection } from "./SettingsSection";
+import { TableDrawer } from "./TableBlock";
 import { ContextBar, OnlineChip, TurnButtons, TurnCard } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
 import { TurnPanel } from "./TurnPanel";
+import { SECTIONS } from "./sections";
 import "./dm.css";
 
 /** Keys for the table, when nothing is being typed and no window is open: N is the next turn, A adds creatures. */
@@ -93,17 +93,6 @@ function EncounterSection({ e }: { e: Encounter }) {
     </>
   );
 }
-
-const SECTIONS: {
-  id: DmSection;
-  label: "dm.section.campaign" | "dm.section.encounter" | "tab.rules" | "dm.section.settings";
-  icon: typeof BookIcon;
-}[] = [
-  { id: "campaign", label: "dm.section.campaign", icon: FlagIcon },
-  { id: "encounter", label: "dm.section.encounter", icon: SwordsIcon },
-  { id: "rules", label: "tab.rules", icon: BookIcon },
-  { id: "settings", label: "dm.section.settings", icon: SlidersIcon },
-];
 
 /** The two parts of the page, as the tabs of the app are: a bar at the bottom of a phone, sticky at the top elsewhere. */
 function SectionTabs() {
@@ -178,7 +167,7 @@ export function DmPage() {
           <p>{ui("app.loading")}</p>
         ) : (
           <>
-            {dmSection.value !== "rules" && dmSection.value !== "settings" && <ContextBar e={e} />}
+            <ContextBar e={e} />
             {dmSection.value === "campaign" && <CampaignSection />}
             {dmSection.value === "encounter" && <EncounterSection e={e} />}
             {dmSection.value === "rules" && <RulesPage />}
@@ -190,6 +179,7 @@ export function DmPage() {
         <AddEffectDialog />
         <PartyDialog />
         <PlayerInfoDialog />
+        <TableDrawer />
         <RollPanel />
         <DiceDrawer>
           <ModePicker />

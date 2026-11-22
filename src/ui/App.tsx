@@ -37,6 +37,7 @@ import { PacksPage } from "./PacksPage";
 import { QuickEditDialog } from "./QuickEdit";
 import { Sheet } from "./Sheet";
 import { PlayerTableChip } from "./TableChip";
+import { DmMessageNotice, TableRequestCard } from "./TableRequest";
 import { Tabs } from "./Tabs";
 import { Tour } from "./Tour";
 import { TransferDialog } from "./TransferDialog";
@@ -192,6 +193,12 @@ export function App() {
         </div>
       )}
       <RollToast />
+      {mode.value === "player" && (
+        <>
+          <TableRequestCard />
+          <DmMessageNotice />
+        </>
+      )}
       <UndoNotice />
       <ConfirmDialog />
       <EditionDialog />

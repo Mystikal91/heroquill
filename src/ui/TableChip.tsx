@@ -7,11 +7,17 @@ import {
   joinTable,
   joinedCode,
   leaveTable,
+  mySeat,
+  myTurn,
   playerBye,
   playerState,
+  readDmMessages,
   resumeTable,
+  sentMessages,
+  tableAttention,
   tellDm,
   trackerView,
+  unreadFromDm,
 } from "../app/playerTable";
 import { ui } from "../i18n/ui";
 import type { ByeReason, TrackerView } from "../relay/protocol";
@@ -32,6 +38,7 @@ export function TableChipFace({
   short,
   label,
   badge,
+  alert,
 }: {
   state: TableLinkState;
   code?: string;
@@ -43,6 +50,8 @@ export function TableChipFace({
   label?: string;
   /** Lines waiting to be read. */
   badge?: number;
+  /** Something waits for the player: their turn, the initiative, a request. */
+  alert?: boolean;
 }) {
   return (
     <span class="table-chip-face" data-state={state}>
@@ -53,6 +62,11 @@ export function TableChipFace({
       )}
       {code && <span class="table-chip-code">{code}</span>}
       {(count ?? label) && <span class="table-chip-count">{count ?? label}</span>}
+      {alert && (
+        <span class="table-chip-alert" role="img" aria-label={ui("table.attention")}>
+          !
+        </span>
+      )}
       {badge !== undefined && badge > 0 && (
         <span class="table-chip-badge" role="img" aria-label={ui("dm.msg.unread", { n: badge })}>
           ✉ {badge}
@@ -97,38 +111,67 @@ const BANDS = {
   down: "table.band.down",
 } as const;
 
-/** The order of the fight the DM shows: who is up, and how hurt the monsters look. */
+/** The order of the fight the DM shows: who is up, the player's own line, and how hurt the monsters look. */
 function Tracker({ view }: { view: TrackerView }) {
+  const seat = mySeat.value;
   return (
     <section class="table-tracker">
-      <h3 class="popover-heading">
-        {ui("table.tracker.title")} · {ui("table.tracker.round", { n: view.round })}
-      </h3>
+      <div class="table-sec-head">
+        <h3 class="popover-heading">{ui("table.tracker.title")}</h3>
+        <small class="muted">{ui("table.tracker.round", { n: view.round })}</small>
+      </div>
       <ol class="plain">
-        {view.order.map((c) => (
-          <li key={c.id} aria-current={c.id === view.turn ? "true" : undefined}>
-            <b>{c.name}</b>
-            {c.band && <small>{ui(BANDS[c.band])}</small>}
-          </li>
-        ))}
+        {view.order.map((c) => {
+          const mine = seat !== undefined && c.seat === seat;
+          const now = c.id === view.turn;
+          return (
+            <li
+              key={c.id}
+              aria-current={now ? "true" : undefined}
+              data-mine={mine || undefined}
+              data-player={c.seat ? true : undefined}
+            >
+              <span class="table-init">{c.initiative ?? "—"}</span>
+              <span class="table-who">
+                {c.name}
+                {mine && <span class="table-you">{ui("table.you")}</span>}
+              </span>
+              <small>
+                {now && mine
+                  ? ui("table.yourTurn")
+                  : now
+                    ? ui("table.nowActs")
+                    : c.band
+                      ? ui(BANDS[c.band])
+                      : ""}
+              </small>
+            </li>
+          );
+        })}
       </ol>
     </section>
   );
 }
 
-/** What the DM wrote, and a line to the DM. */
+/** The lines with the DM, as a conversation (theirs on the left, the player's on the right), and a line to the DM. */
 function Talk() {
   const [text, setText] = useState("");
   const [failed, setFailed] = useState(false);
-  const heard = dmMessages.value;
+  const lines = [
+    ...dmMessages.value.map((m) => ({ mine: false, text: m.text, at: m.at })),
+    ...sentMessages.value.map((m) => ({ mine: true, text: m.text, at: m.at })),
+  ]
+    .sort((a, b) => a.at - b.at)
+    .slice(-6);
   return (
     <section class="table-talk">
       <h3 class="popover-heading">{ui("table.msg.title")}</h3>
-      {heard.length > 0 && (
+      {lines.length > 0 && (
         <ul class="plain table-heard">
-          {heard.slice(0, 4).map((m) => (
-            <li key={m.at}>
-              <small>{ui("table.msg.fromDm")}</small> {m.text}
+          {lines.map((m) => (
+            <li key={`${m.at}-${m.mine}`} data-mine={m.mine || undefined}>
+              {!m.mine && <small>{ui("table.msg.fromDmShort")}</small>}
+              {m.text}
             </li>
           ))}
         </ul>
@@ -142,20 +185,19 @@ function Talk() {
           if (ok) setText("");
         }}
       >
-        <label class="field">
-          <span>{ui("table.msg.toDm")}</span>
-          <input
-            type="text"
-            value={text}
-            maxLength={400}
-            autoComplete="off"
-            onInput={(e) => {
-              setFailed(false);
-              setText(e.currentTarget.value);
-            }}
-          />
-        </label>
-        <button type="submit" class="primary" disabled={text.trim() === ""}>
+        <input
+          type="text"
+          value={text}
+          maxLength={400}
+          autoComplete="off"
+          aria-label={ui("table.msg.toDm")}
+          placeholder={ui("table.msg.placeholder")}
+          onInput={(e) => {
+            setFailed(false);
+            setText(e.currentTarget.value);
+          }}
+        />
+        <button type="submit" disabled={text.trim() === ""}>
           {ui("table.msg.send")}
         </button>
       </form>
@@ -181,16 +223,25 @@ export function PlayerTableChip() {
     <TableChipFace
       state={state === "online" ? "online" : state === "retrying" ? "retrying" : "connecting"}
       code={joined}
-      count={here ? ui("table.dmHere") : ui("table.dmAway")}
-      short={here ? "✓" : "…"}
+      count={myTurn.value ? ui("table.yourTurn") : here ? ui("table.dmHere") : ui("table.dmAway")}
+      short=""
+      badge={unreadFromDm.value}
+      alert={tableAttention.value}
     />
   );
   return (
-    <Popover align="end" class="table-chip-pop" title={ui("dm.table.title")} label={face}>
+    <Popover
+      align="end"
+      class="table-chip-pop"
+      title={ui("dm.table.title")}
+      label={face}
+      keepOpen
+      onOpen={readDmMessages}
+    >
       <div class="table-join">
-        <h2 class="popover-heading">{ui("dm.table.title")}</h2>
         {!joined || ended ? (
           <>
+            <h2 class="popover-heading">{ui("dm.table.title")}</h2>
             {ended && <p>{ui(endedKey(playerBye.value))}</p>}
             <p class="muted">{ui("table.join.intro")}</p>
             <form
@@ -202,33 +253,50 @@ export function PlayerTableChip() {
                 if (ok) setCode("");
               }}
             >
-              <label class="field">
-                <span>{ui("table.join.code")}</span>
-                <input
-                  type="text"
-                  value={code}
-                  maxLength={7}
-                  autoComplete="off"
-                  autoCapitalize="characters"
-                  spellcheck={false}
-                  placeholder="ABC123"
-                  onInput={(e) => {
-                    setBad(false);
-                    setCode(e.currentTarget.value.toUpperCase());
-                  }}
-                />
-              </label>
+              <input
+                type="text"
+                class="table-code-field"
+                value={code}
+                maxLength={7}
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellcheck={false}
+                placeholder="ABC123"
+                aria-label={ui("table.join.code")}
+                onInput={(e) => {
+                  setBad(false);
+                  setCode(e.currentTarget.value.toUpperCase());
+                }}
+              />
               <button type="submit" class="primary" disabled={code.trim().length === 0}>
                 {ui("table.join.button")}
               </button>
             </form>
             {bad && <p class="table-join-soon">{ui("table.join.badCode")}</p>}
-            <p class="muted">{ui("table.join.preview")}</p>
+            <details class="table-privacy">
+              <summary>{ui("table.privacy")}</summary>
+              <p class="muted">{ui("table.join.preview")}</p>
+            </details>
           </>
         ) : (
           <>
-            <p>{ui(STATE_TEXT[state])}</p>
-            {state === "online" && !here && <p class="muted">{ui("table.dmAwayLong")}</p>}
+            <div class="table-status">
+              <span
+                class="table-dot"
+                data-state={state === "online" ? "online" : "retrying"}
+                aria-hidden="true"
+              />
+              <div>
+                <b class="table-chip-code">{joined}</b>
+                <small class="muted">
+                  {state === "online"
+                    ? here
+                      ? ui("table.status.here")
+                      : ui("table.status.away")
+                    : ui(STATE_TEXT[state])}
+                </small>
+              </div>
+            </div>
             {initiativeAsked.value && (
               <div class="table-ask">
                 <p>{ui("table.initiative.ask")}</p>
@@ -241,10 +309,15 @@ export function PlayerTableChip() {
               <Tracker view={trackerView.value} />
             )}
             <Talk />
-            <p class="muted">{ui("table.join.preview")}</p>
-            <button type="button" class="secondary" onClick={leaveTable}>
-              {ui("table.leave")}
-            </button>
+            <div class="table-foot">
+              <details class="table-privacy">
+                <summary>{ui("table.privacy")}</summary>
+                <p class="muted">{ui("table.join.preview")}</p>
+              </details>
+              <button type="button" class="table-leave" onClick={leaveTable}>
+                {ui("table.leave")}
+              </button>
+            </div>
           </>
         )}
       </div>

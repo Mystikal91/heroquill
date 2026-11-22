@@ -3402,3 +3402,515 @@
 .table-heard small {
   color: var(--muted);
 }
+
+/* ==== The online table: a panel from the side (from the bottom on a phone) with the players and the activity ==== */
+
+.table-drawer {
+  width: min(28rem, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-left: 2px solid var(--ink);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.table-drawer::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+@media (max-width: 42rem) {
+  .table-drawer {
+    width: 100vw;
+    height: 92dvh;
+    margin: auto 0 0;
+    border-left: 0;
+    border-top: 2px solid var(--ink);
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+}
+
+.tbl {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tbl-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 0.4rem;
+}
+
+.tbl-head h3 {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--accent);
+}
+
+:root[data-style][data-style] .tbl-close {
+  width: 2.4rem;
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.tbl-intro {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.tbl-intro p {
+  margin: 0;
+}
+
+.tbl-code {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.2rem 1rem 0;
+}
+
+.tbl-code .dm-code {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  letter-spacing: 0.22em;
+}
+
+.tbl-code button {
+  margin: 0;
+}
+
+.tbl-state {
+  margin: 0.2rem 1rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.tbl-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+:root[data-style][data-style] .tbl-tabs button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.6rem;
+  margin: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:root[data-style][data-style] .tbl-tabs button[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.tbl-unread {
+  min-width: 1.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.tbl-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+}
+
+.tbl-players {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.tbl-player {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tbl-player.tbl-away {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-style: dashed;
+  background: transparent;
+}
+
+.tbl-player-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tbl-player-name {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.tbl-player-name b {
+  font-size: 1.05rem;
+}
+
+.tbl-player-name small {
+  font-size: 0.85rem;
+}
+
+:root[data-style][data-style] .tbl-kick {
+  width: 2rem;
+  min-height: 2rem;
+  margin: 0;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+:root[data-style][data-style] .tbl-kick:hover {
+  border-color: var(--border);
+}
+
+.tbl-player-nums {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.2rem 3.2rem;
+  align-items: end;
+  gap: 0.6rem;
+}
+
+.tbl-hp {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.tbl-hp b,
+.tbl-num b {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.tbl-hp em {
+  font-style: normal;
+  color: #4a6fa5;
+}
+
+.tbl-num {
+  display: grid;
+  justify-items: center;
+}
+
+.tbl-num small {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tbl-no-card {
+  margin: 0;
+}
+
+.tbl-conditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.tbl-player-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+:root[data-style][data-style] .tbl-player-actions button {
+  min-height: 2.1rem;
+  margin: 0;
+  padding: 0 0.65rem;
+  font-size: 0.75rem;
+}
+
+:root[data-style][data-style] .tbl-close-table {
+  margin-top: 0.75rem;
+  color: #d9776d;
+}
+
+/* The activity: one list, newest first. */
+.tbl-feed {
+  display: grid;
+  margin: 0;
+}
+
+.tbl-feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.tbl-feed-item[data-kind="mine"] {
+  justify-content: flex-end;
+}
+
+.tbl-feed-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+}
+
+.tbl-feed-mark[data-kind="player"] {
+  background: color-mix(in srgb, #5d86c7 30%, var(--surface));
+  color: var(--friend);
+}
+
+.tbl-feed-mark[data-kind="damage"] {
+  background: color-mix(in srgb, #b4544b 25%, var(--surface));
+  color: var(--foe);
+}
+
+.tbl-feed-body {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.tbl-feed-item[data-kind="mine"] .tbl-feed-body {
+  justify-items: end;
+  max-width: 85%;
+}
+
+.tbl-feed-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tbl-feed-result b {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.tbl-bubble {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem 0.8rem 0.8rem 0.8rem;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+.tbl-feed-item[data-kind="mine"] .tbl-bubble {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 0.8rem 0.25rem 0.8rem 0.8rem;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.tbl-ok,
+.tbl-ko {
+  padding: 0 0.55rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.tbl-ok {
+  border-color: #3d6b4a;
+  background: color-mix(in srgb, #3fa34d 15%, transparent);
+  color: color-mix(in srgb, #3fa34d 70%, var(--fg));
+}
+
+.tbl-ko {
+  border-color: #7a3b37;
+  background: color-mix(in srgb, #c0574f 15%, transparent);
+  color: var(--foe);
+}
+
+/* The foot: asking a roll (players) or writing a line (activity). */
+.tbl-foot {
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.tbl-foot-note {
+  margin: 0;
+}
+
+.tbl-ask,
+.tbl-compose {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tbl-foot-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.tbl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+:root[data-style][data-style] .tbl-chips button {
+  min-height: 2rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+
+:root[data-style][data-style] :is(.tbl-chips, .tbl-abilities) button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+.tbl-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+:root[data-style][data-style] .tbl-abilities button {
+  min-height: 2rem;
+  margin: 0;
+  padding: 0;
+  font-size: 0.75rem;
+}
+
+.tbl-ask-send,
+.tbl-compose-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tbl-dc {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.tbl-dc span {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+:root[data-style] .tbl-dc input {
+  width: 2.6rem;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.tbl-ask-send .primary,
+.tbl-compose-row .primary {
+  flex: 1;
+  min-height: 2.5rem;
+  margin: 0;
+}
+
+.tbl-compose-row input {
+  flex: 3;
+  min-width: 0;
+}
+
+/* ---- A player's sheet for the DM: the tiles of a creature's sheet ---- */
+
+.dm-seat-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.dm-seat-section h4 {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.dm-seat-lines {
+  display: grid;
+  margin: 0;
+}
+
+.dm-seat-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.dm-seat-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dm-seat-actions button {
+  flex: 1;
+  min-height: 2.6rem;
+  margin: 0;
+}

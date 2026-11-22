@@ -39,6 +39,7 @@ import { Rests } from "./Rests";
 import { AttackRolls, CheckRolls, ModePicker } from "./Rolls";
 import { PlaySpells } from "./SpellList";
 import { GroupTabs, StatusBar } from "./StatusBar";
+import { TableStrip } from "./TableStrip";
 import { DeathSaves, HitDice, HitPoints } from "./Vitals";
 import { WildShape } from "./WildShape";
 import { type LayoutFacts, arrange, columnsUsed, estimateHeights } from "./columns";
@@ -283,6 +284,7 @@ export function PlayTab() {
             </div>
           )}
         </div>
+        <TableStrip />
         <QuickStats>{!arranging && <CustomizeButton />}</QuickStats>
         <MoreStatsDialog />
         <AddEffectDialog />

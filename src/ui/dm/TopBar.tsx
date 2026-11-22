@@ -31,7 +31,7 @@ import {
 } from "../../app/dm";
 import { diceOpen } from "../../app/playView";
 import { content } from "../../app/store";
-import { tableCode, tableState, tableUnread, tableView } from "../../app/table";
+import { openTablePanel, tableCode, tableState, tableUnread, tableView } from "../../app/table";
 import { combatantNumbers } from "../../engine/combatantNumbers";
 import {
   type Combatant,
@@ -49,7 +49,7 @@ import { PlusIcon, StepBackIcon, StepForwardIcon, SwordsIcon } from "../icons";
 import { abilitiesOf } from "./Abilities";
 import { CellPopover } from "./CellPopover";
 import { ColumnsEditor } from "./ColumnsEditor";
-import { TableBlock } from "./TableBlock";
+import { SECTIONS } from "./sections";
 
 /** The encounter: which one, its name, and what can be done with it or with the fight. */
 function EncounterMenu({ e }: { e: Encounter }) {
@@ -141,7 +141,7 @@ function EncounterMenu({ e }: { e: Encounter }) {
 
 /**
  * The online table of the campaign, in the header beside the menu: a pill that is always there (a crossed sign while
- * no table is open) and opens the table itself in a panel: open it, the code, who is there, what they share.
+ * no table is open) and opens the table itself in a panel from the side (on the activity when lines wait).
  */
 export function OnlineChip() {
   const code = tableCode.value;
@@ -150,28 +150,28 @@ export function OnlineChip() {
   const live = Boolean(code) && state !== "ended";
   const here = tableView.value.players.filter((p) => p.online).length;
   const seats = Math.max(open?.party.length ?? 0, tableView.value.players.length);
+  const unread = tableUnread.value;
   return (
-    <CellPopover
-      id="dm-online-table"
-      title={ui("dm.table.title")}
+    <button
+      type="button"
       class="table-chip"
-      align="end"
-      trigger={
-        live ? (
-          <TableChipFace
-            state={state}
-            code={code}
-            count={ui("dm.online.here", { n: here, max: seats })}
-            short={String(here)}
-            badge={tableUnread.value}
-          />
-        ) : (
-          <TableChipFace state="offline" label={ui("table.closed")} />
-        )
-      }
+      title={ui("dm.table.title")}
+      aria-label={ui("dm.table.title")}
+      aria-haspopup="dialog"
+      onClick={() => openTablePanel(unread > 0 ? "activity" : "players")}
     >
-      {() => (open ? <TableBlock campaignId={open.id} /> : null)}
-    </CellPopover>
+      {live ? (
+        <TableChipFace
+          state={state}
+          code={code}
+          count={ui("dm.online.here", { n: here, max: seats })}
+          short={String(here)}
+          badge={unread}
+        />
+      ) : (
+        <TableChipFace state="offline" label={ui("table.closed")} />
+      )}
+    </button>
   );
 }
 
@@ -200,16 +200,16 @@ export function ContextBar({ e }: { e: Encounter }) {
         <EncounterMenu e={e} />
       </nav>
       <nav class="dm-inline-tabs" aria-label={ui("dm.title")}>
-        {(["campaign", "encounter"] as const).map((id) => (
+        {SECTIONS.map((section) => (
           <button
             type="button"
-            key={id}
-            aria-current={dmSection.value === id ? "page" : undefined}
+            key={section.id}
+            aria-current={dmSection.value === section.id ? "page" : undefined}
             onClick={() => {
-              dmSection.value = id;
+              dmSection.value = section.id;
             }}
           >
-            {ui(id === "campaign" ? "dm.section.campaign" : "dm.section.encounter")}
+            {ui(section.label)}
           </button>
         ))}
       </nav>
