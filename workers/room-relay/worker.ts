@@ -1,6 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 import {
   type ByeReason,
+  CLOSE_CODES,
   LIMITS,
   normaliseCode,
   parseClientMessage,
@@ -44,19 +45,6 @@ interface Attachment {
   /** A newer socket took this one's place: its closing is not news to anybody. */
   replaced?: boolean;
 }
-
-const CLOSE_BASE = 4000;
-const CLOSE_CODES: Record<ByeReason, number> = {
-  "no-room": CLOSE_BASE + 1,
-  "bad-secret": CLOSE_BASE + 2,
-  full: CLOSE_BASE + 3,
-  kicked: CLOSE_BASE + 4,
-  closed: CLOSE_BASE + 5,
-  expired: CLOSE_BASE + 6,
-  "bad-message": CLOSE_BASE + 7,
-  "too-fast": CLOSE_BASE + 8,
-  replaced: CLOSE_BASE + 9,
-};
 
 const hex = (bytes: Uint8Array) => [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
 

@@ -63,6 +63,7 @@ import {
 } from "../storage/encounters";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { content } from "./store";
+import { switchTable } from "./table";
 import { type UndoOffer, offerUndo, undoOffer } from "./undo";
 
 /** All the encounters, the one changed last first (the open one is `encounter`). */
@@ -177,6 +178,7 @@ async function openCampaign(next: Campaign) {
   const shown = encounter.value;
   if (shown) await setCurrentEncounterId(shown.id);
   await setCurrentCampaignId(next.id);
+  void switchTable(next.id);
 }
 
 /**

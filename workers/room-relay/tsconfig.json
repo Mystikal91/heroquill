@@ -14,5 +14,10 @@
     "types": ["@cloudflare/workers-types"]
   },
   "include": ["worker.ts", "../../src/relay"],
-  "exclude": ["../../src/relay/**/*.test.ts"]
+  "exclude": [
+    "../../src/relay/**/*.test.ts",
+    "../../src/relay/client.ts",
+    "../../src/relay/address.ts",
+    "../../src/relay/dmTable.ts"
+  ]
 }

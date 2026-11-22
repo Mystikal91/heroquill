@@ -277,3 +277,25 @@ export function normaliseCode(text: string): string | undefined {
     ? code
     : undefined;
 }
+
+// ---- How a socket is closed ----
+
+const CLOSE_BASE = 4000;
+
+/** The close code of each reason: the room says why with the code, so a client needs no extra message. */
+export const CLOSE_CODES: Record<ByeReason, number> = {
+  "no-room": CLOSE_BASE + 1,
+  "bad-secret": CLOSE_BASE + 2,
+  full: CLOSE_BASE + 3,
+  kicked: CLOSE_BASE + 4,
+  closed: CLOSE_BASE + 5,
+  expired: CLOSE_BASE + 6,
+  "bad-message": CLOSE_BASE + 7,
+  "too-fast": CLOSE_BASE + 8,
+  replaced: CLOSE_BASE + 9,
+};
+
+/** The reason behind a close code, or nothing when the socket simply dropped (a connection that can be retried). */
+export function byeFromCode(code: number): ByeReason | undefined {
+  return (Object.keys(CLOSE_CODES) as ByeReason[]).find((r) => CLOSE_CODES[r] === code);
+}
