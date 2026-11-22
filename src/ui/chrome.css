@@ -218,7 +218,11 @@
  * ("New" is a plus sign). The tabs leave the top, where the bars of the
  * sheet and of the play stick, and sit under the thumb.
  */
-@media (max-width: 42rem) {
+/*
+ * The slim header is for a phone and for a tablet held upright, where the name of the app, the switch and
+ * the online table do not fit side by side; the tabs at the bottom stay for the phone.
+ */
+@media (max-width: 42rem), (orientation: portrait) and (max-width: 64rem) {
   .app-header,
   .app-header[data-bar] {
     gap: 0.4rem 0.75rem;
@@ -281,7 +285,9 @@
   .bar-new-word {
     display: none;
   }
+}
 
+@media (max-width: 42rem) {
   /* Only the tabs of the app: the About page has tabs of its own, which stay where they are. */
   .main-tabs,
   :root[data-style] .main-tabs {
@@ -1984,7 +1990,7 @@ details.rule-variant[open] > summary::after {
   display: none;
 }
 
-@media (max-width: 42rem) {
+@media (max-width: 42rem), (orientation: portrait) and (max-width: 64rem) {
   .mode-slot {
     display: none;
   }
@@ -2152,7 +2158,7 @@ details.rule-variant[open] > summary::after {
   font-weight: 700;
 }
 
-@media (max-width: 42rem) {
+@media (max-width: 42rem), (orientation: portrait) and (max-width: 64rem) {
   :root[data-style][data-style] :is(.table-chip, .table-chip-pop > .popover-button) {
     min-width: 2.75rem;
     min-height: 2.75rem;
