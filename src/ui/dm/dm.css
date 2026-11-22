@@ -3328,3 +3328,22 @@
 .dm-proposals li[data-status="accepted"] small {
   color: #3fa34d;
 }
+
+.dm-ask summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.dm-ask-form {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.dm-ask-form .field {
+  margin: 0;
+}
+
+.dm-ask-form button {
+  justify-self: start;
+}

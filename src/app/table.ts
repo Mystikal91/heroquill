@@ -41,7 +41,7 @@ let sentView = "";
 let initiativeHandler: ((seat: string, value: number) => void) | undefined;
 let cardHandler: ((seat: string, card: PlayerCard) => void) | undefined;
 /** What to do when a player answers a proposal, by its id. */
-const answers = new Map<string, (accepted: boolean) => void>();
+const answers = new Map<string, (accepted: boolean, result?: number) => void>();
 let owner: string | undefined;
 let lastSaved = 0;
 
@@ -96,7 +96,7 @@ function connect(campaignId: string, saved: SavedTable) {
       if (msg.t === "card") cardHandler?.(msg.seat, msg.card);
       if (msg.t === "welcome")
         for (const p of msg.players) if (p.card) cardHandler?.(p.seat, p.card);
-      if (msg.t === "answer") answers.get(msg.id)?.(msg.accepted);
+      if (msg.t === "answer") answers.get(msg.id)?.(msg.accepted, msg.result);
       if (msg.t === "answer" || msg.t === "undelivered") answers.delete(msg.id);
       touch(campaignId, saved);
     },
@@ -180,11 +180,17 @@ export function propose(
   seat: string,
   proposal: Proposal,
   label: string,
-  done?: (accepted: boolean) => void,
+  done?: (accepted: boolean, result?: number) => void,
 ): boolean {
   const id = uuid().slice(0, 12);
   if (!link?.send({ t: "propose", seat, id, proposal })) return false;
   if (done) answers.set(id, done);
-  tableView.value = withProposal(tableView.value, { id, seat, label, status: "waiting" });
+  tableView.value = withProposal(tableView.value, {
+    id,
+    seat,
+    label,
+    status: "waiting",
+    ...(proposal.kind === "roll" && proposal.dc !== undefined && { dc: proposal.dc }),
+  });
   return true;
 }

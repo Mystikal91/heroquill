@@ -307,7 +307,16 @@ export function step(
         state: room,
         who,
         out: [
-          { to: "dm", msg: { t: "answer", seat: who.seat, id: msg.id, accepted: msg.accepted } },
+          {
+            to: "dm",
+            msg: {
+              t: "answer",
+              seat: who.seat,
+              id: msg.id,
+              accepted: msg.accepted,
+              ...(msg.result !== undefined && { result: msg.result }),
+            },
+          },
         ],
         dirty: false,
       };

@@ -156,3 +156,51 @@ describe("reading a proposal", () => {
     });
   });
 });
+
+describe("reading a roll asked of a player", () => {
+  const read = (proposal: unknown) =>
+    parseClientMessage(JSON.stringify({ t: "propose", seat: "p1", id: "a", proposal }));
+
+  it("reads a save, a check and a skill, with or without a difficulty", () => {
+    expect(
+      read({ kind: "roll", test: "save", ability: "wis", dc: 14, from: "Trap" }),
+    ).toMatchObject({
+      proposal: { kind: "roll", test: "save", ability: "wis", dc: 14, from: "Trap" },
+    });
+    const skill = read({
+      kind: "roll",
+      test: "check",
+      ability: "dex",
+      skill: "srd51:skill/stealth",
+    });
+    expect(skill).toMatchObject({ proposal: { test: "check", skill: "srd51:skill/stealth" } });
+    expect(skill?.t === "propose" && "dc" in skill.proposal).toBe(false);
+  });
+
+  it("refuses an unknown ability or kind of roll, and keeps a skill only on a check", () => {
+    expect(read({ kind: "roll", test: "save", ability: "luck" })).toBeUndefined();
+    expect(read({ kind: "roll", test: "initiative", ability: "dex" })).toBeUndefined();
+    const save = read({
+      kind: "roll",
+      test: "save",
+      ability: "con",
+      skill: "srd51:skill/arcana",
+      dc: 99,
+    });
+    expect(
+      save?.t === "propose" && save.proposal.kind === "roll" && save.proposal.skill,
+    ).toBeFalsy();
+    expect(save).toMatchObject({ proposal: { dc: 40 } });
+  });
+
+  it("carries the total back with the answer", () => {
+    expect(
+      parseClientMessage(JSON.stringify({ t: "answer", id: "a", accepted: true, result: 17 })),
+    ).toEqual({
+      t: "answer",
+      id: "a",
+      accepted: true,
+      result: 17,
+    });
+  });
+});

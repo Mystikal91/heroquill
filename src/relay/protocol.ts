@@ -71,7 +71,19 @@ export type Proposal =
   /** A condition, by the id of its entry in the rules. */
   | { kind: "condition"; condition: string; from?: string }
   /** A line of text to the player, shown to them alone. */
-  | { kind: "say"; text: string };
+  | { kind: "say"; text: string }
+  /** A saving throw, an ability check or a skill check; the player rolls it and the total comes back with the answer. */
+  | {
+      kind: "roll";
+      test: "save" | "check";
+      ability: AbilityKey;
+      skill?: string;
+      dc?: number;
+      from?: string;
+    };
+
+export const ABILITY_KEYS = ["str", "dex", "con", "int", "wis", "cha"] as const;
+export type AbilityKey = (typeof ABILITY_KEYS)[number];
 
 export type ByeReason =
   | "no-room"
@@ -94,7 +106,7 @@ export type ClientMessage =
   | { t: "askInitiative"; seats?: string[] }
   | { t: "kick"; seat: string }
   | { t: "propose"; seat: string; id: string; proposal: Proposal }
-  | { t: "answer"; id: string; accepted: boolean }
+  | { t: "answer"; id: string; accepted: boolean; result?: number }
   | { t: "close" }
   | { t: "ping" };
 
@@ -126,7 +138,7 @@ export type ServerMessage =
   | { t: "tracker"; view: TrackerView }
   | { t: "askInitiative"; seats?: string[] }
   | { t: "proposal"; id: string; proposal: Proposal }
-  | { t: "answer"; seat: string; id: string; accepted: boolean }
+  | { t: "answer"; seat: string; id: string; accepted: boolean; result?: number }
   /** The proposal did not reach a player: nobody is on that seat now. */
   | { t: "undelivered"; id: string }
   | { t: "pong" }
@@ -235,6 +247,20 @@ export function readProposal(raw: unknown): Proposal | undefined {
       const text = str(raw.text, 400)?.trim();
       return text ? { kind: "say", text } : undefined;
     }
+    case "roll": {
+      const ability = ABILITY_KEYS.find((a) => a === raw.ability);
+      const skill = str(raw.skill, 120);
+      const dc = int(raw.dc, 1, 40);
+      if (!ability || (raw.test !== "save" && raw.test !== "check")) return undefined;
+      return {
+        kind: "roll",
+        test: raw.test,
+        ability,
+        ...(skill && raw.test === "check" && { skill }),
+        ...(dc !== undefined && { dc }),
+        ...(from && { from }),
+      };
+    }
     default:
       return undefined;
   }
@@ -307,8 +333,9 @@ export function parseClientMessage(text: string): ClientMessage | undefined {
     }
     case "answer": {
       const id = str(raw.id, 40);
+      const result = int(raw.result, -99, 999);
       return id && typeof raw.accepted === "boolean"
-        ? { t: "answer", id, accepted: raw.accepted }
+        ? { t: "answer", id, accepted: raw.accepted, ...(result !== undefined && { result }) }
         : undefined;
     }
     case "close":

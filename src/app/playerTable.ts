@@ -254,7 +254,49 @@ function describe(p: Proposal): string {
       });
     case "say":
       return ui("table.proposal.say", { text: p.text });
+    case "roll": {
+      const c = content.value;
+      const ability = c?.name(`srd51:ability/${p.ability}`) ?? p.ability;
+      const what = p.skill
+        ? ui("table.proposal.rollSkill", { skill: c?.name(p.skill) ?? p.skill })
+        : ui(p.test === "save" ? "table.proposal.rollSave" : "table.proposal.rollCheck", {
+            ability,
+          });
+      const dc = p.dc !== undefined ? ui("table.proposal.dc", { dc: p.dc }) : "";
+      return ui("table.proposal.rollAsk", { from, what, dc });
+    }
   }
+}
+
+/** Rolls what the DM asked for, on the player's own numbers, and gives the total. */
+function rollAsked(p: Extract<Proposal, { kind: "roll" }>): number | undefined {
+  const s = sheet.value;
+  const c = content.value;
+  if (!s || !c) return undefined;
+  const name = c.name(`srd51:ability/${p.ability}`);
+  if (p.skill) {
+    const skill = s.skills.find((k) => k.id === p.skill);
+    if (!skill) return undefined;
+    return rollCheck(
+      c.name(skill.id),
+      skill.bonus,
+      skill.proficient && s.proficientSkillFloor ? { floor: s.proficientSkillFloor } : undefined,
+      true,
+      undefined,
+      skill.ability,
+    ).total;
+  }
+  if (p.test === "save")
+    return rollCheck(
+      `${name} - ${ui("sheet.savingThrow")}`,
+      s.saves[p.ability].bonus,
+      undefined,
+      undefined,
+      "save",
+      p.ability,
+    ).total;
+  return rollCheck(name, s.abilities[p.ability].modifier, undefined, true, "check", p.ability)
+    .total;
 }
 
 /** Does what the player accepted, on their own sheet. */
@@ -276,13 +318,21 @@ async function drain() {
       const say = proposal.kind === "say";
       const yes = await askConfirm({
         title: describe(proposal),
-        confirm: ui(say ? "table.proposal.ok" : "table.proposal.accept"),
+        confirm: ui(
+          say
+            ? "table.proposal.ok"
+            : proposal.kind === "roll"
+              ? "table.proposal.roll"
+              : "table.proposal.accept",
+        ),
         cancel: ui(say ? "table.proposal.ok" : "table.proposal.decline"),
       });
       // A line of text only needs reading; the rest need a yes.
       const accepted = say || yes;
-      if (accepted) apply(proposal);
-      link?.send({ t: "answer", id, accepted });
+      let result: number | undefined;
+      if (accepted && proposal.kind === "roll") result = rollAsked(proposal);
+      else if (accepted) apply(proposal);
+      link?.send({ t: "answer", id, accepted, ...(result !== undefined && { result }) });
     }
   } finally {
     asking = false;

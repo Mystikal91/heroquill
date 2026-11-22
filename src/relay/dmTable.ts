@@ -24,6 +24,9 @@ export interface ProposalRecord {
   /** The line the DM reads ("Aria: 7 fire damage"). */
   label: string;
   status: "waiting" | "accepted" | "declined" | "undelivered";
+  /** The difficulty of a roll that was asked for, and the total the player rolled. */
+  dc?: number;
+  result?: number;
 }
 
 export interface DmTable {
@@ -44,9 +47,16 @@ export const withProposal = (table: DmTable, record: ProposalRecord): DmTable =>
   proposals: [record, ...table.proposals].slice(0, MAX_PROPOSALS),
 });
 
-const settle = (table: DmTable, id: string, status: ProposalRecord["status"]): DmTable => ({
+const settle = (
+  table: DmTable,
+  id: string,
+  status: ProposalRecord["status"],
+  result?: number,
+): DmTable => ({
   ...table,
-  proposals: table.proposals.map((p) => (p.id === id ? { ...p, status } : p)),
+  proposals: table.proposals.map((p) =>
+    p.id === id ? { ...p, status, ...(result !== undefined && { result }) } : p,
+  ),
 });
 
 const upsert = (players: TablePlayer[], seat: string, change: (p: TablePlayer) => TablePlayer) =>
@@ -102,7 +112,7 @@ export function reduceTable(table: DmTable, msg: ServerMessage, now: number): Dm
       };
     }
     case "answer":
-      return settle(table, msg.id, msg.accepted ? "accepted" : "declined");
+      return settle(table, msg.id, msg.accepted ? "accepted" : "declined", msg.result);
     case "undelivered":
       return settle(table, msg.id, "undelivered");
     default:

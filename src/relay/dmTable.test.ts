@@ -84,3 +84,17 @@ describe("proposals on the table", () => {
     expect(t.proposals).toHaveLength(MAX_PROPOSALS);
   });
 });
+
+describe("the result of a roll asked", () => {
+  it("is kept with the proposal that asked for it", () => {
+    let t = withProposal(emptyTable(), {
+      id: "r",
+      seat: "p1",
+      label: "Aria: Wis save",
+      status: "waiting",
+      dc: 14,
+    });
+    t = reduceTable(t, { t: "answer", seat: "p1", id: "r", accepted: true, result: 17 }, 0);
+    expect(t.proposals[0]).toMatchObject({ status: "accepted", result: 17, dc: 14 });
+  });
+});

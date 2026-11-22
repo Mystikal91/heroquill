@@ -266,3 +266,14 @@ describe("proposals", () => {
     expect(forged.out).toEqual([]);
   });
 });
+
+describe("an answer with a total", () => {
+  it("reaches the DM with the total", () => {
+    const { state, seat } = join(opened());
+    const player = { role: "player", seat } as Who;
+    const a = step(state, player, { t: "answer", id: "r1", accepted: true, result: 17 }, env());
+    expect(a.out).toEqual([
+      { to: "dm", msg: { t: "answer", seat, id: "r1", accepted: true, result: 17 } },
+    ]);
+  });
+});
