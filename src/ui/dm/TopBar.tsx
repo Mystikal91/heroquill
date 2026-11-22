@@ -192,6 +192,7 @@ export function ContextBar({ e }: { e: Encounter }) {
         <button
           type="button"
           class="dm-tool"
+          aria-label={ui("dm.area")}
           title={ui("dm.area.hint")}
           disabled={e.combatants.length === 0}
           onClick={startArea}
@@ -285,7 +286,7 @@ export function TurnButtons({ e }: { e: Encounter }) {
         title={`${ui("dm.next")} (N)`}
         onClick={advanceTurn}
       >
-        <span class="dm-advance-label">{ui("dm.next")}</span>
+        <span class="dm-advance-label">{ui("dm.nextShort")}</span>
         <StepForwardIcon />
       </button>
     </div>

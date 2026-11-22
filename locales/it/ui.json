@@ -2738,5 +2738,6 @@
   "dm.state.ready": "Pronto",
   "dm.state.empty": "Vuoto",
   "dm.resume": "Riprendi",
-  "dm.openEncounter": "Apri"
+  "dm.openEncounter": "Apri",
+  "dm.nextShort": "Successivo"
 }

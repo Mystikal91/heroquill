@@ -2738,5 +2738,6 @@
   "dm.state.ready": "Listo",
   "dm.state.empty": "Vacío",
   "dm.resume": "Reanudar",
-  "dm.openEncounter": "Abrir"
+  "dm.openEncounter": "Abrir",
+  "dm.nextShort": "Siguiente"
 }
