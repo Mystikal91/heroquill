@@ -7,6 +7,7 @@ import type { Effect } from "../../data/schema";
 import {
   BARDIC_DICE,
   addCustomEffect,
+  customRoundsKey,
   removeCustomEffect,
   setBardicDie,
   setCustomEffectOn,
@@ -194,7 +195,15 @@ export function ActiveEffectsList() {
           </span>
           <div class="card-head">
             <b class="feat-name">{e.name}</b>
-            <span class="card-meta">{e.effects.map(effectLine).join(" · ")}</span>
+            <span class="card-meta">
+              {[
+                ...(e.note ? [e.note] : []),
+                ...e.effects.map(effectLine),
+                ...(play.rounds?.[customRoundsKey(e.id)] !== undefined
+                  ? [ui("play.roundsLeft", { n: play.rounds[customRoundsKey(e.id)] ?? 0 })]
+                  : []),
+              ].join(" · ")}
+            </span>
             <label class="effect-toggle">
               <input
                 type="checkbox"

@@ -39,6 +39,7 @@ import {
   nextTurn,
   removeCombatant,
   resetFight,
+  setConditionRounds,
   startCombat,
   toggleCondition,
 } from "../engine/encounter";
@@ -390,8 +391,27 @@ export function addMonsters(entryId: string, count: number, rollHp: boolean) {
 }
 
 /** Puts an effect (a spell, a note, a concentration) on a creature. */
-export const giveEffect = (id: string, effect: Omit<TrackedEffect, "id">) =>
-  editCombatant(id, (c) => addEffect(c, effect));
+export function giveEffect(id: string, effect: Omit<TrackedEffect, "id">) {
+  const e = encounter.value;
+  const c = e?.combatants.find((x) => x.id === id);
+  const seat = e && c ? onlineSeatOf(e, c) : undefined;
+  // On a player at the table it is a proposal: it goes on their sheet when they accept, and on the order then.
+  if (!c || !seat) return editCombatant(id, (x) => addEffect(x, effect));
+  propose(
+    seat,
+    {
+      kind: "effect",
+      name: effect.name,
+      ...(effect.note && { note: effect.note }),
+      ...(effect.rounds && { rounds: effect.rounds }),
+      ...(effect.effects && effect.effects.length > 0 && { effects: effect.effects }),
+    },
+    ui("dm.prop.effect", { name: c.name, effect: effect.name }),
+    (accepted) => {
+      if (accepted) editCombatant(id, (x) => addEffect(x, effect));
+    },
+  );
+}
 
 /** Opens the window that adds creatures, with a fresh running line. */
 export function openAdd() {
@@ -1142,22 +1162,36 @@ function applyAllCards() {
  * Puts a condition on a creature, or takes it off. On a player at the table the condition is a proposal: it
  * goes on the character when they accept (taking it off is the DM's own note: the player's sheet is theirs).
  */
-export function toggleConditionOf(c: Combatant, conditionId: string) {
+export function toggleConditionOf(c: Combatant, conditionId: string, rounds?: number) {
   const e = encounter.value;
   const seat = e && !c.conditions.includes(conditionId) ? onlineSeatOf(e, c) : undefined;
-  if (!seat) return editCombatant(c.id, (y) => toggleCondition(y, conditionId));
+  if (!seat) {
+    editCombatant(c.id, (y) => toggleCondition(y, conditionId));
+    if (rounds) editCombatant(c.id, (y) => setConditionRounds(y, conditionId, rounds));
+    return;
+  }
   const name = content.value?.name(conditionId) ?? conditionId;
   propose(
     seat,
-    { kind: "condition", condition: conditionId },
+    { kind: "condition", condition: conditionId, name, ...(rounds && { rounds }) },
     ui("dm.prop.condition", { name: c.name, condition: name }),
     (accepted) => {
       if (accepted)
         editCombatant(c.id, (y) =>
-          y.conditions.includes(conditionId) ? y : toggleCondition(y, conditionId),
+          setConditionRounds(
+            y.conditions.includes(conditionId) ? y : toggleCondition(y, conditionId),
+            conditionId,
+            rounds,
+          ),
         );
     },
   );
+}
+
+/** Whether this creature is a player at the table now, who therefore takes what is proposed by accepting it. */
+export function isPlayerHere(c: Combatant): boolean {
+  const e = encounter.value;
+  return Boolean(e && onlineSeatOf(e, c));
 }
 
 // The players see the fight as it is: the order, whose turn, how hurt the creatures look.

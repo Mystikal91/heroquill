@@ -188,6 +188,7 @@ const CharacterSchema = v.object({
           id: v.string(),
           name: v.string(),
           effects: v.array(EffectSchema),
+          note: v.optional(v.string()),
           off: v.optional(v.boolean()),
         }),
       ),

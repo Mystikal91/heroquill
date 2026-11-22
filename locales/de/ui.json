@@ -2871,7 +2871,6 @@
   "table.req.damage": "{amount} Schaden",
   "table.req.damageTyped": "{amount} {type}schaden",
   "table.req.dc": "Zu schlagen",
-  "table.req.proposes": "{from} schlägt vor",
   "table.req.rollNote": "Das Ergebnis geht an die Spielleitung; du siehst, ob es gelungen ist.",
   "table.req.rollSave": "Rettungswurf auf {ability}",
   "table.req.rollCheck": "{ability}-Probe",
@@ -2886,5 +2885,11 @@
   "table.you": "du",
   "table.yourTurn": "Du bist dran",
   "dm.ask.checkShort": "Attribut",
-  "dm.ask.skillShort": "Fertigkeit"
+  "dm.ask.skillShort": "Fertigkeit",
+  "table.proposal.rounds": "für {n} Runden",
+  "dm.prop.effect": "{name}: {effect}",
+  "dm.prop.roundsField": "Runden für einen Spieler am Tisch",
+  "table.req.effect": "Der Effekt {effect}",
+  "table.req.dealt": "{from} hat dir zugefügt",
+  "table.req.applied": "{from} hat dir auferlegt"
 }

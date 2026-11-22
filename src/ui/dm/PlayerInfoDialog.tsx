@@ -69,6 +69,19 @@ function Numbers({ card, initiative }: { card: PlayerCard; initiative?: number }
           ))}
         </div>
       )}
+      {(card.active ?? []).length > 0 && (
+        <section class="dm-seat-section">
+          <h4>{ui("play.activeEffects")}</h4>
+          <div class="tbl-conditions">
+            {(card.active ?? []).map((a) => (
+              <span key={a.name} class="dm-fx-chip">
+                {a.name}
+                {a.rounds !== undefined && ` · ${ui("play.roundsLeft", { n: a.rounds })}`}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
       {facts.some(([, v]) => v !== undefined) && (
         <div class="dm-seat-facts">
           {facts

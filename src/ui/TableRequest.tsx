@@ -50,7 +50,9 @@ export function TableRequestCard() {
             <small>
               {proposal.kind === "roll"
                 ? ui("table.req.asks", { from: request.from })
-                : ui("table.req.proposes", { from: request.from })}
+                : proposal.kind === "damage"
+                  ? ui("table.req.dealt", { from: request.from })
+                  : ui("table.req.applied", { from: request.from })}
             </small>
             <h3 id="table-request-title">{request.what}</h3>
           </div>

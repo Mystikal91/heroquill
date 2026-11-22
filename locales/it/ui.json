@@ -2871,7 +2871,6 @@
   "table.req.damage": "{amount} danni",
   "table.req.damageTyped": "{amount} danni da {type}",
   "table.req.dc": "Da superare",
-  "table.req.proposes": "{from} propone",
   "table.req.rollNote": "Il risultato va al master; tu vedi se è riuscito.",
   "table.req.rollSave": "Tiro salvezza su {ability}",
   "table.req.rollCheck": "Prova di {ability}",
@@ -2886,5 +2885,11 @@
   "table.you": "tu",
   "table.yourTurn": "Tocca a te",
   "dm.ask.checkShort": "Caratteristica",
-  "dm.ask.skillShort": "Abilità"
+  "dm.ask.skillShort": "Abilità",
+  "table.proposal.rounds": "per {n} round",
+  "dm.prop.effect": "{name}: {effect}",
+  "dm.prop.roundsField": "Round per un giocatore al tavolo",
+  "table.req.effect": "L'effetto {effect}",
+  "table.req.dealt": "{from} ti ha inflitto",
+  "table.req.applied": "{from} ti ha applicato"
 }

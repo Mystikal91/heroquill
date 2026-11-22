@@ -220,3 +220,63 @@ describe("a line from a player to the DM", () => {
     expect(parseClientMessage(JSON.stringify({ t: "say" }))).toBeUndefined();
   });
 });
+
+describe("a condition or an effect proposed", () => {
+  const read = (proposal: unknown) =>
+    parseClientMessage(JSON.stringify({ t: "propose", seat: "p1", id: "a", proposal }));
+
+  it("reads a condition with its name and rounds", () => {
+    expect(
+      read({ kind: "condition", condition: "hb:condition/hexed", name: "Hexed", rounds: 3 }),
+    ).toMatchObject({
+      proposal: { kind: "condition", condition: "hb:condition/hexed", name: "Hexed", rounds: 3 },
+    });
+    expect(read({ kind: "condition", condition: "x", rounds: 0 })).toMatchObject({
+      proposal: { kind: "condition", condition: "x" },
+    });
+  });
+
+  it("reads an effect with what it changes, and keeps that small", () => {
+    const effect = read({
+      kind: "effect",
+      name: "Bless",
+      rounds: 10,
+      effects: [{ type: "modifier", target: "ac", value: 1 }],
+    });
+    expect(effect).toMatchObject({
+      proposal: { kind: "effect", name: "Bless", rounds: 10, effects: [{ target: "ac" }] },
+    });
+    const many = read({
+      kind: "effect",
+      name: "Big",
+      effects: Array.from({ length: 20 }, (_, i) => ({ type: "modifier", value: i })),
+    });
+    expect(
+      many?.t === "propose" && many.proposal.kind === "effect" && many.proposal.effects?.length,
+    ).toBe(8);
+    const huge = read({
+      kind: "effect",
+      name: "Huge",
+      effects: [{ type: "x", pad: "y".repeat(4000) }],
+    });
+    expect(
+      huge?.t === "propose" && huge.proposal.kind === "effect" && huge.proposal.effects,
+    ).toBeUndefined();
+  });
+
+  it("refuses an effect with no name", () => {
+    expect(read({ kind: "effect", name: "  " })).toBeUndefined();
+  });
+
+  it("reads the effects in force on a card", () => {
+    const card = readCard({
+      name: "Aria",
+      hp: 5,
+      maxHp: 10,
+      ac: 12,
+      conditions: [],
+      active: [{ name: "Bless", rounds: 4 }, { name: "Haste" }, { rounds: 2 }],
+    });
+    expect(card?.active).toEqual([{ name: "Bless", rounds: 4 }, { name: "Haste" }]);
+  });
+});

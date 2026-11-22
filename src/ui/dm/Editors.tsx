@@ -6,6 +6,7 @@ import {
   dmRuleset,
   editCombatant,
   effectFor,
+  isPlayerHere,
   toggleConditionOf,
   updateEncounter,
 } from "../../app/dm";
@@ -203,6 +204,9 @@ function RoundsField({
  */
 export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }) {
   const list = conditionOptions(dmRuleset.value);
+  // For a player at the table the rounds go with the proposal; they are set before the condition is chosen.
+  const [proposedRounds, setProposedRounds] = useState<number | undefined>(undefined);
+  const forPlayer = isPlayerHere(c);
   const immune = conditionImmunities(c);
   const inForce = c.conditions.length + c.effects.length;
   return (
@@ -263,6 +267,15 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
       </section>
       <section>
         <h5 class="dm-fx-title">{ui("play.conditions")}</h5>
+        {forPlayer && (
+          <p class="dm-fx-rounds">
+            <RoundsField
+              label={ui("dm.prop.roundsField")}
+              value={proposedRounds}
+              onChange={setProposedRounds}
+            />
+          </p>
+        )}
         <div class="dm-cond-chips">
           {list.map((x) => (
             <button
@@ -277,7 +290,7 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
                   : undefined
               }
               aria-pressed={c.conditions.includes(x.id)}
-              onClick={() => toggleConditionOf(c, x.id)}
+              onClick={() => toggleConditionOf(c, x.id, forPlayer ? proposedRounds : undefined)}
             >
               {x.name}
               {immune.includes(x.id.split("/")[1] ?? "") && <small> · {ui("dm.immuneTag")}</small>}

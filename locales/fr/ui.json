@@ -2871,7 +2871,6 @@
   "table.req.damage": "{amount} dégâts",
   "table.req.damageTyped": "{amount} dégâts de {type}",
   "table.req.dc": "À battre",
-  "table.req.proposes": "{from} propose",
   "table.req.rollNote": "Le total part au MJ ; tu vois si c'est réussi.",
   "table.req.rollSave": "Jet de sauvegarde de {ability}",
   "table.req.rollCheck": "Test de {ability}",
@@ -2886,5 +2885,11 @@
   "table.you": "toi",
   "table.yourTurn": "À toi",
   "dm.ask.checkShort": "Caractéristique",
-  "dm.ask.skillShort": "Compétence"
+  "dm.ask.skillShort": "Compétence",
+  "table.proposal.rounds": "pendant {n} rounds",
+  "dm.prop.effect": "{name} : {effect}",
+  "dm.prop.roundsField": "Rounds pour un joueur à la table",
+  "table.req.effect": "L'effet {effect}",
+  "table.req.dealt": "{from} vous a infligé",
+  "table.req.applied": "{from} vous a appliqué"
 }

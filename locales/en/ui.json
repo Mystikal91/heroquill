@@ -2871,7 +2871,6 @@
   "table.req.damage": "{amount} damage",
   "table.req.damageTyped": "{amount} {type} damage",
   "table.req.dc": "To beat",
-  "table.req.proposes": "{from} proposes",
   "table.req.rollNote": "The total goes to the DM; you see whether it succeeded.",
   "table.req.rollSave": "A {ability} saving throw",
   "table.req.rollCheck": "A {ability} check",
@@ -2886,5 +2885,11 @@
   "table.you": "you",
   "table.yourTurn": "Your turn",
   "dm.ask.checkShort": "Ability",
-  "dm.ask.skillShort": "Skill"
+  "dm.ask.skillShort": "Skill",
+  "table.proposal.rounds": "for {n} rounds",
+  "dm.prop.effect": "{name}: {effect}",
+  "dm.prop.roundsField": "Rounds for a player at the table",
+  "table.req.effect": "The {effect} effect",
+  "table.req.dealt": "{from} dealt you",
+  "table.req.applied": "{from} applied to you"
 }

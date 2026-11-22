@@ -149,6 +149,8 @@ export interface CustomEffect {
   id: string;
   name: string;
   effects: Effect[];
+  /** What it is, when it changes no number (a condition of a homebrew, a ruling the DM made). */
+  note?: string;
   /** Kept on the list but not counted on the sheet (a long rest, or a spent die, turns it off; the person turns it on). */
   off?: boolean;
 }

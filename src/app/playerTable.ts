@@ -1,6 +1,13 @@
 import { computed, effect, signal } from "@preact/signals";
-import { currentHp } from "../engine/play";
-import { toggleCondition } from "../engine/play";
+import * as v from "valibot";
+import { EffectSchema } from "../data/schema";
+import {
+  addProposedEffect,
+  currentHp,
+  customRoundsKey,
+  setRounds,
+  toggleCondition,
+} from "../engine/play";
 import { beastPool } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
 import { roomUrl } from "../relay/address";
@@ -122,6 +129,15 @@ export function currentCard(): PlayerCard | undefined {
     attunedMax: s.attunement.max,
     senses: movementLines(s.movement, s.senses),
     defenses: damageEffectRows(),
+    active: [
+      ...(play.customEffects ?? [])
+        .filter((e) => !e.off)
+        .map((e) => {
+          const rounds = play.rounds?.[customRoundsKey(e.id)];
+          return { name: e.name, ...(rounds !== undefined && { rounds }) };
+        }),
+      ...(play.activeSpells ?? []).map((id) => ({ name: c.name(id) })),
+    ],
     conditions: [
       ...play.conditions.map((id) => c.name(id)),
       ...(play.concentration
@@ -303,6 +319,15 @@ let settle: ((yes: boolean) => void) | undefined;
 
 const abilityName = (ability: string) => content.value?.name(`srd51:ability/${ability}`) ?? ability;
 
+const forRounds = (rounds: number | undefined) =>
+  rounds === undefined ? "" : ` ${ui("table.proposal.rounds", { n: rounds })}`;
+
+/** The name of a condition the DM proposed: the player's own word for it when they have it, else the DM's. */
+function conditionLabel(p: Extract<Proposal, { kind: "condition" }>): string {
+  const c = content.value;
+  return (c?.index.has(p.condition) ? c.name(p.condition) : undefined) ?? p.name ?? p.condition;
+}
+
 /** What a request asks, in a few words, for the title of its card. */
 function whatOf(p: Exclude<Proposal, { kind: "say" }>): string {
   switch (p.kind) {
@@ -311,9 +336,9 @@ function whatOf(p: Exclude<Proposal, { kind: "say" }>): string {
         ? ui("table.req.damageTyped", { amount: p.amount, type: damageName(p.type) })
         : ui("table.req.damage", { amount: p.amount });
     case "condition":
-      return ui("table.req.condition", {
-        condition: content.value?.name(p.condition) ?? p.condition,
-      });
+      return ui("table.req.condition", { condition: conditionLabel(p) }) + forRounds(p.rounds);
+    case "effect":
+      return ui("table.req.effect", { effect: p.name }) + forRounds(p.rounds);
     case "roll":
       return p.skill
         ? ui("table.req.rollSkill", { skill: content.value?.name(p.skill) ?? p.skill })
@@ -365,10 +390,35 @@ function rollAsked(p: Extract<Proposal, { kind: "roll" }>): number | undefined {
 /** Does what the player accepted, on their own sheet. */
 function apply(p: Proposal) {
   if (p.kind === "damage") damageCharacter(p.amount);
-  else if (p.kind === "condition")
+  else if (p.kind === "condition") {
+    // A condition this device has is the rules' own, with its rounds; one it does not have (a homebrew the DM owns)
+    // becomes an effect with its name, which the Active effects panel shows and the rounds end.
+    if (content.value?.index.has(p.condition))
+      changePlay((play) =>
+        play.conditions.includes(p.condition)
+          ? play
+          : setRounds(toggleCondition(play, p.condition), p.condition, p.rounds),
+      );
+    else
+      changePlay((play) =>
+        addProposedEffect(play, {
+          name: conditionLabel(p),
+          effects: [],
+          ...(p.rounds !== undefined && { rounds: p.rounds }),
+        }),
+      );
+  } else if (p.kind === "effect") {
+    // What it changes is read like any effect of the rules: what does not fit is left out, and the name stays.
+    const parsed = v.safeParse(v.array(EffectSchema), p.effects ?? []);
     changePlay((play) =>
-      play.conditions.includes(p.condition) ? play : toggleCondition(play, p.condition),
+      addProposedEffect(play, {
+        name: p.name,
+        ...(p.note && { note: p.note }),
+        effects: parsed.success ? parsed.output : [],
+        ...(p.rounds !== undefined && { rounds: p.rounds }),
+      }),
     );
+  }
 }
 
 /** The player answered the card of a request: yes (accept, or roll) or no (ignore). */

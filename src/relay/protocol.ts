@@ -55,6 +55,8 @@ export interface PlayerCard {
   senses?: [string, string][];
   /** What the character does to damage (resistances, reductions...): name and text. */
   defenses?: [string, string][];
+  /** Spells and effects in force that are not conditions, with the rounds left when they have a limit. */
+  active?: { name: string; rounds?: number }[];
   conditions: string[];
   concentration?: string;
 }
@@ -82,8 +84,17 @@ export interface TrackerView {
 export type Proposal =
   /** Take this much damage (after the defenses the DM knows of). */
   | { kind: "damage"; amount: number; type?: string; from?: string }
-  /** A condition, by the id of its entry in the rules. */
-  | { kind: "condition"; condition: string; from?: string }
+  /** A condition, by the id of its entry in the rules, with its name for a player who does not have that entry. */
+  | { kind: "condition"; condition: string; name?: string; rounds?: number; from?: string }
+  /** A spell or an effect on the player: a name, a note, a limit in rounds and what it changes (as the rules say it). */
+  | {
+      kind: "effect";
+      name: string;
+      note?: string;
+      rounds?: number;
+      effects?: unknown[];
+      from?: string;
+    }
   /** A line of text to the player, shown to them alone. */
   | { kind: "say"; text: string }
   /** A saving throw, an ability check or a skill check; the player rolls it and the total comes back with the answer. */
@@ -187,6 +198,18 @@ function pairs(raw: unknown, count: number, length: number): [string, string][] 
   return out.length > 0 ? out : undefined;
 }
 
+function readActive(raw: unknown): PlayerCard["active"] {
+  if (!Array.isArray(raw)) return undefined;
+  const out: NonNullable<PlayerCard["active"]> = [];
+  for (const item of raw.slice(0, 12)) {
+    if (!isObject(item)) continue;
+    const name = str(item.name, LIMITS.text);
+    const rounds = int(item.rounds, 1, 999);
+    if (name) out.push({ name, ...(rounds !== undefined && { rounds }) });
+  }
+  return out.length > 0 ? out : undefined;
+}
+
 export function readCard(raw: unknown): PlayerCard | undefined {
   if (!isObject(raw)) return undefined;
   const name = str(raw.name, LIMITS.text);
@@ -209,6 +232,7 @@ export function readCard(raw: unknown): PlayerCard | undefined {
   const crit = int(raw.critRange, 2, 20);
   const attunedUsed = int(raw.attunedUsed, 0, 9);
   const attunedMax = int(raw.attunedMax, 0, 9);
+  const active = readActive(raw.active);
   const senses = pairs(raw.senses, 10, 80);
   const defenses = pairs(raw.defenses, 10, 200);
   return {
@@ -232,6 +256,7 @@ export function readCard(raw: unknown): PlayerCard | undefined {
     ...(attunedMax !== undefined && { attunedMax }),
     ...(senses && { senses }),
     ...(defenses && { defenses }),
+    ...(active && { active }),
     conditions: (Array.isArray(raw.conditions) ? raw.conditions : [])
       .map((c) => str(c, LIMITS.text))
       .filter((c): c is string => c !== undefined && c !== "")
@@ -291,7 +316,34 @@ export function readProposal(raw: unknown): Proposal | undefined {
     }
     case "condition": {
       const condition = str(raw.condition, 120);
-      return condition ? { kind: "condition", condition, ...(from && { from }) } : undefined;
+      const name = str(raw.name, LIMITS.text);
+      const rounds = int(raw.rounds, 1, 999);
+      return condition
+        ? {
+            kind: "condition",
+            condition,
+            ...(name && { name }),
+            ...(rounds !== undefined && { rounds }),
+            ...(from && { from }),
+          }
+        : undefined;
+    }
+    case "effect": {
+      const name = str(raw.name, LIMITS.text)?.trim();
+      if (!name) return undefined;
+      const note = str(raw.note, 200);
+      const rounds = int(raw.rounds, 1, 999);
+      // What it changes is the rules' own vocabulary: the room only keeps it small, the player's device reads it.
+      const list = Array.isArray(raw.effects) ? raw.effects.filter(isObject).slice(0, 8) : [];
+      const effects = list.length > 0 && JSON.stringify(list).length <= 3000 ? list : undefined;
+      return {
+        kind: "effect",
+        name,
+        ...(note && { note }),
+        ...(rounds !== undefined && { rounds }),
+        ...(effects && { effects }),
+        ...(from && { from }),
+      };
     }
     case "say": {
       const text = str(raw.text, 400)?.trim();

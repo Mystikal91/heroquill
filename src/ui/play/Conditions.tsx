@@ -176,19 +176,21 @@ export function Conditions() {
       { undo: false },
     );
   const nameOf = (id: string): string =>
-    id === "concentration"
-      ? ui("play.concentrating", { spell: c.name(play.concentration ?? "") })
-      : id === "rage"
-        ? c.name(
-            character.value.ruleset === "srd52"
-              ? "srd52:feature/barbarian-rage"
-              : "srd51:feature/rage",
-          )
-        : id === "shillelagh"
-          ? ui("play.shillelagh")
-          : id === "sacredWeapon"
-            ? ui("play.sacredWeapon")
-            : c.name(id);
+    id.startsWith("custom:effect/")
+      ? ((play.customEffects ?? []).find((e) => `custom:effect/${e.id}` === id)?.name ?? c.name(id))
+      : id === "concentration"
+        ? ui("play.concentrating", { spell: c.name(play.concentration ?? "") })
+        : id === "rage"
+          ? c.name(
+              character.value.ruleset === "srd52"
+                ? "srd52:feature/barbarian-rage"
+                : "srd51:feature/rage",
+            )
+          : id === "shillelagh"
+            ? ui("play.shillelagh")
+            : id === "sacredWeapon"
+              ? ui("play.sacredWeapon")
+              : c.name(id);
   // Passing the round takes one off every condition that has a limit, and ends those that run out.
   const passRound = () => {
     const before = structuredClone(character.value.play);

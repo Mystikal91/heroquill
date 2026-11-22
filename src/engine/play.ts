@@ -305,11 +305,38 @@ export function addCustomEffect(play: PlayState, name: string, effects: Effect[]
   };
 }
 
+/** Where the rounds of an effect written by hand are counted (the id its entry has on the sheet). */
+export const customRoundsKey = (id: string) => `custom:effect/${id}`;
+
+/**
+ * An effect or condition the DM proposed and the player accepted: a name, a note, what it changes (it may change
+ * nothing: a condition of a homebrew the player does not have is a name and a text) and, if it has a limit, rounds.
+ */
+export function addProposedEffect(
+  play: PlayState,
+  input: { name: string; note?: string; effects: Effect[]; rounds?: number },
+): PlayState {
+  const label = input.name.trim().slice(0, 80);
+  if (!label) return play;
+  const id = customId(play, label);
+  const note = input.note?.trim().slice(0, 200);
+  const next: PlayState = {
+    ...play,
+    customEffects: [
+      ...(play.customEffects ?? []),
+      { id, name: label, ...(note && { note }), effects: input.effects },
+    ],
+  };
+  return input.rounds ? setRounds(next, customRoundsKey(id), input.rounds) : next;
+}
+
 /** Takes an effect written by hand off the character. */
 export function removeCustomEffect(play: PlayState, id: string): PlayState {
   const next = (play.customEffects ?? []).filter((e) => e.id !== id);
   const { customEffects: _old, ...rest } = play;
-  return next.length > 0 ? { ...rest, customEffects: next } : rest;
+  return withoutRounds(next.length > 0 ? { ...rest, customEffects: next } : rest, [
+    customRoundsKey(id),
+  ]);
 }
 
 /** Turns an effect written by hand on or off; it stays on the list either way. */
@@ -448,6 +475,10 @@ export function advanceRound(play: PlayState): { play: PlayState; ended: string[
   if (ended.includes("rage")) next = endRage(next);
   if (ended.includes("shillelagh")) next = endShillelagh(next);
   if (ended.includes("sacredWeapon")) next = endSacredWeapon(next);
+  // An effect with a limit that runs out leaves the list.
+  for (const id of ended)
+    if (id.startsWith("custom:effect/"))
+      next = removeCustomEffect(next, id.slice("custom:effect/".length));
   return { play: next, ended };
 }
 

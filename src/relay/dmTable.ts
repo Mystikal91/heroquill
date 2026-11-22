@@ -25,7 +25,7 @@ export interface ProposalRecord {
   label: string;
   status: "waiting" | "accepted" | "declined" | "undelivered";
   /** What was asked: a line of text is "read", not "accepted". */
-  kind?: "damage" | "condition" | "say" | "roll";
+  kind?: "damage" | "condition" | "effect" | "say" | "roll";
   /** The difficulty of a roll that was asked for, and the total the player rolled. */
   dc?: number;
   result?: number;

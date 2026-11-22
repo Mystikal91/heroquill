@@ -23,6 +23,7 @@ export interface CardInput {
   attunedMax?: number;
   senses?: [string, string][];
   defenses?: [string, string][];
+  active?: { name: string; rounds?: number }[];
   /** Names of the conditions in force, already in the person's language. */
   conditions: readonly string[];
 }
@@ -65,6 +66,7 @@ export function makeCard(input: CardInput): PlayerCard {
       }),
     ...(input.senses && input.senses.length > 0 && { senses: input.senses }),
     ...(input.defenses && input.defenses.length > 0 && { defenses: input.defenses }),
+    ...(input.active && input.active.length > 0 && { active: input.active.slice(0, 12) }),
     conditions: input.conditions.slice(0, LIMITS.conditions).map((c) => c.slice(0, LIMITS.text)),
   };
 }
