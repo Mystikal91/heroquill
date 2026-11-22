@@ -2,7 +2,7 @@ import { signal } from "@preact/signals";
 import { newCode, newSecret, roomUrl } from "../relay/address";
 import { type LinkState, type RelayLink, connectRelay } from "../relay/client";
 import { type DmTable, emptyTable, reduceTable, withoutSeat } from "../relay/dmTable";
-import { type ByeReason, LIMITS } from "../relay/protocol";
+import { type ByeReason, LIMITS, type TrackerView } from "../relay/protocol";
 import { dbDelete, dbGet, dbPut } from "../storage/db";
 
 /**
@@ -29,6 +29,9 @@ export const tableBye = signal<ByeReason | undefined>(undefined);
 export const tableView = signal<DmTable>(emptyTable());
 
 let link: RelayLink | undefined;
+let wanted: TrackerView | undefined;
+let sentView = "";
+let initiativeHandler: ((seat: string, value: number) => void) | undefined;
 let owner: string | undefined;
 let lastSaved = 0;
 
@@ -39,6 +42,8 @@ function stop() {
   tableCode.value = undefined;
   tableBye.value = undefined;
   tableView.value = emptyTable();
+  sentView = "";
+  wanted = undefined;
 }
 
 function touch(campaignId: string, saved: SavedTable) {
@@ -72,6 +77,12 @@ function connect(campaignId: string, saved: SavedTable) {
     onMessage: (msg) => {
       if (owner !== campaignId) return;
       tableView.value = reduceTable(tableView.value, msg, Date.now());
+      // The room keeps the last view, but a room that came back empty is told again.
+      if (msg.t === "welcome") {
+        sentView = "";
+        if (wanted) publishTracker(wanted);
+      }
+      if (msg.t === "initiative") initiativeHandler?.(msg.seat, msg.value);
       touch(campaignId, saved);
     },
   });
@@ -117,3 +128,22 @@ export const kickPlayer = (seat: string) => {
 /** Asks the players for their initiative (the ones given, or everybody). */
 export const askInitiative = (seats?: string[]) =>
   link?.send(seats ? { t: "askInitiative", seats } : { t: "askInitiative" });
+
+/** Who answers when a player gives their initiative: the DM page puts the combatant's number in. */
+export function onInitiative(handler: (seat: string, value: number) => void) {
+  initiativeHandler = handler;
+}
+
+/** Whether the table is up, so a message can be sent now. */
+export const tableOnline = () => link?.state() === "online";
+
+/**
+ * Shows the players the fight as it is now. Only a change is sent, and the last view is kept to be sent again
+ * when the line comes back.
+ */
+export function publishTracker(view: TrackerView) {
+  wanted = view;
+  const text = JSON.stringify(view);
+  if (text === sentView || !link) return;
+  if (link.send({ t: "tracker", view })) sentView = text;
+}

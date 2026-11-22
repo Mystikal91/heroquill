@@ -10,6 +10,7 @@ import {
   endFight,
   groupInitiative,
   infoFor,
+  initiativeWait,
   lastTurn,
   missingPlayers,
   newEncounter,
@@ -24,6 +25,7 @@ import {
   setGroupInitiative,
   startArea,
   startFight,
+  startNow,
   startRoll,
   updateEncounter,
 } from "../../app/dm";
@@ -277,9 +279,11 @@ export function TurnButtons({ e }: { e: Encounter }) {
           type="button"
           class="primary dm-next"
           disabled={e.combatants.length === 0 && missingPlayers().length === 0}
-          onClick={startFight}
+          onClick={initiativeWait.value ? startNow : startFight}
         >
-          {ui("dm.start")}
+          {initiativeWait.value
+            ? ui("dm.waitInitiative", { n: initiativeWait.value.length })
+            : ui("dm.start")}
         </button>
       </div>
     );

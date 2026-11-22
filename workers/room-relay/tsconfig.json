@@ -18,6 +18,8 @@
     "../../src/relay/**/*.test.ts",
     "../../src/relay/client.ts",
     "../../src/relay/address.ts",
-    "../../src/relay/dmTable.ts"
+    "../../src/relay/dmTable.ts",
+    "../../src/relay/trackerView.ts",
+    "../../src/relay/playerCard.ts"
   ]
 }

@@ -179,7 +179,9 @@ export function PlayerTableChip() {
                 </button>
               </div>
             )}
-            {trackerView.value && <Tracker view={trackerView.value} />}
+            {trackerView.value && trackerView.value.round > 0 && (
+              <Tracker view={trackerView.value} />
+            )}
             <p class="muted">{ui("table.join.preview")}</p>
             <button type="button" class="secondary" onClick={leaveTable}>
               {ui("table.leave")}

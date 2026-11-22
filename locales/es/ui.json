@@ -2775,5 +2775,6 @@
   "table.band.unhurt": "Ileso",
   "table.band.hurt": "Herido",
   "table.band.bloodied": "Malherido",
-  "table.band.down": "Caído"
+  "table.band.down": "Caído",
+  "dm.waitInitiative": "Esperando jugadores ({n})… Empezar ahora"
 }

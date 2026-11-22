@@ -2775,5 +2775,6 @@
   "table.band.unhurt": "Unverletzt",
   "table.band.hurt": "Verletzt",
   "table.band.bloodied": "Blutend",
-  "table.band.down": "Am Boden"
+  "table.band.down": "Am Boden",
+  "dm.waitInitiative": "Warte auf Spieler ({n})… Jetzt starten"
 }

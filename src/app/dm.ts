@@ -46,6 +46,7 @@ import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
+import { matchSeats, trackerViewOf } from "../relay/trackerView";
 import {
   deleteCampaign,
   getCurrentCampaignId,
@@ -64,7 +65,14 @@ import {
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { addLog, rollMode } from "./play";
 import { content } from "./store";
-import { switchTable } from "./table";
+import {
+  askInitiative,
+  onInitiative,
+  publishTracker,
+  switchTable,
+  tableOnline,
+  tableView,
+} from "./table";
 import { type UndoOffer, offerUndo, undoOffer } from "./undo";
 
 /** All the encounters, the one changed last first (the open one is `encounter`). */
@@ -968,11 +976,71 @@ export function offerParty() {
   }
 }
 
-function beginFight() {
-  startAfterParty.value = false;
+/** The seats the DM is waiting on for an initiative, while the fight is held back to hear them. */
+export const initiativeWait = signal<string[] | undefined>(undefined);
+let waitTimer: ReturnType<typeof setTimeout> | undefined;
+/** The fight that is being held back. */
+let waitFor: string | undefined;
+/** How long the start waits for the players' initiative before going on without it. */
+const WAIT_MS = 30_000;
+
+/** Really starts the fight: the first turn goes to whoever is first in the order now. */
+export function startNow() {
+  clearTimeout(waitTimer);
+  initiativeWait.value = undefined;
   resetTurnHistory();
   updateEncounter(startCombat);
 }
+
+/** The players at the table, here now, whose character has no initiative yet. */
+function seatsToAsk(e: Encounter): string[] {
+  const players = tableView.value.players;
+  const seats = matchSeats(e.combatants, players);
+  return e.combatants.flatMap((c) => {
+    const seat = seats.get(c.id);
+    return seat && c.initiative === undefined && players.find((p) => p.seat === seat)?.online
+      ? [seat]
+      : [];
+  });
+}
+
+function beginFight() {
+  startAfterParty.value = false;
+  const e = encounter.value;
+  const seats = e && tableOnline() ? seatsToAsk(e) : [];
+  if (!e || seats.length === 0) return startNow();
+  // The players at the table are asked by themselves; the fight starts when they have all answered, or after a while.
+  askInitiative(seats);
+  initiativeWait.value = seats;
+  waitFor = e.id;
+  clearTimeout(waitTimer);
+  waitTimer = setTimeout(() => {
+    if (initiativeWait.value && encounter.value?.id === waitFor) startNow();
+  }, WAIT_MS);
+}
+
+// A player's answer goes into the order, and the last one awaited starts the fight.
+onInitiative((seat, value) => {
+  const e = encounter.value;
+  if (!e) return;
+  const id = [...matchSeats(e.combatants, tableView.value.players)].find(
+    ([, s]) => s === seat,
+  )?.[0];
+  if (!id) return;
+  editCombatant(id, (c) => ({ ...c, initiative: value }));
+  const wait = initiativeWait.value;
+  if (!wait?.includes(seat) || waitFor !== e.id) return;
+  const rest = wait.filter((s) => s !== seat);
+  if (rest.length === 0) startNow();
+  else initiativeWait.value = rest;
+});
+
+// The players see the fight as it is: the order, whose turn, how hurt the creatures look.
+effect(() => {
+  const e = encounter.value;
+  const players = tableView.value.players;
+  if (e) publishTracker(trackerViewOf(e, players));
+});
 
 /** Starts the fight; players of the party that are not in it yet are asked about first. */
 export function startFight() {

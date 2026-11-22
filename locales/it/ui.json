@@ -2775,5 +2775,6 @@
   "table.band.unhurt": "Illeso",
   "table.band.hurt": "Ferito",
   "table.band.bloodied": "Malconcio",
-  "table.band.down": "A terra"
+  "table.band.down": "A terra",
+  "dm.waitInitiative": "In attesa dei giocatori ({n})… Inizia ora"
 }

@@ -2775,5 +2775,6 @@
   "table.band.unhurt": "Indemne",
   "table.band.hurt": "Blessé",
   "table.band.bloodied": "Sanguinant",
-  "table.band.down": "À terre"
+  "table.band.down": "À terre",
+  "dm.waitInitiative": "En attente des joueurs ({n})… Commencer maintenant"
 }

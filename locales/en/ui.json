@@ -2775,5 +2775,6 @@
   "table.band.unhurt": "Unhurt",
   "table.band.hurt": "Hurt",
   "table.band.bloodied": "Bloodied",
-  "table.band.down": "Down"
+  "table.band.down": "Down",
+  "dm.waitInitiative": "Waiting for players ({n})… Start now"
 }
