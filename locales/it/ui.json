@@ -2922,7 +2922,7 @@
   "build.hint.freeEdit": "Forza un numero a mano quando al tavolo si gioca una regola che l'app non conosce.",
   "build.items": "{n} oggetti",
   "build.open": "Apri",
-  "build.progress": "{n} basi su 4 fatte",
+  "build.progress": "{n} fasi su 4 fatte",
   "build.ready.badge": "Le basi sono fatte",
   "build.ready.body": "La scheda ha già tutti i numeri: tiri, attacchi, incantesimi. Il resto lo puoi rifinire quando vuoi, anche a partita iniziata.",
   "build.ready.nav": "Pronta da giocare",
