@@ -2229,10 +2229,14 @@
   color: var(--muted);
 }
 
+/* The capitals of the display font sit high in their line: a line of their own height centres them in the pill. */
 :root[data-style][data-style] .dm-panel-fx .dm-panel-add {
+  display: inline-flex;
+  align-items: center;
   width: auto;
   min-height: 1.9rem;
-  padding: 0 0.7rem;
+  padding: 0.1rem 0.7rem 0;
+  line-height: 1;
   border: 1px dashed var(--ink);
   border-radius: 999px;
   font-size: 0.9rem;
