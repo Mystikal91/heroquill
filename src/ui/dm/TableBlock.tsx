@@ -71,7 +71,7 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
 
   if (!code)
     return (
-      <section class="dm-table">
+      <section class="dm-online">
         <h3>{ui("dm.table.title")}</h3>
         <p class="muted">{ui("dm.table.intro")}</p>
         <button type="button" onClick={() => void openTable(campaignId)}>
@@ -91,10 +91,10 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
   };
 
   return (
-    <section class="dm-table">
+    <section class="dm-online">
       <h3>{ui("dm.table.title")}</h3>
       {state === "ended" ? (
-        <div class="dm-table-ended">
+        <div class="dm-online-ended">
           <p>{endedText()}</p>
           <button type="button" onClick={() => void openTable(campaignId)}>
             {ui("dm.table.openAgain")}
@@ -102,7 +102,7 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
         </div>
       ) : (
         <>
-          <div class="dm-table-code">
+          <div class="dm-online-code-row">
             <span
               class="dm-live"
               data-state={state}
@@ -141,7 +141,7 @@ export function TableBlock({ campaignId }: { campaignId: string }) {
               </ul>
             </>
           )}
-          <div class="dm-table-danger">
+          <div class="dm-online-danger">
             <button
               type="button"
               class="danger-btn"

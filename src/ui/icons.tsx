@@ -172,3 +172,11 @@ export const StepForwardIcon = () => (
     <path d="M18 5v14M6 6v12l9-6z" />
   </Icon>
 );
+
+/** A crown: the Dungeon Master's side of the app. */
+export const CrownIcon = () => (
+  <Icon>
+    <path d="M4 8l4 3.500 4-6 4 6 4-3.500-1.800 10H5.800z" />
+    <path d="M6 20h12" />
+  </Icon>
+);

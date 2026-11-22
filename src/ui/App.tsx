@@ -30,6 +30,7 @@ import { ExplainDialog } from "./Explain";
 
 import { InstallNotice } from "./InstallNotice";
 import { ItemPickerDialog } from "./ItemPicker";
+import { ModeBadge, ModeSwitch } from "./ModeSwitch";
 import { ConfirmDialog, UndoNotice } from "./Notices";
 import { PacksNotice } from "./PacksNotice";
 import { PacksPage } from "./PacksPage";
@@ -150,11 +151,15 @@ export function App() {
         {ui("app.skip")}
       </button>
       <header class="app-header no-print" data-bar={withBar || undefined}>
+        <div class="mode-slot">
+          <ModeSwitch place="header" />
+        </div>
         <div class="app-title">
           <h1>
             <button type="button" class="title-link" onClick={() => showView("about")}>
               {ui("app.title")}
             </button>
+            <ModeBadge />
           </h1>
           <div class="title-ornament" aria-hidden="true">
             <QuillIcon />

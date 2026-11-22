@@ -4,6 +4,7 @@ import { installApp, installable } from "../app/install";
 import { type View, showView } from "../app/navigation";
 import { startTour } from "../app/tour";
 import { type UiKey, ui } from "../i18n/ui";
+import { ModeSwitch } from "./ModeSwitch";
 import { Popover } from "./Popover";
 import { ThemeControls } from "./ThemeControls";
 import {
@@ -14,14 +15,12 @@ import {
   GlobeIcon,
   HeartIcon,
   InfoIcon,
-  SwordsIcon,
 } from "./icons";
 
 const PAGES: { view: View; label: UiKey; icon: () => JSX.Element }[] = [
   { view: "about", label: "footer.about", icon: InfoIcon },
   { view: "packs", label: "footer.packs", icon: BoxIcon },
   { view: "homebrew", label: "hb.title", icon: FlaskIcon },
-  { view: "dm", label: "dm.title", icon: SwordsIcon },
   { view: "translate", label: "footer.translate", icon: GlobeIcon },
   { view: "credits", label: "footer.credits", icon: HeartIcon },
 ];
@@ -30,6 +29,7 @@ const PAGES: { view: View; label: UiKey; icon: () => JSX.Element }[] = [
 export function AppMenu() {
   return (
     <Popover label={<span aria-hidden="true">☰</span>} title={ui("menu.label")} class="app-menu">
+      <ModeSwitch place="menu" />
       <h2 class="popover-heading">{ui("menu.settings")}</h2>
       <ThemeControls />
       <h2 class="popover-heading">{ui("menu.pages")}</h2>

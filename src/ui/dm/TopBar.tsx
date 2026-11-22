@@ -5,9 +5,11 @@ import {
   campaignEncounters,
   canGoBack,
   delayActive,
+  dmSection,
   duplicateEncounter,
   endFight,
   groupInitiative,
+  infoFor,
   lastTurn,
   missingPlayers,
   newEncounter,
@@ -25,6 +27,8 @@ import {
   updateEncounter,
 } from "../../app/dm";
 import { content } from "../../app/store";
+import { tableCode, tableState, tableView } from "../../app/table";
+import { combatantNumbers } from "../../engine/combatantNumbers";
 import {
   type Encounter,
   activeCombatant,
@@ -118,7 +122,7 @@ function EncounterMenu({ e }: { e: Encounter }) {
           {ui("dm.reset")}
         </button>
         {started && (
-          <button type="button" class="secondary dm-menu-end" onClick={endFight}>
+          <button type="button" class="danger-btn dm-menu-end" onClick={endFight}>
             {ui("dm.end")}
           </button>
         )}
@@ -127,8 +131,173 @@ function EncounterMenu({ e }: { e: Encounter }) {
   );
 }
 
-/** The bar above the table: the encounter, the round and turn buttons, adding, and the columns. */
-export function TopBar({ e }: { e: Encounter }) {
+/** The online table, while it is open: a dot, the code and who is there. It leads to the campaign, where the table is. */
+function OnlineChip() {
+  const code = tableCode.value;
+  const state = tableState.value;
+  if (!code || state === "ended") return null;
+  const here = tableView.value.players.filter((p) => p.online).length;
+  const seats = Math.max(campaign.value?.party.length ?? 0, tableView.value.players.length);
+  return (
+    <button
+      type="button"
+      class="dm-online-chip"
+      title={ui("dm.table.title")}
+      onClick={() => {
+        dmSection.value = "campaign";
+      }}
+    >
+      <span class="dm-live" data-state={state} aria-hidden="true" />
+      <span class="dm-online-code">{code}</span>
+      <span class="dm-online-count">{ui("dm.online.here", { n: here, max: seats })}</span>
+    </button>
+  );
+}
+
+/**
+ * The line at the top of the encounter: the campaign it belongs to and the encounter (its menu),
+ * the online table, and the tools that change who is in the table.
+ */
+export function ContextBar({ e }: { e: Encounter }) {
+  return (
+    <div class="dm-context">
+      <nav class="dm-crumbs" aria-label={ui("dm.where")}>
+        <button
+          type="button"
+          class="dm-crumb"
+          onClick={() => {
+            dmSection.value = "campaign";
+          }}
+        >
+          {campaign.value?.name.trim() || ui("dm.unnamed")}
+        </button>
+        <span class="dm-crumb-sep" aria-hidden="true">
+          /
+        </span>
+        <EncounterMenu e={e} />
+      </nav>
+      <OnlineChip />
+      <div class="dm-bar-tools">
+        <button
+          type="button"
+          class="dm-tool"
+          aria-keyshortcuts="A"
+          aria-label={ui("dm.add")}
+          title={`${ui("dm.add")} (A)`}
+          onClick={openAdd}
+        >
+          <PlusIcon />
+          <span class="dm-tool-label">{ui("dm.addShort")}</span>
+        </button>
+        <button
+          type="button"
+          class="dm-tool"
+          title={ui("dm.area.hint")}
+          disabled={e.combatants.length === 0}
+          onClick={startArea}
+        >
+          <SwordsIcon />
+          <span class="dm-tool-label">{ui("dm.area")}</span>
+        </button>
+        <ColumnsEditor />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The buttons that move the fight: before it, rolling initiative and starting; during it, delay,
+ * back and the next turn. They are in the turn card on a wide screen and at the bottom of a phone.
+ */
+export function TurnButtons({ e }: { e: Encounter }) {
+  const waiting = e.combatants.filter((c) => c.initiative === undefined).length;
+  if (!isStarted(e))
+    return (
+      <div class="dm-turn-buttons">
+        <button
+          type="button"
+          disabled={waiting === 0}
+          title={ui("dm.rollInitiativeHint")}
+          onClick={() =>
+            updateEncounter((x) => rollAllInitiative(x, { grouped: groupInitiative.value }))
+          }
+        >
+          {ui("dm.rollInitiative")}
+        </button>
+        <button
+          type="button"
+          class="primary dm-next"
+          disabled={e.combatants.length === 0 && missingPlayers().length === 0}
+          onClick={startFight}
+        >
+          {ui("dm.start")}
+        </button>
+      </div>
+    );
+  const later = laterCombatants(e);
+  return (
+    <div class="dm-turn-buttons">
+      {later.length > 0 && (
+        <CellPopover
+          title={ui("dm.delayHint")}
+          class="dm-delay"
+          align="end"
+          trigger={<span>{ui("dm.delay")}</span>}
+        >
+          {(close) => (
+            <div class="dm-menu">
+              <h4 class="dm-pop-title">{ui("dm.delay")}</h4>
+              <p class="muted">{ui("dm.delayHint")}</p>
+              <ul class="plain dm-menu-list">
+                {later.map((x) => (
+                  <li key={x.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        delayActive(x.id);
+                        close();
+                      }}
+                    >
+                      {ui("dm.delayAfter", { name: x.name, n: x.initiative ?? 0 })}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </CellPopover>
+      )}
+      <button
+        type="button"
+        class="dm-prev"
+        disabled={!canGoBack()}
+        title={ui("dm.previous")}
+        aria-label={ui("dm.previous")}
+        onClick={previousTurn}
+      >
+        <StepBackIcon />
+      </button>
+      <button
+        type="button"
+        class="primary dm-next dm-advance"
+        aria-keyshortcuts="N"
+        aria-label={ui("dm.next")}
+        title={`${ui("dm.next")} (N)`}
+        onClick={advanceTurn}
+      >
+        <span class="dm-advance-label">{ui("dm.next")}</span>
+        <StepForwardIcon />
+      </button>
+    </div>
+  );
+}
+
+/**
+ * The card of the turn, above the table: the round and who acts now (on a narrow screen with their
+ * hit points and armor class, and a button to their details), the turn buttons, the recharges to roll
+ * and what ended with the last turn.
+ */
+export function TurnCard({ e }: { e: Encounter }) {
   const started = isStarted(e);
   const active = activeCombatant(e);
   const waiting = e.combatants.filter((c) => c.initiative === undefined).length;
@@ -140,153 +309,69 @@ export function TopBar({ e }: { e: Encounter }) {
           (d) => d.kind === "recharge" && (active.uses?.[d.key] ?? 0) > 0,
         )
       : [];
-  const later = started ? laterCombatants(e) : [];
   const endedNames = ended
     ? [...ended.conditions.map((id) => content.value?.name(id) ?? id), ...ended.effects].join(", ")
     : "";
+  const numbers = active ? combatantNumbers(active) : undefined;
   return (
-    <>
-      <div class="dm-bar">
-        <div class="dm-bar-row">
-          <EncounterMenu e={e} />
-          <div class="dm-bar-tools">
-            <button
-              type="button"
-              class="dm-tool"
-              aria-keyshortcuts="A"
-              title={`${ui("dm.add")} (A)`}
-              onClick={openAdd}
-            >
-              <PlusIcon />
-              <span class="dm-tool-label">{ui("dm.addShort")}</span>
-            </button>
-            <button
-              type="button"
-              class="dm-tool"
-              title={ui("dm.area.hint")}
-              disabled={e.combatants.length === 0}
-              onClick={startArea}
-            >
-              <SwordsIcon />
-              <span class="dm-tool-label">{ui("dm.area")}</span>
-            </button>
-            <ColumnsEditor />
-          </div>
-        </div>
-      </div>
-      <div class="dm-turnbar">
-        <div class="dm-bar-row dm-turn-row">
-          <output class="dm-status">
-            {started ? (
-              <>
-                <b class="dm-round">{ui("dm.round", { n: e.round })}</b>
-                {active && <span class="dm-turn-of">{ui("dm.turnOf", { name: active.name })}</span>}
-              </>
-            ) : (
-              <span class="muted">
-                {e.combatants.length === 0
-                  ? ui("dm.notStarted")
-                  : waiting > 0
-                    ? ui("dm.waiting", { n: waiting })
-                    : ui("dm.ready")}
-              </span>
-            )}
-          </output>
-          <div class="dm-turn-buttons">
-            {started ? (
-              <>
-                {later.length > 0 && (
-                  <CellPopover
-                    title={ui("dm.delayHint")}
-                    class="dm-delay"
-                    align="end"
-                    trigger={<span>{ui("dm.delay")}</span>}
-                  >
-                    {(close) => (
-                      <div class="dm-menu">
-                        <h4 class="dm-pop-title">{ui("dm.delay")}</h4>
-                        <p class="muted">{ui("dm.delayHint")}</p>
-                        <ul class="plain dm-menu-list">
-                          {later.map((x) => (
-                            <li key={x.id}>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  delayActive(x.id);
-                                  close();
-                                }}
-                              >
-                                {ui("dm.delayAfter", { name: x.name, n: x.initiative ?? 0 })}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </CellPopover>
-                )}
-                <button
-                  type="button"
-                  class="dm-prev"
-                  disabled={!canGoBack()}
-                  title={ui("dm.previous")}
-                  aria-label={ui("dm.previous")}
-                  onClick={previousTurn}
-                >
-                  <StepBackIcon />
-                </button>
-                <button
-                  type="button"
-                  class="primary dm-next dm-advance"
-                  aria-keyshortcuts="N"
-                  aria-label={ui("dm.next")}
-                  title={`${ui("dm.next")} (N)`}
-                  onClick={advanceTurn}
-                >
-                  <StepForwardIcon />
-                  <span class="dm-advance-label">{ui("dm.next")}</span>
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  disabled={waiting === 0}
-                  title={ui("dm.rollInitiativeHint")}
-                  onClick={() =>
-                    updateEncounter((x) => rollAllInitiative(x, { grouped: groupInitiative.value }))
-                  }
-                >
-                  {ui("dm.rollInitiative")}
-                </button>
-                <button
-                  type="button"
-                  class="primary dm-next"
-                  disabled={e.combatants.length === 0 && missingPlayers().length === 0}
-                  onClick={startFight}
-                >
-                  {ui("dm.start")}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-        {due.length > 0 && active && (
-          <div class="dm-recharge">
-            {due.map((d) => (
-              <button type="button" key={d.key} onClick={() => rollRechargeFor(active.id, d)}>
-                {ui("dm.rollRecharge", { name: abilityName(active, d), min: d.minValue ?? 6 })}
+    <div class="dm-turnbar" data-started={started || undefined}>
+      <div class="dm-turn-row">
+        {started ? (
+          <>
+            <div class="dm-round-box">
+              <small>{ui("dm.roundWord")}</small>
+              <b>{e.round}</b>
+            </div>
+            <output class="dm-status">
+              <small class="muted">{ui("dm.nowActs")}</small>
+              {active && <b class="dm-turn-of">{active.name}</b>}
+            </output>
+            {active && numbers && (
+              <button
+                type="button"
+                class="dm-turn-mini"
+                title={ui("dm.info", { name: active.name })}
+                onClick={() => {
+                  infoFor.value = active.id;
+                }}
+              >
+                <span>
+                  <b>{active.hp}</b>/{numbers.maxHp}
+                </span>
+                <span>
+                  {ui("dm.col.ac")} {numbers.ac}
+                </span>
               </button>
-            ))}
-          </div>
-        )}
-        {rechargeNote.value && <output class="dm-ended">{rechargeNote.value}</output>}
-        {ended && endedName && (
-          <output class="dm-ended">
-            {ui("dm.endedOn", { name: endedName, list: endedNames })}
+            )}
+          </>
+        ) : (
+          <output class="dm-status">
+            <span class="muted">
+              {e.combatants.length === 0
+                ? ui("dm.notStarted")
+                : waiting > 0
+                  ? ui("dm.waiting", { n: waiting })
+                  : ui("dm.ready")}
+            </span>
           </output>
         )}
+        <div class="dm-turn-card-buttons">
+          <TurnButtons e={e} />
+        </div>
       </div>
-    </>
+      {due.length > 0 && active && (
+        <div class="dm-recharge">
+          {due.map((d) => (
+            <button type="button" key={d.key} onClick={() => rollRechargeFor(active.id, d)}>
+              {ui("dm.rollRecharge", { name: abilityName(active, d), min: d.minValue ?? 6 })}
+            </button>
+          ))}
+        </div>
+      )}
+      {rechargeNote.value && <output class="dm-ended">{rechargeNote.value}</output>}
+      {ended && endedName && (
+        <output class="dm-ended">{ui("dm.endedOn", { name: endedName, list: endedNames })}</output>
+      )}
+    </div>
   );
 }

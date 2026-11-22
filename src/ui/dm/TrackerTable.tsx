@@ -30,7 +30,7 @@ import { CellPopover } from "./CellPopover";
 import { EffectsEditor, HpEditor, InitEditor } from "./Editors";
 
 /** The second line under a name: what the creature is. */
-function kindLine(c: Combatant): string {
+export function kindLine(c: Combatant): string {
   if (c.lair) return ui("dm.lairKind");
   if (c.kind === "character") return ui("dm.kind.character");
   if (c.kind === "monster" && c.source) {
@@ -70,7 +70,7 @@ function EffectsCell({ c }: { c: Combatant }) {
   );
 }
 
-function HpCell({ c }: { c: Combatant }) {
+export function HpCell({ c }: { c: Combatant }) {
   const { maxHp, parts } = combatantNumbers(c);
   const percent = maxHp > 0 ? Math.round((c.hp / maxHp) * 100) : 0;
   const state = c.hp === 0 ? "down" : percent <= 25 ? "low" : percent <= 50 ? "hurt" : "well";
@@ -286,6 +286,26 @@ function PickButton({ id, name }: { id: string; name: string }) {
   );
 }
 
+/**
+ * Monsters of one kind that act one after the other are a group: the first of them carries a title
+ * line ("Goblin ×3 · humanoid"), and every one of them is marked as part of a run.
+ */
+function withGroups(order: readonly Combatant[]): { c: Combatant; group?: string; run: boolean }[] {
+  const same = (a: Combatant | undefined, b: Combatant | undefined) =>
+    Boolean(
+      a && b && a.kind === "monster" && b.kind === "monster" && a.source && a.source === b.source,
+    );
+  return order.map((c, i) => {
+    const run = same(c, order[i - 1]) || same(c, order[i + 1]);
+    if (!run || same(c, order[i - 1])) return { c, run };
+    let n = 1;
+    while (same(c, order[i + n])) n++;
+    const name = (c.source && content.value?.name(c.source)) || c.name;
+    const kind = kindLine(c);
+    return { c, run, group: [ui("dm.group", { name, n }), kind].filter(Boolean).join(" · ") };
+  });
+}
+
 /** The initiative table: one row for each creature, in turn order, with what is read at a glance. */
 export function TrackerTable({ e }: { e: Encounter }) {
   const columns = visibleColumns(dmColumns.value);
@@ -295,6 +315,7 @@ export function TrackerTable({ e }: { e: Encounter }) {
   const lead = area ? "2.8rem " : "";
   const style = `--cols:${lead}${gridTemplate(columns)};--cols-narrow:${lead}${gridTemplate(columns, true)}`;
   const turn = encounter.value?.turn;
+  const rows = withGroups(initiativeOrder(e.combatants));
   return (
     <div class="dm-table-wrap">
       <table class="dm-table" style={style}>
@@ -313,9 +334,17 @@ export function TrackerTable({ e }: { e: Encounter }) {
           </tr>
         </thead>
         <tbody>
-          {initiativeOrder(e.combatants).map((c) => (
+          {rows.map(({ c, group, run }) => [
+            group && (
+              <tr key={`group-${c.id}`} class="dm-group-head">
+                <th scope="rowgroup" colSpan={columns.length + (area ? 1 : 0)}>
+                  {group}
+                </th>
+              </tr>
+            ),
             <tr
               key={c.id}
+              data-grouped={run || undefined}
               data-active={c.id === turn || undefined}
               data-down={isDown(c) || undefined}
               data-kind={c.kind}
@@ -331,8 +360,8 @@ export function TrackerTable({ e }: { e: Encounter }) {
               {columns.map((col) => (
                 <Cell key={col} col={col} c={c} columns={columns} />
               ))}
-            </tr>
-          ))}
+            </tr>,
+          ])}
         </tbody>
       </table>
     </div>

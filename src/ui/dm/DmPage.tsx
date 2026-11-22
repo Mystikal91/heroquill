@@ -2,17 +2,14 @@ import { useEffect, useRef } from "preact/hooks";
 import {
   advanceTurn,
   areaMode,
-  campaign,
   campaigns,
   dmReady,
   dmSection,
   encounter,
-  endFight,
   loadDm,
   openAdd,
 } from "../../app/dm";
 import type { DmSection } from "../../app/dm";
-import { leavePage } from "../../app/navigation";
 import { monstersWanted } from "../../app/rulesView";
 import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
@@ -27,8 +24,9 @@ import { EncounterNotes } from "./EncounterNotes";
 import { InfoDialog } from "./InfoDialog";
 import { PartyDialog } from "./PartyDialog";
 import { RollPanel } from "./RollPanel";
-import { TopBar } from "./TopBar";
+import { ContextBar, TurnButtons, TurnCard } from "./TopBar";
 import { TrackerTable } from "./TrackerTable";
+import { TurnPanel } from "./TurnPanel";
 import "./dm.css";
 
 /** Keys for the table, when nothing is being typed and no window is open: N is the next turn, A adds creatures. */
@@ -61,39 +59,32 @@ function useShortcuts() {
   }, []);
 }
 
-/** The fights of the open campaign: the bar, the table and the notes. */
+/**
+ * The fight of the open campaign: the line with the campaign and the encounter, the card of the turn,
+ * the table and the notes and, on a wide screen, the creature whose turn it is beside them.
+ */
 function EncounterSection({ e }: { e: Encounter }) {
   return (
     <>
-      <p class="muted dm-campaign-line">
-        <button
-          type="button"
-          class="link"
-          onClick={() => {
-            dmSection.value = "campaign";
-          }}
-        >
-          {campaign.value?.name.trim() || ui("dm.unnamed")}
-        </button>
-      </p>
-      <TopBar e={e} />
+      <ContextBar e={e} />
       {areaMode.value && <AreaPanel />}
-      {e.combatants.length === 0 ? (
-        <div class="dm-empty">
-          <p>{ui("dm.empty")}</p>
-          <button type="button" class="primary" onClick={openAdd}>
-            {ui("dm.add")}
-          </button>
+      <div class="dm-fight">
+        <div class="dm-fight-main">
+          <TurnCard e={e} />
+          {e.combatants.length === 0 ? (
+            <div class="dm-empty">
+              <p>{ui("dm.empty")}</p>
+              <button type="button" class="primary" onClick={openAdd}>
+                {ui("dm.add")}
+              </button>
+            </div>
+          ) : (
+            <TrackerTable e={e} />
+          )}
+          <EncounterNotes e={e} />
         </div>
-      ) : (
-        <TrackerTable e={e} />
-      )}
-      <EncounterNotes e={e} />
-      {isStarted(e) && (
-        <button type="button" class="danger-btn dm-end-fight" onClick={endFight}>
-          {ui("dm.end")}
-        </button>
-      )}
+        {e.combatants.length > 0 && <TurnPanel e={e} />}
+      </div>
     </>
   );
 }
@@ -159,19 +150,12 @@ export function DmPage() {
       return true;
     },
   );
+  const fight = dmReady.value && e && dmSection.value === "encounter" ? e : undefined;
   return (
     <>
       {dmReady.value && e && <SectionTabs />}
-      <article class="card dm" ref={root}>
-        <header class="dm-top">
-          <button type="button" class="secondary" onClick={leavePage}>
-            {ui("credits.back")}
-          </button>
-          <div>
-            <h2>{ui("dm.title")}</h2>
-            <p class="muted">{ui("dm.subtitle")}</p>
-          </div>
-        </header>
+      <article class="card dm" ref={root} data-dock={fight ? "" : undefined}>
+        <h2 class="sr-only">{ui("dm.title")}</h2>
         {!dmReady.value || !e ? (
           <p>{ui("app.loading")}</p>
         ) : (
@@ -183,6 +167,13 @@ export function DmPage() {
         <PartyDialog />
         <RollPanel />
       </article>
+      {/* On a phone the turn buttons sit under the thumb, above the tabs; outside the card, whose cut
+          corners would clip what is fixed inside it. */}
+      {fight && (
+        <div class="dm-dock no-print">
+          <TurnButtons e={fight} />
+        </div>
+      )}
     </>
   );
 }
