@@ -268,13 +268,17 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
       <section>
         <h5 class="dm-fx-title">{ui("play.conditions")}</h5>
         {forPlayer && (
-          <p class="dm-fx-rounds">
+          <div class="dm-fx-rounds">
+            <span>
+              <b>{ui("dm.prop.roundsTitle")}</b>
+              <small class="muted">{ui("dm.prop.roundsHint")}</small>
+            </span>
             <RoundsField
               label={ui("dm.prop.roundsField")}
               value={proposedRounds}
               onChange={setProposedRounds}
             />
-          </p>
+          </div>
         )}
         <div class="dm-cond-chips">
           {list.map((x) => (

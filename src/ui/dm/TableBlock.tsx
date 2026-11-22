@@ -239,8 +239,40 @@ function PlayerCardRow({ p }: { p: TablePlayer }) {
         : percent <= 50
           ? "hurt"
           : "well";
+  if (!p.online)
+    return (
+      <li class="tbl-player tbl-player-away">
+        <span class="dm-live" data-state="retrying" role="img" aria-label={ui("dm.table.away")} />
+        <button
+          type="button"
+          class="tbl-away-name"
+          onClick={() => {
+            seatOpen.value = p.seat;
+          }}
+        >
+          <b>{p.name || ui("dm.unnamed")}</b>
+          <small class="muted">
+            {[
+              ui("dm.table.away"),
+              card ? ui("dm.table.awayNumbers", { hp: card.hp, max: card.maxHp, ac: card.ac }) : "",
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </small>
+        </button>
+        <button
+          type="button"
+          class="tbl-kick"
+          aria-label={ui("dm.table.kick", { name: p.name })}
+          title={ui("dm.table.kick", { name: p.name })}
+          onClick={() => kickPlayer(p.seat)}
+        >
+          ✕
+        </button>
+      </li>
+    );
   return (
-    <li class="tbl-player" data-online={p.online || undefined}>
+    <li class="tbl-player" data-online>
       <div class="tbl-player-head">
         <span
           class="dm-live"
@@ -288,11 +320,17 @@ function PlayerCardRow({ p }: { p: TablePlayer }) {
       ) : (
         <p class="muted tbl-no-card">{ui("dm.table.noCard")}</p>
       )}
-      {card && card.conditions.length > 0 && (
+      {card && card.conditions.length + (card.active ?? []).length > 0 && (
         <div class="tbl-conditions">
           {card.conditions.map((name) => (
             <span key={name} class="dm-fx-chip">
               {name}
+            </span>
+          ))}
+          {(card.active ?? []).map((a) => (
+            <span key={`active-${a.name}`} class="dm-fx-chip tbl-effect-chip">
+              {a.name}
+              {a.rounds !== undefined && ` · ${ui("dm.table.roundsShort", { n: a.rounds })}`}
             </span>
           ))}
         </div>
@@ -300,7 +338,6 @@ function PlayerCardRow({ p }: { p: TablePlayer }) {
       <div class="tbl-player-actions">
         <button
           type="button"
-          disabled={!p.online}
           onClick={() => {
             tablePanel.value = { tab: "players", who: p.seat };
           }}
@@ -309,7 +346,6 @@ function PlayerCardRow({ p }: { p: TablePlayer }) {
         </button>
         <button
           type="button"
-          disabled={!p.online}
           onClick={() => {
             tablePanel.value = { tab: "activity", who: p.seat };
           }}
@@ -559,9 +595,11 @@ export function TableDrawer() {
                 <>
                   {view.players.length === 0 && <p class="muted">{ui("dm.table.none")}</p>}
                   <ul class="plain tbl-players">
-                    {view.players.map((p) => (
-                      <PlayerCardRow key={p.seat} p={p} />
-                    ))}
+                    {[...view.players]
+                      .sort((a, b) => Number(b.online) - Number(a.online))
+                      .map((p) => (
+                        <PlayerCardRow key={p.seat} p={p} />
+                      ))}
                     {away.map((m) => (
                       <li key={m.id} class="tbl-player tbl-away">
                         <span class="dm-live" aria-hidden="true" />

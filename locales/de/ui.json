@@ -2891,5 +2891,9 @@
   "dm.prop.roundsField": "Runden für einen Spieler am Tisch",
   "table.req.effect": "Der Effekt {effect}",
   "table.req.dealt": "{from} hat dir zugefügt",
-  "table.req.applied": "{from} hat dir auferlegt"
+  "table.req.applied": "{from} hat dir auferlegt",
+  "dm.prop.roundsTitle": "Dauer",
+  "dm.prop.roundsHint": "Runden für den Spieler; leer: bis sie entfernt wird",
+  "dm.table.roundsShort": "{n} Rd",
+  "dm.table.awayNumbers": "TP {hp}/{max}, RK {ac}"
 }

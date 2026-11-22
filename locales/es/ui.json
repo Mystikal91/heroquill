@@ -2891,5 +2891,9 @@
   "dm.prop.roundsField": "Asaltos para un jugador en la mesa",
   "table.req.effect": "El efecto {effect}",
   "table.req.dealt": "{from} te ha infligido",
-  "table.req.applied": "{from} te ha aplicado"
+  "table.req.applied": "{from} te ha aplicado",
+  "dm.prop.roundsTitle": "Duración",
+  "dm.prop.roundsHint": "Asaltos para el jugador; vacío: hasta que se quite",
+  "dm.table.roundsShort": "{n} as",
+  "dm.table.awayNumbers": "PG {hp}/{max}, CA {ac}"
 }

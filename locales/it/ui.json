@@ -2891,5 +2891,9 @@
   "dm.prop.roundsField": "Round per un giocatore al tavolo",
   "table.req.effect": "L'effetto {effect}",
   "table.req.dealt": "{from} ti ha inflitto",
-  "table.req.applied": "{from} ti ha applicato"
+  "table.req.applied": "{from} ti ha applicato",
+  "dm.prop.roundsTitle": "Durata",
+  "dm.prop.roundsHint": "Round per il giocatore; vuoto: finché non la togli",
+  "dm.table.roundsShort": "{n} rd",
+  "dm.table.awayNumbers": "PF {hp}/{max}, CA {ac}"
 }
