@@ -2776,5 +2776,17 @@
   "table.band.hurt": "Ferito",
   "table.band.bloodied": "Malconcio",
   "table.band.down": "A terra",
-  "dm.waitInitiative": "In attesa dei giocatori ({n})… Inizia ora"
+  "dm.waitInitiative": "In attesa dei giocatori ({n})… Inizia ora",
+  "dm.section.settings": "Impostazioni",
+  "dm.set.online": "Tavolo online",
+  "dm.set.onlineHint": "Cosa vedono i tuoi giocatori dello scontro sui loro dispositivi. Le scelte restano su questo dispositivo.",
+  "dm.set.hideOrder": "Nascondi l'ordine di iniziativa ai giocatori",
+  "dm.set.hideOrderHint": "Vedono il round e di chi è il turno, nient'altro.",
+  "dm.set.hideBands": "Nascondi ai giocatori la fascia di danno delle creature",
+  "dm.set.hideBandsHint": "Illeso, ferito, malconcio o a terra non viene mostrato.",
+  "dm.set.hideNames": "Mostra le creature come sconosciute",
+  "dm.set.hideNamesHint": "Solo i personaggi dei giocatori mostrano il nome; le altre sono «Creatura sconosciuta».",
+  "dm.set.askInitiative": "Chiedi l'iniziativa ai giocatori quando lo scontro inizia",
+  "dm.set.askInitiativeHint": "Lo scontro attende qualche secondo le risposte. Disattiva per scrivere tu le iniziative.",
+  "table.unknownCreature": "Creatura sconosciuta"
 }

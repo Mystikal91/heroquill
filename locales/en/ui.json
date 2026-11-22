@@ -2776,5 +2776,17 @@
   "table.band.hurt": "Hurt",
   "table.band.bloodied": "Bloodied",
   "table.band.down": "Down",
-  "dm.waitInitiative": "Waiting for players ({n})… Start now"
+  "dm.waitInitiative": "Waiting for players ({n})… Start now",
+  "dm.section.settings": "Settings",
+  "dm.set.online": "Online table",
+  "dm.set.onlineHint": "What your players see of the fight on their devices. The choices stay on this device.",
+  "dm.set.hideOrder": "Hide the initiative order from the players",
+  "dm.set.hideOrderHint": "They see the round and whose turn it is, nothing else.",
+  "dm.set.hideBands": "Hide how hurt the creatures look from the players",
+  "dm.set.hideBandsHint": "Unhurt, hurt, bloodied or down is not shown.",
+  "dm.set.hideNames": "Show the creatures as unknown",
+  "dm.set.hideNamesHint": "Only the players' characters show their names; the rest are \"Unknown creature\".",
+  "dm.set.askInitiative": "Ask the players for their initiative when the fight starts",
+  "dm.set.askInitiativeHint": "The fight waits a few seconds for their answers. Switch it off to type the initiatives yourself.",
+  "table.unknownCreature": "Unknown creature"
 }

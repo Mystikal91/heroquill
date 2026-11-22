@@ -64,4 +64,23 @@ describe("trackerViewOf", () => {
     expect(JSON.stringify(view)).not.toContain("secret");
     expect(JSON.stringify(view)).not.toContain("ac");
   });
+
+  it("keeps from the players what the DM chose to keep", () => {
+    const base = createEncounter("f");
+    const e = startCombat({
+      ...base,
+      combatants: [
+        c({ id: "g", name: "Lich", initiative: 12, hp: 2 }),
+        c({ id: "p", kind: "character", name: "Aria", initiative: 17, hp: 4, maxHp: 12 }),
+      ],
+    });
+    const players = [{ seat: "p1", name: "Aria" }];
+    const names = trackerViewOf(e, players, { names: "Unknown creature" });
+    expect(names.order.map((o) => o.name)).toEqual(["Aria", "Unknown creature"]);
+    const bands = trackerViewOf(e, players, { bands: true });
+    expect(bands.order.some((o) => "band" in o)).toBe(false);
+    const order = trackerViewOf(e, players, { order: true });
+    expect(order.order).toEqual([{ id: "p", name: "Aria", seat: "p1" }]);
+    expect(order.turn).toBe("p");
+  });
 });

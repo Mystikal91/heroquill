@@ -38,24 +38,37 @@ export function matchSeats(
 
 const NOT_ON = { round: 0, order: [] } satisfies TrackerView;
 
+/** What the DM chose to keep from the players (the settings of the online table). */
+export interface Hiding {
+  /** Only the creature whose turn it is, with no initiatives. */
+  order?: boolean;
+  bands?: boolean;
+  /** Creatures that are not a player's show under this name. */
+  names?: string;
+}
+
 /** The view of a fight: nothing until it starts. */
 export function trackerViewOf(
   encounter: Encounter,
   players: readonly { seat: string; name: string }[],
+  hiding: Hiding = {},
 ): TrackerView {
   if (!isStarted(encounter)) return NOT_ON;
   const seats = matchSeats(encounter.combatants, players);
+  const all = initiativeOrder(encounter.combatants);
+  const shown = hiding.order ? all.filter((c) => c.id === encounter.turn) : all;
   return {
     round: encounter.round,
     ...(encounter.turn && { turn: encounter.turn }),
-    order: initiativeOrder(encounter.combatants).map((c) => {
+    order: shown.map((c) => {
       const seat = seats.get(c.id);
+      const own = c.kind === "character";
       return {
         id: c.id,
-        name: c.name,
+        name: !own && !c.lair && hiding.names ? hiding.names : c.name,
         ...(seat && { seat }),
-        ...(c.initiative !== undefined && { initiative: c.initiative }),
-        ...(c.kind !== "character" && !c.lair && { band: bandOf(c) }),
+        ...(!hiding.order && c.initiative !== undefined && { initiative: c.initiative }),
+        ...(!own && !c.lair && !hiding.bands && { band: bandOf(c) }),
       };
     }),
   };

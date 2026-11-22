@@ -3282,3 +3282,29 @@
   display: inline-flex;
   width: auto;
 }
+
+/* The settings of the DM page */
+.dm-settings {
+  display: grid;
+  gap: 1rem;
+}
+
+.dm-settings h3,
+.dm-settings p {
+  margin: 0;
+}
+
+.dm-set-list {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.dm-set-list li {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.dm-set-list small {
+  padding-left: 1.9rem;
+}

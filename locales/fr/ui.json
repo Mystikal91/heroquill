@@ -2776,5 +2776,17 @@
   "table.band.hurt": "Blessé",
   "table.band.bloodied": "Sanguinant",
   "table.band.down": "À terre",
-  "dm.waitInitiative": "En attente des joueurs ({n})… Commencer maintenant"
+  "dm.waitInitiative": "En attente des joueurs ({n})… Commencer maintenant",
+  "dm.section.settings": "Réglages",
+  "dm.set.online": "Table en ligne",
+  "dm.set.onlineHint": "Ce que vos joueurs voient du combat sur leurs appareils. Les choix restent sur cet appareil.",
+  "dm.set.hideOrder": "Cacher l'ordre d'initiative aux joueurs",
+  "dm.set.hideOrderHint": "Ils voient le round et à qui est le tour, rien d'autre.",
+  "dm.set.hideBands": "Cacher aux joueurs l'état de santé des créatures",
+  "dm.set.hideBandsHint": "Indemne, blessé, sanguinant ou à terre n'est pas affiché.",
+  "dm.set.hideNames": "Montrer les créatures comme inconnues",
+  "dm.set.hideNamesHint": "Seuls les personnages des joueurs montrent leur nom ; les autres sont « Créature inconnue ».",
+  "dm.set.askInitiative": "Demander l'initiative aux joueurs au début du combat",
+  "dm.set.askInitiativeHint": "Le combat attend quelques secondes leurs réponses. Désactivez pour saisir vous-même les initiatives.",
+  "table.unknownCreature": "Créature inconnue"
 }

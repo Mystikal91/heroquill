@@ -62,6 +62,7 @@ import {
   saveEncounter,
   setCurrentEncounterId,
 } from "../storage/encounters";
+import { onlineSettings } from "./dmSettings";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { addLog, rollMode } from "./play";
 import { content } from "./store";
@@ -85,7 +86,7 @@ export const dmReady = signal(false);
 export const campaigns = signal<Campaign[]>([]);
 export const campaign = signal<Campaign | undefined>(undefined);
 /** The part of the page on screen: the campaign and its party, or the fights. */
-export type DmSection = "campaign" | "encounter" | "rules";
+export type DmSection = "campaign" | "encounter" | "rules" | "settings";
 export const dmSection = signal<DmSection>("encounter");
 /** The window that offers to put the party in the open encounter. */
 export const partyPrompt = signal(false);
@@ -1007,7 +1008,7 @@ function seatsToAsk(e: Encounter): string[] {
 function beginFight() {
   startAfterParty.value = false;
   const e = encounter.value;
-  const seats = e && tableOnline() ? seatsToAsk(e) : [];
+  const seats = e && tableOnline() && onlineSettings.value.askInitiative ? seatsToAsk(e) : [];
   if (!e || seats.length === 0) return startNow();
   // The players at the table are asked by themselves; the fight starts when they have all answered, or after a while.
   askInitiative(seats);
@@ -1039,7 +1040,15 @@ onInitiative((seat, value) => {
 effect(() => {
   const e = encounter.value;
   const players = tableView.value.players;
-  if (e) publishTracker(trackerViewOf(e, players));
+  const hide = onlineSettings.value;
+  if (e)
+    publishTracker(
+      trackerViewOf(e, players, {
+        order: hide.hideOrder,
+        bands: hide.hideBands,
+        ...(hide.hideNames && { names: ui("table.unknownCreature") }),
+      }),
+    );
 });
 
 /** Starts the fight; players of the party that are not in it yet are asked about first. */

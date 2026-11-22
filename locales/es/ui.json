@@ -2776,5 +2776,17 @@
   "table.band.hurt": "Herido",
   "table.band.bloodied": "Malherido",
   "table.band.down": "Caído",
-  "dm.waitInitiative": "Esperando jugadores ({n})… Empezar ahora"
+  "dm.waitInitiative": "Esperando jugadores ({n})… Empezar ahora",
+  "dm.section.settings": "Ajustes",
+  "dm.set.online": "Mesa en línea",
+  "dm.set.onlineHint": "Lo que tus jugadores ven del combate en sus dispositivos. Las opciones se quedan en este dispositivo.",
+  "dm.set.hideOrder": "Ocultar el orden de iniciativa a los jugadores",
+  "dm.set.hideOrderHint": "Ven la ronda y de quién es el turno, nada más.",
+  "dm.set.hideBands": "Ocultar a los jugadores cuánto daño tienen las criaturas",
+  "dm.set.hideBandsHint": "Ileso, herido, malherido o caído no se muestra.",
+  "dm.set.hideNames": "Mostrar las criaturas como desconocidas",
+  "dm.set.hideNamesHint": "Solo los personajes de los jugadores muestran su nombre; el resto son «Criatura desconocida».",
+  "dm.set.askInitiative": "Pedir la iniciativa a los jugadores al empezar el combate",
+  "dm.set.askInitiativeHint": "El combate espera unos segundos sus respuestas. Desactívalo para escribir tú las iniciativas.",
+  "table.unknownCreature": "Criatura desconocida"
 }
