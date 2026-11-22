@@ -1,6 +1,6 @@
 import { useEffect } from "preact/hooks";
 import { language, localeChain } from "../app/language";
-import { isPage, showView, view } from "../app/navigation";
+import { isPage, mode, showView, view } from "../app/navigation";
 import {
   character,
   content,
@@ -36,6 +36,7 @@ import { PacksNotice } from "./PacksNotice";
 import { PacksPage } from "./PacksPage";
 import { QuickEditDialog } from "./QuickEdit";
 import { Sheet } from "./Sheet";
+import { PlayerTableChip } from "./TableChip";
 import { Tabs } from "./Tabs";
 import { Tour } from "./Tour";
 import { TransferDialog } from "./TransferDialog";
@@ -167,8 +168,9 @@ export function App() {
         </div>
         {withBar && <CharacterBar />}
         <div class="app-actions">
-          {/* The DM page puts the state of its online table here (it is loaded only with that page). */}
+          {/* The online table: the DM page puts its own here (it is loaded only with that page). */}
           <div id="header-extra" class="header-extra" />
+          {mode.value === "player" && ready && <PlayerTableChip />}
           <AppMenu />
         </div>
       </header>

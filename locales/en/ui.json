@@ -2744,5 +2744,11 @@
   "dm.rollsOf": "Rolls of {name}",
   "dm.rollCheck": "Roll a {what} check",
   "dm.saveShort": "Save",
-  "dm.editNumbers": "Edit name and numbers"
+  "dm.editNumbers": "Edit name and numbers",
+  "table.closed": "Table closed",
+  "table.none": "No table",
+  "table.join.intro": "Join your DM's table with the code they give you: they will see your hit points, armor class and conditions, and the rolls you choose to share.",
+  "table.join.code": "Code",
+  "table.join.button": "Join",
+  "table.join.soon": "Coming soon: joining a table is not ready yet."
 }

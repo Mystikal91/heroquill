@@ -2083,3 +2083,126 @@ details.rule-variant[open] > summary::after {
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* ---- The pill of the online table, beside the menu (the DM's and the player's) ---- */
+
+:root[data-style][data-style] :is(.table-chip, .table-chip-pop > .popover-button) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0 0.8rem;
+  border: 1px solid color-mix(in srgb, #3fa34d 55%, var(--border));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+/* No table: a quiet pill with a crossed sign. */
+:root[data-style][data-style]
+  :is(.table-chip, .table-chip-pop > .popover-button):has([data-state="offline"]) {
+  border-color: var(--border);
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.table-chip-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1;
+}
+
+.table-chip-face .ui-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.table-dot {
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #d19a2a;
+}
+
+.table-dot[data-state="online"] {
+  background: #3fa34d;
+  box-shadow: 0 0 0.45rem #3fa34d;
+}
+
+.table-chip-code {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.table-chip-count {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.table-chip-short {
+  display: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+@media (max-width: 42rem) {
+  :root[data-style][data-style] :is(.table-chip, .table-chip-pop > .popover-button) {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0 0.6rem;
+    justify-content: center;
+  }
+
+  .table-chip-code,
+  .table-chip-count {
+    display: none;
+  }
+
+  .table-chip-short {
+    display: inline;
+  }
+}
+
+/* The player's panel to join a table. */
+.table-join {
+  display: grid;
+  gap: 0.6rem;
+  width: min(20rem, calc(100vw - 2rem));
+}
+
+.table-join p {
+  margin: 0;
+}
+
+.table-join-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.table-join-form .field {
+  flex: 1;
+  margin: 0;
+}
+
+.table-join-form input {
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.table-join-form button {
+  min-height: 2.5rem;
+  margin: 0;
+}
+
+.table-join-soon {
+  font-size: 0.85rem;
+}

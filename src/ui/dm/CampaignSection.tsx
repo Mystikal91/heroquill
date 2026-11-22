@@ -25,7 +25,6 @@ import { ui } from "../../i18n/ui";
 import { feetFrom, feetTo, metricUnits } from "../../i18n/units";
 import { type CharacterSummary, listCharacters } from "../../storage/characters";
 import { NumberField } from "./NumberField";
-import { TableBlock } from "./TableBlock";
 
 /** One player of the party, as a card: the name, and the four numbers the fight needs. */
 function Player({ m }: { m: PartyMember }) {
@@ -286,10 +285,7 @@ export function CampaignSection() {
             </ul>
           )}
         </section>
-        <div class="dm-campaign-grid">
-          <EncounterList />
-          <TableBlock campaignId={open.id} />
-        </div>
+        <EncounterList />
         <div class="dm-campaign-danger">
           <button type="button" class="danger-btn" onClick={() => void removeCampaign()}>
             {ui("dm.campaign.delete")}

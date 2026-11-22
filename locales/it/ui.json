@@ -2744,5 +2744,11 @@
   "dm.rollsOf": "Tiri di {name}",
   "dm.rollCheck": "Tira una prova di {what}",
   "dm.saveShort": "TS",
-  "dm.editNumbers": "Modifica nome e numeri"
+  "dm.editNumbers": "Modifica nome e numeri",
+  "table.closed": "Tavolo chiuso",
+  "table.none": "Nessun tavolo",
+  "table.join.intro": "Entra al tavolo del tuo master con il codice che ti dà: vedrà i tuoi punti ferita, la classe armatura, le condizioni e i tiri che scegli di condividere.",
+  "table.join.code": "Codice",
+  "table.join.button": "Entra",
+  "table.join.soon": "In arrivo: entrare in un tavolo non è ancora possibile."
 }

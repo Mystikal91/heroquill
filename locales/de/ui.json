@@ -2744,5 +2744,11 @@
   "dm.rollsOf": "Würfe von {name}",
   "dm.rollCheck": "Probe auf {what} würfeln",
   "dm.saveShort": "RW",
-  "dm.editNumbers": "Name und Werte ändern"
+  "dm.editNumbers": "Name und Werte ändern",
+  "table.closed": "Tisch geschlossen",
+  "table.none": "Kein Tisch",
+  "table.join.intro": "Tritt dem Tisch deiner Spielleitung mit dem Code bei, den sie dir gibt: Sie sieht deine Trefferpunkte, Rüstungsklasse und Zustände und die Würfe, die du teilst.",
+  "table.join.code": "Code",
+  "table.join.button": "Beitreten",
+  "table.join.soon": "Bald: Einem Tisch beizutreten ist noch nicht möglich."
 }

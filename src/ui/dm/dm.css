@@ -1909,31 +1909,6 @@
   border-color: var(--border);
 }
 
-:root[data-style][data-style] .dm-online-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.4rem;
-  margin: 0;
-  padding: 0 0.85rem;
-  border: 1px solid color-mix(in srgb, #3fa34d 55%, var(--border));
-  border-radius: 999px;
-  background: transparent;
-  cursor: pointer;
-}
-
-.dm-online-code {
-  font-weight: 700;
-  letter-spacing: 0.14em;
-}
-
-.dm-online-count {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  letter-spacing: 0;
-  color: var(--muted);
-}
-
 .dm-context .dm-bar-tools {
   margin-left: auto;
 }
@@ -2335,14 +2310,8 @@
     margin-left: 0;
   }
 
-  .dm-context .dm-tool-label,
-  .dm-online-code,
-  .dm-online-count {
+  .dm-context .dm-tool-label {
     display: none;
-  }
-
-  .dm-online-short {
-    display: inline;
   }
 }
 
@@ -2769,10 +2738,6 @@
   color: var(--accent);
 }
 
-.dm-online-short {
-  display: none;
-}
-
 /* The two parts are tabs in the bar on a wide screen, the bar of the app at the bottom of a phone. */
 @media (min-width: 42.01rem) {
   .dm-section-tabs {
@@ -3056,14 +3021,6 @@
   .dm-crumbs {
     flex: 1 1 0;
   }
-
-  .dm-online-short {
-    display: inline;
-  }
-
-  :root[data-style][data-style] .dm-online-chip {
-    padding: 0 0.6rem;
-  }
 }
 
 :root[data-style][data-style] .dm-turn-attacks button {
@@ -3308,4 +3265,20 @@
   background: var(--accent);
   color: var(--accent-contrast);
   font-weight: 700;
+}
+
+/* The online table in its panel under the pill of the header: as wide as its content needs. */
+.dm-pop:has(> .dm-online) {
+  width: min(24rem, calc(100vw - 1rem));
+  padding: 0;
+}
+
+.dm-pop > .dm-online {
+  border: 0;
+}
+
+/* The DM's pill is a cell button of the DM page: it loses that look. */
+:root[data-style][data-style] .dm-cell-button.table-chip {
+  display: inline-flex;
+  width: auto;
 }

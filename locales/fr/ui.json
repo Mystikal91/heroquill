@@ -2744,5 +2744,11 @@
   "dm.rollsOf": "Jets de {name}",
   "dm.rollCheck": "Lancer un test de {what}",
   "dm.saveShort": "JS",
-  "dm.editNumbers": "Modifier le nom et les valeurs"
+  "dm.editNumbers": "Modifier le nom et les valeurs",
+  "table.closed": "Table fermée",
+  "table.none": "Aucune table",
+  "table.join.intro": "Rejoins la table de ton MJ avec le code qu'il te donne : il verra tes points de vie, ta classe d'armure, tes états et les jets que tu choisis de partager.",
+  "table.join.code": "Code",
+  "table.join.button": "Rejoindre",
+  "table.join.soon": "Bientôt : rejoindre une table n'est pas encore possible."
 }

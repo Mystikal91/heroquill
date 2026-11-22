@@ -42,10 +42,12 @@ import {
 import { actionRolls, resolveRolls } from "../../engine/monsterRolls";
 import { signed, ui } from "../../i18n/ui";
 import { Popover } from "../Popover";
+import { TableChipFace } from "../TableChip";
 import { PlusIcon, StepBackIcon, StepForwardIcon, SwordsIcon } from "../icons";
 import { abilitiesOf } from "./Abilities";
 import { CellPopover } from "./CellPopover";
 import { ColumnsEditor } from "./ColumnsEditor";
+import { TableBlock } from "./TableBlock";
 
 /** The encounter: which one, its name, and what can be done with it or with the fight. */
 function EncounterMenu({ e }: { e: Encounter }) {
@@ -135,29 +137,38 @@ function EncounterMenu({ e }: { e: Encounter }) {
   );
 }
 
-/** The online table, while it is open: a dot, the code and who is there. It leads to the campaign, where the table is. */
+/**
+ * The online table of the campaign, in the header beside the menu: a pill that is always there (a crossed sign while
+ * no table is open) and opens the table itself in a panel: open it, the code, who is there, what they share.
+ */
 export function OnlineChip() {
   const code = tableCode.value;
   const state = tableState.value;
-  if (!code || state === "ended") return null;
+  const open = campaign.value;
+  const live = Boolean(code) && state !== "ended";
   const here = tableView.value.players.filter((p) => p.online).length;
-  const seats = Math.max(campaign.value?.party.length ?? 0, tableView.value.players.length);
+  const seats = Math.max(open?.party.length ?? 0, tableView.value.players.length);
   return (
-    <button
-      type="button"
-      class="dm-online-chip"
+    <CellPopover
+      id="dm-online-table"
       title={ui("dm.table.title")}
-      onClick={() => {
-        dmSection.value = "campaign";
-      }}
+      class="table-chip"
+      align="end"
+      trigger={
+        live ? (
+          <TableChipFace
+            state={state}
+            code={code}
+            count={ui("dm.online.here", { n: here, max: seats })}
+            short={String(here)}
+          />
+        ) : (
+          <TableChipFace state="offline" label={ui("table.closed")} />
+        )
+      }
     >
-      <span class="dm-live" data-state={state} aria-hidden="true" />
-      <span class="dm-online-code">{code}</span>
-      <span class="dm-online-count">{ui("dm.online.here", { n: here, max: seats })}</span>
-      <span class="dm-online-short" aria-hidden="true">
-        {here}
-      </span>
-    </button>
+      {() => (open ? <TableBlock campaignId={open.id} /> : null)}
+    </CellPopover>
   );
 }
 

@@ -2744,5 +2744,11 @@
   "dm.rollsOf": "Tiradas de {name}",
   "dm.rollCheck": "Tirar una prueba de {what}",
   "dm.saveShort": "TS",
-  "dm.editNumbers": "Editar nombre y valores"
+  "dm.editNumbers": "Editar nombre y valores",
+  "table.closed": "Mesa cerrada",
+  "table.none": "Sin mesa",
+  "table.join.intro": "Únete a la mesa de tu DM con el código que te dé: verá tus puntos de golpe, tu clase de armadura, tus estados y las tiradas que decidas compartir.",
+  "table.join.code": "Código",
+  "table.join.button": "Unirse",
+  "table.join.soon": "Próximamente: todavía no se puede unirse a una mesa."
 }

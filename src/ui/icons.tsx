@@ -180,3 +180,12 @@ export const CrownIcon = () => (
     <path d="M6 20h12" />
   </Icon>
 );
+
+/** A crossed link: no online table. */
+export const OfflineIcon = () => (
+  <Icon>
+    <path d="M9 15l-1.500 1.500a3 3 0 0 1-4.200-4.200L6 9.500" />
+    <path d="M15 9l1.500-1.500a3 3 0 0 1 4.200 4.200L18 14.500" />
+    <path d="M3 3l18 18" />
+  </Icon>
+);

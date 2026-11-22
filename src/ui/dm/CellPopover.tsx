@@ -14,15 +14,22 @@ export function CellPopover({
   title,
   class: extra,
   align = "start",
+  id: fixedId,
   children,
 }: {
+  /**
+   * An id of its own for the panel, for a popover drawn in a render root of its own (the pill of the header), where
+   * `useId` starts again and would give the id of a popover of the app (the menu would open this panel).
+   */
+  id?: string;
   trigger: ComponentChildren;
   title: string;
   class?: string;
   align?: "start" | "end";
   children: (close: () => void) => ComponentChildren;
 }) {
-  const id = useId();
+  const generated = useId();
+  const id = fixedId ?? generated;
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   // The content is drawn only while the panel is open: a table has many of them.
