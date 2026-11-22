@@ -1,3 +1,4 @@
+import type { ComponentChildren } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { diceOpen } from "../../app/playView";
 import { ui } from "../../i18n/ui";
@@ -24,8 +25,11 @@ export function DiceButton({ inHead }: { inHead?: boolean }) {
   );
 }
 
-/** The dice and the roll history in a sheet over the screen, so they take no room in the page. */
-export function DiceDrawer() {
+/**
+ * The dice and the roll history in a sheet over the screen, so they take no room in the page. `children` come
+ * first (the DM's page puts the way of rolling there).
+ */
+export function DiceDrawer({ children }: { children?: ComponentChildren }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const open = diceOpen.value;
   useEffect(() => {
@@ -54,6 +58,7 @@ export function DiceDrawer() {
             {"✕"}
           </button>
         </div>
+        {children}
         <DiceTray />
         <RollHistory />
       </div>

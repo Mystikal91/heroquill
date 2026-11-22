@@ -2740,5 +2740,9 @@
   "dm.resume": "Resume",
   "dm.openEncounter": "Open",
   "dm.nextShort": "Next",
-  "dm.activeTag": "now"
+  "dm.activeTag": "now",
+  "dm.rollsOf": "Rolls of {name}",
+  "dm.rollCheck": "Roll a {what} check",
+  "dm.saveShort": "Save",
+  "dm.editNumbers": "Edit name and numbers"
 }

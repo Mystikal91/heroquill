@@ -15,6 +15,8 @@ import { monstersWanted } from "../../app/rulesView";
 import { type Encounter, isStarted } from "../../engine/encounter";
 import { ui } from "../../i18n/ui";
 import { BookIcon, SwordsIcon } from "../icons";
+import { DiceDrawer } from "../play/DiceDrawer";
+import { ModePicker } from "../play/Rolls";
 import { neighbour, useSwipe } from "../useSwipe";
 import { useTabsBar } from "../useTabsBar";
 import { AddDialog } from "./AddDialog";
@@ -180,6 +182,9 @@ export function DmPage() {
         <AddEffectDialog />
         <PartyDialog />
         <RollPanel />
+        <DiceDrawer>
+          <ModePicker />
+        </DiceDrawer>
       </article>
       {/* On a phone the turn buttons sit under the thumb, above the tabs. */}
       {fight && (

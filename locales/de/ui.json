@@ -2740,5 +2740,9 @@
   "dm.resume": "Fortsetzen",
   "dm.openEncounter": "Öffnen",
   "dm.nextShort": "Weiter",
-  "dm.activeTag": "am Zug"
+  "dm.activeTag": "am Zug",
+  "dm.rollsOf": "Würfe von {name}",
+  "dm.rollCheck": "Probe auf {what} würfeln",
+  "dm.saveShort": "RW",
+  "dm.editNumbers": "Name und Werte ändern"
 }

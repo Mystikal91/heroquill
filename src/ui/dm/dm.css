@@ -2165,7 +2165,7 @@
   font-size: 1.35rem;
 }
 
-:root[data-style][data-style] .dm-turn-panel .dm-cell-button {
+:root[data-style][data-style] .dm-panel-stat .dm-cell-button {
   min-height: 0;
   padding: 0;
   font-family: var(--font-body);
@@ -2229,7 +2229,7 @@
   color: var(--muted);
 }
 
-:root[data-style][data-style] .dm-turn-panel .dm-panel-add {
+:root[data-style][data-style] .dm-panel-fx .dm-panel-add {
   width: auto;
   min-height: 1.9rem;
   padding: 0 0.7rem;
@@ -3133,4 +3133,175 @@
   .dm-now-tag {
     display: none;
   }
+}
+
+/* ==== The sheet of a creature: what is read in play first, the rest closed ==== */
+
+.dm-info-body {
+  gap: 0.9rem;
+}
+
+.dm-info-kind {
+  margin: -0.4rem 0 0;
+}
+
+.dm-info-stats {
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+}
+
+.dm-info-section h4 {
+  margin: 0 0 0.4rem;
+}
+
+.dm-info-more {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.dm-info-more > summary {
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.dm-info-more[open] > summary {
+  margin-bottom: 0.4rem;
+}
+
+.dm-info-more textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.dm-info-edit {
+  display: grid;
+  gap: 0.6rem;
+  padding-bottom: 0.4rem;
+}
+
+.dm-info-body .dm-statblock {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* The block's own list of facts, quieter: they are read less than the actions. */
+.dm-info-body .monster-facts {
+  font-size: 0.9rem;
+}
+
+/* ---- The six abilities, each a check and a saving throw ---- */
+
+.dm-ability-rolls {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dm-ab-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+@container dm (max-width: 30rem) {
+  .dm-ab-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.dm-ab-cell {
+  display: grid;
+  gap: 0.2rem;
+}
+
+:root[data-style][data-style] .dm-ab-check {
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0.3rem 0.1rem 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  line-height: 1.15;
+  cursor: pointer;
+}
+
+.dm-ab-check small {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dm-ab-check b {
+  font-size: 1.15rem;
+  color: var(--fg);
+}
+
+.dm-ab-check span {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+:root[data-style][data-style] .dm-ab-save {
+  min-height: 1.8rem;
+  margin: 0;
+  padding: 0 0.1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* A save the stat block lists is one the monster is proficient in. */
+:root[data-style][data-style] .dm-ab-save[data-proficient] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--accent);
+}
+
+:root[data-style][data-style] .dm-ab-check:hover,
+:root[data-style][data-style] .dm-ab-save:hover {
+  border-color: var(--accent);
+}
+
+.dm-skill-rolls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+:root[data-style][data-style] .dm-skill-rolls button {
+  min-height: 1.9rem;
+  margin: 0;
+  padding: 0 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+/* ---- The DM's dice, in the bar ---- */
+
+:root[data-style][data-style] .dm-context .dm-dice {
+  min-width: 2.6rem;
+  justify-content: center;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
 }

@@ -27,6 +27,7 @@ import {
   startRoll,
   updateEncounter,
 } from "../../app/dm";
+import { diceOpen } from "../../app/playView";
 import { content } from "../../app/store";
 import { tableCode, tableState, tableView } from "../../app/table";
 import { combatantNumbers } from "../../engine/combatantNumbers";
@@ -227,6 +228,17 @@ export function ContextBar({ e }: { e: Encounter }) {
           <ColumnsEditor />
         </div>
       )}
+      <button
+        type="button"
+        class="dm-tool dm-dice"
+        title={ui("play.dice")}
+        aria-label={ui("play.dice")}
+        onClick={() => {
+          diceOpen.value = true;
+        }}
+      >
+        d20
+      </button>
     </div>
   );
 }

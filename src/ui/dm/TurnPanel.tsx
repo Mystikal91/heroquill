@@ -20,6 +20,7 @@ import { signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { damageLabel } from "../rules/ActionButtons";
 import { AbilitiesCell } from "./Abilities";
+import { AbilityRolls } from "./AbilityRolls";
 import { CellPopover } from "./CellPopover";
 import { EffectsEditor, conditionName } from "./Editors";
 import { HpCell, kindLine } from "./TrackerTable";
@@ -96,7 +97,7 @@ const ACTION_SECTIONS = [
 ] as const;
 
 /** The line under the name of a monster: size, type, alignment and challenge, as a stat block opens. */
-function monsterLine(source: string): string {
+export function monsterLine(source: string): string {
   const all = content.value;
   const m = all?.index.get(source)?.data as MonsterFacts | undefined;
   if (!all || !m) return "";
@@ -173,7 +174,7 @@ function ActionCards({ c, source }: { c: Combatant; source: string }) {
 }
 
 /** What is in force on the creature, and the editor of it in a small window. */
-function PanelEffects({ c }: { c: Combatant }) {
+export function PanelEffects({ c }: { c: Combatant }) {
   const names = [...c.conditions.map(conditionName), ...c.effects.map((x) => x.name)];
   return (
     <div class="dm-panel-fx">
@@ -252,6 +253,7 @@ export function TurnPanel({ e }: { e: Encounter }) {
           <PanelEffects c={c} />
         </>
       )}
+      <AbilityRolls c={c} />
       <div class="dm-panel-abilities">
         <AbilitiesCell c={c} />
       </div>

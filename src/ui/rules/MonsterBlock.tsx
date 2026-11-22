@@ -80,9 +80,15 @@ export function MonsterBlock({
   id,
   owner,
   choose,
+  compact,
 }: {
   id: string;
   owner?: Owner;
+  /**
+   * The page around it shows the name, armor class, hit points, speed, abilities, saves and skills (the DM's sheet
+   * of a creature): the block leaves them out and keeps the rest.
+   */
+  compact?: boolean;
   /** The Dungeon Master's table rolls an action in a window of its own: what to roll comes here instead of the history. */
   choose?: (action: string, rolls: ActionRolls) => void;
 }) {
@@ -193,18 +199,23 @@ export function MonsterBlock({
       m.proficiencyBonus === undefined ? undefined : signed(m.proficiencyBonus),
     ],
   ];
-  const scores = m.abilities;
+  const scores = compact ? undefined : m.abilities;
+  const shownFacts = compact ? facts.slice(5) : facts;
 
   return (
     <div class="rule-detail monster-block">
-      <h3>{c.name(id)}</h3>
-      <p class="muted monster-kind">
-        {kind}
-        {subtype}
-        {alignment ? `, ${alignment}` : ""}
-      </p>
+      {!compact && (
+        <>
+          <h3>{c.name(id)}</h3>
+          <p class="muted monster-kind">
+            {kind}
+            {subtype}
+            {alignment ? `, ${alignment}` : ""}
+          </p>
+        </>
+      )}
       <dl class="monster-facts">
-        {facts
+        {shownFacts
           .filter(([, value]) => value)
           .map(([label, value]) => (
             <div key={label}>

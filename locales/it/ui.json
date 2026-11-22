@@ -2740,5 +2740,9 @@
   "dm.resume": "Riprendi",
   "dm.openEncounter": "Apri",
   "dm.nextShort": "Successivo",
-  "dm.activeTag": "in turno"
+  "dm.activeTag": "in turno",
+  "dm.rollsOf": "Tiri di {name}",
+  "dm.rollCheck": "Tira una prova di {what}",
+  "dm.saveShort": "TS",
+  "dm.editNumbers": "Modifica nome e numeri"
 }

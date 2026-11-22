@@ -62,6 +62,7 @@ import {
   setCurrentEncounterId,
 } from "../storage/encounters";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
+import { addLog, rollMode } from "./play";
 import { content } from "./store";
 import { switchTable } from "./table";
 import { type UndoOffer, offerUndo, undoOffer } from "./undo";
@@ -990,4 +991,24 @@ export function endFight() {
   resetTurnHistory();
   updateEncounter(endCombat);
   offerUndo(ui("dm.endDone"), () => updateEncounter(() => before));
+}
+
+// ---- Checks and saves of a creature ----
+
+/**
+ * A check or a saving throw of a creature: a d20 with its bonus, in the way of rolling chosen with the dice
+ * (advantage, disadvantage), into the history of rolls. Unlike the player's rolls, nothing of the character
+ * open on this device counts (its exhaustion, its Bless).
+ */
+export function rollForCreature(label: string, bonus: number) {
+  const roll = rollD20(bonus, rollMode.value);
+  const faces = roll.dice.length > 1 ? `[${roll.dice.join(", ")}] → ${roll.used}` : `${roll.used}`;
+  const shown = bonus === 0 ? "" : bonus > 0 ? ` +${bonus}` : ` ${bonus}`;
+  addLog({
+    label,
+    detail: `d20 ${faces}${shown}`,
+    total: roll.total,
+    ...(roll.critical && { tone: "critical" as const }),
+    ...(roll.fumble && { tone: "fumble" as const }),
+  });
 }

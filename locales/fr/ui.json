@@ -2740,5 +2740,9 @@
   "dm.resume": "Reprendre",
   "dm.openEncounter": "Ouvrir",
   "dm.nextShort": "Suivant",
-  "dm.activeTag": "son tour"
+  "dm.activeTag": "son tour",
+  "dm.rollsOf": "Jets de {name}",
+  "dm.rollCheck": "Lancer un test de {what}",
+  "dm.saveShort": "JS",
+  "dm.editNumbers": "Modifier le nom et les valeurs"
 }
