@@ -2229,9 +2229,3 @@ details.rule-variant[open] > summary::after {
   gap: 0.5rem;
   justify-items: start;
 }
-
-.table-rolls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}

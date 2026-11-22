@@ -9,8 +9,6 @@ import {
   playerBye,
   playerState,
   resumeTable,
-  setShareRolls,
-  shareRolls,
   trackerView,
 } from "../app/playerTable";
 import { ui } from "../i18n/ui";
@@ -183,14 +181,6 @@ export function PlayerTableChip() {
             )}
             {trackerView.value && <Tracker view={trackerView.value} />}
             <p class="muted">{ui("table.join.preview")}</p>
-            <label class="table-rolls">
-              <input
-                type="checkbox"
-                checked={shareRolls.value}
-                onChange={(e) => setShareRolls(e.currentTarget.checked)}
-              />
-              <span>{ui("table.join.rolls")}</span>
-            </label>
             <button type="button" class="secondary" onClick={leaveTable}>
               {ui("table.leave")}
             </button>

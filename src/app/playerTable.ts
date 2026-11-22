@@ -31,7 +31,6 @@ interface Saved {
 }
 
 const KEY = "playerTable";
-const ROLLS_KEY = "playerTableRolls";
 
 const read = (): Saved | undefined => {
   try {
@@ -58,25 +57,6 @@ export const playerBye = signal<ByeReason | undefined>(undefined);
 export const dmOnline = signal(false);
 export const trackerView = signal<TrackerView | undefined>(undefined);
 export const initiativeAsked = signal(false);
-
-export const shareRolls = signal(
-  (() => {
-    try {
-      return localStorage.getItem(ROLLS_KEY) !== "off";
-    } catch {
-      return true;
-    }
-  })(),
-);
-
-export function setShareRolls(on: boolean) {
-  shareRolls.value = on;
-  try {
-    localStorage.setItem(ROLLS_KEY, on ? "on" : "off");
-  } catch {
-    // A choice for this visit only.
-  }
-}
 
 let link: RelayLink | undefined;
 let stopWatching: (() => void) | undefined;
@@ -129,7 +109,6 @@ function watch() {
     const fresh = log.filter((e) => e.id > seen).reverse();
     if (fresh.length === 0) return;
     seen = log[0]?.id ?? seen;
-    if (!shareRolls.peek()) return;
     for (const e of fresh)
       link?.send({
         t: "roll",
