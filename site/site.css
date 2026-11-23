@@ -1913,6 +1913,16 @@ h3 {
   letter-spacing: 0.03em;
 }
 
+.note-kind {
+  color: var(--accent);
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.note-kind[data-kind="improvement"] {
+  color: var(--muted);
+}
+
 .prose h3 small {
   color: var(--muted);
   font-family: "EB Garamond", Georgia, serif;

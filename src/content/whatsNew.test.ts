@@ -40,6 +40,17 @@ describe("what changes in an update", () => {
     expect(newerEntries(list, "1.12.3")).toEqual([]);
   });
 
+  it("accepts notes that carry a kind", () => {
+    const typed = [
+      {
+        version: "1.35.0",
+        date: "2026-11-24",
+        notes: [{ en: "A new thing. It is nice.", kind: "feature" }],
+      },
+    ];
+    expect(newerEntries(typed, "1.34.0").map((e) => e.version)).toEqual(["1.35.0"]);
+  });
+
   it("shows at most a few of them", () => {
     expect(newerEntries(list, "1.0.0", 2).map((e) => e.version)).toEqual([
       "1.12.3 beta",

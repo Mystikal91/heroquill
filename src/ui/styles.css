@@ -804,6 +804,16 @@ button.title-link {
   margin-bottom: 0.5rem;
 }
 
+.note-kind {
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.note-kind[data-kind="improvement"] {
+  color: var(--muted);
+}
+
 /* Buttons that repeat while held: no text selection or magnifier on a long press. */
 button.hold {
   touch-action: manipulation;

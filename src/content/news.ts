@@ -3,18 +3,23 @@ import type { LanguageCode } from "../app/language.logic";
 /** A text in every language it has been written in; English is required and is the fallback. */
 export type Translated = { en: string } & Partial<Record<Exclude<LanguageCode, "en">, string>>;
 
+export type NoteKind = "feature" | "improvement" | "fix";
+
+export type ChangelogNote = Translated & { kind?: NoteKind };
+
 export interface ChangelogEntry {
   version: string;
   /** ISO date of the release. */
   date: string;
   /** What changed, one line each. Newest entries go first in `CHANGELOG`. */
-  notes: Translated[];
+  notes: ChangelogNote[];
 }
 
 /**
- * What changed in each version. To add an entry, put a new object first in the list, write the
- * lines in English and, when possible, in the other languages (the page shows English where a
- * language is missing).
+ * What changed in each version. To add an entry, put a new object first in the list. Every note of
+ * a new version has a `kind` (feature, improvement or fix); the notes are long, inviting sentences
+ * that describe what a person sees, written in all five languages; features first, then
+ * improvements, then fixes. Old notes have no kind and show without a tag.
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {

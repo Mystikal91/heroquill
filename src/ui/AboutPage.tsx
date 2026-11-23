@@ -94,7 +94,16 @@ function Changelog() {
           </h3>
           <ul class="about-list">
             {entry.notes.map((note) => (
-              <li key={note.en}>{pick(note, language.value)}</li>
+              <li key={note.en}>
+                {note.kind && (
+                  <>
+                    <span class="note-kind" data-kind={note.kind}>
+                      [{ui(`about.changelog.kind.${note.kind}`)}]
+                    </span>{" "}
+                  </>
+                )}
+                {pick(note, language.value)}
+              </li>
             ))}
           </ul>
         </section>

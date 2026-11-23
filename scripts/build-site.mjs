@@ -391,7 +391,12 @@ function newsBody(lang) {
     (UI[lang]["about.changelog.version"] ?? "Version {version}").replace("{version}", version);
   const history = CHANGELOG.map((entry) => {
     const notes = entry.notes
-      .map((note) => `            <li>${escapeHtml(pick(note, lang))}</li>`)
+      .map((note) => {
+        const tag = note.kind
+          ? `<span class="note-kind" data-kind="${escapeHtml(note.kind)}">[${escapeHtml(UI[lang][`about.changelog.kind.${note.kind}`] ?? note.kind)}]</span> `
+          : "";
+        return `            <li>${tag}${escapeHtml(pick(note, lang))}</li>`;
+      })
       .join("\n");
     return `        <section>
           <h3>${escapeHtml(label(entry.version))} <small>${entry.date}</small></h3>
