@@ -22,46 +22,110 @@
   <body>
     <p><a href="/">← Heroquill</a> · <a href="/terms">Terms of service</a> · <a href="#italiano">Italiano</a></p>
     <h1>Privacy policy</h1>
-    <p class="muted">Last updated: 30 October 2026</p>
+    <p class="muted">Last updated: 23 November 2026</p>
 
     <p>
       Heroquill (“the app”) is a free, unofficial tool to make, print and play characters
-      for the fifth edition of the world's most popular roleplaying game. It is written and kept by
-      the GitHub user <a href="https://github.com/Mystikal91">Mystikal91</a>. This page says what
-      happens to your data.
+      for the fifth edition of the world's most popular roleplaying game, and to run the game as the
+      Dungeon Master. It is written and kept by the GitHub user
+      <a href="https://github.com/Mystikal91">Mystikal91</a>. This page says what happens to your data.
     </p>
 
     <h2>The short version</h2>
     <p>
-      The app has no server, no accounts, no advertising and no analytics. Your characters stay in
-      your browser, on your device. We do not receive, collect, store or sell any of your data.
+      The app has no accounts, no advertising and no analytics. Your characters, campaigns and
+      encounters stay in your browser, on your device. The only server of ours that the app talks to
+      is the relay of the online table, and only while you open or join a table: it passes the
+      messages of the game between the people at that table and forgets them. We do not collect,
+      sell or share any of your data.
     </p>
 
     <h2>What the app keeps on your device</h2>
     <p>
-      Your characters, the content packs you add, your quick edits, your settings and (if you
-      choose to type one) your DeepL key are stored in your browser's own storage
-      (IndexedDB and localStorage). They never leave your device unless you decide to move them, as
-      described below. Clearing the site data of your browser deletes them.
+      Your characters, your campaigns and encounters as the Dungeon Master, the content packs you
+      add, your quick edits, your settings, the code of an online table you opened or joined and
+      (if you choose to type one) your DeepL key are stored in your browser's own storage
+      (IndexedDB and localStorage). They never leave your device unless you decide to move or share
+      them, as described below. Clearing the site data of your browser deletes them.
     </p>
 
     <h2>What the app can send, and only when you ask</h2>
     <ul>
+      <li>
+        <strong>The online table (optional).</strong> When a Dungeon Master opens a table, or a
+        player joins one with its code, the app sends what the game needs to our relay. See
+        “The online table” below.
+      </li>
       <li>
         <strong>Content packs.</strong> When you add a pack from an address (for example the
         Aurora content files), your browser downloads the files from that address. The address
         sees an ordinary request from your browser.
       </li>
       <li>
-        <strong>Automatic translation (optional).</strong> If you turn it on and give your own
-        DeepL key, the texts to be translated are sent to DeepL, through the relay you choose, with
-        your key. This is off by default.
+        <strong>Automatic translation (optional, off by default).</strong> If you turn it on, the
+        rules texts that have no translation in your language (and the texts of the content you
+        imported) are sent to be translated: to DeepL with your own key, if you give one, through
+        the relay you choose; otherwise to our translation relay, which runs on Cloudflare, or to
+        <a href="https://mymemory.translated.net/">MyMemory</a>. Your characters and notes are never
+        sent.
+      </li>
+      <li>
+        <strong>Share links.</strong> A link to a character carries the character in the part of the
+        address after <code>#</code>, which browsers never send to a server. Whoever gets the link
+        can read the character.
       </li>
       <li>
         <strong>Google Drive (optional).</strong> If this build offers it and you press “Save to
         Google Drive” or “Load from Google Drive”, you sign in with Google and the app saves or
         reads one file, <code>dnd-character-maker.dndtransfer.json</code>, in your own Google Drive.
         See the next section.
+      </li>
+    </ul>
+
+    <h2>The online table</h2>
+    <p>
+      The online table lets a Dungeon Master and the players follow a fight together, each on their
+      own device. It is optional: the app, the character sheet and the Dungeon Master's tracker all
+      work without it. It goes through a small relay of ours at <code>rooms.heroquill.app</code>,
+      a Cloudflare Worker whose code is public in the repository.
+    </p>
+    <ul>
+      <li>
+        <strong>What a player sends:</strong> the name of the character; a card with the numbers of
+        the sheet that matter at the table (hit points, armor class, speed, initiative bonus, passive
+        Perception, save DCs, conditions, effects in force, concentration and the like; the join
+        window says so before you join); the rolls made in Play; the initiative; the answers to
+        the Dungeon Master's requests; and the lines you write to the Dungeon Master.
+      </li>
+      <li>
+        <strong>What the Dungeon Master sends:</strong> the order of the fight as the players are
+        meant to see it (the names chosen for the creatures, whose turn it is, the round and, if the
+        Dungeon Master wants, how hurt they look), requests for initiative or for a roll, proposals
+        of damage, conditions and effects, and lines of text.
+      </li>
+      <li>
+        <strong>Who sees it:</strong> a player's card, rolls and lines go to the Dungeon Master
+        only, not to the other players. A line of the Dungeon Master goes to the player it is for,
+        or to everyone at the table. Nothing the Dungeon Master proposes changes a player's sheet
+        until that player accepts it.
+      </li>
+      <li>
+        <strong>What the relay keeps, and for how long:</strong> for each table, a fingerprint
+        (SHA-256) of the Dungeon Master's secret, the seats with the name and the last card of each
+        player, and the last order of the fight. Rolls, requests, proposals and lines are passed on
+        and not kept. Everything is deleted when the Dungeon Master closes the table, or twelve
+        hours after the last message.
+      </li>
+      <li>
+        <strong>No account and no logs:</strong> a table is known only by a code of six characters.
+        The relay writes no logs and keeps no address. Cloudflare, which runs it, sees the
+        connection like any web host (see below).
+      </li>
+      <li>
+        <strong>Be careful with the code:</strong> anyone who has the code can join as a player
+        while the table is open, so give it only to your group. The Dungeon Master can remove a
+        seat and close the table. Do not write in names and lines anything you would not say at
+        the table.
       </li>
     </ul>
 
@@ -107,8 +171,8 @@
 
     <h2>Cookies and tracking</h2>
     <p>
-      The app does not use cookies for tracking and has no analytics. The site is hosted on Cloudflare,
-      which, like any web host, may keep ordinary server logs under
+      The app does not use cookies for tracking and has no analytics. The site and the relays are
+      hosted on Cloudflare, which, like any web host, may keep ordinary server logs under
       <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
       If you use Google sign-in, Google's own cookies and policies apply to that window.
     </p>
@@ -135,34 +199,91 @@
 
     <section id="italiano" lang="it">
       <h1>Informativa sulla privacy</h1>
-      <p class="muted">Ultimo aggiornamento: 30 ottobre 2026</p>
+      <p class="muted">Ultimo aggiornamento: 23 novembre 2026</p>
       <p>
         Heroquill («l'app») è uno strumento gratuito e non ufficiale per creare, stampare e
-        giocare personaggi della quinta edizione. È scritta e mantenuta dall'utente GitHub
-        <a href="https://github.com/Mystikal91">Mystikal91</a>.
+        giocare personaggi della quinta edizione, e per condurre il gioco come Dungeon Master. È
+        scritta e mantenuta dall'utente GitHub <a href="https://github.com/Mystikal91">Mystikal91</a>.
       </p>
       <h2>In breve</h2>
       <p>
-        L'app non ha server, account, pubblicità né statistiche. I tuoi personaggi restano nel tuo
-        browser, sul tuo dispositivo. Non riceviamo, raccogliamo, conserviamo né vendiamo alcun dato.
+        L'app non ha account, pubblicità né statistiche. Personaggi, campagne e incontri restano nel
+        tuo browser, sul tuo dispositivo. L'unico nostro server con cui l'app parla è il relay del
+        tavolo online, e solo mentre apri un tavolo o ti unisci a uno: passa i messaggi del gioco tra
+        le persone di quel tavolo e poi li dimentica. Non raccogliamo, vendiamo né condividiamo
+        alcun dato.
       </p>
       <h2>Cosa resta sul tuo dispositivo</h2>
       <p>
-        Personaggi, pacchetti di contenuti, modifiche rapide, impostazioni e (se la scrivi) la tua
-        chiave DeepL stanno nella memoria del browser. Non escono dal dispositivo se non quando
-        decidi tu di spostarli. Cancellando i dati del sito dal browser, spariscono.
+        Personaggi, campagne e incontri del Dungeon Master, pacchetti di contenuti, modifiche rapide,
+        impostazioni, il codice di un tavolo online aperto o a cui ti sei unito e (se la scrivi) la
+        tua chiave DeepL stanno nella memoria del browser. Non escono dal dispositivo se non quando
+        decidi tu di spostarli o condividerli. Cancellando i dati del sito dal browser, spariscono.
       </p>
       <h2>Cosa può essere inviato, solo se lo chiedi</h2>
       <ul>
+        <li>Il tavolo online (facoltativo): vedi «Il tavolo online» qui sotto.</li>
         <li>I pacchetti si scaricano dall'indirizzo che indichi.</li>
         <li>
-          La traduzione automatica (facoltativa, spenta di default) invia i testi a DeepL con la tua
-          chiave, tramite il relay che scegli.
+          La traduzione automatica (facoltativa, spenta di default) invia i testi delle regole senza
+          traduzione (e quelli dei contenuti importati): a DeepL con la tua chiave, se la indichi,
+          tramite il relay che scegli; altrimenti al nostro relay di traduzione su Cloudflare o a
+          MyMemory. I personaggi e le note non vengono mai inviati.
+        </li>
+        <li>
+          Un link a un personaggio porta il personaggio nella parte dell'indirizzo dopo
+          <code>#</code>, che i browser non inviano mai a un server. Chi riceve il link può leggerlo.
         </li>
         <li>
           Google Drive (facoltativo, se questa versione lo offre): premendo «Salva su Google Drive»
           o «Carica da Google Drive» accedi con Google e l'app salva o legge un solo file,
           <code>dnd-character-maker.dndtransfer.json</code>, nel tuo Drive.
+        </li>
+      </ul>
+      <h2>Il tavolo online</h2>
+      <p>
+        Il tavolo online permette al Dungeon Master e ai giocatori di seguire un combattimento
+        insieme, ognuno dal proprio dispositivo. È facoltativo: l'app, la scheda e il tracker del
+        Dungeon Master funzionano anche senza. Passa da un nostro piccolo relay,
+        <code>rooms.heroquill.app</code>, un Cloudflare Worker il cui codice è pubblico nel repository.
+      </p>
+      <ul>
+        <li>
+          <strong>Cosa invia un giocatore:</strong> il nome del personaggio; una scheda con i numeri
+          che contano al tavolo (punti ferita, classe armatura, velocità, bonus di iniziativa,
+          Percezione passiva, CD dei tiri salvezza, condizioni, effetti attivi, concentrazione e
+          simili; la finestra per unirsi lo dice prima); i tiri fatti in Gioca; l'iniziativa; le
+          risposte alle richieste del Dungeon Master; le righe che scrivi al Dungeon Master.
+        </li>
+        <li>
+          <strong>Cosa invia il Dungeon Master:</strong> l'ordine del combattimento come devono
+          vederlo i giocatori (i nomi scelti per le creature, di chi è il turno, il round e, se lo
+          vuole, quanto sembrano ferite), richieste di iniziativa o di un tiro, proposte di danni,
+          condizioni ed effetti, righe di testo.
+        </li>
+        <li>
+          <strong>Chi lo vede:</strong> la scheda, i tiri e le righe di un giocatore vanno solo al
+          Dungeon Master, non agli altri giocatori. Una riga del Dungeon Master va al giocatore a cui
+          è rivolta, o a tutto il tavolo. Niente di ciò che il Dungeon Master propone cambia la scheda
+          di un giocatore finché quel giocatore non accetta.
+        </li>
+        <li>
+          <strong>Cosa conserva il relay, e per quanto:</strong> per ogni tavolo, un'impronta
+          (SHA-256) del segreto del Dungeon Master, i posti con il nome e l'ultima scheda di ogni
+          giocatore, e l'ultimo ordine del combattimento. Tiri, richieste, proposte e righe vengono
+          inoltrati e non conservati. Tutto viene cancellato quando il Dungeon Master chiude il
+          tavolo, o dodici ore dopo l'ultimo messaggio.
+        </li>
+        <li>
+          <strong>Nessun account e nessun registro:</strong> un tavolo è noto solo per un codice di sei
+          caratteri. Il relay non scrive registri e non conserva indirizzi. Cloudflare, che lo
+          ospita, vede la connessione come qualsiasi hosting (vedi sotto).
+        </li>
+        <li>
+          <strong>Attenzione al codice:</strong> chiunque abbia il codice può entrare come giocatore
+          finché il tavolo è aperto, quindi dallo solo al tuo gruppo. Il Dungeon Master può
+          togliere un posto e chiudere il tavolo. Non scrivere nei nomi e nelle righe niente che
+          non diresti al tavolo.
         </li>
       </ul>
       <h2>Dati utente di Google</h2>
@@ -184,7 +305,8 @@
       </p>
       <h2>Cookie e tracciamento</h2>
       <p>
-        L'app non usa cookie di tracciamento né statistiche. Il sito è ospitato su Cloudflare, che
+        L'app non usa cookie di tracciamento né statistiche. Il sito e i relay sono ospitati su
+        Cloudflare, che
         può tenere i normali registri del server secondo la propria informativa. Con l'accesso
         Google valgono le regole di Google per quella finestra.
       </p>

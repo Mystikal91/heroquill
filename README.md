@@ -1,13 +1,15 @@
 # Heroquill
 
-### A free D&D 5e character creator: build, play and print your character
+### A free D&D 5e character creator: build, play and print your character, and run the fight as the DM
 
 **[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/)
 
 Heroquill is a free, offline-first web app to **build, level up, play and print Dungeons & Dragons
 5th edition characters** with the SRD 5.1 rules (2014) or the SRD 5.2.1 rules (2024), chosen for each
-character. No server, no account, no tracking: your characters
-stay on your device, and the app works without a connection once it has been opened. It speaks
+character, and, on its **DM side**, to run encounters with an initiative tracker and an optional
+online table for the players. No account, no tracking: your characters, campaigns and encounters
+stay on your device, and the app works without a connection once it has been opened (the online
+table goes through a small relay that keeps nothing for more than twelve hours). It speaks
 English, Italian, French, German and Spanish, and it reads the content files made for Aurora Builder
 and Aurora Legacy that you already own.
 
@@ -74,6 +76,27 @@ and Aurora Legacy that you already own.
   from the coins. *Spend* works out the coins to hand over and gives change in the biggest coins;
   *Gain* adds some. The potions of healing heal when used.
 
+**Run the game (DM mode)**
+
+A Player / DM switch in the header (in the ☰ menu on a phone) turns the app into the Dungeon Master's
+side; the welcome screen offers both.
+
+- **Campaigns** with their party and **encounters** ready to reuse: the SRD monsters, creatures entered by hand and the party's characters.
+- An **initiative tracker**: rolled or typed initiative, turns and rounds, hit points with damage and
+  healing (resistant, vulnerable, temporary), conditions and effects that count their rounds, groups
+  of the same monster, and the creature in turn beside the table with its actions.
+- **Monster rolls**: pick the targets, roll the attack against their armor class and the damage
+  with their defenses, or an area with half damage on a save; checks and saves for every creature,
+  and the DM's own dice.
+- An **online table** (optional): the DM opens it and gives a short code; players join from their
+  own Heroquill. The DM sees their hit points, armor class, conditions and rolls, asks for initiative
+  or a roll with a DC, and proposes damage, conditions and effects that the player accepts on their
+  own sheet (the DM never changes it). Lines of text go both ways. Players see the order of the fight
+  and whose turn it is; the DM chooses how much they see of the monsters. No account: the relay
+  (`workers/room-relay/`, a Cloudflare Durable Object) passes messages, keeps only the seats, the
+  last card of each player and the last order, and deletes the table when the DM closes it or after
+  twelve hours without messages. See the [privacy policy](https://heroquill.app/privacy).
+
 **Print and share**
 
 - A character sheet, spell sheets and spell cards, for paper or PDF.
@@ -104,12 +127,12 @@ and Aurora Legacy that you already own.
 - English, Italian, French, German and Spanish, with the **official SRD translations** (about 94%
   of the 5.1 rules texts; the 5.2.1 texts are complete in all four languages, partly written by hand and still to be read against the books). Missing texts show in English; translations are managed with Weblate (see
   [docs/TRANSLATING.md](docs/TRANSLATING.md)).
-- **Automatic translation** (footer): with your own DeepL key, texts that have no translation yet
-  (and the English content you imported) are translated as you read them (the casting time and the
-  duration of an imported spell are translated without it), marked as such, with a
-  button for the original. Translations are cached on your device. DeepL does not accept calls
-  from web pages, so requests go through a small relay; see
-  [docs/TRANSLATION_PROXY.md](docs/TRANSLATION_PROXY.md) to run your own.
+- **Automatic translation** (footer, off by default): texts that have no translation yet (and the
+  English content you imported) are translated as you read them, marked as such, with a button for
+  the original: with your own DeepL key, or else with the free translation of our relay or MyMemory
+  (the casting time and the duration of an imported spell are translated without any of them).
+  Translations are cached on your device. DeepL does not accept calls from web pages, so requests go
+  through a small relay; see [docs/TRANSLATION_PROXY.md](docs/TRANSLATION_PROXY.md) to run your own.
 - Eight **colour sets** (Night and gold, Classic, Bordeaux, Forest, Arcane, Ice, Copper, Obsidian), each light and dark (or automatic), and **feet or meters** (automatic by language). The look is the Fantasy one: parchment, ink and framed panels.
 
 ## Development
@@ -122,6 +145,8 @@ npm run lint       # Biome lint + format check
 npm run format     # fix what Biome can
 npm run typecheck  # TypeScript
 npm run build      # type-check and production build into dist/
+npm run relay:dev  # the online table's relay, locally (wrangler), on port 8787
+npm run relay:spike # a scripted table against the local relay
 ```
 
 Node 20+ is required (the PWA build step fails on older versions); Node 22 is used in CI. The
@@ -150,11 +175,13 @@ translations from their PDFs into `locales/`; see [docs/TRANSLATING.md](docs/TRA
 | `src/import/aurora/` | The Aurora XML reader |
 | `src/homebrew/` | The Homebrew studio's model (forms to pack entries and back) |
 | `src/translate/` | Automatic translation: DeepL client, cache and queue |
-| `src/storage/` | IndexedDB: characters, packs, saved translations; sharing links |
-| `src/app/` | App state (signals): character, navigation, language, theme, units |
-| `src/ui/` | Preact components and styles |
+| `src/storage/` | IndexedDB: characters, packs, campaigns, encounters, saved translations; sharing links |
+| `src/app/` | App state (signals): character, navigation, language, theme, units, the DM side |
+| `src/relay/` | The online table: message protocol, the room's rules, the client with reconnection |
+| `src/ui/` | Preact components and styles (`src/ui/dm/` is the DM side, loaded only when opened) |
 | `data/srd51/`, `data/srd52/`, `locales/` | The SRD 5.1 and 5.2.1 content and its texts, by language |
 | `workers/translate-proxy/` | The Cloudflare Worker that relays DeepL requests |
+| `workers/room-relay/` | The Cloudflare Worker and Durable Object of the online table |
 | `docs/` | Guides: translating, content packs, the translation relay |
 
 The stack is Vite, Preact with signals, strict TypeScript, valibot, Biome, Vitest and

@@ -58,6 +58,7 @@
       </a>
       <nav class="nav-links" aria-label="Heroquill">
         <a class="anchor" href="#features" data-i18n="nav.features">Features</a>
+        <a class="anchor" href="#dm" data-i18n="nav.dm">For the DM</a>
         <a class="anchor" href="#colors" data-i18n="nav.colors">Colours</a>
         <a class="anchor" href="#faq" data-i18n="nav.faq">Questions</a>
         <div class="nav-menu">
@@ -98,6 +99,7 @@
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
         </button>
         <a class="anchor" href="#features" data-i18n="nav.features">Features</a>
+        <a class="anchor" href="#dm" data-i18n="nav.dm">For the DM</a>
         <a class="anchor" href="#colors" data-i18n="nav.colors">Colours</a>
         <a class="anchor" href="#faq" data-i18n="nav.faq">Questions</a>
         <p class="side-heading" data-i18n="nav.guide">Guide</p>
@@ -301,7 +303,60 @@
         </div>
       </section>
 
-      <section id="colors" class="band on-dark">
+      <section id="dm" class="band on-dark">
+        <div class="wrap">
+          <h2 class="reveal" data-i18n="dm.title">And for the Dungeon Master</h2>
+          <p class="sub reveal" data-i18n="dm.sub">A second side of the app, one switch away: run the fight, with or without your players online.</p>
+          <div class="cards three">
+            <article class="card reveal">
+              <svg viewBox="0 0 200 110" class="card-art art-dm art-order" aria-hidden="true" focusable="false">
+                <path class="turn" d="M38 24l10 7-10 7" />
+                <g class="num">
+                  <text x="70" y="35">18</text>
+                  <text x="70" y="62">14</text>
+                  <text x="70" y="89">9</text>
+                </g>
+                <rect class="bar b1" x="90" y="27" width="72" height="7" rx="3.5" />
+                <rect class="bar b2" x="90" y="54" width="52" height="7" rx="3.5" />
+                <rect class="bar b3" x="90" y="81" width="62" height="7" rx="3.5" />
+              </svg>
+              <h3 data-i18n="dm.fight.t">Encounters</h3>
+              <p data-i18n="dm.fight.d">Campaigns with their party, encounters ready to go, the SRD monsters or your own. Initiative, turns, rounds, hit points and conditions that count their rounds.</p>
+            </article>
+            <article class="card reveal">
+              <svg viewBox="0 0 200 110" class="card-art art-dm art-target" aria-hidden="true" focusable="false">
+                <g class="die">
+                  <path d="M58 30l22 12.500v25L58 80 36 67.500v-25z" />
+                  <path d="M58 43l11 19H47z" />
+                </g>
+                <path class="shot" d="M90 55h24m-6-6l6 6-6 6" />
+                <path class="shield" d="M126 30h40v20c0 17-9 26-20 31-11-5-20-14-20-31z" />
+                <g class="num"><text x="146" y="58">15</text></g>
+              </svg>
+              <h3 data-i18n="dm.monsters.t">Monsters</h3>
+              <p data-i18n="dm.monsters.d">Every stat block a tap away. Pick the targets and roll: the attack against their armor class, the damage with their resistances, half on a save for an area.</p>
+            </article>
+            <article class="card reveal">
+              <svg viewBox="0 0 200 110" class="card-art art-dm art-table" aria-hidden="true" focusable="false">
+                <path class="link l1" d="M100 55L48 28" />
+                <path class="link l2" d="M100 55L152 28" />
+                <path class="link l3" d="M100 55L48 86" />
+                <path class="link l4" d="M100 55L152 86" />
+                <circle class="seat" cx="48" cy="28" r="9" />
+                <circle class="seat" cx="152" cy="28" r="9" />
+                <circle class="seat" cx="48" cy="86" r="9" />
+                <circle class="seat" cx="152" cy="86" r="9" />
+                <circle class="host" cx="100" cy="55" r="17" />
+                <g class="num"><text x="100" y="59">DM</text></g>
+              </svg>
+              <h3 data-i18n="dm.table.t">Online table</h3>
+              <p data-i18n="dm.table.d">Give your players a short code. You see their hit points and rolls, ask for initiative or a save, and send damage they accept on their own sheet.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="colors" class="band on-light">
         <div class="wrap">
           <h2 class="reveal" data-i18n="col.title">Pick your colours</h2>
           <p class="sub reveal" data-i18n="col.sub">Eight sets, each light and dark. Tap one and the page changes.</p>
@@ -359,6 +414,7 @@
             <li data-i18n="val.homebrew">Homebrew studio</li>
             <li data-i18n="val.aurora">Aurora and Aurora Legacy import</li>
             <li data-i18n="val.pdf">Print and PDF</li>
+            <li data-i18n="val.dm">DM mode and online table</li>
           </ul>
         </div>
       </section>
@@ -387,6 +443,11 @@
               <summary data-i18n="faq.q5">Does it work with Aurora content?</summary>
               <p data-i18n="faq.a5">Yes. You can import the content files (XML) made for Aurora Builder and Aurora Legacy, from a file, an index file or an address. Nothing from Aurora or from any publisher is included: you bring what you already own.</p>
               <p class="faq-more"><a href="{{auroraGuideUrl}}" data-i18n="faq.guideLink">Read the step-by-step guide</a></p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q7">What does the online table share, and with whom?</summary>
+              <p data-i18n="faq.a7">Only what the game needs: a player's name, the main numbers of the sheet and the rolls go to the DM alone, and the players see the order of the fight. There is no account: the table is a code of six characters, and everything is deleted when the DM closes it, or twelve hours after the last message. The rest of the app works without it.</p>
+              <p class="faq-more"><a href="/privacy" data-i18n="faq.privacyLink">Read the privacy policy</a></p>
             </details>
             <details>
               <summary data-i18n="faq.q6">How can I contribute?</summary>

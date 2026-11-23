@@ -1550,6 +1550,118 @@ h3 {
   }
 }
 
+/* ---- For the DM: three cards, and their pictures ---- */
+
+.cards.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 50rem) {
+  .cards.three {
+    grid-template-columns: 1fr;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+}
+
+.art-dm .num text {
+  fill: var(--accent);
+  font: 600 14px "Cinzel", serif;
+  text-anchor: middle;
+}
+
+/* Encounters: the turn moves down the order. */
+.art-order .bar {
+  fill: var(--accent);
+  opacity: 0.55;
+}
+
+.art-order .turn {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: turn 4.5s ease-in-out infinite;
+}
+
+@keyframes turn {
+  0%,
+  28% {
+    transform: translateY(0);
+  }
+  36%,
+  61% {
+    transform: translateY(27px);
+  }
+  69%,
+  92% {
+    transform: translateY(54px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Monsters: the die, the shot, the armor class it has to beat. */
+.art-target .die path,
+.art-target .shield,
+.art-target .shot {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.art-target .die {
+  animation: tumble 3.2s ease-in-out infinite;
+}
+
+.art-target .shot {
+  animation: wave 3.2s ease-in-out infinite;
+}
+
+@keyframes tumble {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0);
+  }
+  30% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Online table: the seats around the DM, the links lighting in turn. */
+.art-table .host {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+}
+
+.art-table .seat {
+  fill: var(--accent);
+}
+
+.art-table .link {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-dasharray: 4 4;
+  animation: wave 2.4s ease-in-out infinite;
+}
+
+.art-table .l2 {
+  animation-delay: 0.3s;
+}
+.art-table .l3 {
+  animation-delay: 0.6s;
+}
+.art-table .l4 {
+  animation-delay: 0.9s;
+}
+
 /* The hit point bar on the sheet in the first screen breathes. */
 .p-fill {
   transform-box: fill-box;

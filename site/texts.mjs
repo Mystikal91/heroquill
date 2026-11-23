@@ -4,7 +4,7 @@ export const TEXTS = {
   en: {
     "meta.title": "Heroquill – Free D&D 5e Character Creator",
     "meta.desc":
-      "Free D&D 5e character creator: build, level up, play and print characters with the 2014 (SRD 5.1) or 2024 (SRD 5.2.1) rules. No account, works offline, imports Aurora files.",
+      "Free D&D 5e character creator and DM initiative tracker: build, level up, play and print characters with the 2014 or 2024 rules. No account, works offline, imports Aurora files.",
     "nav.openShort": "Open",
     "nav.features": "Features",
     "nav.colors": "Colours",
@@ -12,7 +12,7 @@ export const TEXTS = {
     "nav.open": "Open the app",
     "hero.title": "Your D&D 5e hero, from the first idea to the table.",
     "hero.sub":
-      "A free D&D 5e character creator: build, play and print your character. No account, and it works without a connection.",
+      "A free D&D 5e character creator: build, play and print your character, and run the fight as the DM. No account, and it works without a connection.",
     "hero.cta": "Open Heroquill",
     "hero.try": "Try it with Aria",
     "feat.title": "Everything you need at the table",
@@ -86,6 +86,24 @@ export const TEXTS = {
       "In many ways, from a minute to a weekend: say you like it, translate it in your browser, report a problem, or work on the code, which is open under the MIT licence.",
     "faq.guideLink": "Read the step-by-step guide",
     "faq.contributeLink": "See how to help",
+    "nav.dm": "For the DM",
+    "dm.title": "And for the Dungeon Master",
+    "dm.sub":
+      "A second side of the app, one switch away: run the fight, with or without your players online.",
+    "dm.fight.t": "Encounters",
+    "dm.fight.d":
+      "Campaigns with their party, encounters ready to go, the SRD monsters or your own. Initiative, turns, rounds, hit points and conditions that count their rounds.",
+    "dm.monsters.t": "Monsters",
+    "dm.monsters.d":
+      "Every stat block a tap away. Pick the targets and roll: the attack against their armor class, the damage with their resistances, half on a save for an area.",
+    "dm.table.t": "Online table",
+    "dm.table.d":
+      "Give your players a short code. You see their hit points and rolls, ask for initiative or a save, and send damage they accept on their own sheet.",
+    "val.dm": "DM mode and online table",
+    "faq.q7": "What does the online table share, and with whom?",
+    "faq.a7":
+      "Only what the game needs: a player's name, the main numbers of the sheet and the rolls go to the DM alone, and the players see the order of the fight. There is no account: the table is a code of six characters, and everything is deleted when the DM closes it, or twelve hours after the last message. The rest of the app works without it.",
+    "faq.privacyLink": "Read the privacy policy",
     "foot.contribute": "Contribute",
     "foot.packDocs": "Pack format",
     "nav.contribute": "Contribute",
@@ -93,7 +111,7 @@ export const TEXTS = {
   it: {
     "meta.title": "Heroquill – Creatore di personaggi D&D 5e gratis",
     "meta.desc":
-      "Creatore gratuito di personaggi D&D 5e: crea, sali di livello, gioca e stampa con le regole SRD 5.1 (2014) o 5.2.1 (2024). Senza account, offline, importa da Aurora.",
+      "Creatore gratuito di personaggi D&D 5e e tracker di iniziativa per il DM: crea, sali di livello, gioca e stampa con le regole 2014 o 2024. Senza account, offline, importa da Aurora.",
     "nav.openShort": "Apri",
     "nav.features": "Funzioni",
     "nav.colors": "Colori",
@@ -101,7 +119,7 @@ export const TEXTS = {
     "nav.open": "Apri l’app",
     "hero.title": "Il tuo eroe di D&D 5e, dalla prima idea al tavolo.",
     "hero.sub":
-      "Un creatore di personaggi D&D 5e gratuito: crea, gioca e stampa il tuo personaggio. Senza account, e funziona anche senza connessione.",
+      "Un creatore di personaggi D&D 5e gratuito: crea, gioca e stampa il tuo personaggio, e conduci il combattimento come DM. Senza account, e funziona anche senza connessione.",
     "hero.cta": "Apri Heroquill",
     "hero.try": "Prova con Aria",
     "feat.title": "Tutto quello che serve al tavolo",
@@ -178,6 +196,24 @@ export const TEXTS = {
       "In tanti modi, da un minuto a un fine settimana: dire che ti piace, tradurlo dal browser, segnalare un problema o lavorare sul codice, che è aperto con licenza MIT.",
     "faq.guideLink": "Leggi la guida passo per passo",
     "faq.contributeLink": "Scopri come aiutare",
+    "nav.dm": "Per il DM",
+    "dm.title": "E per il Dungeon Master",
+    "dm.sub":
+      "Un secondo lato dell'app, a un interruttore di distanza: conduci il combattimento, con o senza i giocatori collegati.",
+    "dm.fight.t": "Incontri",
+    "dm.fight.d":
+      "Campagne con il loro gruppo, incontri pronti, i mostri dell'SRD o i tuoi. Iniziativa, turni, round, punti ferita e condizioni che contano i propri round.",
+    "dm.monsters.t": "Mostri",
+    "dm.monsters.d":
+      "Ogni blocco di statistiche a un tocco. Scegli i bersagli e tira: l'attacco contro la loro classe armatura, i danni con le loro resistenze, metà con un tiro salvezza riuscito per un'area.",
+    "dm.table.t": "Tavolo online",
+    "dm.table.d":
+      "Dai ai giocatori un codice breve. Vedi i loro punti ferita e i loro tiri, chiedi l'iniziativa o un tiro salvezza e invia danni che accettano sulla propria scheda.",
+    "val.dm": "Modalità DM e tavolo online",
+    "faq.q7": "Cosa condivide il tavolo online, e con chi?",
+    "faq.a7":
+      "Solo ciò che serve al gioco: il nome, i numeri principali della scheda e i tiri di un giocatore vanno solo al DM, e i giocatori vedono l'ordine del combattimento. Non c'è un account: il tavolo è un codice di sei caratteri, e tutto viene cancellato quando il DM lo chiude, o dodici ore dopo l'ultimo messaggio. Il resto dell'app funziona anche senza.",
+    "faq.privacyLink": "Leggi l'informativa sulla privacy",
     "foot.contribute": "Contribuisci",
     "foot.packDocs": "Formato dei pacchetti (inglese)",
     "nav.contribute": "Contribuisci",
@@ -185,7 +221,7 @@ export const TEXTS = {
   fr: {
     "meta.title": "Heroquill – Créateur de personnages D&D 5e gratuit",
     "meta.desc":
-      "Créateur gratuit de personnages D&D 5e : crée, monte de niveau, joue et imprime avec le SRD 5.1 (2014) ou 5.2.1 (2024). Sans compte, hors ligne, import Aurora.",
+      "Créateur gratuit de personnages D&D 5e et suivi d'initiative pour le MJ : crée, monte de niveau, joue et imprime avec les règles 2014 ou 2024. Sans compte, hors ligne, import Aurora.",
     "nav.openShort": "Ouvrir",
     "nav.features": "Fonctions",
     "nav.colors": "Couleurs",
@@ -193,7 +229,7 @@ export const TEXTS = {
     "nav.open": "Ouvrir l’app",
     "hero.title": "Ton héros de D&D 5e, de la première idée à la table.",
     "hero.sub":
-      "Un créateur de personnages D&D 5e gratuit : crée, joue et imprime ton personnage. Sans compte, et ça marche sans connexion.",
+      "Un créateur de personnages D&D 5e gratuit : crée, joue et imprime ton personnage, et mène le combat en tant que MJ. Sans compte, et ça marche sans connexion.",
     "hero.cta": "Ouvrir Heroquill",
     "hero.try": "Essayer avec Aria",
     "feat.title": "Tout ce qu’il faut à la table",
@@ -270,6 +306,24 @@ export const TEXTS = {
       "De bien des façons, d’une minute à un week-end : dire que ça te plaît, le traduire depuis le navigateur, signaler un problème ou travailler sur le code, qui est ouvert sous licence MIT.",
     "faq.guideLink": "Lis le guide pas à pas",
     "faq.contributeLink": "Découvre comment aider",
+    "nav.dm": "Pour le MJ",
+    "dm.title": "Et pour le Maître du Jeu",
+    "dm.sub":
+      "Un second côté de l'appli, à un interrupteur près : mène le combat, avec ou sans tes joueurs en ligne.",
+    "dm.fight.t": "Rencontres",
+    "dm.fight.d":
+      "Des campagnes avec leur groupe, des rencontres prêtes, les monstres du SRD ou les tiens. Initiative, tours, rounds, points de vie et états qui comptent leurs rounds.",
+    "dm.monsters.t": "Monstres",
+    "dm.monsters.d":
+      "Chaque profil à portée de doigt. Choisis les cibles et lance : l'attaque contre leur classe d'armure, les dégâts avec leurs résistances, la moitié sur une sauvegarde réussie pour une zone.",
+    "dm.table.t": "Table en ligne",
+    "dm.table.d":
+      "Donne un code court à tes joueurs. Tu vois leurs points de vie et leurs jets, tu demandes l'initiative ou une sauvegarde, et tu envoies des dégâts qu'ils acceptent sur leur propre fiche.",
+    "val.dm": "Mode MJ et table en ligne",
+    "faq.q7": "Que partage la table en ligne, et avec qui ?",
+    "faq.a7":
+      "Seulement ce dont le jeu a besoin : le nom, les chiffres principaux de la fiche et les jets d'un joueur vont au MJ seul, et les joueurs voient l'ordre du combat. Il n'y a pas de compte : la table est un code de six caractères, et tout est effacé quand le MJ la ferme, ou douze heures après le dernier message. Le reste de l'appli marche sans elle.",
+    "faq.privacyLink": "Lire la politique de confidentialité",
     "foot.contribute": "Contribuer",
     "foot.packDocs": "Format des packs (anglais)",
     "nav.contribute": "Contribuer",
@@ -277,7 +331,7 @@ export const TEXTS = {
   de: {
     "meta.title": "Heroquill – Kostenloser D&D-5e-Charaktergenerator",
     "meta.desc":
-      "Kostenloser D&D-5e-Charaktergenerator: erstellen, aufsteigen, spielen und drucken mit den SRD-Regeln 5.1 (2014) oder 5.2.1 (2024). Ohne Konto, offline, Aurora-Import.",
+      "Kostenloser D&D-5e-Charaktergenerator und Initiative-Tracker für die SL: erstellen, aufsteigen, spielen und drucken mit den Regeln von 2014 oder 2024. Ohne Konto, offline, Aurora-Import.",
     "nav.openShort": "Öffnen",
     "nav.features": "Funktionen",
     "nav.colors": "Farben",
@@ -285,7 +339,7 @@ export const TEXTS = {
     "nav.open": "App öffnen",
     "hero.title": "Dein D&D-5e-Held, von der ersten Idee bis zum Spieltisch.",
     "hero.sub":
-      "Ein kostenloser D&D-5e-Charaktergenerator: erstelle, spiele und drucke deinen Charakter. Ohne Konto, und es funktioniert ohne Verbindung.",
+      "Ein kostenloser D&D-5e-Charaktergenerator: erstelle, spiele und drucke deinen Charakter, und leite als SL den Kampf. Ohne Konto, und es funktioniert ohne Verbindung.",
     "hero.cta": "Heroquill öffnen",
     "hero.try": "Mit Aria ausprobieren",
     "feat.title": "Alles, was du am Spieltisch brauchst",
@@ -361,6 +415,24 @@ export const TEXTS = {
       "Auf viele Arten, von einer Minute bis zu einem Wochenende: sagen, dass es dir gefällt, es im Browser übersetzen, ein Problem melden oder am Code mitarbeiten, der unter der MIT-Lizenz offen ist.",
     "faq.guideLink": "Lies die Schritt-für-Schritt-Anleitung",
     "faq.contributeLink": "So kannst du helfen",
+    "nav.dm": "Für die SL",
+    "dm.title": "Und für die Spielleitung",
+    "dm.sub":
+      "Eine zweite Seite der App, einen Schalter entfernt: leite den Kampf, mit oder ohne deine Spieler online.",
+    "dm.fight.t": "Begegnungen",
+    "dm.fight.d":
+      "Kampagnen mit ihrer Gruppe, fertige Begegnungen, die Monster des SRD oder deine eigenen. Initiative, Züge, Runden, Trefferpunkte und Zustände, die ihre Runden zählen.",
+    "dm.monsters.t": "Monster",
+    "dm.monsters.d":
+      "Jeder Spielwerteblock ein Tippen entfernt. Wähle die Ziele und würfle: der Angriff gegen ihre Rüstungsklasse, der Schaden mit ihren Resistenzen, die Hälfte bei gelungenem Rettungswurf für einen Bereich.",
+    "dm.table.t": "Online-Tisch",
+    "dm.table.d":
+      "Gib deinen Spielern einen kurzen Code. Du siehst ihre Trefferpunkte und Würfe, fragst nach Initiative oder einem Rettungswurf und schickst Schaden, den sie auf ihrem eigenen Bogen annehmen.",
+    "val.dm": "SL-Modus und Online-Tisch",
+    "faq.q7": "Was teilt der Online-Tisch, und mit wem?",
+    "faq.a7":
+      "Nur, was das Spiel braucht: der Name, die wichtigsten Zahlen des Bogens und die Würfe eines Spielers gehen nur an die SL, und die Spieler sehen die Reihenfolge des Kampfes. Es gibt kein Konto: der Tisch ist ein Code aus sechs Zeichen, und alles wird gelöscht, wenn die SL ihn schließt, oder zwölf Stunden nach der letzten Nachricht. Der Rest der App funktioniert ohne ihn.",
+    "faq.privacyLink": "Die Datenschutzerklärung lesen",
     "foot.contribute": "Mitmachen",
     "foot.packDocs": "Paketformat (Englisch)",
     "nav.contribute": "Mitmachen",
@@ -368,7 +440,7 @@ export const TEXTS = {
   es: {
     "meta.title": "Heroquill – Creador de personajes D&D 5e gratis",
     "meta.desc":
-      "Creador gratuito de personajes de D&D 5e: crea, sube de nivel, juega e imprime con el SRD 5.1 (2014) o 5.2.1 (2024). Sin cuenta, sin conexión, importa de Aurora.",
+      "Creador gratuito de personajes de D&D 5e y control de iniciativa para el DM: crea, sube de nivel, juega e imprime con las reglas de 2014 o 2024. Sin cuenta, sin conexión, importa de Aurora.",
     "nav.openShort": "Abrir",
     "nav.features": "Funciones",
     "nav.colors": "Colores",
@@ -376,7 +448,7 @@ export const TEXTS = {
     "nav.open": "Abrir la app",
     "hero.title": "Tu héroe de D&D 5e, desde la primera idea hasta la mesa.",
     "hero.sub":
-      "Un creador de personajes de D&D 5e gratuito: crea, juega e imprime tu personaje. Sin cuenta, y funciona sin conexión.",
+      "Un creador de personajes de D&D 5e gratuito: crea, juega e imprime tu personaje, y dirige el combate como DM. Sin cuenta, y funciona sin conexión.",
     "hero.cta": "Abrir Heroquill",
     "hero.try": "Probar con Aria",
     "feat.title": "Todo lo que necesitas en la mesa",
@@ -452,6 +524,24 @@ export const TEXTS = {
       "De muchas formas, desde un minuto hasta un fin de semana: decir que te gusta, traducirlo desde el navegador, avisar de un problema o trabajar en el código, que es abierto con licencia MIT.",
     "faq.guideLink": "Lee la guía paso a paso",
     "faq.contributeLink": "Descubre cómo ayudar",
+    "nav.dm": "Para el DM",
+    "dm.title": "Y para el Dungeon Master",
+    "dm.sub":
+      "Un segundo lado de la app, a un interruptor de distancia: dirige el combate, con o sin tus jugadores conectados.",
+    "dm.fight.t": "Encuentros",
+    "dm.fight.d":
+      "Campañas con su grupo, encuentros listos, los monstruos del SRD o los tuyos. Iniciativa, turnos, asaltos, puntos de golpe y estados que cuentan sus asaltos.",
+    "dm.monsters.t": "Monstruos",
+    "dm.monsters.d":
+      "Cada bloque de estadísticas a un toque. Elige los objetivos y tira: el ataque contra su clase de armadura, el daño con sus resistencias, la mitad con una salvación superada para un área.",
+    "dm.table.t": "Mesa en línea",
+    "dm.table.d":
+      "Da a tus jugadores un código corto. Ves sus puntos de golpe y sus tiradas, pides la iniciativa o una salvación y envías daño que aceptan en su propia hoja.",
+    "val.dm": "Modo DM y mesa en línea",
+    "faq.q7": "¿Qué comparte la mesa en línea, y con quién?",
+    "faq.a7":
+      "Solo lo que el juego necesita: el nombre, los números principales de la hoja y las tiradas de un jugador van solo al DM, y los jugadores ven el orden del combate. No hay cuenta: la mesa es un código de seis caracteres, y todo se borra cuando el DM la cierra, o doce horas después del último mensaje. El resto de la app funciona sin ella.",
+    "faq.privacyLink": "Leer la política de privacidad",
     "foot.contribute": "Colabora",
     "foot.packDocs": "Formato de paquetes (inglés)",
     "nav.contribute": "Colabora",
