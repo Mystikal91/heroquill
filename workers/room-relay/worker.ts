@@ -33,12 +33,7 @@ interface Env {
   ALLOWED_ORIGINS?: string;
 }
 
-const DEFAULT_ORIGINS = [
-  "https://heroquill.app",
-  "https://develop.heroquill.app",
-  "http://localhost:5173",
-  "http://localhost:5176",
-];
+const DEFAULT_ORIGINS = ["https://heroquill.app", "http://localhost:5173", "http://localhost:5176"];
 
 interface Attachment {
   who?: Who;

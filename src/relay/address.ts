@@ -1,12 +1,11 @@
 import { CODE_ALPHABET, CODE_LENGTH } from "./protocol";
 
 /**
- * Where the relay is: the local one while developing, the preview's own on the develop channel, the
- * published one otherwise. The three never share a room.
+ * Where the relay is: the local one while developing, the published one otherwise. The two never
+ * share a room.
  */
 export function relayBase(): string {
   if (import.meta.env.DEV) return "ws://127.0.0.1:8787";
-  if (import.meta.env.VITE_CHANNEL === "develop") return "wss://rooms-develop.heroquill.app";
   return "wss://rooms.heroquill.app";
 }
 
