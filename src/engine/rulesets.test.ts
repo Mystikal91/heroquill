@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inRuleset, subclassOf } from "./rulesets";
+import { inRuleset, isBackgroundOf2024, subclassOf } from "./rulesets";
 
 describe("rulesets", () => {
   it("shows a character its own SRD and the packs, never the other SRD", () => {
@@ -21,5 +21,17 @@ describe("rulesets", () => {
     const srd52 = { id: "srd52:subclass/champion", parent: "srd52:class/fighter" };
     expect(subclassOf(srd52, "srd52:class/fighter")).toBe(true);
     expect(subclassOf(srd52, "srd51:class/fighter")).toBe(false);
+  });
+
+  it("knows a background of the 2024 books by the flag it sets", () => {
+    const flag = { type: "flag", id: "ID_INTERNAL_GRANTS_BACKGROUND_ASI" };
+    expect(isBackgroundOf2024({ kind: "background", effects: [flag] })).toBe(true);
+    expect(
+      isBackgroundOf2024({ kind: "background", effects: [{ type: "when", effects: [flag] }] }),
+    ).toBe(true);
+    expect(isBackgroundOf2024({ kind: "background", effects: [{ type: "flag", id: "x" }] })).toBe(
+      false,
+    );
+    expect(isBackgroundOf2024({ kind: "species", effects: [flag] })).toBe(false);
   });
 });

@@ -119,6 +119,7 @@ const RecordSchema = v.object({
       v.object({
         effects: v.optional(v.array(EffectSchema)),
         activation: v.optional(v.string()),
+        spellClasses: v.optional(v.array(v.string())),
       }),
     ),
   ),

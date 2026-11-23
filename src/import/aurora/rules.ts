@@ -10,7 +10,7 @@ import {
   type SpendPool,
 } from "../../data/schema";
 import { evaluateRequirements } from "../../engine/requirements";
-import { classIdByName } from "./emit";
+import { classIdsByName } from "./emit";
 import {
   type Context,
   FEATURE_TYPES,
@@ -322,11 +322,7 @@ function allSpells(ctx: Context): SpellFacts[] {
       level: number(set.get("level")?.text ?? "") ?? 0,
       school: slugify(set.get("school")?.text ?? ""),
       ritual: set.get("isRitual")?.text === "true",
-      classes: new Set(
-        supportsOf(source.el)
-          .map((name) => classIdByName(ctx, name))
-          .filter((id): id is string => Boolean(id)),
-      ),
+      classes: new Set(supportsOf(source.el).flatMap((name) => classIdsByName(ctx, name))),
     });
   }
   factsCache.set(ctx, found);
@@ -390,11 +386,12 @@ function spellChoices(ctx: Context, supports: string, className: string): string
     for (const raw of splitTop(unwrap(part), "||")) {
       const token = unwrap(raw);
       const lower = token.toLowerCase();
-      const classId = classIdByName(ctx, token);
+      const classIds = classIdsByName(ctx, token);
       if (/^\d+$/.test(token)) alternatives.push((s) => s.level === Number(token));
       else if (lower === "ritual") alternatives.push((s) => s.ritual);
       else if (SCHOOLS.has(lower)) alternatives.push((s) => s.school === lower);
-      else if (classId) alternatives.push((s) => s.classes.has(classId));
+      else if (classIds.length > 0)
+        alternatives.push((s) => classIds.some((id) => s.classes.has(id)));
       else return undefined;
     }
     if (alternatives.length === 0) return undefined;

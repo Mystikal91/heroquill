@@ -71,4 +71,15 @@ describe("the numbers an overlay gives to a feature", () => {
     // Without the overlay there is nothing to show.
     expect(deriveSheet(c, srd51Index).featureValues[tranquility]).toBeUndefined();
   });
+
+  it("puts a spell of the SRD on the list of a class of the pack, once", () => {
+    const index = fresh();
+    const spell = "srd51:spell/cure-wounds";
+    const before = (index.get(spell)?.data.classes as string[]).length;
+    applyOverlays(index, { [spell]: { spellClasses: ["imp1:class/artificer"] } });
+    applyOverlays(index, { [spell]: { spellClasses: ["imp1:class/artificer"] } });
+    const classes = index.get(spell)?.data.classes as string[];
+    expect(classes).toHaveLength(before + 1);
+    expect(classes).toContain("imp1:class/artificer");
+  });
 });

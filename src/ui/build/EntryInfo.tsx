@@ -185,6 +185,18 @@ export function SpeciesInfo() {
   );
 }
 
+/**
+ * The lines of a background's description that the facts below it already show (ability scores, feat, skills,
+ * tools, languages: Aurora writes them as "- Skill Proficiencies: ..."). Equipment stays: it is only text.
+ */
+const LISTED_FACT =
+  /^- (?:Ability Scores|Feat|Skill Proficiencies|Tool Proficienc(?:y|ies)(?: and Languages)?|Languages|Background Feature):/i;
+const withoutListedFacts = (text: string | undefined): string | undefined =>
+  text
+    ?.split("\n\n")
+    .filter((paragraph) => !LISTED_FACT.test(paragraph.trim()))
+    .join("\n\n");
+
 /** What the chosen background gives: proficiencies and its feature. */
 export function BackgroundInfo() {
   const c = content.value;
@@ -196,7 +208,7 @@ export function BackgroundInfo() {
 
   return (
     <Block title={c.name(background.id)} edit={[background.id]}>
-      <Paragraphs text={c.text(background.id, "desc")} />
+      <Paragraphs text={withoutListedFacts(c.text(background.id, "desc"))} />
       <Facts
         rows={[
           [ui("sheet.skills"), proficiencies(effects, "skill").join(", ")],

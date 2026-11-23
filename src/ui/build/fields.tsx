@@ -1,6 +1,6 @@
 import { character, content } from "../../app/store";
 import { userPacks } from "../../app/userPacks";
-import { inRuleset, subclassOf } from "../../engine/rulesets";
+import { inRuleset, isBackgroundOf2024, subclassOf } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
 
 /** Entries of one kind from the active ruleset, sorted by their display name. */
@@ -11,6 +11,14 @@ export function entriesOfKind(kind: string, parent?: string) {
     [...c.index.values()]
       // The active ruleset's entries, plus packs the user added (any id that is not another SRD's).
       .filter((e) => e.kind === kind && inRuleset(e.id, character.value.ruleset))
+      // A background of the 2024 books gives the ability increases and takes those of a 2014 species away:
+      // it is not offered to a 2014 character (one it already has stays, so the choice is not lost).
+      .filter(
+        (e) =>
+          character.value.ruleset !== "srd51" ||
+          !isBackgroundOf2024(e) ||
+          e.id === character.value.choices.background,
+      )
       .filter(
         (e) =>
           parent === undefined ||

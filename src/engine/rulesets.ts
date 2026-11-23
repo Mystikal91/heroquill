@@ -6,6 +6,28 @@
 export const inRuleset = (entryId: string, ruleset: string): boolean =>
   entryId.startsWith(`${ruleset}:`) || !/^srd\d+:/.test(entryId);
 
+/** The flag that the backgrounds of the 2024 books set: they give the ability increases, so the species gives none. */
+const BACKGROUND_ASI_FLAG = "ID_INTERNAL_GRANTS_BACKGROUND_ASI";
+
+/**
+ * Whether a background is written for the 2024 rules, where the background gives the ability score increases
+ * (an element of Aurora that sets the flag for it). A 2014 character cannot use one: the flag takes the increases
+ * of its species away and the background's own are not given, so the scores are lost.
+ */
+export function isBackgroundOf2024(entry: {
+  kind: string;
+  effects: readonly { type: string; id?: string; effects?: unknown }[];
+}): boolean {
+  if (entry.kind !== "background") return false;
+  const holds = (effects: readonly { type: string; id?: string; effects?: unknown }[]): boolean =>
+    effects.some(
+      (e) =>
+        (e.type === "flag" && e.id === BACKGROUND_ASI_FLAG) ||
+        (e.type === "when" && Array.isArray(e.effects) && holds(e.effects)),
+    );
+  return holds(entry.effects);
+}
+
 /**
  * The spell a 2024 character gets where a book wrote a 2014 one: `srd51:spell/fireball` becomes
  * `srd52:spell/fireball` when the 2024 SRD has a spell with that name (all but Branding Smite and Feeblemind do).

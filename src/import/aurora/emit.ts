@@ -41,8 +41,18 @@ export function emit(
 
 /** The id of the class with this name: one the app has, or one this pack creates. */
 export function classIdByName(ctx: Context, name: string): string | undefined {
+  return classIdsByName(ctx, name)[0];
+}
+
+/**
+ * Every class with this name: the one the app has, or all the ones this pack creates (the Artificer
+ * of Eberron and the one of Tasha's are two classes with one name, and a spell lists both).
+ */
+export function classIdsByName(ctx: Context, name: string): string[] {
   const lower = name.trim().toLowerCase();
   const existing = ctx.existingByName.get(`class|${lower}`);
-  if (existing) return existing;
-  return ofType(ctx, "Class").find((s) => s.name.toLowerCase() === lower && s.id)?.id;
+  if (existing) return [existing];
+  return ofType(ctx, "Class")
+    .filter((s) => s.name.toLowerCase() === lower && s.id)
+    .map((s) => s.id as string);
 }

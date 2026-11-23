@@ -1,5 +1,5 @@
 import type { Effect } from "../../data/schema";
-import { classIdByName, emit } from "./emit";
+import { classIdsByName, emit } from "./emit";
 import type { Context, Source } from "./registry";
 import { mapRules } from "./rules";
 import {
@@ -17,9 +17,7 @@ const PROPERTY_ALIASES: Record<string, string> = { twohanded: "two-handed" };
 
 export function importSpell(ctx: Context, source: Source): void {
   const set = setters(source.el);
-  const classes = supportsOf(source.el)
-    .map((name) => classIdByName(ctx, name))
-    .filter((id): id is string => Boolean(id));
+  const classes = supportsOf(source.el).flatMap((name) => classIdsByName(ctx, name));
   const components = [
     set.get("hasVerbalComponent")?.text === "true" && "V",
     set.get("hasSomaticComponent")?.text === "true" && "S",
