@@ -198,7 +198,8 @@ a hello are all welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Questions and i
 
 The version is in `src/app/version.ts`. What changed in each version is
 listed in `src/content/news.ts` (`CHANGELOG`, newest first: write the lines in English and, if
-possible, in the other languages) next to the `ROADMAP` of what is still missing. Both show in
+possible, in the other languages; since 1.35 each line has a `kind`, feature, improvement or fix, shown
+as a tag) next to the `ROADMAP` of what is still missing. Both show in
 the app, under the title.
 
 ## Credits and licenses
