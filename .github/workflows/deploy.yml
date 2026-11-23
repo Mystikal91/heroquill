@@ -83,7 +83,17 @@ jobs:
         with:
           name: site
           path: dist
-      - uses: cloudflare/wrangler-action@v3
+      # The relay of the online table (rooms.heroquill.app) goes first, so the app never points at a
+      # relay that is not there. It needs no npm packages: wrangler bundles it from the checkout.
+      - name: Deploy the online table's relay
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: deploy --config workers/room-relay/wrangler.toml
+      - name: Deploy the site
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

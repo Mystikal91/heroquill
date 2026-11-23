@@ -32,7 +32,16 @@ jobs:
         env:
           VITE_CHANNEL: develop
       - run: node scripts/develop-channel.mjs
-      - uses: cloudflare/wrangler-action@v3
+      # The preview's own relay (rooms-develop.heroquill.app), before the preview that points at it.
+      - name: Deploy the preview's relay
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: deploy --config workers/room-relay/wrangler.develop.toml
+      - name: Deploy the preview
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

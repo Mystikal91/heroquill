@@ -2,6 +2,17 @@ name = "heroquill-rooms"
 main = "worker.ts"
 compatibility_date = "2024-11-01"
 
+# The published relay, deployed by .github/workflows/deploy.yml with the site. The preview's twin
+# (rooms-develop.heroquill.app) is wrangler.develop.toml. `wrangler dev` ignores the route.
+# (Top-level keys go before the first [table]: after it they would belong to that table.)
+routes = [{ pattern = "rooms.heroquill.app", custom_domain = true }]
+
+# Sites allowed to open a socket (comma separated). Without it: the published app, the preview
+# and the local dev servers (the list in worker.ts). Left unset so that `npm run relay:dev`, which
+# uses this file too, still accepts the local app.
+# [vars]
+# ALLOWED_ORIGINS = "https://heroquill.app"
+
 # The relay of the DM mode: one Durable Object (a room) for each join code.
 # Free plan: only SQLite-backed objects are allowed, hence new_sqlite_classes.
 [[durable_objects.bindings]]
@@ -11,11 +22,3 @@ class_name = "Room"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Room"]
-
-# Sites allowed to open a socket (comma separated). Without it: the published app, the preview
-# and the local dev servers.
-# [vars]
-# ALLOWED_ORIGINS = "https://heroquill.app,https://develop.heroquill.app"
-
-# The custom domain (rooms.heroquill.app) is set on the Worker in the Cloudflare dashboard, or here:
-# routes = [{ pattern = "rooms.heroquill.app", custom_domain = true }]

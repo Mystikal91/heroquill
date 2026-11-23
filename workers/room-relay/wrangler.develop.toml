@@ -1,0 +1,19 @@
+name = "heroquill-rooms-develop"
+main = "worker.ts"
+compatibility_date = "2024-11-01"
+
+# The preview's twin of the relay (see wrangler.toml), so that a test table never lives on the
+# published one. Deployed by .github/workflows/deploy-develop.yml with the preview of the app.
+# (Top-level keys go before the first [table]: after it they would belong to that table.)
+routes = [{ pattern = "rooms-develop.heroquill.app", custom_domain = true }]
+
+[vars]
+ALLOWED_ORIGINS = "https://develop.heroquill.app"
+
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "Room"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
