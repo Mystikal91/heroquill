@@ -1343,6 +1343,30 @@ p.edition-current {
   margin: 0;
 }
 
+/* The buttons of a row are one size: the generic button rules (a bottom margin, a smaller "secondary") are beaten here. */
+:root[data-style][data-style] .bld-step-foot button,
+:root[data-style][data-style] .bld-ready-actions button,
+:root[data-style][data-style] .bld-refine-actions button {
+  box-sizing: border-box;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+:root[data-style][data-style] .bld-step-foot button,
+:root[data-style][data-style] .bld-ready-actions button {
+  min-height: 2.8rem;
+}
+
+:root[data-style][data-style] .bld-refine-actions button {
+  min-height: 2.5rem;
+  padding-block: 0;
+}
+
+.bld-refine-actions {
+  align-items: stretch;
+}
+
 /* ---- Narrower: the steps as a row of chips above, the character beside or above ---- */
 
 @media (max-width: 64rem) {
@@ -1355,8 +1379,12 @@ p.edition-current {
     grid-column: 1 / -1;
     display: flex;
     gap: 0.4rem;
+    min-width: 0;
     overflow-x: auto;
-    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    padding-bottom: 0.3rem;
   }
 
   .bld-nav ol,

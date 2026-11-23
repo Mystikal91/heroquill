@@ -224,15 +224,17 @@ function readCasting(feature: Source): Casting | undefined {
   let initial = 0;
   let perLevel = 0;
   for (const rule of rules) {
-    if (rule.tag !== "select" || rule.type !== "Spell" || rule.level === undefined) continue;
+    if (rule.tag !== "select" || rule.type !== "Spell") continue;
+    // A pick with no level is the one of the first level (the cantrips of Tasha's Artificer are written so).
+    const from = rule.level ?? 1;
     const isCantrip = /cantrip/i.test(rule.name);
     const target = isCantrip ? cantrips : spells;
     if (/spellbook/i.test(rule.name)) {
       spellbook = true;
-      if (rule.level === 1) initial += rule.number;
+      if (from === 1) initial += rule.number;
       else perLevel = rule.number;
     }
-    for (let level = rule.level; level <= 20; level++)
+    for (let level = from; level <= 20; level++)
       target[level - 1] = (target[level - 1] ?? 0) + rule.number;
   }
   const prepares = block.getAttribute("prepare") === "true";

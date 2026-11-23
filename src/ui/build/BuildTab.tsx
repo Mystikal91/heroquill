@@ -435,8 +435,12 @@ export function BuildTab() {
   const wanted = openStep.value;
   const auto = basicsDone ? "ready" : (basics.find((step) => !step.done)?.id ?? "origin");
   // A step that is not in the list (the spells of a class that does not cast) falls back to the screen's choice.
+  // The finished screen only exists once the four basics are done.
   const current: StepId | "ready" =
-    wanted === "ready" || (wanted && all.some((step) => step.id === wanted)) ? wanted : auto;
+    (wanted === "ready" && basicsDone) ||
+    (wanted && wanted !== "ready" && all.some((step) => step.id === wanted))
+      ? wanted
+      : auto;
   const step = all.find((x) => x.id === current);
   // The screen picks the step once, then keeps it: finishing a step (picking a species) must not
   // jump to the next one while its sub-choices are still to be seen. "Continue" moves on.
@@ -447,17 +451,24 @@ export function BuildTab() {
     stepCharacter = characterId;
     if (switched || openStep.value === undefined) openStep.value = auto;
   }, [characterId]);
+  // The row of steps scrolls sideways when it is a strip: the step in use comes into view.
+  useEffect(() => {
+    document
+      .getElementById(`step-head-${current}`)
+      ?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [current]);
   const inBasics = basics.findIndex((x) => x.id === current);
   const inRefine = refine.findIndex((x) => x.id === current);
 
+  const finish: StepId | "ready" = basicsDone ? "ready" : auto;
   const next = (): StepId | "ready" => {
-    if (inBasics >= 0) return basics[inBasics + 1]?.id ?? "ready";
-    return refine[inRefine + 1]?.id ?? "ready";
+    if (inBasics >= 0) return basics[inBasics + 1]?.id ?? finish;
+    return refine[inRefine + 1]?.id ?? finish;
   };
   const back = (): StepId | "ready" | undefined => {
     if (inBasics > 0) return basics[inBasics - 1]?.id;
     if (inRefine > 0) return refine[inRefine - 1]?.id;
-    if (inRefine === 0) return "ready";
+    if (inRefine === 0) return finish;
     return undefined;
   };
   const nextId = next();
