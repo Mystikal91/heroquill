@@ -13,6 +13,7 @@ import { distance, feetFrom, feetTo, metricUnits } from "../../i18n/units";
 import { MonsterBlock } from "../rules/MonsterBlock";
 import { AbilitiesEditor, abilitiesOf } from "./Abilities";
 import { AbilityRolls } from "./AbilityRolls";
+import { EnvironmentCards } from "./Environment";
 import { Modal } from "./Modal";
 import { NumberField } from "./NumberField";
 import { HpCell, kindLine } from "./TrackerTable";
@@ -56,6 +57,7 @@ function Details({ c }: { c: Combatant }) {
           <PanelEffects c={c} />
         </>
       )}
+      {c.lair && <EnvironmentCards c={c} />}
       <AbilityRolls c={c} />
       {(abilitiesOf(c).defs.length > 0 || abilitiesOf(c).legendary) && (
         <section class="dm-info-section">
@@ -100,80 +102,86 @@ function Details({ c }: { c: Combatant }) {
               }}
             />
           </label>
-          <div class="dm-fields">
-            <div class="field">
-              <span>{ui("dm.field.hp")}</span>
-              <NumberField
-                label={ui("dm.field.hp")}
-                min={0}
-                max={now.maxHp}
-                value={c.hp}
-                onChange={(n) => n !== undefined && editCombatant(c.id, (x) => setHp(x, n))}
-              />
+          {!c.lair && (
+            <div class="dm-fields">
+              <div class="field">
+                <span>{ui("dm.field.hp")}</span>
+                <NumberField
+                  label={ui("dm.field.hp")}
+                  min={0}
+                  max={now.maxHp}
+                  value={c.hp}
+                  onChange={(n) => n !== undefined && editCombatant(c.id, (x) => setHp(x, n))}
+                />
+              </div>
+              <div class="field">
+                <span>{ui("dm.field.maxHp")}</span>
+                <NumberField
+                  label={ui("dm.field.maxHp")}
+                  min={1}
+                  max={MAX_HP}
+                  value={c.maxHp}
+                  onChange={(n) => n !== undefined && editCombatant(c.id, (x) => setMaxHp(x, n))}
+                />
+              </div>
+              <div class="field">
+                <span>{ui("sheet.armorClass")}</span>
+                <NumberField
+                  label={ui("sheet.armorClass")}
+                  min={0}
+                  max={99}
+                  value={c.ac}
+                  onChange={(n) => n !== undefined && editCombatant(c.id, (x) => ({ ...x, ac: n }))}
+                />
+              </div>
+              <div class="field">
+                <span>{`${ui("dm.field.speed")} (${metric ? "m" : "ft"})`}</span>
+                <NumberField
+                  label={ui("dm.field.speed")}
+                  min={0}
+                  max={metric ? Math.floor(feetTo(MAX_SPEED, true)) : MAX_SPEED}
+                  value={
+                    c.speed === undefined
+                      ? undefined
+                      : Math.round(feetTo(c.speed, metric) * 10) / 10
+                  }
+                  onChange={(n) =>
+                    editCombatant(c.id, (x) => {
+                      const { speed: _old, ...rest } = x;
+                      return n === undefined
+                        ? rest
+                        : { ...rest, speed: Math.round(feetFrom(n, metric)) };
+                    })
+                  }
+                />
+              </div>
+              <div class="field">
+                <span>{ui("dm.field.bonus")}</span>
+                <NumberField
+                  label={ui("dm.field.bonus")}
+                  min={-20}
+                  max={30}
+                  value={c.initiativeBonus}
+                  onChange={(n) =>
+                    n !== undefined && editCombatant(c.id, (x) => ({ ...x, initiativeBonus: n }))
+                  }
+                />
+              </div>
             </div>
-            <div class="field">
-              <span>{ui("dm.field.maxHp")}</span>
-              <NumberField
-                label={ui("dm.field.maxHp")}
-                min={1}
-                max={MAX_HP}
-                value={c.maxHp}
-                onChange={(n) => n !== undefined && editCombatant(c.id, (x) => setMaxHp(x, n))}
+          )}
+          {!c.lair && (
+            <label class="dm-check">
+              <input
+                type="checkbox"
+                checked={c.surprised === true}
+                onChange={(e) => {
+                  const on = e.currentTarget.checked;
+                  editCombatant(c.id, (x) => setSurprised(x, on));
+                }}
               />
-            </div>
-            <div class="field">
-              <span>{ui("sheet.armorClass")}</span>
-              <NumberField
-                label={ui("sheet.armorClass")}
-                min={0}
-                max={99}
-                value={c.ac}
-                onChange={(n) => n !== undefined && editCombatant(c.id, (x) => ({ ...x, ac: n }))}
-              />
-            </div>
-            <div class="field">
-              <span>{`${ui("dm.field.speed")} (${metric ? "m" : "ft"})`}</span>
-              <NumberField
-                label={ui("dm.field.speed")}
-                min={0}
-                max={metric ? Math.floor(feetTo(MAX_SPEED, true)) : MAX_SPEED}
-                value={
-                  c.speed === undefined ? undefined : Math.round(feetTo(c.speed, metric) * 10) / 10
-                }
-                onChange={(n) =>
-                  editCombatant(c.id, (x) => {
-                    const { speed: _old, ...rest } = x;
-                    return n === undefined
-                      ? rest
-                      : { ...rest, speed: Math.round(feetFrom(n, metric)) };
-                  })
-                }
-              />
-            </div>
-            <div class="field">
-              <span>{ui("dm.field.bonus")}</span>
-              <NumberField
-                label={ui("dm.field.bonus")}
-                min={-20}
-                max={30}
-                value={c.initiativeBonus}
-                onChange={(n) =>
-                  n !== undefined && editCombatant(c.id, (x) => ({ ...x, initiativeBonus: n }))
-                }
-              />
-            </div>
-          </div>
-          <label class="dm-check">
-            <input
-              type="checkbox"
-              checked={c.surprised === true}
-              onChange={(e) => {
-                const on = e.currentTarget.checked;
-                editCombatant(c.id, (x) => setSurprised(x, on));
-              }}
-            />
-            <span>{ui("dm.surprisedField")}</span>
-          </label>
+              <span>{ui("dm.surprisedField")}</span>
+            </label>
+          )}
           {changed.length > 0 && (
             <p class="dm-now">
               {ui("dm.now")} {changed.join(" · ")}

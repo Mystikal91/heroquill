@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { type Effect, EffectSchema, type Entry } from "../data/schema";
+import { ABILITIES, type Effect, EffectSchema, type Entry } from "../data/schema";
 import { effectiveInitiativeBonus, effectiveMaxHp } from "./combatantNumbers";
 import { type RandomInt, cryptoRandomInt, parseDice, rollD20, rollExpression } from "./dice";
 import { uuid } from "./uuid";
@@ -24,8 +24,24 @@ export interface TrackedEffect {
   concentration?: boolean;
   /** What it changes, as the rules of the app say it (a bonus to armor class, a multiplier of the speed...). */
   effects?: Effect[];
+  /** An effect of the lair or of what is around, and what it does when the lair acts. */
+  environment?: EnvironmentRule;
 }
 
+export interface EnvironmentRule {
+  damage?: { dice: string; type?: string };
+  /** `half`: who saves takes half of the damage; otherwise nothing. */
+  save?: { ability: (typeof ABILITIES)[number]; dc: number; half: boolean };
+  /** What those who fail get, and for how many rounds. */
+  condition?: { id: string; rounds?: number };
+  /** The DM lets the players at the online table see its name and rounds. */
+  shown?: boolean;
+  /** The rounds it had at the start, to begin the fight again. */
+  total?: number;
+}
+
+export const MAX_DICE_LENGTH = 20;
+export const MAX_DC = 40;
 export const MAX_EFFECTS = 20;
 export const DEFAULT_LEGENDARY = 3;
 export const MAX_LEGENDARY = 9;
@@ -479,19 +495,28 @@ export function resetFight(encounter: Encounter): Encounter {
   return touch({
     ...rest,
     round: 0,
-    combatants: encounter.combatants.map((c) => {
-      const { initiative: _initiative, rank: _rank, uses: _uses, legendary, ...kept } = c;
-      return {
-        ...kept,
-        ...(legendary && { legendary: { ...legendary, used: 0 } }),
-        ...(c.lair && { initiative: 20 }),
-        ...(c.kind !== "character" && { hp: c.maxHp, tempHp: 0 }),
-        conditions: [],
-        rounds: {},
-        effects: [],
-      };
-    }),
+    combatants: encounter.combatants.map(freshCombatant),
   });
+}
+
+/** A combatant as it is before a fight: see `resetFight`. The effects of the lair stay, at their full length. */
+export function freshCombatant(c: Combatant): Combatant {
+  const { initiative: _initiative, rank: _rank, uses: _uses, legendary, ...kept } = c;
+  return {
+    ...kept,
+    ...(legendary && { legendary: { ...legendary, used: 0 } }),
+    ...(c.lair && { initiative: 20 }),
+    ...(c.kind !== "character" && { hp: c.maxHp, tempHp: 0 }),
+    conditions: [],
+    rounds: {},
+    effects: c.lair
+      ? c.effects.flatMap((x) => {
+          if (!x.environment) return [];
+          const { total } = x.environment;
+          return [total === undefined ? x : { ...x, rounds: total }];
+        })
+      : [],
+  };
 }
 
 /** Back to before the fight: no round, no turn. Initiatives and hit points stay as they are. */
@@ -639,6 +664,9 @@ export function addEffect(c: Combatant, effect: Omit<TrackedEffect, "id">): Comb
     ...(rounds !== undefined && { rounds }),
     ...(effect.concentration && { concentration: true }),
     ...(rules.length > 0 && { effects: rules }),
+    ...(effect.environment && {
+      environment: { ...effect.environment, ...(rounds !== undefined && { total: rounds }) },
+    }),
   };
   const kept = added.concentration ? c.effects.filter((x) => !x.concentration) : c.effects;
   return settle({ ...c, effects: [...kept, added] });
@@ -647,6 +675,16 @@ export function addEffect(c: Combatant, effect: Omit<TrackedEffect, "id">): Comb
 export const removeEffect = (c: Combatant, id: string): Combatant =>
   settle({ ...c, effects: c.effects.filter((x) => x.id !== id) });
 
+/** Lets the players see an effect of the lair, or hides it again. */
+export const setEffectShown = (c: Combatant, id: string, on: boolean): Combatant => ({
+  ...c,
+  effects: c.effects.map((x) => {
+    if (x.id !== id || !x.environment) return x;
+    const { shown: _old, ...rule } = x.environment;
+    return { ...x, environment: on ? { ...rule, shown: true } : rule };
+  }),
+});
+
 /** Sets the rounds left of an effect; 0 or nothing takes the limit off. */
 export function setEffectRounds(c: Combatant, id: string, rounds: number | undefined): Combatant {
   const n = clamp(whole(rounds), 0, MAX_ROUNDS);
@@ -654,8 +692,16 @@ export function setEffectRounds(c: Combatant, id: string, rounds: number | undef
     ...c,
     effects: c.effects.map((x) => {
       if (x.id !== id) return x;
-      const { rounds: _old, ...rest } = x;
-      return n >= 1 ? { ...rest, rounds: n } : rest;
+      const { rounds: _old, environment, ...rest } = x;
+      const { total, ...rule } = environment ?? {};
+      return {
+        ...rest,
+        ...(n >= 1 && { rounds: n }),
+        // Fewer rounds left does not change how long it was; more, or no limit, does.
+        ...(environment && {
+          environment: { ...rule, ...(n >= 1 && { total: Math.max(n, total ?? 0) }) },
+        }),
+      };
     }),
   };
 }
@@ -672,6 +718,61 @@ export const withoutEffects = (c: Combatant): Combatant => ({
 
 const text = (value: unknown, fallback = "", max = 200): string =>
   typeof value === "string" ? value.slice(0, max) : fallback;
+
+function readEnvironment(raw: unknown): EnvironmentRule | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const part = (x: unknown) =>
+    x && typeof x === "object" ? (x as Record<string, unknown>) : undefined;
+  const r = raw as Record<string, unknown>;
+  const damage = part(r.damage);
+  const dice = text(damage?.dice, "", MAX_DICE_LENGTH).trim();
+  const type = text(damage?.type, "", 80);
+  const save = part(r.save);
+  const ability = ABILITIES.find((a) => a === save?.ability);
+  const condition = part(r.condition);
+  const conditionId = text(condition?.id);
+  const conditionRounds = clamp(whole(condition?.rounds), 0, MAX_ROUNDS);
+  const total = clamp(whole(r.total), 0, MAX_ROUNDS);
+  return {
+    ...(dice && parseDice(dice) && { damage: { dice, ...(type && { type }) } }),
+    ...(ability && {
+      save: { ability, dc: clamp(whole(save?.dc, 10), 1, MAX_DC), half: save?.half === true },
+    }),
+    ...(conditionId && {
+      condition: { id: conditionId, ...(conditionRounds >= 1 && { rounds: conditionRounds }) },
+    }),
+    ...(r.shown === true && { shown: true }),
+    ...(total >= 1 && { total }),
+  };
+}
+
+/** An effect read from storage or a file, repaired where it can be; undefined when it is not one. */
+export function readTrackedEffect(raw: unknown): TrackedEffect | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const x = raw as Record<string, unknown>;
+  const name = text(x.name, "", 80).trim();
+  if (!name) return undefined;
+  const left = clamp(whole(x.rounds), 0, MAX_ROUNDS);
+  const note = text(x.note, "", 200).trim();
+  const spell = typeof x.spell === "string" ? x.spell : undefined;
+  const environment = readEnvironment(x.environment);
+  const rules = (Array.isArray(x.effects) ? x.effects : [])
+    .slice(0, MAX_EFFECT_RULES)
+    .flatMap((rule) => {
+      const parsed = v.safeParse(EffectSchema, rule);
+      return parsed.success ? [parsed.output] : [];
+    });
+  return {
+    id: text(x.id) || uuid(),
+    name,
+    ...(note && { note }),
+    ...(spell && { spell }),
+    ...(left >= 1 && { rounds: left }),
+    ...(x.concentration === true && { concentration: true }),
+    ...(rules.length > 0 && { effects: rules }),
+    ...(environment && { environment }),
+  };
+}
 
 function readCombatant(raw: unknown): Combatant | undefined {
   if (!raw || typeof raw !== "object") return undefined;
@@ -690,30 +791,8 @@ function readCombatant(raw: unknown): Combatant | undefined {
   const effects = (Array.isArray(r.effects) ? r.effects : [])
     .slice(0, MAX_EFFECTS)
     .flatMap((e): TrackedEffect[] => {
-      if (!e || typeof e !== "object") return [];
-      const x = e as Record<string, unknown>;
-      const name = text(x.name, "", 80).trim();
-      if (!name) return [];
-      const left = clamp(whole(x.rounds), 0, MAX_ROUNDS);
-      const note = text(x.note, "", 200).trim();
-      const spell = typeof x.spell === "string" ? x.spell : undefined;
-      const rules = (Array.isArray(x.effects) ? x.effects : [])
-        .slice(0, MAX_EFFECT_RULES)
-        .flatMap((rule) => {
-          const parsed = v.safeParse(EffectSchema, rule);
-          return parsed.success ? [parsed.output] : [];
-        });
-      return [
-        {
-          id: text(x.id) || uuid(),
-          name,
-          ...(note && { note }),
-          ...(spell && { spell }),
-          ...(left >= 1 && { rounds: left }),
-          ...(x.concentration === true && { concentration: true }),
-          ...(rules.length > 0 && { effects: rules }),
-        },
-      ];
+      const read = readTrackedEffect(e);
+      return read ? [read] : [];
     });
   const defenses: NonNullable<Combatant["defenses"]> = {};
   if (r.defenses && typeof r.defenses === "object") {

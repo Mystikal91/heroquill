@@ -7,6 +7,7 @@ import {
   trackerView,
 } from "../../app/playerTable";
 import { ui } from "../../i18n/ui";
+import { TableEnvironment } from "../TableEnvironment";
 
 /**
  * At the top of the Play screen while the player is at an online table: the round, whose turn it is (in gold when it
@@ -53,6 +54,7 @@ export function TableStrip() {
           ))}
         </ol>
       )}
+      {fighting && <TableEnvironment view={view} />}
     </section>
   );
 }

@@ -1,9 +1,12 @@
 import { type Campaign, readCampaign } from "../engine/campaign";
 import { type Encounter, readEncounter } from "../engine/encounter";
+import { mergeSaved, readSavedEffects } from "../engine/savedEffects";
 import { uuid } from "../engine/uuid";
 import { ui } from "../i18n/ui";
 import { listCampaigns, saveCampaign } from "../storage/campaigns";
+import { loadSavedEffects, storeSavedEffects } from "../storage/dmEffects";
 import { listEncounters, saveEncounter } from "../storage/encounters";
+import { loadDmEffects } from "./dmEffects";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import type { ConflictPolicy } from "./store";
 
@@ -76,4 +79,12 @@ export async function restoreCampaigns(
       await saveCampaign(incoming);
   }
   encountersChanged.value += 1;
+}
+
+/** Puts the effects the DM kept, from a file, next to the ones here: the newest of two wins, unless the ones here are kept. */
+export async function restoreDmEffects(raw: unknown, policy: ConflictPolicy = "copy") {
+  const incoming = readSavedEffects(raw);
+  if (incoming.length === 0) return;
+  await storeSavedEffects(mergeSaved(await loadSavedEffects(), incoming, policy === "keep"));
+  await loadDmEffects();
 }

@@ -22,6 +22,7 @@ import {
 import { ui } from "../i18n/ui";
 import type { ByeReason, TrackerView } from "../relay/protocol";
 import { Popover } from "./Popover";
+import { TableEnvironment } from "./TableEnvironment";
 import { OfflineIcon } from "./icons";
 
 /** How the link to an online table is: open and connected, on its way, lost for a moment, or no table at all. */
@@ -149,6 +150,7 @@ function Tracker({ view }: { view: TrackerView }) {
           );
         })}
       </ol>
+      <TableEnvironment view={view} />
     </section>
   );
 }

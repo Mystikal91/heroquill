@@ -49,6 +49,7 @@ import { PlusIcon, StepBackIcon, StepForwardIcon, SwordsIcon } from "../icons";
 import { abilitiesOf } from "./Abilities";
 import { CellPopover } from "./CellPopover";
 import { ColumnsEditor } from "./ColumnsEditor";
+import { EnvironmentApply } from "./Environment";
 import { SECTIONS } from "./sections";
 
 /** The encounter: which one, its name, and what can be done with it or with the fight. */
@@ -366,6 +367,7 @@ function TurnAttacks({ c }: { c: Combatant }) {
   });
   return (
     <div class="dm-turn-attacks">
+      {c.lair && c.effects.map((x) => <EnvironmentApply key={x.id} c={c} effect={x} named />)}
       {attacks.map((a) => (
         <button type="button" key={a.key} onClick={() => startRoll(c, a.name, a.rolls)}>
           {a.name} {signed(a.rolls.attackBonus ?? 0)}
@@ -418,7 +420,7 @@ export function TurnCard({ e }: { e: Encounter }) {
               <small class="muted">{ui("dm.nowActs")}</small>
               {active && <b class="dm-turn-of">{active.name}</b>}
             </output>
-            {active && numbers && (
+            {active && numbers && !active.lair && (
               <span class="dm-turn-mini">
                 <span class="dm-turn-hp">
                   <b>{active.hp}</b> / {numbers.maxHp}

@@ -7,6 +7,7 @@ import {
   dmReady,
   dmSection,
   encounter,
+  environmentFlow,
   loadDm,
   openAdd,
 } from "../../app/dm";
@@ -23,6 +24,7 @@ import { AddEffectDialog } from "./AddEffectDialog";
 import { AreaPanel } from "./AreaPanel";
 import { CampaignSection } from "./CampaignSection";
 import { EncounterNotes } from "./EncounterNotes";
+import { EnvironmentPanel } from "./Environment";
 import { InfoDialog } from "./InfoDialog";
 import { PartyDialog } from "./PartyDialog";
 import { PlayerInfoDialog } from "./PlayerInfoDialog";
@@ -72,7 +74,7 @@ function useShortcuts() {
 function EncounterSection({ e }: { e: Encounter }) {
   return (
     <>
-      {areaMode.value && <AreaPanel />}
+      {areaMode.value && (environmentFlow.value ? <EnvironmentPanel /> : <AreaPanel />)}
       <div class="dm-fight">
         <div class="dm-fight-main">
           <TurnCard e={e} />

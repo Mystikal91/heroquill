@@ -10,6 +10,7 @@ import {
   toggleConditionOf,
   updateEncounter,
 } from "../../app/dm";
+import { saveEffect } from "../../app/dmEffects";
 import { content } from "../../app/store";
 import { effectiveMaxHp } from "../../engine/combatantNumbers";
 import { DAMAGE_KINDS, damageDealt } from "../../engine/defenses";
@@ -32,8 +33,10 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { damageName } from "../damageName";
 import { effectLine } from "../play/ActiveEffects";
 import { DamageButtons } from "../play/DamageButtons";
+import { StarIcon } from "../play/icons";
 import { wordOptions } from "../studio/wordOptions";
 import { NumberField } from "./NumberField";
+import { environmentLine } from "./environmentLine";
 
 /** The conditions of the rules a creature can have, by name (exhaustion has levels and is left to the sheet). */
 export function conditionOptions(ruleset: string): { id: string; name: string }[] {
@@ -249,6 +252,7 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
                 <span class="dm-fx-name">
                   {x.name}
                   {x.concentration && <span class="dm-tag">{ui("dm.effect.concentration")}</span>}
+                  {x.environment && <small>{environmentLine(x.environment)}</small>}
                   {x.note && <small>{x.note}</small>}
                   {(x.effects ?? []).length > 0 && (
                     <small class="dm-fx-lines">
@@ -264,6 +268,15 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
                 <button
                   type="button"
                   class="dm-fx-x"
+                  title={ui("dm.saved.save")}
+                  aria-label={`${ui("dm.saved.save")}: ${x.name}`}
+                  onClick={() => saveEffect(x)}
+                >
+                  <StarIcon />
+                </button>
+                <button
+                  type="button"
+                  class="dm-fx-x"
                   aria-label={ui("dm.endEffect", { name: x.name })}
                   onClick={() => editCombatant(c.id, (y) => removeEffect(y, x.id))}
                 >
@@ -274,43 +287,47 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
           </ul>
         )}
       </section>
-      <section>
-        <h5 class="dm-fx-title">{ui("play.conditions")}</h5>
-        {forPlayer && (
-          <div class="dm-fx-rounds">
-            <span>
-              <b>{ui("dm.prop.roundsTitle")}</b>
-              <small class="muted">{ui("dm.prop.roundsHint")}</small>
-            </span>
-            <RoundsField
-              label={ui("dm.prop.roundsField")}
-              value={proposedRounds}
-              onChange={setProposedRounds}
-            />
+      {!c.lair && (
+        <section>
+          <h5 class="dm-fx-title">{ui("play.conditions")}</h5>
+          {forPlayer && (
+            <div class="dm-fx-rounds">
+              <span>
+                <b>{ui("dm.prop.roundsTitle")}</b>
+                <small class="muted">{ui("dm.prop.roundsHint")}</small>
+              </span>
+              <RoundsField
+                label={ui("dm.prop.roundsField")}
+                value={proposedRounds}
+                onChange={setProposedRounds}
+              />
+            </div>
+          )}
+          <div class="dm-cond-chips">
+            {list.map((x) => (
+              <button
+                type="button"
+                key={x.id}
+                class="dm-cond-chip"
+                data-condition={x.id.split("/")[1]}
+                data-immune={immune.includes(x.id.split("/")[1] ?? "") || undefined}
+                title={
+                  immune.includes(x.id.split("/")[1] ?? "")
+                    ? ui("dm.immuneHint", { name: c.name })
+                    : undefined
+                }
+                aria-pressed={c.conditions.includes(x.id)}
+                onClick={() => toggleConditionOf(c, x.id, forPlayer ? proposedRounds : undefined)}
+              >
+                {x.name}
+                {immune.includes(x.id.split("/")[1] ?? "") && (
+                  <small> · {ui("dm.immuneTag")}</small>
+                )}
+              </button>
+            ))}
           </div>
-        )}
-        <div class="dm-cond-chips">
-          {list.map((x) => (
-            <button
-              type="button"
-              key={x.id}
-              class="dm-cond-chip"
-              data-condition={x.id.split("/")[1]}
-              data-immune={immune.includes(x.id.split("/")[1] ?? "") || undefined}
-              title={
-                immune.includes(x.id.split("/")[1] ?? "")
-                  ? ui("dm.immuneHint", { name: c.name })
-                  : undefined
-              }
-              aria-pressed={c.conditions.includes(x.id)}
-              onClick={() => toggleConditionOf(c, x.id, forPlayer ? proposedRounds : undefined)}
-            >
-              {x.name}
-              {immune.includes(x.id.split("/")[1] ?? "") && <small> · {ui("dm.immuneTag")}</small>}
-            </button>
-          ))}
-        </div>
-      </section>
+        </section>
+      )}
       <button
         type="button"
         class="dm-add-effect"
@@ -319,7 +336,7 @@ export function EffectsEditor({ c, close }: { c: Combatant; close?: () => void }
           close?.();
         }}
       >
-        {ui("dm.addEffect")}
+        {ui(c.lair ? "dm.env.add" : "dm.addEffect")}
       </button>
     </div>
   );

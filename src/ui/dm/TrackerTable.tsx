@@ -3,6 +3,7 @@ import {
   areaPicks,
   cyclePick,
   encounter,
+  environmentFlow,
   infoFor,
   liveIds,
   removeFromFight,
@@ -285,9 +286,20 @@ function PickButton({ id, name }: { id: string; name: string }) {
   // Rolling an action picks who it is against: one tap marks, the next lets go.
   const flow = rollFlow.value;
   const pick = flow ? (flow.targets.includes(id) ? "fail" : undefined) : areaPicks.value[id];
+  const rule = flow ? undefined : environmentFlow.value?.rule;
   const label = ui(
-    pick === "fail" ? "dm.area.fail" : pick === "save" ? "dm.area.save" : "dm.area.none",
+    pick === undefined
+      ? "dm.area.none"
+      : rule?.save
+        ? pick === "fail"
+          ? "dm.env.failed"
+          : "dm.env.passed"
+        : pick === "fail"
+          ? "dm.area.fail"
+          : "dm.area.save",
   );
+  // A save that spares everything is not a half.
+  const saved = rule && !(rule.damage && rule.save?.half) ? "✓" : "½";
   return (
     <button
       type="button"
@@ -297,7 +309,7 @@ function PickButton({ id, name }: { id: string; name: string }) {
       title={label}
       onClick={() => (flow ? toggleRollTarget(id) : cyclePick(id))}
     >
-      {pick === "fail" ? "×" : pick === "save" ? "½" : ""}
+      {pick === "fail" ? "×" : pick === "save" ? saved : ""}
     </button>
   );
 }

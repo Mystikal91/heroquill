@@ -23,6 +23,8 @@ export const LIMITS = {
   /** Creatures in the tracker the players see. */
   order: 60,
   conditions: 20,
+  /** Effects of the lair the players see. */
+  environment: 10,
 } as const;
 
 /** How hurt a creature looks, which is all the players see of a monster's hit points. */
@@ -75,6 +77,8 @@ export interface TrackerView {
   /** The id of the creature whose turn it is. */
   turn?: string;
   order: { id: string; name: string; seat?: string; initiative?: number; band?: Band }[];
+  /** The effects of the lair the DM shows: a name and the rounds left, nothing else. */
+  environment?: { name: string; rounds?: number }[];
 }
 
 /**
@@ -300,7 +304,21 @@ export function readTracker(raw: unknown): TrackerView | undefined {
     });
   }
   const turn = str(raw.turn, 64);
-  return { round: int(raw.round, 0, 999) ?? 0, ...(turn && { turn }), order };
+  const environment: NonNullable<TrackerView["environment"]> = [];
+  if (Array.isArray(raw.environment))
+    for (const item of raw.environment.slice(0, LIMITS.environment)) {
+      if (!isObject(item)) continue;
+      const name = str(item.name, LIMITS.text);
+      if (!name) continue;
+      const rounds = int(item.rounds, 1, 999);
+      environment.push({ name, ...(rounds !== undefined && { rounds }) });
+    }
+  return {
+    round: int(raw.round, 0, 999) ?? 0,
+    ...(turn && { turn }),
+    order,
+    ...(environment.length > 0 && { environment }),
+  };
 }
 
 export function readProposal(raw: unknown): Proposal | undefined {

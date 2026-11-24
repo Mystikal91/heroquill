@@ -22,6 +22,7 @@ import { parseDice, rollD20, rollExpression } from "../engine/dice";
 import {
   type Combatant,
   type Encounter,
+  type EnvironmentRule,
   type TrackedEffect,
   type TurnReport,
   addCombatants,
@@ -31,6 +32,7 @@ import {
   createEncounter,
   delayTurn,
   endCombat,
+  freshCombatant,
   isStarted,
   lairCombatant,
   manualCombatant,
@@ -43,6 +45,13 @@ import {
   startCombat,
   toggleCondition,
 } from "../engine/encounter";
+import {
+  applyEnvironment,
+  giveCondition,
+  rollSaves,
+  saveBonus,
+  saveHindrance,
+} from "../engine/environment";
 import { type ActionRolls, type DamagePart, attackHits, doubleDice } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
@@ -66,6 +75,7 @@ import {
   setCurrentEncounterId,
 } from "../storage/encounters";
 import { damageName } from "../ui/damageName";
+import { loadDmEffects } from "./dmEffects";
 import { onlineSettings } from "./dmSettings";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
 import { addLog, rollMode } from "./play";
@@ -221,6 +231,7 @@ export async function loadDm() {
       for (const e of list) if (strays.has(e.id)) await saveEncounter(e);
     }
   }
+  await loadDmEffects();
   campaigns.value = camps;
   encounters.value = list;
   const wanted = await getCurrentCampaignId();
@@ -317,16 +328,7 @@ export async function duplicateEncounter() {
     name: ui("dm.copyName", { name: current.name }),
     round: 0,
     combatants: current.combatants.map((c) => {
-      const { initiative: _gone, ...rest } = c;
-      return {
-        ...rest,
-        id: uuid(),
-        hp: c.maxHp,
-        tempHp: 0,
-        conditions: [],
-        rounds: {},
-        effects: [],
-      };
+      return { ...freshCombatant(c), id: uuid(), hp: c.maxHp, tempHp: 0 };
     }),
     created: now,
     updated: now,
@@ -498,6 +500,11 @@ export function removeFromFight(id: string) {
   const index = before.combatants.indexOf(gone);
   updateEncounter((e) => removeCombatant(e, id));
   if (infoFor.value === id) infoFor.value = undefined;
+  if (areaPicks.value[id]) {
+    const { [id]: _gone, ...rest } = areaPicks.value;
+    areaPicks.value = rest;
+  }
+  if (environmentFlow.value?.lairId === id) leaveArea();
   offerUndo(ui("dm.removedCombatant", { name: gone.name }), () => putBack(gone, index));
 }
 
@@ -573,7 +580,13 @@ export function previousTurn() {
             ...c,
             conditions: step.who.conditions,
             rounds: step.who.rounds,
-            effects: step.who.effects,
+            // What the players see of an effect is as the DM has it now, not as it was then.
+            effects: step.who.effects.map((x) => {
+              const now = c.effects.find((y) => y.id === x.id)?.environment;
+              if (!x.environment || !now) return x;
+              const { shown: _was, ...rule } = x.environment;
+              return { ...x, environment: now.shown ? { ...rule, shown: true } : rule };
+            }),
           }
         : c,
     ),
@@ -631,6 +644,7 @@ export const areaAmount = signal(0);
 export const areaType = signal<string | undefined>(undefined);
 
 export function startArea() {
+  environmentFlow.value = undefined;
   areaPicks.value = {};
   areaAmount.value = 0;
   areaType.value = undefined;
@@ -640,11 +654,245 @@ export function startArea() {
 export function leaveArea() {
   areaMode.value = false;
   areaPicks.value = {};
+  environmentFlow.value = undefined;
+}
+
+/** An effect of the lair being applied: who is inside is marked in the table, as for the area damage. */
+export interface EnvironmentFlow {
+  encounterId: string;
+  lairId: string;
+  name: string;
+  rule: EnvironmentRule;
+  /** The saves rolled, by creature. */
+  saves: Record<string, { total?: number; passed: boolean }>;
+  /** The players at the table who were asked for their save and have not answered, with the request each awaits. */
+  asked: Record<string, string>;
+  effectId: string;
+}
+
+export const environmentFlow = signal<EnvironmentFlow | undefined>(undefined);
+
+export function startEnvironment(lair: Combatant, effect: TrackedEffect) {
+  const e = encounter.value;
+  if (!e || !effect.environment) return;
+  closeRoll();
+  infoFor.value = undefined;
+  startArea();
+  dmSection.value = "encounter";
+  environmentFlow.value = {
+    encounterId: e.id,
+    lairId: lair.id,
+    name: effect.name,
+    rule: effect.environment,
+    saves: {},
+    asked: {},
+    effectId: effect.id,
+  };
+}
+
+// Another fight came on screen: what was being applied belonged to the one before.
+effect(() => {
+  const flow = environmentFlow.value;
+  if (flow && encounter.value?.id !== flow.encounterId) leaveArea();
+});
+
+/** Whether the players see the effect being applied, as the DM has it now. */
+const effectShown = (flow: EnvironmentFlow): boolean =>
+  encounter.value?.combatants
+    .find((c) => c.id === flow.lairId)
+    ?.effects.find((x) => x.id === flow.effectId)?.environment?.shown === true;
+
+/** The relay lets a device send 20 messages a second: many proposals go in small groups. */
+function sendInGroups(sends: readonly (() => void)[]) {
+  const size = 8;
+  sends.forEach((send, i) => {
+    if (i < size) send();
+    else setTimeout(send, Math.floor(i / size) * 1200);
+  });
+}
+
+/** Writes down the save of a creature inside, if it is still marked. */
+function markSave(id: string, total: number | undefined, passed: boolean) {
+  const flow = environmentFlow.value;
+  if (!flow || !areaPicks.value[id]) return;
+  environmentFlow.value = {
+    ...flow,
+    saves: { ...flow.saves, [id]: { ...(total !== undefined && { total }), passed } },
+  };
+  areaPicks.value = { ...areaPicks.value, [id]: passed ? "save" : "fail" };
+}
+
+/**
+ * Rolls the save of the monsters marked that have not rolled yet, and asks it of the players at the table;
+ * the others are marked by hand.
+ */
+export function rollEnvironmentSaves() {
+  const flow = environmentFlow.value;
+  const e = encounter.value;
+  const save = flow?.rule.save;
+  if (!flow || !e || !save) return;
+  const inside = e.combatants.filter((c) => areaPicks.value[c.id] && !flow.saves[c.id]);
+  const monsters = inside.map((c) => ({
+    id: c.id,
+    bonus: saveBonus(monsterEntry(c)?.data, save.ability),
+    ...saveHindrance(c, save.ability),
+  }));
+  for (const roll of rollSaves(monsters, save.dc)) markSave(roll.id, roll.total, roll.passed);
+  const ability = content.value?.name(`srd51:ability/${save.ability}`) ?? save.ability;
+  for (const c of inside) {
+    const seat = onlineSeatOf(e, c);
+    if (!seat || environmentFlow.value?.asked[c.id]) continue;
+    // An answer counts only for the request it answers, and only while that one is still awaited.
+    const request = uuid();
+    const shown = effectShown(flow);
+    const sent = propose(
+      seat,
+      {
+        kind: "roll",
+        test: "save",
+        ability: save.ability,
+        // What the DM keeps hidden keeps its name and its DC.
+        ...(shown && { dc: save.dc, from: flow.name }),
+      },
+      ui("dm.prop.rollSave", { name: c.name, ability }) + ui("dm.prop.dc", { dc: save.dc }),
+      (accepted, result) => {
+        const now = environmentFlow.value;
+        if (now?.asked[c.id] !== request) return;
+        const { [c.id]: _answered, ...asked } = now.asked;
+        environmentFlow.value = { ...now, asked };
+        if (accepted && result !== undefined) markSave(c.id, result, result >= save.dc);
+      },
+    );
+    const now = environmentFlow.value;
+    if (sent && now) environmentFlow.value = { ...now, asked: { ...now.asked, [c.id]: request } };
+  }
+}
+
+/** Rolls the damage of the effect; the amount can be changed before it is dealt. */
+export function rollEnvironmentDamage() {
+  const dice = environmentFlow.value?.rule.damage?.dice;
+  const parsed = dice ? parseDice(dice) : undefined;
+  if (parsed) areaAmount.value = Math.max(0, rollExpression(parsed).total);
+}
+
+/** Deals the damage and gives the condition to those inside, in one step that can be taken back. */
+export function applyEnvironmentFlow() {
+  const flow = environmentFlow.value;
+  const e = encounter.value;
+  if (!flow || !e || flow.encounterId !== e.id) return;
+  const { rule } = flow;
+  const before = new Map(e.combatants.map((c) => [c.id, c]));
+  const out = applyEnvironment(
+    e,
+    rule,
+    areaPicks.value,
+    areaAmount.value,
+    defensesFor,
+    conditionImmunities,
+  );
+  // A player at the table decides on their own sheet: they get proposals, and nothing changes here until then.
+  const seats = new Map(
+    e.combatants.flatMap((c) => {
+      const seat = areaPicks.value[c.id] ? onlineSeatOf(e, c) : undefined;
+      return seat ? [[c.id, seat] as const] : [];
+    }),
+  );
+  updateEncounter(() => ({
+    ...out.encounter,
+    combatants: out.encounter.combatants.map((c) =>
+      seats.has(c.id) ? (before.get(c.id) ?? c) : c,
+    ),
+  }));
+  const shown = effectShown(flow);
+  const sends: (() => void)[] = [];
+  for (const [id, seat] of seats) {
+    const c = before.get(id);
+    if (!c) continue;
+    const dealt = out.taken.find((t) => t.id === id)?.dealt ?? 0;
+    const kind = rule.damage?.type;
+    if (dealt > 0)
+      sends.push(() =>
+        propose(
+          seat,
+          {
+            kind: "damage",
+            amount: dealt,
+            ...(kind && { type: kind }),
+            ...(shown && { from: flow.name }),
+          },
+          ui("dm.prop.damage", { name: c.name, amount: dealt }) +
+            (kind ? ` (${damageName(kind)})` : ""),
+        ),
+      );
+    const condition = rule.condition;
+    // Nothing to propose when the condition is already there for as long or longer.
+    if (!condition || !out.conditioned.includes(id)) continue;
+    const given = giveCondition(c, condition.id, condition.rounds);
+    if (
+      c.conditions.includes(condition.id) &&
+      given.rounds[condition.id] === c.rounds[condition.id]
+    )
+      continue;
+    const name = content.value?.name(condition.id) ?? condition.id;
+    sends.push(() =>
+      propose(
+        seat,
+        {
+          kind: "condition",
+          condition: condition.id,
+          name,
+          ...(condition.rounds && { rounds: condition.rounds }),
+          ...(shown && { from: flow.name }),
+        },
+        ui("dm.prop.condition", { name: c.name, condition: name }),
+        (accepted) => {
+          if (accepted) editCombatant(id, (y) => giveCondition(y, condition.id, condition.rounds));
+        },
+      ),
+    );
+  }
+  sendInGroups(sends);
+  const touched = new Set(
+    [...out.taken.map((t) => t.id), ...out.conditioned].filter((id) => !seats.has(id)),
+  );
+  leaveArea();
+  // What went to the players as a proposal is theirs to answer: there is nothing to take back here.
+  if (touched.size === 0) return;
+  offerUndo(ui("dm.env.done", { name: flow.name, n: touched.size }), () => {
+    if (encounter.value?.id !== e.id) return;
+    updateEncounter((x) => ({
+      ...x,
+      combatants: x.combatants.map((c) => {
+        const was = touched.has(c.id) ? before.get(c.id) : undefined;
+        return was
+          ? {
+              ...c,
+              hp: was.hp,
+              tempHp: was.tempHp,
+              conditions: was.conditions,
+              rounds: was.rounds,
+            }
+          : c;
+      }),
+    }));
+  });
 }
 
 /** One tap on a creature: not hit, then hit in full, then half (it saved), then not hit again. */
 export function cyclePick(id: string) {
   const { [id]: now, ...rest } = areaPicks.value;
+  const flow = environmentFlow.value;
+  // Marked by hand, whatever was rolled before counts no more.
+  if (flow?.saves[id] || flow?.asked[id]) {
+    const { [id]: _rolled, ...saves } = flow.saves;
+    const { [id]: _asked, ...asked } = flow.asked;
+    environmentFlow.value = { ...flow, saves, asked };
+  }
+  // With no save to make, a creature is inside or it is not.
+  if (flow && !flow.rule.save) {
+    areaPicks.value = now === undefined ? { ...rest, [id]: "fail" } : rest;
+    return;
+  }
   areaPicks.value =
     now === undefined
       ? { ...rest, [id]: "fail" }
@@ -657,11 +905,13 @@ export function cyclePick(id: string) {
 export function pickCreatures() {
   const e = encounter.value;
   if (!e) return;
-  areaPicks.value = Object.fromEntries(
+  const all = Object.fromEntries(
     e.combatants
       .filter((c) => c.kind !== "character" && !c.lair)
       .map((c) => [c.id, "fail" as const]),
   );
+  // While an effect is applied, the ones already marked keep their mark and their save.
+  areaPicks.value = environmentFlow.value ? { ...all, ...areaPicks.value } : all;
 }
 
 /**
@@ -767,6 +1017,16 @@ export function addLair() {
   const name = ui("dm.lairName");
   updateEncounter((e) => addCombatants(e, [lairCombatant(name)]));
   logAdded(name, 1);
+}
+
+/** Opens the window that writes an effect of the lair, which is added to the fight when there is none. */
+export function addEnvironment() {
+  const here = () => encounter.value?.combatants.find((c) => c.lair);
+  if (!here()) addLair();
+  const lair = here();
+  if (!lair) return;
+  closeAdd();
+  effectFor.value = lair.id;
 }
 
 /** The active creature delays its turn until after another; it can be taken back. */

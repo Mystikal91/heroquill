@@ -111,6 +111,7 @@ function connect(campaignId: string, saved: SavedTable) {
         for (const p of msg.players) if (p.card) cardHandler?.(p.seat, p.card);
       if (msg.t === "say") tableUnread.value += 1;
       if (msg.t === "answer") answers.get(msg.id)?.(msg.accepted, msg.result);
+      if (msg.t === "undelivered") answers.get(msg.id)?.(false);
       if (msg.t === "answer" || msg.t === "undelivered") answers.delete(msg.id);
       touch(campaignId, saved);
     },

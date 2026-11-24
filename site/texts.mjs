@@ -102,7 +102,7 @@ export const TEXTS = {
     "val.dm": "DM mode and online table",
     "faq.q7": "What does the online table share, and with whom?",
     "faq.a7":
-      "Only what the game needs: a player's name, the main numbers of the sheet and the rolls go to the DM alone, and the players see the order of the fight. There is no account: the table is a code of six characters, and everything is deleted when the DM closes it, or twelve hours after the last message. The rest of the app works without it.",
+      "Only what the game needs: a player's name, the main numbers of the sheet and the rolls go to the DM alone, and the players see the order of the fight and the environment effects the DM shows. There is no account: the table is a code of six characters, and everything is deleted when the DM closes it, or twelve hours after the last message. The rest of the app works without it.",
     "faq.privacyLink": "Read the privacy policy",
     "foot.contribute": "Contribute",
     "foot.packDocs": "Pack format",
@@ -212,7 +212,7 @@ export const TEXTS = {
     "val.dm": "Modalità DM e tavolo online",
     "faq.q7": "Cosa condivide il tavolo online, e con chi?",
     "faq.a7":
-      "Solo ciò che serve al gioco: il nome, i numeri principali della scheda e i tiri di un giocatore vanno solo al DM, e i giocatori vedono l'ordine del combattimento. Non c'è un account: il tavolo è un codice di sei caratteri, e tutto viene cancellato quando il DM lo chiude, o dodici ore dopo l'ultimo messaggio. Il resto dell'app funziona anche senza.",
+      "Solo ciò che serve al gioco: il nome, i numeri principali della scheda e i tiri di un giocatore vanno solo al DM, e i giocatori vedono l'ordine del combattimento e gli effetti d'ambiente che il DM mostra. Non c'è un account: il tavolo è un codice di sei caratteri, e tutto viene cancellato quando il DM lo chiude, o dodici ore dopo l'ultimo messaggio. Il resto dell'app funziona anche senza.",
     "faq.privacyLink": "Leggi l'informativa sulla privacy",
     "foot.contribute": "Contribuisci",
     "foot.packDocs": "Formato dei pacchetti (inglese)",
@@ -322,7 +322,7 @@ export const TEXTS = {
     "val.dm": "Mode MJ et table en ligne",
     "faq.q7": "Que partage la table en ligne, et avec qui ?",
     "faq.a7":
-      "Seulement ce dont le jeu a besoin : le nom, les chiffres principaux de la fiche et les jets d'un joueur vont au MJ seul, et les joueurs voient l'ordre du combat. Il n'y a pas de compte : la table est un code de six caractères, et tout est effacé quand le MJ la ferme, ou douze heures après le dernier message. Le reste de l'appli marche sans elle.",
+      "Seulement ce dont le jeu a besoin : le nom, les chiffres principaux de la fiche et les jets d'un joueur vont au MJ seul, et les joueurs voient l'ordre du combat et les effets d'environnement que le MJ montre. Il n'y a pas de compte : la table est un code de six caractères, et tout est effacé quand le MJ la ferme, ou douze heures après le dernier message. Le reste de l'appli marche sans elle.",
     "faq.privacyLink": "Lire la politique de confidentialité",
     "foot.contribute": "Contribuer",
     "foot.packDocs": "Format des packs (anglais)",
@@ -431,7 +431,7 @@ export const TEXTS = {
     "val.dm": "SL-Modus und Online-Tisch",
     "faq.q7": "Was teilt der Online-Tisch, und mit wem?",
     "faq.a7":
-      "Nur, was das Spiel braucht: der Name, die wichtigsten Zahlen des Bogens und die Würfe eines Spielers gehen nur an die SL, und die Spieler sehen die Reihenfolge des Kampfes. Es gibt kein Konto: der Tisch ist ein Code aus sechs Zeichen, und alles wird gelöscht, wenn die SL ihn schließt, oder zwölf Stunden nach der letzten Nachricht. Der Rest der App funktioniert ohne ihn.",
+      "Nur, was das Spiel braucht: der Name, die wichtigsten Zahlen des Bogens und die Würfe eines Spielers gehen nur an die SL, und die Spieler sehen die Reihenfolge des Kampfes und die Umgebungseffekte, die die SL zeigt. Es gibt kein Konto: der Tisch ist ein Code aus sechs Zeichen, und alles wird gelöscht, wenn die SL ihn schließt, oder zwölf Stunden nach der letzten Nachricht. Der Rest der App funktioniert ohne ihn.",
     "faq.privacyLink": "Die Datenschutzerklärung lesen",
     "foot.contribute": "Mitmachen",
     "foot.packDocs": "Paketformat (Englisch)",
@@ -540,7 +540,7 @@ export const TEXTS = {
     "val.dm": "Modo DM y mesa en línea",
     "faq.q7": "¿Qué comparte la mesa en línea, y con quién?",
     "faq.a7":
-      "Solo lo que el juego necesita: el nombre, los números principales de la hoja y las tiradas de un jugador van solo al DM, y los jugadores ven el orden del combate. No hay cuenta: la mesa es un código de seis caracteres, y todo se borra cuando el DM la cierra, o doce horas después del último mensaje. El resto de la app funciona sin ella.",
+      "Solo lo que el juego necesita: el nombre, los números principales de la hoja y las tiradas de un jugador van solo al DM, y los jugadores ven el orden del combate y los efectos de entorno que el DM muestra. No hay cuenta: la mesa es un código de seis caracteres, y todo se borra cuando el DM la cierra, o doce horas después del último mensaje. El resto de la app funciona sin ella.",
     "faq.privacyLink": "Leer la política de privacidad",
     "foot.contribute": "Colabora",
     "foot.packDocs": "Formato de paquetes (inglés)",

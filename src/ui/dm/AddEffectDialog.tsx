@@ -1,18 +1,15 @@
-import { useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { dmRuleset, effectFor, encounter, giveEffect } from "../../app/dm";
 import { fold } from "../../app/search";
 import { content } from "../../app/store";
-import type { Effect } from "../../data/schema";
 import { durationRounds } from "../../engine/durations";
-import { MAX_ROUNDS } from "../../engine/encounter";
 import { inRuleset } from "../../engine/rulesets";
 import { ui } from "../../i18n/ui";
-import { NOT_FREE } from "../play/ActiveEffects";
-import { EffectList } from "../studio/Effects";
+import { EffectForm } from "./EffectForm";
 import { Modal } from "./Modal";
-import { NumberField } from "./NumberField";
+import { SavedList } from "./SavedList";
 
-type Tab = "spells" | "byHand";
+type Tab = "spells" | "byHand" | "saved";
 
 function Spells({ target, done }: { target: string; done: () => void }) {
   const c = content.value;
@@ -106,78 +103,6 @@ function Spells({ target, done }: { target: string; done: () => void }) {
   );
 }
 
-function ByHand({ target, done }: { target: string; done: () => void }) {
-  const [name, setName] = useState("");
-  const [note, setNote] = useState("");
-  const [rounds, setRounds] = useState<number | undefined>(undefined);
-  const [concentration, setConcentration] = useState(false);
-  const [rules, setRules] = useState<Effect[]>([]);
-  return (
-    <form
-      class="dm-add-body dm-manual"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!name.trim()) return;
-        giveEffect(target, {
-          name,
-          ...(note.trim() && { note }),
-          ...(rounds !== undefined && { rounds }),
-          ...(concentration && { concentration: true }),
-          ...(rules.length > 0 && { effects: rules }),
-        });
-        done();
-      }}
-    >
-      <label class="field dm-manual-name">
-        <span>{ui("dm.effect.name")}</span>
-        <input
-          type="text"
-          maxLength={80}
-          value={name}
-          placeholder={ui("dm.effect.namePlaceholder")}
-          onInput={(e) => setName(e.currentTarget.value)}
-        />
-      </label>
-      <label class="field dm-manual-name">
-        <span>{ui("dm.effect.note")}</span>
-        <input
-          type="text"
-          maxLength={200}
-          value={note}
-          onInput={(e) => setNote(e.currentTarget.value)}
-        />
-      </label>
-      <div class="field">
-        <span>{ui("play.conditionRounds")}</span>
-        <NumberField
-          label={ui("play.conditionRounds")}
-          placeholder="—"
-          min={0}
-          max={MAX_ROUNDS}
-          value={rounds}
-          onChange={setRounds}
-        />
-      </div>
-      <label class="dm-check">
-        <input
-          type="checkbox"
-          checked={concentration}
-          onChange={(e) => setConcentration(e.currentTarget.checked)}
-        />
-        <span>{ui("dm.effect.concentration")}</span>
-      </label>
-      <div class="dm-manual-name dm-effect-rules">
-        <h4>{ui("dm.effect.numbersTitle")}</h4>
-        <p class="muted">{ui("dm.effect.numbersHint")}</p>
-        <EffectList effects={rules} onChange={setRules} hidden={NOT_FREE} />
-      </div>
-      <button type="submit" class="dm-manual-add" disabled={!name.trim()}>
-        {ui("dm.addButton")}
-      </button>
-    </form>
-  );
-}
-
 /** Adds a spell or an effect to a creature: picked from the spells of the rules (its duration and concentration come with it) or written by hand. */
 export function AddEffectDialog() {
   const [tab, setTab] = useState<Tab>("spells");
@@ -186,15 +111,22 @@ export function AddEffectDialog() {
   const close = () => {
     effectFor.value = undefined;
   };
+  const lair = creature?.lair === true;
+  // The lair takes no spell: its window starts from the form.
+  useEffect(() => {
+    if (id) setTab(lair ? "byHand" : "spells");
+  }, [id, lair]);
   const tabs: [Tab, string][] = [
-    ["spells", ui("dm.effect.spells")],
+    ...(lair ? [] : [["spells", ui("dm.effect.spells")] as [Tab, string]]),
     ["byHand", ui("dm.add.manual")],
+    ["saved", ui("dm.saved.tab")],
   ];
+  const addTitle = ui(lair ? "dm.env.add" : "dm.addEffect");
   return (
     <Modal
       open={Boolean(creature)}
       variant="center"
-      title={creature ? `${ui("dm.addEffect")} · ${creature.name}` : ui("dm.addEffect")}
+      title={creature && !lair ? `${addTitle} · ${creature.name}` : addTitle}
       onClose={close}
     >
       <div class="dm-tabs" role="tablist">
@@ -213,10 +145,21 @@ export function AddEffectDialog() {
       </div>
       <div class="dm-add-scroll">
         {creature &&
-          (tab === "spells" ? (
+          (tab === "saved" ? (
+            <SavedList target={creature.id} environment={lair} done={close} />
+          ) : tab === "spells" && !lair ? (
             <Spells target={creature.id} done={close} />
           ) : (
-            <ByHand target={creature.id} done={close} />
+            <EffectForm
+              key={`${creature.id}${lair}`}
+              environment={lair}
+              submit={ui("dm.addButton")}
+              offerSave
+              onSubmit={(effect) => {
+                giveEffect(creature.id, effect);
+                close();
+              }}
+            />
           ))}
       </div>
     </Modal>

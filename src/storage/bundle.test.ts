@@ -180,6 +180,17 @@ describe("the fights of the DM mode in a transfer file", () => {
   });
 });
 
+describe("the saved effects of the DM in a transfer file", () => {
+  it("travel with the fights", () => {
+    const kept = { id: "e", kind: "creature" as const, effect: { name: "Mark" }, updated: 1 };
+    const withEffects: Sources = { ...sources, dmEffects: [kept] };
+    const bundle = buildBundle(withEffects, new Set<Section>(["encounters"]));
+    expect(bundle.dmEffects).toEqual([kept]);
+    expect(buildBundle(withEffects, new Set<Section>(["characters"])).dmEffects).toBeUndefined();
+    expect(onlySections(bundle, new Set<Section>(["characters"])).dmEffects).toBeUndefined();
+  });
+});
+
 describe("the campaigns of the DM mode in a transfer file", () => {
   const camp = createCampaign("Lost Mine");
   const withCamp: Sources = {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 import {
   addCharacter,
+  addEnvironment,
   addLair,
   addManual,
   addMonsters,
@@ -178,6 +179,9 @@ function ByHand() {
     >
       <button type="button" class="secondary dm-manual-name" onClick={addLair}>
         {ui("dm.lairAdd")}
+      </button>
+      <button type="button" class="secondary dm-manual-name" onClick={addEnvironment}>
+        {ui("dm.env.add")}
       </button>
       <label class="field dm-manual-name">
         <span>{ui("dm.field.name")}</span>

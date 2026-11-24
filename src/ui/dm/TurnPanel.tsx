@@ -23,6 +23,7 @@ import { AbilitiesCell } from "./Abilities";
 import { AbilityRolls } from "./AbilityRolls";
 import { CellPopover } from "./CellPopover";
 import { EffectsEditor, conditionName } from "./Editors";
+import { EnvironmentCards } from "./Environment";
 import { HpCell, kindLine } from "./TrackerTable";
 
 /** The ones who act after the active creature, wrapping round: who to get ready. */
@@ -253,6 +254,7 @@ export function TurnPanel({ e }: { e: Encounter }) {
           <PanelEffects c={c} />
         </>
       )}
+      {c.lair && <EnvironmentCards c={c} />}
       <AbilityRolls c={c} />
       <div class="dm-panel-abilities">
         <AbilitiesCell c={c} />

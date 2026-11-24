@@ -2732,3 +2732,19 @@ details.rule-variant[open] > summary::after {
 body:has(.table-request[open]) .roll-toast {
   display: none;
 }
+
+/* What is going on around the fight, as the DM shows it to the players. */
+.table-environment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.5rem;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.table-environment span {
+  padding: 0.05rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}

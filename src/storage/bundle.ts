@@ -1,6 +1,7 @@
 import type { Campaign } from "../engine/campaign";
 import type { Character } from "../engine/character";
 import type { Encounter } from "../engine/encounter";
+import type { SavedEffect } from "../engine/savedEffects";
 import { type Sealed, isSealed, seal, unseal } from "./crypto";
 import { type UserPackRecord, addressesOf } from "./packs";
 
@@ -60,6 +61,8 @@ export interface Bundle {
   encounters?: unknown[];
   /** The campaigns the fights belong to, with their parties. They travel with the fights. */
   campaigns?: unknown[];
+  /** The effects the Dungeon Master kept to use again. They travel with the fights. */
+  dmEffects?: unknown[];
   /** Homebrew packs, whole. */
   homebrew?: unknown[];
   /** The quick edits of each language, whole. */
@@ -80,6 +83,7 @@ export interface Sources {
   /** The fights of the Dungeon Master mode. */
   encounters?: Encounter[];
   campaigns?: Campaign[];
+  dmEffects?: SavedEffect[];
   packs: UserPackRecord[];
   settings: TransferSettings;
   deeplKey: string;
@@ -120,6 +124,7 @@ export function buildBundle(
     ...(has("characters") && sources.characterTimes && { characterTimes: sources.characterTimes }),
     ...(has("encounters") && { encounters: sources.encounters ?? [] }),
     ...(has("encounters") && { campaigns: sources.campaigns ?? [] }),
+    ...(has("encounters") && { dmEffects: sources.dmEffects ?? [] }),
     ...(has("homebrew") && { homebrew: sources.packs.filter((p) => p.origin === "homebrew") }),
     ...(has("edits") && { edits: sources.packs.filter((p) => p.origin === "edits") }),
     ...(has("links") && { links, files }),
@@ -153,6 +158,7 @@ export function onlySections(bundle: Bundle, include: ReadonlySet<Section>): Bun
   if (!include.has("encounters")) {
     out.encounters = undefined;
     out.campaigns = undefined;
+    out.dmEffects = undefined;
   }
   if (!include.has("homebrew")) out.homebrew = undefined;
   if (!include.has("edits")) out.edits = undefined;

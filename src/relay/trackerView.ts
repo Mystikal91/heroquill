@@ -1,6 +1,6 @@
 import type { Combatant, Encounter } from "../engine/encounter";
 import { initiativeOrder, isStarted } from "../engine/encounter";
-import type { Band, TrackerView } from "./protocol";
+import { type Band, LIMITS, type TrackerView } from "./protocol";
 
 /**
  * What the players see of the fight: the order, whose turn it is and how hurt the creatures look. Never the
@@ -58,6 +58,11 @@ export function trackerViewOf(
   if (!isStarted(encounter)) return NOT_ON;
   const seats = matchSeats(encounter.combatants, players);
   const all = initiativeOrder(encounter.combatants);
+  const environment = encounter.combatants
+    .flatMap((c) => c.effects)
+    .filter((x) => x.environment?.shown)
+    .slice(0, LIMITS.environment)
+    .map((x) => ({ name: x.name, ...(x.rounds !== undefined && { rounds: x.rounds }) }));
   const shown = hiding.order ? all.filter((c) => c.id === encounter.turn) : all;
   return {
     round: encounter.round,
@@ -73,5 +78,6 @@ export function trackerViewOf(
         ...(!own && !c.lair && !hiding.bands && { band: bandOf(c) }),
       };
     }),
+    ...(environment.length > 0 && { environment }),
   };
 }

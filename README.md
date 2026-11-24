@@ -85,6 +85,9 @@ side; the welcome screen offers both.
 - An **initiative tracker**: rolled or typed initiative, turns and rounds, hit points with damage and
   healing (resistant, vulnerable, temporary), conditions and effects that count their rounds, groups
   of the same monster, and the creature in turn beside the table with its actions.
+- **Saved effects and environment effects**: effects written by hand can be saved for every fight of every
+  campaign; the lair carries environment effects (damage, a saving throw, a condition) through its
+  rounds, and applies them to whoever is inside.
 - **Monster rolls**: pick the targets, roll the attack against their armor class and the damage
   with their defenses, or an area with half damage on a save; checks and saves for every creature,
   and the DM's own dice.
@@ -92,9 +95,9 @@ side; the welcome screen offers both.
   own Heroquill. The DM sees their hit points, armor class, conditions and rolls, asks for initiative
   or a roll with a DC, and proposes damage, conditions and effects that the player accepts on their
   own sheet (the DM never changes it). Lines of text go both ways. Players see the order of the fight
-  and whose turn it is; the DM chooses how much they see of the monsters. No account: the relay
+  and whose turn it is, and the environment effects the DM shows; the DM chooses how much they see of the monsters. No account: the relay
   (`workers/room-relay/`, a Cloudflare Durable Object) passes messages, keeps only the seats, the
-  last card of each player and the last order, and deletes the table when the DM closes it or after
+  last card of each player and the last order (with the effects shown), and deletes the table when the DM closes it or after
   twelve hours without messages. See the [privacy policy](https://heroquill.app/privacy).
 
 **Print and share**
