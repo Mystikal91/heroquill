@@ -23,6 +23,52 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.36",
+    date: "2026-11-24",
+    notes: [
+      {
+        kind: "feature",
+        en: "At the DM's table every creature has a small X at the end of its row: one click and the defeated goblin leaves the fight, without opening its sheet. If your finger slips, “Undo” puts it back in its place.",
+        it: "Al tavolo del DM ogni creatura ha una piccola X in fondo alla riga: un clic e il goblin sconfitto esce dallo scontro, senza aprire la sua scheda. Se ti scappa il dito, «Annulla» lo rimette al suo posto.",
+        fr: "À la table du MJ, chaque créature a un petit X au bout de sa ligne : un clic et le gobelin vaincu quitte le combat, sans ouvrir sa fiche. Si ton doigt glisse, « Annuler » le remet à sa place.",
+        de: "Am Tisch der SL hat jede Kreatur ein kleines X am Ende ihrer Zeile: Ein Klick, und der besiegte Goblin verlässt den Kampf, ohne seinen Bogen zu öffnen. Wenn du dich vertippst, bringt „Rückgängig“ ihn an seinen Platz zurück.",
+        es: "En la mesa del DM cada criatura tiene una pequeña X al final de su fila: un clic y el goblin derrotado sale del combate, sin abrir su hoja. Si se te escapa el dedo, «Deshacer» lo devuelve a su sitio.",
+      },
+      {
+        kind: "feature",
+        en: "On the campaign page every encounter has its own X beside “Open”: clear away test fights or the ones already played with a single click. Here too, an encounter deleted by mistake comes back with “Undo”.",
+        it: "Nella pagina della campagna ogni incontro ha la sua X accanto ad «Apri»: fai pulizia degli scontri di prova o di quelli già giocati con un clic. Anche qui un incontro eliminato per sbaglio torna indietro con «Annulla».",
+        fr: "Sur la page de la campagne, chaque rencontre a son X à côté de « Ouvrir » : fais le ménage des combats d'essai ou déjà joués d'un seul clic. Ici aussi, une rencontre supprimée par erreur revient avec « Annuler ».",
+        de: "Auf der Seite der Kampagne hat jede Begegnung ihr eigenes X neben „Öffnen“: Räume Testkämpfe oder bereits gespielte mit einem Klick auf. Auch hier kommt eine versehentlich gelöschte Begegnung mit „Rückgängig“ zurück.",
+        es: "En la página de la campaña cada encuentro tiene su X junto a «Abrir»: limpia los combates de prueba o los ya jugados con un clic. También aquí, un encuentro borrado por error vuelve con «Deshacer».",
+      },
+      {
+        kind: "improvement",
+        en: "Conditions and effects with a duration show in the row how many rounds are left (“Poisoned | 3”): one look at the table tells you who is about to break free, without opening anything.",
+        it: "Le condizioni e gli effetti con una durata mostrano nella riga quanti round restano («Avvelenato | 3»): basta un'occhiata alla tabella per sapere chi si libera presto, senza aprire nulla.",
+        fr: "Les états et les effets qui ont une durée montrent dans la ligne combien de rounds il reste (« Empoisonné | 3 ») : un coup d'œil au tableau suffit pour savoir qui va bientôt s'en libérer, sans rien ouvrir.",
+        de: "Zustände und Effekte mit einer Dauer zeigen in der Zeile, wie viele Runden noch bleiben („Vergiftet | 3“): Ein Blick auf die Tabelle genügt, um zu wissen, wer bald frei ist, ohne etwas zu öffnen.",
+        es: "Los estados y efectos con una duración muestran en la fila cuántos asaltos quedan («Envenenado | 3»): basta un vistazo a la tabla para saber quién se libera pronto, sin abrir nada.",
+      },
+      {
+        kind: "improvement",
+        en: "The damage types of your homebrew and of the other packs you use show up among the DM's too, in quick damage and in area damage: your “void” or “shadow” damage is dealt with a tap, like fire or cold.",
+        it: "I tipi di danno del tuo homebrew e degli altri pacchetti che usi compaiono anche tra quelli del DM, nel danno rapido e nel danno ad area: il tuo danno «vuoto» o «ombra» si applica con un tocco, come il fuoco o il freddo.",
+        fr: "Les types de dégâts de ton homebrew et des autres paquets que tu utilises apparaissent aussi parmi ceux du MJ, dans les dégâts rapides et les dégâts de zone : tes dégâts de « vide » ou d'« ombre » s'appliquent d'une touche, comme le feu ou le froid.",
+        de: "Die Schadensarten deines Homebrews und der anderen Pakete, die du nutzt, erscheinen auch bei denen der SL, im schnellen Schaden und im Flächenschaden: Dein „Leere“- oder „Schatten“-Schaden wird mit einem Tippen angewendet, wie Feuer oder Kälte.",
+        es: "Los tipos de daño de tu homebrew y de los demás paquetes que usas aparecen también entre los del DM, en el daño rápido y en el daño en área: tu daño de «vacío» o de «sombra» se aplica con un toque, como el fuego o el frío.",
+      },
+      {
+        kind: "fix",
+        en: "Deleting a campaign can no longer leave the DM's page empty: the next campaign opens at once with its encounter (or a new empty one), and a quick double click on the button no longer deletes two campaigns.",
+        it: "Eliminare una campagna non può più lasciare vuota la pagina del DM: si apre subito la campagna successiva con il suo incontro (o uno nuovo e vuoto), e un doppio clic veloce sul pulsante non elimina due campagne.",
+        fr: "Supprimer une campagne ne peut plus laisser la page du MJ vide : la campagne suivante s'ouvre aussitôt avec sa rencontre (ou une nouvelle, vide), et un double clic rapide sur le bouton ne supprime plus deux campagnes.",
+        de: "Das Löschen einer Kampagne kann die Seite der SL nicht mehr leer lassen: Die nächste Kampagne öffnet sich sofort mit ihrer Begegnung (oder einer neuen, leeren), und ein schneller Doppelklick auf den Knopf löscht nicht mehr zwei Kampagnen.",
+        es: "Borrar una campaña ya no puede dejar vacía la página del DM: la siguiente campaña se abre enseguida con su encuentro (o uno nuevo y vacío), y un doble clic rápido en el botón ya no borra dos campañas.",
+      },
+    ],
+  },
+  {
     version: "1.35",
     date: "2026-11-23",
     notes: [
@@ -1697,6 +1743,16 @@ export interface RoadmapItem {
 
 /** What is still missing, from the nearest to the furthest. */
 export const ROADMAP: RoadmapItem[] = [
+  {
+    id: "dmEffects",
+    text: {
+      en: "More for the DM: effects written by hand that the DM can save and use again in any fight, and lair and environment effects (magical darkness, a room on fire, a poison swamp) that the lair carries through the rounds.",
+      it: "Di più per il DM: effetti scritti a mano da salvare e riusare in ogni scontro, ed effetti di tana e d'ambiente (oscurità magica, una stanza in fiamme, una palude velenosa) che la tana porta avanti round dopo round.",
+      fr: "Plus pour le MJ : des effets écrits à la main à enregistrer et à réutiliser dans chaque combat, et des effets de repaire et d'environnement (ténèbres magiques, une salle en feu, un marais empoisonné) que le repaire porte de round en round.",
+      de: "Mehr für die SL: von Hand geschriebene Effekte, die sich speichern und in jedem Kampf wiederverwenden lassen, und Hort- und Umgebungseffekte (magische Dunkelheit, ein brennender Raum, ein Giftsumpf), die der Hort Runde für Runde mitführt.",
+      es: "Más para el DM: efectos escritos a mano que se guardan y se reutilizan en cualquier combate, y efectos de guarida y de entorno (oscuridad mágica, una sala en llamas, un pantano venenoso) que la guarida lleva asalto tras asalto.",
+    },
+  },
   {
     id: "translations",
     text: {
