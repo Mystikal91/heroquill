@@ -28,7 +28,8 @@ function Summary() {
   if (!s) return null;
   const hitDice = Object.entries(s.hitPoints.hitDice)
     .map(([die, n]) => `${n}${die}`)
-    .join("+");
+    // It may break after a plus (a zero-width space), never inside a die.
+    .join("+\u200b");
   const items: [string, string, ExplainTarget?][] = [
     [ui("play.ac"), String(s.armorClass.value), { kind: "ac" }],
     [ui("play.init"), signed(s.initiative), { kind: "initiative" }],

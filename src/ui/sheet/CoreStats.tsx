@@ -78,7 +78,8 @@ export function KeyNumbers() {
   if (!s) return null;
   const hitDice = Object.entries(s.hitPoints.hitDice)
     .map(([die, n]) => `${n}${die}`)
-    .join("+");
+    // It may break after a plus (a zero-width space), never inside a die.
+    .join("+\u200b");
   return (
     <div class="hero-numbers">
       <Stat

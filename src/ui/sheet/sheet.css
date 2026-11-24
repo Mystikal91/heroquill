@@ -212,7 +212,8 @@
 
 .hero-numbers .stat-value {
   font-size: 1.4rem;
-  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 
 .hero-numbers .stat-label {
@@ -724,6 +725,17 @@
   /* The pencils would take a line of their own. */
   .hero-facts .change-link::after {
     content: none;
+  }
+
+  /* Under a finger. */
+  :root[data-style] .skill-list button.explain-trigger {
+    min-height: 2.5rem;
+  }
+
+  :root[data-style] button.explain-trigger.ability-save,
+  :root[data-style] button.explain-trigger.attack-bonus {
+    min-height: 2.5rem;
+    min-width: 2.9rem;
   }
 
   /* The six abilities, three to a row. */

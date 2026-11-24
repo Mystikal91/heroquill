@@ -23,6 +23,60 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.37",
+    date: "2026-11-24",
+    notes: [
+      {
+        kind: "feature",
+        en: "The rules are now the first step of every new character: choose between 2014 and 2024 right at the start of Build.",
+        it: "Le regole sono ora il primo passo di ogni nuovo personaggio: scegli tra 2014 e 2024 proprio all'inizio di Crea.",
+        fr: "Les règles sont désormais la première étape de chaque nouveau personnage : choisis entre 2014 et 2024 dès le début de Créer.",
+        de: "Die Regeln sind jetzt der erste Schritt für jeden neuen Charakter: Wähle gleich zu Beginn von Erstellen zwischen 2014 und 2024.",
+        es: "Las reglas son ahora el primer paso de cada nuevo personaje: elige entre 2014 y 2024 justo al empezar en Crear.",
+      },
+      {
+        kind: "improvement",
+        en: "The Sheet has a whole new face: a band in the colour of your class with portrait, name and key numbers, the six abilities in coloured tiles with their saving throw, and sections with an icon and a tint of their own, so you find what you need at a glance even in the middle of a fight.",
+        it: "La Scheda ha un volto tutto nuovo: una fascia nel colore della tua classe con ritratto, nome e numeri chiave, le sei caratteristiche in riquadri colorati con il loro tiro salvezza e sezioni con icona e tinta proprie, per trovare al volo quello che cerchi anche a metà combattimento.",
+        fr: "La Feuille a un visage tout neuf : un bandeau à la couleur de ta classe avec portrait, nom et chiffres clés, les six caractéristiques dans des cases colorées avec leur jet de sauvegarde, et des sections avec leur propre icône et leur propre teinte, pour trouver d'un coup d'œil ce qu'il te faut, même en plein combat.",
+        de: "Der Bogen hat ein ganz neues Gesicht: ein Band in der Farbe deiner Klasse mit Porträt, Name und den wichtigsten Werten, die sechs Attribute in farbigen Kacheln samt Rettungswurf und Abschnitte mit eigenem Symbol und eigener Tönung, damit du auch mitten im Kampf auf einen Blick findest, was du brauchst.",
+        es: "La Hoja tiene una cara totalmente nueva: una franja del color de tu clase con retrato, nombre y números clave, las seis características en recuadros de colores con su tirada de salvación y secciones con icono y tono propios, para encontrar de un vistazo lo que buscas, incluso en mitad del combate.",
+      },
+      {
+        kind: "improvement",
+        en: "All the skills are now in a single list in alphabetical order, with the colour of their ability and your proficiencies standing out: one look tells you where your hero shines.",
+        it: "Tutte le abilità stanno ora in un unico elenco in ordine alfabetico, con il colore della loro caratteristica e le competenze in evidenza: basta uno sguardo per sapere in cosa il tuo eroe dà il meglio.",
+        fr: "Toutes les compétences sont maintenant dans une seule liste par ordre alphabétique, avec la couleur de leur caractéristique et tes maîtrises bien en vue : un coup d'œil suffit pour savoir où ton héros brille.",
+        de: "Alle Fertigkeiten stehen jetzt in einer einzigen alphabetischen Liste, mit der Farbe ihres Attributs und deinen Übungen deutlich hervorgehoben: Ein Blick genügt, um zu sehen, worin dein Held glänzt.",
+        es: "Todas las habilidades están ahora en una sola lista por orden alfabético, con el color de su característica y tus competencias bien destacadas: un vistazo basta para saber en qué brilla tu héroe.",
+      },
+      {
+        kind: "improvement",
+        en: "The features of each class are gathered in a single section, with the level beside them: going back over how your character grew is easier, and the page is far less crowded.",
+        it: "I privilegi di ogni classe sono raccolti in una sola sezione, con il livello accanto a ciascuno: ripercorrere la crescita del personaggio è più semplice, e la pagina è molto meno affollata.",
+        fr: "Les aptitudes de chaque classe sont réunies dans une seule section, avec le niveau à côté de chacune : retracer l'évolution de ton personnage devient plus simple, et la page est bien moins encombrée.",
+        de: "Die Merkmale jeder Klasse sind in einem einzigen Abschnitt gesammelt, mit der Stufe daneben: Das Wachstum deines Charakters lässt sich leichter nachverfolgen, und die Seite ist deutlich weniger überladen.",
+        es: "Los rasgos de cada clase están reunidos en una sola sección, con el nivel junto a cada uno: repasar cómo ha crecido tu personaje es más fácil, y la página queda mucho menos abarrotada.",
+      },
+      {
+        kind: "fix",
+        en: "The name of the character is easy to read over the colour of any class, even the ones that come from other books.",
+        it: "Il nome del personaggio si legge bene sopra il colore di ogni classe, anche per quelle che arrivano da altri manuali.",
+        fr: "Le nom du personnage se lit bien sur la couleur de n'importe quelle classe, même celles qui viennent d'autres livres.",
+        de: "Der Name des Charakters ist auf der Farbe jeder Klasse gut lesbar, auch bei denen aus anderen Büchern.",
+        es: "El nombre del personaje se lee bien sobre el color de cualquier clase, incluso las que vienen de otros libros.",
+      },
+      {
+        kind: "fix",
+        en: "The details of a monster open even when it has a sense the app does not know: it is shown as it is written.",
+        it: "I dettagli di un mostro si aprono anche quando ha un senso che l'app non conosce: viene mostrato così com'è scritto.",
+        fr: "Les détails d'un monstre s'ouvrent même quand il possède un sens que l'app ne connaît pas : il est affiché tel qu'il est écrit.",
+        de: "Die Details eines Monsters öffnen sich auch dann, wenn es einen Sinn hat, den die App nicht kennt: Er wird so angezeigt, wie er geschrieben ist.",
+        es: "Los detalles de un monstruo se abren incluso cuando tiene un sentido que la app no conoce: se muestra tal como está escrito.",
+      },
+    ],
+  },
+  {
     version: "1.36",
     date: "2026-11-24",
     notes: [
