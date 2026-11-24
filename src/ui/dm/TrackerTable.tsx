@@ -5,6 +5,7 @@ import {
   encounter,
   infoFor,
   liveIds,
+  removeFromFight,
   rollFlow,
   toggleRollTarget,
 } from "../../app/dm";
@@ -48,17 +49,32 @@ function conditionSlugs(c: Combatant): string {
     .join(" ");
 }
 
-/** The conditions and effects in force, as chips beside the name; touching them opens the editor. */
+/**
+ * The conditions and effects in force, as chips beside the name, each with the rounds it has left when it
+ * has a limit (seen at a glance, without opening anything); touching them opens the editor.
+ */
 function InlineEffects({ c }: { c: Combatant }) {
-  const names = [...c.conditions.map(conditionName), ...c.effects.map((x) => x.name)];
-  if (names.length === 0) return null;
+  const chips = [
+    ...c.conditions.map((id) => ({ key: id, name: conditionName(id), rounds: c.rounds[id] })),
+    ...c.effects.map((x) => ({ key: x.id, name: x.name, rounds: x.rounds })),
+  ];
+  if (chips.length === 0) return null;
   return (
     <CellPopover
       title={ui("dm.editConditions", { name: c.name })}
       class="dm-inline-fx"
-      trigger={names.map((name) => (
-        <span key={name} class="dm-fx-chip">
-          {name}
+      trigger={chips.map((chip) => (
+        <span
+          key={chip.key}
+          class="dm-fx-chip"
+          title={
+            chip.rounds !== undefined
+              ? `${chip.name} · ${ui("play.roundsLeft", { n: chip.rounds })}`
+              : undefined
+          }
+        >
+          {chip.name}
+          {chip.rounds !== undefined && <span class="dm-fx-chip-rounds">{chip.rounds}</span>}
         </span>
       ))}
     >
@@ -313,7 +329,9 @@ export function TrackerTable({ e }: { e: Encounter }) {
   const area = areaMode.value || flow !== undefined;
   // In the area mode a first column marks who is hit.
   const lead = area ? "2.8rem " : "";
-  const style = `--cols:${lead}${gridTemplate(columns)};--cols-narrow:${lead}${gridTemplate(columns, true)}`;
+  // The last column holds the cross that takes a creature out of the fight.
+  const trail = " 2rem";
+  const style = `--cols:${lead}${gridTemplate(columns)}${trail};--cols-narrow:${lead}${gridTemplate(columns, true)}${trail}`;
   const turn = encounter.value?.turn;
   const rows = withGroups(initiativeOrder(e.combatants));
   return (
@@ -331,13 +349,16 @@ export function TrackerTable({ e }: { e: Encounter }) {
                 {ui(`dm.col.${col}` as UiKey)}
               </th>
             ))}
+            <th data-col="remove" scope="col">
+              <span class="sr-only">{ui("dm.removeCombatant")}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
           {rows.map(({ c, group, run }) => [
             group && (
               <tr key={`group-${c.id}`} class="dm-group-head">
-                <th scope="rowgroup" colSpan={columns.length + (area ? 1 : 0)}>
+                <th scope="rowgroup" colSpan={columns.length + (area ? 2 : 1)}>
                   {group}
                 </th>
               </tr>
@@ -360,6 +381,17 @@ export function TrackerTable({ e }: { e: Encounter }) {
               {columns.map((col) => (
                 <Cell key={col} col={col} c={c} grouped={run} />
               ))}
+              <td data-col="remove">
+                <button
+                  type="button"
+                  class="dm-remove"
+                  title={`${ui("dm.removeCombatant")}: ${c.name}`}
+                  aria-label={`${ui("dm.removeCombatant")}: ${c.name}`}
+                  onClick={() => removeFromFight(c.id)}
+                >
+                  ×
+                </button>
+              </td>
             </tr>,
           ])}
         </tbody>

@@ -339,9 +339,26 @@ export async function duplicateEncounter() {
   void refreshEncounterCount();
 }
 
-/** Removes the open encounter; it can be brought back for a few seconds. */
-export async function removeEncounter() {
-  const current = encounter.value;
+/**
+ * Removes an encounter (the open one when no id is given); it can be brought back for a few seconds.
+ * When it was the open one, another of the campaign opens, or a new empty one when it was the last.
+ */
+export async function removeEncounter(id?: string) {
+  const open = encounter.value;
+  if (id !== undefined && id !== open?.id) {
+    const other = encounters.value.find((e) => e.id === id);
+    if (!other) return;
+    await deleteEncounter(other.id);
+    encounters.value = encounters.value.filter((e) => e.id !== other.id);
+    void refreshEncounterCount();
+    offerUndo(ui("dm.removedEncounter", { name: other.name }), async () => {
+      await saveEncounter(other);
+      void refreshEncounterCount();
+      encounters.value = [other, ...encounters.value.filter((e) => e.id !== other.id)];
+    });
+    return;
+  }
+  const current = open;
   if (!current) return;
   clearTimeout(saveTimer);
   await deleteEncounter(current.id);
@@ -916,10 +933,22 @@ export async function newCampaign(name: string) {
 
 export const renameOpenCampaign = (name: string) => updateCampaign((c) => renameCampaign(c, name));
 
+/** True while a campaign is being removed: a second tap on the button waits for the first. */
+let removingCampaign = false;
+
 /** Removes the open campaign with its encounters; they can all be brought back for a few seconds. */
 export async function removeCampaign() {
   const gone = campaign.value;
-  if (!gone) return;
+  if (!gone || removingCampaign) return;
+  removingCampaign = true;
+  try {
+    await dropCampaign(gone);
+  } finally {
+    removingCampaign = false;
+  }
+}
+
+async function dropCampaign(gone: Campaign) {
   clearTimeout(saveTimer);
   saveTimer = undefined;
   const fights = encounters.value.filter((e) => e.campaignId === gone.id);
@@ -933,11 +962,23 @@ export async function removeCampaign() {
     rest = [fresh];
   }
   campaigns.value = rest;
-  encounter.value = undefined;
   infoFor.value = undefined;
   turnHistory.length = 0;
+  // The page keeps showing the old encounter until the next campaign has one open: an empty
+  // encounter in between would leave the page on "Loading" if opening the next one failed.
   const next = rest[0];
-  if (next) await openCampaign(next);
+  try {
+    if (next) await openCampaign(next);
+  } catch (error) {
+    console.error("Opening the next campaign failed", error);
+  }
+  const shown = encounter.value;
+  if (next && (!shown || shown.campaignId !== next.id)) {
+    campaign.value = next;
+    const fresh = createEncounter(defaultName([]), next.id);
+    show(fresh);
+    void saveEncounter(fresh);
+  }
   void refreshEncounterCount();
   offerUndo(ui("dm.campaign.removed", { name: gone.name }), async () => {
     await saveCampaign(gone);

@@ -1579,6 +1579,34 @@
   cursor: pointer;
 }
 
+/* The cross at the end of a row: one tap takes the creature out of the fight, or deletes an encounter (both can be put back). */
+:root[data-style] .dm .dm-remove {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  min-width: 0;
+  height: 1.8rem;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+:root[data-style] .dm .dm-remove:hover,
+:root[data-style] .dm .dm-remove:focus-visible {
+  border-color: #c0443c;
+  background: rgb(192 68 60 / 0.2);
+  color: #f0a39d;
+}
+
 .dm-pick[data-pick="fail"] {
   border-style: solid;
   border-color: #c0443c;
@@ -2574,7 +2602,7 @@
 
 .dm-encounter-list li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.9rem;
@@ -2644,7 +2672,7 @@
 
 @container dm (max-width: 30rem) {
   .dm-encounter-list li {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
   .dm-encounter-state {
@@ -2655,6 +2683,10 @@
   .dm-encounter-list li button {
     grid-row: 1 / 3;
     grid-column: 2;
+  }
+
+  .dm-encounter-list li button.dm-remove {
+    grid-column: 3;
   }
 }
 
@@ -2859,6 +2891,16 @@
   line-height: 1.6;
   color: color-mix(in srgb, #c89bdc 75%, var(--fg));
   white-space: nowrap;
+}
+
+/* The rounds left of a condition or an effect, inside its chip: smaller, after a thin line. */
+.dm-fx-chip-rounds {
+  margin-left: 0.35rem;
+  padding-left: 0.35rem;
+  border-left: 1px solid currentColor;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
 }
 
 /* ---- The card of the turn on a narrow screen: the numbers, the attacks, the details ---- */

@@ -12,6 +12,7 @@ import {
   newCampaign,
   newEncounter,
   removeCampaign,
+  removeEncounter,
   removePlayer,
   renameOpenCampaign,
   selectCampaign,
@@ -165,6 +166,15 @@ function EncounterList() {
                 onClick={() => open(x.id)}
               >
                 {running ? ui("dm.resume") : ui("dm.openEncounter")}
+              </button>
+              <button
+                type="button"
+                class="dm-remove"
+                title={`${ui("dm.remove")}: ${x.name.trim() || ui("dm.unnamed")}`}
+                aria-label={`${ui("dm.remove")}: ${x.name.trim() || ui("dm.unnamed")}`}
+                onClick={() => void removeEncounter(x.id)}
+              >
+                ×
               </button>
             </li>
           );

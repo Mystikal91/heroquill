@@ -32,6 +32,7 @@ import { type UiKey, ui } from "../../i18n/ui";
 import { damageName } from "../damageName";
 import { effectLine } from "../play/ActiveEffects";
 import { DamageButtons } from "../play/DamageButtons";
+import { wordOptions } from "../studio/wordOptions";
 import { NumberField } from "./NumberField";
 
 /** The conditions of the rules a creature can have, by name (exhaustion has levels and is left to the sheet). */
@@ -56,10 +57,18 @@ export function DamageTypeChips({
   value: string | undefined;
   onChange: (kind: string | undefined) => void;
 }) {
+  // The kinds of the rules, then those that homebrew and other packs add ("void"), each once.
+  const rules = new Set<string>(DAMAGE_KINDS);
+  const kinds = [
+    ...DAMAGE_KINDS,
+    ...wordOptions("damage", undefined, "")
+      .map((o) => o.id)
+      .filter((id) => !rules.has(id)),
+  ];
   return (
     <fieldset class="dm-types">
       <legend class="sr-only">{ui("dm.damageType")}</legend>
-      {DAMAGE_KINDS.map((kind) => (
+      {kinds.map((kind) => (
         <button
           type="button"
           key={kind}
