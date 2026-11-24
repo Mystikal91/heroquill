@@ -363,7 +363,7 @@
 }
 
 .skill-ability {
-  color: color-mix(in srgb, var(--ab) 65%, var(--fg));
+  color: color-mix(in srgb, var(--ab) 60%, var(--fg));
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.05em;
