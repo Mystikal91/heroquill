@@ -203,6 +203,11 @@ export interface Character {
   id: string;
   schemaVersion: typeof CHARACTER_SCHEMA_VERSION;
   ruleset: "srd51" | "srd52";
+  /**
+   * True while the rules are still to be chosen (the first step of making a character), false once
+   * chosen for good. Characters saved before the step was there have neither.
+   */
+  rulesPending?: boolean | undefined;
   name: string;
   /**
    * A picture of the character the person added: a small square image as a `data:` address.
@@ -271,6 +276,30 @@ export interface ExtraDefense {
   damage?: string | undefined;
   amount?: number | undefined;
   note?: string | undefined;
+}
+
+/** True while nothing that makes a character was chosen yet. */
+export const isBlank = (c: Character): boolean =>
+  !c.name && c.classes.length === 0 && !c.choices.species && !c.choices.background;
+
+/** True while the rules of a character are still to be chosen: a blank one of before was never asked. */
+export const rulesToChoose = (c: Character): boolean => c.rulesPending ?? isBlank(c);
+
+/**
+ * Chooses the rules of a character for good. What was already taken from the lists of the other
+ * edition (on the Sheet or in Play, which stay open meanwhile) does not belong to this one.
+ */
+export function chooseRules(c: Character, ruleset: Character["ruleset"]): void {
+  if (!rulesToChoose(c)) return;
+  c.rulesPending = false;
+  if (c.ruleset === ruleset) return;
+  const fresh = createCharacter(ruleset);
+  c.ruleset = ruleset;
+  c.inventory = [];
+  // biome-ignore lint/performance/noDelete: an optional field that is absent, not undefined
+  delete c.companions;
+  c.play = fresh.play;
+  c.story = { ...c.story, alignment: fresh.story.alignment, deity: fresh.story.deity };
 }
 
 export function createCharacter(ruleset: Character["ruleset"]): Character {

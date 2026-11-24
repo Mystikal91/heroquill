@@ -21,7 +21,7 @@ export const TOUR_STEPS: readonly TourStep[] = [
   { id: "characters", view: "build", target: ".bar" },
   { id: "more", view: "build", target: ".bar-row .popover-button" },
   { id: "tabs", view: "build", target: ".tabs" },
-  { id: "build", view: "build", target: "#step-head-origin" },
+  { id: "build", view: "build", target: "#step-head-rules, #step-head-origin" },
   { id: "summary", view: "build", target: ".bld-preview" },
   { id: "sheet", view: "sheet", target: ".sheet-header" },
   { id: "play", view: "play", target: ".play-head, .hp-readout" },

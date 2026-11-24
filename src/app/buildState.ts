@@ -2,6 +2,7 @@ import { signal } from "@preact/signals";
 import type { LevelUpSummary } from "../engine/levelUp";
 
 export type StepId =
+  | "rules"
   | "origin"
   | "background"
   | "class"

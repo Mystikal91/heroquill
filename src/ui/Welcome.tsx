@@ -2,6 +2,7 @@ import { signal } from "@preact/signals";
 import { setMode, showView } from "../app/navigation";
 import { character, characters, openExample } from "../app/store";
 import { startTour } from "../app/tour";
+import { isBlank } from "../engine/character";
 import { ui } from "../i18n/ui";
 import { Logo } from "./Logo";
 import { CrownIcon, ShieldIcon } from "./icons";
@@ -30,8 +31,7 @@ function dismiss() {
 /** The first visit: the mark, what the app is, and the two sides of it (a character, or the Dungeon Master's table). */
 export function Welcome() {
   const c = character.value;
-  const blank = !c.name && c.classes.length === 0 && !c.choices.species && !c.choices.background;
-  if (dismissed.value || !blank || characters.value.length > 1) return null;
+  if (dismissed.value || !isBlank(c) || characters.value.length > 1) return null;
   return (
     <section class="card welcome welcome-hero">
       <div class="hero-sky" aria-hidden="true" />

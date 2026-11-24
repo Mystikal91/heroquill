@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { type StepId, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
-import { character, content, editionsAvailable, updateCharacter } from "../../app/store";
+import { character, content, editionsAvailable, rulesOpen, updateCharacter } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
 import { classColor } from "../classColor";
 import { KeyNumbers } from "./CoreStats";
@@ -93,10 +93,7 @@ export function SheetHeader() {
   ];
 
   return (
-    <header
-      class="card sheet-header"
-      style={{ "--cls": classColor(ch.classes[0]?.classId) ?? "#4a5468" }}
-    >
+    <header class="card sheet-header" style={{ "--cls": classColor(ch.classes[0]?.classId) }}>
       <div class="hero-band">
         <Portrait />
         <div class="hero-who">
@@ -110,7 +107,7 @@ export function SheetHeader() {
               </li>
             ))}
             {/* Which rules the character follows, when the app has both editions. */}
-            {editionsAvailable.value.length > 1 && (
+            {editionsAvailable.value.length > 1 && !rulesOpen.value && (
               <li title={ui("edition.label")}>{ui(`edition.${ch.ruleset}.name`)}</li>
             )}
           </ul>

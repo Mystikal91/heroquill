@@ -218,7 +218,6 @@
 .hero-numbers .stat-label {
   color: inherit;
   font-size: 0.68rem;
-  opacity: 0.9;
 }
 
 :root[data-style] .hero-numbers .stat.forced {

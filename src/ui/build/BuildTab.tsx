@@ -2,7 +2,7 @@ import type { ComponentChildren } from "preact";
 import { useEffect } from "preact/hooks";
 import { type StepId, levelUpPhase, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
-import { character, content, sheet } from "../../app/store";
+import { character, content, editionsAvailable, rulesOpen, setRules, sheet } from "../../app/store";
 import {
   assignAbilitiesForMe,
   classPriority,
@@ -24,6 +24,7 @@ import { classColor } from "../classColor";
 import { ClassStep } from "./ClassStep";
 import { FeaturesStep } from "./FeaturesStep";
 import { FreeEditStep } from "./FreeEditStep";
+import { RulesStep, pickedRules } from "./RulesStep";
 import { StoryStep } from "./StoryStep";
 import { BackgroundStep, EquipmentStep, SpeciesStep } from "./steps";
 
@@ -102,7 +103,7 @@ function FillSpells() {
   );
 }
 
-/** The steps: the four basics, after which the sheet can be played, and what can be refined at any time. */
+/** The steps: the basics, after which the sheet can be played, and what can be refined at any time. */
 function buildPlan(): { basics: StepInfo[]; refine: StepInfo[] } {
   const ch = character.value;
   const s = sheet.value;
@@ -272,6 +273,22 @@ function buildPlan(): { basics: StepInfo[]; refine: StepInfo[] } {
     hint: ui("build.hint.freeEdit"),
     body: <FreeEditStep />,
   });
+  // With both editions in the app, the rules come first: every later step depends on them.
+  if (editionsAvailable.value.length > 1)
+    basics.unshift({
+      id: "rules",
+      title: "build.rules",
+      icon: "",
+      status: rulesOpen.value ? "" : ui(`edition.${ch.ruleset}.name`),
+      done: !rulesOpen.value,
+      hint: ui(rulesOpen.value ? "edition.hint" : "build.hint.rules"),
+      body: <RulesStep />,
+    });
+  basics.forEach((step, i) => {
+    step.icon = String(i + 1);
+    // Nothing is done before the rules are.
+    if (rulesOpen.value) step.done = false;
+  });
   return { basics, refine };
 }
 
@@ -294,7 +311,8 @@ function go(id: StepId | "ready") {
 }
 
 /** The character as it grows: the class's colour, the key numbers, the abilities and how far the basics are. */
-function Preview({ basicsDone, doneCount }: { basicsDone: boolean; doneCount: number }) {
+function Preview({ doneCount, total }: { doneCount: number; total: number }) {
+  const basicsDone = doneCount === total;
   const s = sheet.value;
   const ch = character.value;
   const c = content.value;
@@ -302,11 +320,10 @@ function Preview({ basicsDone, doneCount }: { basicsDone: boolean; doneCount: nu
   const first = ch.classes[0];
   const classes = ch.classes.map((cl) => `${c.name(cl.classId)} ${cl.level}`).join(" / ");
   const species = c.name(ch.choices.subspecies ?? ch.choices.species ?? "");
-  const color = classColor(first?.classId);
   const label = ch.name.trim() || ui("sheet.unnamed");
   return (
     <aside class="bld-preview" aria-label={ui("build.summary")}>
-      <div class="bld-band" style={color ? { "--cls": color } : undefined}>
+      <div class="bld-band" style={{ "--cls": classColor(first?.classId) }}>
         <span class="bld-mark" aria-hidden="true">
           {label.charAt(0).toUpperCase()}
         </span>
@@ -360,10 +377,10 @@ function Preview({ basicsDone, doneCount }: { basicsDone: boolean; doneCount: nu
           <div class="bld-progress">
             <span
               class="bld-ring"
-              style={{ "--p": `${(doneCount / 4) * 100}%` }}
+              style={{ "--p": `${(doneCount / total) * 100}%` }}
               aria-hidden="true"
             />
-            <span>{ui("build.progress", { n: doneCount })}</span>
+            <span>{ui("build.progress", { n: doneCount, total })}</span>
           </div>
         )}
       </div>
@@ -426,16 +443,18 @@ function Ready({ refine }: { refine: StepInfo[] }) {
   );
 }
 
-/** Guided building: the four basics one at a time, then a sheet ready to play and what can be refined. */
+/** Guided building: the basics one at a time, then a sheet ready to play and what can be refined. */
 export function BuildTab() {
   const { basics, refine } = buildPlan();
   const all = [...basics, ...refine];
   const doneCount = basics.filter((step) => step.done).length;
   const basicsDone = doneCount === basics.length;
-  const wanted = openStep.value;
+  // The rules shut every other step until they are chosen.
+  const locked = rulesOpen.value;
+  const wanted = locked ? "rules" : openStep.value;
   const auto = basicsDone ? "ready" : (basics.find((step) => !step.done)?.id ?? "origin");
   // A step that is not in the list (the spells of a class that does not cast) falls back to the screen's choice.
-  // The finished screen only exists once the four basics are done.
+  // The finished screen only exists once the basics are done.
   const current: StepId | "ready" =
     (wanted === "ready" && basicsDone) ||
     (wanted && wanted !== "ready" && all.some((step) => step.id === wanted))
@@ -484,6 +503,7 @@ export function BuildTab() {
         aria-current={x.id === current ? "step" : undefined}
         data-done={x.done || undefined}
         data-numbered={numbered || undefined}
+        disabled={locked && x.id !== "rules"}
         onClick={() => go(x.id)}
       >
         <span class="bld-nav-mark" aria-hidden="true">
@@ -575,7 +595,16 @@ export function BuildTab() {
                 {inBasics === basics.length - 1 && !basicsDone && (
                   <span class="muted bld-foot-note">{ui("build.lastBasic")}</span>
                 )}
-                <button type="button" class="primary" onClick={() => go(nextId)}>
+                <button
+                  type="button"
+                  class="primary"
+                  disabled={locked && !pickedRules()}
+                  onClick={() => {
+                    const rules = pickedRules();
+                    if (locked && rules) setRules(rules);
+                    go(nextId);
+                  }}
+                >
                   {nextStep
                     ? ui("build.continueTo", { step: ui(nextStep.title) })
                     : ui("build.toReady")}{" "}
@@ -586,7 +615,7 @@ export function BuildTab() {
           )}
         </div>
 
-        <Preview basicsDone={basicsDone} doneCount={doneCount} />
+        <Preview doneCount={doneCount} total={basics.length} />
       </div>
     </>
   );

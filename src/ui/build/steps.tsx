@@ -1,4 +1,4 @@
-import { character, editionsAvailable, updateCharacter } from "../../app/store";
+import { character, updateCharacter } from "../../app/store";
 import { ui } from "../../i18n/ui";
 import { Choices } from "../Choices";
 import { Coins } from "../Coins";
@@ -30,11 +30,6 @@ export function SpeciesStep() {
           />
         </label>
 
-        {editionsAvailable.value.length > 1 && (
-          <p class="edition-current">
-            <span class="edition-tag">{ui(`edition.${c.ruleset}.name`)}</span>
-          </p>
-        )}
         <CardSelect
           label={ui("form.species")}
           fact={speciesFact}

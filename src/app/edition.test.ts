@@ -1,32 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { askEdition, editionRequest, editionsIn } from "./edition";
+import { chooseRules, createCharacter, rulesToChoose } from "../engine/character";
+import { editionsIn } from "./edition";
 
-describe("the edition question", () => {
+describe("the edition of a character", () => {
   it("offers only the editions whose rules are loaded, 2014 first", () => {
     expect(editionsIn(["srd51"])).toEqual(["srd51"]);
     expect(editionsIn(["srd52", "custom", "srd51"])).toEqual(["srd51", "srd52"]);
     expect(editionsIn([])).toEqual([]);
   });
 
-  it("resolves to the edition the person picks and closes the question", async () => {
-    const answer = askEdition();
-    expect(editionRequest.value).toBeDefined();
-    editionRequest.value?.answer("srd52");
-    await expect(answer).resolves.toBe("srd52");
-    expect(editionRequest.value).toBeUndefined();
+  it("is to choose for a new character and for a blank one of before, not for one with choices", () => {
+    expect(rulesToChoose({ ...createCharacter("srd51"), rulesPending: true, name: "Elowen" })).toBe(
+      true,
+    );
+    expect(rulesToChoose(createCharacter("srd51"))).toBe(true);
+    expect(rulesToChoose({ ...createCharacter("srd51"), name: "Elowen" })).toBe(false);
   });
 
-  it("resolves to nothing when the dialog is closed", async () => {
-    const answer = askEdition();
-    editionRequest.value?.answer(undefined);
-    await expect(answer).resolves.toBeUndefined();
-  });
-
-  it("answers the first question with nothing when a second one comes", async () => {
-    const first = askEdition();
-    const second = askEdition();
-    await expect(first).resolves.toBeUndefined();
-    editionRequest.value?.answer("srd51");
-    await expect(second).resolves.toBe("srd51");
+  it("is chosen once", () => {
+    const c = { ...createCharacter("srd51"), rulesPending: true };
+    c.inventory = [{ itemId: "srd51:item/club", quantity: 1, equipped: false }];
+    chooseRules(c, "srd52");
+    expect(c.ruleset).toBe("srd52");
+    expect(c.inventory).toEqual([]);
+    expect(rulesToChoose(c)).toBe(false);
+    chooseRules(c, "srd51");
+    expect(c.ruleset).toBe("srd52");
   });
 });

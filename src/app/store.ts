@@ -1,7 +1,13 @@
 import { computed, effect, signal } from "@preact/signals";
 import type { Content } from "../content/browser";
 import { applyAbilityMethod } from "../engine/abilityScores";
-import { type Character, createCharacter } from "../engine/character";
+import {
+  type Character,
+  chooseRules,
+  createCharacter,
+  isBlank,
+  rulesToChoose,
+} from "../engine/character";
 import { CharacterParseError } from "../engine/characterSchema";
 import { type DerivedSheet, deriveSheet } from "../engine/derive";
 import { relinkCharacter } from "../engine/relink";
@@ -20,7 +26,7 @@ import {
 } from "../storage/characters";
 import { decodeShare, isShareHash } from "../storage/share";
 import { parseBackup, parseImportFile } from "../storage/transfer";
-import { askEdition, editionsIn } from "./edition";
+import { editionsIn } from "./edition";
 import { refreshEncounterCount } from "./encounterCount";
 import { EXAMPLE_ID, buildExample } from "./example";
 import { showView, view } from "./navigation";
@@ -28,9 +34,10 @@ import { transferDialog, transferInbox } from "./transferState";
 
 export type SaveStatus = "idle" | "saving" | "saved" | "failed";
 
-/** A blank character that starts with the standard array, the easiest way to assign scores. */
-function createNewCharacter(ruleset: Character["ruleset"] = "srd51"): Character {
-  const fresh = createCharacter(ruleset);
+/** A blank character whose rules are still to be chosen, that starts with the standard array, the easiest way to assign scores. */
+function createNewCharacter(): Character {
+  const fresh = createCharacter("srd51");
+  fresh.rulesPending = true;
   applyAbilityMethod(fresh, "standard");
   return fresh;
 }
@@ -207,23 +214,24 @@ export async function importFromLink(): Promise<void> {
   }
 }
 
-/** The edition is fixed here, when the character is made: it picks the rules every later step uses. */
-export const newCharacter = (ruleset: Character["ruleset"] = "srd51") =>
-  switchTo(createNewCharacter(ruleset));
-
 /** The editions whose rules are loaded. */
 export const editionsAvailable = computed(() =>
   editionsIn((content.value?.packs ?? []).map((p) => p.manifest.ruleset)),
 );
 
-/**
- * "New character": the edition comes first. With one edition loaded there is nothing to ask, so the
- * character is made at once; closing the question makes none.
- */
+/** True while the first step of the build screen, the rules, is still to be done. With one edition there is nothing to ask. */
+export const rulesOpen = computed(
+  () => editionsAvailable.value.length > 1 && rulesToChoose(character.value),
+);
+
+/** Settles the rules of the open character: they pick the rules every later step uses. */
+export const setRules = (ruleset: Character["ruleset"]) =>
+  updateCharacter((d) => chooseRules(d, ruleset));
+
+/** "New character": opens a blank one on the build screen, whose first step is the rules. */
 export async function startNewCharacter(): Promise<void> {
-  if (editionsAvailable.value.length < 2) return newCharacter();
-  const ruleset = await askEdition();
-  if (ruleset) await newCharacter(ruleset);
+  await switchTo(createNewCharacter());
+  showView("build");
 }
 
 /**
@@ -235,8 +243,7 @@ export async function openExample(): Promise<void> {
   const loaded = content.value;
   if (!loaded) return;
   const open = character.value;
-  const blank =
-    !open.name && open.classes.length === 0 && !open.choices.species && !open.choices.background;
+  const blank = isBlank(open);
   const known = characters.value.some((c) => c.id === EXAMPLE_ID);
   if (blank && open.id !== EXAMPLE_ID) {
     clearTimeout(saveTimer);
@@ -312,8 +319,7 @@ export async function undoDelete() {
   deletedCharacter.value = undefined;
   // Deleting the only character opened a blank one: it is not worth keeping next to this one.
   const open = character.value;
-  const blank =
-    !open.name && open.classes.length === 0 && !open.choices.species && !open.choices.background;
+  const blank = isBlank(open);
   if (blank) await deleteCharacter(open.id).catch(() => undefined);
   await saveCharacter(back);
   await refreshList();

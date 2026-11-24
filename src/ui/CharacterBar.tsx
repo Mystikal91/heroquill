@@ -9,6 +9,7 @@ import {
   importFailed,
   importNotice,
   openCharacter,
+  rulesOpen,
   saveStatus,
   shareNotice,
   startNewCharacter,
@@ -69,7 +70,11 @@ export function CharacterBar() {
         >
           {options.map((s) => (
             <option key={s.id} value={s.id}>
-              {label(s.name, s.classes, s.id === current.id ? current.ruleset : undefined)}
+              {label(
+                s.name,
+                s.classes,
+                s.id === current.id && !rulesOpen.value ? current.ruleset : undefined,
+              )}
             </option>
           ))}
         </select>

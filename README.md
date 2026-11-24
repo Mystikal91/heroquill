@@ -24,7 +24,7 @@ and Aurora Legacy that you already own.
 
 **Build**
 
-- A guided flow in four steps: species, class, ability scores (standard array, point buy, rolled or
+- A guided flow in a few steps: the rules (2014 or 2024, chosen once), species, class, ability scores (standard array, point buy, rolled or
   manual) and background, each with a short hint, while a card of the character fills in beside them.
   Then the sheet is ready to play; choices, spells, equipment, story and features are optional cards
   to refine whenever you like. *Assign for me* places the scores where the class needs them, and

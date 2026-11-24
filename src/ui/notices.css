@@ -57,46 +57,6 @@
   font-size: 1.1rem;
 }
 
-.edition-dialog {
-  width: min(28rem, calc(100vw - 2rem));
-}
-
-.edition-dialog h3 {
-  margin: 0 0 0.4rem;
-  font-size: 1.1rem;
-}
-
-.edition-options {
-  display: grid;
-  gap: 0.6rem;
-  margin: 1rem 0;
-}
-
-.edition-option {
-  display: grid;
-  gap: 0.25rem;
-  min-height: 3.5rem;
-  padding: 0.7rem 0.9rem;
-  text-align: left;
-}
-
-/* The description is a sentence to read: the plain letters, not the capitals of a button. */
-.edition-option span,
-:root[data-style] .edition-option span {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.35;
-  text-transform: none;
-  opacity: 0.9;
-}
-
-.edition-hint {
-  margin: 0.5rem 0 0;
-  font-size: 0.95rem;
-}
-
 .confirm-actions {
   display: flex;
   flex-wrap: wrap;
