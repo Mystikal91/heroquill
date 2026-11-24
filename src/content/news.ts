@@ -1882,16 +1882,6 @@ export const ROADMAP: RoadmapItem[] = [
     },
   },
   {
-    id: "actions",
-    text: {
-      en: "More in Play: the cost of a use that you can change (Empty Body takes 4 ki points), the healing of Second Wind and Lay on Hands rolled by a button, and effects that last a few rounds (conditions, concentration, rage, Shillelagh and Magic Weapon already work; Bless, Haste and Hunter’s Mark still have no counter).",
-      it: "Altro in Gioca: il costo di un uso che puoi cambiare (Corpo Vuoto costa 4 punti ki), la cura di Recuperare Energie e Imposizione delle Mani tirata con un pulsante, e gli effetti che durano qualche round (condizioni, concentrazione, ira, Randello incantato e Arma magica già funzionano; Benedizione, Velocità e Marchio del Cacciatore non hanno ancora un contatore).",
-      fr: "Plus dans Jouer : le coût d’une utilisation que tu peux changer (Corps vide coûte 4 points de ki), les soins de Second souffle et de Imposition des mains lancés par un bouton, et les effets qui durent quelques rounds (conditions, concentration, rage, Crosse des druides et Arme magique fonctionnent déjà ; Bénédiction, Hâte et Marque du chasseur n’ont pas encore de compteur).",
-      de: "Mehr im Spielmodus: die Kosten einer Anwendung, die du ändern kannst (Leerer Körper kostet 4 Ki-Punkte), die Heilung von Durchatmen und Handauflegen per Schaltfläche gewürfelt und Effekte, die einige Runden dauern (Bedingungen, Konzentration, Wutrausch, Shillelagh und Magische Waffe funktionieren schon; Segnen, Hast und Jägermal haben noch keinen Zähler).",
-      es: "Más en Jugar: el coste de un uso que puedes cambiar (Cuerpo vacío cuesta 4 puntos de ki), la curación de Tomar aliento e Imposición de manos tirada con un botón, y los efectos que duran unos asaltos (condiciones, concentración, furia, Shillelagh y Arma mágica ya funcionan; Bendición, Prisa y Marca del cazador aún no tienen contador).",
-    },
-  },
-  {
     id: "features",
     text: {
       en: "Features that depend on dice rerolls, advantage or reactions (Great Weapon Fighting, Danger Sense, Reckless Attack, Uncanny Dodge, Deflect Missiles) are still only text: use Free edit for their effects.",
