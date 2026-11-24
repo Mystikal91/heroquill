@@ -38,6 +38,9 @@ describe("reading a stat block", () => {
 
   it("lists senses with the passive Perception last", () => {
     expect(sensesText({ darkvision: 60 }, [], 12)).toBe("darkvision 60 ft., passive Perception 12");
+    // A file from outside may write a sense in capitals or invent one: it must not break the page.
+    expect(sensesText({ Darkvision: 30 })).toBe("darkvision 30 ft.");
+    expect(sensesText({ "Echo sense": 10 })).toBe("Echo sense 10 ft.");
     expect(sensesText({ blindsight: 30 }, ["blindsight"])).toBe(
       "blindsight 30 ft. (blind beyond this radius)",
     );

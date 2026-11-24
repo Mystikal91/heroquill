@@ -60,6 +60,14 @@ export function speedText(speed: Record<string, number | true>): string {
   return parts.join(", ");
 }
 
+const SENSES = ["darkvision", "blindsight", "tremorsense", "truesight"];
+
+/** A sense by its name in the language; a file may write it in capitals or invent one, which is shown as it came. */
+const senseName = (sense: string) => {
+  const slug = sense.toLowerCase();
+  return SENSES.includes(slug) ? ui(`monster.sense.${slug}` as UiKey) : sense;
+};
+
 /** Senses as `darkvision 60 ft., passive Perception 12`. */
 export function sensesText(
   senses: Record<string, number>,
@@ -68,7 +76,7 @@ export function sensesText(
 ): string {
   const parts = Object.entries(senses).map(
     ([sense, range]) =>
-      `${ui(`monster.sense.${sense}` as UiKey)} ${feet(range)}${
+      `${senseName(sense)} ${feet(range)}${
         blindBeyond.includes(sense) ? ` (${ui("monster.sense.blindBeyond")})` : ""
       }`,
   );
