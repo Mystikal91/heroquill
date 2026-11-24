@@ -2,6 +2,7 @@ import { character, content, isForced, shownSheet } from "../../app/store";
 import type { DerivedSheet, SpellcastingResult } from "../../engine/derive";
 import { OVERRIDE } from "../../engine/overrides";
 import { signed, ui } from "../../i18n/ui";
+import { MagicIcon } from "../play/icons";
 import { Stat } from "./CoreStats";
 import { Panel, Pips } from "./parts";
 
@@ -63,7 +64,7 @@ export function SpellcastingPanel() {
   const slots = s.spellSlots.map((n, i) => ({ level: i + 1, n })).filter((x) => x.n > 0);
 
   return (
-    <Panel title={ui("sheet.spellcasting")}>
+    <Panel title={ui("sheet.spellcasting")} tint="magic" icon={MagicIcon}>
       <SpellcastingStats s={s} />
       <h4>{ui("sheet.spellSlots")}</h4>
       <ul class="slot-list">

@@ -1315,6 +1315,7 @@
   "sheet.levelLabel": "Niveau {level}",
   "sheet.passiveInsight": "Intuition passive",
   "sheet.proficient": "maîtrisé",
+  "sheet.saveShort": "JS",
   "sheet.savingThrow": "Jet de sauvegarde",
   "sheet.speciesTraits": "Traits d'espèce",
   "sheet.classFeatures": "Aptitudes de classe",

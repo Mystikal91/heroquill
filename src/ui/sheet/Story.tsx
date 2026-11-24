@@ -1,6 +1,7 @@
 import { character, content } from "../../app/store";
 import type { Story } from "../../engine/character";
 import { type UiKey, ui } from "../../i18n/ui";
+import { QuillIcon } from "../icons";
 import { Panel } from "./parts";
 
 const LOOKS = ["age", "height", "weight", "eyes", "skin", "hair"] as const;
@@ -27,7 +28,7 @@ export function StoryPanel() {
   if (looks.length === 0 && texts.length === 0 && !deity) return null;
 
   return (
-    <Panel title={ui("sheet.story")}>
+    <Panel title={ui("sheet.story")} tint="story" icon={QuillIcon}>
       {deity && (
         <p class="story-looks">
           <span>

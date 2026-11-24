@@ -2,7 +2,8 @@ import { character, content, shownSheet } from "../app/store";
 import type { Content } from "../content/browser";
 import { ui } from "../i18n/ui";
 import { EditPencil } from "./QuickEdit";
-import { Paragraphs } from "./sheet/parts";
+import { BookIcon } from "./icons";
+import { Panel, Paragraphs } from "./sheet/parts";
 import { type SpellRow, collectSpellRows } from "./spellRows";
 
 function SpellDetails({ c, ruleset, row }: { c: Content; ruleset: string; row: SpellRow }) {
@@ -68,8 +69,7 @@ export function SpellSheet() {
   const levels = [...new Set(rows.map((r) => r.level))];
 
   return (
-    <section class="card">
-      <h3>{ui("sheet.spellList")}</h3>
+    <Panel title={ui("sheet.spellList")} tint="magic" icon={BookIcon} className="spell-sheet">
       {levels.map((level) => (
         <div key={level}>
           <h4>{level === 0 ? ui("spells.cantrips") : ui("spells.level", { level })}</h4>
@@ -80,6 +80,6 @@ export function SpellSheet() {
             ))}
         </div>
       ))}
-    </section>
+    </Panel>
   );
 }

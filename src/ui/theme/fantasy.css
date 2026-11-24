@@ -151,10 +151,6 @@
   transform: rotate(45deg) scale(0.85);
 }
 
-:root[data-style="fantasy"] .level-frame {
-  --n: 10px;
-}
-
 :root[data-style="fantasy"] :is(button, .site-footer a.link) {
   font-family: var(--font-display);
   letter-spacing: 0.04em;
@@ -177,25 +173,4 @@
 
 :root[data-style="fantasy"] .site-footer {
   border-top: 1px solid var(--ink);
-}
-
-/* The class features heading sits outside a frame, so it gets its own flourish. */
-:root[data-style="fantasy"] .class-features-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  color: var(--accent);
-}
-
-:root[data-style="fantasy"] .class-features-title::before,
-:root[data-style="fantasy"] .class-features-title::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ink));
-}
-
-:root[data-style="fantasy"] .class-features-title::after {
-  transform: scaleX(-1);
 }

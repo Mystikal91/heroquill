@@ -8,6 +8,7 @@ import { distance } from "../../i18n/units";
 import { ExplainButton } from "../Explain";
 import { attackName } from "../attackName";
 import { damageName } from "../damageName";
+import { CombatIcon, SwordIcon } from "../play/icons";
 import { useRoll } from "../useRoll";
 import { ExtraDamageList } from "./ExtraDamage";
 import { Panel } from "./parts";
@@ -71,49 +72,38 @@ function Bonuses() {
   );
 }
 
-/** Armor class, initiative, speed, hit points and hit dice. */
-export function CoreStats() {
+/** The numbers to know first, in the band of the sheet. */
+export function KeyNumbers() {
   const s = shownSheet.value;
   if (!s) return null;
   const hitDice = Object.entries(s.hitPoints.hitDice)
     .map(([die, n]) => `${n}${die}`)
-    .join(" + ");
-
+    .join("+");
   return (
-    <>
-      <div class="stat-row">
-        <Stat
-          label={ui("sheet.armorClass")}
-          forced={isForced(OVERRIDE.armorClass)}
-          explain={{ kind: "ac" }}
-        >
-          {s.armorClass.value}
-        </Stat>
-        <Stat
-          label={ui("sheet.initiative")}
-          forced={isForced(OVERRIDE.initiative)}
-          explain={{ kind: "initiative" }}
-        >
-          {signed(s.initiative)}
-        </Stat>
-        <Stat
-          label={ui("sheet.speed")}
-          forced={isForced(OVERRIDE.speed)}
-          explain={{ kind: "speed" }}
-        >
-          {s.speed === undefined ? "—" : distance(s.speed)}
-        </Stat>
-      </div>
-      {s.armorClass.stealthDisadvantage && <p class="note">{ui("sheet.stealthDisadvantage")}</p>}
-      {s.armorClass.untrained && <p class="note">{ui("armor.untrained")}</p>}
-      <Bonuses />
-      <div class="stat-row stat-row-2">
-        <Stat label={ui("sheet.hitPoints")} forced={isForced(OVERRIDE.hitPoints)}>
-          {s.hitPoints.max}
-        </Stat>
-        <Stat label={ui("sheet.hitDice")}>{hitDice || "—"}</Stat>
-      </div>
-    </>
+    <div class="hero-numbers">
+      <Stat
+        label={ui("sheet.armorClass")}
+        forced={isForced(OVERRIDE.armorClass)}
+        explain={{ kind: "ac" }}
+      >
+        {s.armorClass.value}
+      </Stat>
+      <Stat label={ui("sheet.hitPoints")} forced={isForced(OVERRIDE.hitPoints)}>
+        {s.hitPoints.max}
+      </Stat>
+      <Stat
+        label={ui("sheet.initiative")}
+        forced={isForced(OVERRIDE.initiative)}
+        explain={{ kind: "initiative" }}
+      >
+        {signed(s.initiative)}
+      </Stat>
+      <Stat label={ui("sheet.speed")} forced={isForced(OVERRIDE.speed)} explain={{ kind: "speed" }}>
+        {s.speed === undefined ? "—" : distance(s.speed)}
+      </Stat>
+      <Stat label={ui("quick.proficiency")}>{signed(s.proficiencyBonus)}</Stat>
+      <Stat label={ui("sheet.hitDice")}>{hitDice || "—"}</Stat>
+    </div>
   );
 }
 
@@ -128,7 +118,7 @@ export function Attacks() {
     .map((i) => i.itemId);
 
   return (
-    <Panel title={ui("sheet.attacks")}>
+    <Panel title={ui("sheet.attacks")} tint="combat" icon={CombatIcon}>
       {s.attacks.length === 0 && (
         <>
           <p class="muted">
@@ -159,6 +149,9 @@ export function Attacks() {
       <ul class="attack-list">
         {[...s.attacks, ...(s.unarmed ? [s.unarmed] : [])].map((a) => (
           <li key={a.itemId}>
+            <span class="attack-badge" aria-hidden="true">
+              <SwordIcon />
+            </span>
             <div class="attack-name">
               {attackName(c, a)}
               {a.enhancement > 0 && ` +${a.enhancement}`}
@@ -180,6 +173,9 @@ export function Attacks() {
         ))}
       </ul>
       <ExtraDamageList />
+      {s.armorClass.stealthDisadvantage && <p class="note">{ui("sheet.stealthDisadvantage")}</p>}
+      {s.armorClass.untrained && <p class="note">{ui("armor.untrained")}</p>}
+      <Bonuses />
     </Panel>
   );
 }

@@ -4,7 +4,8 @@ import { classData, subclassData } from "../../data/progression";
 import type { ClassLevel } from "../../engine/character";
 import { ui } from "../../i18n/ui";
 import { sourceLabel } from "../SourceTag";
-import { RulesText } from "./parts";
+import { FeaturesIcon } from "../play/icons";
+import { Panel, RulesText } from "./parts";
 
 /** Features of one class (and its subclass) grouped by the level that grants them. */
 function featuresByLevel(
@@ -24,7 +25,8 @@ function featuresByLevel(
   return byLevel;
 }
 
-function LevelFrame({
+/** The features of one level, as rows beside the number of the level. */
+function LevelRow({
   c,
   level,
   features,
@@ -36,25 +38,27 @@ function LevelFrame({
   locked: boolean;
 }) {
   return (
-    <article class={`card level-frame${locked ? " locked" : ""}`}>
+    <div class={`level-row${locked ? " locked" : ""}`}>
       <span class="level-badge">
         <small>{ui("sheet.levelBadge")}</small>
         {level}
       </span>
-      {features.map((id) => (
-        <RulesText
-          key={id}
-          id={id}
-          name={c.name(id)}
-          text={c.text(id, "desc")}
-          tag={sourceLabel(id)}
-        />
-      ))}
-    </article>
+      <div class="level-features">
+        {features.map((id) => (
+          <RulesText
+            key={id}
+            id={id}
+            name={c.name(id)}
+            text={c.text(id, "desc")}
+            tag={sourceLabel(id)}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
-/** One framed box per level, filled with the class features from the rules. */
+/** One section per class, with its features level by level. */
 export function ClassFeatures() {
   const c = content.value;
   const ch = character.value;
@@ -68,23 +72,24 @@ export function ClassFeatures() {
         const reached = levels.filter(([level]) => level <= cl.level);
         const ahead = levels.filter(([level]) => level > cl.level);
         return (
-          <section key={cl.classId} class="class-block">
-            <h3 class="class-features-title">
-              {ui("sheet.classFeatures")}
-              {ch.classes.length > 1 && ` — ${c.name(cl.classId)}`}
-            </h3>
+          <Panel
+            key={cl.classId}
+            tint="features"
+            icon={FeaturesIcon}
+            title={`${ui("sheet.classFeatures")}${ch.classes.length > 1 ? ` — ${c.name(cl.classId)}` : ""}`}
+          >
             {reached.map(([level, features]) => (
-              <LevelFrame key={level} c={c} level={level} features={features} locked={false} />
+              <LevelRow key={level} c={c} level={level} features={features} locked={false} />
             ))}
             {ahead.length > 0 && (
               <details class="higher-levels">
                 <summary>{ui("sheet.higherLevels", { count: ahead.length })}</summary>
                 {ahead.map(([level, features]) => (
-                  <LevelFrame key={level} c={c} level={level} features={features} locked />
+                  <LevelRow key={level} c={c} level={level} features={features} locked />
                 ))}
               </details>
             )}
-          </section>
+          </Panel>
         );
       })}
     </div>

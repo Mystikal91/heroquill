@@ -1,4 +1,4 @@
-import type { ComponentChildren } from "preact";
+import type { ComponentChildren, ComponentType } from "preact";
 import { content, shownSheet } from "../../app/store";
 import type { FeatureValue } from "../../engine/featureValues";
 import { ui } from "../../i18n/ui";
@@ -6,19 +6,33 @@ import { machineMode, toggleOriginal } from "../../translate/auto";
 import { ENGINE_NAMES } from "../../translate/engines";
 import { EditPencil } from "../QuickEdit";
 
-/** A framed panel with a titled heading. */
+/** What a section of the sheet is about: the colour of its heading. */
+export type Tint = "combat" | "magic" | "bag" | "features" | "species" | "story" | "profile";
+
+/** A framed panel with a titled heading; with a tint, the heading is a coloured band with an icon. */
 export function Panel({
   title,
   children,
   className = "",
+  tint,
+  icon: Icon,
 }: {
   title: string;
   children: ComponentChildren;
   className?: string;
+  tint?: Tint;
+  icon?: ComponentType;
 }) {
   return (
-    <section class={`card panel ${className}`.trim()}>
-      <h3>{title}</h3>
+    <section class={`card panel ${className}`.trim()} data-tint={tint}>
+      <h3>
+        {Icon && (
+          <span class="panel-icon" aria-hidden="true">
+            <Icon />
+          </span>
+        )}
+        {Icon ? <span class="panel-title">{title}</span> : title}
+      </h3>
       {children}
     </section>
   );

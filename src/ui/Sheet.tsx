@@ -3,9 +3,9 @@ import { useRef } from "preact/hooks";
 import { type SheetGroup, sheetGroup, showSheetGroup } from "../app/sheetView";
 import { character, content, shownSheet } from "../app/store";
 import { SpellSheet } from "./SpellSheet";
-import { AbilityBlocks, Badges } from "./sheet/AbilityBlocks";
+import { AbilityTiles, Skills } from "./sheet/AbilityBlocks";
 import { ClassFeatures } from "./sheet/ClassFeatures";
-import { Attacks, CoreStats } from "./sheet/CoreStats";
+import { Attacks } from "./sheet/CoreStats";
 import { CustomFeaturesPanel } from "./sheet/CustomFeaturesPanel";
 import { Defenses, Feats, Inventory, Notes, Proficiencies, SpeciesTraits } from "./sheet/Details";
 import { FormToggle } from "./sheet/FormToggle";
@@ -36,8 +36,8 @@ const Part = ({
 );
 
 /**
- * The character sheet on screen: three columns when there is room (abilities and skills,
- * combat and spells, features by level), two or one when there is not. On a phone it is one
+ * The character sheet on screen: a band with who they are and the key numbers, the six
+ * abilities, then three columns when there is room (skills, combat and spells, features by level), two or one when there is not. On a phone it is one
  * column split into parts behind tabs, under a row with the key numbers.
  */
 export function Sheet() {
@@ -76,13 +76,13 @@ export function Sheet() {
       <SheetHeader />
       <FormToggle />
       <SheetTabs groups={groups} />
+      <Part group="profile" order={0}>
+        <AbilityTiles />
+      </Part>
       <div class="sheet-grid">
         <div class="sheet-col col-left">
-          <Part group="profile" order={1}>
-            <Badges />
-          </Part>
           <Part group="profile" order={2}>
-            <AbilityBlocks />
+            <Skills />
           </Part>
           <Part group="profile" order={3}>
             <Proficiencies />
@@ -92,9 +92,6 @@ export function Sheet() {
           </Part>
         </div>
         <div class="sheet-col col-center">
-          <Part group="combat" order={1}>
-            <CoreStats />
-          </Part>
           <Part group="combat" order={2}>
             <Attacks />
           </Part>
@@ -112,9 +109,6 @@ export function Sheet() {
           </Part>
         </div>
         <div class="sheet-col col-right">
-          <Part group="profile" order={5}>
-            <StoryPanel />
-          </Part>
           <Part group="features" order={1}>
             <SpeciesTraits />
           </Part>
@@ -126,6 +120,9 @@ export function Sheet() {
           </Part>
           <Part group="features" order={4}>
             <CustomFeaturesPanel />
+          </Part>
+          <Part group="profile" order={5}>
+            <StoryPanel />
           </Part>
         </div>
       </div>

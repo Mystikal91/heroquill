@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { type StepId, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
 import { character, content, editionsAvailable, updateCharacter } from "../../app/store";
-import { ui } from "../../i18n/ui";
+import { type UiKey, ui } from "../../i18n/ui";
+import { classColor } from "../classColor";
+import { KeyNumbers } from "./CoreStats";
 import { Portrait } from "./Portrait";
 
 /** Opens a step of the build screen, for changing what the sheet shows. */
@@ -66,86 +68,54 @@ function EditableName() {
   );
 }
 
-/** Name banner, who the character is, and the class banner. */
+/** The band in the colour of the class: portrait, name, who the character is, the key numbers. */
 export function SheetHeader() {
   const c = content.value;
   const ch = character.value;
   if (!c) return null;
   const name = c.name;
 
-  const first = ch.classes[0];
-  const classTitle = ch.classes.map((cl) => name(cl.classId)).join(" / ") || ui("sheet.noClass");
-  const totalLevel = ch.classes.reduce((sum, cl) => sum + cl.level, 0);
-  const classLabel = first?.subclassId
-    ? name(first.subclassId)
-    : ui("sheet.levelLabel", { level: totalLevel });
-
+  const classes = ch.classes
+    .map((cl) => {
+      const sub = cl.subclassId ? ` (${name(cl.subclassId)})` : "";
+      return `${name(cl.classId)} ${cl.level}${sub}`;
+    })
+    .join(" / ");
   const species = [ch.choices.species, ch.choices.subspecies]
     .filter((id): id is string => Boolean(id))
     .map(name)
     .join(", ");
+  const facts: [StepId, UiKey, string][] = [
+    ["origin", "print.species", species],
+    ["class", "form.class", classes || ui("sheet.noClass")],
+    ["background", "print.background", ch.choices.background ? name(ch.choices.background) : ""],
+    ["story", "story.alignment", ch.story.alignment ? name(ch.story.alignment) : ""],
+  ];
 
   return (
-    <header class="sheet-header">
-      <div class="banner-name-wrap">
-        <div class="banner banner-name has-portrait">
-          <EditableName />
-          <span class="banner-label">{ui("sheet.name")}</span>
-        </div>
+    <header
+      class="card sheet-header"
+      style={{ "--cls": classColor(ch.classes[0]?.classId) ?? "#4a5468" }}
+    >
+      <div class="hero-band">
         <Portrait />
-      </div>
-
-      <dl class="card sheet-info">
-        <div>
-          <dd>
-            <Change step="origin" what={ui("print.species")}>
-              {species || "—"}
-            </Change>
-          </dd>
-          <dt>{ui("print.species")}</dt>
+        <div class="hero-who">
+          <EditableName />
+          <ul class="hero-facts plain">
+            {facts.map(([step, label, value]) => (
+              <li key={step}>
+                <Change step={step} what={ui(label)}>
+                  {value || `${ui(label)}: —`}
+                </Change>
+              </li>
+            ))}
+            {/* Which rules the character follows, when the app has both editions. */}
+            {editionsAvailable.value.length > 1 && (
+              <li title={ui("edition.label")}>{ui(`edition.${ch.ruleset}.name`)}</li>
+            )}
+          </ul>
         </div>
-        <div>
-          <dd>
-            <Change step="background" what={ui("print.background")}>
-              {ch.choices.background ? name(ch.choices.background) : "—"}
-            </Change>
-          </dd>
-          <dt>{ui("print.background")}</dt>
-        </div>
-        <div>
-          <dd>
-            <Change step="class" what={ui("form.level")}>
-              {ui("sheet.levelLabel", { level: totalLevel })}
-            </Change>
-          </dd>
-          <dt>{ui("form.level")}</dt>
-        </div>
-        <div>
-          <dd>
-            <Change step="story" what={ui("story.alignment")}>
-              {ch.story.alignment ? name(ch.story.alignment) : "—"}
-            </Change>
-          </dd>
-          <dt>{ui("story.alignment")}</dt>
-        </div>
-      </dl>
-
-      <div class="banner banner-class">
-        <h2>
-          <Change step="class" what={ui("form.class")}>
-            {classTitle}
-          </Change>
-        </h2>
-        <span class="banner-label">
-          {classLabel}
-          {/* Which rules the character follows, when the app has both editions. */}
-          {editionsAvailable.value.length > 1 && (
-            <>
-              {" · "}
-              <span title={ui("edition.label")}>{ui(`edition.${ch.ruleset}.name`)}</span>
-            </>
-          )}
-        </span>
+        <KeyNumbers />
       </div>
     </header>
   );

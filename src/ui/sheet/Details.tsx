@@ -6,6 +6,8 @@ import { Coins } from "../Coins";
 import { damageTitle } from "../damageName";
 import { reductionLabel } from "../damageReduction";
 import { EquipmentBoard } from "../equipment/EquipmentBoard";
+import { FlagIcon, HeartIcon, ShieldIcon } from "../icons";
+import { ResourcesIcon, StarIcon } from "../play/icons";
 import { Panel, RulesText } from "./parts";
 
 const PROFICIENCY_CATEGORIES = ["armor", "weapon", "tool", "language"] as const;
@@ -32,7 +34,7 @@ export function Proficiencies() {
       .join(", ");
 
   return (
-    <Panel title={ui("sheet.proficiencies")}>
+    <Panel title={ui("sheet.proficiencies")} tint="profile" icon={FlagIcon}>
       <dl class="pairs">
         {PROFICIENCY_CATEGORIES.map((cat) => (
           <Fragment key={cat}>
@@ -63,7 +65,7 @@ export function Defenses() {
   if (kinds.length === 0 && s.damageReductions.length === 0) return null;
   const damage = damageTitle;
   return (
-    <Panel title={ui("sheet.defenses")}>
+    <Panel title={ui("sheet.defenses")} tint="profile" icon={ShieldIcon}>
       <dl class="pairs">
         {kinds.map((kind) => (
           <Fragment key={kind}>
@@ -96,7 +98,7 @@ export function SpeciesTraits() {
   const traits = s?.traits.filter((id) => !s.hiddenFeatures.includes(id)) ?? [];
   if (!c || !s || traits.length === 0) return null;
   return (
-    <Panel title={ui("sheet.speciesTraits")}>
+    <Panel title={ui("sheet.speciesTraits")} tint="species" icon={HeartIcon}>
       {traits.map((id) => (
         <RulesText key={id} id={id} name={c.name(id)} text={c.text(id, "desc")} />
       ))}
@@ -111,7 +113,7 @@ export function Feats() {
   const feats = s?.feats.filter((id) => !s.hiddenFeatures.includes(id)) ?? [];
   if (!c || !s || feats.length === 0) return null;
   return (
-    <Panel title={ui("sheet.feats")}>
+    <Panel title={ui("sheet.feats")} tint="features" icon={StarIcon}>
       {feats.map((id) => (
         <RulesText key={id} id={id} name={c.name(id)} text={c.text(id, "desc")} />
       ))}
@@ -126,7 +128,7 @@ export function Inventory() {
   const ch = character.value;
   if (!c || !s) return null;
   return (
-    <Panel title={ui("sheet.inventory")}>
+    <Panel title={ui("sheet.inventory")} tint="bag" icon={ResourcesIcon}>
       {ch.inventory.length > 0 && <p class="muted">{ui("sheet.equipHint")}</p>}
       <EquipmentBoard mode="sheet" />
       <h5>{ui("coin.title")}</h5>
