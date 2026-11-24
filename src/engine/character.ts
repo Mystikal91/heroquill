@@ -2,6 +2,7 @@ import { ABILITIES, type Ability, type Effect } from "../data/schema";
 import type { PointBuyRules } from "./abilityScores";
 import type { Coins } from "./coins";
 import type { CustomFeature } from "./custom";
+import { inRuleset } from "./rulesets";
 import type { BoardSlot } from "./slots";
 import type { FeatureSetting } from "./uses";
 import { uuid } from "./uuid";
@@ -278,28 +279,73 @@ export interface ExtraDefense {
   note?: string | undefined;
 }
 
-/** True while nothing that makes a character was chosen yet. */
-export const isBlank = (c: Character): boolean =>
-  !c.name && c.classes.length === 0 && !c.choices.species && !c.choices.background;
+/** True while no class, species or background was chosen: the rules bind nothing yet. */
+const unmade = (c: Character): boolean =>
+  c.classes.length === 0 && !c.choices.species && !c.choices.background;
 
-/** True while the rules of a character are still to be chosen: a blank one of before was never asked. */
-export const rulesToChoose = (c: Character): boolean => c.rulesPending ?? isBlank(c);
+/** True for a character with nothing in it, that can be dropped without asking. */
+export const isBlank = (c: Character): boolean =>
+  !c.name &&
+  !c.portrait &&
+  unmade(c) &&
+  [c.inventory, c.companions, c.custom, c.options, c.feats, c.extraDefenses, c.abilityRolls].every(
+    (list) => !list?.length,
+  ) &&
+  !c.play.customEffects?.length &&
+  Object.keys(c.overrides).length === 0 &&
+  Object.values(c.coins ?? {}).every((amount) => !amount) &&
+  Object.values(c.story).every((text) => !text);
 
 /**
- * Chooses the rules of a character for good. What was already taken from the lists of the other
- * edition (on the Sheet or in Play, which stay open meanwhile) does not belong to this one.
+ * True while the rules of a character are still to be chosen. One with a class, a species or a
+ * background keeps the rules it has, whatever the flag says; a blank one of before was never asked.
+ */
+export const rulesToChoose = (c: Character): boolean => unmade(c) && (c.rulesPending ?? !c.name);
+
+/**
+ * The character with the question of the rules written down, for one saved before there was one:
+ * worked out when it is opened, so that giving it a name does not answer the question for it.
+ */
+export const withRulesFlag = (c: Character): Character =>
+  c.rulesPending === undefined && rulesToChoose(c) ? { ...c, rulesPending: true } : c;
+
+/**
+ * Chooses the rules of a character for good. What was taken from the lists of the other edition (on
+ * the Sheet or in Play, which stay open meanwhile, or in Build by a character of before) does not
+ * belong to this one and goes, with the picks of a class and the state of Play; what the person wrote,
+ * and items, companions and options of the packs (which belong to every edition), stay.
  */
 export function chooseRules(c: Character, ruleset: Character["ruleset"]): void {
   if (!rulesToChoose(c)) return;
   c.rulesPending = false;
   if (c.ruleset === ruleset) return;
   const fresh = createCharacter(ruleset);
+  const stays = (id: string | undefined) => !id || inRuleset(id, ruleset);
   c.ruleset = ruleset;
-  c.inventory = [];
-  // biome-ignore lint/performance/noDelete: an optional field that is absent, not undefined
-  delete c.companions;
-  c.play = fresh.play;
-  c.story = { ...c.story, alignment: fresh.story.alignment, deity: fresh.story.deity };
+  c.inventory = c.inventory
+    .filter((item) => item.custom || stays(item.itemId))
+    .map(({ enchantment, ...item }) =>
+      enchantment && stays(enchantment) ? { ...item, enchantment } : item,
+    );
+  if (c.companions) c.companions = c.companions.filter((one) => stays(one.monster));
+  const { inspiration, customEffects } = c.play;
+  c.play = { ...fresh.play, inspiration, ...(customEffects && { customEffects }) };
+  const { alignment, deity, ...written } = c.story;
+  c.story = {
+    ...written,
+    ...(alignment && stays(alignment) && { alignment }),
+    ...(deity && stays(deity) && { deity }),
+  };
+  c.feats = [];
+  c.asi = [];
+  c.selections = {};
+  c.spells = {};
+  if (c.featureSettings)
+    c.featureSettings = Object.fromEntries(
+      Object.entries(c.featureSettings).filter(([id]) => stays(id)),
+    );
+  if (c.options) c.options = c.options.filter(stays);
+  if (c.wildShapeForms) c.wildShapeForms = [];
 }
 
 export function createCharacter(ruleset: Character["ruleset"]): Character {

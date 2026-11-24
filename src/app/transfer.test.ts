@@ -116,6 +116,7 @@ describe("moving data between devices", () => {
 
     // The same one is left alone; one with other content is counted.
     expect(await countConflicts([mine])).toBe(0);
+    expect(await countConflicts([{ ...mine, rulesPending: false }])).toBe(0);
     expect(await countConflicts([theirs])).toBe(1);
 
     const keep = await restoreCharacters([theirs], "keep");

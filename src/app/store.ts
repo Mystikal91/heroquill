@@ -7,6 +7,7 @@ import {
   createCharacter,
   isBlank,
   rulesToChoose,
+  withRulesFlag,
 } from "../engine/character";
 import { CharacterParseError } from "../engine/characterSchema";
 import { type DerivedSheet, deriveSheet } from "../engine/derive";
@@ -31,6 +32,7 @@ import { refreshEncounterCount } from "./encounterCount";
 import { EXAMPLE_ID, buildExample } from "./example";
 import { showView, view } from "./navigation";
 import { transferDialog, transferInbox } from "./transferState";
+import { dismissUndo } from "./undo";
 
 export type SaveStatus = "idle" | "saving" | "saved" | "failed";
 
@@ -143,7 +145,7 @@ export function updateCharacter(edit: (draft: Character) => void) {
 /** Makes `next` the open character, saving the previous one first if it has unsaved edits. */
 async function switchTo(next: Character) {
   if (saveTimer !== undefined) await saveNow();
-  character.value = next;
+  character.value = withRulesFlag(next);
   importFailed.value = false;
   await saveNow();
 }
@@ -174,7 +176,7 @@ export async function initStorage(): Promise<void> {
     const wanted = currentId ?? characters.value[0]?.id;
     const loaded = wanted ? await loadCharacter(wanted) : undefined;
     if (loaded) {
-      character.value = loaded;
+      character.value = withRulesFlag(loaded);
       saveStatus.value = "saved";
     } else {
       await saveNow();
@@ -225,12 +227,17 @@ export const rulesOpen = computed(
 );
 
 /** Settles the rules of the open character: they pick the rules every later step uses. */
-export const setRules = (ruleset: Character["ruleset"]) =>
+export function setRules(ruleset: Character["ruleset"]) {
+  // What could be taken back belongs to the rules of before.
+  dismissUndo();
   updateCharacter((d) => chooseRules(d, ruleset));
+}
 
 /** "New character": opens a blank one on the build screen, whose first step is the rules. */
 export async function startNewCharacter(): Promise<void> {
-  await switchTo(createNewCharacter());
+  // A blank one that is open is the new character already.
+  if (!(isBlank(character.value) && rulesToChoose(character.value)))
+    await switchTo(createNewCharacter());
   showView("build");
 }
 
@@ -273,7 +280,7 @@ export async function openCharacter(id: string) {
     await refreshList();
     return;
   }
-  character.value = loaded;
+  character.value = withRulesFlag(loaded);
   importFailed.value = false;
   await setCurrentId(id).catch(() => undefined);
 }
@@ -343,7 +350,11 @@ export async function allCharacters(): Promise<Character[]> {
  */
 export type ConflictPolicy = "newest" | "keep" | "copy";
 
-const sameCharacter = (a: Character, b: Character) => JSON.stringify(a) === JSON.stringify(b);
+/** The flag of the rules is written when a character is opened: one without it can be the same. */
+const sameCharacter = (a: Character, b: Character) =>
+  rulesToChoose(a) === rulesToChoose(b) &&
+  JSON.stringify({ ...a, rulesPending: undefined }) ===
+    JSON.stringify({ ...b, rulesPending: undefined });
 
 /** How many of these characters are already here with other content (the same id, not the same text). */
 export async function countConflicts(incomingList: Character[]): Promise<number> {
@@ -392,14 +403,14 @@ export async function restoreCharacters(
     if (here && dated) {
       await saveCharacter(incoming, theirs);
       // The open character is shown as it is now.
-      if (character.peek().id === incoming.id) character.value = incoming;
+      if (character.peek().id === incoming.id) character.value = withRulesFlag(incoming);
       replaced += 1;
       last = incoming;
       continue;
     }
     const kept = here
       ? {
-          ...incoming,
+          ...withRulesFlag(incoming),
           id: uuid(),
           name: ui("bar.copyName", { name: incoming.name || ui("sheet.unnamed") }),
         }

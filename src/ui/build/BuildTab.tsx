@@ -2,6 +2,7 @@ import type { ComponentChildren } from "preact";
 import { useEffect } from "preact/hooks";
 import { type StepId, levelUpPhase, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
+import { hpUndo } from "../../app/play";
 import { character, content, editionsAvailable, rulesOpen, setRules, sheet } from "../../app/store";
 import {
   assignAbilitiesForMe,
@@ -601,7 +602,10 @@ export function BuildTab() {
                   disabled={locked && !pickedRules()}
                   onClick={() => {
                     const rules = pickedRules();
-                    if (locked && rules) setRules(rules);
+                    if (locked && rules) {
+                      hpUndo.value = undefined;
+                      setRules(rules);
+                    }
                     go(nextId);
                   }}
                 >
