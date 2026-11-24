@@ -14,6 +14,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc -p workers/room-relay --noEmit",
     "lint": "biome check .",
+    "check": "node scripts/check.mjs",
     "format": "biome check --write .",
     "test": "vitest run",
     "relay:dev": "npx wrangler@4 dev --config workers/room-relay/wrangler.toml --port 8787 --ip 127.0.0.1",

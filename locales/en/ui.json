@@ -1248,7 +1248,6 @@
   "edition.srd51.desc": "The fifth edition of 2014 (SRD 5.1).",
   "edition.srd52.name": "2024 rules",
   "edition.srd52.desc": "The revised rules of 2024 (SRD 5.2.1).",
-  "edition.current": "Edition: {name}",
   "edition.label": "Edition",
   "bar.duplicate": "Duplicate",
   "bar.export": "Export",
