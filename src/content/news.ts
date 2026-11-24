@@ -23,6 +23,60 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.38",
+    date: "2026-11-25",
+    notes: [
+      {
+        kind: "feature",
+        en: 'The effects you write by hand as a DM are no longer lost when the fight ends: save them with a tap and find them in the "Saved" tab, ready to use again, edit or delete in every fight of every campaign, and to take to another device together with your fights.',
+        it: "Gli effetti che scrivi a mano da DM non si perdono più alla fine dello scontro: salvali con un tocco e ritrovali nella scheda «Salvati», pronti da riusare, modificare o eliminare in ogni scontro di ogni campagna, e da portare su un altro dispositivo insieme ai tuoi scontri.",
+        fr: "Les effets que tu écris à la main en tant que MJ ne se perdent plus à la fin du combat : enregistre-les d'un geste et retrouve-les dans l'onglet « Enregistrés », prêts à être réutilisés, modifiés ou supprimés dans chaque combat de chaque campagne, et à passer sur un autre appareil avec tes combats.",
+        de: "Die Effekte, die du als SL von Hand schreibst, gehen am Ende des Kampfes nicht mehr verloren: Speichere sie mit einem Tippen und finde sie im Reiter „Gespeichert“ wieder, bereit zum Wiederverwenden, Bearbeiten oder Löschen in jedem Kampf jeder Kampagne, und nimm sie zusammen mit deinen Kämpfen auf ein anderes Gerät mit.",
+        es: "Los efectos que escribes a mano como DM ya no se pierden al acabar el combate: guárdalos con un toque y encuéntralos en la pestaña «Guardados», listos para reutilizar, editar o eliminar en cualquier combate de cualquier campaña, y para llevarlos a otro dispositivo junto con tus combates.",
+      },
+      {
+        kind: "feature",
+        en: "The lair comes to life: a room on fire, a poison swamp or a magical darkness are now environment effects with rounds of their own, which count down by themselves at every turn of the lair and tell you when they end.",
+        it: "La tana prende vita: una stanza in fiamme, una palude velenosa o un'oscurità magica sono ora effetti d'ambiente con i loro round, che scalano da soli a ogni turno della tana e ti avvisano quando finiscono.",
+        fr: "Le repaire prend vie : une salle en feu, un marais empoisonné ou des ténèbres magiques sont désormais des effets d'environnement avec leurs propres rounds, qui diminuent tout seuls à chaque tour du repaire et te préviennent quand ils se terminent.",
+        de: "Der Hort erwacht zum Leben: Ein brennender Raum, ein Giftsumpf oder magische Dunkelheit sind jetzt Umgebungseffekte mit eigenen Runden, die bei jedem Zug des Horts von selbst herunterzählen und dir sagen, wann sie enden.",
+        es: "La guarida cobra vida: una sala en llamas, un pantano venenoso o una oscuridad mágica son ahora efectos de entorno con sus propios asaltos, que se descuentan solos en cada turno de la guarida y te avisan cuando terminan.",
+      },
+      {
+        kind: "feature",
+        en: "When the environment strikes, just mark who is inside: Heroquill rolls the monsters' saving throws and the damage, takes resistances, immunities and conditions into account, and applies damage and conditions in one go that you can undo.",
+        it: "Quando l'ambiente colpisce basta segnare chi è dentro: Heroquill tira i tiri salvezza dei mostri e il danno, tiene conto di resistenze, immunità e condizioni, e applica danni e condizioni in un colpo solo, che puoi annullare.",
+        fr: "Quand l'environnement frappe, il suffit de marquer qui est dedans : Heroquill lance les jets de sauvegarde des monstres et les dégâts, tient compte des résistances, des immunités et des états, et applique dégâts et états en une seule fois, que tu peux annuler.",
+        de: "Wenn die Umgebung zuschlägt, markierst du nur, wer darin steht: Heroquill würfelt die Rettungswürfe der Monster und den Schaden, berücksichtigt Resistenzen, Immunitäten und Zustände und wendet Schaden und Zustände in einem Schritt an, den du rückgängig machen kannst.",
+        es: "Cuando el entorno golpea, basta con marcar quién está dentro: Heroquill tira las salvaciones de los monstruos y el daño, tiene en cuenta resistencias, inmunidades y condiciones, y aplica daño y condiciones de una sola vez, que puedes deshacer.",
+      },
+      {
+        kind: "feature",
+        en: "At the online table the players receive the request for the saving throw and the proposals of damage and condition on their own sheet, and see the name and rounds of the environment effects only when you decide to reveal them.",
+        it: "Al tavolo online i giocatori ricevono la richiesta di tiro salvezza e le proposte di danno e condizione sulla loro scheda, e vedono nome e round degli effetti d'ambiente solo quando decidi tu di rivelarli.",
+        fr: "À la table en ligne, les joueurs reçoivent la demande de jet de sauvegarde et les propositions de dégâts et d'état sur leur propre feuille, et ne voient le nom et les rounds des effets d'environnement que lorsque tu décides de les révéler.",
+        de: "Am Online-Tisch erhalten die Spieler die Aufforderung zum Rettungswurf und die Vorschläge für Schaden und Zustand auf ihrem eigenen Bogen und sehen Name und Runden der Umgebungseffekte erst, wenn du sie aufdeckst.",
+        es: "En la mesa en línea los jugadores reciben la petición de salvación y las propuestas de daño y condición en su propia hoja, y ven el nombre y los asaltos de los efectos de entorno solo cuando tú decides revelarlos.",
+      },
+      {
+        kind: "improvement",
+        en: "Resetting a fight brings the environment effects still in force back to their full length, and duplicating it takes them into the copy, so a fight you prepared is ready to be played again at once.",
+        it: "Azzerare uno scontro riporta gli effetti d'ambiente ancora in corso alla durata piena, e duplicarlo li porta nella copia, così uno scontro preparato è subito pronto per essere rigiocato.",
+        fr: "Remettre un combat à zéro rend aux effets d'environnement encore en cours toute leur durée, et le dupliquer les emporte dans la copie : un combat préparé est aussitôt prêt à être rejoué.",
+        de: "Das Zurücksetzen eines Kampfes gibt den noch laufenden Umgebungseffekten ihre volle Dauer zurück, und beim Duplizieren kommen sie in die Kopie, sodass ein vorbereiteter Kampf sofort wieder spielbereit ist.",
+        es: "Reiniciar un combate devuelve a los efectos de entorno aún en curso su duración completa, y duplicarlo los lleva a la copia, así un combate preparado queda listo para jugarse de nuevo al instante.",
+      },
+      {
+        kind: "fix",
+        en: "When a fight is duplicated, the lair keeps its place at initiative 20.",
+        it: "Duplicando uno scontro, la tana conserva il suo posto a iniziativa 20.",
+        fr: "Quand un combat est dupliqué, le repaire garde sa place à l'initiative 20.",
+        de: "Beim Duplizieren eines Kampfes behält der Hort seinen Platz bei Initiative 20.",
+        es: "Al duplicar un combate, la guarida conserva su puesto en la iniciativa 20.",
+      },
+    ],
+  },
+  {
     version: "1.37",
     date: "2026-11-24",
     notes: [
@@ -1797,16 +1851,6 @@ export interface RoadmapItem {
 
 /** What is still missing, from the nearest to the furthest. */
 export const ROADMAP: RoadmapItem[] = [
-  {
-    id: "dmEffects",
-    text: {
-      en: "More for the DM: effects written by hand that the DM can save and use again in any fight, and lair and environment effects (magical darkness, a room on fire, a poison swamp) that the lair carries through the rounds.",
-      it: "Di più per il DM: effetti scritti a mano da salvare e riusare in ogni scontro, ed effetti di tana e d'ambiente (oscurità magica, una stanza in fiamme, una palude velenosa) che la tana porta avanti round dopo round.",
-      fr: "Plus pour le MJ : des effets écrits à la main à enregistrer et à réutiliser dans chaque combat, et des effets de repaire et d'environnement (ténèbres magiques, une salle en feu, un marais empoisonné) que le repaire porte de round en round.",
-      de: "Mehr für die SL: von Hand geschriebene Effekte, die sich speichern und in jedem Kampf wiederverwenden lassen, und Hort- und Umgebungseffekte (magische Dunkelheit, ein brennender Raum, ein Giftsumpf), die der Hort Runde für Runde mitführt.",
-      es: "Más para el DM: efectos escritos a mano que se guardan y se reutilizan en cualquier combate, y efectos de guarida y de entorno (oscuridad mágica, una sala en llamas, un pantano venenoso) que la guarida lleva asalto tras asalto.",
-    },
-  },
   {
     id: "translations",
     text: {
