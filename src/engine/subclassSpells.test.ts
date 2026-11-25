@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Entry } from "../data/schema";
 import { srd51Index } from "../test/srd51";
+import { bothIndex } from "../test/srd52";
 import { type Character, createCharacter } from "./character";
 import { deriveSheet } from "./derive";
 
@@ -202,5 +203,57 @@ describe("a subclass that gives spellcasting", () => {
     // Caster level 6/3 + 3 = 5.
     expect(sheet.spellSlots).toEqual([4, 3, 2, 0, 0, 0, 0, 0, 0]);
     expect(sheet.spellcasters).toHaveLength(2);
+  });
+});
+
+describe("spells a subclass gives to those who know their spells", () => {
+  const giving = (parent: string, spells: string[]): Entry => ({
+    ...knight(),
+    id: "test:subclass/giving",
+    parent,
+    data: {
+      ...knight().data,
+      spells: spells.map((s) => ({ spell: `srd51:spell/${s}`, classLevel: 3 })),
+    },
+  });
+
+  it("takes no pick for them, and leaves aside without a warning the pick of an older import", () => {
+    const sub = giving("srd51:class/fighter", ["mage-hand", "shield"]);
+    const index = new Map([...srd51Index, [sub.id, sub]]);
+    const c = make("fighter", 3, sub.id);
+    c.spells["srd51:class/fighter"] = {
+      cantrips: ["srd51:spell/mage-hand", "srd51:spell/light", "srd51:spell/fire-bolt"],
+      known: ["srd51:spell/shield", "srd51:spell/sleep"],
+      prepared: [],
+    };
+    const sheet = deriveSheet(c, index);
+    const lists = sheet.spellcasters[0]?.lists;
+    expect(lists?.alwaysPrepared).toEqual(["srd51:spell/mage-hand", "srd51:spell/shield"]);
+    expect(lists?.cantrips?.pool).not.toContain("srd51:spell/mage-hand");
+    expect(lists?.cantrips?.chosen).toEqual(["srd51:spell/light", "srd51:spell/fire-bolt"]);
+    expect(lists?.known?.chosen).toEqual(["srd51:spell/sleep"]);
+    const codes = sheet.warnings.map((w) => w.code);
+    expect(codes).not.toContain("invalidSpell");
+    expect(codes).not.toContain("tooManySpells");
+  });
+
+  it("gives the 2024 spells to a 2024 fighter, though the list is of the 2014 wizard", () => {
+    const sub = giving("srd52:class/fighter", ["shield"]);
+    const c = createCharacter("srd52");
+    c.classes = [{ classId: "srd52:class/fighter", level: 3, subclassId: sub.id }];
+    const sheet = deriveSheet(c, new Map([...bothIndex, [sub.id, sub]]));
+    expect(sheet.spellcasters[0]?.lists.alwaysPrepared).toEqual(["srd52:spell/shield"]);
+  });
+
+  it("counts Magic Weapon among the spells of the character, for the weapons in Play", () => {
+    const sub = giving("srd51:class/fighter", ["magic-weapon"]);
+    const index = new Map([...srd51Index, [sub.id, sub]]);
+    const attack = (level: number) => {
+      const c = make("fighter", level, sub.id);
+      c.inventory = [{ itemId: "srd51:item/longsword", quantity: 1, equipped: true }];
+      return deriveSheet(c, index).attacks[0];
+    };
+    expect(attack(3)?.canMagicWeapon).toBe(true);
+    expect(attack(2)?.canMagicWeapon).toBeUndefined();
   });
 });

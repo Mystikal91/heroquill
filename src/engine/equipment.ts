@@ -114,6 +114,8 @@ interface Context {
   proficiencyBonus: number;
   /** Every effect in force with its source: features and choices add to armor class and attacks. */
   sourced: SourcedEffect[];
+  /** The spells the subclasses always give. */
+  alwaysPrepared: string[];
   /** The level that counts for what an entry gives: its class's, or the whole character's. */
   levelOf: (source: string) => number;
   warnings: Warning[];
@@ -266,7 +268,9 @@ function knowsSpell(ctx: Context, spell: string): boolean {
   return (
     Object.values(ctx.character.spells).some((l) =>
       [...l.cantrips, ...l.known, ...l.prepared].includes(spell),
-    ) || ctx.sourced.some(({ effect }) => effect.type === "grantSpell" && effect.spell === spell)
+    ) ||
+    ctx.alwaysPrepared.includes(spell) ||
+    ctx.sourced.some(({ effect }) => effect.type === "grantSpell" && effect.spell === spell)
   );
 }
 

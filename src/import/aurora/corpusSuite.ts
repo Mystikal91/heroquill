@@ -105,6 +105,21 @@ export function corpusSuite(reverse: boolean) {
         expect(whens.length).toBeGreaterThan(300);
       });
 
+      it("gives a subclass the spells of its table, each from its level", () => {
+        // By class: the same subclass of two books has two entries, with the same table.
+        const tables = (slug: string) =>
+          result.entries
+            .filter(
+              (e) => e.kind === "subclass" && e.id.replace(/-\d+$/, "") === `imp1:subclass/${slug}`,
+            )
+            .map((e) => (e.data.spells as { classLevel: number }[]).map((s) => s.classLevel));
+        const twice = [3, 3, 5, 5, 9, 9, 13, 13, 17, 17];
+        expect(tables("artillerist")).toEqual([twice, twice]);
+        expect(tables("oath-of-conquest")).toEqual([twice]);
+        // Spells a ranger knows, which the files do not mark as prepared.
+        expect(tables("swarmkeeper")).toEqual([[3, 5, 9, 13, 17]]);
+      });
+
       it("reads the companions of the books as creatures with their traits and actions", () => {
         const monsters = result.entries.filter((e) => e.kind === "monster");
         // 164 companions in the files: the app has many of them already (the SRD beasts), and the

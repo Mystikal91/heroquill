@@ -496,6 +496,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
         ...(slotless && typeof limit === "number" && { spellLimit: limit }),
         lists: deriveSpellLists({
           classId: subCasting && cast !== data ? subCasting.list : cl.classId,
+          ownerId: cl.classId,
           data: cast,
           level: cl.level,
           abilityModifier: modifier,
@@ -516,6 +517,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   const slots = created ? pools.slots.map((n, i) => n + (created[i] ?? 0)) : pools.slots;
   for (const caster of casters) if (caster.reserve === undefined) caster.spellSlots = slots;
   const spellcasting = casters[0];
+  const alwaysPrepared = casters.flatMap((c) => c.lists.alwaysPrepared);
 
   // Multiclassing asks for a minimum in the key abilities of every class involved.
   if (classEntries.length > 1) {
@@ -565,6 +567,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     sourced,
     levelOf,
     warnings,
+    alwaysPrepared,
     spellAbilities: casters.map((c) => c.ability),
     martialArts: extraDamage.find((e) => e.kind === "martialArts")?.dice,
     featIds: [
@@ -598,6 +601,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     ...character.classes.flatMap((cl) => [cl.classId, cl.subclassId ?? ""]),
     ...Object.values(character.choices),
     ...Object.values(character.spells).flatMap((l) => [...l.cantrips, ...l.known, ...l.prepared]),
+    ...alwaysPrepared,
     ...sourced.flatMap(({ effect }) => (effect.type === "grantSpell" ? [effect.spell] : [])),
   ]);
   const scores = Object.fromEntries(Object.entries(abilities).map(([id, a]) => [id, a.score]));
