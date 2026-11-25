@@ -1,7 +1,8 @@
-import { classData, subclassData } from "../data/progression";
+import { classData } from "../data/progression";
 import type { Character } from "./character";
 import type { SourcedEffect } from "./choices";
 import type { PackIndex } from "./derive";
+import { subclassDataOn } from "./subclass";
 
 /** Where a feature or trait comes from: the entry that gives it, and the level for a class. */
 export interface FeatureSource {
@@ -28,7 +29,7 @@ export function featureSources(
           for (const id of row.features) found[id] ??= { entry: cl.classId, level: row.level };
     const sub = cl.subclassId ? index.get(cl.subclassId) : undefined;
     if (sub)
-      for (const row of subclassData(sub).levels)
+      for (const row of subclassDataOn(sub, cl.classId).levels)
         if (row.level <= cl.level)
           for (const id of row.features) found[id] ??= { entry: sub.id, level: row.level };
   }

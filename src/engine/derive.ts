@@ -31,11 +31,12 @@ import { type CasterInput, casterKind, slotPools, unmetPrerequisites } from "./m
 import { type OptionNeed, checkNeeds, needsOf } from "./optionNeeds";
 import { OVERRIDE, numberOverride } from "./overrides";
 import { type ClassFact, type ClassResource, type ExtraDamage, classResources } from "./resources";
-import { subclassOf } from "./rulesets";
+import { ownedBy, subclassOf } from "./rulesets";
 import { type FeatureSource, featureSources } from "./sources";
 import type { SpellBonus, SpellHealing } from "./spellRolls";
 import { type SpellLists, deriveSpellLists } from "./spells";
 import { type Spend, deriveSpends } from "./spends";
+import { subclassDataOn } from "./subclass";
 import { withSubclassCasting } from "./subclassCasting";
 import { deriveFreeSpells, deriveUses, withFeatureSettings } from "./uses";
 import { type Warning, warn } from "./warnings";
@@ -243,8 +244,9 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     const ids: string[] = [];
     for (const l of classData(entry).levels) if (l.level <= cl.level) ids.push(...l.features);
     const sub = cl.subclassId ? index.get(cl.subclassId) : undefined;
-    if (sub?.parent === cl.classId)
-      for (const l of subclassData(sub).levels) if (l.level <= cl.level) ids.push(...l.features);
+    if (sub && subclassOf(sub, cl.classId))
+      for (const l of subclassDataOn(sub, cl.classId).levels)
+        if (l.level <= cl.level) ids.push(...l.features);
     const row = classData(entry).levels.find((l) => l.level === cl.level);
     for (const id of ids) {
       const feature = index.get(id);
@@ -255,7 +257,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   const levelOf = (source: string) => {
     const owner = index.get(source)?.data.class;
     return owner
-      ? (character.classes.find((cl) => cl.classId === owner)?.level ?? 0)
+      ? (character.classes.find((cl) => ownedBy(owner, cl.classId))?.level ?? 0)
       : character.classes.reduce((sum, cl) => sum + cl.level, 0);
   };
   // What the character has equipped adds its effects, like a ring that grants a resistance.
@@ -457,7 +459,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
       if (sub) {
         if (!subclassOf(sub, cl.classId))
           warn(warnings, "subclassMismatch", { subclass: cl.subclassId, class: cl.classId });
-        for (const l of subclassData(sub).levels)
+        for (const l of subclassDataOn(sub, cl.classId).levels)
           if (l.level <= cl.level) features.push(...l.features);
       }
     }
@@ -704,7 +706,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   const hpBonus = hpMods.reduce((sum, m) => {
     const owner = index.get(m.source)?.data.class;
     const levels = owner
-      ? (character.classes.find((cl) => cl.classId === owner)?.level ?? 0)
+      ? (character.classes.find((cl) => ownedBy(owner, cl.classId))?.level ?? 0)
       : level;
     return sum + m.value * levels;
   }, 0);
@@ -745,9 +747,9 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
         .filter((cl) => cl.classId.split("/")[1] === slug)
         .reduce((sum, cl) => sum + cl.level, 0),
     tableValue: (source: string, key: string) => {
-      const owner = index.get(source)?.data.class as string | undefined;
-      const cl = character.classes.find((c) => c.classId === owner);
-      const entry = owner ? index.get(owner) : undefined;
+      const owner = index.get(source)?.data.class;
+      const cl = character.classes.find((c) => ownedBy(owner, c.classId));
+      const entry = cl && index.get(cl.classId);
       if (!cl || !entry) return 0;
       const value = classData(entry).levels.find((l) => l.level === cl.level)?.classSpecific?.[key];
       return typeof value === "number" ? value : 0;
@@ -851,8 +853,8 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     featureValues: deriveFeatureValues(sourced, valueState),
     attunement: { used: attuned, max: attunementMax },
     spends: deriveSpends(sourced, resources, (entry) => {
-      const owner = (index.get(entry)?.data as { class?: string } | undefined)?.class;
-      return owner;
+      const owner = index.get(entry)?.data.class;
+      return character.classes.find((cl) => ownedBy(owner, cl.classId))?.classId;
     }),
     ...(spellcasting && { spellcasting }),
     spellcasters: casters,

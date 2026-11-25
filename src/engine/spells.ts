@@ -3,6 +3,7 @@ import type { Entry } from "../data/schema";
 import type { ClassSpells } from "./character";
 import type { PackIndex } from "./derive";
 import { spellFor2024 } from "./rulesets";
+import { subclassDataOn, subclassReached } from "./subclass";
 import { type Warning, warn } from "./warnings";
 
 /** One list of spells a class picks: how many it may hold, the picks, and what it may pick from. */
@@ -139,8 +140,12 @@ export function deriveSpellLists(input: Input): SpellLists {
   const row = data.levels.find((l) => l.level === level);
   const maxSpellLevel = highestSpellLevel(data, level);
 
+  // What a patron adds to the list waits for the subclass too.
+  const adding =
+    subclass && subclassReached(subclass, input.ownerId ?? classId, level) ? subclass : undefined;
+
   const alwaysPrepared = subclass
-    ? subclassData(subclass)
+    ? subclassDataOn(subclass, input.ownerId ?? classId)
         .spells.filter((s) => s.classLevel <= level)
         .map((s) => (twin ? spellFor2024(s.spell, index) : s.spell))
     : [];
@@ -160,7 +165,7 @@ export function deriveSpellLists(input: Input): SpellLists {
     lists.cantrips = resolvePick(
       free(picks?.cantrips),
       row.cantripsKnown,
-      free([...classSpellPool(index, classId, 0, 0), ...expandedPool(index, subclass, 0, 0, twin)]),
+      free([...classSpellPool(index, classId, 0, 0), ...expandedPool(index, adding, 0, 0, twin)]),
       classId,
       warnings,
     );
@@ -169,7 +174,7 @@ export function deriveSpellLists(input: Input): SpellLists {
   const leveled = [
     ...new Set([
       ...classSpellPool(index, classId, 1, maxSpellLevel),
-      ...expandedPool(index, subclass, 1, maxSpellLevel, twin),
+      ...expandedPool(index, adding, 1, maxSpellLevel, twin),
     ]),
   ];
   const preparation = casting.preparation;

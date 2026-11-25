@@ -108,7 +108,8 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
       manifest: { id: "imp1", ruleset: "custom", version: "1", license: "x", attribution: "x" },
       entries: both.entries,
     });
-    const idx = indexPacks(...srd52Packs, pack);
+    // Both SRDs, as the app loads them: a subclass may give a 2014 trait (the darkvision of the Twilight Domain).
+    const idx = new Map([...bothIndex, ...indexPacks(pack)]);
     const subs = both.entries.filter(
       (e) => e.kind === "subclass" && e.parent?.startsWith("srd51:class/"),
     );
@@ -119,6 +120,7 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
       thrown: [] as string[],
       warned: [] as string[],
       missing: [] as string[],
+      lost: [] as string[],
     };
     for (const sub of subs) {
       const cls = `srd52:class/${sub.parent?.split("/")[1]}`;
@@ -146,6 +148,24 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
             for (const f of l.features)
               if (l.level <= level && idx.has(f) && !sheet.features.includes(f))
                 out.missing.push(`${sub.id} L${level}: ${f}`);
+          // The effects of its features come too: the choices, spells and spends the 2014 class gets.
+          const c = createCharacter("srd51");
+          c.choices.species = "srd51:species/human";
+          c.abilityBase = { str: 14, dex: 14, con: 14, int: 14, wis: 14, cha: 14 };
+          c.classes = [{ classId: sub.parent as string, level, subclassId: sub.id }];
+          const old = deriveSheet(c, idx);
+          const gives = (s: typeof sheet) => {
+            const own = new Set(subclassData(sub).levels.flatMap((l) => l.features));
+            return [
+              ...s.choices.filter((x) => own.has(x.source)).map((x) => `choice ${x.key}`),
+              ...s.grantedSpells.map((x) => `spell ${x.split("/")[1]}`),
+              ...Object.keys(s.spends)
+                .filter((x) => own.has(x))
+                .map((x) => `spends ${x}`),
+            ];
+          };
+          const now = new Set(gives(sheet));
+          for (const x of gives(old)) if (!now.has(x)) out.lost.push(`${sub.id} L${level}: ${x}`);
         } catch (error) {
           out.thrown.push(`${sub.id} L${level}: ${(error as Error).message}`);
         }
@@ -154,14 +174,13 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
     // The spells such a subclass always has prepared are the 2024 ones (all but two have a twin).
     const stayed2014: string[] = [];
     const withSpells = subs.filter((s) => subclassData(s).spells.length > 0);
-    const both52 = new Map([...bothIndex, ...idx]);
     for (const sub of withSpells) {
       const cls = `srd52:class/${sub.parent?.split("/")[1]}`;
       const c = createCharacter("srd52");
       c.choices.species = "srd52:species/human";
       c.abilityBase = { str: 14, dex: 14, con: 14, int: 14, wis: 14, cha: 14 };
       c.classes = [{ classId: cls, level: 20, subclassId: sub.id }];
-      const sheet = deriveSheet(c, both52);
+      const sheet = deriveSheet(c, idx);
       for (const caster of sheet.spellcasters)
         for (const id of caster.lists.alwaysPrepared)
           if (id.startsWith("srd51:") && !/feeblemind|branding-smite/.test(id))
@@ -175,6 +194,7 @@ describe.skipIf(!available)("Aurora's content with both SRD rulesets loaded", ()
     expect(out.thrown).toEqual([]);
     expect(out.warned.slice(0, 5)).toEqual([]);
     expect(out.missing.slice(0, 5)).toEqual([]);
+    expect(out.lost.slice(0, 5)).toEqual([]);
   });
 
   it("writes no reference to the 2024 SRD into a pack of 2014 books", () => {

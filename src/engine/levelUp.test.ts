@@ -2,14 +2,8 @@ import { describe, expect, it } from "vitest";
 import { srd51Index as index } from "../test/srd51";
 import { createCharacter } from "./character";
 import { deriveSheet } from "./derive";
-import {
-  MAX_LEVEL,
-  applyLevelUp,
-  levelUpOptions,
-  openTasks,
-  previewLevelUp,
-  subclassLevel,
-} from "./levelUp";
+import { MAX_LEVEL, applyLevelUp, levelUpOptions, openTasks, previewLevelUp } from "./levelUp";
+import { subclassLevel } from "./subclass";
 
 function hero(classes: { id: string; level: number; subclass?: string }[], scores = {}) {
   const c = createCharacter("srd51");
@@ -136,7 +130,7 @@ describe("openTasks", () => {
   it("does not ask for a subclass too early", () => {
     const c = hero([{ id: "fighter", level: 2 }]);
     expect(openTasks(c, deriveSheet(c, index), index).map((t) => t.kind)).not.toContain("subclass");
-    expect(subclassLevel(index, "srd51:class/fighter")).toBe(3);
+    expect(subclassLevel("srd51:class/fighter", index)).toBe(3);
   });
 
   it("lists improvements and spells still to pick", () => {
