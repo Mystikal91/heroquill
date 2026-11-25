@@ -1288,7 +1288,6 @@
   "play.spellAtSlot": "Con slot",
   "play.castSlot": "Lanciato con uno slot di livello {level}",
   "play.castPact": "Lanciato con uno slot della Magia del Patto (livello {level})",
-  "play.noSlot": "Nessuno slot rimasto per lanciarlo",
   "app.skip": "Vai al contenuto",
   "form.searchItems": "Cerca oggetti",
   "form.onlyProficient": "Solo armature e armi in cui sono competente",
@@ -2975,5 +2974,16 @@
   "dm.saved.done": "{name}: salvato per altri scontri.",
   "dm.saved.full": "Non c'è posto per un altro effetto salvato: prima eliminane uno.",
   "dm.saved.rounds": "Round: {n}",
-  "table.environment": "Intorno a voi"
+  "table.environment": "Intorno a voi",
+  "play.noSlotShort": "Nessuno slot",
+  "play.leftOf": "{left} su {total} rimasti",
+  "play.castFree": "Lanciato con un uso gratuito",
+  "play.castWithFree": "Uso gratuito",
+  "play.castWithSlot": "Slot di livello {level}",
+  "play.castAskSlot": "Non hai più slot di livello {level}. Vuoi lanciarlo con un altro?",
+  "play.castAskFree": "Come vuoi lanciarlo?",
+  "play.castRitual": "Come rituale",
+  "play.castRitualHint": "Non spende slot: il lancio richiede 10 minuti in più.",
+  "play.castRitualDone": "Lanciato come rituale, nessuno slot speso (10 minuti in più)",
+  "play.noUseShort": "Uso esaurito"
 }

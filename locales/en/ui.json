@@ -1288,7 +1288,6 @@
   "play.spellAtSlot": "At slot",
   "play.castSlot": "Cast with a level {level} slot",
   "play.castPact": "Cast with a Pact Magic slot (level {level})",
-  "play.noSlot": "No slot left for it",
   "app.skip": "Skip to the content",
   "form.searchItems": "Search items",
   "form.onlyProficient": "Only armor and weapons I am proficient with",
@@ -2975,5 +2974,16 @@
   "dm.saved.done": "{name} saved for other fights.",
   "dm.saved.full": "There is no room for another saved effect: delete one first.",
   "dm.saved.rounds": "Rounds: {n}",
-  "table.environment": "Around you"
+  "table.environment": "Around you",
+  "play.noSlotShort": "No slots",
+  "play.leftOf": "{left} of {total} left",
+  "play.castFree": "Cast with a free use",
+  "play.castWithFree": "Free use",
+  "play.castWithSlot": "Level {level} slot",
+  "play.castAskSlot": "You have no level {level} slots left. Cast it with another one?",
+  "play.castAskFree": "How do you want to cast it?",
+  "play.castRitual": "As a ritual",
+  "play.castRitualHint": "No slot spent: casting takes 10 minutes longer.",
+  "play.castRitualDone": "Cast as a ritual, no slot spent (10 minutes longer)",
+  "play.noUseShort": "Use spent"
 }

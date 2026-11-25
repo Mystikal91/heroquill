@@ -1288,7 +1288,6 @@
   "play.spellAtSlot": "Avec emplacement",
   "play.castSlot": "Lancé avec un emplacement de niveau {level}",
   "play.castPact": "Lancé avec un emplacement de Magie de pacte (niveau {level})",
-  "play.noSlot": "Plus d'emplacement pour le lancer",
   "app.skip": "Aller au contenu",
   "form.searchItems": "Chercher des objets",
   "form.onlyProficient": "Seulement les armures et armes que je maîtrise",
@@ -2975,5 +2974,16 @@
   "dm.saved.done": "{name} : enregistré pour d'autres combats.",
   "dm.saved.full": "Il n'y a plus de place pour un autre effet enregistré : supprimez-en un d'abord.",
   "dm.saved.rounds": "Rounds : {n}",
-  "table.environment": "Autour de vous"
+  "table.environment": "Autour de vous",
+  "play.noSlotShort": "Plus d'emplacement",
+  "play.leftOf": "reste {left} sur {total}",
+  "play.castFree": "Lancé avec une utilisation gratuite",
+  "play.castWithFree": "Utilisation gratuite",
+  "play.castWithSlot": "Emplacement de niveau {level}",
+  "play.castAskSlot": "Tu n'as plus d'emplacement de niveau {level}. Le lancer avec un autre ?",
+  "play.castAskFree": "Comment veux-tu le lancer ?",
+  "play.castRitual": "En rituel",
+  "play.castRitualHint": "Aucun emplacement dépensé : l'incantation prend 10 minutes de plus.",
+  "play.castRitualDone": "Lancé en rituel, sans dépenser d'emplacement (10 minutes de plus)",
+  "play.noUseShort": "Utilisation épuisée"
 }

@@ -4,7 +4,6 @@ import { createCharacter } from "./character";
 import { deriveSheet } from "./derive";
 import {
   canCreateSlot,
-  castSpell,
   convertSlot,
   createSlot,
   longRest,
@@ -50,8 +49,7 @@ describe("Flexible Casting", () => {
     c.play = createSlot(c.play, 1, pool);
     const after = deriveSheet(c, srd51Index);
     expect(after.spellSlots[0]).toBe((before[0] ?? 0) + 1);
-    const cast = castSpell(c.play, 1, after.spellSlots);
-    expect(cast?.slot).toEqual({ kind: "slot", level: 1 });
+    expect(slotsLeft(c.play, 1, after.spellSlots[0] ?? 0)).toBe((before[0] ?? 0) + 1);
   });
 
   it("a long rest takes the made slots away", () => {

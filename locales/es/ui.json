@@ -1288,7 +1288,6 @@
   "play.spellAtSlot": "Con espacio",
   "play.castSlot": "Lanzado con un espacio de nivel {level}",
   "play.castPact": "Lanzado con un espacio de Magia de pacto (nivel {level})",
-  "play.noSlot": "No queda espacio para lanzarlo",
   "app.skip": "Saltar al contenido",
   "form.searchItems": "Buscar objetos",
   "form.onlyProficient": "Solo armaduras y armas con las que tengo competencia",
@@ -2975,5 +2974,16 @@
   "dm.saved.done": "{name}: guardado para otros combates.",
   "dm.saved.full": "No queda sitio para otro efecto guardado: elimina uno antes.",
   "dm.saved.rounds": "Asaltos: {n}",
-  "table.environment": "A vuestro alrededor"
+  "table.environment": "A vuestro alrededor",
+  "play.noSlotShort": "Sin espacios",
+  "play.leftOf": "quedan {left} de {total}",
+  "play.castFree": "Lanzado con un uso gratuito",
+  "play.castWithFree": "Uso gratuito",
+  "play.castWithSlot": "Espacio de nivel {level}",
+  "play.castAskSlot": "No te quedan espacios de nivel {level}. ¿Lanzarlo con otro?",
+  "play.castAskFree": "¿Cómo quieres lanzarlo?",
+  "play.castRitual": "Como ritual",
+  "play.castRitualHint": "No gasta espacio: el lanzamiento tarda 10 minutos más.",
+  "play.castRitualDone": "Lanzado como ritual, sin gastar espacio (10 minutos más)",
+  "play.noUseShort": "Uso agotado"
 }

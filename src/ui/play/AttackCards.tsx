@@ -1,24 +1,11 @@
 import { signal } from "@preact/signals";
 import { useState } from "preact/hooks";
-import {
-  addLog,
-  changePlay,
-  criticalExtra,
-  criticalWeapon,
-  rollCheck,
-  rollDiceText,
-} from "../../app/play";
+import { changePlay, criticalExtra, criticalWeapon, rollCheck, rollDiceText } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
 import { doubleDice } from "../../engine/dice";
 import { SACRED_WEAPON_ROUNDS_2024 } from "../../engine/durations";
 import { type AttackResult, SACRED_WEAPON } from "../../engine/equipment";
-import {
-  castSpell,
-  setMagicWeapon,
-  setSacredWeapon,
-  setShillelagh,
-  slotsLeft,
-} from "../../engine/play";
+import { setMagicWeapon, setSacredWeapon, setShillelagh, slotsLeft } from "../../engine/play";
 import { canSpend, spendPool } from "../../engine/spends";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
@@ -26,6 +13,7 @@ import { attackName } from "../attackName";
 import { damageName } from "../damageName";
 import { ruleDetail } from "../rules/EntryDetail";
 import { extraAmount, extraKey, extraName, extraNote } from "../sheet/ExtraDamage";
+import { startCast } from "./CastDialog";
 import { BowIcon, ChecksIcon, CriticalIcon, SwordIcon } from "./icons";
 
 /** The weapon whose attack was just rolled: its damage button asks to be tapped. */
@@ -290,6 +278,9 @@ function rollExtra(label: string, dice: string) {
   rollDiceText(critical ? `${label} (${ui("play.criticalDamage")})` : label, text);
 }
 
+/** The dice of Divine Smite with a slot of this level. */
+const smiteDice = (level: number) => `${Math.min(5, 1 + level)}d8`;
+
 /** What the classes add to an attack (sneak attack, smite, rage), as cards, with the dice to roll after the weapon's. */
 export function ExtraCards() {
   const s = sheet.value;
@@ -371,22 +362,30 @@ export function ExtraCards() {
                   <button
                     type="button"
                     class="card-btn card-roll card-primary card-wide"
+                    disabled={s.spellSlots.every((n, i) => slotsLeft(play, i + 1, n) === 0)}
                     onClick={() => {
-                      const cast = castSpell(play, chosen, s.spellSlots);
-                      if (!cast) {
-                        addLog({ label: extraName(extra), detail: ui("play.noSlot") });
-                        return;
-                      }
-                      changePlay(() => cast.play);
-                      rollExtra(
-                        `${extraName(extra)} (${ui("play.castSlot", { level: cast.slot.level })})`,
-                        `${Math.min(5, 1 + cast.slot.level)}d8`,
-                      );
+                      startCast({
+                        name: extraName(extra),
+                        spell: { level: 1 },
+                        wanted: chosen,
+                        sources: { spellSlots: s.spellSlots },
+                        dice: (level) => shown(smiteDice(level)),
+                        onCast: (option) => {
+                          rollExtra(
+                            `${extraName(extra)} (${ui("play.castSlot", { level: option.level })})`,
+                            smiteDice(option.level),
+                          );
+                        },
+                      });
                     }}
                   >
                     <ChecksIcon />
                     <span>{extraName(extra)}</span>
-                    <b>{shown(`${Math.min(5, 1 + chosen)}d8`)}</b>
+                    <b>
+                      {s.spellSlots.some((n, i) => slotsLeft(play, i + 1, n) > 0)
+                        ? shown(smiteDice(chosen))
+                        : ui("play.noSlotShort")}
+                    </b>
                   </button>
                 </div>
               </>

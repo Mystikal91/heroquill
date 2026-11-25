@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useState } from "preact/hooks";
 import { view } from "../../app/navigation";
 import {
   addBardicDie,
@@ -103,6 +103,14 @@ export function RollToast() {
   useEffect(() => {
     setHidden(true);
   }, [screen]);
+
+  // The undo notice stays above the roll: it is told how tall the roll is (it grows with its buttons).
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const toast = document.querySelector<HTMLElement>(".roll-toast");
+    if (toast) root.style.setProperty("--toast-space", `${toast.offsetHeight + 12}px`);
+    else root.style.removeProperty("--toast-space");
+  });
 
   if (!fresh || hidden) return null;
   const tone = rolling ? "" : (fresh.tone ?? "");

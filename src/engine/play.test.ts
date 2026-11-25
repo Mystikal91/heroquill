@@ -3,7 +3,6 @@ import { createPlayState } from "./character";
 import {
   applyDamage,
   applyHealing,
-  castSpell,
   currentHp,
   deathSaveRoll,
   deathStatus,
@@ -142,37 +141,6 @@ describe("conditions", () => {
     const on = toggleCondition(createPlayState(), "x:condition/prone");
     expect(on.conditions).toEqual(["x:condition/prone"]);
     expect(toggleCondition(on, "x:condition/prone").conditions).toEqual([]);
-  });
-});
-
-describe("casting a spell", () => {
-  const slots = [2, 1, 0, 0, 0, 0, 0, 0, 0];
-
-  it("spends a slot of the spell's level", () => {
-    const cast = castSpell(createPlayState(), 1, slots);
-    expect(cast?.slot).toEqual({ kind: "slot", level: 1 });
-    expect(cast?.play.slotsUsed[0]).toBe(1);
-  });
-
-  it("uses a higher slot when the lower ones are spent", () => {
-    let play = createPlayState();
-    play = castSpell(play, 1, slots)?.play ?? play;
-    play = castSpell(play, 1, slots)?.play ?? play;
-    const third = castSpell(play, 1, slots);
-    expect(third?.slot).toEqual({ kind: "slot", level: 2 });
-    expect(castSpell(third?.play ?? play, 1, slots)).toBeUndefined();
-  });
-
-  it("never goes below the spell's own level", () => {
-    expect(castSpell(createPlayState(), 3, slots)).toBeUndefined();
-  });
-
-  it("falls back to a Pact Magic slot that is high enough", () => {
-    const pact = { level: 2, count: 2 };
-    const cast = castSpell(createPlayState(), 2, [0, 0, 0, 0, 0, 0, 0, 0, 0], pact);
-    expect(cast?.slot).toEqual({ kind: "pact", level: 2 });
-    expect(cast?.play.pactUsed).toBe(1);
-    expect(castSpell(createPlayState(), 3, [0, 0, 0, 0, 0, 0, 0, 0, 0], pact)).toBeUndefined();
   });
 });
 

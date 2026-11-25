@@ -104,35 +104,6 @@ export function setSlotsUsed(
   return { ...play, slotsUsed };
 }
 
-/** Which slot a cast used: a slot of the spell slot table, or a Pact Magic slot. */
-export type CastSlot = { kind: "slot" | "pact"; level: number };
-
-/**
- * Spends the lowest slot that can hold a spell of this level: a spell slot of the same level or
- * higher, then a Pact Magic slot. Returns undefined, and changes nothing, when none is left.
- */
-export function castSpell(
-  play: PlayState,
-  spellLevel: number,
-  spellSlots: number[],
-  pact?: { level: number; count: number },
-): { play: PlayState; slot: CastSlot } | undefined {
-  for (let level = Math.max(1, spellLevel); level <= spellSlots.length; level++) {
-    const total = spellSlots[level - 1] ?? 0;
-    if (total > 0 && slotsLeft(play, level, total) > 0)
-      return {
-        play: setSlotsUsed(play, level, (play.slotsUsed[level - 1] ?? 0) + 1, total),
-        slot: { kind: "slot", level },
-      };
-  }
-  if (pact && pact.level >= spellLevel && pactLeft(play, pact.count) > 0)
-    return {
-      play: setPactUsed(play, (play.pactUsed ?? 0) + 1, pact.count),
-      slot: { kind: "pact", level: pact.level },
-    };
-  return undefined;
-}
-
 /** What a spell slot costs in sorcery points to make (Flexible Casting): the slot level and its price. */
 export const SLOT_COSTS: Record<number, number> = { 1: 2, 2: 3, 3: 5, 4: 6, 5: 7 };
 
