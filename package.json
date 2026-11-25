@@ -1,6 +1,6 @@
 {
   "name": "heroquill",
-  "version": "1.38.0",
+  "version": "1.39.0",
   "private": true,
   "description": "Offline-first D&D 5e character sheet maker (print and play).",
   "license": "MIT",

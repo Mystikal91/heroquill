@@ -90,7 +90,8 @@ A `choice` that grants a `spell` and lists no `from` is open: `spellLevel` (one 
 (that level and below, cantrips included), `spellClass` and `ritual` say which spells of the
 whole game it offers, and `free`, `rest` and `atWill` say how a pick is cast (the three cantrips
 of the Pact of the Tome, Mystic Arcanum, Spell Mastery, Magical Secrets). A list of more than
-forty spells is a menu in the choices.
+forty spells is a menu in the choices. In Play the *Cast* button offers the `free` use of a spell; a 2014
+spell picked by a choice with `ritual` is cast as a ritual only, unless a class of the character knows or prepares it too.
 
 `{ "type": "spellDamage", "plus": "cha", "spell": "srd51:spell/eldritch-blast" }` adds the
 modifier of an ability to the damage a spell rolls in Play; `spell`, `school` or `damageType` say
