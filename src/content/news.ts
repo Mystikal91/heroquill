@@ -23,6 +23,20 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.39.1",
+    date: "2026-11-26",
+    notes: [
+      {
+        kind: "fix",
+        en: "The “Level up” button is back where you need it: you find it at the top of the Sheet, right under name, species and class, and on a phone also in the character strip of Build, so the new level window is one tap away, with no need to hunt for it.",
+        it: "Il tasto «Sali di livello» è tornato dove serve: lo trovi in cima alla Scheda, subito sotto nome, specie e classe, e su telefono anche nella striscia del personaggio in Crea, così la finestra del nuovo livello è a un tocco, senza doverla cercare.",
+        fr: "Le bouton « Monter de niveau » est revenu là où il sert : tu le trouves en haut de la Feuille, juste sous le nom, l'espèce et la classe, et sur téléphone aussi dans la bande du personnage de Créer, pour que la fenêtre du nouveau niveau soit à un toucher, sans avoir à la chercher.",
+        de: "Der Knopf „Stufenaufstieg“ ist zurück, wo du ihn brauchst: Du findest ihn oben im Bogen, direkt unter Name, Spezies und Klasse, und auf dem Handy auch im Charakterstreifen von Erstellen, damit das Fenster für die neue Stufe nur ein Tippen entfernt ist, ohne dass du es suchen musst.",
+        es: "El botón «Subir de nivel» ha vuelto adonde hace falta: lo encuentras arriba en la Hoja, justo debajo del nombre, la especie y la clase, y en el móvil también en la franja del personaje de Crear, para que la ventana del nuevo nivel esté a un toque, sin tener que buscarla.",
+      },
+    ],
+  },
+  {
     version: "1.39",
     date: "2026-11-25",
     notes: [
