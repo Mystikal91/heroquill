@@ -2,7 +2,7 @@
 
 ### A free D&D 5e character creator: build, play and print your character, and run the fight as the DM
 
-**[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/)
+**[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/) · [Join Discord](https://discord.gg/k6utY79gYs)
 
 Heroquill is a free, offline-first web app to **build, level up, play and print Dungeons & Dragons
 5th edition characters** with the SRD 5.1 rules (2014) or the SRD 5.2.1 rules (2024), chosen for each
