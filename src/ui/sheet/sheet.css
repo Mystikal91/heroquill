@@ -73,6 +73,14 @@
   align-items: center;
 }
 
+/* Level up, under who the character is: not as wide as the band. */
+.hero-who .level-up-button.hero-level-up {
+  width: auto;
+  margin: 0.4rem 0 0;
+  padding: 0.35rem 0.9rem;
+  min-height: 2.25rem;
+}
+
 .hero-facts li:not(:last-child)::after {
   content: "·";
   margin-left: 0.5rem;

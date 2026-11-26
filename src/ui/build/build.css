@@ -593,7 +593,7 @@ fieldset.card-select {
   margin-top: 0;
 }
 
-/* The level-up button lives in Create only (the summary and its strip), and stands out there. */
+/* The level-up button, in Create (the character as it grows) and in the header of the Sheet: it stands out. */
 :root[data-style] button.level-up-button {
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #f3c653));
   color: var(--bg);
@@ -1483,9 +1483,19 @@ fieldset.card-select {
   }
 
   .bld-abilities,
-  .bld-preview .secondary,
-  .bld-preview .level-up-button {
+  .bld-preview .secondary {
     display: none;
+  }
+
+  /* Beside the tiles, where the progress was: a level is one tap away on a phone too. */
+  :root[data-style] .bld-preview button.level-up-button {
+    width: auto;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    line-height: 1.15;
+    white-space: normal;
+    max-width: 9.5rem;
   }
 
   .bld-progress {
