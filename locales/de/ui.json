@@ -1288,7 +1288,6 @@
   "play.spellAtSlot": "Mit Platz",
   "play.castSlot": "Mit einem Zauberplatz von Grad {level} gewirkt",
   "play.castPact": "Mit einem Paktmagie-Platz gewirkt (Grad {level})",
-  "play.noSlot": "Kein Zauberplatz mehr dafür übrig",
   "app.skip": "Zum Inhalt springen",
   "form.searchItems": "Gegenstände suchen",
   "form.onlyProficient": "Nur Rüstungen und Waffen, mit denen ich geübt bin",
@@ -2975,5 +2974,16 @@
   "dm.saved.done": "{name}: für andere Kämpfe gespeichert.",
   "dm.saved.full": "Für einen weiteren gespeicherten Effekt ist kein Platz mehr: Lösche zuerst einen.",
   "dm.saved.rounds": "Runden: {n}",
-  "table.environment": "Um euch herum"
+  "table.environment": "Um euch herum",
+  "play.noSlotShort": "Kein Zauberplatz",
+  "play.leftOf": "{left} von {total} übrig",
+  "play.castFree": "Mit einer freien Anwendung gewirkt",
+  "play.castWithFree": "Freie Anwendung",
+  "play.castWithSlot": "Zauberplatz von Grad {level}",
+  "play.castAskSlot": "Du hast keinen Zauberplatz von Grad {level} mehr. Mit einem anderen wirken?",
+  "play.castAskFree": "Wie möchtest du ihn wirken?",
+  "play.castRitual": "Als Ritual",
+  "play.castRitualHint": "Kein Zauberplatz nötig: Das Wirken dauert 10 Minuten länger.",
+  "play.castRitualDone": "Als Ritual gewirkt, ohne Zauberplatz (10 Minuten länger)",
+  "play.noUseShort": "Anwendung verbraucht"
 }

@@ -60,8 +60,16 @@ export function subclassOf(
   classId: string,
 ): boolean {
   if (sub.parent === classId) return true;
-  const slug = classId.startsWith("srd52:class/")
-    ? classId.slice("srd52:class/".length)
-    : undefined;
-  return Boolean(slug && !/^srd\d+:/.test(sub.id) && sub.parent === `srd51:class/${slug}`);
+  return !/^srd\d+:/.test(sub.id) && ownedBy(sub.parent, classId);
+}
+
+/**
+ * Whether the class an entry names as its own (`data.class` of a feature) is one the character has: that class, or
+ * the 2024 class of the same name where a book wrote the 2014 one. It is asked of what the character already
+ * holds, so it also takes a feature of the 2014 SRD that a subclass of a book gives.
+ */
+export function ownedBy(owner: unknown, classId: string): boolean {
+  if (owner === classId) return true;
+  const slug = /^srd52:class\/(.+)$/.exec(classId)?.[1];
+  return slug !== undefined && owner === `srd51:class/${slug}`;
 }

@@ -587,6 +587,8 @@ interface MapOptions {
   holds?: ReadonlySet<string>;
   /** Skip the rules that depend on a level: the class importer reads those itself. */
   skipLevelled?: boolean;
+  /** With `skipLevelled`: the spells that come at a level are given all the same. */
+  levelledSpells?: boolean;
   /** The class being described, so `$(spellcasting:list)` knows which list to use. */
   classSlug?: string;
   /** The element is a magic item: its stats (armor class, saves...) are read as bonuses. */
@@ -1125,7 +1127,13 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
       note(rule, "unmet");
       continue;
     }
-    if (options.skipLevelled && rule.level !== undefined && featureValueOf(rule) === undefined)
+    const levelledSpell = options.levelledSpells && rule.tag === "grant" && rule.type === "Spell";
+    if (
+      options.skipLevelled &&
+      rule.level !== undefined &&
+      !levelledSpell &&
+      featureValueOf(rule) === undefined
+    )
       continue;
     const gated = options.live && rule.requirements.trim() !== "";
     const effectsFrom = mapped.effects.length;

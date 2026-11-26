@@ -3,6 +3,7 @@ import type { Entry } from "../data/schema";
 import type { ClassSpells } from "./character";
 import type { PackIndex } from "./derive";
 import { spellFor2024 } from "./rulesets";
+import { subclassDataOn, subclassReached } from "./subclass";
 import { type Warning, warn } from "./warnings";
 
 /** One list of spells a class picks: how many it may hold, the picks, and what it may pick from. */
@@ -36,6 +37,8 @@ export interface SpellLists {
 
 interface Input {
   classId: string;
+  /** The class the character has, when `classId` is only the list its subclass picks from. */
+  ownerId?: string;
   data: ClassData;
   level: number;
   /** Modifier of the class's spellcasting ability. */
@@ -133,15 +136,24 @@ export function deriveSpellLists(input: Input): SpellLists {
   const casting = data.spellcasting;
   if (!casting) throw new Error(`${classId} is not a spellcasting class`);
   // The spells the subclass of a book names are those of the 2014 SRD: a 2024 class takes the 2024 spells.
-  const twin = classId.startsWith("srd52:");
+  const twin = (input.ownerId ?? classId).startsWith("srd52:");
   const row = data.levels.find((l) => l.level === level);
   const maxSpellLevel = highestSpellLevel(data, level);
 
+  // What a patron adds to the list waits for the subclass too.
+  const adding =
+    subclass && subclassReached(subclass, input.ownerId ?? classId, level) ? subclass : undefined;
+
   const alwaysPrepared = subclass
-    ? subclassData(subclass)
+    ? subclassDataOn(subclass, input.ownerId ?? classId)
         .spells.filter((s) => s.classLevel <= level)
         .map((s) => (twin ? spellFor2024(s.spell, index) : s.spell))
     : [];
+
+  // What the subclass gives takes no pick: it is not offered, and a pick of it made before (the
+  // subclass of an older import did not give it) is left aside without a warning.
+  const free = (spells: string[] | undefined) =>
+    (spells ?? []).filter((s) => !alwaysPrepared.includes(s));
 
   const lists: SpellLists = {
     preparation: casting.preparation.type,
@@ -151,9 +163,9 @@ export function deriveSpellLists(input: Input): SpellLists {
 
   if (row?.cantripsKnown) {
     lists.cantrips = resolvePick(
-      picks?.cantrips ?? [],
+      free(picks?.cantrips),
       row.cantripsKnown,
-      [...classSpellPool(index, classId, 0, 0), ...expandedPool(index, subclass, 0, 0, twin)],
+      free([...classSpellPool(index, classId, 0, 0), ...expandedPool(index, adding, 0, 0, twin)]),
       classId,
       warnings,
     );
@@ -162,16 +174,16 @@ export function deriveSpellLists(input: Input): SpellLists {
   const leveled = [
     ...new Set([
       ...classSpellPool(index, classId, 1, maxSpellLevel),
-      ...expandedPool(index, subclass, 1, maxSpellLevel, twin),
+      ...expandedPool(index, adding, 1, maxSpellLevel, twin),
     ]),
   ];
   const preparation = casting.preparation;
   if (preparation.type === "known") {
     const schools = input.schools ?? [];
     lists.known = resolvePick(
-      picks?.known ?? [],
+      free(picks?.known),
       row?.spellsKnown ?? 0,
-      leveled,
+      free(leveled),
       classId,
       warnings,
       schools.length > 0
@@ -185,8 +197,7 @@ export function deriveSpellLists(input: Input): SpellLists {
     const count = preparation.fromTable
       ? (row?.spellsKnown ?? 0)
       : Math.max(1, abilityModifier + Math.floor(level / preparation.levelDivisor));
-    const pool = leveled.filter((s) => !alwaysPrepared.includes(s));
-    lists.prepared = resolvePick(picks?.prepared ?? [], count, pool, classId, warnings);
+    lists.prepared = resolvePick(free(picks?.prepared), count, free(leveled), classId, warnings);
   } else {
     const bookSize = preparation.initial + preparation.perLevel * (level - 1);
     lists.known = resolvePick(picks?.known ?? [], bookSize, leveled, classId, warnings);
@@ -194,9 +205,9 @@ export function deriveSpellLists(input: Input): SpellLists {
       ? (row?.spellsKnown ?? 0)
       : Math.max(1, abilityModifier + level);
     lists.prepared = resolvePick(
-      picks?.prepared ?? [],
+      free(picks?.prepared),
       count,
-      lists.known.chosen,
+      free(lists.known.chosen),
       classId,
       warnings,
     );

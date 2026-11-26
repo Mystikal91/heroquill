@@ -9,6 +9,7 @@ import {
   readRules,
   requirementsMet,
   selectMatches,
+  spellIdOf,
   translateRequirement,
 } from "./rules";
 import { clean, description, setters, slugify, supportsOf } from "./xml";
@@ -122,7 +123,12 @@ export function claimFeatures(ctx: Context, owners: Map<Source, Owner>): void {
 /** A class feature or archetype feature. */
 export function importFeature(ctx: Context, source: Source, owners: Map<Source, Owner>): void {
   const owner = owners.get(source);
-  const mapped = mapRules(ctx, source, { idPrefix: "feature", skipLevelled: true, live: true });
+  const mapped = mapRules(ctx, source, {
+    idPrefix: "feature",
+    skipLevelled: true,
+    levelledSpells: !subclassFeatures(ctx).has(source),
+    live: true,
+  });
   // What the feature asks of whoever picks it (an eldritch invocation: a level, a pact, a cantrip):
   // the sheet checks it when the feature is an option of a choice. The words are the ids the app holds.
   const asked = clean(source.el.querySelector(":scope > requirements")?.textContent);
@@ -372,6 +378,50 @@ function archetypeFeatures(ctx: Context, source: Source): Source[] {
   return [...seen];
 }
 
+const subclassFeatureCache = new WeakMap<Context, Set<Source>>();
+
+/**
+ * Every feature a subclass always has. The spells these give at a level are listed by the subclass
+ * (`subclassSpells`); an option the person picks (a druid's land) gives its spells itself.
+ */
+function subclassFeatures(ctx: Context): Set<Source> {
+  let found = subclassFeatureCache.get(ctx);
+  if (!found) {
+    found = new Set(
+      ofType(ctx, "Archetype")
+        .filter((a) => a.id && archetypeParent(ctx, a))
+        .flatMap((a) => archetypeFeatures(ctx, a)),
+    );
+    subclassFeatureCache.set(ctx, found);
+  }
+  return found;
+}
+
+/**
+ * The spells a subclass always gives from a class level, on the archetype itself (the domains of
+ * the Player's Handbook) or on a feature of it ("Artillerist Spells", "Oath Spells"). Not all are
+ * marked `prepared`: those a ranger's subclass adds to the spells known come the same way. A spell
+ * never comes before the feature that gives it. A grant without a level stays an effect of its feature.
+ */
+function subclassSpells(ctx: Context, source: Source): { spell: string; classLevel: number }[] {
+  const found = new Map<string, number>();
+  const visit = (holder: Source, reached: number, path: Set<Source>) => {
+    if (path.has(holder)) return;
+    for (const rule of readRules(holder.el)) {
+      if (rule.tag !== "grant" || rule.type !== "Spell" || rule.level === undefined) continue;
+      const spell = requirementsMet(rule.requirements) && spellIdOf(ctx, rule.id);
+      const level = Math.max(rule.level, reached);
+      if (spell) found.set(spell, Math.min(level, found.get(spell) ?? level));
+    }
+    for (const g of grantedFeatures(ctx, holder))
+      visit(g.feature, Math.max(g.level ?? 1, reached), new Set([...path, holder]));
+  };
+  visit(source, 1, new Set());
+  return [...found]
+    .map(([spell, classLevel]) => ({ spell, classLevel }))
+    .sort((a, b) => a.classLevel - b.classLevel);
+}
+
 export function importArchetype(ctx: Context, source: Source): void {
   const parent = archetypeParent(ctx, source);
   if (!parent) {
@@ -379,14 +429,13 @@ export function importArchetype(ctx: Context, source: Source): void {
     return;
   }
   const byLevel = new Map<number, string[]>();
-  const spells: { spell: string; classLevel: number }[] = [];
+  const spells = subclassSpells(ctx, source);
   for (const rule of readRules(source.el)) {
     if (rule.tag !== "grant" || rule.level === undefined || !requirementsMet(rule.requirements))
       continue;
     const target = ctx.byAid.get(rule.id);
     if (!target?.id) continue;
-    if (rule.type === "Spell") spells.push({ spell: target.id, classLevel: rule.level });
-    else if (FEATURE_TYPES.has(rule.type)) {
+    if (FEATURE_TYPES.has(rule.type)) {
       const list = byLevel.get(rule.level) ?? [];
       list.push(target.id);
       byLevel.set(rule.level, list);

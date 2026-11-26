@@ -545,6 +545,71 @@ describe("classes and archetypes", () => {
     });
   });
 
+  it("gives the spells a subclass gets at a level, wherever the file holds them", () => {
+    const made = parseAurora(
+      [
+        wrap(`
+      <element name="Oath of the Anvil" type="Archetype" source="Test Book" id="ID_OA">
+        <supports>Sacred Oath</supports>
+        <description><p>Standing firm.</p></description>
+        <rules>
+          <grant type="Archetype Feature" id="ID_OA_SPELLS" level="3" />
+          <grant type="Archetype Feature" id="ID_OA_LATE" level="10" />
+        </rules>
+      </element>
+      <element name="Anvil Spells" type="Archetype Feature" source="Test Book" id="ID_OA_SPELLS">
+        <description><p>The spells of the oath table.</p></description>
+        <rules>
+          <grant type="Spell" id="ID_PHB_SPELL_FIREBALL" level="5" prepared="true" />
+          <grant type="Spell" id="ID_PHB_SPELL_SHIELD" level="3" prepared="true" />
+          <grant type="Spell" id="ID_PHB_SPELL_DARKNESS" level="5" />
+          <grant type="Spell" id="ID_PHB_SPELL_LIGHT" />
+          <select type="Archetype Feature" name="Forge" supports="Anvil Forge" />
+        </rules>
+      </element>
+      <element name="Late Blessing" type="Archetype Feature" source="Test Book" id="ID_OA_LATE">
+        <description><p>The file says the 5th level, the feature comes at the 10th.</p></description>
+        <rules><grant type="Spell" id="ID_PHB_SPELL_COUNTERSPELL" level="5" prepared="true" /></rules>
+      </element>
+      <element name="Cold Forge" type="Archetype Feature" source="Test Book" id="ID_OA_COLD">
+        <supports>Anvil Forge</supports>
+        <description><p>A forge of ice.</p></description>
+        <rules><grant type="Spell" id="ID_PHB_SPELL_SLOW" level="9" prepared="true" /></rules>
+      </element>`),
+      ],
+      options,
+    );
+    const oath = byId(made, "imp1:subclass/oath-of-the-anvil");
+    expect(subclassData(oath).spells).toEqual([
+      { spell: "srd51:spell/shield", classLevel: 3 },
+      { spell: "srd51:spell/fireball", classLevel: 5 },
+      { spell: "srd51:spell/darkness", classLevel: 5 },
+      { spell: "srd51:spell/counterspell", classLevel: 10 },
+    ]);
+    // Not given twice: the feature keeps only the grant without a level.
+    const spellsOf = (id: string) => byId(made, id).effects.filter((e) => e.type === "grantSpell");
+    expect(spellsOf("imp1:feature/anvil-spells")).toEqual([
+      { type: "grantSpell", spell: "srd51:spell/light" },
+    ]);
+    // An option gives its spells only to who picks it.
+    expect(spellsOf("imp1:feature/cold-forge")).toEqual([
+      { type: "grantSpell", spell: "srd51:spell/slow", minLevel: 9 },
+    ]);
+
+    const pack = parsePack({
+      manifest: { id: "imp1", ruleset: "custom", version: "1", license: "x", attribution: "x" },
+      entries: made.entries,
+    });
+    const c = createCharacter("srd51");
+    const cl = { classId: "srd51:class/paladin", level: 4, subclassId: oath.id };
+    c.classes = [cl];
+    const always = () =>
+      deriveSheet(c, indexPacks(...srd51Packs, pack)).spellcasters[0]?.lists.alwaysPrepared;
+    expect(always()).toEqual(["srd51:spell/shield"]);
+    cl.level = 5;
+    expect(always()).toHaveLength(3);
+  });
+
   it("lets Hex Warrior and Battle Ready make a weapon use another ability", () => {
     const features = wrap(`
       <element name="The Hexblade" type="Archetype" source="Test Book" id="ID_H">

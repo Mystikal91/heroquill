@@ -19,6 +19,8 @@ export interface PendingChoice {
   /** Ability bonus per pick, for `abilityBonus` choices. */
   value?: number;
   options: string[];
+  /** A choice of spells to cast as rituals. */
+  ritual?: boolean;
   /** For a choice of features: what each option asks for, when it asks for something. */
   needs?: Record<string, OptionNeed>;
   /** Picks that are valid options, at most `choose` of them. */
@@ -210,6 +212,7 @@ function walkEffects(
       grants: choice.grants,
       choose: choice.choose,
       ...(choice.value !== undefined && { value: choice.value }),
+      ...(choice.ritual && { ritual: true }),
       options,
       selected,
       remaining: choice.choose - selected.length,

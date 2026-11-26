@@ -1,9 +1,10 @@
-import { classData, subclassData } from "../data/progression";
+import { classData } from "../data/progression";
 import type { Ability, Entry } from "../data/schema";
 import type { Character } from "./character";
 import { type DerivedSheet, type PackIndex, deriveSheet } from "./derive";
 import { unmetPrerequisites } from "./multiclass";
-import { inRuleset, subclassOf } from "./rulesets";
+import { inRuleset } from "./rulesets";
+import { subclassLevel } from "./subclass";
 
 export const MAX_LEVEL = 20;
 
@@ -104,14 +105,6 @@ export function applyLevelUp(
   return next;
 }
 
-/** The first class level at which a class's subclass starts to matter, from its subclasses' features. */
-export function subclassLevel(index: PackIndex, classId: string): number | undefined {
-  const levels = [...index.values()]
-    .filter((e) => e.kind === "subclass" && subclassOf(e, classId))
-    .flatMap((e) => subclassData(e).levels.map((l) => l.level));
-  return levels.length > 0 ? Math.min(...levels) : undefined;
-}
-
 export interface CasterChange {
   classId: string;
   cantrips: [number, number];
@@ -202,7 +195,7 @@ export function openTasks(
 ): LevelUpTask[] {
   const tasks: LevelUpTask[] = [];
   for (const cl of character.classes) {
-    const from = subclassLevel(index, cl.classId);
+    const from = subclassLevel(cl.classId, index);
     if (from !== undefined && cl.level >= from && !cl.subclassId)
       tasks.push({ kind: "subclass", classId: cl.classId });
   }

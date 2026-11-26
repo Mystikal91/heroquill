@@ -93,6 +93,36 @@
   padding: 0;
 }
 
+/* The window that asks what to pay for a spell with. */
+.cast-dialog {
+  width: min(26rem, calc(100vw - 2rem));
+}
+
+.cast-options {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.play .cast-option:not(.pip-btn):not(.info-btn):not(.link) {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  padding-block: 0.4rem;
+  text-align: start;
+}
+
+.cast-cancel {
+  justify-content: flex-end;
+}
+
+:root[data-style] .play .card-primary:not(.pip-btn):not(.info-btn):not(.link):disabled {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--fg);
+  opacity: 0.75;
+}
+
 .spell-save {
   display: inline-flex;
   align-items: center;

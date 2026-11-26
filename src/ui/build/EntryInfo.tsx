@@ -1,8 +1,9 @@
 import { type ComponentChildren, Fragment } from "preact";
 import { character, content, sheet } from "../../app/store";
-import { classData, subclassData } from "../../data/progression";
+import { classData } from "../../data/progression";
 import type { Effect } from "../../data/schema";
 import { heldBy, plainEffects } from "../../engine/requirements";
+import { subclassDataOn } from "../../engine/subclass";
 import { type UiKey, signed, ui } from "../../i18n/ui";
 import { distance } from "../../i18n/units";
 import { EditPencil } from "../QuickEdit";
@@ -246,7 +247,9 @@ export function ClassInfo({
   const abilityName = (id: string) => c.name(`${rs}:ability/${id}`);
   const levelOne = data.levels.find((l) => l.level === 1)?.features ?? [];
   const byLevel = data.levels.filter((l) => l.features.length > 0);
-  const subLevels = sub ? subclassData(sub).levels.filter((l) => l.features.length > 0) : [];
+  const subLevels = sub
+    ? subclassDataOn(sub, classId).levels.filter((l) => l.features.length > 0)
+    : [];
 
   return (
     <>

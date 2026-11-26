@@ -1,4 +1,4 @@
-import { signal } from "@preact/signals";
+import { effect, signal } from "@preact/signals";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import {
   addLog,
@@ -9,15 +9,22 @@ import {
   vitals,
 } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
+import {
+  type CastSources,
+  type SlotMark,
+  canCastAsRitual,
+  castOptions,
+  isRitualOnly,
+  planCast,
+  slotMark,
+  slotsCameBack,
+} from "../../engine/casting";
 import type { DerivedSheet } from "../../engine/derive";
 import { durationRounds } from "../../engine/durations";
 import { doubleDice } from "../../engine/monsterRolls";
 import {
   applyHealing,
-  castSpell,
   endConcentration,
-  resourceLeft,
-  setResourceUsed,
   setSpellActive,
   slotsLeft,
   startConcentration,
@@ -29,11 +36,28 @@ import { damageLabel } from "../rules/ActionButtons";
 import { Panel } from "../sheet/parts";
 import { type SpellRow, collectSpellRows } from "../spellRows";
 import { spellDetail } from "../spells/SpellInfo";
+import { announceCast, startCast } from "./CastDialog";
 import { PrepareSpellsButton, preparingCasters } from "./PrepareSpells";
 import { ChecksIcon, FocusIcon, HealIcon, SaveIcon } from "./icons";
 
-/** The slot level the person chose to roll and cast a spell at, by spell (default: its own level). */
-const slotChoice = signal<Record<string, number>>({});
+/**
+ * The slot level to roll and cast a spell at, by character and spell (default: the lowest there is):
+ * the one the person picked, or the one it was last cast with. The latter (it has a `mark`) is for the
+ * dice only, never for what the next cast spends, and is forgotten once slots come back.
+ */
+const slotChoice = signal<Record<string, { level: number; mark?: SlotMark }>>({});
+
+const choiceKeyOf = (characterId: string, spell: string) => `${characterId} ${spell}`;
+
+effect(() => {
+  const { id, play } = character.value;
+  const all = Object.entries(slotChoice.value);
+  const kept = all.filter(
+    ([key, { mark }]) => !mark || !key.startsWith(`${id} `) || !slotsCameBack(play, mark),
+  );
+  if (kept.length < all.length) slotChoice.value = Object.fromEntries(kept);
+});
+
 /** The spell whose last attack was a critical hit: its damage rolls the dice twice, once. */
 const criticalSpell = signal<string | undefined>(undefined);
 
@@ -118,22 +142,47 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
   const caster = s.spellcasters.find((x) => data.classes?.includes(x.classId)) ?? s.spellcasters[0];
   const modifier = caster ? s.abilities[caster.ability].modifier : 0;
 
+  // A class without slots pays for its spells from a reserve of points, up to a limit for each spell.
+  const reserveCounter = caster?.reserve
+    ? s.resources.find((r) => r.id === `reserve:${caster.reserve}`)
+    : undefined;
+  const pointCost = typeof data.pointCost === "number" ? data.pointCost : level;
+  const sources: CastSources = {
+    spellSlots: s.spellSlots,
+    pact: s.pactSlots,
+    resources: s.resources,
+    ...(caster?.reserve && {
+      points: {
+        id: `reserve:${caster.reserve}`,
+        max: reserveCounter?.max ?? 0,
+        cost: pointCost,
+        limit: caster.spellLimit,
+      },
+    }),
+  };
+  const options = castOptions(play, { id, level }, sources);
+  const plan = planCast(options);
+
   // A bigger slot only matters to the spells that grow with it.
-  const slotLevels = (level > 0 ? s.spellSlots.map((n, i) => (n > 0 ? i + 1 : 0)) : []).filter(
-    (l) => l >= level,
-  );
-  const picked = slotChoice.value[id] ?? level;
-  const slotLevel = slotLevels.includes(picked) ? picked : level;
-  const rolls = spellRolls(data, {
-    slotLevel,
-    characterLevel: s.level,
-    modifier,
-    bonuses: s.spellDamage,
-    spellId: id,
-    healing: s.spellHealing,
-  });
+  const slots = options.filter((o) => o.kind === "slot" || o.kind === "pact");
+  const slotLevels = level > 0 ? [...new Set(slots.map((o) => o.level))].sort((a, b) => a - b) : [];
+  const choiceKey = choiceKeyOf(character.value.id, id);
+  const choice = slotChoice.value[choiceKey];
+  const slotLevel =
+    choice && slotLevels.includes(choice.level) ? choice.level : (slotLevels[0] ?? level);
+  // What the next cast spends: the level the person picked, never the one of the last cast.
+  const nextLevel = choice?.mark ? slotLevels[0] : slotLevel;
+  const rollsAt = (at: number) =>
+    spellRolls(data, {
+      slotLevel: at,
+      characterLevel: s.level,
+      modifier,
+      bonuses: s.spellDamage,
+      spellId: id,
+      healing: s.spellHealing,
+    });
+  const rolls = rollsAt(slotLevel);
   const choosing = rolls.scalesBySlot && slotLevels.length > 1;
-  const castLevel = rolls.scalesBySlot ? slotLevel : level;
 
   const concentrating = play.concentration === id;
   const critical = criticalSpell.value === id;
@@ -153,54 +202,47 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
     rolls.save !== undefined ||
     data.concentration === true;
 
-  // A class without slots pays for its spells from a reserve of points, up to a limit for each spell.
-  const reserveCounter = caster?.reserve
-    ? s.resources.find((r) => r.id === `reserve:${caster.reserve}`)
-    : undefined;
-  const pointCost = typeof data.pointCost === "number" ? data.pointCost : level;
-  const castFromReserve = () => {
-    if (!caster?.reserve) return;
-    const label = reserveName(caster.reserve);
-    if (caster.spellLimit !== undefined && pointCost > caster.spellLimit) {
-      addLog({ label: name, detail: ui("play.overLimit", { n: caster.spellLimit }) });
-      return;
-    }
-    const left = reserveCounter ? resourceLeft(play, reserveCounter.id, reserveCounter.max) : 0;
-    if (!reserveCounter || left < pointCost) {
-      addLog({ label: name, detail: ui("play.noPoints", { reserve: label.toLowerCase() }) });
-      return;
-    }
-    changePlay((p) =>
-      setResourceUsed(
-        p,
-        reserveCounter.id,
-        (p.resourcesUsed?.[reserveCounter.id] ?? 0) + pointCost,
-        reserveCounter.max,
-      ),
-    );
-    addLog({
-      label: name,
-      detail: ui("play.castPoints", { n: pointCost, reserve: label.toLowerCase() }),
+  const canCast =
+    !isRitualOnly(id, character.value.ruleset, s) &&
+    (level > 0 || (caster?.reserve !== undefined && pointCost > 0));
+  const ritual =
+    level > 0 && canCastAsRitual({ id, ritual: data.ritual === true }, character.value.ruleset, s);
+  // Why the points cannot pay for it, said beside the button.
+  const reserveProblem =
+    !canCast || !caster?.reserve || plan.type !== "none"
+      ? undefined
+      : caster.spellLimit !== undefined && pointCost > caster.spellLimit
+        ? ui("play.overLimit", { n: caster.spellLimit })
+        : ui("play.noPoints", { reserve: reserveName(caster.reserve).toLowerCase() });
+  const cast = () =>
+    startCast({
+      name,
+      spell: { id, level },
+      wanted: rolls.scalesBySlot && choice && !choice.mark ? slotLevel : undefined,
+      sources,
+      dice: rolls.scalesBySlot
+        ? (at) => {
+            const r = rollsAt(at);
+            const dice = [...r.damage.map((part) => part.dice), r.healFixed ?? r.heal];
+            return dice.filter((x) => x !== undefined).join(", ") || undefined;
+          }
+        : undefined,
+      onCast: (option) => {
+        if (option.kind !== "slot" && option.kind !== "pact") return;
+        slotChoice.value = {
+          ...slotChoice.value,
+          [choiceKey]:
+            choice && !choice.mark && choice.level === option.level
+              ? choice
+              : { level: option.level, mark: slotMark(character.value.play) },
+        };
+      },
+      // What was picked before the cast comes back with the slot.
+      onUndo: () => {
+        const { [choiceKey]: _, ...rest } = slotChoice.value;
+        slotChoice.value = choice ? { ...rest, [choiceKey]: choice } : rest;
+      },
     });
-  };
-  const cast = () => {
-    if (caster?.reserve) {
-      castFromReserve();
-      return;
-    }
-    const done = castSpell(play, castLevel, s.spellSlots, s.pactSlots);
-    if (!done) {
-      addLog({ label: name, detail: ui("play.noSlot") });
-      return;
-    }
-    changePlay(() => done.play);
-    addLog({
-      label: name,
-      detail: ui(done.slot.kind === "pact" ? "play.castPact" : "play.castSlot", {
-        level: done.slot.level,
-      }),
-    });
-  };
 
   return (
     <li
@@ -239,9 +281,10 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
               type="button"
               class="card-btn spell-slot-btn"
               aria-label={`${ui("play.spellSlotChoice", { spell: name })}: ${l}`}
-              aria-pressed={l === slotLevel}
+              aria-pressed={l === nextLevel}
+              disabled={!slots.some((o) => o.level === l && o.left > 0)}
               onClick={() => {
-                slotChoice.value = { ...slotChoice.value, [id]: l };
+                slotChoice.value = { ...slotChoice.value, [choiceKey]: { level: l } };
               }}
             >
               {l}
@@ -258,10 +301,30 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
             if (el) el.inert = s.armorClass.untrained;
           }}
         >
-          {(level > 0 || (caster?.reserve && pointCost > 0)) && (
-            <button type="button" class="card-btn card-primary" onClick={cast}>
-              {ui("play.cast")}
-              {caster?.reserve && <small> −{pointCost}</small>}
+          {canCast && options.length > 0 && (
+            <button
+              type="button"
+              class="card-btn card-primary"
+              disabled={plan.type === "none"}
+              onClick={cast}
+            >
+              {plan.type !== "none" || caster?.reserve
+                ? ui("play.cast")
+                : ui(slots.length > 0 ? "play.noSlotShort" : "play.noUseShort")}
+              {caster?.reserve && options.every((o) => o.kind === "points" || o.left === 0) && (
+                <small> −{pointCost}</small>
+              )}
+            </button>
+          )}
+          {reserveProblem && <small class="card-warn">{reserveProblem}</small>}
+          {ritual && (
+            <button
+              type="button"
+              class="card-btn"
+              title={ui("play.castRitualHint")}
+              onClick={() => announceCast(name, ui("play.castRitualDone"))}
+            >
+              {ui("play.castRitual")}
             </button>
           )}
           {rolls.attack && caster && (

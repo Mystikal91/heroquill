@@ -1,7 +1,8 @@
 import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
-import { classData, subclassData } from "../../data/progression";
+import { classData } from "../../data/progression";
 import type { ClassLevel } from "../../engine/character";
+import { subclassDataOn } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
 import { recoveryLabel, resourceLabel } from "../play/ResourceControl";
 import { printedCharacter, printedSheet } from "./printSource";
@@ -19,7 +20,7 @@ function featureRows(c: Content, cl: ClassLevel): [number, string[]][] {
   const entry = c.index.get(cl.classId);
   if (entry) for (const row of classData(entry).levels) add(row.level, row.features);
   const sub = cl.subclassId ? c.index.get(cl.subclassId) : undefined;
-  if (sub) for (const row of subclassData(sub).levels) add(row.level, row.features);
+  if (sub) for (const row of subclassDataOn(sub, cl.classId).levels) add(row.level, row.features);
   return [...byLevel.entries()].sort(([a], [b]) => a - b);
 }
 

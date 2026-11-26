@@ -23,6 +23,7 @@ import { neighbour, useSwipe } from "../useSwipe";
 import { ActionsPanel } from "./Actions";
 import { AddEffectDialog } from "./ActiveEffects";
 import { BeastStrip } from "./BeastStrip";
+import { CastDialog } from "./CastDialog";
 import { Companions } from "./Companions";
 import { Conditions } from "./Conditions";
 import { CustomizeButton, CustomizeToolbar, HiddenPanels, PanelBar } from "./Customize";
@@ -362,6 +363,7 @@ export function PlayTab() {
         <DiceButton />
         <DiceDrawer />
         <PrepareSpellsDialog />
+        <CastDialog />
       </div>
     </>
   );

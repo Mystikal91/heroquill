@@ -30,15 +30,18 @@ export function deriveSpends(
   const found: Record<string, Spend> = {};
   for (const { effect, source } of sourced) {
     if (effect.type !== "spends" || found[source]) continue;
+    // What a 2014 book takes from the ki of a monk, a 2024 monk takes from the Focus Points.
+    const pool =
+      effect.pool === "ki" && !resources.some((r) => r.kind === "ki") ? "focus" : effect.pool;
     const ofKind = effect.reserve
       ? resources.filter((r) => r.reserve === effect.reserve)
-      : resources.filter((r) => r.kind === effect.pool);
+      : resources.filter((r) => r.kind === pool);
     const own = classOf(source);
     const resource = ofKind.find((r) => r.classId === own) ?? ofKind[0];
     if (!resource) continue;
     found[source] = {
       entry: source,
-      pool: effect.pool,
+      pool,
       ...(effect.reserve && { reserve: effect.reserve }),
       cost: effect.cost ?? 1,
       resource: resource.id,

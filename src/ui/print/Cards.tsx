@@ -1,6 +1,7 @@
 import { content } from "../../app/store";
 import type { Content } from "../../content/browser";
-import { classData, subclassData } from "../../data/progression";
+import { classData } from "../../data/progression";
+import { subclassDataOn } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
 import { collectSpellRows } from "../spellRows";
 import { FitText } from "./FitText";
@@ -121,7 +122,7 @@ function featureCards(c: Content, s: NonNullable<typeof printedSheet.value>): Fe
     const sub = cl.subclassId ? c.index.get(cl.subclassId) : undefined;
     const rows = [
       ...(entry ? classData(entry).levels : []),
-      ...(sub ? subclassData(sub).levels : []),
+      ...(sub ? subclassDataOn(sub, cl.classId).levels : []),
     ].filter((row) => row.level <= cl.level);
     for (const row of rows.sort((a, b) => a.level - b.level)) {
       for (const id of row.features) {

@@ -53,6 +53,8 @@ and Aurora Legacy that you already own.
 - Hit points, temporary hit points, death saves, hit dice, short and long rests.
 - A *Change prepared* button for the classes that prepare spells (cleric, druid, paladin, wizard),
   also offered after a long rest.
+- Casting says what it spends, with an undo, and asks before a slot of another level; free uses and
+  rituals have their place, and a spell that cannot be paid for has its button off.
 - Spell slots, Pact Magic, concentration (with the save to keep it), class resources (rage, ki,
   Channel Divinity, Bardic Inspiration...) and the numbers that matter at the table.
 - Quick rolls for checks, saves, attacks and damage, with advantage and critical hits, a dice

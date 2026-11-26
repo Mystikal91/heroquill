@@ -1,7 +1,8 @@
 import { character, content, sheet } from "../../app/store";
 import type { Content } from "../../content/browser";
-import { classData, subclassData } from "../../data/progression";
+import { classData } from "../../data/progression";
 import type { ClassLevel } from "../../engine/character";
+import { subclassDataOn } from "../../engine/subclass";
 import { ui } from "../../i18n/ui";
 import { sourceLabel } from "../SourceTag";
 import { FeaturesIcon } from "../play/icons";
@@ -21,7 +22,7 @@ function featuresByLevel(
   const entry = c.index.get(cl.classId);
   if (entry) for (const row of classData(entry).levels) add(row.level, row.features);
   const sub = cl.subclassId ? c.index.get(cl.subclassId) : undefined;
-  if (sub) for (const row of subclassData(sub).levels) add(row.level, row.features);
+  if (sub) for (const row of subclassDataOn(sub, cl.classId).levels) add(row.level, row.features);
   return byLevel;
 }
 
