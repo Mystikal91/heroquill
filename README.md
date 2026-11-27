@@ -2,7 +2,7 @@
 
 ### A free D&D 5e character creator: build, play and print your character, and run the fight as the DM
 
-**[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/)
+**[heroquill.app](https://heroquill.app/)** · [Open the app](https://heroquill.app/app/) · [Try it with a ready-made character](https://heroquill.app/app/#example) · [How to create a D&D 5e character (guide)](https://heroquill.app/guide/) · [Join Discord](https://discord.gg/k6utY79gYs)
 
 Heroquill is a free, offline-first web app to **build, level up, play and print Dungeons & Dragons
 5th edition characters** with the SRD 5.1 rules (2014) or the SRD 5.2.1 rules (2024), chosen for each
@@ -35,8 +35,9 @@ and Aurora Legacy that you already own.
   score prerequisites; **feats** in place of ability score improvements. Options that ask for
   something (an invocation's level, pact or cantrip; a feat's scores) say so and stay locked until
   the character has it.
-- **Level up**, from the Create tab: choose the class and the hit points, see exactly what
-  changes, then jump to whatever is left to decide (subclass, ability scores, spells, choices).
+- **Level up**, from the top of the Sheet or from Create: choose the class and the hit points, see
+  exactly what changes, then jump to whatever is left to decide (subclass, ability scores, spells,
+  choices).
   With a small celebration. The classes you do not have yet wait behind an *Add a new class* button,
   and only the ones whose minimum scores you meet are offered.
 - **Starting equipment, guided**: the Equipment step asks each choice the rules give your class and

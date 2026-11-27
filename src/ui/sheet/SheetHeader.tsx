@@ -3,6 +3,7 @@ import { type StepId, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
 import { character, content, editionsAvailable, rulesOpen, updateCharacter } from "../../app/store";
 import { type UiKey, ui } from "../../i18n/ui";
+import { LevelUpButton } from "../build/LevelUp";
 import { classColor } from "../classColor";
 import { KeyNumbers } from "./CoreStats";
 import { Portrait } from "./Portrait";
@@ -111,6 +112,7 @@ export function SheetHeader() {
               <li title={ui("edition.label")}>{ui(`edition.${ch.ruleset}.name`)}</li>
             )}
           </ul>
+          <LevelUpButton class="hero-level-up" />
         </div>
         <KeyNumbers />
       </div>

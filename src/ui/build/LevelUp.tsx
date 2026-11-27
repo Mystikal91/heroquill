@@ -24,6 +24,23 @@ const close = () => {
   levelUpResult.value = undefined;
 };
 
+/** The button that opens the level up window; nothing for a character without a class. */
+export function LevelUpButton({ class: extra }: { class?: string }) {
+  if (character.value.classes.length === 0) return null;
+  return (
+    <button
+      type="button"
+      class={extra ? `level-up-button ${extra}` : "level-up-button"}
+      onClick={() => {
+        levelUpPhase.value = "choose";
+      }}
+    >
+      <span aria-hidden="true">{"✦ "}</span>
+      {ui("levelUp.button")}
+    </button>
+  );
+}
+
 /** What a level brings, as a short list. */
 function Changes({ summary, c }: { summary: LevelUpSummary; c: Content }) {
   const [pb0, pb1] = summary.proficiencyBonus;

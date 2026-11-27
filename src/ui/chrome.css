@@ -334,33 +334,6 @@
   }
 }
 
-/* ---- Build: a strip with the numbers where the summary would be far away ---- */
-
-.summary-strip {
-  display: none;
-}
-
-@media (max-width: 55.99rem) {
-  .summary-strip {
-    display: block;
-    margin-bottom: 0.75rem;
-    padding: 0.6rem 0.75rem;
-  }
-
-  .summary-strip .summary-stats {
-    margin: 0 0 0.5rem;
-  }
-
-  .summary-strip .level-up-button {
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-
-  .build > .summary {
-    display: none;
-  }
-}
-
 /* ---- Taps: a line of text that opens something is a comfortable target ---- */
 
 @media (pointer: coarse), (max-width: 40rem) {

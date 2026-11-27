@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useEffect } from "preact/hooks";
-import { type StepId, levelUpPhase, openStep } from "../../app/buildState";
+import { type StepId, openStep } from "../../app/buildState";
 import { showView } from "../../app/navigation";
 import { hpUndo } from "../../app/play";
 import { character, content, editionsAvailable, rulesOpen, setRules, sheet } from "../../app/store";
@@ -25,6 +25,7 @@ import { classColor } from "../classColor";
 import { ClassStep } from "./ClassStep";
 import { FeaturesStep } from "./FeaturesStep";
 import { FreeEditStep } from "./FreeEditStep";
+import { LevelUpButton } from "./LevelUp";
 import { RulesStep, pickedRules } from "./RulesStep";
 import { StoryStep } from "./StoryStep";
 import { BackgroundStep, EquipmentStep, SpeciesStep } from "./steps";
@@ -358,18 +359,7 @@ function Preview({ doneCount, total }: { doneCount: number; total: number }) {
         </ul>
         {basicsDone ? (
           <>
-            {ch.classes.length > 0 && (
-              <button
-                type="button"
-                class="level-up-button"
-                onClick={() => {
-                  levelUpPhase.value = "choose";
-                }}
-              >
-                <span aria-hidden="true">{"✦ "}</span>
-                {ui("levelUp.button")}
-              </button>
-            )}
+            <LevelUpButton />
             <button type="button" class="secondary" onClick={() => showView("sheet")}>
               {ui("build.viewSheet")}
             </button>
