@@ -1007,6 +1007,8 @@ fieldset.card-select {
 
 .bld-step {
   display: grid;
+  /* A long "Continue" must not widen the column past the card. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   margin: 0;
 }
@@ -1540,12 +1542,12 @@ fieldset.card-select {
     display: none;
   }
 
+  /* A long name of the next step goes on two lines. */
   .bld-step-foot .primary {
     flex: 1;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    padding-block: 0.4rem;
+    overflow-wrap: break-word;
   }
 
   /* Only the arrow back on a phone: the room goes to "Continue". */

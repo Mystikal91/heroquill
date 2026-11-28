@@ -275,7 +275,8 @@
   font-size: 0.85rem;
 }
 
-.play .segmented button.on {
+/* The one in force: stronger than the theme's rule for the play buttons. */
+:root[data-style] .play .segmented button.on:not(.pip-btn):not(.info-btn):not(.link) {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-contrast);

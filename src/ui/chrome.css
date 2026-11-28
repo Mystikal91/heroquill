@@ -1939,7 +1939,8 @@ details.rule-variant[open] > summary::after {
 .mode-slot {
   display: flex;
   flex: 1 1 0;
-  min-width: 0;
+  /* Never narrower than its two buttons: on a tablet the name gives up room instead. */
+  min-width: max-content;
 }
 
 .app-header > .app-actions {
@@ -1947,8 +1948,11 @@ details.rule-variant[open] > summary::after {
   justify-content: flex-end;
 }
 
+/* It takes the free room first, up to 30rem; what is left is shared by the two sides. */
 .app-header > .app-title {
-  flex: 0 1 30rem;
+  flex: 100 1 0;
+  min-width: min-content;
+  max-width: 30rem;
 }
 
 .mode-switch-menu {
@@ -1966,6 +1970,8 @@ details.rule-variant[open] > summary::after {
 
   .app-header > .app-title {
     flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
   }
 
   .app-header > .app-actions {
