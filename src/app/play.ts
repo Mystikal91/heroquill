@@ -8,7 +8,6 @@ import {
   type DiceRoll,
   cryptoRandomInt,
   parseDice,
-  rerollDie,
   rollD20,
   rollExpression,
 } from "../engine/dice";
@@ -37,6 +36,17 @@ import {
   setResourceUsed,
   setSpellActive,
 } from "../engine/play";
+import {
+  type RollParts,
+  addTerm,
+  partsDetail,
+  partsOfDice,
+  partsTone,
+  partsTotal,
+  removeTerm,
+  rerollTerm,
+  setD20Mode,
+} from "../engine/rollParts";
 import { beastPool, damageBeast, endShapeIfDown } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
 import { character, content, sheet, updateCharacter } from "./store";
@@ -106,8 +116,13 @@ export interface LogEntry {
     /** The ability the roll uses, for the armor worn without training (Strength and Dexterity). */
     ability?: string;
   };
-  /** The dice of a roll of dice (damage, healing): with the 2024 Heroic Inspiration one of them can be rolled again. */
-  dice?: DiceRoll;
+  /**
+   * The pieces of the roll (the d20 and its mode, each die, the numbers), shown die by die and changed afterwards:
+   * a die or a number added or taken away, a d20 turned into advantage. `total`, `detail` and `tone` follow them.
+   */
+  parts?: RollParts;
+  /** Changed after it was rolled: how many times, so the online table can send it again. */
+  edits?: number;
   /** A die of Bardic Inspiration is already in the total. */
   bardic?: boolean;
   /** A die of a feature (Tactical Mind) is already in the total, and this is the use it took: it can be given back. */
@@ -143,7 +158,66 @@ export function clearLog() {
   rollLog.value = [];
 }
 
-const signedBonus = (n: number) => (n === 0 ? "" : n > 0 ? ` +${n}` : ` ${n}`);
+let nextKey = 1;
+/** A key for a piece of a roll, unique while the app is open. */
+const newKey = () => nextKey++;
+
+/** The numbers a log entry takes from the pieces of its roll. */
+export const fromParts = (parts: RollParts) => {
+  const tone = partsTone(parts);
+  return { detail: partsDetail(parts), total: partsTotal(parts), ...(tone && { tone }) };
+};
+
+/** The pieces of a roll, or for a bare number (a feature that heals a fixed amount) the number as its one piece. */
+function partsOf(entry: LogEntry): RollParts | undefined {
+  if (entry.parts) return entry.parts;
+  if (entry.total === undefined) return undefined;
+  // The key is the one the roll on screen gives the bare number, so a change does not roll it again.
+  return {
+    terms: [{ key: -entry.id, value: Math.abs(entry.total), sign: entry.total < 0 ? -1 : 1 }],
+  };
+}
+
+/** The name of what gave a die to a roll: an entry of a pack, or an effect written by hand. */
+function sourceName(source: string): string {
+  if (source.startsWith("custom:effect/")) {
+    const id = source.slice("custom:effect/".length);
+    return character.value.play.customEffects?.find((e) => e.id === id)?.name ?? id;
+  }
+  return content.value?.name(source) ?? source;
+}
+
+/**
+ * The pieces of a d20 roll: the d20 (one or two faces), its bonus, and the dice an effect rolled with it. The DM's
+ * creature rolls use it too, so they can be changed afterwards like the player's.
+ */
+export function d20Parts(
+  roll: D20Roll,
+  options?: D20Options,
+  extras: { sides: number; value: number; source: string }[] = [],
+): RollParts {
+  return {
+    d20: {
+      faces: roll.dice,
+      keys: roll.dice.map(() => newKey()),
+      mode: roll.mode,
+      critMin: options?.critMin ?? 20,
+      floor: options?.floor ?? 0,
+    },
+    terms: [
+      ...(roll.bonus !== 0
+        ? [
+            {
+              key: newKey(),
+              value: Math.abs(roll.bonus),
+              sign: roll.bonus < 0 ? (-1 as const) : (1 as const),
+            },
+          ]
+        : []),
+      ...extras.map((e) => ({ key: newKey(), ...e, sign: 1 as const })),
+    ],
+  };
+}
 
 /** Rolls a d20 with a bonus in the current mode and records it. */
 export function rollCheck(
@@ -174,7 +248,11 @@ export function rollCheck(
   const used = (sheet.value?.rollDice ?? []).filter(
     (d) => type !== undefined && d.on.includes(type),
   );
-  const extras = used.map((d) => ({ die: d.die, face: cryptoRandomInt(d.die) + 1 }));
+  const extras = used.map((d) => ({
+    die: d.die,
+    face: cryptoRandomInt(d.die) + 1,
+    source: d.source,
+  }));
   // A die that is spent by one roll (Guidance) ends the spell or the effect that gave it.
   const spent = used.filter((d) => d.once).map((d) => d.source);
   if (spent.length > 0)
@@ -190,18 +268,15 @@ export function rollCheck(
       { undo: false },
     );
   const extra = extras.reduce((sum, e) => sum + e.face, 0);
-  const faces =
-    roll.dice.length > 1
-      ? `[${roll.dice.join(", ")}] → ${roll.used}`
-      : roll.used !== roll.natural
-        ? `${roll.natural} → ${roll.used}`
-        : `${roll.used}`;
+  const parts = d20Parts(
+    roll,
+    options,
+    extras.map((e) => ({ sides: e.die, value: e.face, source: sourceName(e.source) })),
+  );
   addLog({
     label,
-    detail: `d20 ${faces}${signedBonus(bonus)}${extras.map((e) => ` + d${e.die} (${e.face})`).join("")}`,
-    total: roll.total + extra,
-    ...(roll.critical && { tone: "critical" as const }),
-    ...(roll.fumble && { tone: "fumble" as const }),
+    ...fromParts(parts),
+    parts,
     redo: {
       label,
       bonus,
@@ -216,23 +291,38 @@ export function rollCheck(
 
 /** Spends the inspiration to roll a d20 again: the new roll is the one that counts. */
 export function rerollWithInspiration(entry: LogEntry) {
-  if (!entry.redo || !character.value.play.inspiration) return;
+  const current = rollLog.value.find((e) => e.id === entry.id) ?? entry;
+  const before = current.parts;
+  if (!current.redo || !before?.d20 || !character.value.play.inspiration) return;
   changePlay((p) => setInspiration(p, false));
-  const { label, bonus, options, check, kind, ability } = entry.redo;
-  rollCheck(`${label} (${ui("play.rerolled")})`, bonus, options, check, kind, ability);
+  // Only the d20 is rolled again: the bonus, the dice of effects and what was added by hand stay, and so does the
+  // way of rolling (advantage given by hand is not lost).
+  const faces = before.d20.faces.map(() => 1 + cryptoRandomInt(20));
+  const parts: RollParts = {
+    ...before,
+    d20: { ...before.d20, faces, keys: faces.map(() => newKey()) },
+  };
+  addLog({
+    label: `${current.redo.label} (${ui("play.rerolled")})`,
+    ...fromParts(parts),
+    parts,
+    redo: current.redo,
+    ...(current.bardic && { bardic: true }),
+    ...(current.boosted && { boosted: current.boosted }),
+  });
 }
 
 /** Spends the die of a Bardic Inspiration: it is rolled and added to the total of the d20 roll. */
 export function addBardicDie(entry: LogEntry) {
   const die = character.value.play.bardicDie;
-  if (!entry.redo || entry.total === undefined || entry.bardic || die === undefined) return;
+  const before = partsOf(entry);
+  if (!entry.redo || !before || entry.bardic || die === undefined) return;
   changePlay((p) => setBardicDie(p, undefined));
-  const rolled = 1 + cryptoRandomInt(die);
+  const parts = addTerm(before, { sides: die, sign: 1, source: ui("play.bardicShort") }, newKey());
   addLog({
     label: `${entry.label} + ${ui("play.bardicShort")}`,
-    detail: `${entry.detail} + d${die} [${rolled}]`,
-    total: entry.total + rolled,
-    ...(entry.tone && { tone: entry.tone }),
+    ...fromParts(parts),
+    parts,
     redo: entry.redo,
     bardic: true,
     ...(entry.boosted && { boosted: entry.boosted }),
@@ -259,17 +349,22 @@ export function boostsFor(entry: LogEntry) {
 export function addCheckBoost(entry: LogEntry, feature: string) {
   const boost = boostsFor(entry).find((b) => b.feature === feature);
   const parsed = boost && parseDice(boost.dice);
-  if (!boost || !parsed || !entry.redo || entry.total === undefined) return;
+  const before = partsOf(entry);
+  if (!boost || !parsed || !entry.redo || !before) return;
   const { counter } = boost;
   changePlay((p) =>
     setResourceUsed(p, counter.id, (p.resourcesUsed?.[counter.id] ?? 0) + 1, counter.max),
   );
-  const rolled = rollExpression(parsed).total;
+  const name = content.value?.name(feature) ?? feature;
+  const boostParts = partsOfDice(rollExpression(parsed), newKey);
+  const parts: RollParts = {
+    ...before,
+    terms: [...before.terms, ...boostParts.terms.map((t) => ({ ...t, source: name }))],
+  };
   addLog({
-    label: `${entry.label} + ${content.value?.name(feature) ?? feature}`,
-    detail: `${entry.detail} + ${boost.dice} [${rolled}]`,
-    total: entry.total + rolled,
-    ...(entry.tone && { tone: entry.tone }),
+    label: `${entry.label} + ${name}`,
+    ...fromParts(parts),
+    parts,
     redo: entry.redo,
     boosted: { resource: counter.id },
     ...(entry.bardic && { bardic: true }),
@@ -296,28 +391,50 @@ export function rollDiceText(label: string, text: string): DiceRoll | undefined 
   const parsed = parseDice(text);
   if (!parsed) return undefined;
   const roll = rollExpression(parsed);
-  addLog({ label, detail: diceDetail(roll), total: roll.total, dice: roll });
+  const parts = partsOfDice(roll, newKey);
+  addLog({ label, ...fromParts(parts), parts });
   return roll;
 }
-
-const diceDetail = (roll: DiceRoll) =>
-  `${roll.rolls.map((group) => `[${group.join(", ")}]`).join(" + ")}${signedBonus(roll.modifier)}`;
 
 /**
  * Spends Heroic Inspiration (2024) to roll one die of a roll again: the new face counts and the total changes. Not
  * for the d20 of a check, which has its own button (`rerollWithInspiration`).
  */
-export function rerollOneDie(entry: LogEntry, term: number, index: number) {
-  if (!entry.dice || !character.value.play.inspiration) return;
+export function rerollOneDie(entry: LogEntry, key: number) {
+  if (!entry.parts || !character.value.play.inspiration) return;
   changePlay((p) => setInspiration(p, false));
-  const roll = rerollDie(entry.dice, term, index);
-  addLog({
-    label: `${entry.label} (${ui("play.rerolled")})`,
-    detail: diceDetail(roll),
-    total: roll.total,
-    dice: roll,
-  });
+  const parts = rerollTerm(entry.parts, key, newKey());
+  addLog({ label: `${entry.label} (${ui("play.rerolled")})`, ...fromParts(parts), parts });
 }
+
+/**
+ * Changes a roll that has landed, in place: the history, the roll on screen and the online table follow. For what
+ * was forgotten before rolling (Bless, a penalty, advantage the DM granted).
+ */
+function editRoll(entry: LogEntry, change: (parts: RollParts) => RollParts) {
+  const current = rollLog.value.find((e) => e.id === entry.id);
+  const before = current && partsOf(current);
+  if (!current || !before) return;
+  const parts = change(before);
+  if (parts === before) return;
+  const { tone: _tone, ...rest } = current;
+  const next: LogEntry = { ...rest, parts, ...fromParts(parts), edits: (current.edits ?? 0) + 1 };
+  rollLog.value = rollLog.value.map((e) => (e.id === entry.id ? next : e));
+}
+
+/** Adds a die (rolled now) or a number to a roll that has landed; `sign` -1 takes it away. */
+export const addToRoll = (
+  entry: LogEntry,
+  piece: { sides?: number; value?: number; sign: 1 | -1 },
+) => editRoll(entry, (parts) => addTerm(parts, piece, newKey()));
+
+/** Takes out of a roll a die or a number the person put in. */
+export const removeFromRoll = (entry: LogEntry, key: number) =>
+  editRoll(entry, (parts) => removeTerm(parts, key));
+
+/** Turns the d20 of a roll that has landed into advantage, disadvantage or a plain roll. */
+export const setRollModeAfter = (entry: LogEntry, mode: D20Mode) =>
+  editRoll(entry, (parts) => setD20Mode(parts, mode, newKey()));
 
 /** Hit points and the numbers the play screen needs, or undefined before the sheet exists. */
 export function vitals() {

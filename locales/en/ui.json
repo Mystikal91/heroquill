@@ -1422,7 +1422,6 @@
   "portrait.change": "Change the portrait",
   "portrait.remove": "Remove the portrait",
   "portrait.failed": "That picture could not be read.",
-  "play.tapToClose": "Tap to close",
   "portrait.editTitle": "Crop the portrait",
   "portrait.editHint": "Drag to move the picture, use the slider, the wheel or two fingers to zoom. The hexagon is what the medallion shows.",
   "portrait.zoom": "Zoom",
@@ -2985,5 +2984,18 @@
   "play.castRitual": "As a ritual",
   "play.castRitualHint": "No slot spent: casting takes 10 minutes longer.",
   "play.castRitualDone": "Cast as a ritual, no slot spent (10 minutes longer)",
-  "play.noUseShort": "Use spent"
+  "play.noUseShort": "Use spent",
+  "play.rollWithAdvantage": "with advantage",
+  "play.rollWithDisadvantage": "with disadvantage",
+  "play.rollTotal": "Total",
+  "play.rollBonus": "bonus",
+  "play.rollEdit": "Change roll",
+  "play.rollEditDone": "Done",
+  "play.rollAdd": "Add",
+  "play.rollSubtract": "Subtract",
+  "play.rollEditDie": "A die",
+  "play.rollEditNumber": "A number",
+  "play.rollIncluded": "Included: {list}",
+  "play.rollRemove": "Remove {what}",
+  "play.rollEdited": "changed"
 }

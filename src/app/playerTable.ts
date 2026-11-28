@@ -26,7 +26,7 @@ import { damageName } from "../ui/damageName";
 import { movementLines } from "../ui/movementLines";
 import { damageEffectRows } from "../ui/play/DamageEffects";
 import { beastArmorClass } from "../ui/play/beastArmorClass";
-import { changePlay, damageCharacter, rollCheck, rollLog } from "./play";
+import { type LogEntry, changePlay, damageCharacter, rollCheck, rollLog } from "./play";
 import { character, content, sheet } from "./store";
 
 /**
@@ -158,6 +158,10 @@ function sendCard(force = false) {
 function watch() {
   stopWatching?.();
   let seen = rollLog.peek()[0]?.id ?? 0;
+  // Rolls changed before joining are not news for the DM.
+  sentEdits.clear();
+  for (const e of rollLog.peek()) sentEdits.set(e.id, e.edits ?? 0);
+  pendingEdits.clear();
   stopWatching = effect(() => {
     // Reading these makes the effect run again when they change.
     const card = currentCard();
@@ -167,18 +171,48 @@ function watch() {
       timer = setTimeout(() => sendCard(), 400);
     }
     const fresh = log.filter((e) => e.id > seen).reverse();
-    if (fresh.length === 0) return;
-    seen = log[0]?.id ?? seen;
-    for (const e of fresh)
-      link?.send({
-        t: "roll",
-        roll: {
-          label: e.label,
-          detail: e.detail,
-          ...(e.total !== undefined && { total: e.total }),
-          ...(e.tone && { tone: e.tone }),
-        },
-      });
+    // A roll changed after it landed (a die added, advantage given) is sent again once the changes stop.
+    for (const e of log)
+      if (e.id <= seen && (e.edits ?? 0) > (sentEdits.get(e.id) ?? 0)) pendingEdits.add(e.id);
+    for (const e of fresh) sentEdits.set(e.id, e.edits ?? 0);
+    clearTimeout(editTimer);
+    if (fresh.length > 0) {
+      // A new roll goes after the changes to the earlier ones, so the DM reads them in order.
+      sendEdits();
+      seen = log[0]?.id ?? seen;
+      for (const e of fresh) sendRoll(e, false);
+    } else if (pendingEdits.size > 0) editTimer = setTimeout(sendEdits, EDIT_WAIT_MS);
+  });
+}
+
+/** Sends again the rolls changed since they were last sent, oldest first. */
+function sendEdits() {
+  clearTimeout(editTimer);
+  for (const e of rollLog
+    .peek()
+    .filter((x) => pendingEdits.has(x.id))
+    .reverse()) {
+    sentEdits.set(e.id, e.edits ?? 0);
+    sendRoll(e, true);
+  }
+  pendingEdits.clear();
+}
+
+/** How long a changed roll waits for more changes before it is sent again. */
+const EDIT_WAIT_MS = 1_200;
+const sentEdits = new Map<number, number>();
+const pendingEdits = new Set<number>();
+let editTimer: ReturnType<typeof setTimeout> | undefined;
+
+function sendRoll(e: LogEntry, edited: boolean) {
+  link?.send({
+    t: "roll",
+    roll: {
+      label: edited ? `${e.label} (${ui("play.rollEdited")})` : e.label,
+      detail: e.detail,
+      ...(e.total !== undefined && { total: e.total }),
+      ...(e.tone && { tone: e.tone }),
+    },
   });
 }
 
@@ -273,6 +307,7 @@ export function leaveTable() {
   stopWatching?.();
   stopWatching = undefined;
   clearTimeout(timer);
+  clearTimeout(editTimer);
   write(undefined);
   joinedCode.value = undefined;
   trackerView.value = undefined;

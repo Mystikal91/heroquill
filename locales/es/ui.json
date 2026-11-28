@@ -1422,7 +1422,6 @@
   "portrait.change": "Cambiar el retrato",
   "portrait.remove": "Quitar el retrato",
   "portrait.failed": "No se pudo leer esa imagen.",
-  "play.tapToClose": "Toca para cerrar",
   "portrait.editTitle": "Recortar el retrato",
   "portrait.editHint": "Arrastra para mover la imagen y usa el control, la rueda o dos dedos para ampliar. El hexágono es lo que muestra el medallón.",
   "portrait.zoom": "Zoom",
@@ -2985,5 +2984,18 @@
   "play.castRitual": "Como ritual",
   "play.castRitualHint": "No gasta espacio: el lanzamiento tarda 10 minutos más.",
   "play.castRitualDone": "Lanzado como ritual, sin gastar espacio (10 minutos más)",
-  "play.noUseShort": "Uso agotado"
+  "play.noUseShort": "Uso agotado",
+  "play.rollWithAdvantage": "con ventaja",
+  "play.rollWithDisadvantage": "con desventaja",
+  "play.rollTotal": "Total",
+  "play.rollBonus": "bono",
+  "play.rollEdit": "Modificar tirada",
+  "play.rollEditDone": "Hecho",
+  "play.rollAdd": "Sumar",
+  "play.rollSubtract": "Restar",
+  "play.rollEditDie": "Un dado",
+  "play.rollEditNumber": "Un número",
+  "play.rollIncluded": "Incluido: {list}",
+  "play.rollRemove": "Quitar {what}",
+  "play.rollEdited": "modificada"
 }

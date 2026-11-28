@@ -1422,7 +1422,6 @@
   "portrait.change": "Changer le portrait",
   "portrait.remove": "Retirer le portrait",
   "portrait.failed": "Cette image n’a pas pu être lue.",
-  "play.tapToClose": "Touche pour fermer",
   "portrait.editTitle": "Recadrer le portrait",
   "portrait.editHint": "Glisse pour déplacer l’image, utilise le curseur, la molette ou deux doigts pour zoomer. L’hexagone est ce que montre le médaillon.",
   "portrait.zoom": "Zoom",
@@ -2985,5 +2984,18 @@
   "play.castRitual": "En rituel",
   "play.castRitualHint": "Aucun emplacement dépensé : l'incantation prend 10 minutes de plus.",
   "play.castRitualDone": "Lancé en rituel, sans dépenser d'emplacement (10 minutes de plus)",
-  "play.noUseShort": "Utilisation épuisée"
+  "play.noUseShort": "Utilisation épuisée",
+  "play.rollWithAdvantage": "avec avantage",
+  "play.rollWithDisadvantage": "avec désavantage",
+  "play.rollTotal": "Total",
+  "play.rollBonus": "bonus",
+  "play.rollEdit": "Modifier le jet",
+  "play.rollEditDone": "Terminé",
+  "play.rollAdd": "Ajouter",
+  "play.rollSubtract": "Soustraire",
+  "play.rollEditDie": "Un dé",
+  "play.rollEditNumber": "Un nombre",
+  "play.rollIncluded": "Inclus : {list}",
+  "play.rollRemove": "Retirer {what}",
+  "play.rollEdited": "modifié"
 }

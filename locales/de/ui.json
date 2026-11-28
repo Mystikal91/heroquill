@@ -1422,7 +1422,6 @@
   "portrait.change": "Das Porträt ändern",
   "portrait.remove": "Das Porträt entfernen",
   "portrait.failed": "Dieses Bild konnte nicht gelesen werden.",
-  "play.tapToClose": "Tippen zum Schließen",
   "portrait.editTitle": "Porträt zuschneiden",
   "portrait.editHint": "Ziehe, um das Bild zu verschieben, und zoome mit dem Regler, dem Mausrad oder zwei Fingern. Das Sechseck zeigt, was das Medaillon zeigt.",
   "portrait.zoom": "Zoom",
@@ -2985,5 +2984,18 @@
   "play.castRitual": "Als Ritual",
   "play.castRitualHint": "Kein Zauberplatz nötig: Das Wirken dauert 10 Minuten länger.",
   "play.castRitualDone": "Als Ritual gewirkt, ohne Zauberplatz (10 Minuten länger)",
-  "play.noUseShort": "Anwendung verbraucht"
+  "play.noUseShort": "Anwendung verbraucht",
+  "play.rollWithAdvantage": "mit Vorteil",
+  "play.rollWithDisadvantage": "mit Nachteil",
+  "play.rollTotal": "Summe",
+  "play.rollBonus": "Bonus",
+  "play.rollEdit": "Wurf ändern",
+  "play.rollEditDone": "Fertig",
+  "play.rollAdd": "Addieren",
+  "play.rollSubtract": "Abziehen",
+  "play.rollEditDie": "Ein Würfel",
+  "play.rollEditNumber": "Eine Zahl",
+  "play.rollIncluded": "Enthalten: {list}",
+  "play.rollRemove": "{what} entfernen",
+  "play.rollEdited": "geändert"
 }

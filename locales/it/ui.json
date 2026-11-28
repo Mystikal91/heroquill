@@ -1422,7 +1422,6 @@
   "portrait.change": "Cambia il ritratto",
   "portrait.remove": "Togli il ritratto",
   "portrait.failed": "Non si è riusciti a leggere quell’immagine.",
-  "play.tapToClose": "Tocca per chiudere",
   "portrait.editTitle": "Ritaglia il ritratto",
   "portrait.editHint": "Trascina per spostare l’immagine, usa il cursore, la rotella o due dita per ingrandire. L’esagono è ciò che mostra il medaglione.",
   "portrait.zoom": "Ingrandimento",
@@ -2985,5 +2984,18 @@
   "play.castRitual": "Come rituale",
   "play.castRitualHint": "Non spende slot: il lancio richiede 10 minuti in più.",
   "play.castRitualDone": "Lanciato come rituale, nessuno slot speso (10 minuti in più)",
-  "play.noUseShort": "Uso esaurito"
+  "play.noUseShort": "Uso esaurito",
+  "play.rollWithAdvantage": "con vantaggio",
+  "play.rollWithDisadvantage": "con svantaggio",
+  "play.rollTotal": "Totale",
+  "play.rollBonus": "bonus",
+  "play.rollEdit": "Modifica tiro",
+  "play.rollEditDone": "Fatto",
+  "play.rollAdd": "Aggiungi",
+  "play.rollSubtract": "Sottrai",
+  "play.rollEditDie": "Un dado",
+  "play.rollEditNumber": "Un numero",
+  "play.rollIncluded": "Incluso: {list}",
+  "play.rollRemove": "Togli {what}",
+  "play.rollEdited": "modificato"
 }

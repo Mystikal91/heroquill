@@ -78,7 +78,7 @@ import { damageName } from "../ui/damageName";
 import { loadDmEffects } from "./dmEffects";
 import { onlineSettings } from "./dmSettings";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
-import { addLog, rollMode } from "./play";
+import { addLog, d20Parts, fromParts, rollMode } from "./play";
 import { content } from "./store";
 import {
   askInitiative,
@@ -1537,14 +1537,6 @@ export function endFight() {
  * open on this device counts (its exhaustion, its Bless).
  */
 export function rollForCreature(label: string, bonus: number) {
-  const roll = rollD20(bonus, rollMode.value);
-  const faces = roll.dice.length > 1 ? `[${roll.dice.join(", ")}] → ${roll.used}` : `${roll.used}`;
-  const shown = bonus === 0 ? "" : bonus > 0 ? ` +${bonus}` : ` ${bonus}`;
-  addLog({
-    label,
-    detail: `d20 ${faces}${shown}`,
-    total: roll.total,
-    ...(roll.critical && { tone: "critical" as const }),
-    ...(roll.fumble && { tone: "fumble" as const }),
-  });
+  const parts = d20Parts(rollD20(bonus, rollMode.value));
+  addLog({ label, ...fromParts(parts), parts });
 }

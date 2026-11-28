@@ -158,6 +158,27 @@ const PAIRS: {
   { text: [".senses dt", "color"], ground: [".senses > div", "background"], needs: 4.5 },
 ];
 
+const play = read("src/ui/play/play.css");
+
+describe("the green and red of a roll (advantage, disadvantage, adding, taking away)", () => {
+  for (const palette of PALETTES)
+    for (const scheme of ["l", "d"] as const)
+      it(`can be read: ${palette}, ${scheme === "l" ? "light" : "dark"}`, () => {
+        const low: string[] = [];
+        const theme = themeVars(palette, scheme);
+        for (const groundVar of ["var(--surface)", "var(--surface-2)"]) {
+          const ground = color(groundVar, theme, [0, 0, 0]);
+          for (const name of ["--rt-plus", "--rt-minus"]) {
+            const hue = color(value(play, ".roll-card", name), theme, ground);
+            // The words in it (with advantage) and the word on it (Add, in the colour of the ground) alike.
+            const ratio = contrast(hue, ground);
+            if (ratio < 4.5) low.push(`${name} on ${groundVar}: ${ratio.toFixed(2)}`);
+          }
+        }
+        expect(low).toEqual([]);
+      });
+});
+
 describe("text on coloured grounds", () => {
   for (const palette of PALETTES)
     for (const scheme of ["l", "d"] as const)

@@ -1286,10 +1286,542 @@ fieldset.segmented {
   visibility: hidden;
 }
 
-.toast-hint {
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  opacity: 0.8;
+/* ---- The player's roll, die by die, that can be changed afterwards ---- */
+
+/* Advantage and adding read green, disadvantage and taking away red: a hue mixed with the text colour, so it
+   is dark on parchment and light on the dark sets. */
+.roll-card {
+  --rt-plus: color-mix(in srgb, #3d8a2a 50%, var(--fg));
+  --rt-minus: color-mix(in srgb, #b8322c 50%, var(--fg));
+  width: min(23rem, calc(100vw - 1.5rem));
+  max-height: calc(100dvh - 2rem - var(--tabs-bottom, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  outline: 1px solid var(--border);
+  outline-offset: -6px;
+}
+
+.rt-head {
+  display: grid;
+  gap: 0.05rem;
+  padding: 0.9rem 1.2rem 0;
+}
+
+.rt-label {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rt-mode {
+  font-style: italic;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.rt-mode.show {
+  opacity: 1;
+}
+
+.rt-mode.advantage {
+  color: var(--rt-plus);
+}
+
+.rt-mode.disadvantage {
+  color: var(--rt-minus);
+}
+
+/* A rule with a diamond, like the headings of the panels. */
+.rt-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 1.2rem 0;
+  color: var(--ink);
+  font-size: 0.55rem;
+}
+
+.rt-rule::before,
+.rt-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink));
+}
+
+.rt-rule::after {
+  transform: scaleX(-1);
+}
+
+.rt-main {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 5.2rem;
+  padding: 0.6rem 1.2rem 0.3rem 0.8rem;
+}
+
+.rt-total {
+  position: relative;
+  flex: none;
+  display: grid;
+  justify-items: center;
+}
+
+.roll-card .toast-number {
+  width: 5.2rem;
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+
+.rt-total small {
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.rt-dice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* The rows are far enough apart for the cross of a die on the row below. */
+  gap: 0.9rem 0.15rem;
+  min-width: 0;
+}
+
+.rt-piece {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+/* A die in its own shape, the number on it. */
+.rt-die {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2.75rem;
+  transition: opacity 0.4s, transform 0.4s, filter 0.4s;
+}
+
+.rt-svg {
+  width: 2.75rem;
+  height: 2.75rem;
+  overflow: visible;
+}
+
+.rt-shape {
+  fill: var(--surface-2);
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.rt-facet {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.rt-num {
+  fill: var(--fg);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.rt-die.kept .rt-shape {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.rt-die.kept .rt-num {
+  fill: var(--accent);
+}
+
+.rt-die.added .rt-shape {
+  stroke-dasharray: 4 2.5;
+}
+
+.rt-die.minus .rt-shape {
+  stroke: var(--rt-minus);
+}
+
+.rt-lab {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* While it tumbles it turns over and hops; when it lands it hits the table. */
+.rt-die.tumbling .rt-svg {
+  animation: rt-tumble 0.5s linear infinite;
+}
+
+@keyframes rt-tumble {
+  0% {
+    transform: translateY(-6px) rotate(0);
+  }
+  50% {
+    transform: translateY(2px) rotate(180deg) scale(0.9);
+  }
+  100% {
+    transform: translateY(-6px) rotate(360deg);
+  }
+}
+
+.rt-die.landed .rt-svg {
+  animation: rt-thud 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+@keyframes rt-thud {
+  from {
+    transform: scale(1.35) rotate(-25deg);
+  }
+}
+
+/* The d20 that does not count, with advantage or disadvantage: faded, smaller, struck out. */
+.rt-die.drop {
+  opacity: 0.45;
+  transform: translateY(4px) scale(0.86);
+  filter: grayscale(1);
+}
+
+.rt-strike {
+  position: absolute;
+  top: 1.3rem;
+  left: 0.25rem;
+  width: 0;
+  height: 2px;
+  background: var(--rt-minus);
+  transform: rotate(-30deg);
+  transition: width 0.35s 0.1s;
+}
+
+.rt-die.drop .rt-strike {
+  width: 2.25rem;
+}
+
+.rt-op {
+  margin-bottom: 0.9rem;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.rt-op.minus {
+  color: var(--rt-minus);
+}
+
+.rt-flat {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.9rem;
+}
+
+.rt-flat-n {
+  height: 2.75rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 2.75rem;
+}
+
+.rt-flat.added .rt-flat-n {
+  text-decoration: underline dashed var(--ink) 1px;
+  text-underline-offset: 0.35rem;
+}
+
+.rt-flat.minus .rt-flat-n {
+  color: var(--rt-minus);
+}
+
+/* The cross on what the person put in: a red X in the corner, with a bigger target than it shows. */
+.roll-card .rt-remove {
+  position: absolute;
+  top: -0.7rem;
+  right: -0.6rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--rt-minus);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.roll-card .rt-remove:hover {
+  transform: scale(1.2);
+}
+
+.roll-card .rt-remove::after {
+  content: "";
+  position: absolute;
+  inset: -0.5rem;
+}
+
+.roll-card .rt-pick {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.roll-card .rt-pick .rt-svg {
+  animation: rt-offer 1.2s ease-in-out infinite;
+}
+
+@keyframes rt-offer {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.roll-card .toast-tone {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+.rt-included {
+  margin: 0;
+  padding: 0 1.2rem 0.3rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* The buttons: a row that wraps, the one that changes the roll first. */
+.roll-card .rt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.7rem 1.2rem 0.9rem;
+}
+
+.roll-card .rt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0 0.8rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.roll-card .rt-btn:hover {
+  background: var(--accent-soft);
+}
+
+.roll-card .rt-btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.roll-card .rt-btn.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.roll-card .rt-btn span {
+  color: inherit;
+}
+
+.roll-card .rt-close {
+  min-width: 2.5rem;
+  margin-left: auto;
+  padding: 0;
+}
+
+/* The panel that changes the roll opens downwards, sliding. */
+.rt-edit {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: var(--surface-2);
+  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rt-edit.open {
+  grid-template-rows: 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.rt-edit > div {
+  overflow: hidden;
+}
+
+.rt-edit-in {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.9rem 1.2rem 1.1rem;
+}
+
+.rt-edit-h {
+  margin: 0.4rem 0 0;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Add or take away: two halves and a knob that slides between them, green or red. */
+.rt-sign {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1.5px solid var(--ink);
+}
+
+.rt-knob {
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: var(--rt-plus);
+  transition: transform 0.3s cubic-bezier(0.3, 1.3, 0.5, 1), background-color 0.3s;
+}
+
+.rt-sign.minus .rt-knob {
+  transform: translateX(100%);
+  background: var(--rt-minus);
+}
+
+.roll-card .rt-sign button {
+  position: relative;
+  min-height: 2.5rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.roll-card .rt-sign button.sel {
+  color: var(--surface);
+}
+
+.rt-palette {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.35rem;
+}
+
+.roll-card .rt-add-die {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.35rem 0 0.25rem;
+  border: 1.5px solid var(--border);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.roll-card .rt-add-die:hover {
+  border-color: var(--ink);
+}
+
+.roll-card .rt-add-die:active {
+  transform: scale(0.92);
+}
+
+.rt-add-die .rt-svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.rt-add-die .rt-facet {
+  display: none;
+}
+
+.rt-sg {
+  color: var(--rt-plus);
+}
+
+.rt-sign.minus ~ .rt-palette .rt-sg {
+  color: var(--rt-minus);
+}
+
+.rt-numbers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+}
+
+.rt-modes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+
+.roll-card .rt-modes .rt-btn {
+  padding: 0 0.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-die .rt-svg,
+  .roll-card .rt-pick .rt-svg {
+    animation: none;
+  }
+
+  .rt-mode,
+  .rt-edit,
+  .rt-die,
+  .rt-strike,
+  .rt-knob {
+    transition: none;
+  }
 }
 
 /* A long skill name (Sopravvivenza, Intrattenere, Persuasione) shrinks a little and, if it still
