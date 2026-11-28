@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { showHomebrewList } from "../app/homebrew";
+import { houseRulesOn } from "../app/houseRules";
 import { installApp, installable } from "../app/install";
 import { type View, showView } from "../app/navigation";
 import { startTour } from "../app/tour";
@@ -8,6 +9,7 @@ import { ModeSwitch } from "./ModeSwitch";
 import { Popover } from "./Popover";
 import { ThemeControls } from "./ThemeControls";
 import {
+  BookIcon,
   BoxIcon,
   DownloadIcon,
   FlagIcon,
@@ -21,6 +23,7 @@ const PAGES: { view: View; label: UiKey; icon: () => JSX.Element }[] = [
   { view: "about", label: "footer.about", icon: InfoIcon },
   { view: "packs", label: "footer.packs", icon: BoxIcon },
   { view: "homebrew", label: "hb.title", icon: FlaskIcon },
+  { view: "houseRules", label: "house.title", icon: BookIcon },
   { view: "translate", label: "footer.translate", icon: GlobeIcon },
   { view: "credits", label: "footer.credits", icon: HeartIcon },
 ];
@@ -42,6 +45,10 @@ export function AppMenu() {
             >
               <page.icon />
               <span>{ui(page.label)}</span>
+              {/* How many house rules are on, so that a table's changes to the book are not forgotten. */}
+              {page.view === "houseRules" && houseRulesOn() > 0 && (
+                <small class="muted">{ui("house.menuOn", { n: houseRulesOn() })}</small>
+              )}
             </button>
           </li>
         ))}

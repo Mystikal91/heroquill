@@ -30,6 +30,7 @@ import { parseBackup, parseImportFile } from "../storage/transfer";
 import { editionsIn } from "./edition";
 import { refreshEncounterCount } from "./encounterCount";
 import { EXAMPLE_ID, buildExample } from "./example";
+import { houseRules } from "./houseRules";
 import { showView, view } from "./navigation";
 import { transferDialog, transferInbox } from "./transferState";
 import { dismissUndo } from "./undo";
@@ -66,7 +67,7 @@ export const storageReady = signal(false);
 
 /** The sheet is always derived: it recomputes whenever the character or content changes. */
 export const sheet = computed<DerivedSheet | undefined>(() =>
-  content.value ? deriveSheet(character.value, content.value.index) : undefined,
+  content.value ? deriveSheet(character.value, content.value.index, houseRules.value) : undefined,
 );
 
 /**
@@ -76,7 +77,11 @@ export const sheet = computed<DerivedSheet | undefined>(() =>
 export const printSheet = computed<DerivedSheet | undefined>(() => {
   const c = character.value;
   if (!c.play.wildShape || !content.value) return sheet.value;
-  return deriveSheet({ ...c, play: { ...c.play, wildShape: undefined } }, content.value.index);
+  return deriveSheet(
+    { ...c, play: { ...c.play, wildShape: undefined } },
+    content.value.index,
+    houseRules.value,
+  );
 });
 
 /** In the shape of a beast, the Sheet tab can show the beast or the character's own form. */
@@ -96,7 +101,7 @@ export const shownSheet = computed<DerivedSheet | undefined>(() =>
  */
 export const calculated = computed<DerivedSheet | undefined>(() =>
   content.value
-    ? deriveSheet({ ...character.value, overrides: {} }, content.value.index)
+    ? deriveSheet({ ...character.value, overrides: {} }, content.value.index, houseRules.value)
     : undefined,
 );
 

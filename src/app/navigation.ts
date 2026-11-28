@@ -13,7 +13,8 @@ export type View =
   | "homebrewPrint"
   | "translate"
   | "dm"
-  | "about";
+  | "about"
+  | "houseRules";
 export type Tab = "build" | "sheet" | "play" | "rules" | "print";
 
 const STORAGE_KEY = "tab";
@@ -47,7 +48,8 @@ export const isPage = (v: View) =>
   v === "homebrewPrint" ||
   v === "translate" ||
   v === "dm" ||
-  v === "about";
+  v === "about" ||
+  v === "houseRules";
 
 /** The tab to go back to when leaving a page, or when the player side is chosen again. */
 let lastTab: Tab = savedTab();

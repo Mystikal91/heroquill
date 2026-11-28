@@ -6,7 +6,7 @@ import {
   rollFlowDamage,
   rollFlowToDamage,
 } from "../../app/dm";
-import { doubleDice } from "../../engine/monsterRolls";
+import { critMonsterDice } from "../../app/houseRules";
 import { signed, ui } from "../../i18n/ui";
 import { Die, putOnTop } from "../play/RollToast";
 import { damageLabel } from "../rules/ActionButtons";
@@ -106,7 +106,7 @@ export function RollPanel() {
         )}
         {damaging &&
           flow.damage.map((part) => {
-            const dice = attack?.critical ? doubleDice(part.dice) : part.dice;
+            const dice = attack?.critical ? critMonsterDice(part.dice) : part.dice;
             return (
               <button
                 type="button"

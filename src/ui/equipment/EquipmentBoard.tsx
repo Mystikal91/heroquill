@@ -2,11 +2,13 @@ import { signal } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { canCustomize } from "../../app/customizeItem";
 import { putOn, takeOff } from "../../app/equipment";
+import { houseRules } from "../../app/houseRules";
 import { useItem } from "../../app/play";
 import { character, content, sheet, updateCharacter } from "../../app/store";
 import { itemData } from "../../data/items";
 import type { InventoryItem } from "../../engine/character";
 import { healingOf, isUsable, itemKind } from "../../engine/gear";
+import { isPotion } from "../../engine/houseRules";
 import {
   BOARD_SLOTS,
   type BoardSlot,
@@ -202,6 +204,12 @@ function PackRow({ item, mode }: { item: InventoryItem; mode: Mode }) {
     // A thing with a place on the body, or a magic item that gives something while it is worn.
     (itemSlot(entry) !== undefined ||
       (kind === "magic" && !healingOf(entry) && (entry?.effects.length ?? 0) > 0));
+  // The house rule: a 2014 character drinks a potion as a bonus action (the 2024 rules already say so).
+  const potionQuick =
+    mode === "play" &&
+    houseRules.value.potionBonusAction === true &&
+    character.value.ruleset !== "srd52" &&
+    isPotion(item.itemId, Boolean(healingOf(entry)));
   const change = (apply: (found: InventoryItem) => void) =>
     updateCharacter((d) => {
       const found = d.inventory.find((i) => i.itemId === item.itemId);
@@ -241,7 +249,11 @@ function PackRow({ item, mode }: { item: InventoryItem; mode: Mode }) {
           </button>
         )}
       </span>
-      <span class="equip-detail equip-pack-detail">{detail}</span>
+      <span class="equip-detail equip-pack-detail">
+        {potionQuick
+          ? [detail, ui("house.potionBonusAction.tag")].filter(Boolean).join(" · ")
+          : detail}
+      </span>
       {mode === "sheet" ? (
         <span class="qty">
           <button

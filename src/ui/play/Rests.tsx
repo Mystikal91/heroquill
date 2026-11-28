@@ -1,9 +1,11 @@
 import { signal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
+import { houseRules } from "../../app/houseRules";
 import { addLog, changePlay, vitals } from "../../app/play";
 import { character, sheet } from "../../app/store";
 import { exhaustionLevel } from "../../engine/exhaustion";
-import { longRest, shortRest } from "../../engine/play";
+import { quickRestHealing } from "../../engine/houseRules";
+import { applyHealing, currentHp, longRest, shortRest } from "../../engine/play";
 import { ui } from "../../i18n/ui";
 import { Panel } from "../sheet/parts";
 import { prepareAsked, preparingCasters } from "./PrepareSpells";
@@ -24,7 +26,10 @@ export function Rests() {
   const shortSome = s.resources.filter((r) => r.shortRegain !== undefined);
   const hasSlots = s.spellcasters.length > 0;
 
+  // The house rule: half the hit points back, without spending hit dice.
+  const quick = houseRules.value.quickRests === true;
   const shortChips = [
+    ...(quick ? [ui("house.quickRests.chip", { n: quickRestHealing(v.max) })] : []),
     ...(recovers === "none"
       ? []
       : [ui(recovers === "pact" ? "play.restChipPact" : "play.restChipSlots")]),
@@ -38,15 +43,24 @@ export function Rests() {
   ];
 
   const takeShort = () => {
-    changePlay((p) =>
-      shortRest(
+    // What the quick rest really healed: nothing at full hit points or after three failed death saves.
+    let healed = 0;
+    changePlay((p) => {
+      const rested = shortRest(
         p,
         recovers,
         shortUses.map((r) => r.id),
         shortSome.map((r) => ({ id: r.id, count: r.shortRegain ?? 0 })),
-      ),
-    );
-    addLog({ label: ui("play.shortRestLog"), detail: "" });
+      );
+      if (!quick) return rested;
+      const after = applyHealing(rested, v.max, quickRestHealing(v.max));
+      healed = currentHp(after, v.max) - currentHp(rested, v.max);
+      return after;
+    });
+    addLog({
+      label: ui("play.shortRestLog"),
+      detail: healed > 0 ? ui("house.quickRests.chip", { n: healed }) : "",
+    });
   };
 
   return (
@@ -60,7 +74,7 @@ export function Rests() {
             <b class="feat-name">{ui("play.shortRest")}</b>
             <span class="card-meta">{ui("play.restShortTime")}</span>
           </div>
-          <p class="rest-text">{ui("play.shortRestHint")}</p>
+          <p class="rest-text">{ui(quick ? "house.quickRests.hint" : "play.shortRestHint")}</p>
           {shortChips.length > 0 && (
             <ul class="plain rest-chips">
               {shortChips.map((chip) => (

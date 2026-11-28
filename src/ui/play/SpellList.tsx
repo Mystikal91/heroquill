@@ -1,5 +1,6 @@
 import { effect, signal } from "@preact/signals";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { critMonsterDice } from "../../app/houseRules";
 import {
   addLog,
   changePlay,
@@ -21,7 +22,6 @@ import {
 } from "../../engine/casting";
 import type { DerivedSheet } from "../../engine/derive";
 import { durationRounds } from "../../engine/durations";
-import { doubleDice } from "../../engine/monsterRolls";
 import {
   applyHealing,
   endConcentration,
@@ -348,7 +348,7 @@ function SpellCard({ row, s }: { row: SpellRow; s: DerivedSheet }) {
             </button>
           )}
           {rolls.damage.map((part) => {
-            const dice = critical ? doubleDice(part.dice) : part.dice;
+            const dice = critical ? critMonsterDice(part.dice) : part.dice;
             return (
               <button
                 key={`${part.type}${part.dice}`}

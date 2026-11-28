@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type StepId, levelUpPhase, levelUpResult, openStep } from "../../app/buildState";
+import { houseRules } from "../../app/houseRules";
 import { showView } from "../../app/navigation";
+import { addLog } from "../../app/play";
 import { character, content, sheet, updateCharacter } from "../../app/store";
 import type { Content } from "../../content/browser";
 import { classData } from "../../data/progression";
@@ -16,7 +18,9 @@ import {
   openTasks,
   previewLevelUp,
 } from "../../engine/levelUp";
+import { longRest } from "../../engine/play";
 import { signed, ui } from "../../i18n/ui";
+import { prepareAsked, preparingCasters } from "../play/PrepareSpells";
 import { RulesText } from "../sheet/parts";
 
 const close = () => {
@@ -144,7 +148,8 @@ function optionLabel(option: LevelUpOption, c: Content): string {
 function Choose({ c }: { c: Content }) {
   const ch = character.value;
   const s = sheet.value;
-  const options = s ? levelUpOptions(ch, c.index, s) : [];
+  const rules = houseRules.value;
+  const options = s ? levelUpOptions(ch, c.index, s, rules) : [];
   const [classId, setClassId] = useState(options[0]?.classId ?? "");
   const [rolled, setRolled] = useState<number | undefined>();
   const [mode, setMode] = useState<"average" | "roll">("average");
@@ -172,8 +177,9 @@ function Choose({ c }: { c: Content }) {
   const average = averageHp(hitDie);
   const hp: HpChoice =
     mode === "roll" && rolled !== undefined ? { type: "roll", value: rolled } : { type: "average" };
-  const summary = previewLevelUp(ch, selected.classId, hp, c.index);
-  const needsRoll = mode === "roll" && rolled === undefined;
+  const summary = previewLevelUp(ch, selected.classId, hp, c.index, rules);
+  // With the house rule of the highest hit points there is nothing to roll.
+  const needsRoll = !rules.maxHitPoints && mode === "roll" && rolled === undefined;
   const mine = options.filter((o) => !o.isNew);
   // A class whose minimums the character does not reach cannot be taken: it is not listed at all.
   const others = options.filter((o) => o.isNew && o.unmet.length === 0);
@@ -197,11 +203,18 @@ function Choose({ c }: { c: Content }) {
 
   const apply = () => {
     const next = applyLevelUp(ch, selected.classId, hp, c.index);
+    // The house rule: the new level comes with a long rest, counted on the hit dice of the new level.
+    const rest = rules.restOnLevelUp === true;
+    const resourceful = s.traits.includes("srd52:trait/resourceful");
     updateCharacter((d) => {
       d.classes = next.classes;
+      if (rest) d.play = longRest(d.play, summary.hitDice, { grantsInspiration: resourceful });
     });
+    if (rest) addLog({ label: ui("play.longRestLog"), detail: ui("house.restOnLevelUp.log") });
     levelUpResult.value = summary;
     levelUpPhase.value = "done";
+    // As after any long rest: a reminder to change the spells that are prepared.
+    if (rest && preparingCasters(sheet.value).length > 0) prepareAsked.value = "rest";
   };
 
   return (
@@ -226,39 +239,47 @@ function Choose({ c }: { c: Content }) {
         )}
       </fieldset>
 
-      <fieldset class="levelup-options">
-        <legend>{ui("levelUp.hp")}</legend>
-        <label class="radio-row">
-          <input
-            type="radio"
-            name="levelup-hp"
-            checked={mode === "average"}
-            onChange={() => setMode("average")}
-          />
-          <span>{ui("levelUp.hpAverage", { value: Math.max(1, average + conMod) })}</span>
-        </label>
-        <label class="radio-row">
-          <input
-            type="radio"
-            name="levelup-hp"
-            checked={mode === "roll"}
-            onChange={() => setMode("roll")}
-          />
-          <span>{ui("levelUp.hpRoll", { die: hitDie })}</span>
-        </label>
-        {mode === "roll" && (
-          <div class="btn-row">
-            <button type="button" onClick={() => setRolled(1 + cryptoRandomInt(hitDie))}>
-              {ui("play.roll")}
-            </button>
-            {rolled !== undefined && (
-              <span>
-                {ui("levelUp.hpRolled", { roll: rolled, total: Math.max(1, rolled + conMod) })}
-              </span>
-            )}
-          </div>
-        )}
-      </fieldset>
+      {rules.maxHitPoints ? (
+        <fieldset class="levelup-options">
+          <legend>{ui("levelUp.hp")}</legend>
+          <p>{ui("house.maxHitPoints.levelUp", { value: Math.max(1, hitDie + conMod) })}</p>
+        </fieldset>
+      ) : (
+        <fieldset class="levelup-options">
+          <legend>{ui("levelUp.hp")}</legend>
+          <label class="radio-row">
+            <input
+              type="radio"
+              name="levelup-hp"
+              checked={mode === "average"}
+              onChange={() => setMode("average")}
+            />
+            <span>{ui("levelUp.hpAverage", { value: Math.max(1, average + conMod) })}</span>
+          </label>
+          <label class="radio-row">
+            <input
+              type="radio"
+              name="levelup-hp"
+              checked={mode === "roll"}
+              onChange={() => setMode("roll")}
+            />
+            <span>{ui("levelUp.hpRoll", { die: hitDie })}</span>
+          </label>
+          {mode === "roll" && (
+            <div class="btn-row">
+              <button type="button" onClick={() => setRolled(1 + cryptoRandomInt(hitDie))}>
+                {ui("play.roll")}
+              </button>
+              {rolled !== undefined && (
+                <span>
+                  {ui("levelUp.hpRolled", { roll: rolled, total: Math.max(1, rolled + conMod) })}
+                </span>
+              )}
+            </div>
+          )}
+        </fieldset>
+      )}
+      {rules.restOnLevelUp && <p class="muted">{ui("house.restOnLevelUp.note")}</p>}
 
       <h4>{ui("levelUp.preview")}</h4>
       <Changes summary={summary} c={c} />

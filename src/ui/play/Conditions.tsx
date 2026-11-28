@@ -1,3 +1,4 @@
+import { houseRules } from "../../app/houseRules";
 import { addLog, changePlay } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
 import { offerUndo } from "../../app/undo";
@@ -7,6 +8,7 @@ import {
   isExhaustionCondition,
   setExhaustion,
 } from "../../engine/exhaustion";
+import { exhaustionRuleset } from "../../engine/houseRules";
 import {
   MAX_ROUNDS,
   advanceRound,
@@ -75,7 +77,7 @@ function RoundsField({ id, name }: { id: string; name: string }) {
  */
 function Exhaustion() {
   const play = character.value.play;
-  const ruleset = character.value.ruleset;
+  const ruleset = exhaustionRuleset(character.value.ruleset, houseRules.value);
   const level = exhaustionLevel(play);
   const set = (n: number) => changePlay((p) => setExhaustion(p, n), { undo: false });
   const lines =

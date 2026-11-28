@@ -1,8 +1,8 @@
 import { signal } from "@preact/signals";
 import { useState } from "preact/hooks";
+import { critDice, critLabel } from "../../app/houseRules";
 import { changePlay, criticalExtra, criticalWeapon, rollCheck, rollDiceText } from "../../app/play";
 import { character, content, sheet } from "../../app/store";
-import { doubleDice } from "../../engine/dice";
 import { SACRED_WEAPON_ROUNDS_2024 } from "../../engine/durations";
 import { type AttackResult, SACRED_WEAPON } from "../../engine/equipment";
 import { setMagicWeapon, setSacredWeapon, setShillelagh, slotsLeft } from "../../engine/play";
@@ -99,9 +99,9 @@ function AttackCard({ a }: { a: AttackResult }) {
     damageDue.value = a.damage && !fumbled ? a.itemId : undefined;
   };
   const hurt = (dice: string) => {
-    const text = critical ? (doubleDice(dice) ?? dice) : dice;
+    const text = critical ? critDice(dice) : dice;
     const label = `${name} - ${ui("play.damageRoll")}`;
-    rollDiceText(critical ? `${label} (${ui("play.criticalDamage")})` : label, text);
+    rollDiceText(critical ? `${label} (${critLabel()})` : label, text);
     if (critical) criticalWeapon.value = undefined;
     damageDue.value = undefined;
   };
@@ -236,7 +236,7 @@ function AttackCard({ a }: { a: AttackResult }) {
           </button>
         )}
         {damages.map((d) => {
-          const dice = critical ? (doubleDice(d.dice) ?? d.dice) : d.dice;
+          const dice = critical ? critDice(d.dice) : d.dice;
           return (
             <button
               key={d.key}
@@ -274,8 +274,8 @@ export function AttackCards() {
 /** Roll one extra damage: the dice double on a critical hit. */
 function rollExtra(label: string, dice: string) {
   const critical = criticalExtra.value;
-  const text = critical ? (doubleDice(dice) ?? dice) : dice;
-  rollDiceText(critical ? `${label} (${ui("play.criticalDamage")})` : label, text);
+  const text = critical ? critDice(dice) : dice;
+  rollDiceText(critical ? `${label} (${critLabel()})` : label, text);
 }
 
 /** The dice of Divine Smite with a slot of this level. */
@@ -285,7 +285,7 @@ const smiteDice = (level: number) => `${Math.min(5, 1 + level)}d8`;
 export function ExtraCards() {
   const s = sheet.value;
   const critical = criticalExtra.value;
-  const shown = (dice: string) => (critical ? (doubleDice(dice) ?? dice) : dice);
+  const shown = (dice: string) => (critical ? critDice(dice) : dice);
   const [slot, setSlot] = useState(1);
   if (!s || s.extraDamage.length === 0) return null;
   const play = character.value.play;

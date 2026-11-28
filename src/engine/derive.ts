@@ -25,13 +25,14 @@ import {
   exhaustionModifiers,
 } from "./exhaustion";
 import { type FeatureValue, deriveFeatureValues } from "./featureValues";
+import { type HouseRules, NO_HOUSE_RULES, exhaustionRuleset, houseFeatEntry } from "./houseRules";
 import { type AppliedModifier, appliedModifiers, total } from "./modifiers";
 import { type Movement, deriveMovement, deriveSenses } from "./movement";
 import { type CasterInput, casterKind, slotPools, unmetPrerequisites } from "./multiclass";
 import { type OptionNeed, checkNeeds, needsOf } from "./optionNeeds";
 import { OVERRIDE, numberOverride } from "./overrides";
 import { type ClassFact, type ClassResource, type ExtraDamage, classResources } from "./resources";
-import { ownedBy, subclassOf } from "./rulesets";
+import { inRuleset, ownedBy, subclassOf } from "./rulesets";
 import { type FeatureSource, featureSources } from "./sources";
 import type { SpellBonus, SpellHealing } from "./spellRolls";
 import { type SpellLists, deriveSpellLists } from "./spells";
@@ -200,6 +201,22 @@ function defensesOf(effects: Effect[], byHand?: ExtraDefense[]): DerivedSheet["d
   return found;
 }
 
+/** Whether the packs hold a feat of the edition, worked out once for each index and edition. */
+const featsIn = new WeakMap<PackIndex, Map<string, boolean>>();
+function hasFeats(index: PackIndex, ruleset: string): boolean {
+  let known = featsIn.get(index);
+  if (!known) {
+    known = new Map();
+    featsIn.set(index, known);
+  }
+  let found = known.get(ruleset);
+  if (found === undefined) {
+    found = [...index.values()].some((e) => e.kind === "feat" && inRuleset(e.id, ruleset));
+    known.set(ruleset, found);
+  }
+  return found;
+}
+
 function overrideNumber(character: Character, key: string): number | undefined {
   const value = character.overrides[key];
   return typeof value === "number" ? value : undefined;
@@ -208,17 +225,22 @@ function overrideNumber(character: Character, key: string): number | undefined {
 /**
  * The sheet of a character. In the shape of a beast (Wild Shape), once the beast is known, the
  * game statistics are the beast's and its skills and saves count where they are better.
+ * The house rules that are on change what the book would give (see `HouseRules`).
  */
-export function deriveSheet(character: Character, index: PackIndex): DerivedSheet {
+export function deriveSheet(
+  character: Character,
+  index: PackIndex,
+  rules: HouseRules = NO_HOUSE_RULES,
+): DerivedSheet {
   const shape = character.play.wildShape;
   const beast = shape ? index.get(shape.monster) : undefined;
   const sheet = beast
-    ? withBeastChecks(deriveForm(inBeastShape(character, beast), index), beast)
-    : deriveForm(character, index);
+    ? withBeastChecks(deriveForm(inBeastShape(character, beast), index, rules), beast)
+    : deriveForm(character, index, rules);
   return withFeatureSettings(sheet, character.featureSettings, index);
 }
 
-function deriveForm(character: Character, index: PackIndex): DerivedSheet {
+function deriveForm(character: Character, index: PackIndex, rules: HouseRules): DerivedSheet {
   const warnings: Warning[] = [];
 
   // Species, subspecies, background and the starting class contribute their effects;
@@ -285,7 +307,14 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     }));
   // A variant of a species (a half-elf of another descent) carries the species' effects itself.
   const standsIn = chosen.some((e) => e.kind === "subspecies" && e.data.replacesSpecies === true);
-  const contributing = standsIn ? chosen.filter((e) => e.kind !== "species") : chosen;
+  const contributing = [
+    ...(standsIn ? chosen.filter((e) => e.kind !== "species") : chosen),
+    // The house rule's feat of the 1st level: a choice of any feat, once the character has a class.
+    // Not without a feat to pick: the 2014 SRD has none until a pack brings some.
+    ...(rules.levelOneFeat && character.classes.length > 0 && hasFeats(index, character.ruleset)
+      ? [houseFeatEntry]
+      : []),
+  ];
   const {
     effects,
     sourced: collected,
@@ -315,9 +344,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   );
   // The levels of exhaustion lower the numbers like any modifier, from the condition (so the sheet says where they come from).
   const exhaustion = exhaustionLevel(character.play);
+  // The house rule can give a 2014 character the 2024 exhaustion.
+  const tiredBy = exhaustionRuleset(character.ruleset, rules);
   const sourced = [
     ...collected,
-    ...exhaustionModifiers(character.ruleset, exhaustion).map((effect) => ({
+    ...exhaustionModifiers(tiredBy, exhaustion).map((effect) => ({
       effect,
       source: exhaustionId(character.ruleset),
     })),
@@ -435,7 +466,11 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     hitDice[`d${data.hitDie}`] = (hitDice[`d${data.hitDie}`] ?? 0) + cl.level;
     for (let lvl = 1; lvl <= cl.level; lvl++) {
       const first = position === 0 && lvl === 1;
-      const roll = first ? data.hitDie : (cl.hpRolls?.[lvl - 1] ?? Math.floor(data.hitDie / 2) + 1);
+      // The house rule gives the highest of the die at every level, as the 1st level does.
+      const roll =
+        first || rules.maxHitPoints
+          ? data.hitDie
+          : (cl.hpRolls?.[lvl - 1] ?? Math.floor(data.hitDie / 2) + 1);
       hp += Math.max(1, roll + conMod);
     }
 
@@ -528,7 +563,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
   const alwaysPrepared = casters.flatMap((c) => c.lists.alwaysPrepared);
 
   // Multiclassing asks for a minimum in the key abilities of every class involved.
-  if (classEntries.length > 1) {
+  if (classEntries.length > 1 && !rules.freeMulticlass) {
     for (const { cl, entry } of classEntries) {
       if (!entry) continue;
       for (const need of unmetPrerequisites(classData(entry), (a) => abilities[a].score))
@@ -702,9 +737,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     (typeof baseSpeed === "number" ? (baseSpeed + total(speedMods)) * speedFactor : undefined);
   // The 2014 exhaustion halves the speed and then takes it away; the 2024 one is a modifier that cannot go under 0.
   const speed =
-    plainSpeed === undefined
-      ? undefined
-      : exhaustedSpeed(character.ruleset, exhaustion, plainSpeed);
+    plainSpeed === undefined ? undefined : exhaustedSpeed(tiredBy, exhaustion, plainSpeed);
   const movement =
     speed === undefined ? {} : deriveMovement(sourced, state, speed, total(speedMods), speedFactor);
   const senses = deriveSenses(sourced, state);
@@ -793,9 +826,7 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     proficiencyBonus,
     abilities,
     hitPoints: {
-      max:
-        hpOverride ??
-        exhaustedHitPoints(character.ruleset, exhaustion, hp + hpBonus + total(hpFlat)),
+      max: hpOverride ?? exhaustedHitPoints(tiredBy, exhaustion, hp + hpBonus + total(hpFlat)),
       overridden: hpOverride !== undefined,
       hitDice,
     },

@@ -2,6 +2,7 @@ import { classData } from "../data/progression";
 import type { Ability, Entry } from "../data/schema";
 import type { Character } from "./character";
 import { type DerivedSheet, type PackIndex, deriveSheet } from "./derive";
+import { type HouseRules, NO_HOUSE_RULES } from "./houseRules";
 import { unmetPrerequisites } from "./multiclass";
 import { inRuleset } from "./rulesets";
 import { subclassLevel } from "./subclass";
@@ -40,9 +41,12 @@ export function levelUpOptions(
   character: Character,
   index: PackIndex,
   sheet: DerivedSheet,
+  rules: HouseRules = NO_HOUSE_RULES,
 ): LevelUpOption[] {
   if (character.classes.length === 0 || sheet.level >= MAX_LEVEL) return [];
-  const score = (a: Ability) => sheet.abilities[a].score;
+  // With the house rule a new class asks for no minimum: every score counts as met.
+  const score = (a: Ability) =>
+    rules.freeMulticlass ? Number.POSITIVE_INFINITY : sheet.abilities[a].score;
 
   // Multiclassing needs the minimums of the new class and of every class already taken.
   const currentUnmet: Unmet[] = character.classes.flatMap((cl) => {
@@ -172,10 +176,11 @@ export function previewLevelUp(
   classId: string,
   hp: HpChoice,
   index: PackIndex,
+  rules: HouseRules = NO_HOUSE_RULES,
 ): LevelUpSummary {
-  const before = deriveSheet(character, index);
+  const before = deriveSheet(character, index, rules);
   const leveled = applyLevelUp(character, classId, hp, index);
-  const summary = summarizeLevelUp(classId, before, deriveSheet(leveled, index));
+  const summary = summarizeLevelUp(classId, before, deriveSheet(leveled, index, rules));
   summary.classLevel = leveled.classes.find((c) => c.classId === classId)?.level ?? 0;
   return summary;
 }

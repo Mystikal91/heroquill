@@ -26,6 +26,7 @@ import { AutoTranslatePage } from "./AutoTranslatePage";
 import { CustomSpellDialog } from "./CustomSpellDialog";
 import { CustomizeItemDialog } from "./CustomizeItemDialog";
 import { ExplainDialog } from "./Explain";
+import { HouseRulesPage } from "./HouseRulesPage";
 
 import { InstallNotice } from "./InstallNotice";
 import { ItemPickerDialog } from "./ItemPicker";
@@ -71,6 +72,8 @@ function Screen() {
       return <DmLoader />;
     case "about":
       return <AboutPage />;
+    case "houseRules":
+      return <HouseRulesPage />;
     case "print":
       return <PrintView />;
     case "sheet":

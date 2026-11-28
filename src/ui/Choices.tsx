@@ -1,12 +1,17 @@
 import { character, content, sheet, updateCharacter } from "../app/store";
 import type { Content } from "../content/browser";
 import type { PendingChoice } from "../engine/choices";
+import { HOUSE_FEAT_SOURCE } from "../engine/houseRules";
 import { type UiKey, signed, ui } from "../i18n/ui";
 import { type ChoiceOrigin, characterOrigins, choiceOrigin } from "./choiceOrigin";
 import { needLabel } from "./needLabel";
 import { RuleInfoButton } from "./rules/EntryDetail";
 import { RulesText } from "./sheet/parts";
 import { SpellInfoButton } from "./spells/SpellInfo";
+
+/** The name of what gives a choice; the feat of the house rule has no entry in the packs. */
+const sourceName = (c: Content, id: string): string =>
+  id === HOUSE_FEAT_SOURCE ? ui("house.levelOneFeat.choice") : c.name(id);
 
 /** The display name of one option of a choice, whatever it grants. */
 function optionLabel(c: Content, ruleset: string, choice: PendingChoice, option: string): string {
@@ -73,7 +78,7 @@ function MenuPicks({ choice }: { choice: PendingChoice }) {
         return (
           <div key={id}>
             <select
-              aria-label={name(choice.source)}
+              aria-label={sourceName(c, choice.source)}
               value={own ?? ""}
               onChange={(e) => set(slot, e.currentTarget.value)}
             >
@@ -160,7 +165,7 @@ export function Choices({ only }: { only?: ChoiceOrigin }) {
       )}
       {shown.map((choice) => (
         <fieldset class="choice" key={choice.key}>
-          <legend>{c.name(choice.source)}</legend>
+          <legend>{sourceName(c, choice.source)}</legend>
           <p class="muted">
             {ui(`choice.kind.${choice.grants}` as UiKey)}
             {choice.grants === "abilityBonus" && choice.value !== undefined

@@ -52,7 +52,7 @@ import {
   saveBonus,
   saveHindrance,
 } from "../engine/environment";
-import { type ActionRolls, type DamagePart, attackHits, doubleDice } from "../engine/monsterRolls";
+import { type ActionRolls, type DamagePart, attackHits } from "../engine/monsterRolls";
 import { type UseDef, rollRecharge } from "../engine/monsterUses";
 import { currentHp } from "../engine/play";
 import { uuid } from "../engine/uuid";
@@ -78,6 +78,7 @@ import { damageName } from "../ui/damageName";
 import { loadDmEffects } from "./dmEffects";
 import { onlineSettings } from "./dmSettings";
 import { encountersChanged, refreshEncounterCount } from "./encounterCount";
+import { critMonsterDice, houseRules } from "./houseRules";
 import { addLog, d20Parts, fromParts, rollMode } from "./play";
 import { content } from "./store";
 import {
@@ -469,7 +470,7 @@ async function characterStats(characterId: string) {
   if (!c) return undefined;
   const character = await loadCharacter(characterId);
   if (!character) return undefined;
-  const sheet = deriveSheet(character, c.index);
+  const sheet = deriveSheet(character, c.index, houseRules.value);
   const max = sheet.hitPoints.max;
   return {
     name: character.name.trim() || ui("dm.unnamed"),
@@ -1148,7 +1149,7 @@ export function rollFlowDamage(part: DamagePart, shown: (dice: string) => string
   const flow = rollFlow.value;
   const e = encounter.value;
   if (!flow || !e) return;
-  const dice = flow.attack?.critical ? doubleDice(part.dice) : part.dice;
+  const dice = flow.attack?.critical ? critMonsterDice(part.dice) : part.dice;
   const parsed = parseDice(dice);
   const rolled = parsed ? rollExpression(parsed) : undefined;
   const total = rolled?.total ?? 0;

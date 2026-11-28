@@ -1,10 +1,10 @@
+import { critMonsterDice } from "../../app/houseRules";
 import { addLog, rollCheck, rollDiceText } from "../../app/play";
 import {
   type ActionRolls,
   type DamagePart,
   type MonsterRoller,
   actionRolls,
-  doubleDice,
   resolveRolls,
 } from "../../engine/monsterRolls";
 import type { Owner } from "../../engine/scaling";
@@ -91,7 +91,7 @@ export function ActionButtons({
   const { attackBonus } = rolls;
 
   const hurt = (part: DamagePart) => {
-    const dice = critical ? doubleDice(part.dice) : part.dice;
+    const dice = critical ? critMonsterDice(part.dice) : part.dice;
     if (choose) choose(name, { ...rolls, attackBonus: undefined, damage: [part] });
     else rolling.damage(name, part.type, dice, damageLabel(part, dice));
   };
@@ -116,7 +116,7 @@ export function ActionButtons({
           class={critical ? "secondary crit" : "secondary"}
           onClick={() => hurt(part)}
         >
-          {damageLabel(part, critical ? doubleDice(part.dice) : part.dice)}
+          {damageLabel(part, critical ? critMonsterDice(part.dice) : part.dice)}
         </button>
       ))}
       {critical && <em>{ui("play.critical")}</em>}

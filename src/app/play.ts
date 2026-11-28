@@ -19,6 +19,7 @@ import {
   exhaustionMode,
 } from "../engine/exhaustion";
 import { healingOf, useOne } from "../engine/gear";
+import { exhaustionRuleset } from "../engine/houseRules";
 import {
   applyDamage,
   applyHealing,
@@ -49,6 +50,7 @@ import {
 } from "../engine/rollParts";
 import { beastPool, damageBeast, endShapeIfDown } from "../engine/wildShape";
 import { ui } from "../i18n/ui";
+import { houseRules } from "./houseRules";
 import { character, content, sheet, updateCharacter } from "./store";
 
 /** The hit points before the last change, to take it back for a few seconds. */
@@ -237,7 +239,7 @@ export function rollCheck(
     type,
     ability,
     exhaustionMode(
-      character.value.ruleset,
+      exhaustionRuleset(character.value.ruleset, houseRules.value),
       exhaustionLevel(character.value.play),
       type,
       rollMode.value,
