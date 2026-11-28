@@ -38,15 +38,16 @@ export function setExhaustion(play: PlayState, level: number): PlayState {
 
 /**
  * What the levels of exhaustion do to the numbers of the sheet.
- * 2024: every D20 Test is lowered by 2 for each level (checks, attack rolls, saving throws, initiative), and so is
- * the spell save DC; the Speed is lowered by 5 feet for each level.
+ * 2024: every D20 Test is lowered by 2 for each level (checks, attack rolls, saving throws, initiative), not the
+ * spell save DC, which the book does not name; the Speed is lowered by 5 feet for each level.
  * 2014: the Speed is halved from the 2nd level and is 0 from the 5th, the hit point maximum is halved from the 4th;
  * the disadvantages of the 1st and the 3rd are on the rolls (`exhaustionMode`).
  */
 export function exhaustionModifiers(ruleset: string, level: number): Effect[] {
   if (level <= 0 || ruleset !== "srd52") return [];
   const penalty = -2 * level;
-  const targets = ["save", "skill", "initiative", "attack", "spellAttack", "spellDc"] as const;
+  // A spell save DC is not a D20 Test of the caster: it stays as it is.
+  const targets = ["save", "skill", "initiative", "attack", "spellAttack"] as const;
   return [
     ...targets.map((target): Effect => ({ type: "modifier", target, value: penalty })),
     { type: "modifier", target: "speed", value: -5 * level },

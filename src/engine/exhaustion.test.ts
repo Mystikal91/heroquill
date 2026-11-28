@@ -65,14 +65,14 @@ describe("the level of exhaustion", () => {
 });
 
 describe("the 2024 exhaustion", () => {
-  it("lowers every D20 Test by 2 for each level, the spell save DC and the speed by 5 feet", () => {
+  it("lowers every D20 Test by 2 for each level and the speed by 5 feet, not the spell save DC", () => {
     const { plain, tired } = sheetAt("srd52", 2, "wizard");
     expect(skill(tired, "arcana", "srd52")).toBe(skill(plain, "arcana", "srd52") - 4);
     expect(tired.saves.con.bonus).toBe(plain.saves.con.bonus - 4);
     expect(tired.initiative).toBe(plain.initiative - 4);
     expect(tired.speed).toBe((plain.speed ?? 0) - 10);
     const dc = (s: typeof plain) => s.spellcasters[0]?.saveDc ?? Number.NaN;
-    expect(dc(tired)).toBe(dc(plain) - 4);
+    expect(dc(tired)).toBe(dc(plain));
     expect(tired.spellcasters[0]?.attackBonus).toBe((plain.spellcasters[0]?.attackBonus ?? 0) - 4);
     expect(tired.hitPoints.max).toBe(plain.hitPoints.max);
   });

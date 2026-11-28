@@ -1064,7 +1064,7 @@
   "play.exhaustionMore": "Añadir un nivel de cansancio",
   "play.exhaustionDead": "Muerte.",
   "play.exhaustionRest": "Un descanso largo quita un nivel.",
-  "play.exhaustion24": "Las pruebas con d20 se reducen en {d20} (pruebas de característica, tiradas de ataque, tiradas de salvación, iniciativa) y también la CD de salvación de tus conjuros; tu velocidad se reduce en {distance}.",
+  "play.exhaustion24": "Las pruebas con d20 se reducen en {d20} (pruebas de característica, tiradas de ataque, tiradas de salvación, iniciativa); tu velocidad se reduce en {distance}.",
   "play.exhaustion14.1": "Desventaja en las pruebas de característica.",
   "play.exhaustion14.2": "Velocidad reducida a la mitad.",
   "play.exhaustion14.3": "Desventaja en las tiradas de ataque y de salvación.",

@@ -1064,7 +1064,7 @@
   "play.exhaustionMore": "Aggiungi un livello di indebolimento",
   "play.exhaustionDead": "Morte.",
   "play.exhaustionRest": "Un riposo lungo toglie un livello.",
-  "play.exhaustion24": "Le prove con d20 sono ridotte di {d20} (prove di caratteristica, tiri per colpire, tiri salvezza, iniziativa) e così la CD degli incantesimi; la velocità è ridotta di {distance}.",
+  "play.exhaustion24": "Le prove con d20 sono ridotte di {d20} (prove di caratteristica, tiri per colpire, tiri salvezza, iniziativa); la velocità è ridotta di {distance}.",
   "play.exhaustion14.1": "Svantaggio alle prove di caratteristica.",
   "play.exhaustion14.2": "Velocità dimezzata.",
   "play.exhaustion14.3": "Svantaggio ai tiri per colpire e ai tiri salvezza.",
