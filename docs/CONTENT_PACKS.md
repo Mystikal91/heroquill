@@ -79,7 +79,10 @@ another descent, a dragonborn of Wildemount, a race with a dragonmark). The Auro
 these from Aurora's race variants, taking from the race what the variant replaces.
 
 A `choice` can grant a `feat`: with an empty `from` it offers every feat there is, and the pick
-(like a feat a species gives outright, as a `trait`) is listed with the feats of the sheet.
+(like a feat a species gives outright, as a `trait`) is listed with the feats of the sheet. A
+`choice` that grants a `language` with an empty `from` offers every language of the content
+loaded, a pack's too, except those whose `data.type` is `secret` or `monster` and those the
+character already speaks (the SRD's "one language of your choice").
 
 A `grantSpell` effect can carry a `minLevel` (the spell comes with that level of the class),
 `free: true` (cast once between rests without a slot, with `rest: "short"` for a short rest, the
@@ -92,6 +95,11 @@ whole game it offers, and `free`, `rest` and `atWill` say how a pick is cast (th
 of the Pact of the Tome, Mystic Arcanum, Spell Mastery, Magical Secrets). A list of more than
 forty spells is a menu in the choices. In Play the *Cast* button offers the `free` use of a spell; a 2014
 spell picked by a choice with `ritual` is cast as a ritual only, unless a class of the character knows or prepares it too.
+
+`{ "type": "spellList", "spells": ["srd51:spell/shield"], "classes": ["srd51:class/warlock"] }` adds spells to
+the list a class picks from (a patron's expanded list); they are offered, not given, and only within the
+spell levels the class can cast. Without `classes` it grows the list of every class the character casts
+with; `fromClasses` adds every spell on the list of those classes (Divine Soul's Divine Magic: the cleric list).
 
 `{ "type": "spellDamage", "plus": "cha", "spell": "srd51:spell/eldritch-blast" }` adds the
 modifier of an ability to the damage a spell rolls in Play; `spell`, `school` or `damageType` say

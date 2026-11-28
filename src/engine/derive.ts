@@ -38,7 +38,7 @@ import { type SpellLists, deriveSpellLists } from "./spells";
 import { type Spend, deriveSpends } from "./spends";
 import { subclassDataOn } from "./subclass";
 import { withSubclassCasting } from "./subclassCasting";
-import { deriveFreeSpells, deriveUses, withFeatureSettings } from "./uses";
+import { countedBy, deriveFreeSpells, deriveUses, withFeatureSettings } from "./uses";
 import { type Warning, warn } from "./warnings";
 import { wordEntry } from "./words";
 
@@ -505,6 +505,12 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
           picks: character.spells[cl.classId],
           index,
           subclass: subEntry,
+          added: sourced.flatMap(({ effect }) =>
+            effect.type === "spellList" &&
+            (!effect.classes || effect.classes.some((c) => ownedBy(c, cl.classId)))
+              ? [{ spells: effect.spells, fromClasses: effect.fromClasses ?? [] }]
+              : [],
+          ),
           ...(subCasting && cast !== data && subCasting.schools && { schools: subCasting.schools }),
           warnings,
         }),
@@ -760,8 +766,12 @@ function deriveForm(character: Character, index: PackIndex): DerivedSheet {
     const recharge = wordEntry(index, "reserve", reserve)?.data.recharge;
     return recharge === "short" || recharge === "long" ? recharge : undefined;
   };
+  // A feature the class table already counts (Lay on Hands, Rage) gets no second counter from its own uses.
+  const fromTable = [...resources];
   resources.push(
-    ...deriveUses(sourced, valueState, reserveRecharge),
+    ...deriveUses(sourced, valueState, reserveRecharge).filter(
+      (r) => r.kind !== "feature" || !r.entry || !countedBy(fromTable, r.entry),
+    ),
     ...deriveFreeSpells(sourced, levelOf),
   );
 

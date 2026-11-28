@@ -1,6 +1,7 @@
 import type { Effect } from "../../data/schema";
 import { classIdByName, emit } from "./emit";
 import { type Context, FEATURE_TYPES, type Source, ofType } from "./registry";
+import { is2024 } from "./repeats";
 import {
   SCHOOLS,
   abilityFromWord,
@@ -408,8 +409,19 @@ function subclassSpells(ctx: Context, source: Source): { spell: string; classLev
   const visit = (holder: Source, reached: number, path: Set<Source>) => {
     if (path.has(holder)) return;
     for (const rule of readRules(holder.el)) {
-      if (rule.tag !== "grant" || rule.type !== "Spell" || rule.level === undefined) continue;
-      const spell = requirementsMet(rule.requirements) && spellIdOf(ctx, rule.id);
+      if (rule.type !== "Spell" || rule.level === undefined) continue;
+      // A select with a level and a default (Aberrant Mind, Clockwork Soul) gives that spell: one
+      // for each edition, the requirement naming the class feature of its book, which the character has.
+      const given = rule.tag === "select" ? (rule.attrs.getAttribute("default") ?? "") : rule.id;
+      if (rule.tag === "select" ? !given : rule.tag !== "grant") continue;
+      const holds = new Set(
+        (rule.requirements.match(/ID_[A-Z0-9_]+/g) ?? []).filter(
+          (word) => is2024({ source: "", aid: word }) === is2024(source),
+        ),
+      );
+      const spell =
+        requirementsMet(rule.requirements, rule.tag === "select" ? holds : undefined) &&
+        spellIdOf(ctx, given);
       const level = Math.max(rule.level, reached);
       if (spell) found.set(spell, Math.min(level, found.get(spell) ?? level));
     }

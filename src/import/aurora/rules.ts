@@ -678,6 +678,43 @@ export function spellIdOf(ctx: Context, aid: string): string | undefined {
 }
 
 /**
+ * The `<spellcasting extend="true">` of an element: a spell list that grows (a warlock patron's
+ * expanded spells, Divine Soul's cleric list). `name` is the class whose list grows, `all` every
+ * class the character casts with; an `<extend>` is a spell id or the name of a class. The spells of
+ * the 2024 books are left out of an element of the 2014 ones (Aurora lists both ids of each spell
+ * and the engine maps a 2014 spell for a 2024 class itself).
+ */
+export function spellListEffects(ctx: Context, source: Source): Effect[] {
+  const found: Effect[] = [];
+  for (const casting of source.el.querySelectorAll(":scope > spellcasting")) {
+    if (casting.getAttribute("extend") !== "true") continue;
+    const spells = new Set<string>();
+    const fromClasses = new Set<string>();
+    for (const extend of casting.querySelectorAll(":scope > extend")) {
+      const text = clean(extend.textContent);
+      if (text.startsWith("ID_")) {
+        if (!is2024(source) && is2024(ctx.byAid.get(text) ?? { source: "", aid: text })) continue;
+        const id = spellIdOf(ctx, text);
+        if (id) spells.add(id);
+      } else for (const id of classIdsByName(ctx, text)) fromClasses.add(id);
+    }
+    const name = casting.getAttribute("name");
+    const classes =
+      casting.getAttribute("all") === "true" || !name
+        ? undefined
+        : [...new Set(classIdsByName(ctx, name))].sort();
+    if (classes?.length === 0 || (spells.size === 0 && fromClasses.size === 0)) continue;
+    found.push({
+      type: "spellList",
+      spells: [...spells].sort(),
+      ...(classes && { classes }),
+      ...(fromClasses.size > 0 && { fromClasses: [...fromClasses].sort() }),
+    });
+  }
+  return found;
+}
+
+/**
  * The tally of one kind of rule: `stat/<name>` for a stat, `grant/<type>` or `select/<type>`
  * otherwise, and the same with `[2024] ` before it for the books of 2024, which the app does not
  * follow yet, so that they do not count among what is left to do.
@@ -941,7 +978,10 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
           });
         else mapped.unsupported += 1;
       } else if (rule.type === "Language") {
-        const slug = tail(rule.id, "ID_LANGUAGE_");
+        // By the language's name, as the choices list it: not every id starts with ID_LANGUAGE_
+        // (ID_WOTC_PHB_LANGUAGE_THIEVES_CANT, ID_MM_LANGUAGE_AQUAN).
+        const language = ctx.byAid.get(rule.id);
+        const slug = language ? slugify(language.name) : tail(rule.id, "ID_LANGUAGE_");
         if (slug) mapped.effects.push({ type: "proficiency", category: "language", target: slug });
       } else if (rule.type === "Size") {
         mapped.size = tail(rule.id, "ID_SIZE_");
@@ -998,7 +1038,12 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
         const target = ctx.byAid.get(rule.id);
         if (target) mapped.grants.push({ source: target, level: rule.level });
       } else if (rule.type === "Grants") {
-        if (options.live) mapped.effects.push({ type: "flag", id: heldName(ctx, rule.id) });
+        if (options.live) {
+          mapped.effects.push({ type: "flag", id: heldName(ctx, rule.id) });
+          // The spells a Grants element adds to a list (the Genie's kind) come with it.
+          const target = ctx.byAid.get(rule.id);
+          if (target) mapped.effects.push(...spellListEffects(ctx, target));
+        }
       } else {
         mapped.unsupported += 1;
       }
@@ -1170,6 +1215,7 @@ export function mapRules(ctx: Context, source: Source, options: MapOptions): Map
     } else mapped.effects.push({ type: "when", requires, effects: inner });
     for (const grant of mapped.grants.slice(grantsFrom)) grant.requires = requires;
   }
+  mapped.effects.push(...spellListEffects(ctx, source));
   // Aurora only describes these in words (or in a stat that feeds the text), so they are known by id.
   const weaponAbility = WEAPON_ABILITIES[source.aid];
   if (weaponAbility) mapped.effects.push(weaponAbility);

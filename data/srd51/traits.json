@@ -148,22 +148,9 @@
           "id": "high-elf-cantrip-spell",
           "choose": 1,
           "grants": "spell",
-          "from": [
-            "srd51:spell/light",
-            "srd51:spell/mage-hand",
-            "srd51:spell/mending",
-            "srd51:spell/message",
-            "srd51:spell/minor-illusion",
-            "srd51:spell/acid-splash",
-            "srd51:spell/prestidigitation",
-            "srd51:spell/ray-of-frost",
-            "srd51:spell/shocking-grasp",
-            "srd51:spell/true-strike",
-            "srd51:spell/chill-touch",
-            "srd51:spell/dancing-lights",
-            "srd51:spell/fire-bolt",
-            "srd51:spell/poison-spray"
-          ]
+          "from": [],
+          "spellLevel": 0,
+          "spellClass": "srd51:class/wizard"
         }
       ],
       "data": {}
@@ -177,22 +164,7 @@
           "id": "extra-language-language",
           "choose": 1,
           "grants": "language",
-          "from": [
-            "dwarvish",
-            "giant",
-            "gnomish",
-            "goblin",
-            "halfling",
-            "orc",
-            "abyssal",
-            "celestial",
-            "draconic",
-            "deep-speech",
-            "infernal",
-            "primordial",
-            "sylvan",
-            "undercommon"
-          ]
+          "from": []
         }
       ],
       "data": {}

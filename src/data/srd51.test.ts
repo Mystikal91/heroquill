@@ -11,7 +11,7 @@ import {
 import { itemData } from "./items";
 import { classData, subclassData } from "./progression";
 import { plainEffects } from "../engine/requirements";
-import { findBrokenReferences } from "./schema";
+import { type Entry, findBrokenReferences } from "./schema";
 
 describe("SRD 5.1 pack", () => {
   it("passes schema validation and has no broken references", () => {
@@ -68,6 +68,56 @@ describe("SRD 5.1 pack", () => {
     expect(cantrip?.effects).toContainEqual(
       expect.objectContaining({ type: "choice", grants: "spell", choose: 1 }),
     );
+  });
+
+  it("lists the classes of a spell as the SRD 5.1 does, where 5e-database differs", () => {
+    const classes = (slug: string) =>
+      [...((index.get(`srd51:spell/${slug}`)?.data.classes as string[] | undefined) ?? [])]
+        .map((c) => c.split("/")[1])
+        .sort();
+    expect(classes("faerie-fire")).toEqual(["bard", "druid"]);
+    expect(classes("meld-into-stone")).toEqual(["cleric", "druid"]);
+    expect(classes("divination")).toEqual(["cleric"]);
+    expect(classes("create-food-and-water")).toEqual(["cleric", "paladin"]);
+    expect(classes("arcane-eye")).toEqual(["wizard"]);
+  });
+
+  it("leaves a choice of your choice open to the languages and cantrips of a book", () => {
+    const book: Entry[] = [
+      { id: "bk:language/aquan", kind: "language", effects: [], data: { type: "exotic" } },
+      { id: "bk:language/druidic", kind: "language", effects: [], data: { type: "secret" } },
+      { id: "bk:language/blink-dog", kind: "language", effects: [], data: { type: "monster" } },
+      {
+        id: "bk:spell/booming-blade",
+        kind: "spell",
+        effects: [],
+        data: { level: 0, school: "evocation", classes: ["srd51:class/wizard"] },
+      },
+    ];
+    const withBook = new Map(index);
+    for (const e of book) withBook.set(e.id, e);
+    const c = createCharacter("srd51");
+    c.choices.species = "srd51:species/elf";
+    c.choices.subspecies = "srd51:subspecies/high-elf";
+    c.classes = [{ classId: "srd51:class/fighter", level: 1 }];
+    const choices = deriveSheet(c, withBook).choices;
+    const language = choices.find((p) => p.key.endsWith("extra-language-language"));
+    expect(language?.options).toEqual(expect.arrayContaining(["dwarvish", "abyssal", "aquan"]));
+    expect(language?.options).not.toContain("druidic");
+    expect(language?.options).not.toContain("blink-dog");
+    const spell = choices.find((p) => p.key.endsWith("high-elf-cantrip-spell"));
+    expect(spell?.options).toEqual(
+      expect.arrayContaining(["srd51:spell/fire-bolt", "bk:spell/booming-blade"]),
+    );
+    expect(spell?.options).not.toContain("srd51:spell/sacred-flame");
+    // A language the character speaks already is not offered (the elf's Common and Elvish).
+    expect(language?.options).not.toContain("common");
+    expect(language?.options).not.toContain("elvish");
+    // The SRD's own: two languages of the acolyte's choice, one of the human's.
+    for (const id of ["srd51:background/acolyte", "srd51:species/human", "srd51:species/half-elf"])
+      expect(index.get(id)?.effects, id).toContainEqual(
+        expect.objectContaining({ grants: "language", from: [] }),
+      );
   });
 });
 

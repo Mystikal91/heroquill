@@ -74,7 +74,8 @@ function renumbered(picked: string, options: string[]): string | undefined {
 /**
  * The options of a choice: what it lists, or every feat when a feat choice lists none, or every
  * spell of the level it names when a spell choice has a `spellLevel` and lists none (the cantrips
- * of the Pact of the Tome come from the list of any class).
+ * of the Pact of the Tome come from the list of any class), or every language a person can learn
+ * when a language choice lists none.
  */
 function optionsOf(index: PackIndex, choice: ChoiceEffect, ruleset?: string): string[] {
   if (choice.from.length > 0) return choice.from;
@@ -100,8 +101,28 @@ function optionsOf(index: PackIndex, choice: ChoiceEffect, ruleset?: string): st
         return true;
       })
       .map((e) => e.id);
+  // A language "of your choice": every one a person can learn, of the app and of the packs loaded. The secret
+  // languages (Druidic, Thieves' Cant) and the monsters' ones of a book are not; a language without a type is.
+  if (choice.grants === "language")
+    return [
+      ...new Set(
+        [...index.values()]
+          .filter(
+            (e) =>
+              e.kind === "language" &&
+              (!ruleset || inRuleset(e.id, ruleset)) &&
+              !OUT_OF_REACH_LANGUAGES.has(String(e.data.type ?? "")),
+          )
+          // The slug a grant of the language names: a second language of one name in a pack is
+          // numbered (`minotaur-2`), the proficiency is the name's.
+          .map((e) => (e.id.split("/")[1] ?? e.id).replace(/-\d+$/, "")),
+      ),
+    ];
   return choice.from;
 }
+
+/** The types of language that a choice "of your choice" does not offer (see `optionsOf`). */
+const OUT_OF_REACH_LANGUAGES = new Set(["secret", "monster"]);
 
 /** The effect that picking `option` of a choice results in. */
 function grantEffect(choice: ChoiceEffect, option: string): Effect {
@@ -192,8 +213,20 @@ function walkEffects(
     const key = `${source}/${choice.id}`;
     const selected: string[] = [];
     const used = choice.grants === "abilityBonus" ? taken.get(source) : undefined;
-    const options = optionsOf(index, choice, ruleset).filter((o) => !used?.has(o));
-    for (const picked of selections[key] ?? []) {
+    const all = optionsOf(index, choice, ruleset).filter((o) => !used?.has(o));
+    // A language of your choice is not one the character already speaks (the human's Common): those
+    // are not offered, though a pick made before stays.
+    const spoken =
+      choice.grants === "language" && choice.from.length === 0
+        ? new Set(
+            effects.flatMap((e) =>
+              e.type === "proficiency" && e.category === "language" ? [e.target] : [],
+            ),
+          )
+        : undefined;
+    const picks = selections[key] ?? [];
+    const options = spoken ? all.filter((o) => !spoken.has(o) || picks.includes(o)) : all;
+    for (const picked of picks) {
       // An entry that was numbered differently when the pack was imported again (`charisma-2`
       // became `charisma-11`) is the one option of the choice with the same name.
       const option = options.includes(picked) ? picked : renumbered(picked, options);

@@ -151,18 +151,19 @@ export function importGear(ctx: Context, source: Source): void {
   );
 }
 
+/** The kinds of language Aurora tags (`<supports>Exotic, Rare</supports>`), as the SRD's `type` names them. */
+const LANGUAGE_TYPES = ["standard", "exotic", "secret", "monster"];
+
 export function importLanguage(ctx: Context, source: Source): void {
   const set = setters(source.el);
-  emit(
-    ctx,
-    source,
-    {},
-    {
-      desc: description(source.el),
-      speakers: set.get("speakers")?.text,
-      script: set.get("script")?.text,
-    },
-  );
+  const type = supportsOf(source.el)
+    .map((t) => t.toLowerCase())
+    .find((t) => LANGUAGE_TYPES.includes(t));
+  emit(ctx, source, type ? { type } : {}, {
+    desc: description(source.el),
+    speakers: set.get("speakers")?.text,
+    script: set.get("script")?.text,
+  });
 }
 
 /** The line a magic item starts with: what it is, how rare, and whether it needs attunement. */

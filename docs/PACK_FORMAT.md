@@ -539,8 +539,10 @@ A few worked examples:
 { "type": "when", "requires": "!elf", "effects": [ { "type": "movement", "mode": "swim", "feet": 30 } ] }
 ```
 
-A `choice` with an empty `from` for `language` is not "any language": give the options, or write
-that the player picks a language in the text.
+A `choice` with an empty `from` for `language` is "a language of your choice": it offers every
+language of the content loaded, packs included, except those whose `data.type` is `secret` or
+`monster` (a language with no `type` is offered) and those the character already speaks. List
+`from` to narrow it.
 
 ## Requirements and terms
 
@@ -688,7 +690,8 @@ See [Monsters](#monsters-1) below.
 
 ### Languages, deities, conditions, options
 
-- A `language` has `data.type` (`standard` or `exotic`) and texts for its `speakers` and `script`.
+- A `language` has `data.type` (`standard` or `exotic`; the Aurora reader also writes `secret` and
+  `monster`, which an open choice of language does not offer) and texts for its `speakers` and `script`.
 - A `deity` has `data.alignment` and `data.domains`; it is picked in the Story step.
 - A `condition` has an optional `data.color`: the glow at the edges of the Play screen while the
   condition lasts, a colour name (`red`, `green`...) or `#rrggbb`.
@@ -1454,7 +1457,7 @@ No fields: the entry is its name and its text.
 
 ### Effects
 
-37 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
+38 types. Every effect is an object with a `type` and the fields listed; the optional fields can be left out.
 
 #### `flag`
 
@@ -1494,7 +1497,7 @@ Gives the character a trait: another entry (kind `trait` or `feature`) with its 
 
 #### `choice`
 
-The person picks `choose` of the options in `from`. `grants` says what each pick is: `proficiency` (options are `category:target`, such as `skill:arcana`), `language` (language slugs), `spell` (entry ids, or no `from` to open the whole list through `spellLevel`, `spellUpTo`, `spellClass` and `ritual`), `trait` (entry ids), `abilityBonus` (ability ids, `value` each), `expertise` (skill slugs), `feat` (entry ids; an empty `from` offers every feat), `mastery` (weapon items) and `size` (creature sizes). A spell pick can be cast without a slot with `free` (`rest` says which rest) or `atWill`. `chooseBy` replaces the fixed `choose` by a column of the class table.
+The person picks `choose` of the options in `from`. `grants` says what each pick is: `proficiency` (options are `category:target`, such as `skill:arcana`), `language` (language slugs, or no `from` to offer every language but those of type `secret` and `monster`), `spell` (entry ids, or no `from` to open the whole list through `spellLevel`, `spellUpTo`, `spellClass` and `ritual`), `trait` (entry ids), `abilityBonus` (ability ids, `value` each), `expertise` (skill slugs), `feat` (entry ids; an empty `from` offers every feat), `mastery` (weapon items) and `size` (creature sizes). A spell pick can be cast without a slot with `free` (`rest` says which rest) or `atWill`. `chooseBy` replaces the fixed `choose` by a column of the class table.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
@@ -1523,6 +1526,16 @@ Gives a spell. By default it is always prepared and does not count against the s
 | `free` | boolean | no |  |
 | `rest` | `short` or `long` | no |  |
 | `atWill` | boolean | no |  |
+
+#### `spellList`
+
+Adds spells to a spell list the character picks from (a warlock patron's expanded list, Divine Soul's Divine Magic). They are offered, never given: the person still spends a pick on them, within the levels the class can cast. `spells` are the spells added; `classes` are the casting classes whose list grows (every class the character casts with when absent); `fromClasses` adds every spell on the list of those classes.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `spells` | list of entry id | **yes** |  |
+| `classes` | list of entry id | no |  |
+| `fromClasses` | list of entry id | no |  |
 
 #### `unarmedStrike`
 

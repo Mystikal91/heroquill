@@ -340,6 +340,32 @@ describe("items", () => {
     expect(item("test-plate")).toMatchObject({ cost: { amount: 1500, unit: "gp" } });
     expect(item("rope-thing")).toMatchObject({ cost: { amount: 5, unit: "sp" } });
     expect(result.strings["imp1:language/old-tongue.speakers"]).toBe("Scholars");
+    // Its kind, which an open choice of language reads (no secret or monster language is offered).
+    expect(byId(result, "imp1:language/old-tongue").data).toEqual({ type: "exotic" });
+  });
+
+  it("grants a language by its name, whatever its id is", () => {
+    const granted = parseAurora(
+      [
+        wrap(`
+  <element name="Thieves’ Cant" type="Language" source="Test Book" id="ID_TEST_PHB_LANGUAGE_CANT">
+    <supports>Secret, Rare</supports>
+  </element>
+  <element name="Test Rogue Trait" type="Racial Trait" source="Test Book" id="ID_TEST_TRAIT_CANT">
+    <rules><grant type="Language" id="ID_TEST_PHB_LANGUAGE_CANT" /></rules>
+  </element>
+  <element name="Cant Folk" type="Race" source="Test Book" id="ID_TEST_RACE_CANT">
+    <rules><grant type="Racial Trait" id="ID_TEST_TRAIT_CANT" /></rules>
+  </element>`),
+      ],
+      options,
+    );
+    expect(byId(granted, "imp1:language/thieves-cant").data).toEqual({ type: "secret" });
+    expect(byId(granted, "imp1:trait/test-rogue-trait").effects).toContainEqual({
+      type: "proficiency",
+      category: "language",
+      target: "thieves-cant",
+    });
   });
 });
 
@@ -608,6 +634,146 @@ describe("classes and archetypes", () => {
     expect(always()).toEqual(["srd51:spell/shield"]);
     cl.level = 5;
     expect(always()).toHaveLength(3);
+  });
+
+  describe("a spell list that grows (spellcasting extend)", () => {
+    const listOf = (made: AuroraResult, id: string) =>
+      byId(made, id).effects.filter((e) => e.type === "spellList");
+
+    it("reads a class by name, the spells by id and the lists of other classes", () => {
+      const made = parseAurora(
+        [
+          wrap(`
+      <element name="The Hexblade" type="Archetype" source="Test Book" id="ID_H">
+        <supports>Otherworldly Patron</supports>
+        <description><p>A pact.</p></description>
+        <rules><grant type="Archetype Feature" id="ID_H_LIST" level="1" /></rules>
+      </element>
+      <element name="Expanded Spells" type="Archetype Feature" source="Test Book" id="ID_H_LIST">
+        <description><p>More spells.</p></description>
+        <spellcasting name="Warlock" extend="true">
+          <extend>ID_PHB_SPELL_SHIELD</extend>
+          <extend>ID_PHB_SPELL_BLUR</extend>
+          <extend>ID_WOTC_PHB24_SPELL_BLUR</extend>
+          <extend>ID_PHB_SPELL_SHIELD</extend>
+          <extend>Cleric</extend>
+          <extend>ID_NOT_A_SPELL_AT_ALL</extend>
+        </spellcasting>
+      </element>`),
+        ],
+        options,
+      );
+      expect(listOf(made, "imp1:feature/expanded-spells")).toEqual([
+        {
+          type: "spellList",
+          spells: ["srd51:spell/blur", "srd51:spell/shield"],
+          classes: ["srd51:class/warlock"],
+          fromClasses: ["srd51:class/cleric"],
+        },
+      ]);
+    });
+
+    it("leaves out the class of an element that casts with every class", () => {
+      const made = parseAurora(
+        [
+          wrap(`
+      <element name="Marked" type="Archetype" source="Test Book" id="ID_MARKED">
+        <supports>Arcane Tradition</supports>
+        <description><p>Marked.</p></description>
+        <rules>
+          <grant type="Archetype Feature" id="ID_MARK" level="2" />
+          <grant type="Archetype Feature" id="ID_NOBODY" level="2" />
+        </rules>
+      </element>
+      <element name="Mark Spells" type="Archetype Feature" source="Test Book" id="ID_MARK">
+        <supports>Wizard</supports>
+        <description><p>Spells of the mark.</p></description>
+        <spellcasting all="true" extend="true">
+          <extend>ID_PHB_SPELL_SHIELD</extend>
+        </spellcasting>
+      </element>
+      <element name="Nobody Spells" type="Archetype Feature" source="Test Book" id="ID_NOBODY">
+        <description><p>A class nobody has.</p></description>
+        <spellcasting name="Nobody" extend="true"><extend>ID_PHB_SPELL_SHIELD</extend></spellcasting>
+      </element>`),
+        ],
+        options,
+      );
+      expect(listOf(made, "imp1:feature/mark-spells")).toEqual([
+        { type: "spellList", spells: ["srd51:spell/shield"] },
+      ]);
+      expect(listOf(made, "imp1:feature/nobody-spells")).toEqual([]);
+    });
+
+    it("brings the list of a Grants element under the option that holds it", () => {
+      const made = parseAurora(
+        [
+          wrap(`
+      <element name="The Genie" type="Archetype" source="Test Book" id="ID_G">
+        <supports>Otherworldly Patron</supports>
+        <description><p>A genie.</p></description>
+        <rules>
+          <select type="Archetype Feature" name="Kind" supports="Genie Kind" />
+          <grant type="Archetype Feature" id="ID_G_LIST" level="1" />
+        </rules>
+      </element>
+      <element name="Dao" type="Archetype Feature" source="Test Book" id="ID_G_DAO">
+        <supports>Genie Kind</supports>
+        <description><p>Earth.</p></description>
+      </element>
+      <element name="Genie List" type="Archetype Feature" source="Test Book" id="ID_G_LIST">
+        <description><p>Spells.</p></description>
+        <spellcasting name="Warlock" extend="true"><extend>ID_PHB_SPELL_SHIELD</extend></spellcasting>
+        <rules><grant type="Grants" id="ID_G_LIST_DAO" requirements="ID_G_DAO" /></rules>
+      </element>
+      <element name="Dao Spells" type="Grants" source="Test Book" id="ID_G_LIST_DAO">
+        <spellcasting name="Warlock" extend="true"><extend>ID_PHB_SPELL_BLUR</extend></spellcasting>
+      </element>`),
+        ],
+        options,
+      );
+      const feature = byId(made, "imp1:feature/genie-list");
+      const dao = byId(made, "imp1:feature/dao");
+      expect(listOf(made, feature.id).map((e) => (e.type === "spellList" ? e.spells : []))).toEqual(
+        [["srd51:spell/shield"]],
+      );
+      const gated = feature.effects.find((e) => e.type === "when");
+      expect(gated).toMatchObject({
+        requires: dao.id,
+        effects: expect.arrayContaining([
+          { type: "spellList", spells: ["srd51:spell/blur"], classes: ["srd51:class/warlock"] },
+        ]),
+      });
+    });
+  });
+
+  it("gives the spells a subclass has by default at a level (a select with a level and a default)", () => {
+    const made = parseAurora(
+      [
+        wrap(`
+      <element name="Aberrant" type="Archetype" source="Test Book" id="ID_AB">
+        <supports>Sorcerous Origin</supports>
+        <description><p>Strange.</p></description>
+        <rules><grant type="Archetype Feature" id="ID_AB_SPELLS" level="1" /></rules>
+      </element>
+      <element name="Psionic Spells" type="Archetype Feature" source="Test Book" id="ID_AB_SPELLS">
+        <description><p>The table.</p></description>
+        <rules>
+          <select type="Spell" name="Cantrip" supports="0,(Sorcerer)" level="1" default="ID_PHB_SPELL_LIGHT" />
+          <select type="Spell" name="A" supports="1,(Sorcerer)" level="1" default="ID_PHB_SPELL_SHIELD" requirements="ID_ORIGIN_2014" />
+          <select type="Spell" name="A" supports="1,(Sorcerer)" level="1" default="ID_WOTC_PHB24_SPELL_SHIELD" requirements="ID_WOTC_PHB24_ORIGIN" />
+          <select type="Spell" name="B" supports="2,(Sorcerer)" level="3" default="ID_PHB_SPELL_BLUR" requirements="ID_ORIGIN_2014" />
+          <select type="Spell" name="Plain pick" supports="2,(Sorcerer)" level="3" />
+        </rules>
+      </element>`),
+      ],
+      options,
+    );
+    expect(subclassData(byId(made, "imp1:subclass/aberrant")).spells).toEqual([
+      { spell: "srd51:spell/light", classLevel: 1 },
+      { spell: "srd51:spell/shield", classLevel: 1 },
+      { spell: "srd51:spell/blur", classLevel: 3 },
+    ]);
   });
 
   it("lets Hex Warrior and Battle Ready make a weapon use another ability", () => {

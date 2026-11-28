@@ -120,6 +120,33 @@ export function corpusSuite(reverse: boolean) {
         expect(tables("swarmkeeper")).toEqual([[3, 5, 9, 13, 17]]);
       });
 
+      it("gives a subclass the spells it has by default at a level (Aberrant Mind)", () => {
+        const aberrant = result.entries.filter(
+          (e) =>
+            e.kind === "subclass" && e.id.replace(/-\d+$/, "") === "imp1:subclass/aberrant-mind",
+        );
+        expect(aberrant.length).toBeGreaterThan(0);
+        for (const sub of aberrant)
+          expect((sub.data.spells as { classLevel: number }[]).map((s) => s.classLevel)).toEqual([
+            1, 1, 1, 3, 3, 5, 5, 7, 7, 9, 9,
+          ]);
+      });
+
+      it("offers the expanded spells of a patron to a warlock who has it", () => {
+        const hexblades = result.entries.filter(
+          (e) =>
+            e.kind === "subclass" && e.id.replace(/-\d+$/, "") === "imp1:subclass/the-hexblade",
+        );
+        expect(hexblades.length).toBeGreaterThan(0);
+        for (const sub of hexblades) {
+          const c = createCharacter("srd51");
+          c.classes = [{ classId: "srd51:class/warlock", level: 1, subclassId: sub.id }];
+          const lists = deriveSheet(c, index).spellcasters[0]?.lists;
+          expect(lists?.known?.pool, sub.id).toContain("srd51:spell/shield");
+          expect(lists?.alwaysPrepared, sub.id).not.toContain("srd51:spell/shield");
+        }
+      });
+
       it("reads the companions of the books as creatures with their traits and actions", () => {
         const monsters = result.entries.filter((e) => e.kind === "monster");
         // 164 companions in the files: the app has many of them already (the SRD beasts), and the

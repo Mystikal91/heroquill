@@ -35,7 +35,15 @@ export interface SpellLists {
   alwaysPrepared: string[];
 }
 
+/** What the `spellList` effects in force add to the list of a class (see `Effect` `spellList`). */
+export interface SpellListAdd {
+  spells: string[];
+  fromClasses: string[];
+}
+
 interface Input {
+  /** The spells that effects (a feature, a trait) offer on top of the class's list. */
+  added?: SpellListAdd[];
   classId: string;
   /** The class the character has, when `classId` is only the list its subclass picks from. */
   ownerId?: string;
@@ -81,6 +89,26 @@ function expandedPool(
     const level = index.get(id)?.data.level;
     return typeof level === "number" && level >= min && level <= max;
   });
+}
+
+/** The spells that `spellList` effects add to the list, within the levels the class can cast. */
+function addedPool(
+  index: PackIndex,
+  added: SpellListAdd[],
+  min: number,
+  max: number,
+  twin = false,
+): string[] {
+  const ids = added.flatMap((a) => [
+    ...a.spells,
+    ...a.fromClasses.flatMap((c) => classSpellPool(index, c, min, max)),
+  ]);
+  return ids
+    .map((id) => (twin ? spellFor2024(id, index) : id))
+    .filter((id) => {
+      const level = index.get(id)?.data.level;
+      return typeof level === "number" && level >= min && level <= max;
+    });
 }
 
 /** Keeps the valid picks, warning about invalid and surplus ones. */
@@ -133,6 +161,7 @@ export function highestSpellLevel(data: ClassData, level: number): number {
 /** The spell lists of one casting class at its current level (call only once it can cast). */
 export function deriveSpellLists(input: Input): SpellLists {
   const { classId, data, level, abilityModifier, picks, index, subclass, warnings } = input;
+  const added = input.added ?? [];
   const casting = data.spellcasting;
   if (!casting) throw new Error(`${classId} is not a spellcasting class`);
   // The spells the subclass of a book names are those of the 2014 SRD: a 2024 class takes the 2024 spells.
@@ -165,7 +194,13 @@ export function deriveSpellLists(input: Input): SpellLists {
     lists.cantrips = resolvePick(
       free(picks?.cantrips),
       row.cantripsKnown,
-      free([...classSpellPool(index, classId, 0, 0), ...expandedPool(index, adding, 0, 0, twin)]),
+      free([
+        ...new Set([
+          ...classSpellPool(index, classId, 0, 0),
+          ...expandedPool(index, adding, 0, 0, twin),
+          ...addedPool(index, added, 0, 0, twin),
+        ]),
+      ]),
       classId,
       warnings,
     );
@@ -175,6 +210,7 @@ export function deriveSpellLists(input: Input): SpellLists {
     ...new Set([
       ...classSpellPool(index, classId, 1, maxSpellLevel),
       ...expandedPool(index, adding, 1, maxSpellLevel, twin),
+      ...addedPool(index, added, 1, maxSpellLevel, twin),
     ]),
   ];
   const preparation = casting.preparation;

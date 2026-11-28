@@ -189,6 +189,17 @@ export const PlainEffectSchema = v.variant("type", [
     atWill: v.optional(v.boolean()),
   }),
   /**
+   * Spells added to a spell list the character picks from (a patron's expanded list, Divine Magic):
+   * they are offered, never given. `classes` are the casting classes whose list grows (every class
+   * the character casts with when absent); `fromClasses` add every spell on the list of those classes.
+   */
+  v.object({
+    type: v.literal("spellList"),
+    spells: v.array(EntryIdSchema),
+    classes: v.optional(v.array(EntryIdSchema)),
+    fromClasses: v.optional(v.array(EntryIdSchema)),
+  }),
+  /**
    * A natural weapon (claws, a bite, horns): the unarmed strike rolls this die and this kind of
    * damage in place of its 1 and bludgeoning, and is always there, even with a weapon in hand.
    */
@@ -572,6 +583,9 @@ export function brokenReferences(packs: Pack[]): { from: string; ref: string }[]
         if (effect.type === "trait") check(entry.id, effect.id);
         else if (effect.type === "grantSpell") check(entry.id, effect.spell);
         else if (effect.type === "spellDamage" && effect.spell) check(entry.id, effect.spell);
+        else if (effect.type === "spellList")
+          for (const ref of [...effect.spells, ...(effect.classes ?? []), ...(effect.fromClasses ?? [])])
+            check(entry.id, ref);
         else if (effect.type === "when") visit(effect.effects);
         else if (
           effect.type === "choice" &&

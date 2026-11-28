@@ -352,7 +352,6 @@
         "ritual": false,
         "concentration": true,
         "classes": [
-          "srd51:class/cleric",
           "srd51:class/wizard"
         ],
         "areaOfEffect": {
@@ -1736,7 +1735,6 @@
         "concentration": false,
         "classes": [
           "srd51:class/cleric",
-          "srd51:class/druid",
           "srd51:class/paladin"
         ]
       }
@@ -2269,7 +2267,7 @@
         "ritual": true,
         "concentration": false,
         "classes": [
-          "srd51:class/druid"
+          "srd51:class/cleric"
         ]
       }
     },
@@ -2720,6 +2718,7 @@
         "ritual": false,
         "concentration": true,
         "classes": [
+          "srd51:class/bard",
           "srd51:class/druid"
         ],
         "dc": {
@@ -5314,7 +5313,8 @@
         "ritual": true,
         "concentration": false,
         "classes": [
-          "srd51:class/cleric"
+          "srd51:class/cleric",
+          "srd51:class/druid"
         ]
       }
     },

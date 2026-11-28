@@ -190,15 +190,29 @@ const referenceIndex = (option: Raw): string => {
   return option.item.index;
 };
 
-function languageChoice(ctx: Context, owner: string, options: Raw): Effect {
+/**
+ * A language "of your choice" (the human, the half-elf, the high elf's Extra Language, the acolyte): the SRD
+ * lets the person pick any language, so the choice lists none and the engine offers every standard and exotic
+ * language of the content loaded (a book's too). 5e-database writes the SRD's sixteen out, which kept the
+ * languages of the books away.
+ */
+function languageChoice(owner: string, options: Raw): Effect {
   return {
     type: "choice",
     id: `${owner}-language`,
     choose: options.choose,
     grants: "language",
-    from: optionValues(ctx, options.from, referenceIndex),
+    from: [],
   };
 }
+
+/**
+ * Spell choices the SRD words as "of your choice from a class's list" (the high elf's cantrip): open, so a
+ * cantrip of a book on that list is offered too, where 5e-database writes out the SRD's.
+ */
+const OPEN_SPELL_CHOICES: Record<string, { spellLevel: number; spellClass: string }> = {
+  "high-elf-cantrip": { spellLevel: 0, spellClass: "wizard" },
+};
 
 function abilityBonuses(list: Raw[] | undefined): Effect[] {
   return (list ?? []).map((b) => ({
@@ -232,16 +246,20 @@ function convertTraits(raw: RawSource, ctx: Context): Converted {
         }),
       });
     }
-    if (t.language_options) effects.push(languageChoice(ctx, t.index, t.language_options));
+    if (t.language_options) effects.push(languageChoice(t.index, t.language_options));
 
     const { spell_options, subtrait_options, ...specific } = t.trait_specific ?? {};
     if (spell_options) {
+      const open = OPEN_SPELL_CHOICES[t.index];
       effects.push({
         type: "choice",
         id: `${t.index}-spell`,
         choose: spell_options.choose,
         grants: "spell",
-        from: optionValues(ctx, spell_options.from, (o) => id("spell", referenceIndex(o))),
+        from: open
+          ? []
+          : optionValues(ctx, spell_options.from, (o) => id("spell", referenceIndex(o))),
+        ...(open && { spellLevel: open.spellLevel, spellClass: id("class", open.spellClass) }),
       });
     }
     if (subtrait_options) {
@@ -273,7 +291,7 @@ function convertTraits(raw: RawSource, ctx: Context): Converted {
   return { entries, strings };
 }
 
-function convertSpecies(raw: RawSource, ctx: Context): Converted {
+function convertSpecies(raw: RawSource): Converted {
   const entries: Entry[] = [];
   const strings: Strings = {};
   for (const r of raw.races) {
@@ -294,7 +312,7 @@ function convertSpecies(raw: RawSource, ctx: Context): Converted {
     for (const l of r.languages as Raw[]) {
       effects.push({ type: "proficiency", category: "language", target: l.index });
     }
-    if (r.language_options) effects.push(languageChoice(ctx, r.index, r.language_options));
+    if (r.language_options) effects.push(languageChoice(r.index, r.language_options));
     effects.push(...traitRefs(r.traits));
 
     entries.push({
@@ -336,7 +354,7 @@ function convertBackgrounds(raw: RawSource, ctx: Context): Converted {
     const effects: Effect[] = (b.starting_proficiencies as Raw[]).map((p) =>
       resolveProficiency(ctx, p.index),
     );
-    if (b.language_options) effects.push(languageChoice(ctx, b.index, b.language_options));
+    if (b.language_options) effects.push(languageChoice(b.index, b.language_options));
 
     const choose: Record<string, number> = {};
     strings[`${b.index}.name`] = b.name;
@@ -367,17 +385,33 @@ function convertBackgrounds(raw: RawSource, ctx: Context): Converted {
   return { entries, strings };
 }
 
+/**
+ * The class lists that 5e-database writes differently from the spell lists of the SRD 5.1 (and of the
+ * Player's Handbook, which agrees with the SRD on every SRD spell): the classes as the SRD lists them.
+ * Faerie fire is a bard spell too; meld into stone a druid one; divination a cleric one, not a druid
+ * one; create food and water is not a druid spell, nor arcane eye a cleric one (the Knowledge domain
+ * of the book gives it, not the class).
+ */
+export const SPELL_CLASSES: Record<string, string[]> = {
+  "arcane-eye": ["wizard"],
+  "create-food-and-water": ["cleric", "paladin"],
+  divination: ["cleric"],
+  "faerie-fire": ["bard", "druid"],
+  "meld-into-stone": ["cleric", "druid"],
+};
+
 function convertSpells(raw: RawSource): Converted {
   const entries: Entry[] = [];
   const strings: Strings = {};
   for (const s of raw.spells) {
+    const classes = SPELL_CLASSES[s.index] ?? (s.classes as Raw[]).map((c) => c.index as string);
     const data: Record<string, unknown> = {
       level: s.level,
       school: s.school.index,
       components: s.components,
       ritual: s.ritual,
       concentration: s.concentration,
-      classes: (s.classes as Raw[]).map((c) => id("class", c.index)),
+      classes: classes.map((c) => id("class", c)),
     };
     for (const key of ["attack_type", "damage", "dc", "heal_at_slot_level", "area_of_effect"]) {
       if (s[key] !== undefined) data[cleanKey(key)] = cleanData(s[key]);
@@ -1078,7 +1112,7 @@ export function convertMonsters(raw: { monsters: Raw[] }, pack: string = PACK): 
 export function convertAll(raw: RawSource): ConvertedPack {
   const ctx = buildContext(raw);
   return {
-    species: convertSpecies(raw, ctx),
+    species: convertSpecies(raw),
     subspecies: convertSubspecies(raw),
     trait: convertTraits(raw, ctx),
     background: convertBackgrounds(raw, ctx),

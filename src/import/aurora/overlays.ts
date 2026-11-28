@@ -44,6 +44,24 @@ function plainFeatureValues(effects: Effect[]): Effect[] {
 }
 
 /**
+ * The kinds of effect Aurora may add to an entry of the app that has none of that kind: what the
+ * book says the feature gives (Druidic's language, the one use of Holy Nimbus) and the SRD data left
+ * in its text. A kind the entry already has stays as the entry says, so nothing is counted twice.
+ */
+const ADDED_KINDS = new Set(["proficiency", "uses"]);
+
+function missingKinds(own: Effect[], mapped: Effect[]): Effect[] {
+  const kinds = new Set(own.map((e) => e.type));
+  // A spell cast without a slot brings its own uses (Signature Spells): a count would be a second one.
+  const freeCast = own.some(
+    (e) => (e.type === "choice" || e.type === "grantSpell") && (e.free || e.atWill),
+  );
+  return mapped.filter(
+    (e) => ADDED_KINDS.has(e.type) && !kinds.has(e.type) && !(e.type === "uses" && freeCast),
+  );
+}
+
+/**
  * What the elements of the Player's Handbook that are the entries of the app (see `srdPairs.json`)
  * say that the entries do not: the numbers a feature shows and how it is used. The entry of the
  * app keeps its text, its translations and what it already does; the pack carries these extras and
@@ -75,9 +93,12 @@ export function collectOverlays(ctx: Context, options: AuroraOptions): Record<st
     const names = new Set(
       entry.effects.flatMap((e) => (e.type === "featureValue" ? [e.name] : [])),
     );
-    const effects = plainFeatureValues(mapped).filter(
-      (e) => e.type === "featureValue" && !names.has(e.name) && !has.has(JSON.stringify(e)),
-    );
+    const effects = [
+      ...plainFeatureValues(mapped).filter(
+        (e) => e.type === "featureValue" && !names.has(e.name) && !has.has(JSON.stringify(e)),
+      ),
+      ...missingKinds(entry.effects, mapped),
+    ];
     const action =
       ACTIVATIONS[
         (source.el.querySelector(":scope > sheet")?.getAttribute("action") ?? "")

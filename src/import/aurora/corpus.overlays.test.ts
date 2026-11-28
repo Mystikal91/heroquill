@@ -83,7 +83,7 @@ describe.skipIf(!root)("what Aurora adds to the SRD", () => {
     expect(overlays).toBeGreaterThan(10);
   });
 
-  it("changes nothing of a character but the numbers the features show", () => {
+  it("changes nothing of a character but the numbers, the uses and the proficiencies the book adds", () => {
     const changed = new Set<string>();
     for (const cls of Object.keys(SUBCLASS))
       for (const level of LEVELS) {
@@ -92,7 +92,42 @@ describe.skipIf(!root)("what Aurora adds to the SRD", () => {
         for (const key of new Set([...Object.keys(a), ...Object.keys(b)]))
           if (JSON.stringify(a[key]) !== JSON.stringify(b[key])) changed.add(key);
       }
-    expect([...changed]).toEqual(["featureValues"]);
+    expect([...changed].sort()).toEqual(["featureValues", "proficiencies", "resources"]);
+  });
+
+  it("adds what the SRD entry lacks, and never takes away a use or a proficiency", () => {
+    const lost: string[] = [];
+    for (const cls of Object.keys(SUBCLASS))
+      for (const level of LEVELS) {
+        const a = sheet(plain, cls, level);
+        const b = sheet(added, cls, level);
+        for (const r of a.resources)
+          if (!b.resources.some((s) => s.id === r.id && s.max === r.max))
+            lost.push(`${cls} ${level} ${r.id}`);
+        for (const [kind, list] of Object.entries(a.proficiencies))
+          for (const p of list as string[])
+            if (!(b.proficiencies as Record<string, string[]>)[kind]?.includes(p))
+              lost.push(`${cls} ${level} ${kind}:${p}`);
+      }
+    expect(lost).toEqual([]);
+    const uses = (cls: string, level: number, feature: string) =>
+      sheet(added, cls, level).resources.filter(
+        (r) => r.entry === `srd51:feature/${feature}` || r.id.includes(feature),
+      );
+    // The language a class feature teaches, which the SRD says in words only.
+    expect(sheet(added, "druid", 1).proficiencies.language).toContain("druidic");
+    expect(sheet(plain, "druid", 1).proficiencies.language).not.toContain("druidic");
+    expect(sheet(added, "rogue", 1).proficiencies.language).toContain("thieves-cant");
+    // Once between long rests, as the book has it.
+    expect(uses("paladin", 20, "holy-nimbus").map((r) => [r.max, r.recovery])).toEqual([
+      [1, "long"],
+    ]);
+    // Lay on Hands keeps the one pool of the class table; Signature Spells keep their free casts.
+    expect(uses("paladin", 5, "lay-on-hands")).toHaveLength(0);
+    expect(
+      sheet(added, "paladin", 5).resources.filter((r) => r.id.startsWith("layOnHands")),
+    ).toHaveLength(1);
+    expect(uses("wizard", 20, "signature-spell")).toHaveLength(0);
   });
 
   it("only adds numbers: the ones a feature already showed stay as they were", () => {

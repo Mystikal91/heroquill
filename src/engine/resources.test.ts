@@ -42,6 +42,26 @@ describe("class resources", () => {
     });
   });
 
+  it("makes no second counter for a feature the class table counts, whatever uses it says", () => {
+    // A book's Lay on Hands with uses of its own (a pack adds them to the SRD's): the pool stays one.
+    const id = "srd51:feature/lay-on-hands";
+    const hands = index.get(id);
+    if (!hands) throw new Error(id);
+    const withUses = new Map(index);
+    withUses.set(id, {
+      ...hands,
+      effects: [
+        ...hands.effects,
+        { type: "uses", term: { classLevel: "paladin" }, recharge: "long" },
+      ],
+    });
+    const c = createCharacter("srd51");
+    c.classes = [{ classId: "srd51:class/paladin", level: 3 }];
+    const sheet = deriveSheet(c, withUses);
+    expect(sheet.resources.filter((r) => r.kind === "layOnHands")).toHaveLength(1);
+    expect(sheet.resources.some((r) => r.entry === id)).toBe(false);
+  });
+
   it("counts a barbarian's rages and shows the rage damage", () => {
     const sheet = hero([{ id: "barbarian", level: 3 }]);
     expect(sheet.resources).toEqual([
