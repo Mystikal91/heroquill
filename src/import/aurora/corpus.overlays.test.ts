@@ -119,6 +119,9 @@ describe.skipIf(!root)("what Aurora adds to the SRD", () => {
     expect(sheet(plain, "druid", 1).proficiencies.language).not.toContain("druidic");
     expect(sheet(added, "rogue", 1).proficiencies.language).toContain("thieves-cant");
     // Once between long rests, as the book has it.
+    expect(uses("warlock", 20, "eldritch-master").map((r) => [r.max, r.recovery])).toEqual([
+      [1, "long"],
+    ]);
     expect(uses("paladin", 20, "holy-nimbus").map((r) => [r.max, r.recovery])).toEqual([
       [1, "long"],
     ]);

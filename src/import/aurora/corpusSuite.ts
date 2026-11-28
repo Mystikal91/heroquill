@@ -147,6 +147,30 @@ export function corpusSuite(reverse: boolean) {
         }
       });
 
+      it("offers Tasha's additional class spells once the option is on, and reads a dragonmark's list", () => {
+        const option = result.aids.ID_WOTC_TCOE_ITEM_OCF_BARD_ADDITIONAL_BARD_SPELLS ?? "";
+        expect(index.has(option), option).toBe(true);
+        const pool = (options: string[]) => {
+          const c = createCharacter("srd51");
+          c.classes = [{ classId: "srd51:class/bard", level: 1 }];
+          c.options = options;
+          return deriveSheet(c, index).spellcasters[0]?.lists.known?.pool ?? [];
+        };
+        // Color spray is not a bard spell of the SRD: Tasha adds it to the bard's list.
+        expect(pool([])).not.toContain("srd51:spell/color-spray");
+        expect(pool([option])).toContain("srd51:spell/color-spray");
+        const mark = index.get(
+          result.aids.ID_WOTC_ERLW_RACIAL_TRAIT_MARK_OF_HEALING_SPELLS_OF_THE_MARK ?? "",
+        );
+        expect(mark?.effects).toContainEqual(
+          expect.objectContaining({
+            type: "spellList",
+            spells: expect.arrayContaining(["srd51:spell/cure-wounds"]),
+          }),
+        );
+        expect(JSON.stringify(mark?.effects)).not.toContain('"classes"');
+      });
+
       it("reads the companions of the books as creatures with their traits and actions", () => {
         const monsters = result.entries.filter((e) => e.kind === "monster");
         // 164 companions in the files: the app has many of them already (the SRD beasts), and the

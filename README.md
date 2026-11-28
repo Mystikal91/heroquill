@@ -39,12 +39,17 @@ and Aurora Legacy that you already own.
   exactly what changes, then jump to whatever is left to decide (subclass, ability scores, spells,
   choices).
   With a small celebration. The classes you do not have yet wait behind an *Add a new class* button,
-  and only the ones whose minimum scores you meet are offered.
+  and only the ones whose minimum scores you meet are offered (all of them with the house rule).
 - **Starting equipment, guided**: the Equipment step asks each choice the rules give your class and
   background (this or that, a martial weapon, an arcane focus...) and adds it all to the inventory with
   one button. Features that improve with the level (Brutal Critical, Extra Attack, Bardic Inspiration...)
   show only their latest step, and the Ability Score Improvement features stay off the sheet unless
   you ask for them.
+- **House rules** (menu ☰): switches for eight common variants, for every character on the device,
+  each with an example next to the book: quick short rests (half the hit points back), a long rest
+  with each new level, crunchy crits (also for monsters), potions as a bonus action (2014), a feat at
+  1st level, the highest hit points at every level, multiclassing without minimum scores, and the
+  2024 exhaustion for 2014 characters.
 - **Install it** like an app: a discreet strip offers it after a few seconds (Install, Later for a
   week, No thanks to stop), the menu has an *Install the app* entry, and on an iPhone or iPad it shows
   the steps of Safari.
